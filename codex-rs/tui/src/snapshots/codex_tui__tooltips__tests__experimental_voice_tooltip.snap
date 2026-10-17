@@ -1,5 +1,0 @@
----
-source: tui/src/tooltips.rs
-expression: "available.into_iter().filter(|tip| *tip ==\nvoice_tip).collect::<Vec<_>>().join(\"\\n\")"
----
-NEW: Voice conversations can now be enabled from /experimental. Restart Nyacode after enabling, then use /voice.

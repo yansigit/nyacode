@@ -2330,7 +2330,11 @@ async fn dispatched_mcp_approval_with_closed_response_is_classified_as_approval(
     *session.active_turn.lock().await = None;
     assert_eq!(
         approval.await.expect("approval task should complete"),
-        ReviewDecision::Abort
+        ApprovalResolution {
+            decision: ReviewDecision::Abort,
+            source: ApprovalResolutionSource::User,
+            cancellation_reason: Some(McpApprovalCancellationReason::Interrupted),
+        }
     );
 
     item["status"] = serde_json::json!("failed");
@@ -3002,6 +3006,7 @@ async fn permission_request_hook_allows_mcp_tool_call() {
         Some(McpToolApproval {
             decision: ReviewDecision::Approved,
             source: Some(ApprovalResolutionSource::Hook),
+            cancellation_reason: None,
         })
     );
     let log = std::fs::read_to_string(log_path).expect("read MCP permission hook log");
@@ -3079,6 +3084,7 @@ async fn permission_request_hook_uses_hook_tool_name_without_metadata() {
         Some(McpToolApproval {
             decision: ReviewDecision::Approved,
             source: Some(ApprovalResolutionSource::Hook),
+            cancellation_reason: None,
         })
     );
     let log = std::fs::read_to_string(log_path).expect("read MCP permission hook log");
@@ -3172,6 +3178,7 @@ async fn permission_request_hook_runs_after_remembered_mcp_approval() {
         Some(McpToolApproval {
             decision: ReviewDecision::Approved,
             source: None,
+            cancellation_reason: None,
         })
     );
     assert!(
@@ -3276,6 +3283,7 @@ async fn strict_auto_review_forces_guardian_for_mcp_policy_skip() {
     let Some(McpToolApproval {
         decision: ReviewDecision::Denied { rejection: message },
         source: Some(ApprovalResolutionSource::Guardian),
+        cancellation_reason: None,
     }) = decision
     else {
         panic!("guardian-denied MCP approval should carry a rejection message");
@@ -3391,6 +3399,7 @@ async fn assert_mcp_user_approval_persistence(
         Some(McpToolApproval {
             decision: expected_decision,
             source: Some(ApprovalResolutionSource::User),
+            cancellation_reason: None,
         }),
     );
 }

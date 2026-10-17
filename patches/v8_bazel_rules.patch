@@ -1,14 +1,14 @@
 # What: adapt upstream V8 Bazel rules to this workspace's hermetic toolchains
 # and externally provided dependencies.
-# Scope: Bazel BUILD/defs/BUILD.icu integration only, including dependency
+# Scope: Bazel BUILD/defs integration only, including dependency
 # wiring, generated sources, and visibility; no standalone V8 source patching.
 
 diff --git a/orig/v8-15.2.124.1/bazel/defs.bzl b/mod/v8-15.2.124.1/bazel/defs.bzl
 --- a/orig/v8-15.2.124.1/bazel/defs.bzl
 +++ b/mod/v8-15.2.124.1/bazel/defs.bzl
-@@ -42,12 +42,17 @@
+@@ -42,12 +42,30 @@
  )
- 
+
  def v8_flag(name, default = False):
 -    _create_option_flag(name = name, build_setting_default = default, scope = "universal")
 -    native.config_setting(name = "is_" + name, flag_values = {name: "True"})
@@ -22,16 +22,29 @@ diff --git a/orig/v8-15.2.124.1/bazel/defs.bzl b/mod/v8-15.2.124.1/bazel/defs.bz
 +        scope = "universal",
 +        visibility = ["//visibility:public"],
 +    )
-+    native.config_setting(name = "is_" + name, flag_values = {name: "True"}, visibility = ["//visibility:public"])
-+    native.config_setting(name = "is_not_" + name, flag_values = {name: "False"}, visibility = ["//visibility:public"])
++    native.config_setting(
++        name = "is_" + name,
++        flag_values = {name: "True"},
++        visibility = ["//visibility:public"],
++    )
++    native.config_setting(
++        name = "is_not_" + name,
++        flag_values = {name: "False"},
++        visibility = ["//visibility:public"],
++    )
 +
 +def v8_string(name, default = "", visibility = None):
-+    _create_option_string(name = name, build_setting_default = default, scope = "universal", visibility = visibility)
- 
++    _create_option_string(
++        name = name,
++        build_setting_default = default,
++        scope = "universal",
++        visibility = visibility,
++    )
+
  def v8_int(name, default = 0):
      _create_option_int(name = name, build_setting_default = default, scope = "universal")
-@@ -106,7 +111,13 @@
- 
+@@ -106,7 +124,13 @@
+
  def _default_args():
      return struct(
 -        deps = [":define_flags", "@libcxx//:libc++"],
@@ -45,7 +58,7 @@ diff --git a/orig/v8-15.2.124.1/bazel/defs.bzl b/mod/v8-15.2.124.1/bazel/defs.bz
          defines = select({
              "@v8//bazel/config:is_windows": [
                  "UNICODE",
-@@ -136,12 +147,15 @@
+@@ -136,12 +160,15 @@
              ],
              "//conditions:default": [],
          }) + select({
@@ -67,7 +80,7 @@ diff --git a/orig/v8-15.2.124.1/bazel/defs.bzl b/mod/v8-15.2.124.1/bazel/defs.bz
              "@v8//bazel/config:is_gcc": [
                  "-Wno-extra",
                  "-Wno-array-bounds",
-@@ -161,9 +175,17 @@
+@@ -161,9 +188,17 @@
                  "-std=gnu++2a",
              ],
              "@v8//bazel/config:is_windows": [
@@ -88,7 +101,7 @@ diff --git a/orig/v8-15.2.124.1/bazel/defs.bzl b/mod/v8-15.2.124.1/bazel/defs.bz
          }) + select({
              "@v8//bazel/config:is_gcc_fastbuild": [
                  # Non-debug builds without optimizations fail because
-@@ -187,12 +209,12 @@
+@@ -187,12 +222,12 @@
          includes = ["include"],
          linkopts = select({
              "@v8//bazel/config:is_windows": [
@@ -105,7 +118,7 @@ diff --git a/orig/v8-15.2.124.1/bazel/defs.bzl b/mod/v8-15.2.124.1/bazel/defs.bz
          }) + select({
              ":should_add_rdynamic": ["-rdynamic"],
              "//conditions:default": [],
-@@ -466,6 +488,11 @@
+@@ -466,6 +501,11 @@
  def _mksnapshot(ctx):
      prefix = ctx.attr.prefix
      suffix = ctx.attr.suffix
@@ -117,7 +130,7 @@ diff --git a/orig/v8-15.2.124.1/bazel/defs.bzl b/mod/v8-15.2.124.1/bazel/defs.bz
      outs = [
          ctx.actions.declare_file(prefix + "/snapshot" + suffix + ".cc"),
          ctx.actions.declare_file(prefix + "/embedded" + suffix + ".S"),
-@@ -483,7 +510,7 @@
+@@ -483,7 +523,7 @@
              "--embedded_src",
              outs[1].path,
          ] + ctx.attr.args,
@@ -126,7 +139,7 @@ diff --git a/orig/v8-15.2.124.1/bazel/defs.bzl b/mod/v8-15.2.124.1/bazel/defs.bz
          progress_message = "Running mksnapshot",
      )
      return [DefaultInfo(files = depset(outs))]
-@@ -498,6 +525,12 @@
+@@ -498,6 +538,12 @@
              executable = True,
              cfg = "exec",
          ),
@@ -139,7 +152,7 @@ diff --git a/orig/v8-15.2.124.1/bazel/defs.bzl b/mod/v8-15.2.124.1/bazel/defs.bz
          "target_os": attr.string(mandatory = True),
          "prefix": attr.string(mandatory = True),
          "suffix": attr.string(mandatory = True),
-@@ -511,6 +544,7 @@
+@@ -511,6 +557,7 @@
          args = args,
          prefix = "noicu",
          tool = ":noicu/mksnapshot" + suffix,
@@ -147,7 +160,7 @@ diff --git a/orig/v8-15.2.124.1/bazel/defs.bzl b/mod/v8-15.2.124.1/bazel/defs.bz
          suffix = suffix,
          target_os = select({
              "@v8//bazel/config:is_macos": "mac",
-@@ -523,6 +557,7 @@
+@@ -523,6 +570,7 @@
          args = args,
          prefix = "icu",
          tool = ":icu/mksnapshot" + suffix,
@@ -159,15 +172,15 @@ diff --git a/orig/v8-15.2.124.1/BUILD.bazel b/mod/v8-15.2.124.1/BUILD.bazel
 --- a/orig/v8-15.2.124.1/BUILD.bazel
 +++ b/mod/v8-15.2.124.1/BUILD.bazel
 @@ -154,6 +154,10 @@
- 
+
  v8_flag(name = "v8_enable_v8_checks")
- 
+
 +v8_flag(name = "v8_enable_sandbox")
 +
 +v8_flag(name = "v8_use_rusty_v8_custom_libcxx")
 +
  v8_flag(name = "v8_enable_verify_csa")
- 
+
  v8_flag(name = "v8_enable_verify_heap")
 @@ -319,7 +323,8 @@
  # If no explicit value for v8_enable_pointer_compression, we set it to 'none'.
@@ -177,7 +190,7 @@ diff --git a/orig/v8-15.2.124.1/BUILD.bazel b/mod/v8-15.2.124.1/BUILD.bazel
 +    default = "False",
 +    visibility = ["//visibility:public"],
  )
- 
+
  # Default setting for v8_enable_pointer_compression.
 @@ -520,6 +525,7 @@
          "v8_enable_slow_dchecks": "ENABLE_SLOW_DCHECKS",
@@ -190,7 +203,7 @@ diff --git a/orig/v8-15.2.124.1/BUILD.bazel b/mod/v8-15.2.124.1/BUILD.bazel
 @@ -4170,28 +4176,14 @@
      }),
  )
- 
+
 -v8_library(
 -  name = "lib_dragonbox",
 -  srcs = ["third_party/dragonbox/src/include/dragonbox/dragonbox.h"],
@@ -222,7 +235,7 @@ diff --git a/orig/v8-15.2.124.1/BUILD.bazel b/mod/v8-15.2.124.1/BUILD.bazel
 +    name = "lib_fp16",
 +    actual = "@fp16//:fp16",
  )
- 
+
  filegroup(
 @@ -4486,6 +4478,20 @@
      srcs = [
@@ -245,7 +258,7 @@ diff --git a/orig/v8-15.2.124.1/BUILD.bazel b/mod/v8-15.2.124.1/BUILD.bazel
      ],
      outs = [
          "include/inspector/Debugger.h",
-@@ -4507,15 +4513,16 @@
+@@ -4507,15 +4513,19 @@
          "src/inspector/protocol/Schema.cpp",
          "src/inspector/protocol/Schema.h",
      ],
@@ -264,8 +277,8 @@ diff --git a/orig/v8-15.2.124.1/BUILD.bazel b/mod/v8-15.2.124.1/BUILD.bazel
          ":code_generator",
      ],
  )
- 
-@@ -4527,6 +4534,35 @@
+
+@@ -4527,6 +4537,35 @@
          ":v8_libsampler_files",
          ":v8_shared_internal_headers",
      ],
@@ -299,12 +312,12 @@ diff --git a/orig/v8-15.2.124.1/BUILD.bazel b/mod/v8-15.2.124.1/BUILD.bazel
 +    strip_include_prefix = "",
 +    visibility = ["//visibility:public"],
  )
- 
+
  filegroup(
 @@ -4609,11 +4648,9 @@
      strip_include_prefix = "noicu",
  )
- 
+
 -cc_library(
 +alias(
      name = "llvm_libc_headers",
@@ -313,12 +326,12 @@ diff --git a/orig/v8-15.2.124.1/BUILD.bazel b/mod/v8-15.2.124.1/BUILD.bazel
 -    defines = ["LIBC_NAMESPACE=__llvm_libc_cr"],
 +    actual = "@@//third_party/v8:rusty_v8_llvm_libc_headers",
  )
- 
+
  v8_library(
 @@ -4660,16 +4697,9 @@
      ],
  )
- 
+
 -cc_library(
 -  name = "simdutf",
 -  srcs = ["third_party/simdutf/simdutf.cpp"],
@@ -333,7 +346,7 @@ diff --git a/orig/v8-15.2.124.1/BUILD.bazel b/mod/v8-15.2.124.1/BUILD.bazel
 +    name = "simdutf",
 +    actual = "@simdutf//:simdutf",
  )
- 
+
  v8_library(
 @@ -4686,7 +4716,7 @@
      copts = ["-Wno-implicit-fallthrough"],
@@ -359,7 +372,7 @@ diff --git a/orig/v8-15.2.124.1/BUILD.bazel b/mod/v8-15.2.124.1/BUILD.bazel
      actual = "icu/v8",
 +    visibility = ["//visibility:public"],
  )
- 
+
  v8_library(
 @@ -4808,7 +4839,7 @@
      ],
@@ -369,7 +382,7 @@ diff --git a/orig/v8-15.2.124.1/BUILD.bazel b/mod/v8-15.2.124.1/BUILD.bazel
 +        "@icu//:icu",
      ],
  )
- 
+
 @@ -4852,9 +4883,20 @@
          ":icu/generated_torque_initializers",
          ":icu/v8_initializers_files",
@@ -392,104 +405,3 @@ diff --git a/orig/v8-15.2.124.1/BUILD.bazel b/mod/v8-15.2.124.1/BUILD.bazel
      }),
      noicu_deps = [":v8_libshared_noicu"],
      noicu_srcs = [
-diff --git a/orig/v8-15.2.124.1/bazel/BUILD.icu b/mod/v8-15.2.124.1/bazel/BUILD.icu
---- a/orig/v8-15.2.124.1/bazel/BUILD.icu
-+++ b/mod/v8-15.2.124.1/bazel/BUILD.icu
-@@ -1,3 +1,24 @@
-+load("@rules_cc//cc:defs.bzl", "cc_library")
-+
-+CUSTOM_LIBCXX_COPTS = select({
-+    "@v8//:is_v8_use_rusty_v8_custom_libcxx": [
-+        "-nostdinc++",
-+        "-D_LIBCPP_DISABLE_VISIBILITY_ANNOTATIONS",
-+        "-D_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_EXTENSIVE",
-+        "-D_LIBCPP_INSTRUMENTED_WITH_ASAN=0",
-+        "-D_LIBCXXABI_DISABLE_VISIBILITY_ANNOTATIONS",
-+    ],
-+    "//conditions:default": [],
-+})
-+
-+CUSTOM_LIBCXX_DEPS = select({
-+    "@v8//:is_v8_use_rusty_v8_custom_libcxx": [
-+        "@@//third_party/v8:rusty_v8_custom_libcxx_headers",
-+        "@@//third_party/v8:rusty_v8_custom_libcxx_runtime",
-+    ],
-+    "//conditions:default": [],
-+})
-+
- # Copyright 2021 the V8 project authors. All rights reserved.
- # Use of this source code is governed by a BSD-style license that can be
- # found in the LICENSE file.
-@@ -16,15 +37,12 @@
-     ]),
-     copts = select({
-         "@platforms//os:windows": [
--            "/wd4005",  # Macro redefinition.
--            "/wd4068",  # Unknown pragmas.
--            "/wd4267",  # Conversion from size_t on 64-bits.
--            "/utf-8",  # ICU source files are in UTF-8.
-+            "-Wno-deprecated-declarations",
-         ],
-         "//conditions:default": [
-             "-Wno-deprecated-declarations",
-         ],
--    }),
-+    }) + CUSTOM_LIBCXX_COPTS,
-     data = [":icudata"],
-     defines = [
-         "HAVE_DLOPEN=0",
-@@ -54,6 +72,7 @@
-         "U_ICUDATAENTRY_IN_COMMON",
-     ],
-     tags = ["requires-rtti"],
-+    deps = CUSTOM_LIBCXX_DEPS,
-     alwayslink = 1,
- )
- 
-@@ -65,19 +84,16 @@
-     ]),
-     copts = select({
-         "@platforms//os:windows": [
--            "/wd4005",  # Macro redefinition.
--            "/wd4068",  # Unknown pragmas.
--            "/wd4267",  # Conversion from size_t on 64-bits.
--            "/utf-8",  # ICU source files are in UTF-8.
-+            "-Wno-deprecated-declarations",
-         ],
-         "//conditions:default": [
-             "-Wno-deprecated-declarations",
-         ],
--    }),
-+    }) + CUSTOM_LIBCXX_COPTS,
-     local_defines = [
-         "U_I18N_IMPLEMENTATION",
-     ],
--    deps = [":icuuc"],
-+    deps = [":icuuc"] + CUSTOM_LIBCXX_DEPS,
-     alwayslink = 1,
- )
- 
-@@ -93,13 +109,10 @@
-     ]),
-     copts = select({
-         "@platforms//os:windows": [
--            "/wd4005",  # Macro redefinition.
--            "/wd4068",  # Unknown pragmas.
--            "/wd4267",  # Conversion from size_t on 64-bits.
--            "/utf-8",  # ICU source files are in UTF-8.
-+            "-Wno-deprecated-declarations",
-         ],
-         "//conditions:default": [],
--    }),
-+    }) + CUSTOM_LIBCXX_COPTS,
-     include_prefix = "third_party/icu",
-     local_defines = [
-         "U_COMMON_IMPLEMENTATION",
-@@ -108,6 +121,6 @@
-     deps = [
-         ":icui18n",
-         ":icuuc",
--    ],
-+    ] + CUSTOM_LIBCXX_DEPS,
-     alwayslink = 1,
- )

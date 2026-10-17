@@ -237,6 +237,7 @@ mod managed_worktree_creation;
 mod misalignment_policy;
 mod model_defaults;
 mod new_session;
+mod quick_dials;
 mod turn_tips;
 pub(crate) use new_session::has_launch_setting;
 mod clipboard;

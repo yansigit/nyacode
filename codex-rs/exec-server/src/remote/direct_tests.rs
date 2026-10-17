@@ -175,6 +175,57 @@ impl AuthProvider for QueryAuthProvider {
     }
 }
 
+struct ScopedExecutorAuth;
+
+impl AuthProvider for ScopedExecutorAuth {
+    fn add_auth_headers(&self, headers: &mut HeaderMap) {
+        headers.insert(
+            http::header::AUTHORIZATION,
+            HeaderValue::from_static("Bearer synthetic-scoped-token"),
+        );
+    }
+}
+
+#[tokio::test]
+async fn direct_transport_rejects_scoped_credentials_before_sending() -> Result<()> {
+    let registry = MockServer::start().await;
+    let mut client = EnvironmentRegistryClient::new(registry.uri(), Arc::new(ScopedExecutorAuth))?;
+    client.auth_mode = RegistryAuthMode::ExecutorCredential;
+    let error = client
+        .register_direct_environment("environment-requested")
+        .await
+        .expect_err("scoped credentials must not be sent on direct registration");
+    assert!(matches!(
+        error,
+        ExecServerError::EnvironmentRegistryConfig(_)
+    ));
+    assert!(registry.received_requests().await.unwrap().is_empty());
+
+    let listener = TcpListener::bind("127.0.0.1:0").await?;
+    let url = format!("ws://{}/connect", listener.local_addr()?);
+    let error = match connect_direct(
+        &url,
+        &ScopedExecutorAuth,
+        RegistryAuthMode::ExecutorCredential,
+        &HttpClientFactory::new(OutboundProxyPolicy::ReqwestDefault),
+    )
+    .await
+    {
+        Err(error) => error,
+        Ok(_) => panic!("scoped credentials must not be sent to the WebSocket"),
+    };
+    assert!(matches!(
+        error,
+        ExecServerError::EnvironmentRegistryConfig(_)
+    ));
+    assert!(
+        timeout(Duration::from_millis(50), listener.accept())
+            .await
+            .is_err()
+    );
+    Ok(())
+}
+
 #[tokio::test]
 async fn direct_websocket_signs_only_host_and_preserves_handshake_headers() -> Result<()> {
     let mut request = "wss://executor.example.com/connect".into_client_request()?;
@@ -213,6 +264,7 @@ async fn direct_websocket_uses_authenticated_url_query_parameters() -> Result<()
     let connection = connect_direct(
         &url,
         &QueryAuthProvider,
+        RegistryAuthMode::Legacy,
         &HttpClientFactory::new(OutboundProxyPolicy::ReqwestDefault),
     )
     .await?;

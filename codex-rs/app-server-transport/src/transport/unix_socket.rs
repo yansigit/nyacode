@@ -303,6 +303,36 @@ async fn prepare_control_socket_path(socket_path: &Path) -> IoResult<()> {
     tokio::fs::remove_file(socket_path).await
 }
 
+/// Return a verified local socket endpoint, independent of the advertised Unix alias.
+/// A socket bound directly at the advertised path (e.g. SSH forwarding) is not ours on Unix.
+pub fn verified_local_daemon_socket(socket_path: &Path) -> IoResult<Option<AbsolutePathBuf>> {
+    #[cfg(unix)]
+    {
+        use std::os::unix::fs::MetadataExt;
+
+        let protected = protected_socket_path(socket_path)?;
+        if std::fs::read_link(socket_path).ok().as_deref() != Some(protected.as_path()) {
+            return Ok(None);
+        }
+        let directory = std::fs::symlink_metadata(codex_uds::shared_daemon_socket_directory()?)?;
+        // Match the daemon's bind-time check without creating or repairing the directory.
+        if directory.is_dir()
+            && directory.uid() == unsafe { libc::geteuid() }
+            && directory.mode() & 0o777 == 0o700
+        {
+            return AbsolutePathBuf::from_absolute_path(protected).map(Some);
+        }
+        Ok(None)
+    }
+    #[cfg(windows)]
+    {
+        // The TUI revalidates this directory and verifies the peer at connection time,
+        // using the same connect_local_daemon path as implicit startup.
+        let (path, _directory) = codex_uds::validate_private_socket_path(socket_path)?;
+        AbsolutePathBuf::from_absolute_path_checked(path).map(Some)
+    }
+}
+
 #[cfg(unix)]
 fn protected_socket_path(rendezvous_path: &Path) -> IoResult<std::path::PathBuf> {
     use sha2::Digest;

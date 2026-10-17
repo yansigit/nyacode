@@ -99,27 +99,26 @@ impl PreparedGuardianContext {
         kind: GuardianReviewSessionKind,
         snapshot: Option<GuardianReviewForkSnapshot>,
     ) -> (crate::StartThreadOptions, GuardianReviewState) {
-        let snapshot =
-            snapshot.filter(|_| self.reviewer_selection == ReviewerSelection::ReuseIfAvailable);
-        let (mut conversation, mut history) = snapshot.map(ConversationState::fork).unzip();
-        if self.parent_compaction.is_some()
-            && conversation
-                .as_ref()
-                .is_some_and(|state| state.cursor().is_none())
-        {
+        let mut conversation = snapshot
+            .filter(|_| self.reviewer_selection == ReviewerSelection::ReuseIfAvailable)
+            .map(ConversationState::from)
+            .unwrap_or_default();
+        if self.parent_compaction.is_some() && conversation.cursor().is_none() {
             // A compacted fork has no valid transcript progress. Prefer the
             // captured parent checkpoint to its lossy reviewer summary.
-            conversation = None;
-            history = None;
+            conversation = ConversationState::default();
         }
-        if !matches!(kind, GuardianReviewSessionKind::EphemeralForked)
-            && let Some((conversation, history)) = conversation.as_mut().zip(history.as_ref())
-        {
-            // Replacement trunks need a rollback point if their first review is invalidated.
-            conversation.commit_snapshot(history.clone());
-        }
+        let history = match kind {
+            GuardianReviewSessionKind::EphemeralForked => conversation.take_history(),
+            // Replacement trunks keep the checkpoint if their first review is invalidated.
+            GuardianReviewSessionKind::TrunkNew | GuardianReviewSessionKind::TrunkReused => {
+                conversation
+                    .snapshot()
+                    .map(|checkpoint| checkpoint.history().clone())
+            }
+        };
         let state = GuardianReviewState {
-            conversation: conversation.unwrap_or_default(),
+            conversation,
             fresh_parent_checkpoint: history.is_none() && self.parent_compaction.is_some(),
             transcript_history_version: 0,
             transcript_source: history

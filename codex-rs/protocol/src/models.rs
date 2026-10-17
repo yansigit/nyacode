@@ -910,6 +910,21 @@ pub enum ContentItem {
     },
 }
 
+/// Constructs an input-text content item.
+pub fn input_text(text: impl Into<String>) -> ContentItem {
+    ContentItem::InputText { text: text.into() }
+}
+
+impl ContentItem {
+    /// Extracts text, returning `None` for non-text content.
+    pub fn into_text(self) -> Option<String> {
+        match self {
+            Self::InputText { text } | Self::OutputText { text, .. } => Some(text),
+            Self::InputImage { .. } | Self::InputAudio { .. } => None,
+        }
+    }
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, JsonSchema, TS)]
 #[serde(untagged)]
 #[ts(untagged)]
@@ -2249,6 +2264,20 @@ pub enum FunctionCallOutputContentItem {
     EncryptedContent {
         encrypted_content: String,
     },
+}
+
+/// Converts message content to tool output, preserving media and image detail.
+/// Output text becomes input text without its sampling annotations or logprobs.
+impl From<ContentItem> for FunctionCallOutputContentItem {
+    fn from(item: ContentItem) -> Self {
+        match item {
+            ContentItem::InputText { text } | ContentItem::OutputText { text, .. } => {
+                Self::InputText { text }
+            }
+            ContentItem::InputImage { image, detail } => Self::InputImage { image, detail },
+            ContentItem::InputAudio { audio_url } => Self::InputAudio { audio_url },
+        }
+    }
 }
 
 /// Converts structured function-call output content into plain text for

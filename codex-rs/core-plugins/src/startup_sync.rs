@@ -1102,38 +1102,24 @@ fn extract_zipball_to_dir(bytes: &[u8], destination: &Path) -> Result<(), String
                 output_path.display()
             )
         })?;
-        apply_zip_permissions(&entry, &output_path)?;
+        #[cfg(unix)]
+        if let Some(mode) = entry.unix_mode() {
+            use std::os::unix::fs::PermissionsExt;
+
+            // zip strips setuid, setgid, and sticky bits from the archive's Unix mode.
+            output
+                .set_permissions(std::fs::Permissions::from_mode(mode))
+                .map_err(|err| {
+                    format!(
+                        "failed to set permissions on curated plugins file {}: {err}",
+                        output_path.display()
+                    )
+                })?;
+        }
     }
 
     Ok(())
 }
-
-#[cfg(unix)]
-fn apply_zip_permissions<R: std::io::Read + ?Sized>(
-    entry: &zip::read::ZipFile<'_, R>,
-    output_path: &Path,
-) -> Result<(), String> {
-    use std::os::unix::fs::PermissionsExt;
-
-    let Some(mode) = entry.unix_mode() else {
-        return Ok(());
-    };
-    std::fs::set_permissions(output_path, std::fs::Permissions::from_mode(mode)).map_err(|err| {
-        format!(
-            "failed to set permissions on curated plugins file {}: {err}",
-            output_path.display()
-        )
-    })
-}
-
-#[cfg(not(unix))]
-fn apply_zip_permissions<R: std::io::Read + ?Sized>(
-    _entry: &zip::read::ZipFile<'_, R>,
-    _output_path: &Path,
-) -> Result<(), String> {
-    Ok(())
-}
-
 #[cfg(test)]
 #[path = "startup_sync_tests.rs"]
 mod tests;

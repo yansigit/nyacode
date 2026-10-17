@@ -364,7 +364,11 @@ async fn daemon_startup_falls_back_only_for_implicit_endpoints() -> color_eyre::
             assert_eq!(target, original_target);
             assert!(state_db.is_none());
         } else {
-            let server = AppServerSession::new(result?, target.thread_params_mode());
+            let server = AppServerSession::new(
+                crate::backend_id::BackendId::new(),
+                result?,
+                target.thread_params_mode(),
+            );
             assert!(server.uses_embedded_app_server());
             assert_eq!(target, AppServerTarget::Embedded);
             assert!(state_db.is_some());

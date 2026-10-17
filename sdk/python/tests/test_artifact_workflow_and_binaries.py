@@ -589,6 +589,39 @@ def test_generated_image_variants_preserve_flat_fields(
         model.model_validate({"type": payload["type"]})
 
 
+def test_generated_image_generation_thread_item_alias_remains_available() -> None:
+    """Existing SDK callers can still construct and validate inline image-generation items."""
+    from openai_codex.generated.v2_all import (
+        ImageGenerationThreadItem,
+        ResultThreadItem,
+    )
+
+    item = ImageGenerationThreadItem.model_validate(
+        {
+            "failure": None,
+            "id": "image_1",
+            "result": "aW1hZ2U=",
+            "revisedPrompt": None,
+            "savedPath": None,
+            "status": "completed",
+            "transparentBackground": None,
+            "type": "imageGeneration",
+        }
+    )
+
+    if ImageGenerationThreadItem is ResultThreadItem:
+        assert isinstance(item, ResultThreadItem)
+        return
+
+    # ts-rs 12 keeps ImageGenerationThreadItem as the file-or-result union and
+    # aliases ResultThreadItem to the inline result variant.
+    assert isinstance(item.root, ResultThreadItem)
+    dumped = item.model_dump(by_alias=True, exclude_none=True)
+    assert dumped["id"] == "image_1"
+    assert dumped["result"] == "aW1hZ2U="
+    assert dumped["type"] == "imageGeneration"
+
+
 def test_runtime_package_template_has_no_checked_in_binaries() -> None:
     runtime_root = ROOT.parent / "python-runtime" / "src" / "codex_cli_bin"
     assert sorted(

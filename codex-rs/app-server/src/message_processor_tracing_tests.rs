@@ -264,6 +264,7 @@ pub(super) async fn build_test_processor(
         outgoing,
         analytics_events_client,
         arg0_paths: Arg0DispatchPaths::default(),
+        startup_cwd: Some(config.cwd.to_path_buf()),
         config,
         config_manager,
         environment_manager: Arc::new(EnvironmentManager::default_for_tests()),

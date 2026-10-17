@@ -352,6 +352,7 @@ mod tests {
     ) -> ConfiguredHandler {
         ConfiguredHandler {
             builtin: false,
+            plugin_trust: None,
             event_name,
             matcher: matcher
                 .map(|pattern| crate::engine::HookMatcher::new(pattern).expect("valid matcher")),

@@ -1322,6 +1322,10 @@ impl App {
         app_server: &mut AppServerSession,
         target_session: SessionTarget,
     ) -> Result<AppRunControl> {
+        if let Err(error) = target_session.ensure_backend(app_server.backend_id()) {
+            self.add_session_picker_error(error.to_string());
+            return Ok(AppRunControl::Continue);
+        }
         if self.ignore_same_thread_resume(&target_session) {
             self.agents_overview
                 .hidden_threads

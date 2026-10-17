@@ -66,6 +66,7 @@ mod exec_args_tests;
 mod exec_server_args_tests;
 mod exec_server_auth;
 mod exec_server_command;
+mod exec_server_credential;
 mod exec_server_telemetry;
 mod marketplace_cmd;
 mod mcp_cmd;
@@ -2110,6 +2111,13 @@ async fn run_debug_prompt_input_command(
     let auth_manager =
         AuthManager::shared_from_config(&config, /*enable_codex_api_key_env*/ false).await?;
     let mut extensions = codex_extension_api::ExtensionRegistryBuilder::new();
+    // Debug prompt construction bypasses app-server and needs its own extension registry.
+    if config
+        .features
+        .enabled(codex_features::Feature::MultiEnvCopyFile)
+    {
+        codex_multi_env_copy_file::install(&mut extensions);
+    }
     codex_git_attribution::install(
         &mut extensions,
         auth_manager,

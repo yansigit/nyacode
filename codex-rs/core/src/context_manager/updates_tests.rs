@@ -5,6 +5,7 @@ use crate::context::ContextualUserFragment;
 use codex_protocol::models::ContentItem;
 use codex_protocol::models::ContentItemKind;
 use codex_protocol::models::InternalChatMessageMetadataPassthrough;
+use codex_protocol::models::input_text;
 use pretty_assertions::assert_eq;
 use serde_json::json;
 
@@ -31,8 +32,8 @@ impl ContextualUserFragment for TestFragment {
         ("", "")
     }
 
-    fn body(&self) -> String {
-        self.text.to_string()
+    fn body(&self) -> ContentItem {
+        input_text(self.text.to_string())
     }
 }
 

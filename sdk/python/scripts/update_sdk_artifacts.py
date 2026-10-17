@@ -655,6 +655,7 @@ def generate_v2_all(schema_dir: Path, *, format_output: bool = True) -> None:
             cwd=sdk_root() if format_output else Path(td),
         )
     _preserve_inline_image_class_names(out_path)
+    _add_legacy_image_generation_thread_item_alias(out_path)
     _require_nullable_field(out_path, "ChatgptAccount", r"email: str \| None")
     _require_nullable_field(out_path, "McpResourceReadTarget", r"link_id: Annotated\[[\s\S]*?\]")
     _preserve_open_enum(out_path, "CodexErrorInfoValue", allow_empty=True)
@@ -680,6 +681,38 @@ def _preserve_inline_image_class_names(out_path: Path) -> None:
         source = re.sub(rf"\b{re.escape(generated_name)}\b", stable_name, source)
 
     out_path.write_text(source)
+
+
+def _add_legacy_image_generation_thread_item_alias(out_path: Path) -> None:
+    """Keep the inline image-generation class import available after splitting the wire type.
+
+    ts-rs 11 inlines the image payload into ``ThreadItem`` and names the result
+    variant ``ResultThreadItem``. ts-rs 12 exports that variant as
+    ``ResultImageGenerationItem`` and already emits ``ImageGenerationThreadItem``
+    as the thread-item union, so the legacy name is aliased the other way.
+    """
+    source = out_path.read_text()
+    class_start = source.find("class ResultThreadItem(BaseModel):")
+    if class_start != -1:
+        if re.search(r"\bImageGenerationThreadItem\b", source):
+            raise RuntimeError("Generated SDK already defines ImageGenerationThreadItem")
+        class_end = source.find("\n\nclass ", class_start)
+        if class_end == -1:
+            class_end = len(source)
+        alias = "\n\nImageGenerationThreadItem = ResultThreadItem\n"
+        out_path.write_text(source[:class_end] + alias + source[class_end:])
+        return
+
+    result_start = source.find("class ResultImageGenerationItem(BaseModel):")
+    if result_start == -1:
+        raise RuntimeError("Generated SDK is missing ResultThreadItem")
+    if re.search(r"\bResultThreadItem\b", source):
+        raise RuntimeError("Generated SDK already defines ResultThreadItem")
+    class_end = source.find("\n\nclass ", result_start)
+    if class_end == -1:
+        class_end = len(source)
+    alias = "\n\nResultThreadItem = ResultImageGenerationItem\n"
+    out_path.write_text(source[:class_end] + alias + source[class_end:])
 
 
 def _require_nullable_field(out_path: Path, class_name: str, field_pattern: str) -> None:

@@ -1018,6 +1018,9 @@
             "mcp_oauth_refresh_coordination": {
               "type": "boolean"
             },
+            "mcp_tool_list_changed": {
+              "type": "boolean"
+            },
             "memories": {
               "type": "boolean"
             },
@@ -1040,6 +1043,9 @@
               "$ref": "#/definitions/FeatureToml_for_MultiAgentV2ConfigToml"
             },
             "multi_agent_v2_dynamic_tools": {
+              "type": "boolean"
+            },
+            "multi_env_copy_file": {
               "type": "boolean"
             },
             "network_proxy": {
@@ -2216,6 +2222,10 @@
       "properties": {
         "enabled": {
           "type": "boolean"
+        },
+        "trusted_content_hash": {
+          "description": "Approved plugin contents; kept separate for declaration-only clients.",
+          "type": "string"
         },
         "trusted_hash": {
           "type": "string"
@@ -3636,6 +3646,10 @@
     "PluginConfig": {
       "additionalProperties": false,
       "properties": {
+        "auto_provision": {
+          "description": "Provisioning metadata. Omission does not request provisioning.\nOnly applies with `remote_plugin_id` and Plugin Service availability to the\nrequesting user at provisioning time. Effective enablement, trusted\nprovisioning policy, and authentication and authorization restrictions still apply.\nThis value is not trusted authorization and does not trigger provisioning.",
+          "type": "boolean"
+        },
         "enabled": {
           "description": "Explicit activation override. Omission inherits the installed-plugin default.",
           "type": "boolean"
@@ -3646,6 +3660,14 @@
           },
           "description": "Per-MCP-server policy overlays for MCP servers contributed by this plugin.",
           "type": "object"
+        },
+        "release_id": {
+          "description": "Release identifier used to pin the remote plugin to a specific release.\nOmission leaves release selection unchanged.\nCore stores this metadata without selecting or fetching a release.",
+          "type": "string"
+        },
+        "remote_plugin_id": {
+          "description": "Stable, unique identifier of a ChatGPT-hosted remote plugin.\nAvailability to the requesting user is determined by Plugin Service at\nprovisioning time.",
+          "type": "string"
         }
       },
       "type": "object"
@@ -3717,6 +3739,24 @@
           "type": "boolean"
         }
       },
+      "type": "object"
+    },
+    "Preset": {
+      "additionalProperties": false,
+      "description": "One reusable prompt or slash command submitted through the TUI composer.",
+      "properties": {
+        "input": {
+          "description": "Plain-text input, limited to 8,000 UTF-8 bytes.",
+          "type": "string"
+        },
+        "label": {
+          "description": "Optional short name for the picker and shortcut hints.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "input"
+      ],
       "type": "object"
     },
     "ProfileTui": {
@@ -4666,6 +4706,7 @@
               "increase_reasoning_effort": null,
               "interrupt_turn": null,
               "next_permission_mode": null,
+              "open_presets": null,
               "previous_permission_mode": null,
               "prompt_stack_back": null,
               "skip_question": null,
@@ -4877,6 +4918,14 @@
           ],
           "default": "composer",
           "description": "Where the terminal pet should anchor vertically.\n\nDefaults to `composer`, which follows the current TUI composer viewport."
+        },
+        "presets": {
+          "additionalProperties": {
+            "$ref": "#/definitions/Preset"
+          },
+          "default": {},
+          "description": "Saved inputs keyed by a single digit (`0` through `9`).",
+          "type": "object"
         },
         "question_esc_back": {
           "default": true,
@@ -5201,6 +5250,14 @@
             }
           ],
           "description": "Switch to the next available permission mode."
+        },
+        "open_presets": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/KeybindingsSpec"
+            }
+          ],
+          "description": "Open saved prompts and slash commands."
         },
         "previous_permission_mode": {
           "allOf": [
@@ -5661,6 +5718,7 @@
             "increase_reasoning_effort": null,
             "interrupt_turn": null,
             "next_permission_mode": null,
+            "open_presets": null,
             "previous_permission_mode": null,
             "prompt_stack_back": null,
             "skip_question": null,
@@ -7306,6 +7364,9 @@
         "mcp_oauth_refresh_coordination": {
           "type": "boolean"
         },
+        "mcp_tool_list_changed": {
+          "type": "boolean"
+        },
         "memories": {
           "type": "boolean"
         },
@@ -7328,6 +7389,9 @@
           "$ref": "#/definitions/FeatureToml_for_MultiAgentV2ConfigToml"
         },
         "multi_agent_v2_dynamic_tools": {
+          "type": "boolean"
+        },
+        "multi_env_copy_file": {
           "type": "boolean"
         },
         "network_proxy": {

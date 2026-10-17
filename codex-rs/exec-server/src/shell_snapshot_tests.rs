@@ -74,12 +74,14 @@ async fn cached_bash_snapshot_does_not_reload_profile_with_socket_stdin() -> any
     };
     let cache = ShellSnapshotCache::default();
     for _ in 0..2 {
+        let credential_brokers = codex_network_proxy::RemoteCredentialBrokerCache::default();
         let mut prepared = prepare_exec_request_with_telemetry(
             &params,
             params.env.clone(),
             /*runtime_paths*/ None,
             /*network_policy_decider*/ None,
             /*network_policy_audit_observer*/ None,
+            &credential_brokers,
             &ProcessTelemetry::default(),
         )
         .await
@@ -90,6 +92,7 @@ async fn cached_bash_snapshot_does_not_reload_profile_with_socket_stdin() -> any
                 &mut prepared,
                 &ExecServerTelemetry::default(),
                 CapturePurpose::Execution,
+                &credential_brokers,
             )
             .await
             .expect("prepare replay");
@@ -199,6 +202,7 @@ async fn snapshot_failure_retries_are_bounded_and_single_flight(
             /*runtime_paths*/ None,
             /*network_policy_decider*/ None,
             /*network_policy_audit_observer*/ None,
+            &codex_network_proxy::RemoteCredentialBrokerCache::default(),
             &ProcessTelemetry::default(),
         )
         .await
@@ -209,6 +213,7 @@ async fn snapshot_failure_retries_are_bounded_and_single_flight(
             /*runtime_paths*/ None,
             /*network_policy_decider*/ None,
             /*network_policy_audit_observer*/ None,
+            &codex_network_proxy::RemoteCredentialBrokerCache::default(),
             &ProcessTelemetry::default(),
         )
         .await
@@ -219,10 +224,11 @@ async fn snapshot_failure_retries_are_bounded_and_single_flight(
         } else {
             CapturePurpose::Execution
         };
+        let credential_brokers = codex_network_proxy::RemoteCredentialBrokerCache::default();
         let (first, second) = tokio::join!(
             biased;
-            cache.prepare(&params, &mut prepared, &telemetry, purpose),
-            cache.prepare(&params, &mut concurrent, &telemetry, CapturePurpose::Execution),
+            cache.prepare(&params, &mut prepared, &telemetry, purpose, &credential_brokers),
+            cache.prepare(&params, &mut concurrent, &telemetry, CapturePurpose::Execution, &credential_brokers),
         );
         let first = if prewarming {
             first.expect_err("prewarm must report failure without caching it");
@@ -258,6 +264,7 @@ async fn snapshot_failure_retries_are_bounded_and_single_flight(
                     &mut prepared,
                     &telemetry,
                     CapturePurpose::Execution,
+                    &credential_brokers,
                 )
                 .await
                 .expect("capture must stay cached during backoff");

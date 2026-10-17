@@ -7,7 +7,9 @@ use app_test_support::ChatGptAuthFixture;
 use app_test_support::MockResponsesConfig;
 use app_test_support::TestAppServer;
 use app_test_support::write_chatgpt_auth;
+use codex_app_server_protocol::GeneratedImageRef;
 use codex_app_server_protocol::ImageGenerationFailure;
+use codex_app_server_protocol::ImageGenerationInputImage;
 use codex_app_server_protocol::ImageGenerationItem;
 use codex_app_server_protocol::ImageReference as V2ImageReference;
 use codex_app_server_protocol::ItemCompletedNotification;
@@ -23,10 +25,13 @@ use codex_app_server_protocol::TurnStartResponse;
 use codex_app_server_protocol::UserInput as V2UserInput;
 use codex_config::types::AuthCredentialsStoreMode;
 use codex_features::Feature;
+use codex_utils_absolute_path::AbsolutePathBuf;
 use core_test_support::responses;
 use core_test_support::skip_if_remote;
 use pretty_assertions::assert_eq;
 use serde_json::json;
+use sha2::Digest;
+use sha2::Sha256;
 use tempfile::TempDir;
 use test_case::test_case;
 use tokio::time::timeout;
@@ -159,7 +164,7 @@ async fn standalone_image_generation_returns_saved_path_hint_to_model(
     let ThreadItem::ImageGeneration(ImageGenerationItem {
         status,
         revised_prompt,
-        result,
+        image,
         transparent_background,
         saved_path: Some(saved_path),
         ..
@@ -169,7 +174,12 @@ async fn standalone_image_generation_returns_saved_path_hint_to_model(
     };
     assert_eq!(status, "completed");
     assert_eq!(revised_prompt.as_deref(), Some("paint a blue whale"));
-    assert_eq!(result, RESULT);
+    assert_eq!(
+        image,
+        GeneratedImageRef::Inline {
+            result: RESULT.to_string(),
+        }
+    );
     assert_eq!(transparent_background, Some(false));
     assert_eq!(std::fs::read(&saved_path)?, TINY_PNG_BYTES);
 
@@ -258,11 +268,46 @@ async fn standalone_image_generation_returns_saved_path_hint_to_model(
     Ok(())
 }
 
+#[derive(Clone, Copy)]
+enum ImagegenInput {
+    PromptOnly,
+    ReferencedFile,
+}
+
+#[test_case(ImagegenInput::PromptOnly; "prompt_only")]
+#[test_case(ImagegenInput::ReferencedFile; "referenced_file")]
 #[tokio::test]
-async fn transparent_image_preserves_output_metadata_and_persisted_history() -> Result<()> {
+async fn transparent_image_preserves_output_metadata_and_persisted_history(
+    input: ImagegenInput,
+) -> Result<()> {
     let call_id = "transparent-image-run-1";
     let server = responses::start_mock_server().await;
-    mount_image_response_with_background(&server, "transparent").await;
+    let codex_home = TempDir::new()?;
+    let mut arguments = json!({
+        "prompt": "a blue whale on a transparent background",
+        "transparent_background": true,
+    });
+    let expected_inputs = match input {
+        ImagegenInput::PromptOnly => {
+            mount_image_response_with_background(&server, "transparent").await;
+            Vec::new()
+        }
+        ImagegenInput::ReferencedFile => {
+            skip_if_remote!(
+                Ok(()),
+                "remote executors use different imagegen storage approaches, so host-local image paths are unavailable"
+            );
+            let path =
+                AbsolutePathBuf::from_absolute_path(codex_home.path().join("reference.png"))?;
+            std::fs::write(path.as_path(), TINY_PNG_BYTES)?;
+            arguments["referenced_image_paths"] = json!([path]);
+            mount_image_edit_response(&server).await;
+            vec![ImageGenerationInputImage {
+                path,
+                sha256: hex::encode(Sha256::digest(TINY_PNG_BYTES)),
+            }]
+        }
+    };
     responses::mount_sse_sequence(
         &server,
         vec![
@@ -272,11 +317,7 @@ async fn transparent_image_preserves_output_metadata_and_persisted_history() -> 
                     call_id,
                     "image_gen",
                     "imagegen",
-                    &json!({
-                        "prompt": "a blue whale on a transparent background",
-                        "transparent_background": true,
-                    })
-                    .to_string(),
+                    &arguments.to_string(),
                 ),
                 responses::ev_completed("resp-1"),
             ]),
@@ -288,7 +329,6 @@ async fn transparent_image_preserves_output_metadata_and_persisted_history() -> 
     )
     .await;
 
-    let codex_home = TempDir::new()?;
     create_config_toml(codex_home.path(), &server.uri(), ImagegenTestMode::Direct)?;
     write_chatgpt_auth(
         codex_home.path(),
@@ -315,16 +355,23 @@ async fn transparent_image_preserves_output_metadata_and_persisted_history() -> 
     let thread_id = completed.thread_id.clone();
     let ThreadItem::ImageGeneration(ImageGenerationItem {
         status,
-        result,
+        image,
         transparent_background,
+        input_images,
         ..
     }) = completed.item
     else {
         panic!("expected completed image-generation item");
     };
     assert_eq!(status, "completed");
-    assert_eq!(result, RESULT);
+    assert_eq!(
+        image,
+        GeneratedImageRef::Inline {
+            result: RESULT.to_string(),
+        }
+    );
     assert_eq!(transparent_background, Some(true));
+    assert_eq!(input_images, expected_inputs);
 
     drop(mcp);
     let mut resumed = TestAppServer::builder()
@@ -350,6 +397,7 @@ async fn transparent_image_preserves_output_metadata_and_persisted_history() -> 
         })
         .context("persisted legacy history should contain the generated image")?;
     assert_eq!(persisted_image.transparent_background, Some(true));
+    assert_eq!(persisted_image.input_images, expected_inputs);
 
     let resume_id = resumed
         .send_thread_resume_request(ThreadResumeParams {
@@ -369,6 +417,7 @@ async fn transparent_image_preserves_output_metadata_and_persisted_history() -> 
         })
         .context("resumed legacy history should contain the generated image")?;
     assert_eq!(resumed_image.transparent_background, Some(true));
+    assert_eq!(resumed_image.input_images, expected_inputs);
 
     Ok(())
 }
@@ -508,12 +557,31 @@ async fn invalid_transparent_background_does_not_dispatch(
     Ok(())
 }
 
+#[test_case(ImagegenInput::PromptOnly; "prompt_only")]
+#[test_case(ImagegenInput::ReferencedFile; "referenced_file")]
 #[tokio::test]
-async fn standalone_image_generation_failure_emits_terminal_item() -> Result<()> {
+async fn standalone_image_generation_failure_emits_terminal_item(
+    input: ImagegenInput,
+) -> Result<()> {
     let call_id = "image-run-failed";
     let server = responses::start_mock_server().await;
+    let codex_home = TempDir::new()?;
+    let mut arguments = json!({"prompt": "paint a blue whale"});
+    let image_endpoint = match input {
+        ImagegenInput::PromptOnly => "/api/codex/images/generations",
+        ImagegenInput::ReferencedFile => {
+            skip_if_remote!(
+                Ok(()),
+                "remote executors use different imagegen storage approaches, so host-local image paths are unavailable"
+            );
+            let input_path = codex_home.path().join("reference.png");
+            std::fs::write(&input_path, TINY_PNG_BYTES)?;
+            arguments["referenced_image_paths"] = json!([input_path]);
+            "/api/codex/images/edits"
+        }
+    };
     Mock::given(method("POST"))
-        .and(path("/api/codex/images/generations"))
+        .and(path(image_endpoint))
         .respond_with(
             ResponseTemplate::new(500)
                 .insert_header("x-codex-imagegen-request-id", "req-imagegen-failed-123")
@@ -531,7 +599,7 @@ async fn standalone_image_generation_failure_emits_terminal_item() -> Result<()>
                     call_id,
                     "image_gen",
                     "imagegen",
-                    &json!({"prompt": "paint a blue whale"}).to_string(),
+                    &arguments.to_string(),
                 ),
                 responses::ev_completed("resp-1"),
             ]),
@@ -543,7 +611,6 @@ async fn standalone_image_generation_failure_emits_terminal_item() -> Result<()>
     )
     .await;
 
-    let codex_home = TempDir::new()?;
     create_config_toml(codex_home.path(), &server.uri(), ImagegenTestMode::Direct)?;
     write_chatgpt_auth(
         codex_home.path(),
@@ -568,10 +635,13 @@ async fn standalone_image_generation_failure_emits_terminal_item() -> Result<()>
             id: call_id.to_string(),
             status: "failed".to_string(),
             revised_prompt: Some("paint a blue whale".to_string()),
-            result: String::new(),
+            image: GeneratedImageRef::Inline {
+                result: String::new(),
+            },
             transparent_background: None,
             failure: None,
             saved_path: None,
+            input_images: Vec::new(),
             imagegen_request_id: None,
             generation_id: None,
         })
@@ -755,9 +825,11 @@ async fn standalone_image_edit_uses_attached_model_visible_image(
         "remote executors use different imagegen storage approaches, so host-local image paths are unavailable"
     );
 
-    let (edit_request, _) = run_image_edit_test(|codex_home| {
+    let mut expected_input_path = None;
+    let (edit_request, completed_image) = run_image_edit_test(|codex_home| {
         let image_path = codex_home.join("attached.png");
         std::fs::write(&image_path, TINY_PNG_BYTES)?;
+        expected_input_path = Some(AbsolutePathBuf::from_absolute_path(&image_path)?);
         let mut arguments = imagegen_arguments("add a red hat", requested_transparent_background);
         arguments["referenced_image_paths"] = json!([image_path.display().to_string()]);
         Ok((
@@ -785,6 +857,14 @@ async fn standalone_image_edit_uses_attached_model_visible_image(
             "quality": "auto",
             "size": "auto",
         })
+    );
+
+    assert_eq!(
+        completed_image.input_images,
+        vec![ImageGenerationInputImage {
+            path: expected_input_path.expect("input path"),
+            sha256: hex::encode(Sha256::digest(TINY_PNG_BYTES)),
+        }]
     );
 
     Ok(())

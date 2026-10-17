@@ -4,6 +4,8 @@ load("@rules_cc//cc:defs.bzl", "cc_library")
 
 package(default_visibility = ["//visibility:public"])
 
+exports_files(["icu.BUILD.bazel"])
+
 config_setting(
     name = "platform_aarch64_unknown_linux_musl",
     constraint_values = [
@@ -90,40 +92,46 @@ alias(
 alias(
     name = "rusty_v8_prebuilt_archive_for_target",
     actual = select({
+        "@rules_rs//rs/platforms/config:aarch64-pc-windows-msvc": ":v8_152_2_0_aarch64_pc_windows_msvc",
+        "@rules_rs//rs/platforms/config:x86_64-pc-windows-msvc": ":v8_152_2_0_x86_64_pc_windows_msvc",
         "@rules_rs//rs/platforms/config:aarch64-apple-darwin": "@rusty_v8_152_2_0_aarch64_apple_darwin_archive//file",
         "@rules_rs//rs/platforms/config:aarch64-unknown-linux-gnu": ":v8_152_2_0_aarch64_unknown_linux_gnu_prebuilt",
         "@rules_rs//rs/platforms/config:x86_64-apple-darwin": "@rusty_v8_152_2_0_x86_64_apple_darwin_archive//file",
         "@rules_rs//rs/platforms/config:x86_64-unknown-linux-gnu": ":v8_152_2_0_x86_64_unknown_linux_gnu_prebuilt",
-        ":platform_aarch64_unknown_linux_musl": ":rusty_v8_source_archive_for_target",
-        ":platform_x86_64_unknown_linux_musl": ":rusty_v8_source_archive_for_target",
+        ":platform_aarch64_unknown_linux_musl": ":v8_152_2_0_aarch64_unknown_linux_musl_prebuilt",
+        ":platform_x86_64_unknown_linux_musl": ":v8_152_2_0_x86_64_unknown_linux_musl_prebuilt",
         "//conditions:default": ":rusty_v8_source_archive_for_target",
     }),
 )
 
-# A GNU Codex release archive carries Chromium's namespaced libc++ runtime.
+# A Linux Codex release archive carries Chromium's namespaced libc++ runtime.
 # Bazel also links its own libc++. Both keep their exception classes in std::,
 # so prefer the toolchain definitions of just those shared ABI entry points.
 # Inputs remain checksum-verified and immutable; only the Bazel output changes.
 [
     genrule(
-        name = "v8_152_2_0_%s_unknown_linux_gnu_prebuilt" % arch,
+        name = "v8_152_2_0_%s_unknown_linux_%s_prebuilt" % (arch, libc),
         srcs = [
             ":gnu_libcxx_shared_exception_symbols.txt",
-            "@rusty_v8_152_2_0_%s_unknown_linux_gnu_archive//file" % arch,
+            "@rusty_v8_152_2_0_%s_unknown_linux_%s_archive//file" % (arch, libc),
         ],
-        outs = ["libv8_152_2_0_%s_unknown_linux_gnu_prebuilt.a" % arch],
+        outs = ["libv8_152_2_0_%s_unknown_linux_%s_prebuilt.a" % (arch, libc)],
         cmd = """
-            gzip -dc "$(location @rusty_v8_152_2_0_%s_unknown_linux_gnu_archive//file)" > "$@.unadjusted"
+            gzip -dc "$(location @rusty_v8_152_2_0_%s_unknown_linux_%s_archive//file)" > "$@.unadjusted"
             $(location @llvm//tools:llvm-objcopy) \
                 --weaken-symbols="$(location :gnu_libcxx_shared_exception_symbols.txt)" \
                 "$@.unadjusted" "$@"
             rm "$@.unadjusted"
-        """ % arch,
+        """ % (arch, libc),
         tools = ["@llvm//tools:llvm-objcopy"],
     )
     for arch in [
         "aarch64",
         "x86_64",
+    ]
+    for libc in [
+        "gnu",
+        "musl",
     ]
 ]
 
@@ -157,12 +165,14 @@ alias(
 alias(
     name = "rusty_v8_prebuilt_binding_for_target",
     actual = select({
+        "@rules_rs//rs/platforms/config:aarch64-pc-windows-msvc": "@rusty_v8_152_2_0_aarch64_pc_windows_msvc_binding//file",
+        "@rules_rs//rs/platforms/config:x86_64-pc-windows-msvc": "@rusty_v8_152_2_0_x86_64_pc_windows_msvc_binding//file",
         "@rules_rs//rs/platforms/config:aarch64-apple-darwin": "@rusty_v8_152_2_0_aarch64_apple_darwin_binding//file",
         "@rules_rs//rs/platforms/config:aarch64-unknown-linux-gnu": "@rusty_v8_152_2_0_aarch64_unknown_linux_gnu_binding//file",
         "@rules_rs//rs/platforms/config:x86_64-apple-darwin": "@rusty_v8_152_2_0_x86_64_apple_darwin_binding//file",
         "@rules_rs//rs/platforms/config:x86_64-unknown-linux-gnu": "@rusty_v8_152_2_0_x86_64_unknown_linux_gnu_binding//file",
-        ":platform_aarch64_unknown_linux_musl": ":rusty_v8_source_binding_for_target",
-        ":platform_x86_64_unknown_linux_musl": ":rusty_v8_source_binding_for_target",
+        ":platform_aarch64_unknown_linux_musl": "@rusty_v8_152_2_0_aarch64_unknown_linux_musl_binding//file",
+        ":platform_x86_64_unknown_linux_musl": "@rusty_v8_152_2_0_x86_64_unknown_linux_musl_binding//file",
         "//conditions:default": ":rusty_v8_source_binding_for_target",
     }),
 )
@@ -409,14 +419,14 @@ filegroup(
     srcs = ["@v8_crate_152_2_0//:src_binding_release_x86_64_unknown_linux_gnu"],
 )
 
-filegroup(
+alias(
     name = "src_binding_release_aarch64_pc_windows_msvc_152_2_0_release",
-    srcs = ["@v8_crate_152_2_0//:src_binding_release_aarch64_pc_windows_msvc"],
+    actual = "@rusty_v8_152_2_0_aarch64_pc_windows_msvc_binding//file",
 )
 
-filegroup(
+alias(
     name = "src_binding_release_x86_64_pc_windows_msvc_152_2_0_release",
-    srcs = ["@v8_crate_152_2_0//:src_binding_release_x86_64_pc_windows_msvc"],
+    actual = "@rusty_v8_152_2_0_x86_64_pc_windows_msvc_binding//file",
 )
 
 filegroup(

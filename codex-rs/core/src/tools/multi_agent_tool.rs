@@ -30,7 +30,7 @@ pub(super) fn multi_agent_v2_handler(
             && let Some(properties) = tool.parameters.properties
         {
             // Argument transport requires these markers even without server encryption config.
-            for (name, schema) in properties {
+            for (name, schema) in *properties {
                 // Provider selection is owned by the host, and older model catalogs
                 // do not know this optional spawn argument. Keep it when the catalog
                 // still exposes model selection and the local settings permit it.

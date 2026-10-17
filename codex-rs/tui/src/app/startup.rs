@@ -270,6 +270,11 @@ impl App {
         tui.prepare_owned_screen(config.tui_fullscreen_transcript)?;
         let mut local_settings = crate::local_settings::LocalSettings::for_tui(&config, tui);
         let startup_started_at = Instant::now();
+        if let SessionSelection::Resume(target) | SessionSelection::Fork(target) =
+            &session_selection
+        {
+            target.ensure_backend(app_server.backend_id())?;
+        }
         let (app_event_tx, mut app_event_rx) = unbounded_channel();
         let app_event_tx = AppEventSender::new(app_event_tx);
         if let Some(message) = project_config_warning(&config) {
@@ -1244,6 +1249,7 @@ See the Nyacode keymap documentation for supported actions and examples."
                 }
                 if app.reconnect.offline && !app.reconnect.failed && reconnect.is_none() {
                     reconnect = Some(Box::pin(reconnect::reconnect(
+                        app_server.backend_id(),
                         app.app_server_target.clone(),
                         app.config.clone(),
                         app.local_settings.clone(),
