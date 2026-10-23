@@ -24,6 +24,7 @@ def main() -> int:
 
     build_root = prepare(root=root)
     os.environ["CODEX_REPO_ROOT"] = str(build_root)
+    os.environ["NYACODE_ENGINE_ROOT"] = str(build_root)
     # Reuse the package builder's archive/bindings checksum validation.
     sys.path.insert(0, str(build_root / "scripts"))
     from codex_package.targets import TARGET_SPECS

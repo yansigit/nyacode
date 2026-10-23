@@ -97,6 +97,9 @@ class EnginePathTests(unittest.TestCase):
             self.assertIn("--release", command)
             self.assertEqual(call.kwargs["cwd"], engine_root / "codex-rs")
             self.assertEqual(call.kwargs["env"]["CODEX_REPO_ROOT"], str(engine_root))
+            self.assertEqual(
+                call.kwargs["env"]["NYACODE_ENGINE_ROOT"], str(engine_root)
+            )
             self.assertEqual(call.kwargs["env"]["RUSTY_V8_ARCHIVE"], "pinned")
             self.assertEqual(
                 call.kwargs["env"]["CARGO_TARGET_DIR"], str(ROOT / ".engine/target")
@@ -115,13 +118,20 @@ class EnginePathTests(unittest.TestCase):
         engine.prepare = Mock(return_value=workspace)
         for args, cwd in [
             (["cargo", "check"], workspace / "codex-rs"),
+            (["--", "cargo", "check"], workspace / "codex-rs"),
             (["--workspace-root", "bazel", "test", "//..."], workspace),
         ]:
             with (
                 self.subTest(args=args),
                 patch.dict(sys.modules, {"engine": engine}),
                 patch.object(sys, "argv", ["engine_run.py", *args]),
-                patch.dict(os.environ, {"CARGO_TARGET_DIR": "/external-target"}),
+                patch.dict(
+                    os.environ,
+                    {
+                        "CARGO_TARGET_DIR": "/external-target",
+                        "NYACODE_ENGINE_ROOT": "/stale-engine",
+                    },
+                ),
                 patch(
                     "subprocess.run", return_value=types.SimpleNamespace(returncode=7)
                 ) as run,
@@ -138,6 +148,10 @@ class EnginePathTests(unittest.TestCase):
                 self.assertEqual(
                     run.call_args.kwargs["env"]["CARGO_TARGET_DIR"], "/external-target"
                 )
+                self.assertEqual(
+                    run.call_args.kwargs["env"]["NYACODE_ENGINE_ROOT"], str(workspace)
+                )
+                self.assertNotIn("--", run.call_args.args[0])
 
     def test_engine_run_locks_cargo_before_cli_arguments(self):
         engine = types.ModuleType("engine")

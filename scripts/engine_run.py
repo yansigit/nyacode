@@ -39,11 +39,14 @@ def main() -> int:
     parser.add_argument("--workspace-root", action="store_true")
     parser.add_argument("command", nargs=argparse.REMAINDER)
     args = parser.parse_args()
+    if args.command[:1] == ["--"]:
+        args.command = args.command[1:]
     if not args.command:
         parser.error("a command is required")
     workspace = prepare(root=ROOT)
     env = os.environ.copy()
     env["CODEX_REPO_ROOT"] = str(workspace)
+    env["NYACODE_ENGINE_ROOT"] = str(workspace)
     env.setdefault("CARGO_TARGET_DIR", str(ROOT / ".engine/target"))
     return subprocess.run(
         locked_command(args.command),
