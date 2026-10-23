@@ -139,6 +139,47 @@ class EnginePathTests(unittest.TestCase):
                     run.call_args.kwargs["env"]["CARGO_TARGET_DIR"], "/external-target"
                 )
 
+    def test_engine_run_locks_cargo_before_cli_arguments(self):
+        engine = types.ModuleType("engine")
+        engine.prepare = Mock()
+        with patch.dict(sys.modules, {"engine": engine}):
+            locked = runpy.run_path(str(ROOT / "scripts/engine_run.py"))[
+                "locked_command"
+            ]
+        for command, expected in [
+            (
+                ["cargo", "run", "--bin", "nyacode", "--", "--help"],
+                ["cargo", "run", "--locked", "--bin", "nyacode", "--", "--help"],
+            ),
+            (
+                ["cargo", "nextest", "run", "--profile", "local"],
+                ["cargo", "nextest", "run", "--locked", "--profile", "local"],
+            ),
+            (
+                ["cargo", "run", "--", "--locked"],
+                ["cargo", "run", "--locked", "--", "--locked"],
+            ),
+            (
+                ["cargo", "test", "--locked", "--", "--nocapture"],
+                ["cargo", "test", "--locked", "--", "--nocapture"],
+            ),
+            (["cargo", "update"], ["cargo", "update"]),
+            (["cargo", "fmt", "--check"], ["cargo", "fmt", "--check"]),
+        ]:
+            with self.subTest(command=command):
+                self.assertEqual(locked(command), expected)
+        for command in [
+            "build",
+            "check",
+            "test",
+            "bench",
+            "run",
+            "clippy",
+            "fetch",
+            "metadata",
+        ]:
+            self.assertEqual(locked(["cargo", command]), ["cargo", command, "--locked"])
+
     def test_python_sdk_binary_precedence(self):
         harness = load_python_harness()
         with tempfile.TemporaryDirectory() as temp:

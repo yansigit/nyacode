@@ -57,6 +57,7 @@ fmt:
 fmt-check:
     @{{ python }} {{ justfile_directory() }}/scripts/format.py --check
 
+# Edits the disposable assembly; copy changes into owned inputs before preparing again.
 fix *args:
     {{ engine_run }} cargo clippy --fix --tests --allow-dirty {args}
 
@@ -123,22 +124,23 @@ bench-e2e-smoke:
 [no-cd]
 [unix]
 bazel-codex *args:
-    {{ engine_run }} --workspace-root just --justfile justfile bazel-codex {args}
+    {{ engine_run }} --workspace-root bazel run //codex-rs/cli:codex --run_under={{ quote("cd " + quote(invocation_directory()) + " &&") }} -- {args}
 
 [windows]
 bazel-codex *args:
-    {{ engine_run }} --workspace-root just --justfile justfile bazel-codex {args}
+    {{ engine_run }} --workspace-root bazel run //codex-rs/cli:codex --run_under='cd /d "{{ invocation_directory_native() }}" &&' -- {args}
 
 # Build and run the standalone code-mode host from source using Bazel.
 [no-cd]
 [unix]
 bazel-code-mode-host *args:
-    {{ engine_run }} --workspace-root just --justfile justfile bazel-code-mode-host {args}
+    {{ engine_run }} --workspace-root bazel run //codex-rs/code-mode-host:codex-code-mode-host --run_under={{ quote("cd " + quote(invocation_directory()) + " &&") }} -- {args}
 
 [windows]
 bazel-code-mode-host *args:
-    {{ engine_run }} --workspace-root just --justfile justfile bazel-code-mode-host {args}
+    {{ engine_run }} --workspace-root bazel run //codex-rs/code-mode-host:codex-code-mode-host --run_under='cd /d "{{ invocation_directory_native() }}" &&' -- {args}
 
+# Edits the disposable assembly; copy changes into owned inputs before preparing again.
 [no-cd]
 bazel-lock-update:
     {{ engine_run }} --workspace-root just --justfile justfile bazel-lock-update
@@ -169,10 +171,12 @@ build-for-release:
     {{ engine_run }} --workspace-root just --justfile justfile build-for-release
 
 # Regenerate the json schema for config.toml from the current config types.
+# Edits the disposable assembly; copy changes into owned inputs before preparing again.
 write-config-schema:
     {{ engine_run }} cargo run -p codex-config-schema --bin codex-write-config-schema
 
 # Regenerate app-server protocol schemas and the Python SDK derived from them.
+# Edits the disposable assembly; copy changes into owned inputs before preparing again.
 write-app-server-schema *args:
     {{ engine_run }} {{ python }} app-server-protocol/scripts/write_schema_fixtures.py {args}
 
@@ -201,6 +205,7 @@ engine-schema *args: prepare-engine
 engine-controls:
     {{ python }} {{ justfile_directory() }}/scripts/engine.py check --mode controls
 
+# Edits the disposable assembly; copy changes into owned inputs before preparing again.
 [no-cd]
 write-hooks-schema:
     {{ engine_run }} cargo run -p codex-hooks --bin write_hooks_schema_fixtures
