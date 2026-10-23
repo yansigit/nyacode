@@ -1,0 +1,57 @@
+[
+  {
+    "status": 429,
+    "body": {
+      "error": {
+        "code": 429,
+        "status": "RESOURCE_EXHAUSTED",
+        "details": [
+          {
+            "@type": "type.googleapis.com/google.rpc.ErrorInfo",
+            "domain": "cloudcode-pa.googleapis.com",
+            "reason": "QUOTA_EXHAUSTED"
+          },
+          {
+            "@type": "type.googleapis.com/google.rpc.RetryInfo",
+            "retryDelay": "120.5s"
+          }
+        ]
+      }
+    },
+    "category": "quota_exhausted",
+    "can_fail_over": true
+  },
+  {
+    "status": 401,
+    "body": {
+      "error": {
+        "status": "UNAUTHENTICATED",
+        "message": "fixture secret"
+      }
+    },
+    "category": "authentication",
+    "can_fail_over": true
+  },
+  {
+    "status": 503,
+    "body": {
+      "error": {
+        "status": "UNAVAILABLE",
+        "message": "capacity"
+      }
+    },
+    "category": "provider_unavailable",
+    "can_fail_over": false
+  },
+  {
+    "status": 429,
+    "body": {
+      "error": {
+        "status": "RESOURCE_EXHAUSTED",
+        "message": "capacity"
+      }
+    },
+    "category": "unknown",
+    "can_fail_over": false
+  }
+]

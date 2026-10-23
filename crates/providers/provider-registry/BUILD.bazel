@@ -1,0 +1,13 @@
+load("//:defs.bzl", "codex_rust_crate")
+
+codex_rust_crate(
+    name = "provider-registry",
+    crate_features = [
+        "runtime",
+        "provider-cursor",
+        "provider-opencode",
+        "provider-claude",
+        "provider-antigravity",
+    ],
+    crate_name = "codex_provider_registry",
+)

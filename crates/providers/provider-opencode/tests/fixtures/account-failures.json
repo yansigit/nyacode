@@ -1,0 +1,73 @@
+[
+  {
+    "status": 429,
+    "body": {
+      "type": "error",
+      "error": {
+        "type": "GoUsageLimitError",
+        "message": "subscription quota exceeded"
+      },
+      "metadata": {
+        "workspace": "wrk_fixture",
+        "limitName": "weekly"
+      }
+    },
+    "category": "quota_exhausted",
+    "can_fail_over": true
+  },
+  {
+    "status": 401,
+    "body": {
+      "error": {
+        "type": "AuthError",
+        "message": "invalid key fixture secret"
+      }
+    },
+    "category": "login_required",
+    "can_fail_over": true
+  },
+  {
+    "status": 401,
+    "body": {
+      "error": {
+        "type": "CreditsError",
+        "message": "insufficient balance"
+      }
+    },
+    "category": "quota_exhausted",
+    "can_fail_over": true
+  },
+  {
+    "status": 401,
+    "body": {
+      "error": {
+        "type": "ModelError",
+        "message": "unsupported model"
+      }
+    },
+    "category": "invalid_request",
+    "can_fail_over": false
+  },
+  {
+    "status": 429,
+    "body": {
+      "error": {
+        "type": "RateLimitError",
+        "message": "shared limit"
+      }
+    },
+    "category": "provider_unavailable",
+    "can_fail_over": false
+  },
+  {
+    "status": 429,
+    "body": {
+      "error": {
+        "type": "unknown",
+        "message": "quota"
+      }
+    },
+    "category": "unknown",
+    "can_fail_over": false
+  }
+]

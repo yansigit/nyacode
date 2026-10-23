@@ -1,0 +1,37 @@
+[package]
+name = "codex-provider-adapter"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[lints]
+workspace = true
+
+[features]
+default = ["provider-cursor", "provider-opencode", "provider-claude", "provider-antigravity"]
+provider-cursor = ["codex-provider-registry/provider-cursor"]
+provider-opencode = ["codex-provider-registry/provider-opencode"]
+provider-claude = ["codex-provider-registry/provider-claude"]
+provider-antigravity = ["codex-provider-registry/provider-antigravity"]
+
+[dependencies]
+codex-api = { workspace = true }
+codex-http-client = { workspace = true }
+codex-model-provider-info = { workspace = true }
+codex-models-manager = { workspace = true }
+codex-protocol = { workspace = true }
+codex-provider-api = { workspace = true }
+codex-provider-auth = { workspace = true }
+codex-provider-registry = { workspace = true, features = ["runtime"] }
+codex-provider-runtime = { workspace = true }
+base64 = { workspace = true }
+serde_json = { workspace = true }
+tokio = { workspace = true, features = ["macros", "rt", "sync"] }
+tokio-util = { workspace = true }
+uuid = { workspace = true, features = ["v4"] }
+which = { workspace = true }
+
+[dev-dependencies]
+codex-provider-cursor = { workspace = true }
+tempfile = { workspace = true }
+tokio = { workspace = true, features = ["macros", "rt-multi-thread"] }

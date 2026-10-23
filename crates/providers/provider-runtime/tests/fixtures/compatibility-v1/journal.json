@@ -1,0 +1,1 @@
+{"call":{"id":"fixture-call-1","name":"shell","arguments":{"cmd":"true"}},"result":{"call_id":"fixture-call-1","output":"fixture-result","is_error":false}}

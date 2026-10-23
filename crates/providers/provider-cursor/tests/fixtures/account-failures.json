@@ -1,0 +1,38 @@
+[
+  {
+    "status": 401,
+    "body": {
+      "code": "unauthenticated",
+      "message": "fixture secret"
+    },
+    "category": "authentication",
+    "can_fail_over": true
+  },
+  {
+    "status": 429,
+    "body": {
+      "code": "resource_exhausted",
+      "message": "unspecified resource"
+    },
+    "category": "unknown",
+    "can_fail_over": false
+  },
+  {
+    "status": 503,
+    "body": {
+      "code": "unavailable",
+      "message": "capacity"
+    },
+    "category": "provider_unavailable",
+    "can_fail_over": false
+  },
+  {
+    "status": 400,
+    "body": {
+      "code": "invalid_argument",
+      "message": "invalid prompt"
+    },
+    "category": "invalid_request",
+    "can_fail_over": false
+  }
+]

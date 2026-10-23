@@ -1,0 +1,33 @@
+{
+  "selected": "53b625f74c3044fffc60d311b1edb700bf4320c5b366e98732cc1c76fc4e9358",
+  "credentials": "a503f410d8d22ff3bfcb4450982294e612996d7f75e8c87abb18bb800365a4d3",
+  "checkpoint": "2cef126685d6bf87abc2fc0d8f902b9f4a762b747290a2fe51d55ba20f77789e",
+  "tool": "b84092155b3318fd4581411e0254b8425a8a480b3b88034b979d8a34b030176a",
+  "execution": "d6db7313bf3b7f22f7d7e7c9fffc57c0adb007f431f21bf032472b677c04b796",
+  "providers": {
+    "cursor": {
+      "selected": "1529465c2d08970eb34f438c4dc3b9dd2bb6aaeac0d60ff690570d627cf28b6a",
+      "credentials": "63b7f660af02024bcfe333a8b6bf89ba6bb9b1a4d8133e99c26c7595759b3171",
+      "checkpoint": "1ca007f7cea39cb1ee978b5077023e2612da97c677dc33fcdb02cd09dbed9922",
+      "tool": "395e11d7d5cae2cd9d202f0ea9e5b0d2f446001293e1ce49b0a007310fdcf582"
+    },
+    "opencode-go": {
+      "selected": "7eb9629f27ae25e16475127e6110f4cf937528b5e5462f28b4ca50dd1865f7ca",
+      "credentials": "1c774d17c23976bc1652b2415484c6e92990d66f5cd934bd1c5ee46603292ecc",
+      "checkpoint": "e98d28897641c94d35c1fc17a0e39eab509d5e77e60e21370964ecb61e83befa",
+      "tool": "2c4ef56ce65211b075cd86219295f901ef58df81c62dae1e7096aed227c4f759"
+    },
+    "claude": {
+      "selected": "12367c39ea52b2993729ff97b1d995c0b973d7c3b1df8a9b0c661ef88cfc3135",
+      "credentials": "ec09ed0a50255995f4754517810b9b253a2323d9b56ef480bdb05421a897f53b",
+      "checkpoint": "71a157ba7f1e77cb15f7bde215235b2198f9c80dd43a34efdad2cb7da2e9d81b",
+      "tool": "e1c0625e34b02288cbffb8ff097ce6d7eaf8d2959aba2bd2c151e3926dbfdb08"
+    },
+    "antigravity": {
+      "selected": "c5ec2cc8bcf5a96f54e7ac8e7cd6dcbc5463ab522fc85cf3b1f815a55386c170",
+      "credentials": "37812dc052a55f1d1ee6b50d8ec74a451482c80e8a808c7b285db8ecfdd489a7",
+      "checkpoint": "a6c715a269cb881d3e870f595f73a51d7c3daf38f480c36901842e4db4c857eb",
+      "tool": "838b6842dd190eb81000469defe54503d28a6f13f7d824f6912bf57e74f1717e"
+    }
+  }
+}

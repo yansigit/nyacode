@@ -1,0 +1,65 @@
+[
+  {
+    "status": 401,
+    "body": {
+      "error": {
+        "type": "authentication_error",
+        "message": "invalid credential (fixture secret)"
+      }
+    },
+    "category": "authentication",
+    "can_fail_over": true
+  },
+  {
+    "status": 429,
+    "body": {
+      "error": {
+        "type": "rate_limit_error",
+        "message": "rate limit exceeded"
+      }
+    },
+    "category": "temporary_limit",
+    "can_fail_over": true
+  },
+  {
+    "status": 429,
+    "body": {
+      "error": {
+        "type": "rate_limit_error",
+        "message": "monthly spend cap reached"
+      }
+    },
+    "category": "quota_exhausted",
+    "can_fail_over": true
+  },
+  {
+    "status": 529,
+    "body": {
+      "error": {
+        "type": "overloaded_error",
+        "message": "overloaded"
+      }
+    },
+    "category": "provider_unavailable",
+    "can_fail_over": false
+  },
+  {
+    "status": 400,
+    "body": {
+      "error": {
+        "type": "invalid_request_error",
+        "message": "prompt is too long"
+      }
+    },
+    "category": "invalid_request",
+    "can_fail_over": false
+  },
+  {
+    "status": 429,
+    "body": {
+      "message": "unknown shape"
+    },
+    "category": "unknown",
+    "can_fail_over": false
+  }
+]

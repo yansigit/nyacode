@@ -1,0 +1,30 @@
+[package]
+edition.workspace = true
+license.workspace = true
+name = "codex-provider-registry"
+version.workspace = true
+
+[lib]
+doctest = false
+
+[lints]
+workspace = true
+
+[features]
+default = []
+runtime = ["dep:codex-provider-auth", "dep:reqwest", "dep:serde_json", "dep:tokio-util"]
+provider-cursor = ["runtime", "dep:codex-provider-cursor"]
+provider-opencode = ["runtime", "dep:codex-provider-opencode"]
+provider-claude = ["runtime", "dep:codex-provider-claude"]
+provider-antigravity = ["runtime", "dep:codex-provider-antigravity"]
+
+[dependencies]
+codex-provider-api = { workspace = true }
+codex-provider-auth = { workspace = true, optional = true }
+codex-provider-cursor = { workspace = true, optional = true }
+codex-provider-opencode = { workspace = true, optional = true }
+codex-provider-claude = { workspace = true, optional = true }
+codex-provider-antigravity = { workspace = true, optional = true }
+reqwest = { workspace = true, features = ["json", "stream"], optional = true }
+serde_json = { workspace = true, optional = true }
+tokio-util = { workspace = true, optional = true }
