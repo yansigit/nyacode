@@ -186,8 +186,9 @@ prepare-engine *args:
     {{ python }} {{ justfile_directory() }}/scripts/engine.py prepare {args}
 
 # Run the standalone provider workspace suite.
+[working-directory("crates/providers")]
 test-providers:
-    cargo test --manifest-path crates/providers/Cargo.toml --locked --all-features
+    cargo test --locked --all-features
 
 # Run strict engine assembly and native-provider qualification checks.
 [no-cd]

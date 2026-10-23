@@ -178,7 +178,7 @@ def load_metadata(metadata_path: Path | None) -> dict[str, Any]:
             "--format-version",
             "1",
         ],
-        cwd=ROOT,
+        cwd=CARGO_MANIFEST.parent,
         check=True,
         capture_output=True,
         text=True,
@@ -491,7 +491,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--metadata-json", type=Path, help="use saved Cargo metadata")
     parser.add_argument("--manifest", type=Path, default=MANIFEST)
-    parser.add_argument("--repo", type=Path, default=ROOT)
+    parser.add_argument("--repo", type=Path, help="use an existing engine workspace")
     parser.add_argument(
         "--list-test-packages",
         action="store_true",
@@ -499,21 +499,26 @@ def main() -> int:
     )
     args = parser.parse_args()
 
-    global CARGO_MANIFEST
-    CARGO_MANIFEST = args.repo.resolve() / "codex-rs/Cargo.toml"
-
     manifest = json.loads(args.manifest.read_text())
     if args.list_test_packages:
         for package in manifest["subsystem_packages"] + [manifest["adapter_package"]]:
             print(package)
         return 0
 
+    root = args.repo.resolve() if args.repo else ROOT
+    if args.repo is None and (ROOT / "scripts/engine.py").is_file():
+        from engine import prepare
+
+        root = prepare(root=ROOT)
+    global CARGO_MANIFEST
+    CARGO_MANIFEST = root / "codex-rs/Cargo.toml"
+
     try:
         metadata = load_metadata(args.metadata_json)
     except (OSError, subprocess.CalledProcessError, json.JSONDecodeError) as error:
         print(f"unable to load Cargo metadata: {error}", file=sys.stderr)
         return 2
-    errors = validate(metadata, manifest, args.repo.resolve())
+    errors = validate(metadata, manifest, root)
     assembly_path = ROOT / "integration/codex/assembly.json"
     if assembly_path.is_file():
         assembly = json.loads(assembly_path.read_text())

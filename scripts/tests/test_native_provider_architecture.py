@@ -1,10 +1,15 @@
 from __future__ import annotations
 
 import sys
+import contextlib
+import io
+import subprocess
+import types
 import json
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import Mock, patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import native_provider_architecture as architecture
@@ -85,6 +90,70 @@ class NativeProviderArchitectureTests(unittest.TestCase):
 
     def tearDown(self) -> None:
         self.temporary.cleanup()
+
+    def test_cli_default_prepares_product_and_preserves_explicit_or_assembled_roots(
+        self,
+    ):
+        for product, explicit in [(True, False), (True, True), (False, False)]:
+            with (
+                self.subTest(product=product, explicit=explicit),
+                tempfile.TemporaryDirectory() as temporary,
+            ):
+                root = Path(temporary)
+                if product:
+                    (root / "scripts").mkdir()
+                    (root / "scripts/engine.py").touch()
+                manifest = root / "manifest.json"
+                manifest.write_text(json.dumps(self.manifest))
+                engine = types.ModuleType("engine")
+                engine.prepare = Mock(return_value=root / ".engine/workspace")
+                expected = (
+                    root / "explicit"
+                    if explicit
+                    else root / ".engine/workspace"
+                    if product
+                    else root
+                )
+                args = ["native_provider_architecture.py", "--manifest", str(manifest)]
+                if explicit:
+                    args.extend(["--repo", str(expected)])
+                with (
+                    patch.object(architecture, "ROOT", root),
+                    patch.object(architecture, "CARGO_MANIFEST"),
+                    patch.object(sys, "argv", args),
+                    patch.dict(sys.modules, {"engine": engine}),
+                    patch.object(
+                        architecture, "load_metadata", return_value=self.metadata
+                    ),
+                    patch.object(architecture, "validate", return_value=[]) as validate,
+                    contextlib.redirect_stdout(io.StringIO()),
+                ):
+                    self.assertEqual(architecture.main(), 0)
+                    self.assertEqual(
+                        architecture.CARGO_MANIFEST, expected / "codex-rs/Cargo.toml"
+                    )
+                validate.assert_called_once_with(self.metadata, self.manifest, expected)
+                if product and not explicit:
+                    engine.prepare.assert_called_once_with(root=root)
+                else:
+                    engine.prepare.assert_not_called()
+
+    def test_metadata_runs_in_selected_cargo_workspace_for_rustup_toolchain(self):
+        manifest = self.root / "codex-rs/Cargo.toml"
+        with (
+            patch.object(architecture, "CARGO_MANIFEST", manifest),
+            patch.object(
+                architecture.subprocess,
+                "run",
+                return_value=subprocess.CompletedProcess(
+                    [], 0, json.dumps(self.metadata)
+                ),
+            ) as run,
+        ):
+            self.assertEqual(architecture.load_metadata(None), self.metadata)
+        self.assertEqual(run.call_args.kwargs["cwd"], manifest.parent)
+        self.assertIn("--locked", run.call_args.args[0])
+        self.assertIn(str(manifest), run.call_args.args[0])
 
     def test_adapter_may_depend_on_upstream_while_subsystem_stays_owned(self) -> None:
         self.assertEqual(

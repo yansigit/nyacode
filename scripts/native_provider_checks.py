@@ -11,6 +11,7 @@ import re
 import subprocess
 import sys
 import time
+import tomllib
 from pathlib import Path
 from typing import Any
 
@@ -27,6 +28,11 @@ def run_checks(root: Path, artifact_dir: Path) -> list[dict[str, Any]]:
     stages: list[dict[str, Any]] = []
     env = os.environ.copy()
     env["CARGO_TERM_COLOR"] = "never"
+    env["CODEX_REPO_ROOT"] = str(root)
+    env["NYACODE_ENGINE_ROOT"] = str(root)
+    env["RUSTUP_TOOLCHAIN"] = tomllib.loads(
+        (root / "codex-rs/rust-toolchain.toml").read_text()
+    )["toolchain"]["channel"]
     # Match the repository's `just test` stack size for large host test futures.
     env.setdefault("RUST_MIN_STACK", "8388608")
     env.setdefault("CARGO_BUILD_JOBS", "2")
@@ -303,10 +309,15 @@ def run_checks(root: Path, artifact_dir: Path) -> list[dict[str, Any]]:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--repo", type=Path, default=ROOT)
+    parser.add_argument("--repo", type=Path, help="use an existing engine workspace")
     parser.add_argument("--artifact-dir", type=Path, required=True)
     args = parser.parse_args()
-    stages = run_checks(args.repo.resolve(), args.artifact_dir.resolve())
+    root = args.repo.resolve() if args.repo else ROOT
+    if args.repo is None and (ROOT / "scripts/engine.py").is_file():
+        from engine import prepare
+
+        root = prepare(root=ROOT)
+    stages = run_checks(root, args.artifact_dir.resolve())
     failures = [stage for stage in stages if stage["exit_code"] != 0]
     if failures:
         print(
