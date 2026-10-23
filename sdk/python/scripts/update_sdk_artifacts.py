@@ -63,6 +63,7 @@ def default_schema_dir() -> Path:
     local_schemas = sdk_root().parents[1] / "codex-rs/app-server-protocol/schema/json"
     if (
         configured == "../../.engine/workspace/codex-rs/app-server-protocol/schema/json"
+        and not (sdk_root().parents[1] / "engine.lock").is_file()
         and local_schemas.is_dir()
     ):
         return local_schemas

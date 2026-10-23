@@ -49,6 +49,10 @@ jobs:
         with:
           persist-credentials: false
 
+      - name: Prepare pinned engine source
+        id: engine
+        uses: ./.github/actions/prepare-engine
+
       - name: Install Linux bwrap build dependencies
         shell: bash
         run: |
@@ -76,6 +80,7 @@ jobs:
 
       - name: Build codex and the code-mode host with Bazel
         id: build_bazel
+        working-directory: ${{ steps.engine.outputs.root }}
         env:
           BUILDBUDDY_API_KEY: ${{ secrets.BUILDBUDDY_API_KEY }}
         shell: bash

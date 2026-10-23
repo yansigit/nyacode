@@ -460,8 +460,10 @@ def test_generation_default_schema_path_follows_checkout_layout(tmp_path, monkey
     monkeypatch.setattr(script, "sdk_root", lambda: sdk_dir)
     monkeypatch.delenv("NYACODE_ENGINE_ROOT", raising=False)
     local_schemas = tmp_path / "codex-rs/app-server-protocol/schema/json"
-    if assembled:
-        local_schemas.mkdir(parents=True)
+    local_schemas.mkdir(parents=True)
+    if not assembled:
+        # Old build or schema directories must not override the product's engine pin.
+        (tmp_path / "engine.lock").write_text("{}\n")
     selected_schemas = []
     monkeypatch.setattr(script, "generate_types_from_schema_dir", selected_schemas.append)
 

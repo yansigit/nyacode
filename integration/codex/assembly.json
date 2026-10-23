@@ -4083,6 +4083,7 @@
         "sdk/python/src/openai_codex/generated/notification_registry.py",
         "sdk/python/src/openai_codex/generated/v2_all.py",
         "sdk/python/tests/test_artifact_workflow_and_binaries.py",
+        "sdk/python/tests/test_contract_generation.py",
         "sdk/typescript/README.md",
         "sdk/typescript/package.json",
         "sdk/typescript/samples/basic_streaming.ts",

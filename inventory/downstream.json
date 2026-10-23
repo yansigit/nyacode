@@ -41518,6 +41518,34 @@
       }
     },
     {
+      "added_after_baseline": true,
+      "artifact": "source",
+      "change": "modified",
+      "destination": {
+        "kind": "patch",
+        "patch": "integration/codex/patches/sdk_protocol.patch",
+        "path": "sdk/python/tests/test_contract_generation.py"
+      },
+      "git_status": "M",
+      "mode_changed": false,
+      "owner": "downstream-sdk",
+      "path": "sdk/python/tests/test_contract_generation.py",
+      "purpose": "Resolve SDK contract checks against the prepared engine while preserving generated API fixtures.",
+      "regression_groups": [
+        "sdk_protocol"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "sdk/python/tests/test_contract_generation.py",
+        "sha256": "5d80018957d3954eb5eeefbfe3d33e9d749a87af6098fc53a67b2f5818d2245e"
+      },
+      "upstream_source": {
+        "mode": "100644",
+        "path": "sdk/python/tests/test_contract_generation.py",
+        "sha256": "ffef300765bec65ee8bf19aca1da900def92d41847990b04c9bd96e209484092"
+      }
+    },
+    {
       "artifact": "dependency_override",
       "change": "modified",
       "destination": {

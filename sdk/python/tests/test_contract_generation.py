@@ -14,9 +14,9 @@ ROOT = Path(__file__).resolve().parents[1]
 ENGINE_ROOT = Path(
     os.environ.get("NYACODE_ENGINE_ROOT")
     or (
-        ROOT.parents[1]
-        if (ROOT.parents[1] / "codex-rs").is_dir()
-        else ROOT.parents[1] / ".engine/workspace"
+        ROOT.parents[1] / ".engine/workspace"
+        if (ROOT.parents[1] / "engine.lock").is_file()
+        else ROOT.parents[1]
     )
 ).resolve()
 GENERATED_TARGETS = [
