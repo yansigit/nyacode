@@ -17,6 +17,14 @@ import tomllib
 
 ROOT = Path(__file__).resolve().parents[1]
 WORKSPACE_INPUTS = {
+    "engine.lock",
+    "VERSION",
+    "scripts/engine.py",
+    "integration/codex/assembly.json",
+    "integration/codex/Cargo.lock",
+    "crates/providers/Cargo.toml",
+    "crates/providers/Cargo.lock",
+    "crates/providers/rust-toolchain.toml",
     "Containerfile",
     "Dockerfile",
     "scripts/verify-container.sh",
@@ -26,6 +34,28 @@ WORKSPACE_INPUTS = {
     "codex-rs/rust-toolchain.toml",
     "codex-rs/rustfmt.toml",
 }
+
+
+def assembly_changes(root: Path, changed: set[str]) -> set[str]:
+    """Map owned sources and patches to the engine files their consumers compile."""
+    manifest_path = root / "integration/codex/assembly.json"
+    if not manifest_path.is_file():
+        return changed
+    manifest = json.loads(manifest_path.read_text())
+    destinations: dict[str, set[str]] = {}
+    for overlay in manifest["overlays"]:
+        destinations.setdefault(overlay["source"], set()).add(overlay["destination"])
+    for patch in manifest["patches"]:
+        destinations.setdefault(patch["path"], set()).update(patch["paths"])
+    return {
+        destination
+        for source in changed
+        for destination in (
+            {source}
+            if source in WORKSPACE_INPUTS
+            else destinations.get(source, {source})
+        )
+    }
 
 
 def select_packages(root: Path, changed: set[str], packages: list[dict]) -> list[str]:
@@ -51,7 +81,7 @@ def select_packages(root: Path, changed: set[str], packages: list[dict]) -> list
         )
         if owner:
             selected.add(owner)
-        elif relative.startswith("codex-rs/"):
+        elif relative.startswith(("codex-rs/", "crates/", "integration/codex/")):
             return sorted(names)
     while True:
         dependents = {
@@ -64,7 +94,7 @@ def select_packages(root: Path, changed: set[str], packages: list[dict]) -> list
         selected |= dependents
 
 
-def affected_packages(root: Path) -> list[str]:
+def affected_packages(root: Path, workspace: Path | None = None) -> list[str]:
     def git(*args: str) -> bytes:
         return subprocess.check_output(["git", *args], cwd=root)
 
@@ -86,13 +116,20 @@ def affected_packages(root: Path) -> list[str]:
     paths = git("diff", "--name-only", "--no-renames", "-z", base)
     paths += git("ls-files", "--others", "--exclude-standard", "-z")
     changed = {os.fsdecode(path) for path in paths.split(b"\0") if path}
+    workspace = workspace or root
     metadata = json.loads(
         subprocess.check_output(
             ["cargo", "metadata", "--locked", "--no-deps", "--format-version", "1"],
-            cwd=root / "codex-rs",
+            cwd=workspace / "codex-rs",
         )
     )
-    return select_packages(root, changed, metadata["packages"])
+    mapped = assembly_changes(root, changed)
+    if workspace != root:
+        # Metadata paths refer to the assembly, while Git paths refer to owned sources.
+        for package in metadata["packages"]:
+            relative = Path(package["manifest_path"]).relative_to(workspace)
+            package["manifest_path"] = str(root / relative)
+    return select_packages(root, mapped, metadata["packages"])
 
 
 def manifest_hashes(content: bytes) -> dict[str, str]:
@@ -173,6 +210,7 @@ def prepare_v8(root: Path, cache: Path, target: str) -> tuple[Path, Path]:
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", type=Path, default=ROOT)
+    parser.add_argument("--workspace", type=Path)
     commands = parser.add_subparsers(dest="command", required=True)
     commands.add_parser("affected")
     v8 = commands.add_parser("prepare-v8")
@@ -180,7 +218,7 @@ def main() -> None:
     v8.add_argument("--target", required=True)
     args = parser.parse_args()
     if args.command == "affected":
-        print("\n".join(affected_packages(args.root)))
+        print("\n".join(affected_packages(args.root, args.workspace)))
     else:
         print(*prepare_v8(args.root, args.cache, args.target), sep="\n")
 

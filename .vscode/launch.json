@@ -4,19 +4,23 @@
     {
       "type": "lldb",
       "request": "launch",
-      "name": "Cargo launch",
-      "cargo": {
-        "cwd": "${workspaceFolder}/codex-rs",
-        "args": ["build", "--bin=codex-tui"]
-      },
-      "args": []
+      "name": "Nyacode CLI",
+      "args": [],
+      "preLaunchTask": "Build Nyacode",
+      "program": "${workspaceFolder}/.engine/target/debug/nyacode",
+      "cwd": "${workspaceFolder}",
+      "windows": {
+        "program": "${workspaceFolder}/.engine/target/debug/nyacode.exe"
+      }
     },
     {
       "type": "lldb",
       "request": "attach",
       "name": "Attach to running codex CLI",
       "pid": "${command:pickProcess}",
-      "sourceLanguages": ["rust"]
+      "sourceLanguages": [
+        "rust"
+      ]
     }
   ]
 }

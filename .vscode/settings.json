@@ -1,9 +1,10 @@
 {
     "rust-analyzer.checkOnSave": true,
     "rust-analyzer.check.command": "clippy",
-    "rust-analyzer.check.extraArgs": ["--tests"],
+    "rust-analyzer.check.extraArgs": ["--locked", "--tests"],
+    "rust-analyzer.linkedProjects": ["crates/providers/Cargo.toml", ".engine/workspace/codex-rs/Cargo.toml"],
     "rust-analyzer.rustfmt.extraArgs": ["--config", "imports_granularity=Item"],
-    "rust-analyzer.cargo.targetDir": "${workspaceFolder}/codex-rs/target/rust-analyzer",
+    "rust-analyzer.cargo.targetDir": "${workspaceFolder}/.engine/target/rust-analyzer",
     "[rust]": {
         "editor.defaultFormatter": "rust-lang.rust-analyzer",
         "editor.formatOnSave": true,

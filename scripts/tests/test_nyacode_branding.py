@@ -12,7 +12,7 @@ import unittest
 
 ROOT = Path(__file__).resolve().parents[2]
 BINARY = Path(
-    os.environ.get("NYACODE_TEST_BINARY", ROOT / "codex-rs/target/debug/nyacode")
+    os.environ.get("NYACODE_TEST_BINARY", ROOT / ".engine/target/debug/nyacode")
 )
 
 

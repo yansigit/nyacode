@@ -58,8 +58,9 @@ ID with identical command text still executes.
 The opt-in live runner uses the built app-server and existing private credentials:
 
 ```sh
+python3 scripts/engine_run.py cargo build -p codex-cli --bin codex
 python3 scripts/native_provider_multiagent_acceptance.py \
-  --codex "$PWD/codex-rs/target/debug/codex" \
+  --codex "$PWD/.engine/target/debug/codex" \
   --codex-home "$NYACODE_HOME" \
   --provider cursor --model gpt-5.6-luna-none \
   --child opencode-go:glm-5.3 \

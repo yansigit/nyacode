@@ -3,7 +3,7 @@ name: v8-canary
 # Do not use trigger-level path filters here. This workflow is also called by
 # postmerge-ci, and GitHub cannot share a path filter between pull_request and
 # workflow_call. v8_canary_changes.py is the single source of truth instead;
-# unrelated events run only the cheap metadata job below.
+# unrelated upstream events run only the cheap metadata job below.
 on:
   workflow_call:
   pull_request: {}
@@ -15,6 +15,9 @@ concurrency:
 
 jobs:
   metadata:
+    # Fork qualification verifies pinned V8 artifacts on all six package targets.
+    # Rebuild V8 from source only on request; upstream keeps its automatic canary.
+    if: github.repository == 'openai/codex' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     outputs:
       # Older revisions can contain a detector that does not emit this output.
@@ -30,10 +33,9 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
-      - name: Set up Python
-        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
-        with:
-          python-version: "3.12"
+      - name: Prepare pinned engine source
+        id: engine
+        uses: ./.github/actions/prepare-engine
 
       - name: Resolve exact v8 crate version
         id: v8_version
@@ -174,16 +176,15 @@ jobs:
         with:
           persist-credentials: false
 
+      - name: Prepare pinned engine source
+        id: engine
+        uses: ./.github/actions/prepare-engine
+
       - name: Prepare Bazel CI
         uses: ./.github/actions/prepare-bazel-ci
         with:
           target: ${{ matrix.target }}
           cache-scope: bazel-v8
-
-      - name: Set up Python
-        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
-        with:
-          python-version: "3.12"
 
       - name: Set up Rust toolchain for Cargo smoke
         uses: dtolnay/rust-toolchain@e2a55d2ffb04f378e9626c28d38b36d230d1e12f # master, 2026-10-12
@@ -191,6 +192,7 @@ jobs:
           toolchain: "1.95.0"
 
       - name: Build Bazel V8 release pair
+        working-directory: ${{ steps.engine.outputs.root }}
         env:
           BUILDBUDDY_API_KEY: ${{ secrets.BUILDBUDDY_API_KEY }}
           PLATFORM: ${{ matrix.platform }}
@@ -214,13 +216,13 @@ jobs:
             --config=rusty-v8-upstream-libcxx
             "--config=v8-target-${V8_CPU}"
             "${pair_target}"
-            "--build_metadata=COMMIT_SHA=$(git rev-parse HEAD)"
+            "--build_metadata=COMMIT_SHA=$(git -C "${GITHUB_WORKSPACE}" rev-parse HEAD)"
           )
           if [[ "${SANDBOX}" != "true" ]]; then
             bazel_args+=(--config=v8-release-compat)
           fi
 
-          python3 .github/scripts/run_v8_bazel_build.py \
+          python3 "${GITHUB_WORKSPACE}/.github/scripts/run_v8_bazel_build.py" \
             --noexperimental_remote_repo_contents_cache \
             "${bazel_args[@]}" \
             "--config=${{ matrix.bazel_config }}"
@@ -283,7 +285,7 @@ jobs:
           fi
 
           (
-            cd codex-rs
+            cd "${NYACODE_ENGINE_ROOT}/codex-rs"
             CARGO_TARGET_DIR="${RUNNER_TEMP}/rusty-v8-cargo-smoke-${TARGET}-${SANDBOX}" \
             RUSTY_V8_ARCHIVE="${GITHUB_WORKSPACE}/${archive}" \
             RUSTY_V8_SRC_BINDING_PATH="${GITHUB_WORKSPACE}/${binding}" \
@@ -360,11 +362,11 @@ jobs:
           echo "fbe28d541ecc20d2e5d67f3ad859b1b35b60e4b069b0795a3d4766aa0828da2c  tools/win/DebugVisualizers/blink.natvis" | sha256sum --check
           echo "56fe0993b70365e1d2d848ad67739aed5fd70284910665b559fc3c9369b24593  tools/win/DebugVisualizers/chrome.natvis" | sha256sum --check
 
-      - name: Set up Python
-        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+      - name: Prepare pinned engine source
+        id: engine
+        uses: ./.github/actions/prepare-engine
         with:
           python-version: "3.11"
-          architecture: x64
 
       - name: Set up Codex Rust toolchain for Cargo smoke
         uses: dtolnay/rust-toolchain@e2a55d2ffb04f378e9626c28d38b36d230d1e12f # master, 2026-10-12
@@ -392,14 +394,14 @@ jobs:
           path: |
             ${{ steps.setup_ci.outputs.cargo-target-dir }}/sccache
             ${{ steps.setup_ci.outputs.cargo-target-dir }}/${{ matrix.target }}/release/gn_out
-          key: rusty-v8-source-${{ matrix.target }}-${{ matrix.runner }}-sandbox-${{ hashFiles('upstream-rusty-v8/Cargo.lock', 'upstream-rusty-v8/build.rs', 'upstream-rusty-v8/git_submodule_status.txt', 'patches/v8_array_sort_elements_kind.patch') }}
+          key: rusty-v8-source-${{ matrix.target }}-${{ matrix.runner }}-sandbox-${{ hashFiles('upstream-rusty-v8/Cargo.lock', 'upstream-rusty-v8/build.rs', 'upstream-rusty-v8/git_submodule_status.txt', '.engine/workspace/patches/v8_array_sort_elements_kind.patch') }}
           restore-keys: |
             rusty-v8-source-${{ matrix.target }}-${{ matrix.runner }}-sandbox-
 
       - name: Apply V8 Array.sort backport
         shell: bash
         working-directory: upstream-rusty-v8/v8
-        run: git apply -p3 "${GITHUB_WORKSPACE}/patches/v8_array_sort_elements_kind.patch"
+        run: git apply -p3 "${NYACODE_ENGINE_ROOT}/patches/v8_array_sort_elements_kind.patch"
 
       - name: Install sccache
         uses: taiki-e/install-action@1168f6810a3cb30a3514bf5756a3b7f0422c6df8 # v2.87.28
@@ -456,7 +458,7 @@ jobs:
           fi
 
           (
-            cd codex-rs
+            cd "${NYACODE_ENGINE_ROOT}/codex-rs"
             RUSTY_V8_ARCHIVE="${GITHUB_WORKSPACE}/${archive}" \
             RUSTY_V8_SRC_BINDING_PATH="${GITHUB_WORKSPACE}/${binding}" \
             cargo +1.95.0 test -p codex-v8-poc --target "${TARGET}" --features sandbox --no-run

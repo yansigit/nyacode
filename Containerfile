@@ -33,6 +33,7 @@ RUN apt-get update \
         cmake \
         curl \
         git \
+        gh \
         gstreamer1.0-plugins-base \
         gstreamer1.0-plugins-good \
         gstreamer1.0-tools \
@@ -77,6 +78,7 @@ RUN curl --proto '=https' --tlsv1.2 -fsSL https://sh.rustup.rs \
     && cargo --version
 
 # Verify the exact release bytes for both supported Linux host architectures.
+# Build-time tools populate HOME as root; make it writable by the runtime UID.
 RUN set -eu; \
     case "$(uname -m)" in \
         x86_64) nextest_sha=223ba936714cc861a9cdedad5a8eb664dfdd69d6fbdf6cea6aa8184f523290dc; \
@@ -98,7 +100,8 @@ RUN set -eu; \
     for element in appsrc appsink audioconvert audioresample capsfilter opusdec rtpopusdepay rtpjitterbuffer; do \
         gst-inspect-1.0 "$element" >/dev/null; \
     done; \
-    rm /tmp/nextest.tar.gz /tmp/sccache.tar.gz
+    rm /tmp/nextest.tar.gz /tmp/sccache.tar.gz; \
+    chmod -R a+rwX /home/verifier
 
 WORKDIR /src
 # The verifier script is the command. A bare `docker run` still has cargo on PATH.

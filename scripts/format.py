@@ -2,6 +2,7 @@
 """Format repository sources or check that they are already formatted."""
 
 import argparse
+import json
 import os
 import shlex
 import subprocess
@@ -58,24 +59,28 @@ def rust_formatter_group(*, check: bool) -> FormatterGroup:
     ).split(b"\0")
     rust_files = sorted(
         {
-            os.path.relpath(REPO_ROOT / os.fsdecode(path), REPO_ROOT / "codex-rs")
+            str(REPO_ROOT / os.fsdecode(path))
             for path in paths
-            if path and (REPO_ROOT / os.fsdecode(path)).is_file()
+            if path
+            and not os.fsdecode(path).startswith((".engine/", "codex-rs/"))
+            and (REPO_ROOT / os.fsdecode(path)).is_file()
         }
     )
+    toolchain = json.loads((REPO_ROOT / "engine.lock").read_text())["toolchain"]
     args = [
+        "rustup",
+        "run",
+        toolchain,
         "rustfmt",
         "--edition",
         "2024",
-        "--config-path",
-        str(REPO_ROOT / "codex-rs/rustfmt.toml"),
         "--config",
         "imports_granularity=Item,skip_children=true",
     ]
     if check:
         args.append("--check")
     args.extend(rust_files)
-    command = Command(tuple(args), REPO_ROOT / "codex-rs")
+    command = Command(tuple(args), REPO_ROOT)
     return FormatterGroup("Rust", (command,))
 
 
@@ -147,10 +152,40 @@ def python_sdk_formatter_group(*, check: bool) -> FormatterGroup:
 
 
 def python_scripts_formatter_group(*, check: bool) -> FormatterGroup:
-    args = ["uv", "run", "--frozen", "--project", "scripts", "ruff", "format"]
+    args = [
+        "uv",
+        "run",
+        "--frozen",
+        "--project",
+        "scripts",
+        "ruff",
+        "format",
+        "--force-exclude",
+    ]
     if check:
         args.append("--check")
-    args.append(".")
+    paths = subprocess.check_output(
+        [
+            "git",
+            "ls-files",
+            "-z",
+            "--cached",
+            "--others",
+            "--exclude-standard",
+            "--",
+            "*.py",
+        ],
+        cwd=REPO_ROOT,
+    ).split(b"\0")
+    args.extend(
+        sorted(
+            {
+                os.fsdecode(path)
+                for path in paths
+                if path and (REPO_ROOT / os.fsdecode(path)).is_file()
+            }
+        )
+    )
     return FormatterGroup("Python scripts", (Command(tuple(args)),))
 
 

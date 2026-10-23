@@ -1,7 +1,0 @@
----
-source: tui/src/app/tests.rs
-expression: rendered
----
-
-  >_ Nyacode (v<VERSION>)
-     /tmp/project

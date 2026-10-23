@@ -1,0 +1,3637 @@
+diff --git a/.codespellignore b/.codespellignore
+index 4f3c8c3513b5866da9e2e531a047cad245bbbbcd..87449482709f9a8879f7b3a0af4be36046edbf9d 100644
+--- a/.codespellignore
++++ b/.codespellignore
+@@ -1,7 +1,11 @@
+ iTerm
+ iTerm2
++inout
+ numer
+ psuedo
+ SOM
+ te
+ TE
++adn
++WRONLY
++oint
+diff --git a/.npmrc b/.npmrc
+deleted file mode 100644
+index 4153fe87bb5f08b63514128adf30f1643ef3f1fc..0000000000000000000000000000000000000000
+--- a/.npmrc
++++ /dev/null
+@@ -1,4 +0,0 @@
+-shamefully-hoist=true
+-strict-peer-dependencies=false
+-node-linker=hoisted
+-prefer-workspace-packages=true
+diff --git a/announcement_tip.toml b/announcement_tip.toml
+index 79c0daea761e0f634960dd39e2dff6bdbfd02f63..f78710c1904c5a58f723798423311557f9b7fe67 100644
+--- a/announcement_tip.toml
++++ b/announcement_tip.toml
+@@ -1,17 +1,2 @@
+-# Example announcement tips for Codex TUI.
+-# Each [[announcements]] entry is evaluated in order; the last matching one is shown.
+-# Dates are UTC, formatted as YYYY-MM-DD. The from_date is inclusive and the to_date is exclusive.
+-# version_regex matches against the CLI version (env!("CARGO_PKG_VERSION")); omit to apply to all versions.
+-# target_app specify which app should display the announcement (cli, vsce, ...).
+-
+-# Test announcement only for local build version until 2027-05-10 excluded
+-[[announcements]]
+-content = "This is a test announcement"
+-version_regex = "^0\\.0\\.0$"
+-to_date = "2027-05-10"
+-
+-[[announcements]]
+-content = "Update Required - This version will no longer be supported starting May 8th. Please upgrade to the latest version (https://github.com/openai/codex/releases/latest) using your preferred package manager."
+-# Matches 0.x.y versions from 0.0.y through 0.119.y; excludes 0.120.0 and newer.
+-version_regex = "^0\\.(?:[0-9]|[1-9][0-9]|1[01][0-9])\\."
+-to_date = "2026-05-08"
++# Nyacode announcements. Add dated entries when a fork release is available.
++announcements = []
+diff --git a/codex-cli/bin/codex.js b/codex-cli/bin/codex.js
+index 934600714b97f340cb5468e20e5fe560d751cbed..94d75b3e81f5c56c3edc724ae8e83a3cfb9233dc 100755
+--- a/codex-cli/bin/codex.js
++++ b/codex-cli/bin/codex.js
+@@ -1,5 +1,5 @@
+ #!/usr/bin/env node
+-// Unified entry point for the Codex CLI.
++// Unified entry point for the Nyacode CLI.
+ 
+ import { spawn } from "node:child_process";
+ import { existsSync, readFileSync, realpathSync } from "fs";
+@@ -14,12 +14,12 @@ const require = createRequire(import.meta.url);
+ const codexPackageRoot = realpathSync(path.join(__dirname, ".."));
+ 
+ const PLATFORM_PACKAGE_BY_TARGET = {
+-  "x86_64-unknown-linux-musl": "@openai/codex-linux-x64",
+-  "aarch64-unknown-linux-musl": "@openai/codex-linux-arm64",
+-  "x86_64-apple-darwin": "@openai/codex-darwin-x64",
+-  "aarch64-apple-darwin": "@openai/codex-darwin-arm64",
+-  "x86_64-pc-windows-msvc": "@openai/codex-win32-x64",
+-  "aarch64-pc-windows-msvc": "@openai/codex-win32-arm64",
++  "x86_64-unknown-linux-musl": "@yansigit/nyacode-linux-x64",
++  "aarch64-unknown-linux-musl": "@yansigit/nyacode-linux-arm64",
++  "x86_64-apple-darwin": "@yansigit/nyacode-darwin-x64",
++  "aarch64-apple-darwin": "@yansigit/nyacode-darwin-arm64",
++  "x86_64-pc-windows-msvc": "@yansigit/nyacode-win32-x64",
++  "aarch64-pc-windows-msvc": "@yansigit/nyacode-win32-arm64",
+ };
+ 
+ const { platform, arch } = process;
+@@ -76,7 +76,7 @@ if (!platformPackage) {
+   throw new Error(`Unsupported target triple: ${targetTriple}`);
+ }
+ 
+-function findCodexExecutable() {
++function findNyacodeExecutable() {
+   let vendorRoot;
+   try {
+     const packageJsonPath = require.resolve(`${platformPackage}/package.json`);
+@@ -98,18 +98,18 @@ function findCodexExecutable() {
+   const packageManager = detectPackageManager();
+   const updateCommand =
+     packageManager === "bun"
+-      ? "bun install -g @openai/codex@latest"
++      ? "bun install -g @yansigit/nyacode@latest"
+       : packageManager === "pnpm"
+-        ? "pnpm add -g @openai/codex@latest"
++        ? "pnpm add -g @yansigit/nyacode@latest"
+         : packageManager === "vite-plus"
+-          ? "vp install -g @openai/codex@latest"
+-          : "npm install -g @openai/codex@latest";
++          ? "vp install -g @yansigit/nyacode@latest"
++          : "npm install -g @yansigit/nyacode@latest";
+   throw new Error(
+-    `Missing optional dependency ${platformPackage}. Reinstall Codex: ${updateCommand}`,
++    `Missing optional dependency ${platformPackage}. Reinstall Nyacode: ${updateCommand}`,
+   );
+ }
+ 
+-const binaryPath = findCodexExecutable();
++const binaryPath = findNyacodeExecutable();
+ 
+ // Use an asynchronous spawn instead of spawnSync so that Node is able to
+ // respond to signals (e.g. Ctrl-C / SIGINT) while the native binary is
+@@ -117,14 +117,14 @@ const binaryPath = findCodexExecutable();
+ // and guarantees that when either the child terminates or the parent
+ // receives a fatal signal, both processes exit in a predictable manner.
+ 
+-function isPnpmOwnedCodexInstall(nodeModulesDir) {
++function isPnpmOwnedNyacodeInstall(nodeModulesDir) {
+   if (!existsSync(path.join(nodeModulesDir, ".modules.yaml"))) {
+     return false;
+   }
+ 
+   try {
+     return (
+-      realpathSync(path.join(nodeModulesDir, "@openai", "codex")) ===
++      realpathSync(path.join(nodeModulesDir, "@yansigit", "nyacode")) ===
+       codexPackageRoot
+     );
+   } catch {
+@@ -132,31 +132,31 @@ function isPnpmOwnedCodexInstall(nodeModulesDir) {
+   }
+ }
+ 
+-function isVitePlusOwnedCodexInstall(packagesDir) {
++function isVitePlusOwnedNyacodeInstall(packagesDir) {
+   if (path.basename(packagesDir) !== "packages") {
+     return false;
+   }
+ 
+   try {
+     const metadata = JSON.parse(
+-      readFileSync(path.join(packagesDir, "@openai", "codex.json"), "utf8"),
++      readFileSync(path.join(packagesDir, "@yansigit", "nyacode.json"), "utf8"),
+     );
+-    if (metadata.name !== "@openai/codex") {
++    if (metadata.name !== "@yansigit/nyacode") {
+       return false;
+     }
+ 
+-    // Vite+ records the active global installation in packages/@openai/codex.json.
++    // Vite+ records the active global installation in packages/@yansigit/nyacode.json.
+     // Older installs have no ID or append a #-prefixed ID to the package name;
+     // newer installs put the ID in a subdirectory of the package prefix.
+     const installId = metadata.installId || "";
+     const installDir = installId.startsWith("#")
+-      ? path.join(packagesDir, `@openai/codex${installId}`)
+-      : path.join(packagesDir, "@openai/codex", installId);
++      ? path.join(packagesDir, `@yansigit/nyacode${installId}`)
++      : path.join(packagesDir, "@yansigit/nyacode", installId);
+     for (const nodeModulesDir of [
+       path.join(installDir, "lib", "node_modules"),
+       path.join(installDir, "node_modules"),
+     ]) {
+-      const packageRoot = path.join(nodeModulesDir, "@openai", "codex");
++      const packageRoot = path.join(nodeModulesDir, "@yansigit", "nyacode");
+       if (
+         existsSync(packageRoot) &&
+         realpathSync(packageRoot) === codexPackageRoot
+@@ -165,13 +165,13 @@ function isVitePlusOwnedCodexInstall(packagesDir) {
+       }
+     }
+   } catch {
+-    // Missing or unreadable ownership metadata must not prevent Codex starting.
++    // Missing or unreadable ownership metadata must not prevent Nyacode starting.
+   }
+   return false;
+ }
+ 
+ /**
+- * Use heuristics to detect the package manager that was used to install Codex
++ * Use heuristics to detect the package manager that was used to install Nyacode
+  * in order to give the user a hint about how to update it.
+  */
+ function detectPackageManager() {
+@@ -186,15 +186,15 @@ function detectPackageManager() {
+       currentDir !== filesystemRoot;
+       currentDir = path.dirname(currentDir)
+     ) {
+-      if (isVitePlusOwnedCodexInstall(currentDir)) {
++      if (isVitePlusOwnedNyacodeInstall(currentDir)) {
+         return "vite-plus";
+       }
+-      if (isPnpmOwnedCodexInstall(path.join(currentDir, "node_modules"))) {
++      if (isPnpmOwnedNyacodeInstall(path.join(currentDir, "node_modules"))) {
+         return "pnpm";
+       }
+     }
+ 
+-    if (isPnpmOwnedCodexInstall(path.join(filesystemRoot, "node_modules"))) {
++    if (isPnpmOwnedNyacodeInstall(path.join(filesystemRoot, "node_modules"))) {
+       return "pnpm";
+     }
+   }
+@@ -222,21 +222,27 @@ function detectPackageManager() {
+ const packageManager = detectPackageManager();
+ const packageManagerEnvVar =
+   packageManager === "bun"
+-    ? "CODEX_MANAGED_BY_BUN"
++    ? "NYACODE_MANAGED_BY_BUN"
+     : packageManager === "pnpm"
+-      ? "CODEX_MANAGED_BY_PNPM"
++      ? "NYACODE_MANAGED_BY_PNPM"
+       : packageManager === "vite-plus"
+-        ? "CODEX_MANAGED_BY_VITE_PLUS"
+-        : "CODEX_MANAGED_BY_NPM";
++        ? "NYACODE_MANAGED_BY_VITE_PLUS"
++        : "NYACODE_MANAGED_BY_NPM";
+ const env = {
+   ...process.env,
+   CODEX_MANAGED_PACKAGE_ROOT: codexPackageRoot,
+ };
++delete env.NYACODE_MANAGED_BY_NPM;
++delete env.NYACODE_MANAGED_BY_BUN;
++delete env.NYACODE_MANAGED_BY_PNPM;
++delete env.NYACODE_MANAGED_BY_VITE_PLUS;
+ delete env.CODEX_MANAGED_BY_NPM;
+ delete env.CODEX_MANAGED_BY_BUN;
+ delete env.CODEX_MANAGED_BY_PNPM;
+ delete env.CODEX_MANAGED_BY_VITE_PLUS;
++// Keep legacy launch metadata for compatible diagnostics and subprocesses.
+ env[packageManagerEnvVar] = "1";
++env[packageManagerEnvVar.replace("NYACODE_", "CODEX_")] = "1";
+ 
+ const child = spawn(binaryPath, process.argv.slice(2), {
+   stdio: "inherit",
+diff --git a/codex-rs/app-server/src/config_manager.rs b/codex-rs/app-server/src/config_manager.rs
+index d2c2db748177905ab46d9dd58faeef11efb1582d..15d2c2e8d34c193b9705450d8c72d8ac40f476b2 100644
+--- a/codex-rs/app-server/src/config_manager.rs
++++ b/codex-rs/app-server/src/config_manager.rs
+@@ -45,6 +45,7 @@ pub(crate) struct ConfigManager {
+     codex_home: PathBuf,
+     cli_overrides: Arc<RwLock<Vec<(String, TomlValue)>>>,
+     runtime_feature_enablement: Arc<RwLock<BTreeMap<String, bool>>>,
++    chat_service: Arc<RwLock<std::sync::Weak<crate::chat::Service>>>,
+     loader_overrides: LoaderOverrides,
+     strict_config: bool,
+     cloud_config_bundle: Arc<RwLock<CloudConfigBundleLoader>>,
+@@ -90,6 +91,7 @@ impl ConfigManager {
+             codex_home,
+             cli_overrides: Arc::new(RwLock::new(cli_overrides)),
+             runtime_feature_enablement: Arc::new(RwLock::new(BTreeMap::new())),
++            chat_service: Arc::default(),
+             loader_overrides,
+             strict_config,
+             cloud_config_bundle: Arc::new(RwLock::new(cloud_config_bundle)),
+@@ -106,6 +108,40 @@ impl ConfigManager {
+         self.codex_home.as_path()
+     }
+ 
++    pub(crate) fn bind_chat_service(&self, service: &Arc<crate::chat::Service>) {
++        *self
++            .chat_service
++            .write()
++            .unwrap_or_else(std::sync::PoisonError::into_inner) = Arc::downgrade(service);
++    }
++
++    fn sync_chat_feature(&self, enabled: bool) {
++        if let Some(service) = self
++            .chat_service
++            .read()
++            .unwrap_or_else(std::sync::PoisonError::into_inner)
++            .upgrade()
++        {
++            service.set_enabled(enabled);
++        }
++    }
++
++    /// Global Chat ownership does not follow project/thread feature overrides.
++    pub(crate) async fn refresh_chat_feature(&self) {
++        if self
++            .chat_service
++            .read()
++            .unwrap_or_else(std::sync::PoisonError::into_inner)
++            .strong_count()
++            == 0
++        {
++            return;
++        }
++        if self.load_non_project_config().await.is_err() {
++            self.sync_chat_feature(false);
++        }
++    }
++
+     pub(crate) fn with_embedded_network_policy(
+         mut self,
+         policy: crate::in_process::EmbeddedNetworkPolicy,
+@@ -229,6 +265,11 @@ impl ConfigManager {
+         self.apply_network_policy(&mut config);
+         self.apply_runtime_feature_enablement(&mut config);
+         self.apply_arg0_paths(&mut config);
++        self.sync_chat_feature(
++            config
++                .features
++                .enabled(codex_features::Feature::ChatgptChat),
++        );
+         Ok(config)
+     }
+ 
+diff --git a/codex-rs/app-server/src/request_processors/config_processor.rs b/codex-rs/app-server/src/request_processors/config_processor.rs
+index d903a6fce2da674d58040214068b96d8d184f71d..9035335e006eebbb0349626015cc676997ddb9e6 100644
+--- a/codex-rs/app-server/src/request_processors/config_processor.rs
++++ b/codex-rs/app-server/src/request_processors/config_processor.rs
+@@ -69,6 +69,7 @@ const SUPPORTED_EXPERIMENTAL_FEATURE_ENABLEMENT: &[&str] = &[
+     "api_key_model_discovery",
+     "auth_elicitation",
+     BACKGROUND_PAGINATED_ROLLOUT_MIGRATION_FEATURE,
++    "chatgpt_chat",
+     "codex_apps_mcp_2026_07_28",
+     "mcp_2026_07_28",
+     "memories",
+@@ -221,6 +222,7 @@ impl ConfigRequestProcessor {
+     }
+ 
+     pub(crate) async fn handle_config_mutation(&self) {
++        self.config_manager.refresh_chat_feature().await;
+         self.thread_manager.plugins_manager().clear_cache();
+         self.thread_manager.skills_service().clear_cache();
+     }
+@@ -374,6 +376,7 @@ pub(super) async fn reload_user_config(
+ }
+ 
+ async fn reload_user_config_inner(config_manager: &ConfigManager, thread_manager: &ThreadManager) {
++    config_manager.refresh_chat_feature().await;
+     if let Err(err) = config_manager.load_config_layers(/*cwd*/ None).await {
+         tracing::warn!("failed to rebuild user config for runtime refresh: {err}");
+         for thread_id in thread_manager.list_thread_ids().await {
+diff --git a/codex-rs/cli/tests/sandbox_cloud_config.rs b/codex-rs/cli/tests/sandbox_cloud_config.rs
+index 81fbf07cf35c5016a3dc8542dbddee1c29f2b51b..fbbe673756a6aebc686519c6457e31838f4e1942 100644
+--- a/codex-rs/cli/tests/sandbox_cloud_config.rs
++++ b/codex-rs/cli/tests/sandbox_cloud_config.rs
+@@ -140,7 +140,7 @@ async fn sandbox_fetches_and_enforces_cloud_managed_permission_profile() -> Resu
+     );
+     if !nested_macos_sandbox_unavailable {
+         assert!(
+-            String::from_utf8(output.stdout)?.starts_with("codex"),
++            String::from_utf8(output.stdout)?.starts_with("nyacode "),
+             "expected the sandboxed Codex version command to run",
+         );
+     }
+diff --git a/codex-rs/cli/tests/snapshots/doctor_path_safety__doctor_config_error_location.snap b/codex-rs/cli/tests/snapshots/doctor_path_safety__doctor_config_error_location.snap
+index e8e35240f08246d9f82e8bcef58c56e79933015a..995b3119012f2ac11cad9774d0db8c7c1c10f6a6 100644
+--- a/codex-rs/cli/tests/snapshots/doctor_path_safety__doctor_config_error_location.snap
++++ b/codex-rs/cli/tests/snapshots/doctor_path_safety__doctor_config_error_location.snap
+@@ -11,7 +11,7 @@ expression: "serde_json::to_string_pretty(&check)?"
+     "line": "1"
+   },
+   "id": "config.load",
+-  "remediation": "Fix the reported config error, then rerun codex doctor.",
++  "remediation": "Fix the reported config error, then rerun nyacode doctor.",
+   "status": "fail",
+   "summary": "config could not be loaded"
+ }
+diff --git a/codex-rs/cli/tests/snapshots/doctor_path_safety__doctor_config_invalid_data.snap b/codex-rs/cli/tests/snapshots/doctor_path_safety__doctor_config_invalid_data.snap
+index 3346b53afbf376cefc8d28be8373811aae1bb828..92faceb20db64954b87612dd73cc394589760242 100644
+--- a/codex-rs/cli/tests/snapshots/doctor_path_safety__doctor_config_invalid_data.snap
++++ b/codex-rs/cli/tests/snapshots/doctor_path_safety__doctor_config_invalid_data.snap
+@@ -8,7 +8,7 @@ expression: "serde_json::to_string_pretty(&check)?"
+     "error": "invalid data"
+   },
+   "id": "config.load",
+-  "remediation": "Fix the reported config error, then rerun codex doctor.",
++  "remediation": "Fix the reported config error, then rerun nyacode doctor.",
+   "status": "fail",
+   "summary": "config could not be loaded"
+ }
+diff --git a/codex-rs/cli/tests/snapshots/doctor_path_safety__doctor_config_not_found.snap b/codex-rs/cli/tests/snapshots/doctor_path_safety__doctor_config_not_found.snap
+index a34966d5659877a6709e4ed966e7a4389bf10434..ade0d3d9f1b64c8b8ed8b85cbb76480fcdeb8f8e 100644
+--- a/codex-rs/cli/tests/snapshots/doctor_path_safety__doctor_config_not_found.snap
++++ b/codex-rs/cli/tests/snapshots/doctor_path_safety__doctor_config_not_found.snap
+@@ -8,7 +8,7 @@ expression: "serde_json::to_string_pretty(&check)?"
+     "error": "entity not found"
+   },
+   "id": "config.load",
+-  "remediation": "Fix the reported config error, then rerun codex doctor.",
++  "remediation": "Fix the reported config error, then rerun nyacode doctor.",
+   "status": "fail",
+   "summary": "config could not be loaded"
+ }
+diff --git a/codex-rs/cloud-config/Cargo.toml b/codex-rs/cloud-config/Cargo.toml
+index 2077502017d90fe5a229835d9aee64fdf78c8411..96a5f086780c3b640897e2ce32f6c2b091d84206 100644
+--- a/codex-rs/cloud-config/Cargo.toml
++++ b/codex-rs/cloud-config/Cargo.toml
+@@ -17,7 +17,7 @@ codex-http-client = { workspace = true }
+ codex-login = { workspace = true }
+ codex-otel = { workspace = true }
+ codex-protocol = { workspace = true }
+-hmac = "0.12.1"
++hmac = "0.13.0"
+ serde = { workspace = true, features = ["derive"] }
+ serde_json = { workspace = true }
+ sha2 = { workspace = true }
+diff --git a/codex-rs/cloud-config/src/cache.rs b/codex-rs/cloud-config/src/cache.rs
+index 94748ec05206fbe95080f0b7c820b73ce0f6c23c..a6b85c5ab7d7db235af956be1f2c93f353aca24f 100644
+--- a/codex-rs/cloud-config/src/cache.rs
++++ b/codex-rs/cloud-config/src/cache.rs
+@@ -12,6 +12,7 @@ use codex_config::AbsolutePathBuf;
+ use codex_config::CloudConfigBundle;
+ use codex_config::CloudConfigBundlePolicyRevision;
+ use hmac::Hmac;
++use hmac::KeyInit;
+ use hmac::Mac;
+ use serde::Deserialize;
+ use serde::Serialize;
+diff --git a/codex-rs/config/Cargo.toml b/codex-rs/config/Cargo.toml
+index b4be94bb585c6757234299a78f8b42a02b3d2017..de156611b0d51917659d9116a54738581f8796c1 100644
+--- a/codex-rs/config/Cargo.toml
++++ b/codex-rs/config/Cargo.toml
+@@ -22,6 +22,7 @@ codex-model-provider-info = { workspace = true }
+ codex-network-proxy = { workspace = true }
+ codex-protocol = { workspace = true }
+ codex-utils-absolute-path = { workspace = true }
++codex-utils-home-dir = { workspace = true }
+ codex-utils-path = { workspace = true }
+ codex-utils-path-uri = { workspace = true }
+ codex-utils-redacted-string = { workspace = true }
+@@ -30,7 +31,7 @@ futures = { workspace = true, features = ["alloc", "std"] }
+ gethostname = { workspace = true }
+ indexmap = { workspace = true, features = ["serde"] }
+ multimap = { workspace = true }
+-prost = "0.14.3"
++prost = "0.14.4"
+ regex-lite = { workspace = true }
+ schemars = { workspace = true }
+ serde = { workspace = true, features = ["derive"] }
+@@ -52,7 +53,7 @@ dns-lookup = { workspace = true }
+ libc = { workspace = true }
+ 
+ [target.'cfg(target_os = "macos")'.dependencies]
+-core-foundation = "0.9"
++core-foundation = "0.10"
+ 
+ [target.'cfg(target_os = "windows")'.dependencies]
+ codex-windows-sandbox = { workspace = true }
+@@ -69,7 +70,7 @@ tempfile = { workspace = true }
+ tokio = { workspace = true, features = ["full"] }
+ tokio-stream = { workspace = true, features = ["net"] }
+ tonic = { workspace = true, features = ["router", "transport"] }
+-tonic-prost-build = { version = "=0.14.3", default-features = false, features = ["transport"] }
++tonic-prost-build = { version = "=0.14.6", default-features = false, features = ["transport"] }
+ 
+ [lib]
+ doctest = false
+diff --git a/codex-rs/config/src/codex_home_symlink.rs b/codex-rs/config/src/codex_home_symlink.rs
+index bf544f49204b4aba5f2d7b4f64c42c5f23c45b5f..36bb7f235a61086acfca8727790fc84e1d54db80 100644
+--- a/codex-rs/config/src/codex_home_symlink.rs
++++ b/codex-rs/config/src/codex_home_symlink.rs
+@@ -20,8 +20,8 @@ pub fn allowed_symlinked_codex_home(
+     }
+ 
+     // Preserve a configured alias only when lexical normalization did not change its target.
+-    let alias = std::env::var_os("CODEX_HOME")
+-        .filter(|path| !path.is_empty())
++    let alias = codex_utils_home_dir::home_override()
++        .map(|(_, path)| path)
+         .and_then(|path| AbsolutePathBuf::from_absolute_path(path).ok())
+         .filter(|path| path.canonicalize().ok().as_ref() == Some(codex_home));
+     Some(alias.unwrap_or_else(|| codex_home.clone()))
+diff --git a/codex-rs/config/src/config_toml.rs b/codex-rs/config/src/config_toml.rs
+index 8c8c66ea1dc45669a3f52e3e0d3f10e633267167..5e5eb761bd3ce18548bb6e2881d7a3dfe1e2e830 100644
+--- a/codex-rs/config/src/config_toml.rs
++++ b/codex-rs/config/src/config_toml.rs
+@@ -754,7 +754,7 @@ pub struct GoalsToml {
+ }
+ 
+ #[derive(Serialize, Deserialize, Debug, Clone, Default, PartialEq, Eq, JsonSchema)]
+-#[schemars(deny_unknown_fields)]
++// Flattened map entries are valid dynamic keys, validated by their value schema.
+ pub struct AgentsToml {
+     /// Whether multi-agent tools are enabled. Defaults to true.
+     /// An enabled `features.multi_agent_v2` setting takes precedence.
+diff --git a/codex-rs/config/src/permissions_toml.rs b/codex-rs/config/src/permissions_toml.rs
+index 8853f73db2d8091c2caa5570d736437e6001434e..98baad96b01f71016914831ee1129150f3196fa6 100644
+--- a/codex-rs/config/src/permissions_toml.rs
++++ b/codex-rs/config/src/permissions_toml.rs
+@@ -403,6 +403,7 @@ pub struct NetworkMitmInjectedHeaderToml {
+ 
+ #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, JsonSchema)]
+ #[serde(transparent)]
++#[schemars(inline)]
+ struct MitmHookBodyConfigSchema(pub serde_json::Value);
+ 
+ impl<'de> Deserialize<'de> for NetworkMitmToml {
+diff --git a/codex-rs/config/src/schema.rs b/codex-rs/config/src/schema.rs
+index 770e73ee5cca4b51b73109a36045edc1bea65a61..794e113f4580999b0254aa8ce3a151fccf170d51 100644
+--- a/codex-rs/config/src/schema.rs
++++ b/codex-rs/config/src/schema.rs
+@@ -4,14 +4,9 @@ use codex_features::FEATURES;
+ use codex_features::legacy_feature_keys;
+ use codex_protocol::protocol::GranularApprovalConfig;
+ use schemars::JsonSchema;
+-use schemars::r#gen::SchemaGenerator;
+-use schemars::r#gen::SchemaSettings;
+-use schemars::schema::InstanceType;
+-use schemars::schema::ObjectValidation;
+-use schemars::schema::RootSchema;
+-use schemars::schema::Schema;
+-use schemars::schema::SchemaObject;
+-use schemars::schema::SubschemaValidation;
++use schemars::Schema;
++use schemars::generate::SchemaGenerator;
++use schemars::generate::SchemaSettings;
+ use serde_json::Map;
+ use serde_json::Value;
+ use std::path::Path;
+@@ -40,18 +35,13 @@ pub(crate) enum ConfigAskForApproval {
+ 
+ /// Schema for the `[features]` map with known + legacy keys only.
+ pub fn features_schema(schema_gen: &mut SchemaGenerator) -> Schema {
+-    let mut object = SchemaObject {
+-        instance_type: Some(InstanceType::Object.into()),
+-        ..Default::default()
+-    };
+-
+-    let mut validation = ObjectValidation::default();
++    let mut properties = std::collections::BTreeMap::<String, Schema>::new();
+     for feature in FEATURES {
+         if feature.id == codex_features::Feature::Artifact {
+             continue;
+         }
+         if feature.id == codex_features::Feature::CodeMode {
+-            validation.properties.insert(
++            properties.insert(
+                 feature.key.to_string(),
+                 schema_gen.subschema_for::<codex_features::FeatureToml<
+                     codex_features::CodeModeConfigToml,
+@@ -60,7 +50,7 @@ pub fn features_schema(schema_gen: &mut SchemaGenerator) -> Schema {
+             continue;
+         }
+         if feature.id == codex_features::Feature::CodeModeHost {
+-            validation.properties.insert(
++            properties.insert(
+                 feature.key.to_string(),
+                 schema_gen.subschema_for::<codex_features::FeatureToml<
+                     codex_features::CodeModeHostConfigToml,
+@@ -69,7 +59,7 @@ pub fn features_schema(schema_gen: &mut SchemaGenerator) -> Schema {
+             continue;
+         }
+         if feature.id == codex_features::Feature::NonPrefixedMcpToolNames {
+-            validation.properties.insert(
++            properties.insert(
+                 feature.key.to_string(),
+                 schema_gen.subschema_for::<codex_features::FeatureToml<
+                     codex_features::NonPrefixedMcpToolNamesConfigToml,
+@@ -82,7 +72,7 @@ pub fn features_schema(schema_gen: &mut SchemaGenerator) -> Schema {
+             continue;
+         }
+         if feature.id == codex_features::Feature::GuardianV2 {
+-            validation.properties.insert(
++            properties.insert(
+                 feature.key.to_string(),
+                 schema_gen.subschema_for::<codex_features::FeatureToml<
+                     codex_features::GuardianV2ConfigToml,
+@@ -91,7 +81,7 @@ pub fn features_schema(schema_gen: &mut SchemaGenerator) -> Schema {
+             continue;
+         }
+         if feature.id == codex_features::Feature::MultiAgentV2 {
+-            validation.properties.insert(
++            properties.insert(
+                 feature.key.to_string(),
+                 schema_gen.subschema_for::<codex_features::FeatureToml<
+                     codex_features::MultiAgentV2ConfigToml,
+@@ -100,7 +90,7 @@ pub fn features_schema(schema_gen: &mut SchemaGenerator) -> Schema {
+             continue;
+         }
+         if feature.id == codex_features::Feature::AsyncCompaction {
+-            validation.properties.insert(
++            properties.insert(
+                 feature.key.to_string(),
+                 schema_gen.subschema_for::<codex_features::FeatureToml<
+                     codex_features::AsyncCompactionConfigToml,
+@@ -109,7 +99,7 @@ pub fn features_schema(schema_gen: &mut SchemaGenerator) -> Schema {
+             continue;
+         }
+         if feature.id == codex_features::Feature::TokenBudget {
+-            validation.properties.insert(
++            properties.insert(
+                 feature.key.to_string(),
+                 schema_gen.subschema_for::<codex_features::FeatureToml<
+                     codex_features::TokenBudgetConfigToml,
+@@ -118,7 +108,7 @@ pub fn features_schema(schema_gen: &mut SchemaGenerator) -> Schema {
+             continue;
+         }
+         if feature.id == codex_features::Feature::ContextManagement {
+-            validation.properties.insert(
++            properties.insert(
+                 feature.key.to_string(),
+                 schema_gen.subschema_for::<codex_features::FeatureToml<
+                     codex_features::ContextManagementConfigToml,
+@@ -127,7 +117,7 @@ pub fn features_schema(schema_gen: &mut SchemaGenerator) -> Schema {
+             continue;
+         }
+         if feature.id == codex_features::Feature::RolloutBudget {
+-            validation.properties.insert(
++            properties.insert(
+                 feature.key.to_string(),
+                 schema_gen.subschema_for::<codex_features::FeatureToml<
+                     codex_features::RolloutBudgetConfigToml,
+@@ -136,7 +126,7 @@ pub fn features_schema(schema_gen: &mut SchemaGenerator) -> Schema {
+             continue;
+         }
+         if feature.id == codex_features::Feature::CurrentTimeReminder {
+-            validation.properties.insert(
++            properties.insert(
+                 feature.key.to_string(),
+                 schema_gen.subschema_for::<codex_features::FeatureToml<
+                     codex_features::CurrentTimeReminderConfigToml,
+@@ -145,7 +135,7 @@ pub fn features_schema(schema_gen: &mut SchemaGenerator) -> Schema {
+             continue;
+         }
+         if feature.id == codex_features::Feature::SleepTool {
+-            validation.properties.insert(
++            properties.insert(
+                 feature.key.to_string(),
+                 schema_gen.subschema_for::<codex_features::FeatureToml<
+                     codex_features::SleepToolConfigToml,
+@@ -154,14 +144,14 @@ pub fn features_schema(schema_gen: &mut SchemaGenerator) -> Schema {
+             continue;
+         }
+         if feature.id == codex_features::Feature::AppsMcpPathOverride {
+-            validation.properties.insert(
++            properties.insert(
+                 feature.key.to_string(),
+                 removed_apps_mcp_path_override_schema(schema_gen),
+             );
+             continue;
+         }
+         if feature.id == codex_features::Feature::NetworkProxy {
+-            validation.properties.insert(
++            properties.insert(
+                 feature.key.to_string(),
+                 schema_gen.subschema_for::<codex_features::FeatureToml<
+                     codex_features::NetworkProxyConfigToml,
+@@ -169,70 +159,56 @@ pub fn features_schema(schema_gen: &mut SchemaGenerator) -> Schema {
+             );
+             continue;
+         }
+-        validation
+-            .properties
+-            .insert(feature.key.to_string(), schema_gen.subschema_for::<bool>());
++        properties.insert(feature.key.to_string(), schema_gen.subschema_for::<bool>());
+     }
+     for legacy_key in legacy_feature_keys() {
+-        validation
+-            .properties
+-            .insert(legacy_key.to_string(), schema_gen.subschema_for::<bool>());
++        properties.insert(legacy_key.to_string(), schema_gen.subschema_for::<bool>());
+     }
+-    validation.properties.insert(
++    properties.insert(
+         "tool_registry".to_string(),
+         schema_gen.subschema_for::<codex_features::ToolRegistryConfigToml>(),
+     );
+-    validation.additional_properties = Some(Box::new(Schema::Bool(false)));
+-    object.object = Some(Box::new(validation));
+-
+-    Schema::Object(object)
++    schemars::json_schema!({
++        "type": "object",
++        "properties": properties,
++        "additionalProperties": false,
++    })
+ }
+ 
+ fn removed_apps_mcp_path_override_schema(schema_gen: &mut SchemaGenerator) -> Schema {
+-    let mut config_validation = ObjectValidation::default();
+-    config_validation
+-        .properties
+-        .insert("enabled".to_string(), schema_gen.subschema_for::<bool>());
+-    config_validation
+-        .properties
+-        .insert("path".to_string(), schema_gen.subschema_for::<String>());
+-    config_validation.additional_properties = Some(Box::new(Schema::Bool(false)));
+-
+-    let config = Schema::Object(SchemaObject {
+-        instance_type: Some(InstanceType::Object.into()),
+-        object: Some(Box::new(config_validation)),
+-        ..Default::default()
+-    });
+-    Schema::Object(SchemaObject {
+-        subschemas: Some(Box::new(SubschemaValidation {
+-            any_of: Some(vec![schema_gen.subschema_for::<bool>(), config]),
+-            ..Default::default()
+-        })),
+-        ..Default::default()
++    schemars::json_schema!({
++        "anyOf": [schema_gen.subschema_for::<bool>(), {
++            "type": "object",
++            "properties": {
++                "enabled": schema_gen.subschema_for::<bool>(),
++                "path": schema_gen.subschema_for::<String>(),
++            },
++            "additionalProperties": false,
++        }],
+     })
+ }
+ 
+ /// Schema for the `[mcp_servers]` map using the raw input shape.
+ pub fn mcp_servers_schema(schema_gen: &mut SchemaGenerator) -> Schema {
+-    let mut object = SchemaObject {
+-        instance_type: Some(InstanceType::Object.into()),
+-        ..Default::default()
+-    };
+-
+-    let validation = ObjectValidation {
+-        additional_properties: Some(Box::new(schema_gen.subschema_for::<RawMcpServerConfig>())),
+-        ..Default::default()
+-    };
+-    object.object = Some(Box::new(validation));
+-
+-    Schema::Object(object)
++    schemars::json_schema!({
++        "type": "object",
++        "additionalProperties": schema_gen.subschema_for::<RawMcpServerConfig>(),
++    })
+ }
+ 
+ /// Build the config schema for `config.toml`.
+-pub fn config_schema() -> RootSchema {
++pub fn config_schema() -> Schema {
+     let mut schema = SchemaSettings::draft07()
+         .with(|settings| {
+-            settings.option_add_null_type = false;
++            settings
++                .transforms
++                .push(Box::new(codex_protocol::json_schema::sort_required_fields));
++            settings
++                .transforms
++                .push(Box::new(codex_protocol::json_schema::omit_optional_null));
++            settings
++                .transforms
++                .push(Box::new(schemars::transform::RemoveRefSiblings::default()));
+         })
+         .into_generator()
+         .into_root_schema_for::<ConfigToml>();
+@@ -240,30 +216,21 @@ pub fn config_schema() -> RootSchema {
+     schema
+ }
+ 
+-fn add_shell_environment_policy_constraints(schema: &mut RootSchema) {
+-    let Some(Schema::Object(policy)) = schema.definitions.get_mut("ShellEnvironmentPolicyToml")
++fn add_shell_environment_policy_constraints(schema: &mut Schema) {
++    let Some(policy) = schema
++        .get_mut("definitions")
++        .and_then(|definitions| definitions.get_mut("ShellEnvironmentPolicyToml"))
++        .and_then(Value::as_object_mut)
+     else {
+         return;
+     };
+     let all_of = policy
+-        .subschemas
+-        .get_or_insert_default()
+-        .all_of
+-        .get_or_insert_default();
+-    for fields in [["exclude", "filters"], ["filters", "include_only"]] {
+-        all_of.push(Schema::Object(SchemaObject {
+-            subschemas: Some(Box::new(SubschemaValidation {
+-                not: Some(Box::new(Schema::Object(SchemaObject {
+-                    object: Some(Box::new(ObjectValidation {
+-                        required: fields.into_iter().map(str::to_string).collect(),
+-                        ..Default::default()
+-                    })),
+-                    ..Default::default()
+-                }))),
+-                ..Default::default()
+-            })),
+-            ..Default::default()
+-        }));
++        .entry("allOf")
++        .or_insert_with(|| Value::Array(Vec::new()));
++    if let Some(all_of) = all_of.as_array_mut() {
++        for fields in [["exclude", "filters"], ["filters", "include_only"]] {
++            all_of.push(serde_json::json!({"not": {"required": fields}}));
++        }
+     }
+ }
+ 
+@@ -299,3 +266,30 @@ pub fn write_config_schema(out_path: &Path) -> anyhow::Result<()> {
+     std::fs::write(out_path, json)?;
+     Ok(())
+ }
++
++#[cfg(test)]
++mod tests {
++    #[test]
++    fn dynamic_config_keys_retain_their_value_schemas() {
++        let schema = super::config_schema();
++        let definitions = &schema.as_value()["definitions"];
++        for (map, value) in [
++            ("AgentsToml", "AgentRoleToml"),
++            ("AppToolsConfig", "AppToolConfig"),
++            ("AppLinksConfig", "AppLinkConfig"),
++            ("PluginsConfigToml", "PluginConfig"),
++            ("AppsConfigToml", "AppConfig"),
++        ] {
++            assert_eq!(
++                definitions[map]["additionalProperties"]["$ref"],
++                format!("#/definitions/{value}"),
++                "{map} must accept dynamically named entries"
++            );
++        }
++        assert_eq!(
++            definitions["ModelAvailabilityNuxConfig"]["additionalProperties"]["type"],
++            "integer"
++        );
++        assert_eq!(definitions["AgentRoleToml"]["additionalProperties"], false);
++    }
++}
+diff --git a/codex-rs/config/src/tui_keymap.rs b/codex-rs/config/src/tui_keymap.rs
+index 170dcf1b446d645140bb4c7d27a82d320a93f142..336dea49e608ba85d1f55d993c2112d5005d6b8e 100644
+--- a/codex-rs/config/src/tui_keymap.rs
++++ b/codex-rs/config/src/tui_keymap.rs
+@@ -40,6 +40,7 @@ const MAX_KEY_CHORD_STROKES: usize = 2;
+ /// bindings remain alternatives; their entries do not form a chord together.
+ #[derive(Serialize, Debug, Clone, PartialEq, Eq, JsonSchema)]
+ #[serde(transparent)]
++#[schemars(inline)]
+ pub struct KeybindingSpec(#[schemars(with = "String")] pub String);
+ 
+ impl KeybindingSpec {
+@@ -133,6 +134,8 @@ impl KeybindingsSpec {
+ #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Default, JsonSchema)]
+ #[schemars(deny_unknown_fields)]
+ pub struct TuiGlobalKeymap {
++    /// Switch between the independent Codex and Chat surfaces (default F6).
++    pub switch_surface: Option<KeybindingsSpec>,
+     /// Prefix for persistent, context-aware shortcut menus.
+     pub leader: Option<KeybindingsSpec>,
+     /// Open the shared agent-session overview.
+diff --git a/codex-rs/config/src/tui_mouse_scroll.rs b/codex-rs/config/src/tui_mouse_scroll.rs
+index 345f994183ac644fa27dba38778a251b5b2babab..fdd205e4d7ee4815276385cd0fb22de8fd66f32d 100644
+--- a/codex-rs/config/src/tui_mouse_scroll.rs
++++ b/codex-rs/config/src/tui_mouse_scroll.rs
+@@ -1,15 +1,15 @@
+ //! Keep transcript mouse-scroll speed validation and its configuration schema in sync.
+ 
+ use schemars::JsonSchema;
+-use schemars::r#gen::SchemaGenerator;
+-use schemars::schema::Schema;
++use schemars::Schema;
++use schemars::generate::SchemaGenerator;
+ use serde::Deserialize;
+ use serde::Deserializer;
+ 
+ pub(crate) fn schema(generator: &mut SchemaGenerator) -> Schema {
+-    let mut schema = Option::<f64>::json_schema(generator).into_object();
+-    schema.number().exclusive_minimum = Some(0.0);
+-    schema.into()
++    let mut schema = Option::<f64>::json_schema(generator);
++    schema.insert("exclusiveMinimum".into(), 0.0.into());
++    schema
+ }
+ 
+ pub(crate) fn deserialize<'de, D>(deserializer: D) -> Result<Option<f64>, D::Error>
+diff --git a/codex-rs/config/src/types.rs b/codex-rs/config/src/types.rs
+index 8846fb3d95abe0da0526c77a7b06932dda3d14a4..9c35582af028eaf96d1ede0128b9211026754c0a 100644
+--- a/codex-rs/config/src/types.rs
++++ b/codex-rs/config/src/types.rs
+@@ -488,7 +488,7 @@ pub struct AppToolConfig {
+ 
+ /// Tool settings for a single app.
+ #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Default, JsonSchema)]
+-#[schemars(deny_unknown_fields)]
++// Flattened map entries are valid dynamic keys, validated by their value schema.
+ pub struct AppToolsConfig {
+     /// Per-tool overrides keyed by tool name (for example `repos/list`).
+     #[serde(default, flatten)]
+@@ -510,7 +510,7 @@ pub struct AppLinkConfig {
+ 
+ /// Account settings for a single app.
+ #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Default, JsonSchema)]
+-#[schemars(deny_unknown_fields)]
++// Flattened map entries are valid dynamic keys, validated by their value schema.
+ pub struct AppLinksConfig {
+     /// Per-account approval settings keyed by link ID.
+     #[serde(default, flatten)]
+@@ -562,7 +562,7 @@ pub struct AppConfig {
+ 
+ /// App/connector settings loaded from `config.toml`.
+ #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Default, JsonSchema)]
+-#[schemars(deny_unknown_fields)]
++// Flattened map entries are valid dynamic keys, validated by their value schema.
+ pub struct AppsConfigToml {
+     /// Default settings for all apps.
+     #[serde(default, rename = "_default", skip_serializing_if = "Option::is_none")]
+@@ -812,7 +812,7 @@ pub struct TuiNotificationSettings {
+ }
+ 
+ #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Default, JsonSchema)]
+-#[schemars(deny_unknown_fields)]
++// Flattened map entries are valid dynamic keys, validated by their value schema.
+ pub struct ModelAvailabilityNuxConfig {
+     /// Number of times a startup availability NUX has been shown per model slug.
+     #[serde(default, flatten)]
+@@ -1082,7 +1082,7 @@ pub struct PluginsDefaultConfig {
+ 
+ /// Plugin activation and capability settings loaded from configuration layers.
+ #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Default, JsonSchema)]
+-#[schemars(deny_unknown_fields)]
++// Flattened map entries are valid dynamic keys, validated by their value schema.
+ pub struct PluginsConfigToml {
+     /// Defaults for installed plugin activation. Omission preserves source enablement.
+     /// Explicit plugin enablement settings override this default, but cannot enable
+diff --git a/codex-rs/core/config.schema.json b/codex-rs/core/config.schema.json
+index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd71101f73c72 100644
+--- a/codex-rs/core/config.schema.json
++++ b/codex-rs/core/config.schema.json
+@@ -3,7 +3,7 @@
+   "additionalProperties": false,
+   "definitions": {
+     "AbsolutePathBuf": {
+-      "description": "A path that is guaranteed to be absolute and normalized (though it is not guaranteed to be canonicalized or exist on the filesystem).\n\nIMPORTANT: When deserializing an `AbsolutePathBuf`, a base path must be set using [AbsolutePathBufGuard::new]. If no base path is set, the deserialization will fail unless the path being deserialized is already absolute.",
++      "description": "A path that is guaranteed to be absolute and normalized (though it is not\nguaranteed to be canonicalized or exist on the filesystem).\n\nIMPORTANT: When deserializing an `AbsolutePathBuf`, a base path must be set\nusing [AbsolutePathBufGuard::new]. If no base path is set, the\ndeserialization will fail unless the path being deserialized is already\nabsolute.",
+       "type": "string"
+     },
+     "AgentRoleToml": {
+@@ -15,10 +15,10 @@
+               "$ref": "#/definitions/AbsolutePathBuf"
+             }
+           ],
+-          "description": "Path to a role-specific config layer. Relative paths are resolved relative to the `config.toml` that defines them."
++          "description": "Path to a role-specific config layer.\nRelative paths are resolved relative to the `config.toml` that defines them."
+         },
+         "description": {
+-          "description": "Human-facing role documentation used in spawn tool guidance. Required unless supplied by the referenced agent role file.",
++          "description": "Human-facing role documentation used in spawn tool guidance.\nRequired unless supplied by the referenced agent role file.",
+           "type": "string"
+         },
+         "nickname_candidates": {
+@@ -58,17 +58,17 @@
+           "description": "Default reasoning effort for spawned subagents when the spawn call does not select one."
+         },
+         "enabled": {
+-          "description": "Whether multi-agent tools are enabled. Defaults to true. An enabled `features.multi_agent_v2` setting takes precedence.",
++          "description": "Whether multi-agent tools are enabled. Defaults to true.\nAn enabled `features.multi_agent_v2` setting takes precedence.",
+           "type": "boolean"
+         },
+         "interrupt_message": {
+-          "description": "Whether to record a model-visible message when an agent turn is interrupted. Defaults to true.",
++          "description": "Whether to record a model-visible message when an agent turn is interrupted.\nDefaults to true.",
+           "type": "boolean"
+         },
+         "max_concurrent_threads_per_session": {
+-          "description": "Maximum number of spawned agent threads that can be open concurrently per session. When unset, the selected multi-agent backend uses its default.",
++          "description": "Maximum number of spawned agent threads that can be open concurrently per session.\nWhen unset, the selected multi-agent backend uses its default.",
+           "format": "uint",
+-          "minimum": 1.0,
++          "minimum": 1,
+           "type": "integer"
+         },
+         "max_depth": {
+@@ -87,27 +87,21 @@
+       "type": "string"
+     },
+     "AltScreenMode": {
+-      "description": "Controls whether the TUI uses the terminal's alternate screen buffer.\n\n- `auto` (default): Use alternate screen mode. - `always`: Always use alternate screen mode. - `never`: Never use alternate screen mode. Runs in inline mode, preserving scrollback.\n\nThe CLI flag `--no-alt-screen` can override this setting at runtime.",
++      "description": "Controls whether the TUI uses the terminal's alternate screen buffer.\n\n- `auto` (default): Use alternate screen mode.\n- `always`: Always use alternate screen mode.\n- `never`: Never use alternate screen mode. Runs in inline mode, preserving scrollback.\n\nThe CLI flag `--no-alt-screen` can override this setting at runtime.",
+       "oneOf": [
+         {
++          "const": "auto",
+           "description": "Use alternate screen mode.",
+-          "enum": [
+-            "auto"
+-          ],
+           "type": "string"
+         },
+         {
++          "const": "always",
+           "description": "Always use alternate screen mode.",
+-          "enum": [
+-            "always"
+-          ],
+           "type": "string"
+         },
+         {
++          "const": "never",
+           "description": "Never use alternate screen (inline mode only).",
+-          "enum": [
+-            "never"
+-          ],
+           "type": "string"
+         }
+       ]
+@@ -117,7 +111,7 @@
+       "description": "Analytics settings loaded from config.toml. Fields are optional so we can apply defaults.",
+       "properties": {
+         "enabled": {
+-          "description": "When `false`, disables OpenAI analytics across Codex product surfaces in this profile. Custom OTLP metrics exporters remain enabled; set `otel.metrics_exporter = \"none\"` to disable them.",
++          "description": "When `false`, disables OpenAI analytics across Codex product surfaces in this profile.\nCustom OTLP metrics exporters remain enabled; set `otel.metrics_exporter = \"none\"` to disable them.",
+           "type": "boolean"
+         }
+       },
+@@ -165,7 +159,7 @@
+           "description": "Per-account approval settings keyed by link ID."
+         },
+         "omit_tools_from": {
+-          "description": "Model-facing surfaces from which this connector's tools must be omitted, in addition to any server-level omissions. `None` leaves lower-priority configuration unchanged; an empty list clears connector-level omissions.",
++          "description": "Model-facing surfaces from which this connector's tools must be omitted,\nin addition to any server-level omissions. `None` leaves lower-priority\nconfiguration unchanged; an empty list clears connector-level omissions.",
+           "items": {
+             "$ref": "#/definitions/ToolExposureSurface"
+           },
+@@ -314,18 +308,16 @@
+       "type": "object"
+     },
+     "AskForApproval": {
+-      "description": "Determines the conditions under which the user is consulted to approve running the command proposed by Codex.",
++      "description": "Determines the conditions under which the user is consulted to approve\nrunning the command proposed by Codex.",
+       "oneOf": [
+         {
++          "const": "on-request",
+           "description": "The model decides when to ask the user for approval.",
+-          "enum": [
+-            "on-request"
+-          ],
+           "type": "string"
+         },
+         {
+           "additionalProperties": false,
+-          "description": "Fine-grained controls for individual approval flows.\n\nWhen a field is `true`, commands in that category are allowed. When it is `false`, those requests are automatically rejected instead of shown to the user.",
++          "description": "Fine-grained controls for individual approval flows.\n\nWhen a field is `true`, commands in that category are allowed. When it\nis `false`, those requests are automatically rejected instead of shown\nto the user.",
+           "properties": {
+             "granular": {
+               "$ref": "#/definitions/GranularApprovalConfig"
+@@ -337,10 +329,8 @@
+           "type": "object"
+         },
+         {
+-          "description": "Never ask the user to approve commands. Failures are immediately returned to the model, and never escalated to the user for approval.",
+-          "enum": [
+-            "never"
+-          ],
++          "const": "never",
++          "description": "Never ask the user to approve commands. Failures are immediately returned\nto the model, and never escalated to the user for approval.",
+           "type": "string"
+         }
+       ]
+@@ -361,10 +351,10 @@
+           "type": "boolean"
+         },
+         "model_async_compact_threshold_percent": {
+-          "description": "Percentage of the model's full context window that starts background compaction. Defaults to 65; valid values are 1–100, including when disabled.",
++          "description": "Percentage of the model's full context window that starts background compaction.\nDefaults to 65; valid values are 1–100, including when disabled.",
+           "format": "uint8",
+-          "maximum": 100.0,
+-          "minimum": 1.0,
++          "maximum": 100,
++          "minimum": 1,
+           "type": "integer"
+         }
+       },
+@@ -374,50 +364,38 @@
+       "description": "Determine where Codex should store CLI auth credentials.",
+       "oneOf": [
+         {
++          "const": "file",
+           "description": "Persist credentials in CODEX_HOME/auth.json.",
+-          "enum": [
+-            "file"
+-          ],
+           "type": "string"
+         },
+         {
++          "const": "keyring",
+           "description": "Persist credentials in the keyring. Fail if unavailable.",
+-          "enum": [
+-            "keyring"
+-          ],
+           "type": "string"
+         },
+         {
++          "const": "auto",
+           "description": "Use keyring when available; otherwise, fall back to a file in CODEX_HOME.",
+-          "enum": [
+-            "auto"
+-          ],
+           "type": "string"
+         },
+         {
++          "const": "ephemeral",
+           "description": "Store credentials in memory only for the current process.",
+-          "enum": [
+-            "ephemeral"
+-          ],
+           "type": "string"
+         }
+       ]
+     },
+     "AutoCompactTokenLimitScope": {
+-      "description": "Selects which part of the active context is charged against `model_auto_compact_token_limit`.",
++      "description": "Selects which part of the active context is charged against\n`model_auto_compact_token_limit`.",
+       "oneOf": [
+         {
++          "const": "total",
+           "description": "Count the full active context against the limit.",
+-          "enum": [
+-            "total"
+-          ],
+           "type": "string"
+         },
+         {
++          "const": "body_after_prefix",
+           "description": "Count sampled output and later growth after the carried window prefix.",
+-          "enum": [
+-            "body_after_prefix"
+-          ],
+           "type": "string"
+         }
+       ]
+@@ -430,16 +408,16 @@
+               "$ref": "#/definitions/CircuitBreakAction"
+             }
+           ],
+-          "description": "Controls whether circuit-breaker interruptions include a structured error. Strict mode writes structured errors that older clients may not recognize when reading shared history. Defaults to `default`."
++          "description": "Controls whether circuit-breaker interruptions include a structured error.\nStrict mode writes structured errors that older clients may not\nrecognize when reading shared history. Defaults to `default`."
+         },
+         "conversation_history_max_output_tokens": {
+-          "description": "Maximum estimated tokens per Guardian history-tool response, before the standard serialization allowance. Defaults to 4,000; stricter parent tool limits still apply.",
++          "description": "Maximum estimated tokens per Guardian history-tool response, before the standard\nserialization allowance. Defaults to 4,000; stricter parent tool limits still apply.",
+           "format": "uint",
+-          "minimum": 1.0,
++          "minimum": 1,
+           "type": "integer"
+         },
+         "experimental_conversation_history_prompt": {
+-          "description": "Experimental replacement for the history-retrieval instructions when history tools and Apps are enabled. Omitted or blank values use the built-in prompt.",
++          "description": "Experimental replacement for the history-retrieval instructions when history tools\nand Apps are enabled. Omitted or blank values use the built-in prompt.",
+           "type": "string"
+         },
+         "experimental_policy_template": {
+@@ -465,6 +443,7 @@
+           "default": [],
+           "description": "Arguments passed to the refresh command.",
+           "items": {
++            "description": "A string whose `Debug` output is redacted.",
+             "type": "string"
+           },
+           "type": "array"
+@@ -477,7 +456,7 @@
+           "default": 300000,
+           "description": "Maximum time to wait for the refresh command to complete.",
+           "format": "uint64",
+-          "minimum": 1.0,
++          "minimum": 1,
+           "type": "integer"
+         }
+       },
+@@ -494,6 +473,7 @@
+           "default": [],
+           "description": "Arguments passed to the credential export command.",
+           "items": {
++            "description": "A string whose `Debug` output is redacted.",
+             "type": "string"
+           },
+           "type": "array"
+@@ -506,7 +486,7 @@
+           "default": 30000,
+           "description": "Maximum time to wait for the credential export command to complete.",
+           "format": "uint64",
+-          "minimum": 1.0,
++          "minimum": 1,
+           "type": "integer"
+         }
+       },
+@@ -564,17 +544,13 @@
+     "CircuitBreakAction": {
+       "oneOf": [
+         {
++          "const": "default",
+           "description": "Emit the warning and interrupt without structured error details.",
+-          "enum": [
+-            "default"
+-          ],
+           "type": "string"
+         },
+         {
++          "const": "strict",
+           "description": "Emit the same warning and interruption, with structured error details.",
+-          "enum": [
+-            "strict"
+-          ],
+           "type": "string"
+         }
+       ]
+@@ -600,11 +576,11 @@
+         "default_exec_yield_time_ms": {
+           "description": "Default yield timeout for code-mode exec calls, in milliseconds.",
+           "format": "uint64",
+-          "minimum": 0.0,
++          "minimum": 0,
+           "type": "integer"
+         },
+         "direct_only_tool_namespaces": {
+-          "description": "Exact tool namespaces to expose only as direct model tools. These tools bypass deferral, remain top-level in code-mode-only sessions, and are omitted from the nested code-mode tool surface.",
++          "description": "Exact tool namespaces to expose only as direct model tools.\nThese tools bypass deferral, remain top-level in code-mode-only sessions, and are omitted\nfrom the nested code-mode tool surface.",
+           "items": {
+             "type": "string"
+           },
+@@ -621,13 +597,13 @@
+           "type": "array"
+         },
+         "experimental_show_cell_overhead": {
+-          "description": "Show handler duration, code-mode host duration, and harness overhead in each code-mode cell response. Experimental: this option and the response format may change or be removed.",
++          "description": "Show handler duration, code-mode host duration, and harness overhead\nin each code-mode cell response.\nExperimental: this option and the response format may change or be removed.",
+           "type": "boolean"
+         },
+         "tool_input_schema_max_bytes": {
+-          "description": "Maximum UTF-8 bytes per rendered tool input type, with a 16,000-byte minimum and default. For ordinary MCP tools, this is also at least their server's explicitly configured input limit.",
++          "description": "Maximum UTF-8 bytes per rendered tool input type, with a 16,000-byte minimum and default.\nFor ordinary MCP tools, this is also at least their server's explicitly configured input limit.",
+           "format": "uint",
+-          "minimum": 1.0,
++          "minimum": 1,
+           "type": "integer"
+         }
+       },
+@@ -716,7 +692,7 @@
+     },
+     "ConfigProfile": {
+       "additionalProperties": false,
+-      "description": "Collection of common configuration options that a user can define as a unit in `config.toml`.",
++      "description": "Collection of common configuration options that a user can define as a unit\nin `config.toml`.",
+       "properties": {
+         "analytics": {
+           "$ref": "#/definitions/AnalyticsConfigToml"
+@@ -808,6 +784,9 @@
+             "browser_use_full_cdp_access": {
+               "type": "boolean"
+             },
++            "chatgpt_chat": {
++              "type": "boolean"
++            },
+             "chronicle": {
+               "type": "boolean"
+             },
+@@ -1356,7 +1335,7 @@
+           "description": "Optional path to a file containing model instructions."
+         },
+         "model_provider": {
+-          "description": "The key in the `model_providers` map identifying the [`ModelProviderInfo`] to use.",
++          "description": "The key in the `model_providers` map identifying the\n[`ModelProviderInfo`] to use.",
+           "type": "string"
+         },
+         "model_reasoning_effort": {
+@@ -1386,7 +1365,7 @@
+           "$ref": "#/definitions/SandboxMode"
+         },
+         "service_tier": {
+-          "description": "Optional explicit service tier request id for new turns (for example `default`, `priority`, or `flex`; legacy `fast` also works).",
++          "description": "Optional explicit service tier request id for new turns (for example\n`default`, `priority`, or `flex`; legacy `fast` also works).",
+           "type": "string"
+         },
+         "tools": {
+@@ -1429,24 +1408,18 @@
+       "description": "When mouse selections are copied on release.",
+       "oneOf": [
+         {
++          "const": "auto",
+           "description": "Use the terminal-specific default.",
+-          "enum": [
+-            "auto"
+-          ],
+           "type": "string"
+         },
+         {
++          "const": "always",
+           "description": "Copy every nonempty transcript, footer, or composer mouse selection on release.",
+-          "enum": [
+-            "always"
+-          ],
+           "type": "string"
+         },
+         {
++          "const": "never",
+           "description": "Require an explicit copy action.",
+-          "enum": [
+-            "never"
+-          ],
+           "type": "string"
+         }
+       ]
+@@ -1498,7 +1471,7 @@
+         },
+         "url_prefixes": {
+           "default": [],
+-          "description": "URL prefixes authorized for injection. Bare loopback hosts imply HTTP; other bare hosts imply HTTPS.",
++          "description": "URL prefixes authorized for injection. Bare loopback hosts imply HTTP; other bare hosts\nimply HTTPS.",
+           "items": {
+             "type": "string"
+           },
+@@ -1521,7 +1494,7 @@
+         },
+         "reminder_interval_seconds": {
+           "format": "uint64",
+-          "minimum": 0.0,
++          "minimum": 0,
+           "type": "integer"
+         },
+         "sleep_tool": {
+@@ -1535,17 +1508,13 @@
+       "description": "Which inference boundaries may receive current-time reminders.",
+       "oneOf": [
+         {
++          "const": "any_inference",
+           "description": "Allow a reminder before any inference request once the interval is due.",
+-          "enum": [
+-            "any_inference"
+-          ],
+           "type": "string"
+         },
+         {
++          "const": "after_user_or_tool_output",
+           "description": "Allow reminders after user input or tool output; new context windows still force one.",
+-          "enum": [
+-            "after_user_or_tool_output"
+-          ],
+           "type": "string"
+         }
+       ]
+@@ -1569,7 +1538,7 @@
+     },
+     "ExternalConfigMigrationPrompts": {
+       "additionalProperties": false,
+-      "description": "Settings for notices we display to users via the tui and app-server clients (primarily the Codex IDE extension). NOTE: these are different from notifications - notices are warnings, NUX screens, acknowledgements, etc.",
++      "description": "Settings for notices we display to users via the tui and app-server clients\n(primarily the Codex IDE extension). NOTE: these are different from\nnotifications - notices are warnings, NUX screens, acknowledgements, etc.",
+       "properties": {
+         "home": {
+           "description": "Tracks whether home-level external config migration prompts are hidden.",
+@@ -1741,7 +1710,7 @@
+       "type": "object"
+     },
+     "FileSystemAccessMode": {
+-      "description": "Access mode for a filesystem entry.\n\nWhen two equally specific entries target the same path, we compare these by conflict precedence rather than by capability breadth: `deny` beats `write`, and `write` beats `read`.",
++      "description": "Access mode for a filesystem entry.\n\nWhen two equally specific entries target the same path, we compare these by\nconflict precedence rather than by capability breadth: `deny` beats\n`write`, and `write` beats `read`.",
+       "oneOf": [
+         {
+           "enum": [
+@@ -1751,10 +1720,8 @@
+           "type": "string"
+         },
+         {
++          "const": "deny",
+           "description": "`none` is a legacy input alias retained temporarily for compatibility.",
+-          "enum": [
+-            "deny"
+-          ],
+           "type": "string"
+         }
+       ]
+@@ -1773,11 +1740,14 @@
+       ]
+     },
+     "FilesystemPermissionsToml": {
++      "additionalProperties": {
++        "$ref": "#/definitions/FilesystemPermissionToml"
++      },
+       "properties": {
+         "glob_scan_max_depth": {
+-          "description": "Optional maximum depth for expanding unreadable glob patterns on platforms that snapshot glob matches before sandbox startup.",
++          "description": "Optional maximum depth for expanding unreadable glob patterns on\nplatforms that snapshot glob matches before sandbox startup.",
+           "format": "uint",
+-          "minimum": 1.0,
++          "minimum": 1,
+           "type": "integer"
+         }
+       },
+@@ -1818,7 +1788,8 @@
+         },
+         "redirect_port": {
+           "format": "uint16",
+-          "minimum": 0.0,
++          "maximum": 65535,
++          "minimum": 0,
+           "type": "integer"
+         },
+         "resource": {
+@@ -1849,9 +1820,7 @@
+           "additionalProperties": false,
+           "properties": {
+             "kind": {
+-              "enum": [
+-                "header"
+-              ],
++              "const": "header",
+               "type": "string"
+             },
+             "name": {
+@@ -1872,9 +1841,7 @@
+           "additionalProperties": false,
+           "properties": {
+             "kind": {
+-              "enum": [
+-                "cookie"
+-              ],
++              "const": "cookie",
+               "type": "string"
+             },
+             "name": {
+@@ -1915,7 +1882,7 @@
+         "max_goal_token_budget": {
+           "description": "Maximum token budget allowed for a goal and default budget for new goals.",
+           "format": "uint64",
+-          "minimum": 1.0,
++          "minimum": 1,
+           "type": "integer"
+         }
+       },
+@@ -1937,7 +1904,7 @@
+           "type": "boolean"
+         },
+         "sandbox_approval": {
+-          "description": "Whether to allow shell command approval requests, including inline `with_additional_permissions` and `require_escalated` requests.",
++          "description": "Whether to allow shell command approval requests, including inline\n`with_additional_permissions` and `require_escalated` requests.",
+           "type": "boolean"
+         },
+         "skill_approval": {
+@@ -1958,9 +1925,9 @@
+       "description": "User-configurable prompt, approval, and context settings for Guardian v2.",
+       "properties": {
+         "async_classifier_conversation_token_limit": {
+-          "description": "Reset retained async history when the next request exceeds this token estimate. Defaults to 100,000. Fresh requests remain subject to the model's input limit.",
++          "description": "Reset retained async history when the next request exceeds this token estimate.\nDefaults to 100,000. Fresh requests remain subject to the model's input limit.",
+           "format": "uint",
+-          "minimum": 1.0,
++          "minimum": 1,
+           "type": "integer"
+         },
+         "async_classifier_mode": {
+@@ -1983,25 +1950,25 @@
+         },
+         "max_action_tokens": {
+           "format": "uint",
+-          "maximum": 100000.0,
+-          "minimum": 100.0,
++          "maximum": 100000,
++          "minimum": 100,
+           "type": "integer"
+         },
+         "max_classifier_instruction_tokens": {
+           "format": "uint",
+-          "maximum": 100000.0,
+-          "minimum": 100.0,
++          "maximum": 100000,
++          "minimum": 100,
+           "type": "integer"
+         },
+         "max_parent_compaction_tokens": {
+           "format": "uint",
+-          "maximum": 100000.0,
+-          "minimum": 100.0,
++          "maximum": 100000,
++          "minimum": 100,
+           "type": "integer"
+         },
+         "max_tool_call_lag": {
+           "format": "uint",
+-          "minimum": 0.0,
++          "minimum": 0,
+           "type": "integer"
+         },
+         "persist_scores": {
+@@ -2066,31 +2033,31 @@
+         },
+         "max_message_entry_tokens": {
+           "format": "uint",
+-          "maximum": 100000.0,
+-          "minimum": 100.0,
++          "maximum": 100000,
++          "minimum": 100,
+           "type": "integer"
+         },
+         "max_message_transcript_tokens": {
+           "format": "uint",
+-          "maximum": 100000.0,
+-          "minimum": 100.0,
++          "maximum": 100000,
++          "minimum": 100,
+           "type": "integer"
+         },
+         "max_recent_non_user_entries": {
+           "format": "uint",
+-          "minimum": 1.0,
++          "minimum": 1,
+           "type": "integer"
+         },
+         "max_tool_entry_tokens": {
+           "format": "uint",
+-          "maximum": 100000.0,
+-          "minimum": 100.0,
++          "maximum": 100000,
++          "minimum": 100,
+           "type": "integer"
+         },
+         "max_tool_transcript_tokens": {
+           "format": "uint",
+-          "maximum": 100000.0,
+-          "minimum": 100.0,
++          "maximum": 100000,
++          "minimum": 100,
+           "type": "integer"
+         },
+         "sources": {
+@@ -2117,9 +2084,9 @@
+       "properties": {
+         "max_bytes": {
+           "default": null,
+-          "description": "If set, the maximum size of the history file in bytes. The oldest entries are dropped once the file exceeds this limit.",
++          "description": "If set, the maximum size of the history file in bytes. The oldest entries\nare dropped once the file exceeds this limit.",
+           "format": "uint",
+-          "minimum": 0.0,
++          "minimum": 0,
+           "type": "integer"
+         },
+         "persistence": {
+@@ -2137,17 +2104,13 @@
+     "HistoryPersistence": {
+       "oneOf": [
+         {
++          "const": "save-all",
+           "description": "Save all history entries to disk.",
+-          "enum": [
+-            "save-all"
+-          ],
+           "type": "string"
+         },
+         {
++          "const": "none",
+           "description": "Do not write history to disk.",
+-          "enum": [
+-            "none"
+-          ],
+           "type": "string"
+         }
+       ]
+@@ -2157,9 +2120,9 @@
+         {
+           "properties": {
+             "additionalContextLimit": {
+-              "description": "Approximate token threshold for spilling this hook's `additionalContext` to disk. Unset uses 2,500 tokens; `0` disables spilling for this hook. The threshold is evaluated against the original context; a spilled preview also includes recovery metadata.",
++              "description": "Approximate token threshold for spilling this hook's `additionalContext` to disk.\nUnset uses 2,500 tokens; `0` disables spilling for this hook. The threshold is\nevaluated against the original context; a spilled preview also includes recovery\nmetadata.",
+               "format": "uint",
+-              "minimum": 0.0,
++              "minimum": 0,
+               "type": "integer"
+             },
+             "async": {
+@@ -2180,13 +2143,11 @@
+             "timeout": {
+               "default": null,
+               "format": "uint64",
+-              "minimum": 0.0,
++              "minimum": 0,
+               "type": "integer"
+             },
+             "type": {
+-              "enum": [
+-                "command"
+-              ],
++              "const": "command",
+               "type": "string"
+             }
+           },
+@@ -2213,16 +2174,14 @@
+             "timeout": {
+               "default": null,
+               "format": "uint64",
+-              "minimum": 0.0,
++              "minimum": 0,
+               "type": "integer"
+             },
+             "tool": {
+               "type": "string"
+             },
+             "type": {
+-              "enum": [
+-                "mcp_tool"
+-              ],
++              "const": "mcp_tool",
+               "type": "string"
+             }
+           },
+@@ -2236,9 +2195,7 @@
+         {
+           "properties": {
+             "type": {
+-              "enum": [
+-                "prompt"
+-              ],
++              "const": "prompt",
+               "type": "string"
+             }
+           },
+@@ -2250,9 +2207,7 @@
+         {
+           "properties": {
+             "type": {
+-              "enum": [
+-                "agent"
+-              ],
++              "const": "agent",
+               "type": "string"
+             }
+           },
+@@ -2376,16 +2331,18 @@
+     "KeybindingsSpec": {
+       "anyOf": [
+         {
++          "description": "Normalized representation of one key event or a two-stroke key chord.\n\nThe parser accepts a small alias set (for example `escape` -> `esc`,\n`pageup` -> `page-up`) and stores each stroke in its canonical form. Chord\nstrokes are separated by one space, for example `ctrl-x ctrl-s`. Arrays of\nbindings remain alternatives; their entries do not form a chord together.",
+           "type": "string"
+         },
+         {
+           "items": {
++            "description": "Normalized representation of one key event or a two-stroke key chord.\n\nThe parser accepts a small alias set (for example `escape` -> `esc`,\n`pageup` -> `page-up`) and stores each stroke in its canonical form. Chord\nstrokes are separated by one space, for example `ctrl-x ctrl-s`. Arrays of\nbindings remain alternatives; their entries do not form a chord together.",
+             "type": "string"
+           },
+           "type": "array"
+         }
+       ],
+-      "description": "One action binding value in config.\n\nThis accepts either:\n\n1. A single key or chord string (`\"ctrl-a\"` or `\"ctrl-x ctrl-s\"`). 2. A list of alternative bindings (`[\"ctrl-a\", \"ctrl-x ctrl-s\"]`).\n\nAn empty list explicitly unbinds the action in that scope. Because an explicit empty list is still a configured value, runtime resolution must not fall through to global or built-in defaults for that action."
++      "description": "One action binding value in config.\n\nThis accepts either:\n\n1. A single key or chord string (`\"ctrl-a\"` or `\"ctrl-x ctrl-s\"`).\n2. A list of alternative bindings (`[\"ctrl-a\", \"ctrl-x ctrl-s\"]`).\n\nAn empty list explicitly unbinds the action in that scope. Because an\nexplicit empty list is still a configured value, runtime resolution must not\nfall through to global or built-in defaults for that action."
+     },
+     "LegacyAppPathString": {
+       "type": "string"
+@@ -2474,27 +2431,21 @@
+       "type": "object"
+     },
+     "McpServerAuth": {
+-      "description": "Authentication flow for an HTTP MCP server. Explicit credentials take precedence for OAuth and ChatGPT; EMA rejects alternate credentials and fallback.",
++      "description": "Authentication flow for an HTTP MCP server. Explicit credentials take\nprecedence for OAuth and ChatGPT; EMA rejects alternate credentials and fallback.",
+       "oneOf": [
+         {
+-          "description": "Use stored MCP OAuth credentials when available. Starting an OAuth login is a separate operation.",
+-          "enum": [
+-            "oauth"
+-          ],
++          "const": "oauth",
++          "description": "Use stored MCP OAuth credentials when available. Starting an OAuth login\nis a separate operation.",
+           "type": "string"
+         },
+         {
+-          "description": "Use the current ChatGPT session for servers on the trusted first-party ChatGPT origin. If no ChatGPT session provider is available, startup can still fall back to stored OAuth credentials.",
+-          "enum": [
+-            "chatgpt"
+-          ],
++          "const": "chatgpt",
++          "description": "Use the current ChatGPT session for servers on the trusted first-party\nChatGPT origin. If no ChatGPT session provider is available, startup can\nstill fall back to stored OAuth credentials.",
+           "type": "string"
+         },
+         {
+-          "description": "Exchange an enterprise IdP refresh token for resource-specific authorization. Alternate credentials and ordinary OAuth fallback are not permitted.",
+-          "enum": [
+-            "ema_auth"
+-          ],
++          "const": "ema_auth",
++          "description": "Exchange an enterprise IdP refresh token for resource-specific authorization.\nAlternate credentials and ordinary OAuth fallback are not permitted.",
+           "type": "string"
+         }
+       ]
+@@ -2550,7 +2501,8 @@
+         "callback_port": {
+           "description": "Fixed callback port that takes precedence over Codex's global OAuth callback port.",
+           "format": "uint16",
+-          "minimum": 0.0,
++          "maximum": 65535,
++          "minimum": 0,
+           "type": "integer"
+         },
+         "callback_url": {
+@@ -2583,7 +2535,7 @@
+         "output_token_limit": {
+           "description": "Token budget for this tool's output, before the standard 20% serialization allowance.",
+           "format": "uint",
+-          "minimum": 1.0,
++          "minimum": 1,
+           "type": "integer"
+         }
+       },
+@@ -2593,17 +2545,13 @@
+       "description": "Readiness needed before startup can expose this server's tools to the model.",
+       "oneOf": [
+         {
++          "const": "connection",
+           "description": "Use the live connection to determine startup readiness.",
+-          "enum": [
+-            "connection"
+-          ],
+           "type": "string"
+         },
+         {
+-          "description": "Allow a valid cached tool catalog while the live connection starts. Tool execution still requires the current connection.",
+-          "enum": [
+-            "catalog"
+-          ],
++          "const": "catalog",
++          "description": "Allow a valid cached tool catalog while the live connection starts.\nTool execution still requires the current connection.",
+           "type": "string"
+         }
+       ]
+@@ -2639,8 +2587,8 @@
+         "max_raw_memories_for_consolidation": {
+           "description": "Maximum number of recent raw memories retained for global consolidation.",
+           "format": "uint",
+-          "maximum": 4096.0,
+-          "minimum": 1.0,
++          "maximum": 4096,
++          "minimum": 1,
+           "type": "integer"
+         },
+         "max_rollout_age_days": {
+@@ -2651,8 +2599,8 @@
+         "max_rollouts_per_startup": {
+           "description": "Maximum number of rollout candidates processed per pass.",
+           "format": "uint",
+-          "maximum": 128.0,
+-          "minimum": 1.0,
++          "maximum": 128,
++          "minimum": 1,
+           "type": "integer"
+         },
+         "max_unused_days": {
+@@ -2663,8 +2611,8 @@
+         "min_rate_limit_remaining_percent": {
+           "description": "Minimum remaining percentage required in Codex rate-limit windows before memory startup runs.",
+           "format": "int64",
+-          "maximum": 100.0,
+-          "minimum": 0.0,
++          "maximum": 100,
++          "minimum": 0,
+           "type": "integer"
+         },
+         "min_rollout_idle_hours": {
+@@ -2698,13 +2646,15 @@
+       "anyOf": [
+         {
+           "format": "uint16",
+-          "minimum": 1.0,
++          "maximum": 65535,
++          "minimum": 1,
+           "type": "integer"
+         },
+         {
+           "items": {
+             "format": "uint16",
+-            "minimum": 1.0,
++            "maximum": 65535,
++            "minimum": 1,
+             "type": "integer"
+           },
+           "type": "array"
+@@ -2715,7 +2665,7 @@
+     "ModelAvailabilityNuxConfig": {
+       "additionalProperties": {
+         "format": "uint32",
+-        "minimum": 0.0,
++        "minimum": 0,
+         "type": "integer"
+       },
+       "type": "object"
+@@ -2728,6 +2678,7 @@
+           "default": [],
+           "description": "Command arguments.",
+           "items": {
++            "description": "A string whose `Debug` output is redacted.",
+             "type": "string"
+           },
+           "type": "array"
+@@ -2746,16 +2697,16 @@
+         },
+         "refresh_interval_ms": {
+           "default": 300000,
+-          "description": "Maximum age for the cached token before rerunning the command. Set to `0` to disable proactive refresh and only rerun after a 401 retry path.",
++          "description": "Maximum age for the cached token before rerunning the command.\nSet to `0` to disable proactive refresh and only rerun after a 401 retry path.",
+           "format": "uint64",
+-          "minimum": 0.0,
++          "minimum": 0,
+           "type": "integer"
+         },
+         "timeout_ms": {
+           "default": 5000,
+           "description": "Maximum time to wait for the token command to exit successfully.",
+           "format": "uint64",
+-          "minimum": 1.0,
++          "minimum": 1,
+           "type": "integer"
+         }
+       },
+@@ -2844,13 +2795,13 @@
+               "$ref": "#/definitions/ModelProviderCapabilities"
+             }
+           ],
+-          "description": "Optional API capability overrides for a custom Responses-compatible provider. Unspecified capabilities retain their existing provider defaults."
++          "description": "Optional API capability overrides for a custom Responses-compatible provider.\nUnspecified capabilities retain their existing provider defaults."
+         },
+         "env_http_headers": {
+           "additionalProperties": {
+             "type": "string"
+           },
+-          "description": "Optional HTTP headers to include in requests to this provider where the (key, value) pairs are the header name and _environment variable_ whose value should be used. If the environment variable is not set, or the value is empty, the header will not be included in the request.",
++          "description": "Optional HTTP headers to include in requests to this provider where the\n(key, value) pairs are the header name and _environment variable_ whose\nvalue should be used. If the environment variable is not set, or the\nvalue is empty, the header will not be included in the request.",
+           "type": "object"
+         },
+         "env_key": {
+@@ -2858,11 +2809,11 @@
+           "type": "string"
+         },
+         "env_key_instructions": {
+-          "description": "Optional instructions to help the user get a valid value for the variable and set it.",
++          "description": "Optional instructions to help the user get a valid value for the\nvariable and set it.",
+           "type": "string"
+         },
+         "experimental_bearer_token": {
+-          "description": "Value to use with `Authorization: Bearer <token>` header. Use of this config is discouraged in favor of `env_key` for security reasons, but this may be necessary when using this programmatically.",
++          "description": "Value to use with `Authorization: Bearer <token>` header. Use of this\nconfig is discouraged in favor of `env_key` for security reasons, but\nthis may be necessary when using this programmatically.",
+           "type": "string"
+         },
+         "gateway_oauth": {
+@@ -2875,13 +2826,14 @@
+         },
+         "http_headers": {
+           "additionalProperties": {
++            "description": "A string whose `Debug` output is redacted.",
+             "type": "string"
+           },
+-          "description": "Additional HTTP headers to include in requests to this provider where the (key, value) pairs are the header name and value.",
++          "description": "Additional HTTP headers to include in requests to this provider where\nthe (key, value) pairs are the header name and value.",
+           "type": "object"
+         },
+         "model_catalog_url": {
+-          "description": "Optional full URL for a Codex-native model catalog. When unset, OpenAI discovery uses the Codex backend unless `base_url` overrides the inference endpoint.",
++          "description": "Optional full URL for a Codex-native model catalog. When unset, OpenAI discovery\nuses the Codex backend unless `base_url` overrides the inference endpoint.",
+           "type": "string"
+         },
+         "name": {
+@@ -2889,8 +2841,13 @@
+           "description": "Friendly display name.",
+           "type": "string"
+         },
++        "native_provider": {
++          "description": "Registered provider ID required by `wire_api = \"native\"`.",
++          "type": "string"
++        },
+         "query_params": {
+           "additionalProperties": {
++            "description": "A string whose `Debug` output is redacted.",
+             "type": "string"
+           },
+           "description": "Optional query parameters to append to the base URL.",
+@@ -2899,24 +2856,24 @@
+         "request_max_retries": {
+           "description": "Maximum number of times to retry a failed HTTP request to this provider.",
+           "format": "uint64",
+-          "minimum": 0.0,
++          "minimum": 0,
+           "type": "integer"
+         },
+         "requires_openai_auth": {
+           "default": false,
+-          "description": "Does this provider require an OpenAI API key or ChatGPT login token? If true, the user is presented with a login screen on first run, and credentials are stored using the backend selected by `cli_auth_credentials_store`. If false (the default), the login screen is skipped, and the API key (if needed) comes from the environment variable specified by `env_key`.",
++          "description": "Does this provider require an OpenAI API key or ChatGPT login token? If true,\nthe user is presented with a login screen on first run, and credentials are\nstored using the backend selected by `cli_auth_credentials_store`.\nIf false (the default), the login screen is skipped, and the API key\n(if needed) comes from the environment variable specified by `env_key`.",
+           "type": "boolean"
+         },
+         "stream_idle_timeout_ms": {
+-          "description": "Idle timeout (in milliseconds) to wait for activity on a streaming response before treating the connection as lost.",
++          "description": "Idle timeout (in milliseconds) to wait for activity on a streaming response before treating\nthe connection as lost.",
+           "format": "uint64",
+-          "minimum": 0.0,
++          "minimum": 0,
+           "type": "integer"
+         },
+         "stream_max_retries": {
+           "description": "Number of times to retry reconnecting a dropped streaming response before failing.",
+           "format": "uint64",
+-          "minimum": 0.0,
++          "minimum": 0,
+           "type": "integer"
+         },
+         "supports_standalone_web_search": {
+@@ -2930,9 +2887,9 @@
+           "type": "boolean"
+         },
+         "websocket_connect_timeout_ms": {
+-          "description": "Maximum time (in milliseconds) to wait for a websocket connection attempt before treating it as failed.",
++          "description": "Maximum time (in milliseconds) to wait for a websocket connection attempt before treating\nit as failed.",
+           "format": "uint64",
+-          "minimum": 0.0,
++          "minimum": 0,
+           "type": "integer"
+         },
+         "wire_api": {
+@@ -2952,8 +2909,8 @@
+       "properties": {
+         "default_wait_timeout_ms": {
+           "format": "int64",
+-          "maximum": 3600000.0,
+-          "minimum": 0.0,
++          "maximum": 3600000,
++          "minimum": 0,
+           "type": "integer"
+         },
+         "disable_direct_message": {
+@@ -2968,7 +2925,7 @@
+           "type": "boolean"
+         },
+         "expose_spawn_agent_model_overrides": {
+-          "description": "Exposes `model` and `reasoning_effort` on the multi-agent v2 spawn tool and adds corresponding guidance to root and subagent usage hints.",
++          "description": "Exposes `model` and `reasoning_effort` on the multi-agent v2 spawn tool and adds\ncorresponding guidance to root and subagent usage hints.",
+           "type": "boolean"
+         },
+         "hide_spawn_agent_metadata": {
+@@ -2976,13 +2933,13 @@
+         },
+         "max_concurrent_threads_per_session": {
+           "format": "uint",
+-          "minimum": 1.0,
++          "minimum": 1,
+           "type": "integer"
+         },
+         "max_wait_timeout_ms": {
+           "format": "int64",
+-          "maximum": 3600000.0,
+-          "minimum": 0.0,
++          "maximum": 3600000,
++          "minimum": 0,
+           "type": "integer"
+         },
+         "message_board_in_memory": {
+@@ -2999,8 +2956,8 @@
+         },
+         "min_wait_timeout_ms": {
+           "format": "int64",
+-          "maximum": 3600000.0,
+-          "minimum": 0.0,
++          "maximum": 3600000,
++          "minimum": 0,
+           "type": "integer"
+         },
+         "multi_agent_mode_hint_text": {
+@@ -3010,7 +2967,7 @@
+           "type": "boolean"
+         },
+         "preserve_fork_prefix": {
+-          "description": "Preserve the parent's model-visible history on full forks and append child instructions. Defaults to false. Legacy compaction without a reusable context baseline still rebuilds.",
++          "description": "Preserve the parent's model-visible history on full forks and append child instructions.\nDefaults to false. Legacy compaction without a reusable context baseline still rebuilds.",
+           "type": "boolean"
+         },
+         "root_agent_usage_hint_text": {
+@@ -3051,6 +3008,9 @@
+       "type": "string"
+     },
+     "NetworkDomainPermissionsToml": {
++      "additionalProperties": {
++        "$ref": "#/definitions/NetworkDomainPermissionToml"
++      },
+       "type": "object"
+     },
+     "NetworkMitmActionToml": {
+@@ -3176,7 +3136,7 @@
+       "additionalProperties": false,
+       "properties": {
+         "allow_local_binding": {
+-          "description": "Permits local servers and direct host-loopback connections and skips the proxy's additional private-network destination checks. Proxy domain rules still apply. Defaults to true for MXC, which cannot enforce false; otherwise defaults to false.",
++          "description": "Permits local servers and direct host-loopback connections and skips the proxy's\nadditional private-network destination checks. Proxy domain rules still apply.\nDefaults to true for MXC, which cannot enforce false; otherwise defaults to false.",
+           "type": "boolean"
+         },
+         "allow_upstream_proxy": {
+@@ -3255,7 +3215,7 @@
+       "additionalProperties": false,
+       "properties": {
+         "allow_local_binding": {
+-          "description": "Permits local servers and direct host-loopback connections and skips the proxy's additional private-network destination checks. Proxy domain rules still apply. Defaults to true for MXC, which cannot enforce false; otherwise defaults to false.",
++          "description": "Permits local servers and direct host-loopback connections and skips the proxy's\nadditional private-network destination checks. Proxy domain rules still apply.\nDefaults to true for MXC, which cannot enforce false; otherwise defaults to false.",
+           "type": "boolean"
+         },
+         "allow_upstream_proxy": {
+@@ -3305,6 +3265,9 @@
+       "type": "string"
+     },
+     "NetworkUnixSocketPermissionsToml": {
++      "additionalProperties": {
++        "$ref": "#/definitions/NetworkUnixSocketPermissionToml"
++      },
+       "type": "object"
+     },
+     "NonPrefixedMcpToolNamesConfigToml": {
+@@ -3382,17 +3345,13 @@
+     "NotificationCondition": {
+       "oneOf": [
+         {
++          "const": "unfocused",
+           "description": "Emit TUI notifications only while the terminal is unfocused.",
+-          "enum": [
+-            "unfocused"
+-          ],
+           "type": "string"
+         },
+         {
++          "const": "always",
+           "description": "Emit TUI notifications regardless of terminal focus.",
+-          "enum": [
+-            "always"
+-          ],
+           "type": "string"
+         }
+       ]
+@@ -3422,24 +3381,18 @@
+       "description": "Determine where Codex should store and read MCP credentials.",
+       "oneOf": [
+         {
+-          "description": "Prefer `Keyring` and use `File` when keyring storage is unavailable. Once an MCP client loads credentials from one store, that client keeps the resolved store for its lifetime so refreshes cannot switch to a possibly stale credential source. Credentials stored in the keyring will only be readable by Codex unless the user explicitly grants access via OS-level keyring access.",
+-          "enum": [
+-            "auto"
+-          ],
++          "const": "auto",
++          "description": "Prefer `Keyring` and use `File` when keyring storage is unavailable.\nOnce an MCP client loads credentials from one store, that client keeps the resolved store\nfor its lifetime so refreshes cannot switch to a possibly stale credential source.\nCredentials stored in the keyring will only be readable by Codex unless the user explicitly grants access via OS-level keyring access.",
+           "type": "string"
+         },
+         {
+-          "description": "CODEX_HOME/.credentials.json This file will be readable to Codex and other applications running as the same user.",
+-          "enum": [
+-            "file"
+-          ],
++          "const": "file",
++          "description": "CODEX_HOME/.credentials.json\nThis file will be readable to Codex and other applications running as the same user.",
+           "type": "string"
+         },
+         {
++          "const": "keyring",
+           "description": "Keyring when available, otherwise fail.",
+-          "enum": [
+-            "keyring"
+-          ],
+           "type": "string"
+         }
+       ]
+@@ -3479,11 +3432,11 @@
+           "description": "Optional log exporter"
+         },
+         "log_agent_responses": {
+-          "description": "Opt in to logging final main-agent and spawned-subagent responses to an OTLP log exporter. Defaults to false. Response text can be sensitive and is capped at 64 KiB.",
++          "description": "Opt in to logging final main-agent and spawned-subagent responses to an OTLP log exporter.\nDefaults to false. Response text can be sensitive and is capped at 64 KiB.",
+           "type": "boolean"
+         },
+         "log_guardian_assessments": {
+-          "description": "Opt in to logging completed Guardian assessments to an OTLP log exporter. Defaults to false. Rationales can be sensitive and are capped at 64 KiB.",
++          "description": "Opt in to logging completed Guardian assessments to an OTLP log exporter.\nDefaults to false. Rationales can be sensitive and are capped at 64 KiB.",
+           "type": "boolean"
+         },
+         "log_user_prompt": {
+@@ -3496,7 +3449,7 @@
+               "$ref": "#/definitions/OtelExporterKind"
+             }
+           ],
+-          "description": "Metrics exporter. Defaults to `statsig`, which follows `analytics.enabled`. Custom OTLP exporters are independent of `analytics.enabled`; `none` disables metrics export."
++          "description": "Metrics exporter. Defaults to `statsig`, which follows `analytics.enabled`.\nCustom OTLP exporters are independent of `analytics.enabled`; `none` disables metrics export."
+         },
+         "span_attributes": {
+           "additionalProperties": {
+@@ -3628,17 +3581,13 @@
+     "OtelHttpProtocol": {
+       "oneOf": [
+         {
++          "const": "binary",
+           "description": "Binary payload",
+-          "enum": [
+-            "binary"
+-          ],
+           "type": "string"
+         },
+         {
++          "const": "json",
+           "description": "JSON payload",
+-          "enum": [
+-            "json"
+-          ],
+           "type": "string"
+         }
+       ]
+@@ -3680,6 +3629,9 @@
+       "type": "object"
+     },
+     "PermissionsToml": {
++      "additionalProperties": {
++        "$ref": "#/definitions/PermissionProfileToml"
++      },
+       "type": "object"
+     },
+     "Personality": {
+@@ -3695,7 +3647,7 @@
+       "additionalProperties": false,
+       "properties": {
+         "auto_provision": {
+-          "description": "Provisioning metadata. Omission does not request provisioning. Only applies with `remote_plugin_id` and Plugin Service availability to the requesting user at provisioning time. Effective enablement, trusted provisioning policy, and authentication and authorization restrictions still apply. This value is not trusted authorization and does not trigger provisioning.",
++          "description": "Provisioning metadata. Omission does not request provisioning.\nOnly applies with `remote_plugin_id` and Plugin Service availability to the\nrequesting user at provisioning time. Effective enablement, trusted\nprovisioning policy, and authentication and authorization restrictions still apply.\nThis value is not trusted authorization and does not trigger provisioning.",
+           "type": "boolean"
+         },
+         "enabled": {
+@@ -3710,11 +3662,11 @@
+           "type": "object"
+         },
+         "release_id": {
+-          "description": "Release identifier used to pin the remote plugin to a specific release. Omission leaves release selection unchanged. Core stores this metadata without selecting or fetching a release.",
++          "description": "Release identifier used to pin the remote plugin to a specific release.\nOmission leaves release selection unchanged.\nCore stores this metadata without selecting or fetching a release.",
+           "type": "string"
+         },
+         "remote_plugin_id": {
+-          "description": "Stable, unique identifier of a ChatGPT-hosted remote plugin. Availability to the requesting user is determined by Plugin Service at provisioning time.",
++          "description": "Stable, unique identifier of a ChatGPT-hosted remote plugin.\nAvailability to the requesting user is determined by Plugin Service at\nprovisioning time.",
+           "type": "string"
+         }
+       },
+@@ -3722,7 +3674,7 @@
+     },
+     "PluginMcpServerConfig": {
+       "additionalProperties": false,
+-      "description": "Policy settings for a plugin-provided MCP server.\n\nThis intentionally excludes transport settings: plugin manifests own how the MCP server is launched, while host config owns enablement, auth, and tool policy.",
++      "description": "Policy settings for a plugin-provided MCP server.\n\nThis intentionally excludes transport settings: plugin manifests own how the\nMCP server is launched, while host config owns enablement, auth, and tool policy.",
+       "properties": {
+         "default_tools_approval_mode": {
+           "allOf": [
+@@ -3773,7 +3725,7 @@
+               "$ref": "#/definitions/PluginsDefaultConfig"
+             }
+           ],
+-          "description": "Defaults for installed plugin activation. Omission preserves source enablement. Explicit plugin enablement settings override this default, but cannot enable an installation disabled by its source."
++          "description": "Defaults for installed plugin activation. Omission preserves source enablement.\nExplicit plugin enablement settings override this default, but cannot enable\nan installation disabled by its source."
+         }
+       },
+       "type": "object"
+@@ -3834,7 +3786,7 @@
+     },
+     "RawMcpServerConfig": {
+       "additionalProperties": false,
+-      "description": "Raw MCP config shape used for deserialization and supported-field JSON Schema generation.\n\nFields that are accepted only to produce targeted validation errors should be skipped in the generated schema.\n\nKeep `TryFrom<RawMcpServerConfig> for McpServerConfig` exhaustively destructuring this struct so new TOML fields cannot be added here without updating the validation/mapping logic that produces [`McpServerConfig`].",
++      "description": "Raw MCP config shape used for deserialization and supported-field JSON\nSchema generation.\n\nFields that are accepted only to produce targeted validation errors should\nbe skipped in the generated schema.\n\nKeep `TryFrom<RawMcpServerConfig> for McpServerConfig` exhaustively\ndestructuring this struct so new TOML fields cannot be added here without\nupdating the validation/mapping logic that produces [`McpServerConfig`].",
+       "properties": {
+         "args": {
+           "default": null,
+@@ -3972,7 +3924,7 @@
+         "startup_timeout_ms": {
+           "default": null,
+           "format": "uint64",
+-          "minimum": 0.0,
++          "minimum": 0,
+           "type": "integer"
+         },
+         "startup_timeout_sec": {
+@@ -3986,9 +3938,9 @@
+         },
+         "tool_input_schema_max_bytes": {
+           "default": null,
+-          "description": "UTF-8 byte threshold for compacting each ordinary MCP tool input schema. Defaults to 5,000 bytes. Code Mode also uses an explicitly configured limit when rendering each tool's input type. Larger limits preserve more parameter descriptions.",
++          "description": "UTF-8 byte threshold for compacting each ordinary MCP tool input schema. Defaults to 5,000 bytes.\nCode Mode also uses an explicitly configured limit when rendering each tool's input type.\nLarger limits preserve more parameter descriptions.",
+           "format": "uint",
+-          "minimum": 1.0,
++          "minimum": 1,
+           "type": "integer"
+         },
+         "tool_timeout_sec": {
+@@ -4115,7 +4067,7 @@
+       "type": "string"
+     },
+     "ReasoningSummary": {
+-      "description": "A summary of the reasoning performed by the model. This can be useful for debugging and understanding the model's reasoning process. See https://platform.openai.com/docs/guides/reasoning?api-mode=responses#reasoning-summaries",
++      "description": "A summary of the reasoning performed by the model. This can be useful for\ndebugging and understanding the model's reasoning process.\nSee https://platform.openai.com/docs/guides/reasoning?api-mode=responses#reasoning-summaries",
+       "oneOf": [
+         {
+           "enum": [
+@@ -4126,10 +4078,8 @@
+           "type": "string"
+         },
+         {
++          "const": "none",
+           "description": "Option to disable reasoning summaries.",
+-          "enum": [
+-            "none"
+-          ],
+           "type": "string"
+         }
+       ]
+@@ -4138,17 +4088,13 @@
+       "description": "Remote context-compaction protocols supported by a model provider.",
+       "oneOf": [
+         {
++          "const": "unsupported",
+           "description": "Use local compaction instead of a provider compaction protocol.",
+-          "enum": [
+-            "unsupported"
+-          ],
+           "type": "string"
+         },
+         {
++          "const": "v2",
+           "description": "Send `compaction_trigger` items over the Responses endpoint.",
+-          "enum": [
+-            "v2"
+-          ],
+           "type": "string"
+         }
+       ]
+@@ -4178,17 +4124,13 @@
+       "description": "Working directory to use when resuming or forking a session.",
+       "oneOf": [
+         {
++          "const": "current",
+           "description": "Use the directory where Codex was launched.",
+-          "enum": [
+-            "current"
+-          ],
+           "type": "string"
+         },
+         {
++          "const": "session",
+           "description": "Use the latest working directory recorded in the selected session.",
+-          "enum": [
+-            "session"
+-          ],
+           "type": "string"
+         }
+       ]
+@@ -4197,24 +4139,18 @@
+       "description": "Right-click text paste when the fullscreen TUI has no selection.",
+       "oneOf": [
+         {
++          "const": "auto",
+           "description": "Enable on Windows/WSL/Linux, except recognized terminal-owned paste paths.",
+-          "enum": [
+-            "auto"
+-          ],
+           "type": "string"
+         },
+         {
++          "const": "on",
+           "description": "Enable on supported local platforms; selection and terminal-owned paste still win.",
+-          "enum": [
+-            "on"
+-          ],
+           "type": "string"
+         },
+         {
++          "const": "off",
+           "description": "Leave right-click paste to the terminal.",
+-          "enum": [
+-            "off"
+-          ],
+           "type": "string"
+         }
+       ]
+@@ -4227,7 +4163,7 @@
+         },
+         "limit_tokens": {
+           "format": "int64",
+-          "minimum": 1.0,
++          "minimum": 1,
+           "type": "integer"
+         },
+         "prefill_token_weight": {
+@@ -4293,7 +4229,7 @@
+       "type": "string"
+     },
+     "ShellEnvironmentPolicyFilter": {
+-      "description": "Assigns a shell environment variable pattern to the include-only or exclude set. Includes do not re-add variables removed by another exclude pattern.",
++      "description": "Assigns a shell environment variable pattern to the include-only or exclude\nset. Includes do not re-add variables removed by another exclude pattern.",
+       "enum": [
+         "include",
+         "exclude"
+@@ -4303,24 +4239,18 @@
+     "ShellEnvironmentPolicyInherit": {
+       "oneOf": [
+         {
+-          "description": "\"Core\" environment variables for the platform. On UNIX, this would include HOME, LOGNAME, PATH, SHELL, and USER, among others.",
+-          "enum": [
+-            "core"
+-          ],
++          "const": "core",
++          "description": "\"Core\" environment variables for the platform. On UNIX, this would\ninclude HOME, LOGNAME, PATH, SHELL, and USER, among others.",
+           "type": "string"
+         },
+         {
++          "const": "all",
+           "description": "Inherits the full environment from the parent process.",
+-          "enum": [
+-            "all"
+-          ],
+           "type": "string"
+         },
+         {
++          "const": "none",
+           "description": "Do not inherit any environment variables from the parent process.",
+-          "enum": [
+-            "none"
+-          ],
+           "type": "string"
+         }
+       ]
+@@ -4361,7 +4291,7 @@
+           "additionalProperties": {
+             "$ref": "#/definitions/ShellEnvironmentPolicyFilter"
+           },
+-          "description": "Pattern actions used by the canonical table representation.\n\nOrdinary config keeps accepting the legacy arrays above during the migration. Requirements will accept only this keyed form, keeping array compatibility isolated so the legacy fields can be deprecated later. Pattern keys merge case-insensitively across config layers, matching how the resulting patterns match environment variable names.",
++          "description": "Pattern actions used by the canonical table representation.\n\nOrdinary config keeps accepting the legacy arrays above during the\nmigration. Requirements will accept only this keyed form, keeping array\ncompatibility isolated so the legacy fields can be deprecated later.\nPattern keys merge case-insensitively across config layers, matching how\nthe resulting patterns match environment variable names.",
+           "type": "object"
+         },
+         "ignore_default_excludes": {
+@@ -4427,9 +4357,9 @@
+           "type": "boolean"
+         },
+         "max_context_tokens": {
+-          "description": "Maximum tokens used by the available-skills catalog. Defaults to 2% of the model context window and is capped at 10,000 tokens when set.",
++          "description": "Maximum tokens used by the available-skills catalog. Defaults to 2% of\nthe model context window and is capped at 10,000 tokens when set.",
+           "format": "uint",
+-          "minimum": 1.0,
++          "minimum": 1,
+           "type": "integer"
+         }
+       },
+@@ -4451,17 +4381,13 @@
+       "description": "How the sleep tool is selected when its feature gate is enabled.",
+       "oneOf": [
+         {
++          "const": "model_driven",
+           "description": "Preserve the existing model and legacy clock configuration defaults.",
+-          "enum": [
+-            "model_driven"
+-          ],
+           "type": "string"
+         },
+         {
++          "const": "always_on",
+           "description": "Register sleep regardless of the model or legacy clock configuration.",
+-          "enum": [
+-            "always_on"
+-          ],
+           "type": "string"
+         }
+       ]
+@@ -4471,9 +4397,7 @@
+         {
+           "properties": {
+             "type": {
+-              "enum": [
+-                "local"
+-              ],
++              "const": "local",
+               "type": "string"
+             }
+           },
+@@ -4490,7 +4414,7 @@
+         "auto_compact_fallback_buffer_tokens": {
+           "description": "Additional tokens available after the compaction threshold for fallback note-taking.",
+           "format": "int64",
+-          "minimum": 1.0,
++          "minimum": 1,
+           "type": "integer"
+         },
+         "auto_compact_fallback_prompt": {
+@@ -4507,7 +4431,7 @@
+           "type": "string"
+         },
+         "reminder_message_template": {
+-          "description": "Reminder template. `{n_remaining}` is replaced with the tokens remaining before auto-compaction.",
++          "description": "Reminder template. `{n_remaining}` is replaced with the tokens remaining before\nauto-compaction.",
+           "maxLength": 2000,
+           "minLength": 1,
+           "type": "string"
+@@ -4515,7 +4439,7 @@
+         "reminder_threshold_tokens": {
+           "description": "Number of tokens remaining before auto-compaction when the wrap-up reminder is emitted.",
+           "format": "int64",
+-          "minimum": 1.0,
++          "minimum": 1,
+           "type": "integer"
+         },
+         "use_history_notes_extension": {
+@@ -4529,24 +4453,18 @@
+       "description": "A model-facing surface on which a tool can be exposed.",
+       "oneOf": [
+         {
++          "const": "code_mode",
+           "description": "Nested tools available to Code Mode scripts.",
+-          "enum": [
+-            "code_mode"
+-          ],
+           "type": "string"
+         },
+         {
++          "const": "deferred",
+           "description": "Tools discovered later through tool search.",
+-          "enum": [
+-            "deferred"
+-          ],
+           "type": "string"
+         },
+         {
++          "const": "direct",
+           "description": "Tools present in the model's initial tool list.",
+-          "enum": [
+-            "direct"
+-          ],
+           "type": "string"
+         }
+       ]
+@@ -4566,13 +4484,13 @@
+       "type": "object"
+     },
+     "ToolResultLogConfig": {
+-      "description": "Limit for the text included in `codex.tool_result` log records. This does not affect model-visible output. Raising it can expose more tool data to logs.",
++      "description": "Limit for the text included in `codex.tool_result` log records.\nThis does not affect model-visible output. Raising it can expose more tool data to logs.",
+       "properties": {
+         "max_bytes": {
+           "default": 2048,
+           "description": "Maximum UTF-8 bytes before the truncation notice. Defaults to 2048.",
+           "format": "uint",
+-          "minimum": 0.0,
++          "minimum": 0,
+           "type": "integer"
+         }
+       },
+@@ -4661,23 +4579,19 @@
+       "description": "Transcript encoding shared by rendering, provenance instructions and budget recovery.",
+       "oneOf": [
+         {
++          "const": "line",
+           "description": "Numbered entries with a role prefix and unescaped text.",
+-          "enum": [
+-            "line"
+-          ],
+           "type": "string"
+         },
+         {
++          "const": "json",
+           "description": "Host-owned metadata with message text escaped as a JSON string.",
+-          "enum": [
+-            "json"
+-          ],
+           "type": "string"
+         }
+       ]
+     },
+     "TrustLevel": {
+-      "description": "Represents the trust level for a project directory. This determines the approval policy and sandbox mode applied.",
++      "description": "Represents the trust level for a project directory.\nThis determines the approval policy and sandbox mode applied.",
+       "enum": [
+         "trusted",
+         "untrusted"
+@@ -4704,16 +4618,16 @@
+             }
+           ],
+           "default": "auto",
+-          "description": "Controls whether the TUI uses the terminal's alternate screen buffer.\n\n- `auto` (default): Use alternate screen. - `always`: Always use alternate screen. - `never`: Never use alternate screen (inline mode only, preserves scrollback)."
++          "description": "Controls whether the TUI uses the terminal's alternate screen buffer.\n\n- `auto` (default): Use alternate screen.\n- `always`: Always use alternate screen.\n- `never`: Never use alternate screen (inline mode only, preserves scrollback)."
+         },
+         "animations": {
+           "default": true,
+-          "description": "Enable animations (welcome screen, shimmer effects, spinners). Defaults to `true`.",
++          "description": "Enable animations (welcome screen, shimmer effects, spinners).\nDefaults to `true`.",
+           "type": "boolean"
+         },
+         "auto_recap": {
+           "default": true,
+-          "description": "Generate automatic conversation recaps when the terminal is unfocused. Defaults to `true`. Disabling this leaves `/recap` available on demand.",
++          "description": "Generate automatic conversation recaps when the terminal is unfocused.\nDefaults to `true`. Disabling this leaves `/recap` available on demand.",
+           "type": "boolean"
+         },
+         "copy_on_select": {
+@@ -4723,15 +4637,15 @@
+             }
+           ],
+           "default": "auto",
+-          "description": "Copy selected transcript, footer, or composer text when the mouse button is released. Defaults to `auto`: enabled except in direct terminals known to forward their native copy shortcut (Ghostty 1.2+, Kitty on macOS, Windows Terminal, and VS Code on Windows). Unknown terminals, Ghostty without a recognized version, and tmux/Zellij default to copying."
++          "description": "Copy selected transcript, footer, or composer text when the mouse button is released.\nDefaults to `auto`: enabled except in direct terminals known to forward their native\ncopy shortcut (Ghostty 1.2+, Kitty on macOS, Windows Terminal, and VS Code on Windows).\nUnknown terminals, Ghostty without a recognized version, and tmux/Zellij default to copying."
+         },
+         "copy_on_select_clear_selection": {
+           "default": false,
+-          "description": "Deselect read-only transcript or footer text after Copy on select confirms delivery. Editable composer selections remain visible. Defaults to `false` and has no effect when Copy on select is off.",
++          "description": "Deselect read-only transcript or footer text after Copy on select confirms delivery.\nEditable composer selections remain visible. Defaults to `false` and has no effect when\nCopy on select is off.",
+           "type": "boolean"
+         },
+         "disable_paste_burst": {
+-          "description": "When true, disables burst-paste detection for typed input entirely. All characters are inserted as they are received, and no buffering or placeholder replacement will occur for fast keypress bursts. Overrides the legacy top-level `disable_paste_burst` setting. Defaults to `false`.",
++          "description": "When true, disables burst-paste detection for typed input entirely.\nAll characters are inserted as they are received, and no buffering\nor placeholder replacement will occur for fast keypress bursts.\nOverrides the legacy top-level `disable_paste_burst` setting. Defaults to `false`.",
+           "type": "boolean"
+         },
+         "effects": {
+@@ -4752,7 +4666,7 @@
+         },
+         "fullscreen_transcript": {
+           "default": true,
+-          "description": "Own the fullscreen transcript, including scrolling, selection, and search. Defaults to `true`; alternate-screen restrictions take precedence.",
++          "description": "Own the fullscreen transcript, including scrolling, selection, and search.\nDefaults to `true`; alternate-screen restrictions take precedence.",
+           "type": "boolean"
+         },
+         "keymap": {
+@@ -4836,6 +4750,7 @@
+               "open_transcript": null,
+               "queue": null,
+               "submit": null,
++              "switch_surface": null,
+               "toggle_fast_mode": null,
+               "toggle_raw_output": null,
+               "toggle_shortcuts": null,
+@@ -4945,7 +4860,7 @@
+               "word": null
+             }
+           },
+-          "description": "Keybinding overrides for the TUI.\n\nThis supports rebinding selected actions globally and by context. Context bindings take precedence over `global` bindings."
++          "description": "Keybinding overrides for the TUI.\n\nThis supports rebinding selected actions globally and by context.\nContext bindings take precedence over `global` bindings."
+         },
+         "model_availability_nux": {
+           "allOf": [
+@@ -4958,7 +4873,7 @@
+         },
+         "mouse_scroll_speed": {
+           "default": null,
+-          "description": "Mouse wheel speed multiplier for transcript scrolling, based on one row per event. Defaults to `1.0`. Positive fractional values slow scrolling; values above `1.0` speed it up.",
++          "description": "Mouse wheel speed multiplier for transcript scrolling, based on one row per event.\nDefaults to `1.0`. Positive fractional values slow scrolling; values above `1.0` speed it up.",
+           "exclusiveMinimum": 0.0,
+           "format": "double",
+           "type": "number"
+@@ -4970,7 +4885,7 @@
+             }
+           ],
+           "default": "unfocused",
+-          "description": "Controls whether TUI notifications are delivered only when the terminal is unfocused or regardless of focus. Defaults to `unfocused`."
++          "description": "Controls whether TUI notifications are delivered only when the terminal is unfocused or\nregardless of focus. Defaults to `unfocused`."
+         },
+         "notification_method": {
+           "allOf": [
+@@ -4979,7 +4894,7 @@
+             }
+           ],
+           "default": "auto",
+-          "description": "Notification method to use for terminal notifications. Defaults to `auto`."
++          "description": "Notification method to use for terminal notifications.\nDefaults to `auto`."
+         },
+         "notifications": {
+           "allOf": [
+@@ -4988,7 +4903,7 @@
+             }
+           ],
+           "default": true,
+-          "description": "Enable desktop notifications from the TUI. Defaults to `true`."
++          "description": "Enable desktop notifications from the TUI.\nDefaults to `true`."
+         },
+         "pet": {
+           "default": null,
+@@ -5019,7 +4934,7 @@
+         },
+         "raw_output_mode": {
+           "default": false,
+-          "description": "Start the TUI in raw scrollback mode for copy-friendly transcript output. Defaults to `false`.",
++          "description": "Start the TUI in raw scrollback mode for copy-friendly transcript output.\nDefaults to `false`.",
+           "type": "boolean"
+         },
+         "rendering": {
+@@ -5043,7 +4958,7 @@
+             }
+           ],
+           "default": null,
+-          "description": "Working directory to use when resuming or forking a session. When unset, prompt if the current and session directories differ."
++          "description": "Working directory to use when resuming or forking a session.\nWhen unset, prompt if the current and session directories differ."
+         },
+         "right_click_paste": {
+           "allOf": [
+@@ -5052,7 +4967,7 @@
+             }
+           ],
+           "default": "auto",
+-          "description": "Right-click text paste fallback. Defaults to `auto` (Windows/WSL/Linux). `on` also enables macOS; neither mode reads over SSH or in recognized VS Code terminals. This controls the fullscreen fallback, not the terminal's own paste binding."
++          "description": "Right-click text paste fallback. Defaults to `auto` (Windows/WSL/Linux).\n`on` also enables macOS; neither mode reads over SSH or in recognized VS Code terminals.\nThis controls the fullscreen fallback, not the terminal's own paste binding."
+         },
+         "screen_reader_detection_done": {
+           "description": "Records the one-time screen-reader detection attempt. Either value skips detection.",
+@@ -5069,17 +4984,17 @@
+         },
+         "show_server_version_notice": {
+           "default": true,
+-          "description": "Show informational notices about connected app server version differences. Defaults to `true`; this does not control compatibility errors or version status.",
++          "description": "Show informational notices about connected app server version differences.\nDefaults to `true`; this does not control compatibility errors or version status.",
+           "type": "boolean"
+         },
+         "show_tooltips": {
+           "default": true,
+-          "description": "Show startup tooltips in the TUI welcome screen. Defaults to `true`.",
++          "description": "Show startup tooltips in the TUI welcome screen.\nDefaults to `true`.",
+           "type": "boolean"
+         },
+         "status_line": {
+           "default": null,
+-          "description": "Ordered list of status line item identifiers.\n\nWhen set, the TUI renders the selected items as the status line. When unset, the TUI defaults to: `model-with-reasoning`, `current-dir`, and `thread-name`.",
++          "description": "Ordered list of status line item identifiers.\n\nWhen set, the TUI renders the selected items as the status line.\nWhen unset, the TUI defaults to: `model-with-reasoning`, `current-dir`, and `thread-name`.",
+           "items": {
+             "type": "string"
+           },
+@@ -5087,19 +5002,19 @@
+         },
+         "status_line_use_colors": {
+           "default": true,
+-          "description": "Color status line items with colors derived from the active syntax theme. Defaults to `true`.",
++          "description": "Color status line items with colors derived from the active syntax theme.\nDefaults to `true`.",
+           "type": "boolean"
+         },
+         "terminal_resize_reflow_max_rows": {
+           "default": null,
+-          "description": "Trim terminal resize-reflow replay to the most recent rendered terminal rows when the transcript exceeds this cap. Omit to use Codex's terminal-specific default. Set to `0` to keep all rendered rows.",
++          "description": "Trim terminal resize-reflow replay to the most recent rendered terminal rows when the\ntranscript exceeds this cap. Omit to use Codex's terminal-specific default. Set to `0` to\nkeep all rendered rows.",
+           "format": "uint",
+-          "minimum": 0.0,
++          "minimum": 0,
+           "type": "integer"
+         },
+         "terminal_title": {
+           "default": null,
+-          "description": "Ordered list of terminal title item identifiers.\n\nWhen set, the TUI renders the selected items into the terminal window/tab title. When unset, the TUI defaults to: `activity`, `thread-name`, and `project-name`. The `activity` item spins while working and shows an action-required message when blocked on the user.",
++          "description": "Ordered list of terminal title item identifiers.\n\nWhen set, the TUI renders the selected items into the terminal window/tab title.\nWhen unset, the TUI defaults to: `activity`, `thread-name`, and `project-name`.\nThe `activity` item spins while working and shows an action-required\nmessage when blocked on the user.",
+           "items": {
+             "type": "string"
+           },
+@@ -5107,12 +5022,12 @@
+         },
+         "theme": {
+           "default": null,
+-          "description": "Syntax highlighting theme name (kebab-case).\n\nWhen set, overrides automatic light/dark theme detection. Use `/theme` in the TUI or see `$CODEX_HOME/themes` for custom themes.",
++          "description": "Syntax highlighting theme name (kebab-case).\n\nWhen set, overrides automatic light/dark theme detection.\nUse `/theme` in the TUI or see `$CODEX_HOME/themes` for custom themes.",
+           "type": "string"
+         },
+         "vim_mode_default": {
+           "default": false,
+-          "description": "Start the composer in Vim mode (`Normal`) by default. Defaults to `false`.",
++          "description": "Start the composer in Vim mode (`Normal`) by default.\nDefaults to `false`.",
+           "type": "boolean"
+         }
+       },
+@@ -5698,6 +5613,14 @@
+           ],
+           "description": "Submit the current composer draft."
+         },
++        "switch_surface": {
++          "allOf": [
++            {
++              "$ref": "#/definitions/KeybindingsSpec"
++            }
++          ],
++          "description": "Switch between the independent Codex and Chat surfaces (default F6)."
++        },
+         "toggle_fast_mode": {
+           "allOf": [
+             {
+@@ -5743,7 +5666,7 @@
+     },
+     "TuiKeymap": {
+       "additionalProperties": false,
+-      "description": "Raw keymap configuration from `[tui.keymap]`.\n\nEach context contains action-level overrides. Missing actions inherit from built-in defaults, and selected chat/composer actions can fall back through `global` during runtime resolution.\n\nThis type is intentionally a persistence shape, not the structure used by input handlers. Runtime consumers should resolve it into `RuntimeKeymap` first so precedence, empty-list unbinding, and duplicate-key validation are applied consistently.",
++      "description": "Raw keymap configuration from `[tui.keymap]`.\n\nEach context contains action-level overrides. Missing actions inherit from\nbuilt-in defaults, and selected chat/composer actions can fall back\nthrough `global` during runtime resolution.\n\nThis type is intentionally a persistence shape, not the structure used by\ninput handlers. Runtime consumers should resolve it into\n`RuntimeKeymap` first so precedence, empty-list unbinding, and duplicate-key\nvalidation are applied consistently.",
+       "properties": {
+         "agents": {
+           "allOf": [
+@@ -5860,6 +5783,7 @@
+             "open_transcript": null,
+             "queue": null,
+             "submit": null,
++            "switch_surface": null,
+             "toggle_fast_mode": null,
+             "toggle_raw_output": null,
+             "toggle_shortcuts": null,
+@@ -6199,17 +6123,13 @@
+     "TuiPetAnchor": {
+       "oneOf": [
+         {
++          "const": "composer",
+           "description": "Anchor the pet to the bottom of the current TUI composer viewport.",
+-          "enum": [
+-            "composer"
+-          ],
+           "type": "string"
+         },
+         {
++          "const": "screen-bottom",
+           "description": "Anchor the pet to the physical bottom of the terminal screen.",
+-          "enum": [
+-            "screen-bottom"
+-          ],
+           "type": "string"
+         }
+       ]
+@@ -6243,7 +6163,7 @@
+     },
+     "TuiVimNormalKeymap": {
+       "additionalProperties": false,
+-      "description": "Vim normal-mode keybindings for modal editing inside text areas.\n\nActions that use uppercase letters (like `A` for append-line-end) should be specified as `shift-a` in config; the runtime matcher handles cross-terminal shift-reporting differences automatically.",
++      "description": "Vim normal-mode keybindings for modal editing inside text areas.\n\nActions that use uppercase letters (like `A` for append-line-end) should\nbe specified as `shift-a` in config; the runtime matcher handles\ncross-terminal shift-reporting differences automatically.",
+       "properties": {
+         "append_after_cursor": {
+           "allOf": [
+@@ -6538,7 +6458,7 @@
+     },
+     "TuiVimOperatorKeymap": {
+       "additionalProperties": false,
+-      "description": "Vim operator-pending keybindings for modal editing inside text areas.\n\nThis context is active only while waiting for a motion after `d` or `y`. Repeating the operator key (`dd`, `yy`) targets the entire line. Pressing `Esc` cancels the pending operator and returns to normal mode without modifying text.",
++      "description": "Vim operator-pending keybindings for modal editing inside text areas.\n\nThis context is active only while waiting for a motion after `d` or `y`.\nRepeating the operator key (`dd`, `yy`) targets the entire line. Pressing\n`Esc` cancels the pending operator and returns to normal mode without\nmodifying text.",
+       "properties": {
+         "cancel": {
+           "allOf": [
+@@ -6843,16 +6763,14 @@
+           "type": "string"
+         },
+         {
++          "const": "none",
+           "description": "Option to disable the URI-based file opener.",
+-          "enum": [
+-            "none"
+-          ],
+           "type": "string"
+         }
+       ]
+     },
+     "Verbosity": {
+-      "description": "Controls output length/detail on GPT-5 models via the Responses API. Serialized with lowercase values to match the OpenAI API.",
++      "description": "Controls output length/detail on GPT-5 models via the Responses API.\nSerialized with lowercase values to match the OpenAI API.",
+       "enum": [
+         "low",
+         "medium",
+@@ -6938,15 +6856,30 @@
+       "description": "Wire protocol that the provider speaks.",
+       "oneOf": [
+         {
+-          "description": "The Responses API exposed by OpenAI at `/v1/responses`.",
+           "enum": [
+-            "responses"
++            "cursor",
++            "opencode-go",
++            "claude",
++            "antigravity"
+           ],
+           "type": "string"
++        },
++        {
++          "const": "responses",
++          "description": "The Responses API exposed by OpenAI at `/v1/responses`.",
++          "type": "string"
++        },
++        {
++          "const": "native",
++          "description": "A provider selected by the registered `native_provider` ID.",
++          "type": "string"
+         }
+       ]
+     },
+     "WorkspaceRootsToml": {
++      "additionalProperties": {
++        "type": "boolean"
++      },
+       "type": "object"
+     }
+   },
+@@ -6961,11 +6894,11 @@
+       "description": "Agent-related settings (thread limits, etc.)."
+     },
+     "allow_login_shell": {
+-      "description": "Whether the model may request a login shell for shell-based tools. Default to `true`\n\nIf `true`, the model may request a login shell (`login = true`), and omitting `login` defaults to using a login shell. If `false`, the model can never use a login shell: `login = true` requests are rejected, and omitting `login` defaults to a non-login shell.",
++      "description": "Whether the model may request a login shell for shell-based tools.\nDefault to `true`\n\nIf `true`, the model may request a login shell (`login = true`), and\nomitting `login` defaults to using a login shell.\nIf `false`, the model can never use a login shell: `login = true`\nrequests are rejected, and omitting `login` defaults to a non-login\nshell.",
+       "type": "boolean"
+     },
+     "allow_symlinked_codex_home": {
+-      "description": "Allow macOS sandbox writable roots at or beneath CODEX_HOME to traverse symlinks. Read only from the host's user config at startup; defaults to false. This grants no write access by itself, but trusts symlink targets even if they change between commands or lie outside CODEX_HOME. This setting has no effect on Linux or Windows.",
++      "description": "Allow macOS sandbox writable roots at or beneath CODEX_HOME to traverse\nsymlinks. Read only from the host's user config at startup; defaults to false.\nThis grants no write access by itself, but trusts symlink targets even if\nthey change between commands or lie outside CODEX_HOME.\nThis setting has no effect on Linux or Windows.",
+       "type": "boolean"
+     },
+     "analytics": {
+@@ -6974,7 +6907,7 @@
+           "$ref": "#/definitions/AnalyticsConfigToml"
+         }
+       ],
+-      "description": "When `enabled` is `false`, disables OpenAI analytics across Codex product surfaces on this machine. Custom OTLP metrics exporters are controlled by `otel.metrics_exporter`. When unset, the default depends on the client."
++      "description": "When `enabled` is `false`, disables OpenAI analytics across Codex product surfaces on this machine.\nCustom OTLP metrics exporters are controlled by `otel.metrics_exporter`.\nWhen unset, the default depends on the client."
+     },
+     "approval_policy": {
+       "allOf": [
+@@ -6990,7 +6923,7 @@
+           "$ref": "#/definitions/ApprovalsReviewer"
+         }
+       ],
+-      "description": "Configures who approval requests are routed to for review once they have been escalated. This does not disable separate safety checks such as ARC."
++      "description": "Configures who approval requests are routed to for review once they have\nbeen escalated. This does not disable separate safety checks such as\nARC."
+     },
+     "apps": {
+       "allOf": [
+@@ -7024,9 +6957,9 @@
+       "description": "Optional policy instructions for the guardian auto-reviewer."
+     },
+     "background_terminal_max_timeout": {
+-      "description": "Maximum poll window for background terminal output (`write_stdin`), in milliseconds. Default: `300000` (5 minutes).",
++      "description": "Maximum poll window for background terminal output (`write_stdin`), in milliseconds.\nDefault: `300000` (5 minutes).",
+       "format": "uint64",
+-      "minimum": 0.0,
++      "minimum": 0,
+       "type": "integer"
+     },
+     "browser_use": {
+@@ -7037,7 +6970,7 @@
+       "type": "string"
+     },
+     "check_for_update_on_startup": {
+-      "description": "When `true`, checks for Codex updates on startup and surfaces update prompts. Set to `false` only if your Codex updates are centrally managed. Defaults to `true`.",
++      "description": "When `true`, checks for Codex updates on startup and surfaces update prompts.\nSet to `false` only if your Codex updates are centrally managed.\nDefaults to `true`.",
+       "type": "boolean"
+     },
+     "cli_auth_credentials_store": {
+@@ -7047,7 +6980,7 @@
+         }
+       ],
+       "default": null,
+-      "description": "Preferred backend for storing CLI auth credentials. file (default): Use a file in the Codex home directory. keyring: Use an OS-specific keyring service. auto: Use the keyring if available, otherwise use a file."
++      "description": "Preferred backend for storing CLI auth credentials.\nfile (default): Use a file in the Codex home directory.\nkeyring: Use an OS-specific keyring service.\nauto: Use the keyring if available, otherwise use a file."
+     },
+     "cloud": {
+       "allOf": [
+@@ -7069,7 +7002,7 @@
+       "type": "boolean"
+     },
+     "default_permissions": {
+-      "description": "Default permissions profile to apply. Names starting with `:` refer to built-in profiles; other names are resolved from the `[permissions]` table.",
++      "description": "Default permissions profile to apply. Names starting with `:` refer to\nbuilt-in profiles; other names are resolved from the `[permissions]`\ntable.",
+       "type": "string"
+     },
+     "desktop": {
+@@ -7091,27 +7024,27 @@
+       "$ref": "#/definitions/AbsolutePathBuf"
+     },
+     "experimental_realtime_start_instructions": {
+-      "description": "Experimental / do not use. Replaces the built-in realtime start instructions inserted into developer messages when realtime becomes active.",
++      "description": "Experimental / do not use. Replaces the built-in realtime start\ninstructions inserted into developer messages when realtime becomes\nactive.",
+       "type": "string"
+     },
+     "experimental_realtime_webrtc_call_base_url": {
+-      "description": "Experimental / do not use. Overrides only the WebRTC realtime call creation base URL. This is separate from `experimental_realtime_ws_base_url` because WebRTC call creation is HTTP, while sideband control is websocket.",
++      "description": "Experimental / do not use. Overrides only the WebRTC realtime call\ncreation base URL. This is separate from `experimental_realtime_ws_base_url`\nbecause WebRTC call creation is HTTP, while sideband control is websocket.",
+       "type": "string"
+     },
+     "experimental_realtime_ws_backend_prompt": {
+-      "description": "Experimental / do not use. Overrides only the realtime conversation websocket transport instructions (the `Op::RealtimeConversation` `/ws` session.update instructions) without changing normal prompts.",
++      "description": "Experimental / do not use. Overrides only the realtime conversation\nwebsocket transport instructions (the `Op::RealtimeConversation`\n`/ws` session.update instructions) without changing normal prompts.",
+       "type": "string"
+     },
+     "experimental_realtime_ws_base_url": {
+-      "description": "Experimental / do not use. Overrides only the realtime conversation websocket transport base URL (the `Op::RealtimeConversation` `/v1/realtime` connection) without changing normal provider HTTP requests.",
++      "description": "Experimental / do not use. Overrides only the realtime conversation\nwebsocket transport base URL (the `Op::RealtimeConversation`\n`/v1/realtime`\nconnection) without changing normal provider HTTP requests.",
+       "type": "string"
+     },
+     "experimental_realtime_ws_model": {
+-      "description": "Experimental / do not use. Selects the realtime websocket model/snapshot used for the `Op::RealtimeConversation` connection.",
++      "description": "Experimental / do not use. Selects the realtime websocket model/snapshot\nused for the `Op::RealtimeConversation` connection.",
+       "type": "string"
+     },
+     "experimental_realtime_ws_startup_context": {
+-      "description": "Experimental / do not use. Replaces the synthesized realtime startup context appended to websocket session instructions. An empty string disables startup context injection entirely.",
++      "description": "Experimental / do not use. Replaces the synthesized realtime startup\ncontext appended to websocket session instructions. An empty string\ndisables startup context injection entirely.",
+       "type": "string"
+     },
+     "experimental_thread_store": {
+@@ -7197,6 +7130,9 @@
+         "browser_use_full_cdp_access": {
+           "type": "boolean"
+         },
++        "chatgpt_chat": {
++          "type": "boolean"
++        },
+         "chronicle": {
+           "type": "boolean"
+         },
+@@ -7716,7 +7652,7 @@
+           "$ref": "#/definitions/FeedbackConfigToml"
+         }
+       ],
+-      "description": "When `false`, disables feedback collection across Codex product surfaces. Defaults to `true`."
++      "description": "When `false`, disables feedback collection across Codex product surfaces.\nDefaults to `true`."
+     },
+     "file_opener": {
+       "allOf": [
+@@ -7724,7 +7660,7 @@
+           "$ref": "#/definitions/UriBasedFileOpener"
+         }
+       ],
+-      "description": "Optional URI-based file opener. If set, citations to files in the model output will be hyperlinked using the specified URI scheme."
++      "description": "Optional URI-based file opener. If set, citations to files in the model\noutput will be hyperlinked using the specified URI scheme."
+     },
+     "forced_chatgpt_workspace_id": {
+       "allOf": [
+@@ -7751,7 +7687,7 @@
+         }
+       ],
+       "default": null,
+-      "description": "Compatibility-only settings retained so legacy `ghost_snapshot` config still loads."
++      "description": "Compatibility-only settings retained so legacy `ghost_snapshot`\nconfig still loads."
+     },
+     "goals": {
+       "allOf": [
+@@ -7763,7 +7699,7 @@
+     },
+     "hide_agent_reasoning": {
+       "default": false,
+-      "description": "When set to `true`, `AgentReasoning` events will be hidden from the UI/output. Defaults to `false`.",
++      "description": "When set to `true`, `AgentReasoning` events will be hidden from the\nUI/output. Defaults to `false`.",
+       "type": "boolean"
+     },
+     "history": {
+@@ -7816,7 +7752,7 @@
+           "$ref": "#/definitions/AbsolutePathBuf"
+         }
+       ],
+-      "description": "Directory where Codex writes log files. Setting this value explicitly also enables the TUI text log in this directory. Defaults to `$CODEX_HOME/log`."
++      "description": "Directory where Codex writes log files. Setting this value explicitly\nalso enables the TUI text log in this directory.\nDefaults to `$CODEX_HOME/log`."
+     },
+     "marketplaces": {
+       "additionalProperties": {
+@@ -7836,13 +7772,14 @@
+       "description": "Trusted enterprise IdP shared by EMA-enabled MCP servers and plugins."
+     },
+     "mcp_oauth_callback_port": {
+-      "description": "Optional fixed port for the local HTTP callback server used during MCP OAuth login. When unset, Codex will bind to an ephemeral port chosen by the OS.",
++      "description": "Optional fixed port for the local HTTP callback server used during MCP OAuth login.\nWhen unset, Codex will bind to an ephemeral port chosen by the OS.",
+       "format": "uint16",
+-      "minimum": 0.0,
++      "maximum": 65535,
++      "minimum": 0,
+       "type": "integer"
+     },
+     "mcp_oauth_callback_url": {
+-      "description": "Optional redirect URI to use during MCP OAuth login. When set, this URI is used in the OAuth authorization request instead of the local listener address. The local callback listener still binds to 127.0.0.1 (using `mcp_oauth_callback_port` when provided).",
++      "description": "Optional redirect URI to use during MCP OAuth login.\nWhen set, this URI is used in the OAuth authorization request instead\nof the local listener address. The local callback listener still binds\nto 127.0.0.1 (using `mcp_oauth_callback_port` when provided).",
+       "type": "string"
+     },
+     "mcp_oauth_credentials_store": {
+@@ -7852,12 +7789,12 @@
+         }
+       ],
+       "default": null,
+-      "description": "Preferred backend for storing MCP OAuth credentials. keyring: Use an OS-specific keyring service. https://github.com/openai/codex/blob/main/codex-rs/rmcp-client/src/oauth.rs#L2 file: Use a file in the Codex home directory. auto (default): Use the OS-specific keyring service if available, otherwise use a file."
++      "description": "Preferred backend for storing MCP OAuth credentials.\nkeyring: Use an OS-specific keyring service.\n         https://github.com/openai/codex/blob/main/codex-rs/rmcp-client/src/oauth.rs#L2\nfile: Use a file in the Codex home directory.\nauto (default): Use the OS-specific keyring service if available, otherwise use a file."
+     },
+     "mcp_optional_startup_grace_ms": {
+-      "description": "Milliseconds to wait for optional MCP servers while building the initial tool catalog.\n\nDefaults to 1000. Set to 0 to disable the shared grace and wait for each server's configured `startup_timeout_sec` instead.",
++      "description": "Milliseconds to wait for optional MCP servers while building the initial tool catalog.\n\nDefaults to 1000. Set to 0 to disable the shared grace and wait for each\nserver's configured `startup_timeout_sec` instead.",
+       "format": "uint64",
+-      "minimum": 0.0,
++      "minimum": 0,
+       "type": "integer"
+     },
+     "mcp_servers": {
+@@ -7891,7 +7828,7 @@
+           "$ref": "#/definitions/AutoCompactTokenLimitScope"
+         }
+       ],
+-      "description": "Controls whether the auto-compaction limit applies to the full context or only to tokens after the carried prefix in the current compaction window."
++      "description": "Controls whether the auto-compaction limit applies to the full context or\nonly to tokens after the carried prefix in the current compaction window."
+     },
+     "model_catalog_json": {
+       "allOf": [
+@@ -7899,7 +7836,7 @@
+           "$ref": "#/definitions/AbsolutePathBuf"
+         }
+       ],
+-      "description": "Optional path to a JSON model catalog (applied on startup only). Per-thread `config` overrides are accepted but do not reapply this (no-ops)."
++      "description": "Optional path to a JSON model catalog (applied on startup only).\nPer-thread `config` overrides are accepted but do not reapply this (no-ops)."
+     },
+     "model_context_window": {
+       "description": "Size of the context window for the model, in tokens.",
+@@ -7912,13 +7849,13 @@
+           "$ref": "#/definitions/AbsolutePathBuf"
+         }
+       ],
+-      "description": "Optional path to a file containing model instructions that will override the built-in instructions for the selected model. Users are STRONGLY DISCOURAGED from using this field, as deviating from the instructions sanctioned by Codex will likely degrade model performance."
++      "description": "Optional path to a file containing model instructions that will override\nthe built-in instructions for the selected model. Users are STRONGLY\nDISCOURAGED from using this field, as deviating from the instructions\nsanctioned by Codex will likely degrade model performance."
+     },
+     "model_post_turn_compact_threshold_percent": {
+-      "description": "Percentage of the usable context window that triggers compaction after a final response. Existing auto-compaction limits still apply. Omitted or zero disables turn-end compaction; valid values are 0–100.",
++      "description": "Percentage of the usable context window that triggers compaction after a final\nresponse. Existing auto-compaction limits still apply. Omitted or zero disables\nturn-end compaction; valid values are 0–100.",
+       "format": "uint8",
+-      "maximum": 100.0,
+-      "minimum": 0.0,
++      "maximum": 100,
++      "minimum": 0,
+       "type": "integer"
+     },
+     "model_provider": {
+@@ -7930,7 +7867,7 @@
+         "$ref": "#/definitions/ModelProviderInfo"
+       },
+       "default": {},
+-      "description": "User-defined provider entries that extend the built-in list. Built-in IDs cannot be overridden.",
++      "description": "User-defined provider entries that extend the built-in list. Built-in\nIDs cannot be overridden.",
+       "type": "object"
+     },
+     "model_reasoning_effort": {
+@@ -7953,7 +7890,7 @@
+           "$ref": "#/definitions/Notice"
+         }
+       ],
+-      "description": "Collection of in-product notices (different from notifications) See [`crate::types::Notice`] for more details"
++      "description": "Collection of in-product notices (different from notifications)\nSee [`crate::types::Notice`] for more details"
+     },
+     "notify": {
+       "default": null,
+@@ -8040,12 +7977,12 @@
+       "default": 32768,
+       "description": "Maximum total bytes of project instruction content across all selected environments.",
+       "format": "uint",
+-      "minimum": 0.0,
++      "minimum": 0,
+       "type": "integer"
+     },
+     "project_root_markers": {
+       "default": null,
+-      "description": "Markers used to detect the project root when searching parent directories for `.codex` folders. Defaults to [\".git\"] when unset.",
++      "description": "Markers used to detect the project root when searching parent\ndirectories for `.codex` folders. Defaults to [\".git\"] when unset.",
+       "items": {
+         "type": "string"
+       },
+@@ -8064,7 +8001,7 @@
+         }
+       ],
+       "default": null,
+-      "description": "Experimental / do not use. Realtime websocket session selection. `version` controls v1/v2 and `type` controls conversational/transcription."
++      "description": "Experimental / do not use. Realtime websocket session selection.\n`version` controls v1/v2 and `type` controls conversational/transcription."
+     },
+     "responses_api_metadata": {
+       "additionalProperties": {
+@@ -8094,7 +8031,7 @@
+       "description": "Sandbox configuration to apply if `sandbox` is `WorkspaceWrite`."
+     },
+     "service_tier": {
+-      "description": "Optional explicit service tier request id for new turns (for example `default`, `priority`, or `flex`; legacy `fast` also works).",
++      "description": "Optional explicit service tier request id for new turns (for example\n`default`, `priority`, or `flex`; legacy `fast` also works).",
+       "type": "string"
+     },
+     "shell_environment_policy": {
+@@ -8114,7 +8051,7 @@
+       }
+     },
+     "show_raw_agent_reasoning": {
+-      "description": "When set to `true`, `AgentReasoningRawContentEvent` events will be shown in the UI/output. Defaults to `false`.",
++      "description": "When set to `true`, `AgentReasoningRawContentEvent` events will be shown in the UI/output.\nDefaults to `false`.",
+       "type": "boolean"
+     },
+     "skills": {
+@@ -8131,22 +8068,22 @@
+           "$ref": "#/definitions/AbsolutePathBuf"
+         }
+       ],
+-      "description": "Directory where Codex stores the SQLite state DB. Defaults to `$CODEX_SQLITE_HOME` when set. Otherwise uses `$CODEX_HOME`."
++      "description": "Directory where Codex stores the SQLite state DB.\nDefaults to `$CODEX_SQLITE_HOME` when set. Otherwise uses `$CODEX_HOME`."
+     },
+     "suppress_unstable_features_warning": {
+       "description": "Suppress warnings about unstable (under development) features.",
+       "type": "boolean"
+     },
+     "thread_unload_delay_secs": {
+-      "description": "Seconds a thread must have no subscribers and no activity before app-server unloads it. Defaults to 1800 (30 minutes); zero unloads immediately. Changes require a server restart.",
++      "description": "Seconds a thread must have no subscribers and no activity before app-server\nunloads it. Defaults to 1800 (30 minutes); zero unloads immediately.\nChanges require a server restart.",
+       "format": "uint64",
+-      "minimum": 0.0,
++      "minimum": 0,
+       "type": "integer"
+     },
+     "tool_output_token_limit": {
+       "description": "Token budget applied when storing tool/function outputs in the context manager.",
+       "format": "uint",
+-      "minimum": 0.0,
++      "minimum": 0,
+       "type": "integer"
+     },
+     "tool_suggest": {
+diff --git a/codex-rs/network-proxy/src/credential_broker/configured.rs b/codex-rs/network-proxy/src/credential_broker/configured.rs
+index b4f0630d1e435ff11800dadc42b5c8a9c8414019..ddf921585a1df1bc7bb75ab944321b3f1578a655 100644
+--- a/codex-rs/network-proxy/src/credential_broker/configured.rs
++++ b/codex-rs/network-proxy/src/credential_broker/configured.rs
+@@ -12,7 +12,7 @@ use rama_http::HeaderMap;
+ use rama_http::HeaderName;
+ use rama_http::HeaderValue;
+ use rama_http::header::AUTHORIZATION;
+-use rand::Rng as _;
++use rand::RngExt as _;
+ use regex::Regex;
+ use regex::RegexBuilder;
+ use regex_automata::Anchored;
+diff --git a/codex-rs/protocol/src/config_types.rs b/codex-rs/protocol/src/config_types.rs
+index 87ffe6dc8bea4d093822a8c1e868df477490e669..784954cd0130319ab371e3fd9feaab26ac8648e7 100644
+--- a/codex-rs/protocol/src/config_types.rs
++++ b/codex-rs/protocol/src/config_types.rs
+@@ -1,14 +1,10 @@
+ use codex_utils_absolute_path::AbsolutePathBuf;
+ use codex_utils_redacted_string::RedactedString;
+ use schemars::JsonSchema;
+-use schemars::r#gen::SchemaGenerator;
+-use schemars::schema::InstanceType;
+-use schemars::schema::Metadata;
+-use schemars::schema::Schema;
+-use schemars::schema::SchemaObject;
++use schemars::Schema;
++use schemars::generate::SchemaGenerator;
+ use serde::Deserialize;
+ use serde::Serialize;
+-use serde_json::Value;
+ use std::collections::HashMap;
+ use std::fmt;
+ use std::num::NonZeroU64;
+@@ -190,8 +186,8 @@ pub enum ApprovalsReviewer {
+ }
+ 
+ impl JsonSchema for ApprovalsReviewer {
+-    fn schema_name() -> String {
+-        "ApprovalsReviewer".to_string()
++    fn schema_name() -> std::borrow::Cow<'static, str> {
++        "ApprovalsReviewer".into()
+     }
+ 
+     fn json_schema(_generator: &mut SchemaGenerator) -> Schema {
+@@ -272,21 +268,11 @@ impl Default for ShellEnvironmentPolicy {
+ }
+ 
+ fn string_enum_schema_with_description(values: &[&str], description: &str) -> Schema {
+-    let mut schema = SchemaObject {
+-        instance_type: Some(InstanceType::String.into()),
+-        metadata: Some(Box::new(Metadata {
+-            description: Some(description.to_string()),
+-            ..Default::default()
+-        })),
+-        ..Default::default()
+-    };
+-    schema.enum_values = Some(
+-        values
+-            .iter()
+-            .map(|value| Value::String((*value).to_string()))
+-            .collect(),
+-    );
+-    Schema::Object(schema)
++    schemars::json_schema!({
++        "type": "string",
++        "description": description,
++        "enum": values,
++    })
+ }
+ 
+ #[derive(
+@@ -339,6 +325,8 @@ pub enum Personality {
+ /// configured mode hint defines the policy instead of a built-in policy.
+ #[derive(Debug, Serialize, Deserialize, Clone, PartialEq, Eq, Display, JsonSchema, TS, Default)]
+ #[serde(rename_all = "camelCase", from = "MultiAgentModeWire")]
++// Legacy deserialization aliases are not part of the exported canonical schema.
++#[schemars(!from)]
+ #[ts(rename_all = "camelCase")]
+ #[strum(serialize_all = "camelCase")]
+ pub enum MultiAgentMode {
+diff --git a/codex-rs/rmcp-client/src/enterprise_oauth_logout_tests.rs b/codex-rs/rmcp-client/src/enterprise_oauth_logout_tests.rs
+index 3916c01b418510969976527c3656e5c2974c8c09..a18fa78030fd241a6f88ba56fee3236b38110058 100644
+--- a/codex-rs/rmcp-client/src/enterprise_oauth_logout_tests.rs
++++ b/codex-rs/rmcp-client/src/enterprise_oauth_logout_tests.rs
+@@ -375,7 +375,7 @@ impl CredentialBuilderApi for FileKeyring {
+         _service: &str,
+         user: &str,
+     ) -> keyring::Result<Box<Credential>> {
+-        let name = format!("{:x}", Sha256::digest(user.as_bytes()));
++        let name = hex::encode(Sha256::digest(user.as_bytes()));
+         Ok(Box::new(FileCredential(self.0.join(name))))
+     }
+ 
+diff --git a/codex-rs/tui/src/app/config_panel.rs b/codex-rs/tui/src/app/config_panel.rs
+index f1fb01ff12deb14fd99f402812839721fd1ef88b..61b28e5e7725f337ef30fe147332faa2a6eca50f 100644
+--- a/codex-rs/tui/src/app/config_panel.rs
++++ b/codex-rs/tui/src/app/config_panel.rs
+@@ -141,7 +141,7 @@ impl App {
+             return;
+         }
+         self.config_notification_test_pending = None;
+-        let notice = if !tui.notify_test("Codex notification test") {
++        let notice = if !tui.notify_test("Nyacode notification test") {
+             "Could not send test · check terminal connection"
+         } else if codex_terminal_detection::terminal_info().name
+             == codex_terminal_detection::TerminalName::Ghostty
+diff --git a/codex-rs/tui/src/app/server_version_notice.rs b/codex-rs/tui/src/app/server_version_notice.rs
+index bca03e34f7cfa95bfeeb37779b75cf34f9476231..9351cae6bcec1ee9b54f783fb7d614243cd96048 100644
+--- a/codex-rs/tui/src/app/server_version_notice.rs
++++ b/codex-rs/tui/src/app/server_version_notice.rs
+@@ -61,7 +61,7 @@ impl App {
+                     ServerVersionNoticeKind::Different => "≠",
+                 };
+             Some(format!(
+-                "Service v{server} {comparison} Codex CLI v{client_version}{guidance}"
++                "Service v{server} {comparison} Nyacode CLI v{client_version}{guidance}"
+             ))
+         });
+     }
+diff --git a/codex-rs/tui/src/onboarding/auth.rs b/codex-rs/tui/src/onboarding/auth.rs
+index 2cdc98ca68e47667e84864cbefab3664bffa842f..af0f3907494b699240398ffc094601895c194446 100644
+--- a/codex-rs/tui/src/onboarding/auth.rs
++++ b/codex-rs/tui/src/onboarding/auth.rs
+@@ -438,12 +438,12 @@ impl AuthModeWidget {
+ 
+     fn render_pick_mode(&self, area: Rect, buf: &mut Buffer) {
+         let mut lines: Vec<Line> = if self.bedrock_setup_enabled {
+-            vec!["  Choose how you want to use Codex.".into(), "".into()]
++            vec!["  Choose how you want to use Nyacode.".into(), "".into()]
+         } else {
+             vec![
+                 Line::from(vec![
+                     "  ".into(),
+-                    "Sign in with ChatGPT to use Codex as part of your paid plan".into(),
++                    "Sign in with ChatGPT to use Nyacode as part of your paid plan".into(),
+                 ]),
+                 Line::from(vec![
+                     "  ".into(),
+@@ -622,7 +622,7 @@ impl AuthModeWidget {
+         let mut docs_line =
+             HyperlinkLine::new(Line::from("  Learn about permissions and approvals in the ").dim());
+         docs_line.push_span(
+-            "Codex docs".underlined(),
++            "Nyacode docs".underlined(),
+             Some("https://developers.openai.com/codex/security"),
+         );
+         let mut preferences_line =
+@@ -643,7 +643,7 @@ impl AuthModeWidget {
+             "  You're in control".into(),
+             docs_line,
+             "".into(),
+-            "  Codex can make mistakes".into(),
++            "  Nyacode can make mistakes".into(),
+             HyperlinkLine::new(
+                 "  Review the code it writes and commands it runs"
+                     .dim()
+@@ -682,7 +682,7 @@ impl AuthModeWidget {
+         let lines = vec![
+             "✓ API key configured".fg(Color::Green).into(),
+             "".into(),
+-            "  Codex will use usage-based billing with your API key.".into(),
++            "  Nyacode will use usage-based billing with your API key.".into(),
+         ];
+ 
+         Paragraph::new(lines)
+@@ -1356,7 +1356,7 @@ mod tests {
+             rows.pop();
+         }
+         insta::assert_snapshot!(rows.join("\n"), @r###"
+-          Choose how you want to use Codex.
++          Choose how you want to use Nyacode.
+ 
+         > 1. Sign in with ChatGPT
+              Usage included with Plus, Pro, Business, and Enterprise plans
+@@ -1522,7 +1522,7 @@ mod tests {
+ 
+         assert_eq!(
+             collect_osc8_chars(&buf, area, "https://developers.openai.com/codex/security"),
+-            "Codex docs"
++            "Nyacode docs"
+         );
+         assert_eq!(
+             collect_osc8_chars(&buf, area, "https://chatgpt.com/#settings"),
+@@ -1561,9 +1561,9 @@ mod tests {
+         ✓ Signed in with your ChatGPT account
+ 
+           You're in control
+-          Learn about permissions and approvals in the Codex docs
++          Learn about permissions and approvals in the Nyacode docs
+ 
+-          Codex can make mistakes
++          Nyacode can make mistakes
+           Review the code it writes and commands it runs
+ 
+           Included with your ChatGPT plan
+diff --git a/codex-rs/tui/src/onboarding/bedrock.rs b/codex-rs/tui/src/onboarding/bedrock.rs
+index d1ea4d24640c3d681efe1f2737bc525a85ab2616..7e9454c1faaf4b5ce9d1742e525188cad0fb3e03 100644
+--- a/codex-rs/tui/src/onboarding/bedrock.rs
++++ b/codex-rs/tui/src/onboarding/bedrock.rs
+@@ -379,9 +379,9 @@ impl BedrockState {
+         let mut footer = Vec::new();
+         match &self.view {
+             BedrockView::GovCloudWarning(_) => {
+-                lines = vec!["Using Codex with AWS GovCloud".bold().into(), "".into()];
++                lines = vec!["Using Nyacode with AWS GovCloud".bold().into(), "".into()];
+                 lines.push(Line::from(vec![
+-                    "You are using Codex with AWS GovCloud. Please ensure you or your administrator have read the ".into(),
++                    "You are using Nyacode with AWS GovCloud. Please ensure you or your administrator have read the ".into(),
+                     "application configuration and security guidance"
+                         .cyan()
+                         .underlined(),
+@@ -483,7 +483,7 @@ impl BedrockState {
+             }
+             BedrockView::EnvironmentInstructions => {
+                 lines.push(
+-                    "  Configure AWS credentials in your environment, then restart Codex.".into(),
++                    "  Configure AWS credentials in your environment, then restart Nyacode.".into(),
+                 );
+                 lines.push("".into());
+                 lines.push(Line::from(vec![
+diff --git a/codex-rs/tui/src/onboarding/bedrock_tests.rs b/codex-rs/tui/src/onboarding/bedrock_tests.rs
+index 8f9f240587ac2e3a840308041cf35d81aa94393e..b66de9df57f4574b1067e98685ce393e538f1413 100644
+--- a/codex-rs/tui/src/onboarding/bedrock_tests.rs
++++ b/codex-rs/tui/src/onboarding/bedrock_tests.rs
+@@ -43,14 +43,14 @@ fn gov_cloud_guidance_scrolls_in_short_panes() {
+                 !state.handle_guidance_key_event(&KeyEvent::new(KeyCode::Down, KeyModifiers::NONE))
+             );
+         }
+-        assert!(seen.contains("Using Codex with AWS"));
++        assert!(seen.contains("Using Nyacode with AWS"));
+         assert!(seen.contains("proceeding."));
+         assert!(seen.contains(GOV_CLOUD_GUIDANCE_URL));
+         for _ in 0..20 {
+             state.handle_guidance_key_event(&KeyEvent::new(KeyCode::Up, KeyModifiers::NONE));
+             render_visible_at(&state, area);
+         }
+-        assert!(render_visible_at(&state, area).starts_with("Using Codex with AWS"));
++        assert!(render_visible_at(&state, area).starts_with("Using Nyacode with AWS"));
+     }
+     assert_eq!(render_visible_at(&state, area), initial);
+     state.handle_guidance_key_event(&KeyEvent::new(KeyCode::Down, KeyModifiers::NONE));
+@@ -514,7 +514,7 @@ fn credential_entries_share_region_and_keep_aws_secrets_hidden() {
+     insta::assert_snapshot!(render_visible(&access_keys), @r###"
+     > Set up Amazon Bedrock
+ 
+-      Configure AWS credentials in your environment, then restart Codex.
++      Configure AWS credentials in your environment, then restart Nyacode.
+ 
+       Setup guide: https://learn.chatgpt.com/docs/amazon-bedrock
+ 
+diff --git a/codex-rs/tui/src/onboarding/keys.rs b/codex-rs/tui/src/onboarding/keys.rs
+index ff7eacac44d907d34df8dae279c1d8039fba4da1..c68e7e5bc003855b292db3a3c4b9752d190e1dc9 100644
+--- a/codex-rs/tui/src/onboarding/keys.rs
++++ b/codex-rs/tui/src/onboarding/keys.rs
+@@ -1,4 +1,4 @@
+-//! Fixed shortcuts used before users have had a chance to configure Codex.
++//! Fixed shortcuts used before users have had a chance to configure Nyacode.
+ 
+ use crossterm::event::KeyCode;
+ use crossterm::event::KeyModifiers;
+diff --git a/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__bedrock__tests__gov_cloud_warning.snap b/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__bedrock__tests__gov_cloud_warning.snap
+index 9ac2ef79a74fff1682e911be85211b9a71ae1f6b..35e24c8b4409206d1da091272204e06312dd589c 100644
+--- a/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__bedrock__tests__gov_cloud_warning.snap
++++ b/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__bedrock__tests__gov_cloud_warning.snap
+@@ -2,9 +2,9 @@
+ source: tui/src/onboarding/bedrock_tests.rs
+ expression: render_visible(&state)
+ ---
+-Using Codex with AWS GovCloud
++Using Nyacode with AWS GovCloud
+ 
+-You are using Codex with AWS GovCloud. Please ensure you or your
++You are using Nyacode with AWS GovCloud. Please ensure you or your
+ administrator have read the application configuration and security
+ guidance before proceeding.
+ 
+diff --git a/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__bedrock__tests__gov_cloud_warning_short.snap b/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__bedrock__tests__gov_cloud_warning_short.snap
+index 43f5fab067538243832e08a58eb1ab988d085d43..6c112ae7c2abbdc649c70d9cd657042c1816b524 100644
+--- a/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__bedrock__tests__gov_cloud_warning_short.snap
++++ b/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__bedrock__tests__gov_cloud_warning_short.snap
+@@ -2,9 +2,9 @@
+ source: tui/src/onboarding/bedrock_tests.rs
+ expression: initial
+ ---
+-Using Codex with AWS
++Using Nyacode with AWS
+ GovCloud
+ 
+-You are using Codex with
++You are using Nyacode
+ > Acknowledge
+ ↑/↓ scroll · enter
+diff --git a/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__trust_directory__tests__directory_change_consent_can_keep_current_directory.snap b/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__trust_directory__tests__directory_change_consent_can_keep_current_directory.snap
+index 802d9e87d54d7aae34a7c8bc7e6bdd6f30037871..eb4577e1f6ca4eac7d7c382f36613fd6518f22d9 100644
+--- a/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__trust_directory__tests__directory_change_consent_can_keep_current_directory.snap
++++ b/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__trust_directory__tests__directory_change_consent_can_keep_current_directory.snap
+@@ -1,13 +1,12 @@
+ ---
+ source: tui/src/onboarding/trust_directory.rs
+-assertion_line: 365
+ expression: terminal.backend()
+ ---
+ 
+   Folder access
+   /workspace/project                                                
+ 
+-  Trust this folder? Codex can read, edit, and run files here,
++  Trust this folder? Nyacode can read, edit, and run files here,
+   subject to your permission settings. Folder settings can run code
+   automatically, even without a model request. Continue only if you
+   trust these files. Your trust decision will be saved.
+diff --git a/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__trust_directory__tests__long_checkout_40x13.snap b/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__trust_directory__tests__long_checkout_40x13.snap
+index 642ee186fcb1ca7075c538ffb863cfdfb5f4bbdf..6d202a2ccacce4fdb96017c747c13453cb224359 100644
+--- a/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__trust_directory__tests__long_checkout_40x13.snap
++++ b/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__trust_directory__tests__long_checkout_40x13.snap
+@@ -4,7 +4,7 @@ expression: "terminal.backend().to_string().replace('\\\\', \"/\")"
+ ---
+   Folder access
+   workspace/…/repository              
+-  Trust this folder? Codex can read,
++  Trust this folder? Nyacode can read,
+   edit, and run files here, subject to
+   your permission settings. Folder
+   settings can run code automatically,
+diff --git a/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__trust_directory__tests__long_repository_root_40x17.snap b/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__trust_directory__tests__long_repository_root_40x17.snap
+index 38aa66c2a7f5bf6913d9ff80d0966c0897c30faf..0e5ac1566bb8ce5778af3e7c19b4c1bab803d982 100644
+--- a/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__trust_directory__tests__long_repository_root_40x17.snap
++++ b/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__trust_directory__tests__long_repository_root_40x17.snap
+@@ -8,7 +8,7 @@ expression: "terminal.backend().to_string().replace('\\\\', \"/\")"
+   Git project. Trusting will apply to 
+   the repository root:                
+   workspace/…/repository              
+-  Trust this folder? Codex can read,
++  Trust this folder? Nyacode can read,
+   edit, and run files here, subject to
+   your permission settings. Folder
+   settings can run code automatically,
+diff --git a/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__trust_directory__tests__only_repository_root_fits_40x16.snap b/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__trust_directory__tests__only_repository_root_fits_40x16.snap
+index 46067fa6e02003dbf330abacafde56ea1a44fefd..cbeb39e9572ee4702d79c1489819a0838b0bc24f 100644
+--- a/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__trust_directory__tests__only_repository_root_fits_40x16.snap
++++ b/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__trust_directory__tests__only_repository_root_fits_40x16.snap
+@@ -7,7 +7,7 @@ expression: "terminal.backend().to_string().replace('\\\\', \"/\")"
+   Git project. Trusting will apply to 
+   the repository root:                
+   workspace/…/repository              
+-  Trust this folder? Codex can read,
++  Trust this folder? Nyacode can read,
+   edit, and run files here, subject to
+   your permission settings. Folder
+   settings can run code automatically,
+diff --git a/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__trust_directory__tests__renders_snapshot_for_git_repo.snap b/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__trust_directory__tests__renders_snapshot_for_git_repo.snap
+index 1c94e842ed3be0b05757d22cddd394c5fd3f6b13..fdf6a01ce44db2b8e73f45ae237cfaeaa707e62e 100644
+--- a/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__trust_directory__tests__renders_snapshot_for_git_repo.snap
++++ b/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__trust_directory__tests__renders_snapshot_for_git_repo.snap
+@@ -6,7 +6,7 @@ expression: terminal.backend()
+   Folder access
+   /workspace/project                                                
+ 
+-  Trust this folder? Codex can read, edit, and run files here,
++  Trust this folder? Nyacode can read, edit, and run files here,
+   subject to your permission settings. Folder settings can run code
+   automatically, even without a model request. Continue only if you
+   trust these files. Your trust decision will be saved.
+diff --git a/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__trust_directory__tests__renders_snapshot_for_remote_git_subdirectory.snap b/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__trust_directory__tests__renders_snapshot_for_remote_git_subdirectory.snap
+index 09f1dd6facdf8fb6b3936f6f6eeac7088d46a6b4..08c49a975eb5e9a0b5f94bb933453d799ae669fc 100644
+--- a/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__trust_directory__tests__renders_snapshot_for_remote_git_subdirectory.snap
++++ b/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__trust_directory__tests__renders_snapshot_for_remote_git_subdirectory.snap
+@@ -10,7 +10,7 @@ expression: "terminal.backend().to_string().lines().map(str::trim_end).collect::
+   apply to the repository root:
+   /srv/remote/project
+ 
+-  Trust this folder? Codex can read, edit, and run files here,
++  Trust this folder? Nyacode can read, edit, and run files here,
+   subject to your permission settings. Folder settings can run code
+   automatically, even without a model request. Continue only if you
+   trust these files. Your trust decision will be saved.
+diff --git a/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__trust_directory__tests__renders_snapshot_for_trust_error.snap b/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__trust_directory__tests__renders_snapshot_for_trust_error.snap
+index fc61829f80742b35d76631a75475037a1f16d672..b800ea2c1e2172946e4a616db74b8d51a108d6c8 100644
+--- a/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__trust_directory__tests__renders_snapshot_for_trust_error.snap
++++ b/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__trust_directory__tests__renders_snapshot_for_trust_error.snap
+@@ -6,7 +6,7 @@ expression: terminal.backend()
+   Folder access
+   /workspace/project                                                
+ 
+-  Trust this folder? Codex can read, edit, and run files here,
++  Trust this folder? Nyacode can read, edit, and run files here,
+   subject to your permission settings. Folder settings can run code
+   automatically, even without a model request. Continue only if you
+   trust these files. Your trust decision will be saved.
+diff --git a/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__welcome__tests__welcome_logo_160x48.snap b/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__welcome__tests__welcome_logo_160x48.snap
+index b4f744e2d013e52a1e126790073ee0fb4ebd4477..0c1237554f371fa3ee071c54485b21c57047dfd2 100644
+--- a/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__welcome__tests__welcome_logo_160x48.snap
++++ b/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__welcome__tests__welcome_logo_160x48.snap
+@@ -2,24 +2,26 @@
+ source: tui/src/onboarding/welcome.rs
+ expression: visible.trim_end()
+ ---
+-                         ⢀⣀⣠⣤⣤⣤⣤⣤⣤⣀⣀
+-                     ⢀⣤⣶⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣶⣤⡀
+-                  ⢀⣠⣾⣿⣿⣿⣿⡿⠟⠛⠋⠉⠉⠙⠛⠛⠿⣿⣿⣿⣿⣿⣷⡄
+-                 ⣠⣾⣿⣿⣿⠿⠋            ⠉⠛⣿⣿⣿⣿⣷⡀
+-                ⣰⣿⣿⣿⡟⠁                 ⠹⣿⣿⣿⣿⡄
+-               ⣼⣿⣿⣿⠟   ⣀⣤⡀              ⠈⢿⣿⣿⣷⡀
+-              ⢠⣿⣿⣿⡟    ⣿⣿⣿⣄              ⠘⣿⣿⣿⣧
+-              ⢸⣿⣿⣿⠁    ⠙⣿⣿⣿⣆              ⢿⣿⣿⣿
+-              ⢾⣿⣿⣿      ⢸⣿⣿⣿⠆             ⢸⣿⣿⣿⠆
+-              ⣾⣿⣿⣿     ⣠⣿⣿⣿⠏  ⢀⣀⣀⣀⣀⣀⣀⡀    ⢸⣿⣿⣿
+-              ⠸⣿⣿⣿⡆   ⢰⣿⣿⣿⠇   ⣿⣿⣿⣿⣿⣿⣿⣿⡆  ⢀⣿⣿⣿⡟
+-               ⢻⣿⣿⣿⣄   ⠉⠛⠁    ⠙⠛⠛⠛⠛⠛⠛⠋  ⢀⣼⣿⣿⣿⠃
+-               ⠈⢻⣿⣿⣿⣦⡀                 ⣠⣾⣿⣿⣿⠇
+-                 ⠻⣿⣿⣿⣿⣤⣀            ⢀⣠⣾⣿⣿⣿⡿⠃
+-                  ⠈⠻⣿⣿⣿⣿⣷⣶⣤⣄⣀⣀⣀⢀⣀⣠⣤⣴⣿⣿⣿⣿⣿⠛
+-                     ⠙⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⠋
+-                        ⠉⠙⠛⠿⠿⠿⠿⠿⠿⠿⠛⠋⠁
+ 
+ 
+ 
+-  Welcome to Codex, OpenAI's command-line coding agent
++                ⢠⣤⣤⣤⣤⣤⣄              ⢠⣶⣶⣶⣶⣶⣶
++                ⢸⣿⣿⣿⣿⣿⣿⣷⣀            ⢸⣿⣿⣿⣿⣿⣿
++                ⢸⣿⣿⣿⣿⣿⣿⣿⣿⣦⡀          ⢸⣿⣿⣿⣿⣿⣿
++                ⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣄         ⢸⣿⣿⣿⣿⣿⣿
++                ⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣦⡀       ⢸⣿⣿⣿⣿⣿⣿
++                ⢸⣿⣿⣿⣿⣿⣿⠻⣿⣿⣿⣿⣿⣿⣄      ⢸⣿⣿⣿⣿⣿⣿
++                ⣼⣿⣿⣿⣿⣿⣿ ⠘⢿⣿⣿⣿⣿⣿⣧⡀    ⢸⣿⣿⣿⣿⣿⣿
++                ⣿⣿⣿⣿⣿⣿⡏   ⠛⣿⣿⣿⣿⣿⣿⣦   ⢸⣿⣿⣿⣿⣿⣿
++                ⣿⣿⣿⣿⣿⣿⡇    ⠈⢻⣿⣿⣿⣿⣿⣷⣄ ⢸⣿⣿⣿⣿⣿⣿
++                ⣿⣿⣿⣿⣿⣿⡇      ⠙⣿⣿⣿⣿⣿⣿⣦⣸⣿⣿⣿⣿⣿⣿
++                ⣿⣿⣿⣿⣿⣿⡇       ⠈⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡀
++                ⣿⣿⣿⣿⣿⣿⡇         ⠙⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇
++                ⣿⣿⣿⣿⣿⣿⡇          ⠈⢻⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇
++                ⣿⣿⣿⣿⣿⣿⡇            ⠙⢿⣿⣿⣿⣿⣿⣿⣿⠃
++                ⠛⠛⠛⠛⠛⠛⠃             ⠈⠻⠿⠿⠿⠿⠿⠿
++
++
++
++
++  Welcome to Nyacode, your multi-provider coding agent
+diff --git a/codex-rs/tui/src/onboarding/trust_directory.rs b/codex-rs/tui/src/onboarding/trust_directory.rs
+index 64ea9ce98e86356fc13aa6bb3d106d36687d189f..3e1d101238b1b8e440c7fee2e0f6590cb984284b 100644
+--- a/codex-rs/tui/src/onboarding/trust_directory.rs
++++ b/codex-rs/tui/src/onboarding/trust_directory.rs
+@@ -67,7 +67,7 @@ impl WidgetRef for &TrustDirectoryWidget {
+                  Trusted project folders can still contribute settings. Skills still load, \
+                  and tools follow your permission settings. Opening will not change saved trust."
+             } else {
+-                "Trust this folder? Codex can read, edit, and run files here, subject to \
++                "Trust this folder? Nyacode can read, edit, and run files here, subject to \
+                  your permission settings. Folder settings can run code automatically, \
+                  even without a model request. Continue only if you trust these files. \
+                  Your trust decision will be saved."
+diff --git a/codex-rs/tui/src/onboarding/welcome.rs b/codex-rs/tui/src/onboarding/welcome.rs
+index 9c9e7b8f1df80f81bc5c3cf7b43e4d926b721ada..a0a5599fd813bce1bfc715a7edaee74ff13c8d73 100644
+--- a/codex-rs/tui/src/onboarding/welcome.rs
++++ b/codex-rs/tui/src/onboarding/welcome.rs
+@@ -126,8 +126,8 @@ impl WidgetRef for &WelcomeWidget {
+         lines.push(Line::from(vec![
+             "  ".into(),
+             "Welcome to ".into(),
+-            "Codex".bold(),
+-            ", OpenAI's command-line coding agent".into(),
++            "Nyacode".bold(),
++            ", your multi-provider coding agent".into(),
+         ]));
+ 
+         Paragraph::new(lines)
+diff --git a/codex-rs/tui/src/snapshots/codex_tui__empty_state_animation__tests__onboarding_settled_logo.snap b/codex-rs/tui/src/snapshots/codex_tui__empty_state_animation__tests__onboarding_settled_logo.snap
+index 3a68cdb2db4373ff38c28cdf40b3f108e4e94938..fb0a8c40134dc1f595058407e395400a513f93c7 100644
+--- a/codex-rs/tui/src/snapshots/codex_tui__empty_state_animation__tests__onboarding_settled_logo.snap
++++ b/codex-rs/tui/src/snapshots/codex_tui__empty_state_animation__tests__onboarding_settled_logo.snap
+@@ -1,18 +1,19 @@
+ ---
+ source: tui/src/empty_state_animation_tests.rs
+-expression: "buffer.content.chunks(usize::from(area.width)).map(|row|\nrow.iter().map(|cell|\ncell.symbol()).collect::<String>().trim_end().to_owned()).collect::<Vec<_>>().join(\"\\n\")"
++expression: "buffer.content.chunks(usize::from(area.width)).map(|row|\nrow.iter().map(ratatui::buffer::Cell::symbol).collect::<String>().trim_end().to_owned()).collect::<Vec<_>>().join(\"\\n\")"
+ ---
+-                  ⣠⣴⣶⣿⣿⣷⣶⣤⣀⣀⣀⣀⣀
+-                ⢠⣾⣿⡿⠟⠛⠉⣻⣿⣿⣿⣿⣿⣿⣿⣿⣦⡀
+-              ⢀⣀⣿⣿⡟⢀⣠⣶⣿⣿⠿⠛⢉⣀⣀ ⠙⢿⣿⣿⣆
+-            ⢀⣾⣿⣿⣿⣿ ⢸⣿⡿⠋⢁⣤⣶⣿⣿⣿⣿⣦⣄⣻⣿⣿
+-           ⢠⣿⣿⡟⢹⣿⣿ ⢸⣿⣷⣾⣿⣿⣿⣯⣀⠉⠛⢿⣿⣿⣿⣿
+-           ⣼⣿⣿ ⢸⣿⣿ ⢸⣿⡿⠛⠁⠈⠛⢿⣿⣿⣦⣄⡈⠙⢿⣿⣷⡀
+-           ⢸⣿⣿⡀⠸⣿⣿⣶⣼⣿⡇    ⢸⣿⣟⠿⣿⣿⡆ ⢻⣿⣧
+-            ⢻⣿⣿⣄⡈⠙⠻⣿⣿⣷⣤⡀⢀⣤⣾⣿⣿ ⢸⣿⡇ ⣸⣿⣿
+-             ⣿⣿⣿⣿⣷⣦⣀⠉⣻⣿⣿⣿⡿⢿⣿⣿ ⢸⣿⡇⣠⣿⣿⡟
+-             ⢿⣿⣧⠉⠻⣿⣿⣿⣿⡿⠛⠉⣀⣼⣿⣿ ⣸⣿⣿⣿⣿⠟
+-             ⠘⢿⣿⣷⣄⡀⠉⠉⢁⣠⣴⣿⣿⡿⠟⠋⢀⣿⣿⡟⠋⠁
+-              ⠈⠛⢿⣿⣿⣿⣿⣿⣿⣿⣛⣉⣀⣀⣴⣿⣿⡟
+-                 ⠈⠉⠉⠉⠙⠻⣿⣿⣿⣿⣿⣿⠿⠋
+-                        ⠈⠉⠉
++
++
++           ⢀                        ⣀
++           ⢸⣷⣦⡀                  ⢀⣴⣿⣿
++           ⢸⣿⣿⣿⣶⣄              ⣠⣶⣿⣿⣿⣿
++           ⢸⣿⣿⣿⣿⣿⣷⣤⡀        ⢀⣤⣾⣿⣿⣿⣿⣿⣿
++           ⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
++           ⣼⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
++           ⣿⣿⣿⣿⣿⣿⠿⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⠿⢿⣿⣿⣿⣿⣿
++           ⣿⣿⣿⣿⣿⡇  ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿  ⢸⣿⣿⣿⣿⣿
++           ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
++           ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
++           ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
++           ⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
++           ⠈⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠙⠛⠛⠛⠛⠛⠛⠛⠛⠋⠉⠉
+diff --git a/codex-rs/tui/src/snapshots/codex_tui__startup_draft__tests__startup_draft_onboarding_transition.snap b/codex-rs/tui/src/snapshots/codex_tui__startup_draft__tests__startup_draft_onboarding_transition.snap
+index 74e7b7d1f08c1ebaee26766e72b188d3c5551e7b..e027d5c79e859e2c8f25f56e2ecc5868f07ed6a9 100644
+--- a/codex-rs/tui/src/snapshots/codex_tui__startup_draft__tests__startup_draft_onboarding_transition.snap
++++ b/codex-rs/tui/src/snapshots/codex_tui__startup_draft__tests__startup_draft_onboarding_transition.snap
+@@ -6,10 +6,10 @@ before onboarding: hidden (0x0 viewport)
+ ---
+ after onboarding:
+ 
+-  >_ OpenAI Codex (v<VERSION>)
++  >_ Nyacode (v<VERSION>)
+      loading
+ 
+ 
+-› Ask Codex to do anything
++› Ask Nyacode to do anything
+ 
+   ? for shortcuts
+diff --git a/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_uses_default_reasoning_when_config_empty.snap b/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_uses_default_reasoning_when_config_empty.snap
+index 8661643e2e94b91d6e69e3b05b4cc748e48fe380..4513658bac52e1db5e99baacebe5149782c9a747 100644
+--- a/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_uses_default_reasoning_when_config_empty.snap
++++ b/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_uses_default_reasoning_when_config_empty.snap
+@@ -4,7 +4,7 @@ expression: sanitized
+ ---
+ /status
+ 
+-  >_ OpenAI Codex (v0.0.0)
++  >_ Nyacode (v0.0.0)
+ 
+   Visit https://chatgpt.com/settings/usage for up-to-date
+   information on rate limits and credits
+diff --git a/codex-rs/tui/src/version.rs b/codex-rs/tui/src/version.rs
+index 8c8d108dc61314c01eeb31a987f48cf508f6fa9d..64c422f529319107ac7026bbb73a9441b907622d 100644
+--- a/codex-rs/tui/src/version.rs
++++ b/codex-rs/tui/src/version.rs
+@@ -1,2 +1,2 @@
+-/// The current Codex CLI version as embedded at compile time.
++/// The current Nyacode CLI version as embedded at compile time.
+ pub const CODEX_CLI_VERSION: &str = env!("CARGO_PKG_VERSION");
+diff --git a/codex-rs/utils/cli/src/config_override.rs b/codex-rs/utils/cli/src/config_override.rs
+index 61177dd76567f347ee4509da27722c27a459b6bd..f57720f33a86664ea03f88a12af54fb6f102ae6a 100644
+--- a/codex-rs/utils/cli/src/config_override.rs
++++ b/codex-rs/utils/cli/src/config_override.rs
+@@ -18,7 +18,7 @@ use toml::Value;
+ #[derive(Parser, Debug, Default, Clone)]
+ pub struct CliConfigOverrides {
+     /// Override a configuration value that would otherwise be loaded from
+-    /// `~/.codex/config.toml`. Use a dotted path (`foo.bar.baz`) to override
++    /// `~/.nyacode/config.toml`. Use a dotted path (`foo.bar.baz`) to override
+     /// nested values. The `value` portion is parsed as TOML. If it fails to
+     /// parse as TOML, the raw string is used as a literal.
+     ///

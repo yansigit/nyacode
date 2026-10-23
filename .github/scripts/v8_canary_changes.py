@@ -35,6 +35,10 @@ CANARY_PATH_PATTERNS = {
     "MODULE.bazel",
     "MODULE.bazel.lock",
     "codex-rs/Cargo.toml",
+    "engine.lock",
+    "integration/codex/Cargo.lock",
+    "integration/codex/overlays/third_party/v8/**",
+    "integration/codex/overlays/patches/v8_*.patch",
     "patches/BUILD.bazel",
     "patches/llvm_*.patch",
     "patches/rules_cc_*.patch",
@@ -52,6 +56,8 @@ WINDOWS_SOURCE_BUILD_PATHS = {
     ".github/workflows/rusty-v8-release.yml",
     ".github/workflows/v8-canary.yml",
     "patches/v8_array_sort_elements_kind.patch",
+    "engine.lock",
+    "integration/codex/overlays/patches/v8_array_sort_elements_kind.patch",
 }
 
 
@@ -121,9 +127,10 @@ def git_output(*args: str, root: Path = ROOT) -> bytes:
 
 
 def v8_version_at_revision(revision: str, *, root: Path = ROOT) -> str:
-    return resolved_v8_version(
-        git_output("show", f"{revision}:codex-rs/Cargo.lock", root=root)
-    )
+    lock_path = "integration/codex/Cargo.lock"
+    if not git_output("ls-tree", "--name-only", revision, lock_path, root=root).strip():
+        lock_path = "codex-rs/Cargo.lock"
+    return resolved_v8_version(git_output("show", f"{revision}:{lock_path}", root=root))
 
 
 def merge_base(base: str, head: str, *, root: Path = ROOT) -> str:

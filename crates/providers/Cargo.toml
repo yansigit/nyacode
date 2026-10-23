@@ -1,0 +1,92 @@
+[workspace]
+members = [
+    "provider-antigravity",
+    "provider-api",
+    "provider-auth",
+    "provider-claude",
+    "provider-codecs",
+    "provider-cursor",
+    "provider-opencode",
+    "provider-registry",
+    "provider-runtime",
+]
+resolver = "2"
+
+[workspace.package]
+version = "0.0.0"
+edition = "2024"
+license = "Apache-2.0"
+
+[workspace.dependencies]
+base64 = "0.23.1"
+bytes = "1.12.1"
+codex-provider-antigravity = { path = "provider-antigravity" }
+codex-provider-api = { path = "provider-api" }
+codex-provider-auth = { path = "provider-auth" }
+codex-provider-claude = { path = "provider-claude" }
+codex-provider-cursor = { path = "provider-cursor" }
+codex-provider-opencode = { path = "provider-opencode" }
+codex-provider-runtime = { path = "provider-runtime" }
+flate2 = "1.1.10"
+futures = { version = "0.3", default-features = false }
+hex = "0.4.3"
+http = "1.5.0"
+httpdate = "1.0.3"
+libc = "0.2.190"
+rand = "0.10"
+reqwest = { version = "0.13", features = ["cookies", "form", "query"] }
+serde = { version = "1", features = ["rc"] }
+serde_json = "1"
+sha2 = "0.11"
+tempfile = "3.27.0"
+thiserror = "2.0.21"
+tokio = "1"
+tokio-stream = "0.1.19"
+tokio-util = "0.7.20"
+url = "2"
+uuid = "1"
+wiremock = "0.6"
+
+[workspace.lints]
+rust = {}
+
+[workspace.lints.clippy]
+await_holding_invalid_type = "deny"
+await_holding_lock = "deny"
+disallowed_methods = "deny"
+expect_used = "deny"
+identity_op = "deny"
+manual_clamp = "deny"
+manual_filter = "deny"
+manual_find = "deny"
+manual_flatten = "deny"
+manual_map = "deny"
+manual_memcpy = "deny"
+manual_non_exhaustive = "deny"
+manual_ok_or = "deny"
+manual_range_contains = "deny"
+manual_retain = "deny"
+manual_strip = "deny"
+manual_try_fold = "deny"
+manual_unwrap_or = "deny"
+needless_borrow = "deny"
+needless_borrowed_reference = "deny"
+needless_collect = "deny"
+needless_late_init = "deny"
+needless_option_as_deref = "deny"
+needless_question_mark = "deny"
+needless_update = "deny"
+redundant_clone = "deny"
+redundant_closure = "deny"
+redundant_closure_for_method_calls = "deny"
+redundant_static_lifetimes = "deny"
+trivially_copy_pass_by_ref = "deny"
+uninlined_format_args = "deny"
+unnecessary_filter_map = "deny"
+unnecessary_lazy_evaluations = "deny"
+unnecessary_sort_by = "deny"
+unnecessary_to_owned = "deny"
+unwrap_used = "deny"
+
+[profile.dev]
+debug = "line-tables-only"

@@ -2,7 +2,7 @@
 
 # Nyacode
 
-Nyacode is a multi-provider coding agent for your terminal, forked from [OpenAI Codex](https://github.com/openai/codex). It connects directly to Cursor, OpenCode Go, Claude, and Antigravity, alongside the existing OpenAI-compatible providers.
+Nyacode is an independently maintained multi-provider coding agent for your terminal, built with a pinned [Codex](https://github.com/openai/codex) engine. It connects directly to Cursor, OpenCode Go, Claude, and Antigravity, alongside the existing OpenAI-compatible providers.
 
 - Manage native provider accounts and automatic account pools with `nyacode provider` or `/providers`.
 - Run tools, approvals, resumable conversations, and child agents with provider and model overrides.
@@ -15,14 +15,16 @@ Account switching is bounded by verified continuation safety. See the [provider 
 Build from source while Nyacode release packages are being prepared:
 
 ```sh
-git clone https://github.com/yansigit/nyacode.git
+gh repo clone yansigit/nyacode
 cd nyacode
 python3 scripts/build_nyacode.py
-./codex-rs/target/debug/nyacode --help
-./codex-rs/target/debug/nyacode
+./.engine/target/debug/nyacode --help
+./.engine/target/debug/nyacode
 ```
 
 The repository pins its Rust toolchain. See [installation and development](docs/install.md) for prerequisites and installation instructions.
+
+The build prepares a disposable workspace from `engine.lock` and Nyacode-owned source. Provider crates live under `crates/`; engine patches and overlays live under `integration/codex/`. See [engine development](docs/engine.md).
 
 ```sh
 nyacode provider --help

@@ -1,0 +1,1554 @@
+{
+  "entries": [
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-antigravity/BUILD.bazel"
+      },
+      "owner": "provider_workspace",
+      "path": "crates/providers/provider-antigravity/BUILD.bazel",
+      "purpose": "native_provider_integration",
+      "regression_groups": [
+        "native_provider"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "crates/providers/provider-antigravity/BUILD.bazel",
+        "sha256": "3ce7b7da7986152a11a2e4e135b073225a5d823deb52750031c560e9807138f2"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-antigravity/Cargo.toml"
+      },
+      "owner": "provider_workspace",
+      "path": "crates/providers/provider-antigravity/Cargo.toml",
+      "purpose": "native_provider_integration",
+      "regression_groups": [
+        "native_provider"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "crates/providers/provider-antigravity/Cargo.toml",
+        "sha256": "fc56652ea13a66af6b6646c81b4ce1069965efb96fc53df298201536b47aa18b"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-antigravity/src/failure.rs"
+      },
+      "owner": "provider_workspace",
+      "path": "crates/providers/provider-antigravity/src/failure.rs",
+      "purpose": "native_provider_integration",
+      "regression_groups": [
+        "native_provider"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "crates/providers/provider-antigravity/src/failure.rs",
+        "sha256": "006cf1416d120621f24818e15f9faffaa1cf7d686d4f410f89b7058307e56794"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-antigravity/src/lib.rs"
+      },
+      "owner": "provider_workspace",
+      "path": "crates/providers/provider-antigravity/src/lib.rs",
+      "purpose": "native_provider_integration",
+      "regression_groups": [
+        "native_provider"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "crates/providers/provider-antigravity/src/lib.rs",
+        "sha256": "ad1a8043bc39b1d290c5ff8d3e89eb0c761a9cc111b03d33fa24f25e456f49c9"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-antigravity/tests/fixtures/account-failures.json"
+      },
+      "owner": "provider_workspace",
+      "path": "crates/providers/provider-antigravity/tests/fixtures/account-failures.json",
+      "purpose": "native_provider_integration",
+      "regression_groups": [
+        "native_provider"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "crates/providers/provider-antigravity/tests/fixtures/account-failures.json",
+        "sha256": "866f3b0c945964f5bd96bccf810b301a8ead136e315b47b85b7d1a6948c37453"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-api/BUILD.bazel"
+      },
+      "owner": "provider_workspace",
+      "path": "crates/providers/provider-api/BUILD.bazel",
+      "purpose": "native_provider_integration",
+      "regression_groups": [
+        "native_provider"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "crates/providers/provider-api/BUILD.bazel",
+        "sha256": "b04c8691d8c361ffb8d5a1e34c709b3331c4c7f5c38da7f1a8abee6cea0617f4"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-api/Cargo.toml"
+      },
+      "owner": "provider_workspace",
+      "path": "crates/providers/provider-api/Cargo.toml",
+      "purpose": "native_provider_integration",
+      "regression_groups": [
+        "native_provider"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "crates/providers/provider-api/Cargo.toml",
+        "sha256": "5d9d0ee7eabb9ac36663b6285d67a1dd65410f03e1349f140467abd24c12b227"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-api/src/lib.rs"
+      },
+      "owner": "provider_workspace",
+      "path": "crates/providers/provider-api/src/lib.rs",
+      "purpose": "native_provider_integration",
+      "regression_groups": [
+        "native_provider"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "crates/providers/provider-api/src/lib.rs",
+        "sha256": "d9ff38350a06a033ee2f6fecb8a00e61229c8c48cbe6991683ca6cc05983b567"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-api/src/pool.rs"
+      },
+      "owner": "provider_workspace",
+      "path": "crates/providers/provider-api/src/pool.rs",
+      "purpose": "native_provider_integration",
+      "regression_groups": [
+        "native_provider"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "crates/providers/provider-api/src/pool.rs",
+        "sha256": "300e3d655e346f42dc6ca0afb2fd67aec814dd025b21460ea6c2f416f382a01d"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-auth/BUILD.bazel"
+      },
+      "owner": "provider_workspace",
+      "path": "crates/providers/provider-auth/BUILD.bazel",
+      "purpose": "native_provider_integration",
+      "regression_groups": [
+        "native_provider"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "crates/providers/provider-auth/BUILD.bazel",
+        "sha256": "c39882929c8f289d0720b733470493fc4a03ec85b657e1fe926878e6bd662ad3"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-auth/Cargo.toml"
+      },
+      "owner": "provider_workspace",
+      "path": "crates/providers/provider-auth/Cargo.toml",
+      "purpose": "native_provider_integration",
+      "regression_groups": [
+        "native_provider"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "crates/providers/provider-auth/Cargo.toml",
+        "sha256": "108c38180d47564e490f0b20b466ff46c3752251d78425959e4c4a68f5602da7"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-auth/src/accounts.rs"
+      },
+      "owner": "provider_workspace",
+      "path": "crates/providers/provider-auth/src/accounts.rs",
+      "purpose": "native_provider_integration",
+      "regression_groups": [
+        "native_provider"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "crates/providers/provider-auth/src/accounts.rs",
+        "sha256": "c2945dc6b5e308c756a14b7ab7f941b22d89132431567dddb154569b06bb603b"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-auth/src/lib.rs"
+      },
+      "owner": "provider_workspace",
+      "path": "crates/providers/provider-auth/src/lib.rs",
+      "purpose": "native_provider_integration",
+      "regression_groups": [
+        "native_provider"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "crates/providers/provider-auth/src/lib.rs",
+        "sha256": "44eb46ef64c7a2b382f124f3ce89ce91248fd9763fda95e9dd790e4e25058f22"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-auth/src/loopback.rs"
+      },
+      "owner": "provider_workspace",
+      "path": "crates/providers/provider-auth/src/loopback.rs",
+      "purpose": "native_provider_integration",
+      "regression_groups": [
+        "native_provider"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "crates/providers/provider-auth/src/loopback.rs",
+        "sha256": "8a50a550ee06616735d80d89888a0929f9302175ff68a14885f87dc4fbe09008"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-auth/src/oauth.rs"
+      },
+      "owner": "provider_workspace",
+      "path": "crates/providers/provider-auth/src/oauth.rs",
+      "purpose": "native_provider_integration",
+      "regression_groups": [
+        "native_provider"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "crates/providers/provider-auth/src/oauth.rs",
+        "sha256": "499130d71e5b130bb567144c05c7705f81d3b4334e126bf9929c6e216c4d1e2a"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-auth/src/store.rs"
+      },
+      "owner": "provider_workspace",
+      "path": "crates/providers/provider-auth/src/store.rs",
+      "purpose": "native_provider_integration",
+      "regression_groups": [
+        "native_provider"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "crates/providers/provider-auth/src/store.rs",
+        "sha256": "1826804bfc9730d1277721efc62a0d3baf9e68e620306a7f684f073e9b5ffd8e"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-auth/tests/accounts.rs"
+      },
+      "owner": "provider_workspace",
+      "path": "crates/providers/provider-auth/tests/accounts.rs",
+      "purpose": "native_provider_integration",
+      "regression_groups": [
+        "native_provider"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "crates/providers/provider-auth/tests/accounts.rs",
+        "sha256": "8609bf03cc6f1fbf8ae65b38b45cf09bc9a5df48c4db4eb0a403adc6cf8ba0af"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-auth/tests/security.rs"
+      },
+      "owner": "provider_workspace",
+      "path": "crates/providers/provider-auth/tests/security.rs",
+      "purpose": "native_provider_integration",
+      "regression_groups": [
+        "native_provider"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "crates/providers/provider-auth/tests/security.rs",
+        "sha256": "00d9918338e93191961784b8851ae3afa898576b613351694fd1e401fb875098"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-claude/BUILD.bazel"
+      },
+      "owner": "provider_workspace",
+      "path": "crates/providers/provider-claude/BUILD.bazel",
+      "purpose": "native_provider_integration",
+      "regression_groups": [
+        "native_provider"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "crates/providers/provider-claude/BUILD.bazel",
+        "sha256": "316d899c21614800533f657d14a243784a275b7dc17621e300c6c5adcac3812c"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-claude/Cargo.toml"
+      },
+      "owner": "provider_workspace",
+      "path": "crates/providers/provider-claude/Cargo.toml",
+      "purpose": "native_provider_integration",
+      "regression_groups": [
+        "native_provider"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "crates/providers/provider-claude/Cargo.toml",
+        "sha256": "f74155ac7771561ae2b8848f95b045ec81431af8ff7ed45f971d18f69258d2e0"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-claude/src/failure.rs"
+      },
+      "owner": "provider_workspace",
+      "path": "crates/providers/provider-claude/src/failure.rs",
+      "purpose": "native_provider_integration",
+      "regression_groups": [
+        "native_provider"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "crates/providers/provider-claude/src/failure.rs",
+        "sha256": "0cf2939bf687aa5f736ca0b98063a0d7daca97b5668a93e90e8cf18d465d7763"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-claude/src/lib.rs"
+      },
+      "owner": "provider_workspace",
+      "path": "crates/providers/provider-claude/src/lib.rs",
+      "purpose": "native_provider_integration",
+      "regression_groups": [
+        "native_provider"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "crates/providers/provider-claude/src/lib.rs",
+        "sha256": "d8ad6272cd07ec6e27ac82cb0c5898d934bca4e70941fa6a5d0073048703d24a"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-claude/tests/fixtures/account-failures.json"
+      },
+      "owner": "provider_workspace",
+      "path": "crates/providers/provider-claude/tests/fixtures/account-failures.json",
+      "purpose": "native_provider_integration",
+      "regression_groups": [
+        "native_provider"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "crates/providers/provider-claude/tests/fixtures/account-failures.json",
+        "sha256": "a9fb7709bb82d9eeca481df070870784918ceda2c89b4580b46f9bc68874ede7"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-codecs/BUILD.bazel"
+      },
+      "owner": "provider_workspace",
+      "path": "crates/providers/provider-codecs/BUILD.bazel",
+      "purpose": "native_provider_integration",
+      "regression_groups": [
+        "native_provider"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "crates/providers/provider-codecs/BUILD.bazel",
+        "sha256": "fedb6c4026a8478d1180676c2734b051257d489109cd64fcc28fca1bb7581b22"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-codecs/Cargo.toml"
+      },
+      "owner": "provider_workspace",
+      "path": "crates/providers/provider-codecs/Cargo.toml",
+      "purpose": "native_provider_integration",
+      "regression_groups": [
+        "native_provider"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "crates/providers/provider-codecs/Cargo.toml",
+        "sha256": "ba83c10f22ecbf53141326fe3082f9e25710724dec6ce7a91c3907d378c3174f"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-codecs/src/chat.rs"
+      },
+      "owner": "provider_workspace",
+      "path": "crates/providers/provider-codecs/src/chat.rs",
+      "purpose": "native_provider_integration",
+      "regression_groups": [
+        "native_provider"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "crates/providers/provider-codecs/src/chat.rs",
+        "sha256": "94af7170be11f3292a90771aedac50f99b67fca12b20a0b2b7cdd1e05f9a6980"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-codecs/src/google.rs"
+      },
+      "owner": "provider_workspace",
+      "path": "crates/providers/provider-codecs/src/google.rs",
+      "purpose": "native_provider_integration",
+      "regression_groups": [
+        "native_provider"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "crates/providers/provider-codecs/src/google.rs",
+        "sha256": "f3f6d98c625b0088be857363ce72f5b3327d267478652c1f15bca8fdc4b82eda"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-codecs/src/lib.rs"
+      },
+      "owner": "provider_workspace",
+      "path": "crates/providers/provider-codecs/src/lib.rs",
+      "purpose": "native_provider_integration",
+      "regression_groups": [
+        "native_provider"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "crates/providers/provider-codecs/src/lib.rs",
+        "sha256": "2c441763d4cc3dbf8113f73624d4c16d96ce158474d147144b26d3560694ea71"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-codecs/src/messages.rs"
+      },
+      "owner": "provider_workspace",
+      "path": "crates/providers/provider-codecs/src/messages.rs",
+      "purpose": "native_provider_integration",
+      "regression_groups": [
+        "native_provider"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "crates/providers/provider-codecs/src/messages.rs",
+        "sha256": "32d9ec3064e83e3d9fcf08acb8e729b6a73cf53f7bfbb472e8586259a22e0fb7"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-codecs/src/replay.rs"
+      },
+      "owner": "provider_workspace",
+      "path": "crates/providers/provider-codecs/src/replay.rs",
+      "purpose": "native_provider_integration",
+      "regression_groups": [
+        "native_provider"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "crates/providers/provider-codecs/src/replay.rs",
+        "sha256": "e0cff45818189d125eb0fad92116292c9845e668a95335f185a131a1e42870a5"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-codecs/src/responses.rs"
+      },
+      "owner": "provider_workspace",
+      "path": "crates/providers/provider-codecs/src/responses.rs",
+      "purpose": "native_provider_integration",
+      "regression_groups": [
+        "native_provider"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "crates/providers/provider-codecs/src/responses.rs",
+        "sha256": "b8f600468f5cdf150d0dbdc5e5cee8fa3aaff3fbdd94c0d92600fedf39df382b"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-codecs/src/session.rs"
+      },
+      "owner": "provider_workspace",
+      "path": "crates/providers/provider-codecs/src/session.rs",
+      "purpose": "native_provider_integration",
+      "regression_groups": [
+        "native_provider"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "crates/providers/provider-codecs/src/session.rs",
+        "sha256": "c09c2a81bbb87ba8091d65ba7babe2d077406f442197899a5a30c73666c96aec"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-codecs/src/sse.rs"
+      },
+      "owner": "provider_workspace",
+      "path": "crates/providers/provider-codecs/src/sse.rs",
+      "purpose": "native_provider_integration",
+      "regression_groups": [
+        "native_provider"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "crates/providers/provider-codecs/src/sse.rs",
+        "sha256": "c6284ca108ddb437ac2ce968e674a44961a73f08307f422710491b098369c611"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-codecs/src/tests.rs"
+      },
+      "owner": "provider_workspace",
+      "path": "crates/providers/provider-codecs/src/tests.rs",
+      "purpose": "native_provider_integration",
+      "regression_groups": [
+        "native_provider"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "crates/providers/provider-codecs/src/tests.rs",
+        "sha256": "a415938b11ebbbfa280a215ca453a9142b83d9568635409dd7c6aaf026194e1a"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-cursor/BUILD.bazel"
+      },
+      "owner": "provider_workspace",
+      "path": "crates/providers/provider-cursor/BUILD.bazel",
+      "purpose": "native_provider_integration",
+      "regression_groups": [
+        "native_provider"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "crates/providers/provider-cursor/BUILD.bazel",
+        "sha256": "3eaaa03ddb8e7fd197bb67da2022ae887d506c5771a574953d89135ed8b5748f"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-cursor/Cargo.toml"
+      },
+      "owner": "provider_workspace",
+      "path": "crates/providers/provider-cursor/Cargo.toml",
+      "purpose": "native_provider_integration",
+      "regression_groups": [
+        "native_provider"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "crates/providers/provider-cursor/Cargo.toml",
+        "sha256": "1b15f375b86866986ed11c33e3a81f9ba3f92fb66f637917e2cc228b96b75135"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-cursor/README.md"
+      },
+      "owner": "provider_workspace",
+      "path": "crates/providers/provider-cursor/README.md",
+      "purpose": "native_provider_integration",
+      "regression_groups": [
+        "native_provider"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "crates/providers/provider-cursor/README.md",
+        "sha256": "59b49f1e2d9f05b8b8b44ce0bdbad08247b3223b30994acec7dbf450155b1cab"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-cursor/src/auth.rs"
+      },
+      "owner": "provider_workspace",
+      "path": "crates/providers/provider-cursor/src/auth.rs",
+      "purpose": "native_provider_integration",
+      "regression_groups": [
+        "native_provider"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "crates/providers/provider-cursor/src/auth.rs",
+        "sha256": "7cc2b68fd4b110738e84fc06956959b1ee59877732b9e18845626e7c2b9b74dd"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-cursor/src/connect.rs"
+      },
+      "owner": "provider_workspace",
+      "path": "crates/providers/provider-cursor/src/connect.rs",
+      "purpose": "native_provider_integration",
+      "regression_groups": [
+        "native_provider"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "crates/providers/provider-cursor/src/connect.rs",
+        "sha256": "a26292b75090b18dfbd58d4b0d58a5e27ac1bf5adf9465ff25047b0195ef9761"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-cursor/src/failure.rs"
+      },
+      "owner": "provider_workspace",
+      "path": "crates/providers/provider-cursor/src/failure.rs",
+      "purpose": "native_provider_integration",
+      "regression_groups": [
+        "native_provider"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "crates/providers/provider-cursor/src/failure.rs",
+        "sha256": "06250966d47f67b316b78589e6075b7e2e9a82b620db203e2e93ca43c1fcf6f3"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-cursor/src/lib.rs"
+      },
+      "owner": "provider_workspace",
+      "path": "crates/providers/provider-cursor/src/lib.rs",
+      "purpose": "native_provider_integration",
+      "regression_groups": [
+        "native_provider"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "crates/providers/provider-cursor/src/lib.rs",
+        "sha256": "5e6ac2f7dd8c926f4a623f297052438434e3828e5cb2250787d354395b1b658d"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-cursor/src/native.rs"
+      },
+      "owner": "provider_workspace",
+      "path": "crates/providers/provider-cursor/src/native.rs",
+      "purpose": "native_provider_integration",
+      "regression_groups": [
+        "native_provider"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "crates/providers/provider-cursor/src/native.rs",
+        "sha256": "4e2aca875fa2540f39fbcd2909bd001065ef8745750ac15ec5f267cdd7840c2e"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-cursor/src/operations.rs"
+      },
+      "owner": "provider_workspace",
+      "path": "crates/providers/provider-cursor/src/operations.rs",
+      "purpose": "native_provider_integration",
+      "regression_groups": [
+        "native_provider"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "crates/providers/provider-cursor/src/operations.rs",
+        "sha256": "64a75f187bf57e3c6438ed9491583d1f0fe8569916581b917feedc92e2599a78"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-cursor/src/state.rs"
+      },
+      "owner": "provider_workspace",
+      "path": "crates/providers/provider-cursor/src/state.rs",
+      "purpose": "native_provider_integration",
+      "regression_groups": [
+        "native_provider"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "crates/providers/provider-cursor/src/state.rs",
+        "sha256": "4dfc11f2e28f9785a1e79be188933dc7faeecec9acdebfe69de475613c3c9bc9"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-cursor/src/tests.rs"
+      },
+      "owner": "provider_workspace",
+      "path": "crates/providers/provider-cursor/src/tests.rs",
+      "purpose": "native_provider_integration",
+      "regression_groups": [
+        "native_provider"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "crates/providers/provider-cursor/src/tests.rs",
+        "sha256": "6357deb28810fdc70f4647c7610a1f050f825ea3861d5f87c8ef2b25b8b8ce51"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-cursor/src/wire.rs"
+      },
+      "owner": "provider_workspace",
+      "path": "crates/providers/provider-cursor/src/wire.rs",
+      "purpose": "native_provider_integration",
+      "regression_groups": [
+        "native_provider"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "crates/providers/provider-cursor/src/wire.rs",
+        "sha256": "2380768f139c27fccc8f9e33b8ff2b9915f992f1a9c544730b8bf28386ea56a1"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-cursor/tests/fixtures/account-failures.json"
+      },
+      "owner": "provider_workspace",
+      "path": "crates/providers/provider-cursor/tests/fixtures/account-failures.json",
+      "purpose": "native_provider_integration",
+      "regression_groups": [
+        "native_provider"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "crates/providers/provider-cursor/tests/fixtures/account-failures.json",
+        "sha256": "52e6c36a77243cc9ce6f73da6183548c4dc45a21b01e50fbf1254adb47740ed7"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-opencode/BUILD.bazel"
+      },
+      "owner": "provider_workspace",
+      "path": "crates/providers/provider-opencode/BUILD.bazel",
+      "purpose": "native_provider_integration",
+      "regression_groups": [
+        "native_provider"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "crates/providers/provider-opencode/BUILD.bazel",
+        "sha256": "e5bc0327280322d04b0169dc0cb1701bfdfe20bb585e513d566851304fdbed8e"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-opencode/Cargo.toml"
+      },
+      "owner": "provider_workspace",
+      "path": "crates/providers/provider-opencode/Cargo.toml",
+      "purpose": "native_provider_integration",
+      "regression_groups": [
+        "native_provider"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "crates/providers/provider-opencode/Cargo.toml",
+        "sha256": "705a0fc197b0045d159f73ab791e7b531bd9eb7461dfd92fd71925f87d34f01d"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-opencode/LICENSE-pi"
+      },
+      "owner": "provider_workspace",
+      "path": "crates/providers/provider-opencode/LICENSE-pi",
+      "purpose": "native_provider_integration",
+      "regression_groups": [
+        "native_provider"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "crates/providers/provider-opencode/LICENSE-pi",
+        "sha256": "0457f5bcec3b3b211605dfb5d1a49042fd638f3686a410fe099c24a25af13c48"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-opencode/src/catalog.json"
+      },
+      "owner": "provider_workspace",
+      "path": "crates/providers/provider-opencode/src/catalog.json",
+      "purpose": "native_provider_integration",
+      "regression_groups": [
+        "native_provider"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "crates/providers/provider-opencode/src/catalog.json",
+        "sha256": "1864f0c78d42ce47afacffd570b47302563f88190268b2da52b39e7f3af311a8"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-opencode/src/failure.rs"
+      },
+      "owner": "provider_workspace",
+      "path": "crates/providers/provider-opencode/src/failure.rs",
+      "purpose": "native_provider_integration",
+      "regression_groups": [
+        "native_provider"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "crates/providers/provider-opencode/src/failure.rs",
+        "sha256": "f7183cb7278d8cec792b5f01f9fbcf5e55b7353527017ce0d24e4d532ad9e634"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-opencode/src/lib.rs"
+      },
+      "owner": "provider_workspace",
+      "path": "crates/providers/provider-opencode/src/lib.rs",
+      "purpose": "native_provider_integration",
+      "regression_groups": [
+        "native_provider"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "crates/providers/provider-opencode/src/lib.rs",
+        "sha256": "90dfa6e8d64f447f44681b88d0e29ccc0f20ca2e93db728b4f7d4e535452a1ef"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-opencode/tests/fixtures/account-failures.json"
+      },
+      "owner": "provider_workspace",
+      "path": "crates/providers/provider-opencode/tests/fixtures/account-failures.json",
+      "purpose": "native_provider_integration",
+      "regression_groups": [
+        "native_provider"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "crates/providers/provider-opencode/tests/fixtures/account-failures.json",
+        "sha256": "eb6617f457688294a41e8dd6cd5d0b49d0e43ee88170093f66d54b0f02ec354e"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-registry/BUILD.bazel"
+      },
+      "owner": "provider_workspace",
+      "path": "crates/providers/provider-registry/BUILD.bazel",
+      "purpose": "native_provider_integration",
+      "regression_groups": [
+        "native_provider"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "crates/providers/provider-registry/BUILD.bazel",
+        "sha256": "8ffff925e8597dd6d84923c85a9810b5346d76164d3b8922a3c18f7ee0fb33e0"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-registry/Cargo.toml"
+      },
+      "owner": "provider_workspace",
+      "path": "crates/providers/provider-registry/Cargo.toml",
+      "purpose": "native_provider_integration",
+      "regression_groups": [
+        "native_provider"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "crates/providers/provider-registry/Cargo.toml",
+        "sha256": "3192c3759cdbe25f569efc6f94affece863270c860e59ba77c942be120e67166"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-registry/src/lib.rs"
+      },
+      "owner": "provider_workspace",
+      "path": "crates/providers/provider-registry/src/lib.rs",
+      "purpose": "native_provider_integration",
+      "regression_groups": [
+        "native_provider"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "crates/providers/provider-registry/src/lib.rs",
+        "sha256": "dc460734fa2488368819806f590303ff8aaa1a7f082fb433a857a26af52b4f5e"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-registry/src/runtime.rs"
+      },
+      "owner": "provider_workspace",
+      "path": "crates/providers/provider-registry/src/runtime.rs",
+      "purpose": "native_provider_integration",
+      "regression_groups": [
+        "native_provider"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "crates/providers/provider-registry/src/runtime.rs",
+        "sha256": "7f46776d58c003844fb192182c84b116011621ead53e256b5b1813df8c7eeb9e"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-runtime/BUILD.bazel"
+      },
+      "owner": "provider_workspace",
+      "path": "crates/providers/provider-runtime/BUILD.bazel",
+      "purpose": "native_provider_integration",
+      "regression_groups": [
+        "native_provider"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "crates/providers/provider-runtime/BUILD.bazel",
+        "sha256": "f44451202b1801792b481d514c2e8f71f1a9322c3a5d3b9dc6a4d7e7ce2b6e41"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-runtime/Cargo.toml"
+      },
+      "owner": "provider_workspace",
+      "path": "crates/providers/provider-runtime/Cargo.toml",
+      "purpose": "native_provider_integration",
+      "regression_groups": [
+        "native_provider"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "crates/providers/provider-runtime/Cargo.toml",
+        "sha256": "24bd074eb129462c3636e0233dfd03dd893d058e4fac938f5235a15693d611ca"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-runtime/src/driver.rs"
+      },
+      "owner": "provider_workspace",
+      "path": "crates/providers/provider-runtime/src/driver.rs",
+      "purpose": "native_provider_integration",
+      "regression_groups": [
+        "native_provider"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "crates/providers/provider-runtime/src/driver.rs",
+        "sha256": "cbdb0308c505c015010596576fdae50df2e19e5946d44059f1ba3ea191e6ed49"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-runtime/src/lib.rs"
+      },
+      "owner": "provider_workspace",
+      "path": "crates/providers/provider-runtime/src/lib.rs",
+      "purpose": "native_provider_integration",
+      "regression_groups": [
+        "native_provider"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "crates/providers/provider-runtime/src/lib.rs",
+        "sha256": "3ee24b02d0710fa68c0fac0bb65ea25a44be8c38e052aefaece2e81b2554b707"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-runtime/src/pool.rs"
+      },
+      "owner": "provider_workspace",
+      "path": "crates/providers/provider-runtime/src/pool.rs",
+      "purpose": "native_provider_integration",
+      "regression_groups": [
+        "native_provider"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "crates/providers/provider-runtime/src/pool.rs",
+        "sha256": "c69e8b88c84d49f91be73138972fd228ae1e5a8121811f732752bff11d9899c5"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-runtime/src/pooled.rs"
+      },
+      "owner": "provider_workspace",
+      "path": "crates/providers/provider-runtime/src/pooled.rs",
+      "purpose": "native_provider_integration",
+      "regression_groups": [
+        "native_provider"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "crates/providers/provider-runtime/src/pooled.rs",
+        "sha256": "9952b643e3241e66ec1fbdb1eb3f4e4e0852ab9b6e44307f853864c1cf0a2272"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-runtime/src/session.rs"
+      },
+      "owner": "provider_workspace",
+      "path": "crates/providers/provider-runtime/src/session.rs",
+      "purpose": "native_provider_integration",
+      "regression_groups": [
+        "native_provider"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "crates/providers/provider-runtime/src/session.rs",
+        "sha256": "d9611428f12ee92dd7c87cda3d743db75811ecaeebda0bc4e1ff65f084344aa3"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-runtime/src/session_tests.rs"
+      },
+      "owner": "provider_workspace",
+      "path": "crates/providers/provider-runtime/src/session_tests.rs",
+      "purpose": "native_provider_integration",
+      "regression_groups": [
+        "native_provider"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "crates/providers/provider-runtime/src/session_tests.rs",
+        "sha256": "a5459701ec9bff2b54eb62d6edebe70b452e6e30ef093b262893e3a95344ff9d"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-runtime/src/store.rs"
+      },
+      "owner": "provider_workspace",
+      "path": "crates/providers/provider-runtime/src/store.rs",
+      "purpose": "native_provider_integration",
+      "regression_groups": [
+        "native_provider"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "crates/providers/provider-runtime/src/store.rs",
+        "sha256": "8acad10745ffdda1db95dd1695c1aaff37051c559fa3bbda3c3020ea9243aa0c"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-runtime/tests/compatibility_fixtures.rs"
+      },
+      "owner": "provider_workspace",
+      "path": "crates/providers/provider-runtime/tests/compatibility_fixtures.rs",
+      "purpose": "native_provider_integration",
+      "regression_groups": [
+        "native_provider"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "crates/providers/provider-runtime/tests/compatibility_fixtures.rs",
+        "sha256": "e2032fc00175b561767959f20d963934311eec387da67d2323cf51290e1ea826"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-runtime/tests/driver.rs"
+      },
+      "owner": "provider_workspace",
+      "path": "crates/providers/provider-runtime/tests/driver.rs",
+      "purpose": "native_provider_integration",
+      "regression_groups": [
+        "native_provider"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "crates/providers/provider-runtime/tests/driver.rs",
+        "sha256": "8c28d11c638313dcd68b74ce71b50d413cd9b30519b150d90095de5167315292"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-runtime/tests/fixtures/compatibility-v1/README.md"
+      },
+      "owner": "provider_workspace",
+      "path": "crates/providers/provider-runtime/tests/fixtures/compatibility-v1/README.md",
+      "purpose": "native_provider_integration",
+      "regression_groups": [
+        "native_provider"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "crates/providers/provider-runtime/tests/fixtures/compatibility-v1/README.md",
+        "sha256": "0d3773a971aee22721dd7968ef572d761e704717da01720e3b78953273e6ae58"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-runtime/tests/fixtures/compatibility-v1/checkpoint.json"
+      },
+      "owner": "provider_workspace",
+      "path": "crates/providers/provider-runtime/tests/fixtures/compatibility-v1/checkpoint.json",
+      "purpose": "native_provider_integration",
+      "regression_groups": [
+        "native_provider"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "crates/providers/provider-runtime/tests/fixtures/compatibility-v1/checkpoint.json",
+        "sha256": "f77df275c89302c6728b6013dc4c140ddbbc278faf9d7eee74a047df9a4f3200"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-runtime/tests/fixtures/compatibility-v1/credentials.json"
+      },
+      "owner": "provider_workspace",
+      "path": "crates/providers/provider-runtime/tests/fixtures/compatibility-v1/credentials.json",
+      "purpose": "native_provider_integration",
+      "regression_groups": [
+        "native_provider"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "crates/providers/provider-runtime/tests/fixtures/compatibility-v1/credentials.json",
+        "sha256": "2e3cf75e310a0c7dd9dd7e963a346bf2c8e62256752fb850268a4fee07e39621"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-runtime/tests/fixtures/compatibility-v1/execution.json"
+      },
+      "owner": "provider_workspace",
+      "path": "crates/providers/provider-runtime/tests/fixtures/compatibility-v1/execution.json",
+      "purpose": "native_provider_integration",
+      "regression_groups": [
+        "native_provider"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "crates/providers/provider-runtime/tests/fixtures/compatibility-v1/execution.json",
+        "sha256": "a17fcf0a2f50e2d495e4f90ce263410edc183add6c62699a2facbccf60410f74"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-runtime/tests/fixtures/compatibility-v1/identities.json"
+      },
+      "owner": "provider_workspace",
+      "path": "crates/providers/provider-runtime/tests/fixtures/compatibility-v1/identities.json",
+      "purpose": "native_provider_integration",
+      "regression_groups": [
+        "native_provider"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "crates/providers/provider-runtime/tests/fixtures/compatibility-v1/identities.json",
+        "sha256": "142e8fce8fc0cbc363be7b2197558d909c6dae407735a52658aefbc26eab3fbc"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-runtime/tests/fixtures/compatibility-v1/journal.json"
+      },
+      "owner": "provider_workspace",
+      "path": "crates/providers/provider-runtime/tests/fixtures/compatibility-v1/journal.json",
+      "purpose": "native_provider_integration",
+      "regression_groups": [
+        "native_provider"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "crates/providers/provider-runtime/tests/fixtures/compatibility-v1/journal.json",
+        "sha256": "51fb292d93279d76e8bd0508534511869c89bd9b24b5b7cc739dd323ce8bc34c"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-runtime/tests/fixtures/compatibility-v1/selected.json"
+      },
+      "owner": "provider_workspace",
+      "path": "crates/providers/provider-runtime/tests/fixtures/compatibility-v1/selected.json",
+      "purpose": "native_provider_integration",
+      "regression_groups": [
+        "native_provider"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "crates/providers/provider-runtime/tests/fixtures/compatibility-v1/selected.json",
+        "sha256": "a1b0676a6bb0a0f31c32517e504c304c494aa17f68731dcf511948f45396dec5"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-runtime/tests/pool.rs"
+      },
+      "owner": "provider_workspace",
+      "path": "crates/providers/provider-runtime/tests/pool.rs",
+      "purpose": "native_provider_integration",
+      "regression_groups": [
+        "native_provider"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "crates/providers/provider-runtime/tests/pool.rs",
+        "sha256": "8c2fdf9665d11f3012fcf1035164c20e8ff315914ff27518f55ac701c8e78dc2"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-runtime/tests/pooled_turn.rs"
+      },
+      "owner": "provider_workspace",
+      "path": "crates/providers/provider-runtime/tests/pooled_turn.rs",
+      "purpose": "native_provider_integration",
+      "regression_groups": [
+        "native_provider"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "crates/providers/provider-runtime/tests/pooled_turn.rs",
+        "sha256": "844a1aa0eb77d9499aa1af9f2cd11cd1b75f5fc0a248646733643997185db384"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-runtime/tests/security.rs"
+      },
+      "owner": "provider_workspace",
+      "path": "crates/providers/provider-runtime/tests/security.rs",
+      "purpose": "native_provider_integration",
+      "regression_groups": [
+        "native_provider"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "crates/providers/provider-runtime/tests/security.rs",
+        "sha256": "ab3636bf2b9c7824d57d6206efc4b4caa4e2131cf4681552473cee23d5419aa1"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-adapter/BUILD.bazel"
+      },
+      "owner": "provider_workspace",
+      "path": "integration/codex/adapter/BUILD.bazel",
+      "purpose": "chat_integration",
+      "regression_groups": [
+        "chat_integration"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "integration/codex/adapter/BUILD.bazel",
+        "sha256": "564259892bb3309462c7b15cd9baafa55afdf0735ea8fd82a6bd9868d795554e"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-adapter/Cargo.toml"
+      },
+      "owner": "provider_workspace",
+      "path": "integration/codex/adapter/Cargo.toml",
+      "purpose": "chat_integration",
+      "regression_groups": [
+        "chat_integration"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "integration/codex/adapter/Cargo.toml",
+        "sha256": "de276e30602644ae0e7aefa9bba97042b0eaf98f4fd001e1df9849775918c575"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-adapter/src/backend.rs"
+      },
+      "owner": "provider_workspace",
+      "path": "integration/codex/adapter/src/backend.rs",
+      "purpose": "chat_integration",
+      "regression_groups": [
+        "chat_integration"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "integration/codex/adapter/src/backend.rs",
+        "sha256": "de1b8bfef4588b8f4ef3ce1ecbb1592947543ff26a0563733013c660ef289adb"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-adapter/src/host_operations.rs"
+      },
+      "owner": "provider_workspace",
+      "path": "integration/codex/adapter/src/host_operations.rs",
+      "purpose": "chat_integration",
+      "regression_groups": [
+        "chat_integration"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "integration/codex/adapter/src/host_operations.rs",
+        "sha256": "cfc404f11262b89af87f8fd3f87d64dcbfc1d804f60ee9349fbf76c438f81518"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-adapter/src/lib.rs"
+      },
+      "owner": "provider_workspace",
+      "path": "integration/codex/adapter/src/lib.rs",
+      "purpose": "chat_integration",
+      "regression_groups": [
+        "chat_integration"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "integration/codex/adapter/src/lib.rs",
+        "sha256": "bb96d3b0c049ec5e54151a120fdb879509875e82962058f3b3d9b192e10926c2"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-adapter/src/session.rs"
+      },
+      "owner": "provider_workspace",
+      "path": "integration/codex/adapter/src/session.rs",
+      "purpose": "chat_integration",
+      "regression_groups": [
+        "chat_integration"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "integration/codex/adapter/src/session.rs",
+        "sha256": "543d806d44ec111e8bcaabbd8ee35d6371a79b186673b160f244323487151234"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    },
+    {
+      "destination": {
+        "kind": "overlay",
+        "path": "codex-rs/providers/provider-adapter/tests/live_pool.rs"
+      },
+      "owner": "provider_workspace",
+      "path": "integration/codex/adapter/tests/live_pool.rs",
+      "purpose": "chat_integration",
+      "regression_groups": [
+        "chat_integration"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "integration/codex/adapter/tests/live_pool.rs",
+        "sha256": "b38f0fde72f3a5a67dabf3335e9da3caa35a0524c329b231c90a935f427054b3"
+      },
+      "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+    }
+  ],
+  "schema_version": 1,
+  "source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb"
+}

@@ -33,7 +33,7 @@ runs:
         archive_path="${binding_dir}/${archive_name}"
         binding_path="${binding_dir}/${binding_name}"
         checksums_path="${binding_dir}/${checksums_name}"
-        trusted_checksums="${GITHUB_WORKSPACE}/third_party/v8/rusty_v8_${version//./_}_release_manifests.sha256"
+        trusted_checksums="${NYACODE_ENGINE_ROOT:-$GITHUB_WORKSPACE}/third_party/v8/rusty_v8_${version//./_}_release_manifests.sha256"
 
         if command -v sha256sum >/dev/null 2>&1; then
           checksum_command=(sha256sum --check -)

@@ -1,0 +1,110 @@
+{
+  "assembled_tree": "1e13f9936192c086856e062674cdad20ddc174f0",
+  "input_sha256": "ddcaf830be44307f76cf963cacf7c8a5af6174081d633318f6a56721b326d837",
+  "openssl": "3.6.3 (vendored GNU build)",
+  "schema_version": 1,
+  "sdk_dependency_fix": {
+    "audit": "no known vulnerabilities",
+    "package": "ip-address",
+    "test_log_sha256": "30c64dd53c476184ad007f04b18a5666442ca030460191a7f99a7f31de3ec9c2",
+    "typescript_tests_passed": 49,
+    "version": "10.7.4"
+  },
+  "source_changed_after_build_and_tests": false,
+  "source_parity_files": 9712,
+  "source_revision": "55dd53eb1dfafce208e464f75512f2f8512284a6",
+  "target": "x86_64-unknown-linux-gnu",
+  "tests": [
+    {
+      "command": [
+        "/tmp/nyacode-migration-corrected-linked-artifacts/nyacode",
+        "--version"
+      ],
+      "exit_code": 0,
+      "log_sha256": "311f8a5f980e6f4c89ebcaeae9a1c5b32ad0e9918bdf639d8b29f67a80a9a9d1",
+      "name": "cli-version",
+      "state": "passed"
+    },
+    {
+      "command": [
+        "/tmp/nyacode-migration-corrected-linked-artifacts/codex-code-mode-host",
+        "--help"
+      ],
+      "exit_code": 0,
+      "log_sha256": "e940e40f4e1df9e087585a0a4933a01bcbcd17f88b2e006b659f77d8b610fd64",
+      "name": "helper-help",
+      "state": "passed"
+    },
+    {
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--manifest-path",
+        "codex-rs/Cargo.toml",
+        "-p",
+        "codex-secrets",
+        "--",
+        "--test-threads",
+        "2"
+      ],
+      "exit_code": 0,
+      "ignored_count": 0,
+      "log_sha256": "e19b339535369553d2b0dc9f27765fdf2b8d5e9919f951a14f8cf7fb55afa6f2",
+      "name": "codex-secrets",
+      "state": "passed",
+      "test_count": 9
+    },
+    {
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--manifest-path",
+        "codex-rs/Cargo.toml",
+        "-p",
+        "codex-provider-api",
+        "-p",
+        "codex-provider-auth",
+        "-p",
+        "codex-provider-codecs",
+        "-p",
+        "codex-provider-cursor",
+        "-p",
+        "codex-provider-opencode",
+        "-p",
+        "codex-provider-claude",
+        "-p",
+        "codex-provider-antigravity",
+        "-p",
+        "codex-provider-registry",
+        "-p",
+        "codex-provider-runtime",
+        "-p",
+        "codex-provider-adapter",
+        "--",
+        "--test-threads",
+        "2"
+      ],
+      "exit_code": 0,
+      "ignored_count": 2,
+      "log_sha256": "957ff9bb73405e15771f784f6c22747328108944ad7b6ed05093c52407e0cc64",
+      "name": "provider-packages",
+      "state": "passed",
+      "test_count": 174
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--exit-code"
+      ],
+      "exit_code": 0,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "name": "source-diff",
+      "state": "passed"
+    }
+  ],
+  "toolchain": "1.95.0",
+  "upstream_revision": "ce0323f2f2d3b25e82806cd555237da3db4e1897"
+}

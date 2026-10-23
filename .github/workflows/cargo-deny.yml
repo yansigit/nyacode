@@ -6,9 +6,6 @@ on:
 jobs:
   cargo-deny:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./codex-rs
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -22,11 +19,17 @@ jobs:
         with:
           toolchain: 1.95.0
 
+      - name: Prepare pinned engine
+        working-directory: .
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 scripts/engine.py prepare
+
       - name: Run cargo-deny
         uses: EmbarkStudios/cargo-deny-action@3c6349835b2b7b196a839186cb8b78e02f7b5f25 # v2.1.1
         with:
           rust-version: 1.95.0
-          manifest-path: ./codex-rs/Cargo.toml
+          manifest-path: ./.engine/workspace/codex-rs/Cargo.toml
 
       - name: Check for a clean worktree
         if: always() && !cancelled()

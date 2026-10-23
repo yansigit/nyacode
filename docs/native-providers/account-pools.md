@@ -93,10 +93,12 @@ no repeated call or an explicit signature refusal. It requires a dedicated home 
 enabled, authorized pool members:
 
 ```sh
+python3 scripts/engine.py prepare
 CODEX_POOL_ACCEPTANCE_HOME=/private/acceptance-home \
 CODEX_POOL_ACCEPTANCE_PROVIDER=opencode-go \
 CODEX_POOL_ACCEPTANCE_MODEL=glm-5.3 \
-cargo test --manifest-path codex-rs/Cargo.toml -p codex-provider-adapter \
+cargo test --manifest-path .engine/workspace/codex-rs/Cargo.toml \
+  --locked -p codex-provider-adapter \
   --test live_pool -- --ignored --nocapture
 ```
 

@@ -16,6 +16,21 @@ from openai_codex import CodexConfig
 Json = dict[str, Any]
 
 
+def resolve_codex_exec_path(
+    repo_root: Path, explicit_path: str | None, binary_name: str
+) -> str | None:
+    """Prefer CODEX_EXEC_PATH, then an assembled debug build, then a source build."""
+    if explicit_path is not None:
+        return explicit_path
+    for binary in (
+        repo_root / ".engine/target/debug" / binary_name,
+        repo_root / "codex-rs/target/debug" / binary_name,
+    ):
+        if binary.is_file():
+            return str(binary)
+    return None
+
+
 @dataclass(frozen=True)
 class CapturedResponsesRequest:
     """Recorded request sent by app-server to the mock Responses API."""
@@ -227,12 +242,12 @@ class AppServerHarness:
         shutil.rmtree(self.workspace, ignore_errors=True)
 
     def app_server_config(self) -> CodexConfig:
-        """Prefer the CI binary, then a local debug build, then the installed runtime."""
+        """Prefer an explicit binary, then assembled/source debug builds, then installed runtime."""
         binary_name = "codex.exe" if os.name == "nt" else "codex"
-        debug_binary = Path(__file__).resolve().parents[3] / "codex-rs/target/debug" / binary_name
-        codex_bin = os.environ.get("CODEX_EXEC_PATH")
-        if codex_bin is None and debug_binary.is_file():
-            codex_bin = str(debug_binary)
+        repo_root = Path(__file__).resolve().parents[3]
+        codex_bin = resolve_codex_exec_path(
+            repo_root, os.environ.get("CODEX_EXEC_PATH"), binary_name
+        )
         return CodexConfig(
             codex_bin=codex_bin,
             cwd=str(self.workspace),

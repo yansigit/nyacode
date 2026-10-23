@@ -1,0 +1,19 @@
+{
+  "assembled_git_tree": "add2821c87d5895a22ed8e2f0778f24b5ee0f6c7",
+  "assembly_inputs": "inventory/baseline-assembly-inputs.json",
+  "complete_diff_sha256": "1a33b41ff0ad4d8be773cd75360d938121af2d334835bbd8c186a225556bac53",
+  "coordinator_lock_source": "product baseline codex-rs/Cargo.lock",
+  "expected_paths": 9712,
+  "extra_paths": 0,
+  "hash_or_mode_mismatches": 0,
+  "overlays_applied": 434,
+  "passed": true,
+  "pristine_git_tree": "4e648d23f0d36f589e1945ddd3daca53ab3dd8bc",
+  "product_baseline": "b8bbac5e2ad84168eee5a8b08564a910e8006564",
+  "provider_source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb",
+  "qualification": "source parity; linked build, SDKs, and platform packages qualify separately",
+  "reconstructed_paths": 9712,
+  "schema_version": 1,
+  "strict_patches_applied": 9,
+  "upstream_base": "ce0323f2f2d3b25e82806cd555237da3db4e1897"
+}

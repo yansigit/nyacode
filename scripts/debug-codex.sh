@@ -6,5 +6,5 @@
 
 set -euo pipefail
 
-CODEX_RS_DIR=$(realpath "$(dirname "$0")/../codex-rs")
-(cd "$CODEX_RS_DIR" && cargo run --quiet --bin codex -- "$@")
+REPO_ROOT=$(cd "$(dirname "$0")/.." && pwd)
+exec python3 "$REPO_ROOT/scripts/engine_run.py" cargo run --quiet --bin nyacode -- "$@"

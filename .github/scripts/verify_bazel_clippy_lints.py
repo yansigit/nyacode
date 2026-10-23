@@ -4,12 +4,17 @@ from __future__ import annotations
 
 import argparse
 import re
+import os
 import sys
 import tomllib
 from pathlib import Path
 
 
-ROOT = Path(__file__).resolve().parents[2]
+ROOT = Path(
+    os.environ.get(
+        "CODEX_REPO_ROOT", Path(__file__).resolve().parents[2] / ".engine/workspace"
+    )
+)
 DEFAULT_CARGO_TOML = ROOT / "codex-rs" / "Cargo.toml"
 DEFAULT_BAZELRC = ROOT / ".bazelrc"
 BAZEL_CLIPPY_FLAG_PREFIX = "build:clippy --@rules_rust//rust/settings:clippy_flag="

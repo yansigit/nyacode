@@ -1,0 +1,46 @@
+--- a/BUILD.bazel
++++ b/BUILD.bazel
+@@ -27,7 +27,7 @@
+ })
+ 
+ BORINGSSL_CONLYOPTS = select({
+-    "@rules_cc//cc/compiler:msvc-cl": ["/std:c11"],
++    ":uses_msvc_driver": ["/std:c11"],
+     "//conditions:default": ["-std=c11"],
+ })
+ 
+@@ -55,6 +55,16 @@
+     name = "is_windows_msvc",
+     constraint_values = ["@platforms//os:windows"],
+     flag_values = {"@rules_cc//cc/compiler:compiler": "msvc-cl"},
++)
++
++# clang-cl uses the same MSVC command-line syntax and unoptimized entropy
++# compilation as cl.exe. Keep GCC-only flags off both MSVC drivers.
++selects.config_setting_group(
++    name = "uses_msvc_driver",
++    match_any = [
++        "@rules_cc//cc/compiler:clang-cl",
++        "@rules_cc//cc/compiler:msvc-cl",
++    ],
+ )
+ 
+ selects.config_setting_group(
+@@ -192,7 +202,7 @@
+ })
+ 
+ TEST_COPTS = COMMON_COPTS + select({
+-    "@rules_cc//cc/compiler:msvc-cl": [],
++    ":uses_msvc_driver": [],
+     "//conditions:default": [
+         "-Wno-deprecated-declarations",
+         "-Wno-unused-result",
+@@ -212,7 +222,7 @@
+     hdrs = glob(["third_party/jitterentropy/jitterentropy-library/**/*.h"]),
+     conlyopts = BORINGSSL_CONLYOPTS,
+     copts = select({
+-        "@rules_cc//cc/compiler:msvc-cl": [
++        ":uses_msvc_driver": [
+             "/Od",
+             "/W4",
+             "/DYNAMICBASE",

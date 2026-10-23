@@ -2,6 +2,7 @@
 
 import hashlib
 import io
+import json
 import os
 import re
 import shlex
@@ -75,6 +76,49 @@ class PackageSelectionTests(unittest.TestCase):
             verifier.select_packages(self.root, {"docs/usage.md"}, self.packages), []
         )
 
+    def test_owned_sources_and_patches_select_assembled_consumers(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            manifest = root / "integration/codex/assembly.json"
+            manifest.parent.mkdir(parents=True)
+            manifest.write_text(
+                json.dumps(
+                    {
+                        "overlays": [
+                            {
+                                "source": "crates/providers/leaf/src/lib.rs",
+                                "destination": "codex-rs/leaf/src/lib.rs",
+                            }
+                        ],
+                        "patches": [
+                            {
+                                "path": "integration/codex/patches/leaf.patch",
+                                "paths": ["codex-rs/leaf/src/lib.rs"],
+                            }
+                        ],
+                    }
+                )
+            )
+            for source in (
+                "crates/providers/leaf/src/lib.rs",
+                "integration/codex/patches/leaf.patch",
+            ):
+                changed = verifier.assembly_changes(root, {source})
+                self.assertEqual(
+                    verifier.select_packages(self.root, changed, self.packages),
+                    ["cli", "core", "leaf"],
+                )
+
+    def test_undeclared_owned_source_selects_all_consumers(self):
+        self.assertEqual(
+            len(
+                verifier.select_packages(
+                    self.root, {"crates/new/src/lib.rs"}, self.packages
+                )
+            ),
+            4,
+        )
+
     def test_missing_base_fails_instead_of_claiming_no_tests(self):
         with (
             patch.object(
@@ -104,6 +148,40 @@ class PackageSelectionTests(unittest.TestCase):
 
 
 class MountTests(unittest.TestCase):
+    def test_container_build_uses_the_pinned_rust_toolchain(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            log = Path(temporary) / "arguments.jsonl"
+            engine = Path(temporary) / "container-engine"
+            engine.write_text(
+                f"#!{sys.executable}\n"
+                "import json, sys\n"
+                f"with open({str(log)!r}, 'a') as stream:\n"
+                "    stream.write(json.dumps(sys.argv[1:]) + '\\n')\n"
+            )
+            engine.chmod(0o755)
+            subprocess.run(
+                [
+                    "bash",
+                    str(verifier.ROOT / "scripts/verify-container.sh"),
+                    "--engine",
+                    str(engine),
+                    "run",
+                    "--",
+                    "true",
+                ],
+                check=True,
+                capture_output=True,
+                text=True,
+            )
+            calls = [json.loads(line) for line in log.read_text().splitlines()]
+            build = next(call for call in calls if call[0] == "build")
+            toolchain = json.loads((verifier.ROOT / "engine.lock").read_text())[
+                "toolchain"
+            ]
+            self.assertEqual(
+                build[build.index("--build-arg") + 1], f"RUST_VERSION={toolchain}"
+            )
+
     def check_mount(self, source):
         script = (verifier.ROOT / "scripts/verify-container.sh").read_text()
         function = re.search(

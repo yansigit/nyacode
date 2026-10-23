@@ -172,17 +172,73 @@ def load_metadata(metadata_path: Path | None) -> dict[str, Any]:
         [
             "cargo",
             "metadata",
+            "--locked",
             "--manifest-path",
             str(CARGO_MANIFEST),
             "--format-version",
             "1",
         ],
-        cwd=ROOT,
+        cwd=CARGO_MANIFEST.parent,
         check=True,
         capture_output=True,
         text=True,
     )
     return json.loads(result.stdout)
+
+
+def validate_assembly_ownership(root: Path, assembly: dict[str, Any]) -> list[str]:
+    """Every engine delta needs an explicit owner and an executable regression group."""
+    errors: list[str] = []
+    inventory = json.loads((root / assembly["inventory"]).read_text())
+    contract = json.loads((root / assembly["regression_manifest"]).read_text())
+    groups = contract["product_test_groups"]
+    entries = inventory["entries"]
+    by_path = {entry["path"]: entry for entry in entries}
+    if len(by_path) != len(entries):
+        errors.append("downstream inventory contains duplicate paths")
+    declared = {"codex-rs/Cargo.lock"}
+    declared.update(assembly["deletes"])
+    declared.update(item["destination"] for item in assembly["overlays"])
+    for patch in assembly["patches"]:
+        declared.update(patch["paths"])
+    # A new owned module must not silently disappear from the linked product.
+    sources = {item.get("source") for item in assembly["overlays"]}
+    owned_roots = [
+        root / "crates/chatgpt-chat",
+        root / "integration/codex/adapter",
+        root / "integration/codex/overlays",
+        *(root / "crates/providers").glob("provider-*"),
+    ]
+    for owned in owned_roots:
+        for path in owned.rglob("*"):
+            if any(part in {"target", "__pycache__", ".git"} for part in path.parts):
+                continue
+            if (path.is_file() or path.is_symlink()) and path.relative_to(
+                root
+            ).as_posix() not in sources:
+                errors.append(
+                    f"owned engine input has no assembly mapping: {path.relative_to(root)}"
+                )
+    if declared != set(by_path):
+        errors.append(
+            f"assembly ownership differs from inventory: undeclared={sorted(declared - set(by_path))}, "
+            f"unused={sorted(set(by_path) - declared)}"
+        )
+    for path, entry in by_path.items():
+        if not entry.get("owner") or not entry.get("purpose"):
+            errors.append(f"engine modification needs an owner and purpose: {path}")
+        regressions = entry.get("regression_groups", [])
+        if not regressions:
+            errors.append(f"engine modification needs a regression group: {path}")
+        for name in regressions:
+            group = groups.get(name)
+            if (
+                not group
+                or not group.get("checks")
+                or group.get("minimum_tests", 0) < 1
+            ):
+                errors.append(f"unknown or unguarded regression group {name!r}: {path}")
+    return errors
 
 
 def validate(
@@ -435,6 +491,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--metadata-json", type=Path, help="use saved Cargo metadata")
     parser.add_argument("--manifest", type=Path, default=MANIFEST)
+    parser.add_argument("--repo", type=Path, help="use an existing engine workspace")
     parser.add_argument(
         "--list-test-packages",
         action="store_true",
@@ -448,12 +505,25 @@ def main() -> int:
             print(package)
         return 0
 
+    root = args.repo.resolve() if args.repo else ROOT
+    if args.repo is None and (ROOT / "scripts/engine.py").is_file():
+        from engine import prepare
+
+        root = prepare(root=ROOT)
+    global CARGO_MANIFEST
+    CARGO_MANIFEST = root / "codex-rs/Cargo.toml"
+
     try:
         metadata = load_metadata(args.metadata_json)
     except (OSError, subprocess.CalledProcessError, json.JSONDecodeError) as error:
         print(f"unable to load Cargo metadata: {error}", file=sys.stderr)
         return 2
-    errors = validate(metadata, manifest, ROOT)
+    errors = validate(metadata, manifest, root)
+    assembly_path = ROOT / "integration/codex/assembly.json"
+    if assembly_path.is_file():
+        assembly = json.loads(assembly_path.read_text())
+        if "inventory" in assembly:
+            errors.extend(validate_assembly_ownership(ROOT, assembly))
     if errors:
         print("native provider architecture check failed:", file=sys.stderr)
         for error in errors:

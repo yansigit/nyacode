@@ -1,0 +1,182 @@
+diff --git a/runtimes/mingw/BUILD.bazel b/runtimes/mingw/BUILD.bazel
+index 7b1f831..29505a8 100644
+--- a/runtimes/mingw/BUILD.bazel
++++ b/runtimes/mingw/BUILD.bazel
+@@ -330,14 +330,42 @@ stub_library(
+     name = "stdc++",
+ )
+ 
++# Clang may inject -lssp and -lssp_nonshared for windows-gnu links.
++# Provide compatibility archives in the MinGW runtime search directory.
++stub_library(
++    name = "ssp",
++)
++
++stub_library(
++    name = "ssp_nonshared",
++)
++
++# Prebuilt MSVC archives can carry /DEFAULTLIB:libcmt.lib and
++# /DEFAULTLIB:oldnames.lib directives. Provide MinGW-compatible stand-ins so
++# lld can satisfy the lookup under windows-gnullvm.
++stub_library(
++    name = "libcmt",
++)
++
++copy_file(
++    name = "oldnames",
++    src = ":moldname",
++    out = "liboldnames.a",
++    visibility = ["//visibility:public"],
++)
++
+ copy_to_directory(
+     name = "mingw_crt_library_search_directory",
+     srcs = [
++        ":libcmt",
+         ":m",
+         ":mingw32",
+         ":mingwex",
+         ":moldname",
++        ":oldnames",
+         ":pthread",
++        ":ssp",
++        ":ssp_nonshared",
+         ":stdc++",
+         ":uuid",
+         ":winpthread",
+diff --git a/runtimes/mingw/crt_sources.bzl b/runtimes/mingw/crt_sources.bzl
+index cace1e5..68b17bc 100644
+--- a/runtimes/mingw/crt_sources.bzl
++++ b/runtimes/mingw/crt_sources.bzl
+@@ -437,6 +437,7 @@ MINGWEX_TEXTUAL_SRCS = [
+ ]
+ 
+ MINGWEX_ARM64_SRCS = [
++    "math/arm-common/powl.c",
+     "math/sincos.c",
+     "math/sincosf.c",
+     "math/arm-common/sincosl.c",
+diff --git a/runtimes/msvc/BUILD.bazel b/runtimes/msvc/BUILD.bazel
+index 87b5110..86155db 100644
+--- a/runtimes/msvc/BUILD.bazel
++++ b/runtimes/msvc/BUILD.bazel
+@@ -6,6 +6,7 @@ package(default_visibility = ["//visibility:public"])
+ 
+ _MSVC_DYNAMIC_RUNTIME_LIBRARIES = [
+     "iso_stdio_wide_specifiers.lib",
++    "legacy_stdio_definitions.lib",
+     "msvcprt.lib",
+     "msvcrt.lib",
+     "oldnames.lib",
+@@ -14,6 +15,7 @@ _MSVC_DYNAMIC_RUNTIME_LIBRARIES = [
+ 
+ _MSVC_STATIC_RUNTIME_LIBRARIES = [
+     "iso_stdio_wide_specifiers.lib",
++    "legacy_stdio_definitions.lib",
+     "libcmt.lib",
+     "libcpmt.lib",
+     "libvcruntime.lib",
+diff --git a/toolchain/BUILD.bazel b/toolchain/BUILD.bazel
+index 1b70ba7..9ad60f5 100644
+--- a/toolchain/BUILD.bazel
++++ b/toolchain/BUILD.bazel
+@@ -1,4 +1,5 @@
+ load("@bazel_lib//:bzl_library.bzl", "bzl_library")
++load("@bazel_skylib//lib:selects.bzl", "selects")
+ load("@bazel_skylib//rules:common_settings.bzl", "string_flag", "string_setting")
+ load("@rules_cc//cc/toolchains:actions.bzl", "cc_action_type_set")
+ load("@rules_cc//cc/toolchains:artifacts.bzl", "cc_artifact_name_pattern")
+@@ -65,6 +66,15 @@ config_setting(
+     visibility = ["//visibility:public"],
+ )
+ 
++selects.config_setting_group(
++    name = "runtimes_all_with_rusty_v8_custom_libcxx",
++    match_all = [
++        ":runtimes_all",
++        "@@//third_party/v8:use_rusty_v8_custom_libcxx",
++    ],
++    visibility = ["//visibility:public"],
++)
++
+ config_setting(
+     name = "runtimes_stage1",
+     flag_values = {
+@@ -163,6 +173,14 @@ cc_args_list(
+ 
+ cc_args_list(
+     name = "cxxstdlib_headers_include_search_paths",
++    args = select({
++        "@@//third_party/v8:use_rusty_v8_custom_libcxx": [],
++        "//conditions:default": [":default_cxxstdlib_headers_include_search_paths"],
++    }),
++)
++
++cc_args_list(
++    name = "default_cxxstdlib_headers_include_search_paths",
+     args = select({
+         "@platforms//os:linux": ["//toolchain/args:cxxstdlib_headers_include_search_paths"],
+         "@platforms//os:windows": ["//toolchain/args/windows:cxxstdlib_headers_include_search_paths"],
+diff --git a/toolchain/args/windows/mingw/BUILD.bazel b/toolchain/args/windows/mingw/BUILD.bazel
+index ef26cc8..9a24c3c 100644
+--- a/toolchain/args/windows/mingw/BUILD.bazel
++++ b/toolchain/args/windows/mingw/BUILD.bazel
+@@ -44,6 +44,7 @@ cc_args(
+     args = [
+         "-L{mingw_import_library_search_path}",
+         "-L{mingw_crt_library_search_path}",
++        "-lmingwex",
+     ],
+     data = [
+         "//runtimes/mingw:mingw_crt_library_search_directory",
+diff --git a/toolchain/llvm/llvm.bzl b/toolchain/llvm/llvm.bzl
+index 3009b15..62d0dc6 100644
+--- a/toolchain/llvm/llvm.bzl
++++ b/toolchain/llvm/llvm.bzl
+@@ -407,18 +407,23 @@ def declare_llvm_targets(*, suffix = ""):
+         ],
+     )
+ 
++    default_cxxstdlib_target_headers = select({
++        "@llvm//toolchain:runtimes_all_with_rusty_v8_custom_libcxx": [],
++        "@llvm//toolchain:runtimes_stage1": [],
++        "@llvm//toolchain:runtimes_stage1_hosted": [],
++        "@llvm//toolchain:runtimes_none": [],
++        "//conditions:default": [
++            "@llvm//runtimes/cxxstdlib:headers_include_search_directory",
++            "@llvm//runtimes/cxxstdlib:abi_headers_include_search_directory",
++        ],
++    })
++
+     # This must match //toolchain:linux_toolchain_args
+     include_path(
+         name = "linux_target_headers",
+         srcs = [
+             ":builtin_resource_include_dir",
+-        ] + select({
+-            "@llvm//toolchain:runtimes_all": [
+-                "@llvm//runtimes/cxxstdlib:headers_include_search_directory",
+-                "@llvm//runtimes/cxxstdlib:abi_headers_include_search_directory",
+-            ],
+-            "//conditions:default": [],
+-        }) + [
++        ] + default_cxxstdlib_target_headers + [
+             "@kernel_headers//:kernel_headers_directory",
+             "@llvm//sanitizers:sanitizers_headers_include_search_directory",
+         ] + select({
+@@ -436,13 +441,7 @@ def declare_llvm_targets(*, suffix = ""):
+         name = "windows_target_headers",
+         srcs = [
+             ":builtin_resource_include_dir",
+-        ] + select({
+-            "@llvm//toolchain:runtimes_all": [
+-                "@llvm//runtimes/cxxstdlib:headers_include_search_directory",
+-                "@llvm//runtimes/cxxstdlib:abi_headers_include_search_directory",
+-            ],
+-            "//conditions:default": [],
+-        }) + [
++        ] + default_cxxstdlib_target_headers + [
+             "@mingw//:mingw_generated_headers_crt_directory",
+             "@mingw//:mingw_w64_headers_include_directory",
+             "@mingw//:mingw_w64_headers_crt_directory",

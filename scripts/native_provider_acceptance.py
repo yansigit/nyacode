@@ -2,8 +2,8 @@
 """Run bounded live native-provider checks against an existing CODEX_HOME.
 
 Examples (use a dedicated CODEX_HOME with an already selected account):
-  python scripts/native_provider_acceptance.py --codex "$PWD/codex-rs/target/debug/codex" --codex-home /path/to/codex-home --provider claude --check lifecycle
-  python scripts/native_provider_acceptance.py --codex "$PWD/codex-rs/target/debug/codex" --codex-home /path/to/codex-home --provider opencode-go --check permissions
+  python scripts/native_provider_acceptance.py --codex "$PWD/.engine/target/debug/codex" --codex-home /path/to/codex-home --provider claude --check lifecycle
+  python scripts/native_provider_acceptance.py --codex "$PWD/.engine/target/debug/codex" --codex-home /path/to/codex-home --provider opencode-go --check permissions
 
 The script never logs in, changes accounts, prints protocol payloads, or dumps
 provider logs. It creates only uniquely named temporary workspaces and files.
@@ -460,7 +460,7 @@ def parse_args() -> argparse.Namespace:
         description="Run bounded live native-provider checks against an existing CODEX_HOME.",
         epilog=(
             "Example: python scripts/native_provider_acceptance.py --codex "
-            "$(pwd)/codex-rs/target/debug/codex --codex-home /path/to/codex-home "
+            "$(pwd)/.engine/target/debug/codex --codex-home /path/to/codex-home "
             "--provider claude --check lifecycle\n"
             "The selected account is used as-is; this script never logs in, "
             "changes accounts, or prints protocol/provider logs."

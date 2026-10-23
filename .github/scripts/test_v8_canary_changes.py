@@ -7,6 +7,7 @@ from v8_canary_changes import changed_files
 from v8_canary_changes import canary_required
 from v8_canary_changes import merge_base
 from v8_canary_changes import resolved_v8_version
+from v8_canary_changes import v8_version_at_revision
 from v8_canary_changes import windows_source_required
 
 
@@ -79,6 +80,41 @@ version = "149.2.0"
         paths = {".github/scripts/run_v8_bazel_build.py"}
         self.assertTrue(canary_required(paths, "152.2.0", "152.2.0"))
         self.assertFalse(windows_source_required(paths, "152.2.0", "152.2.0"))
+
+    def test_owned_v8_paths_trigger_canary_and_security_source_builds(self) -> None:
+        for path in (
+            "engine.lock",
+            "integration/codex/overlays/patches/v8_array_sort_elements_kind.patch",
+        ):
+            with self.subTest(path=path):
+                self.assertTrue(canary_required({path}, "152.2.0", "152.2.0"))
+                self.assertTrue(windows_source_required({path}, "152.2.0", "152.2.0"))
+        self.assertTrue(
+            canary_required({"integration/codex/Cargo.lock"}, "152.2.0", "152.2.0")
+        )
+
+    def test_version_lookup_spans_source_tree_removal(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            self.run_git(root, "init", "--initial-branch=main")
+            self.run_git(root, "config", "user.name", "Test User")
+            self.run_git(root, "config", "user.email", "test@example.com")
+            (root / "codex-rs").mkdir()
+            self.write_and_commit(
+                root,
+                '[[package]]\nname = "v8"\nversion = "149.2.0"\n',
+                "codex-rs/Cargo.lock",
+            )
+            baseline = self.run_git(root, "rev-parse", "HEAD")
+            self.run_git(root, "rm", "codex-rs/Cargo.lock")
+            (root / "integration/codex").mkdir(parents=True)
+            self.write_and_commit(
+                root,
+                '[[package]]\nname = "v8"\nversion = "152.2.0"\n',
+                "integration/codex/Cargo.lock",
+            )
+            self.assertEqual(v8_version_at_revision(baseline, root=root), "149.2.0")
+            self.assertEqual(v8_version_at_revision("HEAD", root=root), "152.2.0")
 
     def test_changed_files_excludes_changes_made_only_on_base_branch(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:

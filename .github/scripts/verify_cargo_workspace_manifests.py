@@ -11,11 +11,16 @@ Checks:
 
 from __future__ import annotations
 
+import os
 import sys
 import tomllib
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[2]
+ROOT = Path(
+    os.environ.get(
+        "CODEX_REPO_ROOT", Path(__file__).resolve().parents[2] / ".engine/workspace"
+    )
+)
 CARGO_RS_ROOT = ROOT / "codex-rs"
 WORKSPACE_PACKAGE_FIELDS = ("version", "edition", "license")
 TOP_LEVEL_NAME_EXCEPTIONS = {

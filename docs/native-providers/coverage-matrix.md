@@ -34,16 +34,15 @@ cover the new boundary.
 The detailed counts and receipts below are the published baseline. They are
 kept for comparison and do not substitute for the fresh refactor results above.
 
-Implementation and regression entry points: [native core routing](../../codex-rs/core/src/native_provider.rs),
-[adapter tests](../../codex-rs/providers/provider-adapter/src/session.rs),
-[host-tool translation](../../codex-rs/providers/provider-adapter/src/host_operations.rs),
-[shared driver tests](../../codex-rs/providers/provider-runtime/tests/driver.rs),
-[auth security tests](../../codex-rs/providers/provider-auth/tests/security.rs),
-[codec tests](../../codex-rs/providers/provider-codecs/src/tests.rs),
-[Cursor transport tests](../../codex-rs/providers/provider-cursor/src/tests.rs),
-[native account app-server tests](../../codex-rs/app-server/tests/suite/v2/native_account.rs),
-[thread inheritance tests](../../codex-rs/app-server/src/request_processors/thread_processor_tests.rs),
-and [schema fixture tests](../../codex-rs/app-server-protocol/src/schema_fixtures_tests.rs).
+Implementation and regression entry points: [native core routing](../../integration/codex/overlays/codex-rs/core/src/native_provider.rs),
+[adapter tests](../../integration/codex/adapter/src/session.rs),
+[host-tool translation](../../integration/codex/adapter/src/host_operations.rs),
+[shared driver tests](../../crates/providers/provider-runtime/tests/driver.rs),
+[auth security tests](../../crates/providers/provider-auth/tests/security.rs),
+[codec tests](../../crates/providers/provider-codecs/src/tests.rs),
+[Cursor transport tests](../../crates/providers/provider-cursor/src/tests.rs),
+[native account app-server tests](../../integration/codex/overlays/codex-rs/app-server/tests/suite/v2/native_account.rs),
+thread inheritance tests, and schema fixture tests.
 
 | Area                                     | Local and integrated evidence                                                                                                                                                                                                                                                                                                    | Live evidence                                                                                                                                                                                                                                                                                                                      | Remaining limits                                                                                                                                                                                 |
 | ---------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -107,6 +106,6 @@ and [schema fixture tests](../../codex-rs/app-server-protocol/src/schema_fixture
   the default sandbox.
 - Cursor uses a bounded 500 ms upstream drain after `turnEnded`; checkpoint
   metadata arriving later can be missed. See the
-  [protocol assumption](../../codex-rs/providers/provider-cursor/README.md).
+  [protocol assumption](../../crates/providers/provider-cursor/README.md).
 - The implemented paths have passed the listed local and live acceptance
   checks. Future model/platform combinations require their own validation.

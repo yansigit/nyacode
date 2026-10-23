@@ -11,6 +11,7 @@ import re
 import subprocess
 import sys
 import time
+import tomllib
 from pathlib import Path
 from typing import Any
 
@@ -27,10 +28,22 @@ def run_checks(root: Path, artifact_dir: Path) -> list[dict[str, Any]]:
     stages: list[dict[str, Any]] = []
     env = os.environ.copy()
     env["CARGO_TERM_COLOR"] = "never"
+    env["CODEX_REPO_ROOT"] = str(root)
+    env["NYACODE_ENGINE_ROOT"] = str(root)
+    env["RUSTUP_TOOLCHAIN"] = tomllib.loads(
+        (root / "codex-rs/rust-toolchain.toml").read_text()
+    )["toolchain"]["channel"]
     # Match the repository's `just test` stack size for large host test futures.
     env.setdefault("RUST_MIN_STACK", "8388608")
     env.setdefault("CARGO_BUILD_JOBS", "2")
     env["CARGO_INCREMENTAL"] = "0"
+    target_dir = Path(env.get("CARGO_TARGET_DIR", root / "codex-rs/target"))
+    if not target_dir.is_absolute():
+        target_dir = root / target_dir
+    binary_dir = target_dir / env.get("CARGO_BUILD_TARGET", "") / "debug"
+    suffix = ".exe" if sys.platform == "win32" else ""
+    env["NYACODE_TEST_BINARY"] = str(binary_dir / f"nyacode{suffix}")
+    env["CODEX_EXEC_PATH"] = str(binary_dir / f"codex{suffix}")
     revision = subprocess.run(
         ["git", "rev-parse", "HEAD"],
         cwd=root,
@@ -51,6 +64,8 @@ def run_checks(root: Path, artifact_dir: Path) -> list[dict[str, Any]]:
     def run_stage(
         name: str, command: list[str], minimum_tests: int | None = None
     ) -> None:
+        if command[0] == "cargo" and command[1] != "fmt" and "--locked" not in command:
+            command = command[:2] + ["--locked"] + command[2:]
         print(f"[native-provider-checks] starting {name}", flush=True)
         started = time.monotonic()
         log_path = artifact_dir / f"{len(stages) + 1:02d}-{name}.log"
@@ -79,6 +94,9 @@ def run_checks(root: Path, artifact_dir: Path) -> list[dict[str, Any]]:
                     r"test result: [^\n]*?(\d+) passed;", log_contents
                 )
             )
+            if match := re.search(r"Ran (\d+) tests? in", log_contents):
+                skipped = re.search(r"skipped=(\d+)", log_contents)
+                test_count += int(match[1]) - (int(skipped[1]) if skipped else 0)
             if return_code == 0 and test_count < minimum_tests:
                 with log_path.open("a") as log:
                     log.write(
@@ -220,6 +238,7 @@ def run_checks(root: Path, artifact_dir: Path) -> list[dict[str, Any]]:
             "-p",
             "test_nyacode_branding.py",
         ],
+        minimum_tests=7,
     )
 
     adapter = manifest["adapter_package"]
@@ -290,10 +309,15 @@ def run_checks(root: Path, artifact_dir: Path) -> list[dict[str, Any]]:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--repo", type=Path, default=ROOT)
+    parser.add_argument("--repo", type=Path, help="use an existing engine workspace")
     parser.add_argument("--artifact-dir", type=Path, required=True)
     args = parser.parse_args()
-    stages = run_checks(args.repo.resolve(), args.artifact_dir.resolve())
+    root = args.repo.resolve() if args.repo else ROOT
+    if args.repo is None and (ROOT / "scripts/engine.py").is_file():
+        from engine import prepare
+
+        root = prepare(root=ROOT)
+    stages = run_checks(root, args.artifact_dir.resolve())
     failures = [stage for stage in stages if stage["exit_code"] != 0]
     if failures:
         print(

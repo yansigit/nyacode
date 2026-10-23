@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import gzip
 import hashlib
+import os
 import re
 import shutil
 import subprocess
@@ -21,7 +22,11 @@ from rusty_v8_module_bazel import (
 )
 
 
-ROOT = Path(__file__).resolve().parents[2]
+ROOT = Path(
+    os.environ.get(
+        "NYACODE_ENGINE_ROOT", Path(__file__).resolve().parents[2] / ".engine/workspace"
+    )
+)
 MODULE_BAZEL = ROOT / "MODULE.bazel"
 RUSTY_V8_CHECKSUMS_DIR = ROOT / "third_party" / "v8"
 RELEASE_ARTIFACT_PROFILE = "release"

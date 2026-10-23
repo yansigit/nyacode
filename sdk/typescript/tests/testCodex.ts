@@ -1,11 +1,22 @@
+import { existsSync } from "node:fs";
 import path from "node:path";
 
 import { Codex } from "../src/codex";
 import type { CodexConfigObject } from "../src/codexOptions";
 
+const repoRoot = path.resolve(process.cwd(), "..", "..");
+const engineExecPath = path.join(
+  repoRoot,
+  ".engine",
+  "target",
+  "debug",
+  process.platform === "win32" ? "codex.exe" : "codex",
+);
+const sourceExecPath = path.join(repoRoot, "codex-rs", "target", "debug", "codex");
+
 export const codexExecPath =
   process.env.CODEX_EXEC_PATH ??
-  path.join(process.cwd(), "..", "..", "codex-rs", "target", "debug", "codex");
+  (existsSync(engineExecPath) ? engineExecPath : sourceExecPath);
 
 type CreateTestClientOptions = {
   apiKey?: string;

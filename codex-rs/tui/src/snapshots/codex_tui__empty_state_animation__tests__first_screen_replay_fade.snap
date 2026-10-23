@@ -1,7 +1,0 @@
----
-source: tui/src/empty_state_animation_tests.rs
-expression: "fade_frames.join(\"\\n\")"
----
-0ms: ⣤ Rgb(169, 180, 197)
-200ms: ⣤ Rgb(105, 114, 131)
-400ms: ⣤ Rgb(42, 48, 65)

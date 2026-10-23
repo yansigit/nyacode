@@ -37,4 +37,10 @@ scripts/verify-container.sh --reset-cache full
 
 `--reset-cache` removes only the verifier's named volumes. `--no-cache` rebuilds the image layers. Docker and Podman maintain separate caches. `CARGO_BUILD_JOBS` controls compilation and test concurrency; hosted verification uses two jobs. The command prints phase timings and sccache statistics.
 
+The verifier always prepares and checks `.engine/workspace`. The compatibility
+flag `--engine-workspace` remains accepted; `--engine docker|podman` selects the
+container runtime. The image includes `gh` for pinned source retrieval. To use a
+GitHub token for source retrieval in the container, export `GH_TOKEN` before
+running the verifier; the verifier forwards it to the disposable container.
+
 The **Container verification** GitHub workflow runs the complete path for Rust, dependency, V8 input, and verifier changes on pull requests and `main`. It enables user namespaces on its disposable Ubuntu runner using the same kernel settings as the repository's common CI setup. The local verifier requires its host to permit nested user namespaces and reports a failed sandbox preflight when they are unavailable. The workflow also supports manual execution. A successful fast run alone does not establish full-workspace acceptance.

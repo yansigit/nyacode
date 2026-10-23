@@ -1,7 +1,7 @@
 # Native provider refactor architecture
 
 Provider protocol implementations, codecs, credentials, registry, and session
-runtime live under [`codex-rs/providers/`](../../codex-rs/providers/). This
+runtime live under [`crates/providers/`](../../crates/providers/). This
 subtree is the native-provider subsystem. Its packages can depend on one
 another, but cannot depend on `codex-core` or other upstream integration crates.
 `codex-provider-adapter` is the only package that crosses that boundary. The
@@ -20,7 +20,7 @@ support and translates between provider-neutral calls and upstream Codex types.
 
 ```mermaid
 flowchart LR
-  subgraph Owned[Owned subsystem: codex-rs/providers]
+  subgraph Owned[Owned subsystem: crates/providers]
     API[codex-provider-api]
     Auth[codex-provider-auth]
     Codecs[codex-provider-codecs]
@@ -109,7 +109,7 @@ rebuilds from verified history according to the declared policy.
 ## Durable compatibility
 
 The compatibility snapshots in
-[`provider-runtime/tests/fixtures/compatibility-v1/`](../../codex-rs/providers/provider-runtime/tests/fixtures/compatibility-v1/)
+[`provider-runtime/tests/fixtures/compatibility-v1/`](../../crates/providers/provider-runtime/tests/fixtures/compatibility-v1/)
 were captured from the published implementation at
 `29413a496e28042629125693b3d8c218e49be879`. They use synthetic, invalid token
 and signature values. The fixture tests assert that the refactored stores read
@@ -121,37 +121,31 @@ checkpoint host-lineage/signature shape and interrupted execution marker.
 
 This is a serialization/identity compatibility contract. A fixture passing
 does not by itself establish live-provider behavior or validate a real
-credential. See the [fixture test](../../codex-rs/providers/provider-runtime/tests/compatibility_fixtures.rs)
-and its [sanitized fixture notes](../../codex-rs/providers/provider-runtime/tests/fixtures/compatibility-v1/README.md).
+credential. See the [fixture test](../../crates/providers/provider-runtime/tests/compatibility_fixtures.rs)
+and its [sanitized fixture notes](../../crates/providers/provider-runtime/tests/fixtures/compatibility-v1/README.md).
 
 ## Retained upstream hooks
 
 The links below are the required integration hooks; each has a focused test
 group in the [integration manifest](integration-manifest.json).
 
-- [`model-provider-info`](../../codex-rs/model-provider-info/src/lib.rs) keeps
+- `model-provider-info` keeps
   legacy enum aliases for wire compatibility while registry descriptors supply
   generic metadata.
-- [Remote thread configuration](../../codex-rs/config/src/thread_config/remote.rs)
-  carries a generic provider identity and model through the existing config
-  path.
-- The [model-provider facade](../../codex-rs/model-provider/src/native.rs)
+- Remote thread configuration carries a generic provider identity and model
+  through the existing config path.
+- The [model-provider facade](../../integration/codex/overlays/codex-rs/model-provider/src/native.rs)
   exposes the adapter as an optional backend.
-- The [core bridge](../../codex-rs/core/src/native_provider.rs) stays small;
-  [client construction and stream routing](../../codex-rs/core/src/client.rs)
-  use the adapter, while [`SessionControl`](../../codex-rs/core/src/client_common.rs)
+- The [core bridge](../../integration/codex/overlays/codex-rs/core/src/native_provider.rs) stays small;
+  client construction and stream routing use the adapter, while `SessionControl`
   owns lifecycle and cancellation.
-- [Turn handling](../../codex-rs/core/src/session/turn.rs) records completion,
-  retry, and terminal outcomes. [Parallel tool dispatch](../../codex-rs/core/src/tools/parallel.rs)
-  captures structured results before adapter resubmission, and
-  [thread-scoped model metadata](../../codex-rs/core/src/thread_manager.rs)
-  stays scoped to its thread.
-- [App-server account operations](../../codex-rs/app-server/src/request_processors/account_processor.rs)
-  use generic adapter dispatch and explicit ownership locking;
-  [thread processing](../../codex-rs/app-server/src/request_processors/thread_processor.rs)
-  preserves inherited provider identity on fork and cold resume when there is
-  no override.
-- [CLI provider choices](../../codex-rs/cli/src/provider_cmd.rs) come from
+- Turn handling records completion, retry, and terminal outcomes. Parallel tool
+  dispatch captures structured results before adapter resubmission, and
+  thread-scoped model metadata stays scoped to its thread.
+- App-server account operations use generic adapter dispatch and explicit
+  ownership locking; thread processing preserves inherited provider identity
+  on fork and cold resume when there is no override.
+- [CLI provider choices](../../integration/codex/overlays/codex-rs/cli/src/provider_cmd.rs) come from
   generic provider metadata.
 
 ## Validation automation

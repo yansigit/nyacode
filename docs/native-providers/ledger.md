@@ -148,7 +148,7 @@ listed in the [coverage matrix](coverage-matrix.md).
   service keeps HTTP/2 open. There is no verified final-checkpoint marker;
   metadata arriving after this grace period can be missed. This bounded
   protocol assumption and its delayed-frame regression are documented in the
-  [Cursor crate](../../codex-rs/providers/provider-cursor/README.md).
+  [Cursor crate](../../crates/providers/provider-cursor/README.md).
 - Binary native writes, audio/resource inputs, remote-image resources, and
   unsupported model/protocol combinations return explicit errors.
 - An optional baseline code-mode host build failed because the upstream V8

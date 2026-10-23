@@ -77,7 +77,7 @@ rsync \
   --human-readable \
   --itemize-changes \
   --exclude '.git/' \
-  --exclude 'codex-rs/target/' \
+  --exclude '.engine/' \
   --filter=':- .gitignore' \
   "$@" \
   "${repo_root}/" \
@@ -98,13 +98,16 @@ remote_exec_server_log_path="$1"
 remote_exec_server_pid_path="$2"
 remote_exec_server_start_timeout_seconds="$3"
 remote_repo_root="$HOME/code/codex-sync"
-remote_codex_rs="$remote_repo_root/codex-rs"
+remote_codex_rs="$remote_repo_root/.engine/workspace/codex-rs"
+export CARGO_TARGET_DIR="$remote_repo_root/.engine/target"
+export CODEX_REPO_ROOT="$remote_repo_root/.engine/workspace"
+python3 "$remote_repo_root/scripts/engine.py" prepare >&2
 
 cd "${remote_codex_rs}"
-cargo build -p codex-cli --bin codex
+cargo build --locked -p codex-cli --bin codex
 
 rm -f "${remote_exec_server_log_path}" "${remote_exec_server_pid_path}"
-nohup ./target/debug/codex exec-server --listen ws://127.0.0.1:0 \
+nohup "$CARGO_TARGET_DIR/debug/codex" exec-server --listen ws://127.0.0.1:0 \
   >"${remote_exec_server_log_path}" 2>&1 &
 remote_exec_server_pid="$!"
 echo "${remote_exec_server_pid}" >"${remote_exec_server_pid_path}"

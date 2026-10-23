@@ -7,6 +7,9 @@ on:
   push:
     branches: [main]
 
+permissions:
+  contents: read
+
 jobs:
   # Keep reusable workflow calls alphabetized. The `required` job below is the
   # version-controlled list that the main-branch ruleset should require.
@@ -52,7 +55,7 @@ jobs:
     name: CI required
     # Without `always()`, GitHub skips this job after a failed dependency and a
     # required check can appear successful instead of reporting the failure.
-    if: ${{ always() && github.repository == 'openai/codex' }}
+    if: ${{ always() }}
     needs:
       - bazel
       - blob-size-policy
@@ -72,4 +75,7 @@ jobs:
       - name: Require successful dependencies
         env:
           NEEDS: ${{ toJSON(needs) }}
+          # Fork builds are covered by Engine acceptance; security and repo
+          # policy checks remain required on every repository.
+          ALLOWED_SKIPPED_JOBS: ${{ github.repository != 'openai/codex' && 'bazel,rust-ci,sdk' || '' }}
         run: python3 .github/scripts/check_ci_results.py

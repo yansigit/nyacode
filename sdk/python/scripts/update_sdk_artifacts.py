@@ -3,6 +3,7 @@
 import argparse
 import importlib.util
 import json
+import os
 import platform
 import re
 import runpy
@@ -45,6 +46,28 @@ def python_runtime_root() -> Path:
 def schema_bundle_path(schema_dir: Path) -> Path:
     """Return the aggregate v2 app-server schema bundle."""
     return schema_dir / "codex_app_server_protocol.v2.schemas.json"
+
+
+def default_schema_dir() -> Path:
+    """Use prepared engine schemas, with an explicit assembly root taking precedence."""
+    engine_root = os.environ.get("NYACODE_ENGINE_ROOT")
+    if engine_root:
+        return Path(engine_root) / "codex-rs/app-server-protocol/schema/json"
+    try:
+        import tomllib
+    except ModuleNotFoundError:
+        import tomli as tomllib
+
+    pyproject = tomllib.loads((sdk_root() / "pyproject.toml").read_text())
+    configured = pyproject["tool"]["codex"]["codegen"]["schema-dir"]
+    local_schemas = sdk_root().parents[1] / "codex-rs/app-server-protocol/schema/json"
+    if (
+        configured == "../../.engine/workspace/codex-rs/app-server-protocol/schema/json"
+        and not (sdk_root().parents[1] / "engine.lock").is_file()
+        and local_schemas.is_dir()
+    ):
+        return local_schemas
+    return sdk_root() / configured
 
 
 def _is_windows() -> bool:
@@ -1602,13 +1625,7 @@ def run_command(args: argparse.Namespace, ops: CliOps) -> None:
     if args.command == "generate-types":
         schema_dir = args.schema_dir
         if schema_dir is None:
-            try:
-                import tomllib
-            except ModuleNotFoundError:
-                import tomli as tomllib
-
-            pyproject = tomllib.loads((sdk_root() / "pyproject.toml").read_text())
-            schema_dir = sdk_root() / pyproject["tool"]["codex"]["codegen"]["schema-dir"]
+            schema_dir = default_schema_dir()
         ops.generate_types(schema_dir.resolve())
     elif args.command == "stage-sdk":
         ops.stage_python_sdk_package(

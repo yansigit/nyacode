@@ -12,6 +12,7 @@ import tarfile
 import tempfile
 import unittest
 from unittest.mock import patch
+from types import SimpleNamespace
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "scripts"))
@@ -116,6 +117,10 @@ class ReleaseVersionTest(unittest.TestCase):
 
 class ReleaseSetTest(unittest.TestCase):
     def setUp(self):
+        environment = patch.dict(os.environ)
+        environment.start()
+        self.addCleanup(environment.stop)
+        os.environ.pop("NYACODE_ENGINE_ROOT", None)
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name)
@@ -132,11 +137,48 @@ class ReleaseSetTest(unittest.TestCase):
         self.assertEqual(provenance["commit"], COMMIT)
         self.assertEqual(len(provenance["packages"]), 6)
 
+    def test_verification_uses_the_accepted_toolchain(self):
+        product = self.root / "product"
+        product.mkdir()
+        release.write_json(product / "engine.lock", {"toolchain": "1.96.0"})
+        for path in self.dist.glob("*.json"):
+            report = json.loads(path.read_text())
+            release.write_json(path, {**report, "rust_toolchain": "1.96.0"})
+        with patch.object(release, "ROOT", product):
+            self.assertEqual(len(release.verify(self.dist, VERSION, COMMIT)), 6)
+
     def test_missing_platform_blocks_publication(self):
         next(self.dist.glob("*.tar.gz")).unlink()
         with self.assertRaisesRegex(ValueError, "Incomplete/unexpected"):
             release.seal(self.dist, VERSION, COMMIT)
         self.assertFalse((self.dist / release.CHECKSUMS).exists())
+
+    def test_engine_provenance_must_match_the_qualified_assembly(self):
+        provenance = {
+            "engine_revision": "e" * 40,
+            "engine_archive_sha256": "a" * 64,
+            "integration_input_sha256": "b" * 64,
+            "integration_contract_version": 1,
+        }
+        for path in self.dist.glob("*.json"):
+            release.write_json(path, {**json.loads(path.read_text()), **provenance})
+        with patch.object(release, "engine_provenance", return_value=provenance):
+            self.assertEqual(len(release.verify(self.dist, VERSION, COMMIT)), 6)
+            path = next(self.dist.glob("*.json"))
+            value = json.loads(path.read_text())
+            value["integration_input_sha256"] = "c" * 64
+            release.write_json(path, value)
+            with self.assertRaisesRegex(ValueError, "Inconsistent build report"):
+                release.verify(self.dist, VERSION, COMMIT)
+
+    def test_assembled_reports_cannot_bypass_input_validation(self):
+        path = next(self.dist.glob("*.json"))
+        release.write_json(
+            path, {**json.loads(path.read_text()), "engine_revision": "e" * 40}
+        )
+        with patch.object(release, "engine_provenance", return_value={}):
+            with self.assertRaises(ValueError):
+                release.verify(self.dist, VERSION, COMMIT)
 
     def test_unexpected_asset_blocks_publication(self):
         (self.dist / "surprise.zip").write_bytes(b"unexpected")
@@ -185,9 +227,15 @@ class ReleaseSetTest(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "alias differ"):
             release.check_package(package, target, VERSION)
 
-    def test_required_license_files_exist_in_source(self):
+    def test_overlay_license_inputs_exist_in_product_source(self):
+        lock = json.loads((ROOT / "engine.lock").read_text())
+        manifest = json.loads((ROOT / lock["assembly_manifest"]).read_text())
+        overlays = {
+            item["destination"]: item["source"] for item in manifest["overlays"]
+        }
         for notice in release.NOTICES:
-            self.assertTrue((ROOT / notice).is_file(), notice)
+            if notice in overlays:
+                self.assertTrue((ROOT / overlays[notice]).is_file(), notice)
 
     def test_extraction_rejects_traversal_and_links(self):
         for name, kind in (("../escape", tarfile.REGTYPE), ("link", tarfile.SYMTYPE)):
@@ -205,8 +253,217 @@ class ReleaseSetTest(unittest.TestCase):
         self.assertFalse((self.root / "escape").exists())
 
 
+class EngineReleaseTest(unittest.TestCase):
+    def setUp(self):
+        import engine
+
+        self.engine = engine
+        self.temp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.temp.cleanup)
+        self.root = Path(self.temp.name) / "product"
+        self.workspace = Path(self.temp.name) / "engine"
+        self.root.mkdir()
+        self.workspace.mkdir()
+        self.lock = json.loads((ROOT / "engine.lock").read_text())
+        release.write_json(self.root / "engine.lock", self.lock)
+        manifest = self.root / self.lock["assembly_manifest"]
+        manifest.parent.mkdir(parents=True)
+        release.write_json(
+            manifest,
+            {
+                "overlays": [
+                    {
+                        "source": "helper.sh",
+                        "destination": "helper.sh",
+                        "mode": "100755",
+                    }
+                ]
+            },
+        )
+        (self.root / "VERSION").write_text(VERSION + "\n")
+        (self.root / "helper.sh").write_text("engine input\n")
+        (self.root / "helper.sh").chmod(0o755)
+        self.report = {
+            "generated_by": "nyacode-engine-v1",
+            "revision": self.lock["revision"],
+            "archive_sha256": self.lock["archive_sha256"],
+            "inputs": {
+                name: {
+                    "sha256": engine.digest(engine.blob(self.root / name)),
+                    "mode": engine.file_mode(self.root / name),
+                }
+                for name in (
+                    "engine.lock",
+                    self.lock["assembly_manifest"],
+                    "VERSION",
+                    "helper.sh",
+                )
+            },
+        }
+        self.report["input_sha256"] = engine.digest(
+            json.dumps(self.report["inputs"], sort_keys=True).encode()
+        )
+        self.write_report()
+        for context in (
+            patch.object(release, "ROOT", self.root),
+            patch.dict(os.environ, {"NYACODE_ENGINE_ROOT": str(self.workspace)}),
+        ):
+            context.start()
+            self.addCleanup(context.stop)
+
+    def write_report(self):
+        self.engine.write_json(self.workspace / self.engine.MARKER, self.report)
+
+    def test_release_records_the_accepted_pin_and_input_digest(self):
+        self.assertEqual(
+            release.engine_provenance(),
+            {
+                "engine_revision": self.lock["revision"],
+                "engine_archive_sha256": self.lock["archive_sha256"],
+                "integration_input_sha256": self.report["input_sha256"],
+                "integration_contract_version": self.lock[
+                    "integration_contract_version"
+                ],
+            },
+        )
+
+    def test_changed_pin_or_archive_is_rejected(self):
+        for key, value in (("revision", "e" * 40), ("archive_sha256", "a" * 64)):
+            with self.subTest(key=key), patch.dict(self.report, {key: value}):
+                self.write_report()
+                with self.assertRaisesRegex(ValueError, "accepted engine pin"):
+                    release.engine_provenance()
+
+    def test_changed_missing_or_mode_changed_inputs_are_rejected(self):
+        helper = self.root / "helper.sh"
+        helper.write_text("changed\n")
+        with self.assertRaisesRegex(ValueError, "input changed"):
+            release.engine_provenance()
+        helper.write_text("engine input\n")
+        helper.chmod(0o644)
+        with self.assertRaisesRegex(ValueError, "input changed"):
+            release.engine_provenance()
+        helper.unlink()
+        with self.assertRaisesRegex(ValueError, "input changed"):
+            release.engine_provenance()
+
+    def test_input_digest_and_preparation_marker_are_required(self):
+        for key, value in (("input_sha256", "0" * 64), ("generated_by", "other")):
+            with self.subTest(key=key), patch.dict(self.report, {key: value}):
+                self.write_report()
+                with self.assertRaisesRegex(ValueError, "input provenance"):
+                    release.engine_provenance()
+
+    def test_windows_uses_canonical_git_modes(self):
+        (self.root / "helper.sh").chmod(0o644)
+        with patch.object(
+            self.engine, "source_modes", return_value={"helper.sh": "100755"}
+        ):
+            self.assertTrue(release.engine_provenance())
+
+    def test_windows_untracked_overlay_uses_declared_mode(self):
+        (self.root / "helper.sh").chmod(0o644)
+        with (
+            patch.object(self.engine, "source_modes", return_value={}),
+            patch.object(release, "os", SimpleNamespace(environ=os.environ, name="nt")),
+        ):
+            self.assertTrue(release.engine_provenance())
+
+    def test_assembly_requires_prepared_engine(self):
+        with patch.dict(os.environ):
+            os.environ.pop("NYACODE_ENGINE_ROOT")
+            with self.assertRaisesRegex(ValueError, "NYACODE_ENGINE_ROOT is required"):
+                release.assemble(
+                    release.RELEASE_TARGETS[0], self.root, self.root / "dist"
+                )
+
+    def test_assembly_ships_engine_resources_with_product_metadata(self):
+        from codex_package import version
+
+        target = release.RELEASE_TARGETS[0]
+        for name in ("nyacode", "codex-code-mode-host", "bwrap"):
+            binary = self.root / name
+            binary.write_bytes(b"executable fixture")
+            binary.chmod(0o755)
+        for notice in release.NOTICES:
+            path = self.workspace / notice
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text("assembled engine license\n")
+        (self.workspace / "codex-rs/rust-toolchain.toml").write_text(
+            '[toolchain]\nchannel = "1.95.0"\n'
+        )
+        (self.workspace / "VERSION").write_text("9.8.7\n")
+        dist = self.root / "dist"
+        with (
+            patch.object(
+                release, "fetch_rg", return_value=self.root / "nyacode"
+            ) as fetch,
+            patch.object(release, "smoke"),
+            patch.object(release, "source_commit", return_value=COMMIT),
+            patch("codex_package.cli.strip_binary"),
+            patch.object(version, "REPO_ROOT", self.workspace),
+        ):
+            release.assemble(target, self.root, dist)
+        fetch.assert_called_once_with(
+            TARGET_SPECS[target],
+            manifest_path=self.workspace / "scripts/codex_package/rg",
+        )
+        report = json.loads((dist / f"nyacode-{target}.json").read_text())
+        self.assertEqual((report["version"], report["commit"]), (VERSION, COMMIT))
+        extracted = self.root / "extracted"
+        release.extract_package(dist / report["archive"], extracted)
+        for notice in release.NOTICES:
+            self.assertEqual(
+                (extracted / "licenses" / notice).read_text(),
+                "assembled engine license\n",
+            )
+
+    def test_packaging_helpers_use_engine_while_metadata_uses_product(self):
+        code = """
+import json
+import nyacode_release as release
+from codex_package import cargo, targets, v8
+print(json.dumps([str(targets.REPO_ROOT), str(cargo.CODEX_RS_ROOT), str(v8.REPO_ROOT)]))
+release.metadata(None, None)
+"""
+        result = subprocess.run(
+            [sys.executable, "-c", code],
+            cwd=ROOT,
+            env={
+                **os.environ,
+                "PYTHONPATH": str(ROOT / "scripts"),
+                "CODEX_REPO_ROOT": str(ROOT),
+            },
+            check=True,
+            text=True,
+            capture_output=True,
+        )
+        roots, metadata = map(json.loads, result.stdout.splitlines())
+        self.assertEqual(
+            roots,
+            [
+                str(self.workspace),
+                str(self.workspace / "codex-rs"),
+                str(self.workspace),
+            ],
+        )
+        self.assertEqual(metadata["version"], (ROOT / "VERSION").read_text().strip())
+        self.assertEqual(
+            metadata["commit"],
+            subprocess.check_output(
+                ["git", "rev-parse", "HEAD"],
+                cwd=ROOT,
+                text=True,
+            ).strip(),
+        )
+
+
 class PublicationTest(unittest.TestCase):
     def setUp(self):
+        environment = patch.dict(os.environ)
+        environment.start()
+        self.addCleanup(environment.stop)
+        os.environ.pop("NYACODE_ENGINE_ROOT", None)
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name)

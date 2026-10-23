@@ -18,6 +18,7 @@ Each package contains one entrypoint, not both codex and codex-app-server.
 """
 
 import json
+import os
 import shutil
 import subprocess
 import sys
@@ -56,14 +57,16 @@ def test_cli_public_commands(
 
 def test_cli_version_matches_release_sources(package: SmokePackage) -> None:
     """Verify the compiled banner against the sources used to package the release."""
-    root = next(
-        parent
-        for parent in Path(__file__).resolve().parents
-        if (parent / "codex-rs/Cargo.toml").is_file()
+    root = Path(os.environ.get("CODEX_REPO_ROOT", Path(__file__).resolve().parents[3]))
+    version_file = root / "VERSION"
+    version = (
+        version_file.read_text().strip()
+        if version_file.is_file()
+        else tomllib.loads((root / "codex-rs/Cargo.toml").read_text())["workspace"][
+            "package"
+        ]["version"]
     )
-    manifest = tomllib.loads((root / "codex-rs/Cargo.toml").read_text())
-    version = manifest["workspace"]["package"]["version"]
-    assert package.run("--version").stdout == f"codex-cli {version}\n"
+    assert package.run("--version").stdout == f"nyacode {version}\n"
 
 
 @pytest.mark.parametrize("entrypoint", ["codex", "codex-app-server"])

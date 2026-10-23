@@ -1,0 +1,33 @@
+name: Prepare pinned engine
+description: Assemble the pinned engine and expose its source root to later steps.
+inputs:
+  python-version:
+    description: Python version required by subsequent source builds.
+    default: "3.12"
+outputs:
+  root:
+    description: Absolute path to the assembled engine workspace.
+    value: ${{ steps.engine.outputs.root }}
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+      with:
+        python-version: ${{ inputs.python-version }}
+
+    - name: Preserve Windows engine paths and symlinks
+      if: runner.os == 'Windows'
+      shell: pwsh
+      run: |
+        git config --global core.longpaths true
+        New-Item -Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock' -Force | Out-Null
+        New-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock' -Name AllowDevelopmentWithoutDevLicense -PropertyType DWord -Value 1 -Force | Out-Null
+
+    - name: Prepare pinned engine source
+      id: engine
+      env:
+        GH_TOKEN: ${{ github.token }}
+      shell: bash
+      run: |
+        python3 scripts/engine.py --json prepare > "$RUNNER_TEMP/engine.json"
+        python3 -c 'import json, os; root = json.load(open(os.environ["RUNNER_TEMP"] + "/engine.json"))["output"]; print("root=" + root, file=open(os.environ["GITHUB_OUTPUT"], "a")); print("NYACODE_ENGINE_ROOT=" + root + "\nCODEX_REPO_ROOT=" + root + "\nRUSTUP_TOOLCHAIN=" + json.load(open("engine.lock"))["toolchain"], file=open(os.environ["GITHUB_ENV"], "a"))'

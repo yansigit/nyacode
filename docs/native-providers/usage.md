@@ -234,7 +234,8 @@ The checks create unique temporary workspaces and only print provider/thread
 and pass/fail details.
 
 ```sh
-CODEX_BINARY="$PWD/codex-rs/target/debug/codex"
+python3 scripts/engine_run.py cargo build -p codex-cli --bin codex
+CODEX_BINARY="$PWD/.engine/target/debug/codex"
 ACCEPTANCE_HOME="/path/to/private-acceptance-home"
 
 python3 scripts/native_provider_acceptance.py \

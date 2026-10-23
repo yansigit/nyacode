@@ -1,5 +1,0 @@
----
-source: tui/src/app/agents_overview_tests.rs
-expression: rendered.lines().last().unwrap()
----
-  Service v0.152.1 < Nyacode CLI v0.153.0

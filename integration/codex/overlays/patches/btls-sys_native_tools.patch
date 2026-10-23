@@ -1,0 +1,76 @@
+diff --git a/build/main.rs b/build/main.rs
+--- a/build/main.rs
++++ b/build/main.rs
+@@ -390,6 +390,23 @@ fn get_apple_sdk_name(config: &Config) -> &'static str {
+ }
+ 
+ fn get_extra_clang_args_for_bindgen(config: &Config) -> Vec<String> {
++    // Bazel supplies a complete hermetic C toolchain, including the target ABI
++    // and SDK include paths. Bindgen must use the same headers and target as
++    // the native library rather than probing the host's SDK or C runtime.
++    println!("cargo:rerun-if-env-changed=CODEX_CHAT_BINDGEN_USE_CC");
++    if std::env::var_os("CODEX_CHAT_BINDGEN_USE_CC").as_deref()
++        == Some(std::ffi::OsStr::new("1"))
++    {
++        return cc::Build::new()
++            .cargo_metadata(false)
++            .warnings(false)
++            .get_compiler()
++            .args()
++            .iter()
++            .map(|arg| arg.to_string_lossy().into_owned())
++            .collect();
++    }
++
+     let mut params = Vec::new();
+ 
+     // Add platform-specific parameters.
+@@ -604,6 +621,14 @@ fn get_boringssl_lib_dir(config: &Config) -> PathBuf {
+ }
+ 
+ fn get_cpp_runtime_lib(config: &Config) -> Option<String> {
++    // The Bazel wrapper propagates the selected static runtime via CcInfo.
++    // A second name-based directive would request a nonexistent c++.lib on
++    // MSVC and can accidentally select a host runtime when cross-linking.
++    println!("cargo:rerun-if-env-changed=CODEX_CHAT_CXX_RUNTIME_PROVIDED");
++    if std::env::var_os("CODEX_CHAT_CXX_RUNTIME_PROVIDED").as_deref()
++        == Some(std::ffi::OsStr::new("1"))
++    { return None; }
++
+     if let Some(ref cpp_lib) = config.env.cpp_runtime_lib {
+         return cpp_lib.clone().into_string().ok();
+     }
+@@ -796,7 +821,11 @@ fn generate_bindings(config: &Config) -> Result<PathBuf, Box<dyn std::error::Error>> {
+         }
+     }
+ 
+-    if config.features.prefix_symbols {
++    // Match run(): these platforms leave the native archive unprefixed.
++    // Applying only the bindings callback produces unresolved TLS symbols.
++    if config.features.prefix_symbols
++        && !matches!(config.target_os.as_str(), "macos" | "ios" | "windows")
++    {
+         builder = builder.parse_callbacks(Box::new(PrefixCallback));
+     }
+ 
+diff --git a/build/prefix.rs b/build/prefix.rs
+--- a/build/prefix.rs
++++ b/build/prefix.rs
+@@ -49,7 +49,7 @@ pub fn prefix_symbols(config: &Config) {
+     // Use `nm` to list symbols in these static libraries
+     let nm = match &*config.target_os {
+         "android" => android_toolchain(config).join("llvm-nm"),
+-        _ => PathBuf::from("nm"),
++        _ => std::env::var_os("NM").map(PathBuf::from).unwrap_or_else(|| PathBuf::from("nm")),
+     };
+     let out = run_command(Command::new(nm).args(&static_libs)).unwrap();
+     let mut redefine_syms: Vec<String> = String::from_utf8_lossy(&out.stdout)
+@@ -76,7 +76,7 @@ pub fn prefix_symbols(config: &Config) {
+     // Use `objcopy` to prefix symbols in these static libraries
+     let objcopy = match &*config.target_os {
+         "android" => android_toolchain(config).join("llvm-objcopy"),
+-        _ => PathBuf::from("objcopy"),
++        _ => std::env::var_os("OBJCOPY").map(PathBuf::from).unwrap_or_else(|| PathBuf::from("objcopy")),
+     };
+     for static_lib in &static_libs {
+         run_command(

@@ -1,12 +1,14 @@
-set working-directory := "codex-rs"
+set working-directory := "."
 set positional-arguments
-export CODEX_REPO_ROOT := justfile_directory()
+export CODEX_REPO_ROOT := justfile_directory() / ".engine/workspace"
+export CARGO_TARGET_DIR := env("CARGO_TARGET_DIR", justfile_directory() / ".engine/target")
 export JUST_SHELL := justfile_directory() / "scripts/just-shell.py"
 set shell := ["python3", "-c", 'import os, runpy; runpy.run_path(os.environ["JUST_SHELL"], run_name="__main__")']
 set windows-shell := ["python", "-c", 'import os, runpy; runpy.run_path(os.environ["JUST_SHELL"], run_name="__main__")']
 
 rust_min_stack := "8388608" # 8 MiB
 python := if os_family() == "windows" { "python" } else { "python3" }
+engine_run := python + " " + quote(justfile_directory() / "scripts/engine_run.py")
 
 # Display help
 help:
@@ -16,11 +18,11 @@ help:
 alias c := nyacode
 alias codex := nyacode
 nyacode *args:
-    cargo run --bin nyacode -- {args}
+    {{ engine_run }} cargo run --bin nyacode -- {args}
 
 # `codex exec`
 exec *args:
-    cargo run --bin nyacode -- exec {args}
+    {{ engine_run }} cargo run --bin nyacode -- exec {args}
 
 # Start `codex exec-server` and run codex-tui.
 [no-cd]
@@ -31,40 +33,41 @@ tui-with-exec-server *args:
 
 # Run the CLI version of the file-search crate.
 file-search *args:
-    cargo run --bin codex-file-search -- {args}
+    {{ engine_run }} cargo run --bin codex-file-search -- {args}
 
 # Run the standalone code-mode host from source.
 code-mode-host *args:
-    cargo run --bin codex-code-mode-host -- {args}
+    {{ engine_run }} cargo run --bin codex-code-mode-host -- {args}
 
 # Assemble a local Codex package.
 [no-cd]
 assemble-codex-package *args:
-    {{ python }} {{ justfile_directory() }}/scripts/build_codex_package.py {args}
+    {{ engine_run }} --workspace-root {{ python }} scripts/build_codex_package.py {args}
 
 # Build the CLI and run the app-server test client
 app-server-test-client *args:
-    cargo build -p codex-cli
-    cargo run -p codex-app-server-test-client -- --codex-bin ./target/debug/codex {args}
+    {{ engine_run }} cargo build -p codex-cli
+    {{ engine_run }} cargo run -p codex-app-server-test-client -- --codex-bin {{ quote(env("CARGO_TARGET_DIR", justfile_directory() / ".engine/target") / "debug/codex") }} {args}
 
 # Format the justfile, Rust, Bazel/Starlark, Python SDK code, and Python scripts.
 fmt:
-    @{{ python }} ../scripts/format.py
+    @{{ python }} {{ justfile_directory() }}/scripts/format.py
 
 # Check formatting without modifying files.
 fmt-check:
-    @{{ python }} ../scripts/format.py --check
+    @{{ python }} {{ justfile_directory() }}/scripts/format.py --check
 
+# Edits the disposable assembly; copy changes into owned inputs before preparing again.
 fix *args:
-    cargo clippy --fix --tests --allow-dirty {args}
+    {{ engine_run }} cargo clippy --fix --tests --allow-dirty {args}
 
 clippy *args:
-    cargo clippy --tests {args}
+    {{ engine_run }} cargo clippy --tests {args}
 
 [unix]
 install:
     rustup show active-toolchain
-    cargo fetch
+    {{ engine_run }} cargo fetch
 
 [windows]
 install:
@@ -76,7 +79,7 @@ install:
     }
     rustup show active-toolchain
     if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-    cargo fetch
+    {{ engine_run }} cargo fetch
     exit $LASTEXITCODE
 
 # Run nextest with --no-fail-fast so all tests are run.
@@ -86,21 +89,21 @@ install:
 # there should be no need to add `--all-features`.
 [unix]
 test *args:
-    RUST_MIN_STACK={{ rust_min_stack }} NEXTEST_PROFILE=local cargo nextest run --no-fail-fast "$@"
+    RUST_MIN_STACK={{ rust_min_stack }} NEXTEST_PROFILE=local {{ engine_run }} cargo nextest run --no-fail-fast "$@"
 
 [windows]
 test *args:
-    $env:RUST_MIN_STACK = "{{ rust_min_stack }}"; $env:NEXTEST_PROFILE = "local"; cargo nextest run --no-fail-fast @($args | Select-Object -Skip 1)
+    $env:RUST_MIN_STACK = "{{ rust_min_stack }}"; $env:NEXTEST_PROFILE = "local"; {{ engine_run }} cargo nextest run --no-fail-fast @($args | Select-Object -Skip 1)
 
 # Run from the repository root so scripts that resolve paths from `cwd` see
 # the same layout they use in GitHub Actions.
 [no-cd]
 test-github-scripts:
-    {{ python }} -m unittest discover -s {{ justfile_directory() }}/.github/scripts -p 'test_*.py'
+    {{ engine_run }} --workspace-root {{ python }} -m unittest discover -s {{ justfile_directory() }}/.github/scripts -p 'test_*.py'
 
 # Run explicit workspace benchmark targets.
 bench *args:
-    cargo bench --workspace --bench '*' {args}
+    {{ engine_run }} cargo bench --workspace --bench '*' {args}
 
 # Run benchmark targets once to ensure they start successfully.
 bench-smoke:
@@ -108,16 +111,12 @@ bench-smoke:
 
 # Run Bazel-backed end-to-end macrobenchmarks with optimized binaries.
 bench-e2e:
-    # Keep measured binaries comparable to production-style optimized builds.
-    bazel test --compilation_mode=opt --cache_test_results=no --test_output=streamed //codex-rs:e2e-benchmarks
+    {{ engine_run }} --workspace-root just --justfile justfile bench-e2e
 
 # Run Bazel-backed end-to-end macrobenchmarks once per case with release-like
 # Rust cfg paths but fastbuild codegen.
 bench-e2e-smoke:
-    # Avoid optimizer cost because smoke runs only check that benchmarks work.
-    # Compile target Rust code through the same release-only cfg paths as opt.
-    # Compile exec-platform Rust tools through those release-only cfg paths too.
-    bazel test --compilation_mode=fastbuild --@rules_rust//rust/settings:extra_rustc_flag=-Cdebug-assertions=no --@rules_rust//rust/settings:extra_exec_rustc_flag=-Cdebug-assertions=no --cache_test_results=no --test_output=streamed --test_arg=--test //codex-rs:e2e-benchmarks
+    {{ engine_run }} --workspace-root just --justfile justfile bench-e2e-smoke
 
 # Build and run Codex from source using Bazel.
 # On Unix, use `[no-cd]` and `--run_under="cd $PWD &&"` to ensure Bazel runs
@@ -125,82 +124,108 @@ bench-e2e-smoke:
 [no-cd]
 [unix]
 bazel-codex *args:
-    bazel run //codex-rs/cli:codex --run_under="cd $PWD &&" -- "$@"
+    {{ engine_run }} --workspace-root bazel run //codex-rs/cli:codex --run_under={{ quote("cd " + quote(invocation_directory()) + " &&") }} -- {args}
 
 [windows]
 bazel-codex *args:
-    bazel run //codex-rs/cli:codex --run_under='cd /d "{{ invocation_directory_native() }}" &&' -- @($args | Select-Object -Skip 1)
+    {{ engine_run }} --workspace-root bazel run //codex-rs/cli:codex --run_under='cd /d "{{ invocation_directory_native() }}" &&' -- {args}
 
 # Build and run the standalone code-mode host from source using Bazel.
 [no-cd]
 [unix]
 bazel-code-mode-host *args:
-    bazel run //codex-rs/code-mode-host:codex-code-mode-host --run_under="cd $PWD &&" -- "$@"
+    {{ engine_run }} --workspace-root bazel run //codex-rs/code-mode-host:codex-code-mode-host --run_under={{ quote("cd " + quote(invocation_directory()) + " &&") }} -- {args}
 
 [windows]
 bazel-code-mode-host *args:
-    bazel run //codex-rs/code-mode-host:codex-code-mode-host --run_under='cd /d "{{ invocation_directory_native() }}" &&' -- @($args | Select-Object -Skip 1)
+    {{ engine_run }} --workspace-root bazel run //codex-rs/code-mode-host:codex-code-mode-host --run_under='cd /d "{{ invocation_directory_native() }}" &&' -- {args}
 
+# Edits the disposable assembly; copy changes into owned inputs before preparing again.
 [no-cd]
 bazel-lock-update:
-    bazel mod deps --lockfile_mode=update
+    {{ engine_run }} --workspace-root just --justfile justfile bazel-lock-update
 
 [no-cd]
 [unix]
 bazel-lock-check:
-    {{ justfile_directory() }}/scripts/check-module-bazel-lock.sh
+    {{ engine_run }} --workspace-root just --justfile justfile bazel-lock-check
 
 [windows]
 bazel-lock-check:
-    bazel mod deps --lockfile_mode=error; if ($LASTEXITCODE -ne 0) { Write-Error "Unable to verify MODULE.bazel.lock; see the Bazel error above. If Bazel reports an out-of-date lockfile, run 'just bazel-lock-update' and commit the updated lockfile."; exit 1 }
+    {{ engine_run }} --workspace-root just --justfile justfile bazel-lock-check
 
 bazel-test:
-    bazel test --test_tag_filters=-argument-comment-lint //... --keep_going
+    {{ engine_run }} --workspace-root just --justfile justfile bazel-test
 
 [no-cd]
 [unix]
 bazel-clippy:
-    bazel_targets="$({{ justfile_directory() }}/scripts/list-bazel-clippy-targets.sh)" && bazel build --config=clippy -- ${bazel_targets}
+    {{ engine_run }} --workspace-root just --justfile justfile bazel-clippy
 
 [no-cd]
 [unix]
 bazel-argument-comment-lint:
-    bazel build --config=argument-comment-lint -- $({{ justfile_directory() }}/tools/argument-comment-lint/list-bazel-targets.sh)
+    {{ engine_run }} --workspace-root just --justfile justfile bazel-argument-comment-lint
 
 build-for-release:
-    bazel build //codex-rs/cli:release_binaries
+    {{ engine_run }} --workspace-root just --justfile justfile build-for-release
 
 # Regenerate the json schema for config.toml from the current config types.
+# Edits the disposable assembly; copy changes into owned inputs before preparing again.
 write-config-schema:
-    cargo run -p codex-config-schema --bin codex-write-config-schema
+    {{ engine_run }} cargo run -p codex-config-schema --bin codex-write-config-schema
 
 # Regenerate app-server protocol schemas and the Python SDK derived from them.
+# Edits the disposable assembly; copy changes into owned inputs before preparing again.
 write-app-server-schema *args:
-    {{ python }} app-server-protocol/scripts/write_schema_fixtures.py {args}
+    {{ engine_run }} {{ python }} app-server-protocol/scripts/write_schema_fixtures.py {args}
 
+# Prepare the pinned upstream engine into the assembly workspace.
+[no-cd]
+prepare-engine *args:
+    {{ python }} {{ justfile_directory() }}/scripts/engine.py prepare {args}
+
+# Run the standalone provider workspace suite.
+[working-directory("crates/providers")]
+test-providers:
+    cargo test --locked --all-features
+
+# Run strict engine assembly and native-provider qualification checks.
+[no-cd]
+engine-checks *args:
+    {{ python }} {{ justfile_directory() }}/scripts/engine.py check --mode full {args}
+
+# Regenerate schemas and SDK bindings from the assembled engine, then check compatibility.
+[no-cd]
+engine-schema *args: prepare-engine
+    {{ python }} {{ justfile_directory() }}/.engine/workspace/codex-rs/app-server-protocol/scripts/write_schema_fixtures.py {args}
+    {{ python }} {{ justfile_directory() }}/scripts/engine_compatibility.py --workspace {{ justfile_directory() }}/.engine/workspace
+
+# Check pinned engine inputs, assembly schema, and engine control tests.
+[no-cd]
+engine-controls:
+    {{ python }} {{ justfile_directory() }}/scripts/engine.py check --mode controls
+
+# Edits the disposable assembly; copy changes into owned inputs before preparing again.
 [no-cd]
 write-hooks-schema:
-    cargo run --manifest-path {{ justfile_directory() }}/codex-rs/Cargo.toml -p codex-hooks --bin write_hooks_schema_fixtures
+    {{ engine_run }} cargo run -p codex-hooks --bin write_hooks_schema_fixtures
 
 # Run the argument-comment Dylint checks across codex-rs.
 [no-cd]
 [unix]
 argument-comment-lint *args:
-    if [ "$#" -eq 0 ]; then \
-      bazel build --config=argument-comment-lint -- $({{ justfile_directory() }}/tools/argument-comment-lint/list-bazel-targets.sh); \
-    else \
-      {{ justfile_directory() }}/tools/argument-comment-lint/run-prebuilt-linter.py "$@"; \
-    fi
+    {{ engine_run }} --workspace-root just --justfile justfile argument-comment-lint {args}
 
 [no-cd]
 argument-comment-lint-from-source *args:
-    {{ python }} {{ justfile_directory() }}/tools/argument-comment-lint/run.py {args}
+    {{ engine_run }} --workspace-root just --justfile justfile argument-comment-lint-from-source {args}
 
 # Tail logs from the state SQLite database
 [unix]
 log *args:
-    if [ "${1:-}" = "--" ]; then shift; fi; cargo run -p codex-cli --bin logs_client -- "$@"
+    if [ "${1:-}" = "--" ]; then shift; fi; {{ engine_run }} cargo run -p codex-cli --bin logs_client -- "$@"
 
 [windows]
 log *args:
-    $forwarded_args = @($args | Select-Object -Skip 1); if ($forwarded_args.Count -gt 0 -and $forwarded_args[0] -eq "--") { $forwarded_args = @($forwarded_args | Select-Object -Skip 1) }; cargo run -p codex-cli --bin logs_client -- @forwarded_args
+    $forwarded_args = @($args | Select-Object -Skip 1); if ($forwarded_args.Count -gt 0 -and $forwarded_args[0] -eq "--") { $forwarded_args = @($forwarded_args | Select-Object -Skip 1) }; {{ engine_run }} cargo run -p codex-cli --bin logs_client -- @forwarded_args

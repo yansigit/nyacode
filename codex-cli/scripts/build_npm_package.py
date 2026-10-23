@@ -13,7 +13,6 @@ from pathlib import Path
 SCRIPT_DIR = Path(__file__).resolve().parent
 CODEX_CLI_ROOT = SCRIPT_DIR.parent
 REPO_ROOT = CODEX_CLI_ROOT.parent
-RESPONSES_API_PROXY_NPM_ROOT = REPO_ROOT / "codex-rs" / "responses-api-proxy" / "npm"
 CODEX_SDK_ROOT = REPO_ROOT / "sdk" / "typescript"
 CODEX_NPM_NAME = "@yansigit/nyacode"
 CODEX_PACKAGE_COMPONENT = "codex-package"
@@ -274,18 +273,23 @@ def stage_sources(staging_dir: Path, version: str, package: str) -> None:
         if isinstance(package_manager, str):
             package_json["packageManager"] = package_manager
     elif package == "codex-responses-api-proxy":
+        engine_root = REPO_ROOT
+        if (REPO_ROOT / "engine.lock").is_file():
+            sys.path.insert(0, str(REPO_ROOT / "scripts"))
+            from engine import prepare
+
+            engine_root = prepare(root=REPO_ROOT)
+        proxy_root = engine_root / "codex-rs/responses-api-proxy/npm"
         bin_dir = staging_dir / "bin"
         bin_dir.mkdir(parents=True, exist_ok=True)
-        launcher_src = (
-            RESPONSES_API_PROXY_NPM_ROOT / "bin" / "codex-responses-api-proxy.js"
-        )
+        launcher_src = proxy_root / "bin" / "codex-responses-api-proxy.js"
         shutil.copy2(launcher_src, bin_dir / "codex-responses-api-proxy.js")
 
-        readme_src = RESPONSES_API_PROXY_NPM_ROOT / "README.md"
+        readme_src = proxy_root / "README.md"
         if readme_src.exists():
             shutil.copy2(readme_src, staging_dir / "README.md")
 
-        package_json_path = RESPONSES_API_PROXY_NPM_ROOT / "package.json"
+        package_json_path = proxy_root / "package.json"
     elif package == "codex-sdk":
         package_json_path = CODEX_SDK_ROOT / "package.json"
         stage_codex_sdk_sources(staging_dir)
