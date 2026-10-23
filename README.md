@@ -24,6 +24,8 @@ python3 scripts/build_nyacode.py
 
 The repository pins its Rust toolchain. See [installation and development](docs/install.md) for prerequisites and installation instructions.
 
+To rehearse the pinned engine assembly, run `python3 scripts/build_nyacode.py --engine`. It writes under `.engine/workspace` and does not change the default build or release packages. See [engine migration](docs/engine.md).
+
 ```sh
 nyacode provider --help
 nyacode provider accounts cursor

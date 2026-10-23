@@ -124,7 +124,7 @@ def overlay_source(path):
         return "integration/codex/adapter/" + path.removeprefix("codex-rs/providers/provider-adapter/")
     if path.startswith("codex-rs/providers/provider-"):
         return "crates/providers/" + path.removeprefix("codex-rs/providers/")
-    if path.startswith("scripts/"):
+    if path.startswith("scripts/") or path in {"Containerfile", "Dockerfile"}:
         return path
     return "integration/codex/overlays/" + path
 
@@ -220,10 +220,14 @@ def generate():
                 verify_symlink_target(path, git("show", f"{PRODUCT}:{path}").decode())
             replace = path in old_tree
             overlay = {"source": src, "destination": destination_path, "replace": replace, "mode": new["mode"]}
-            if not src.startswith("scripts/"):
+            if not (src.startswith("scripts/") or src in {"Containerfile", "Dockerfile"}):
                 overlay["sha256"] = source["sha256"]
             assembly["overlays"].append(overlay)
-            if not path.startswith("codex-rs/providers/provider-") and not path.startswith("scripts/"):
+            if not (
+                path.startswith("codex-rs/providers/provider-")
+                or path.startswith("scripts/")
+                or path in {"Containerfile", "Dockerfile"}
+            ):
                 target = ROOT / src
                 target.parent.mkdir(parents=True, exist_ok=True)
                 content = git("cat-file", "blob", new["oid"])

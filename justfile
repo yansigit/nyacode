@@ -178,6 +178,25 @@ write-config-schema:
 write-app-server-schema *args:
     {{ python }} app-server-protocol/scripts/write_schema_fixtures.py {args}
 
+# Prepare the pinned upstream engine into the opt-in assembly workspace.
+[no-cd]
+prepare-engine *args:
+    {{ python }} {{ justfile_directory() }}/scripts/engine.py prepare {args}
+
+# Run the standalone provider workspace suite without changing the default build.
+test-providers:
+    cargo test --manifest-path ../crates/providers/Cargo.toml --locked --all-features
+
+# Run strict engine assembly and native-provider qualification checks.
+[no-cd]
+engine-checks *args:
+    {{ python }} {{ justfile_directory() }}/scripts/engine.py check --mode full {args}
+
+# Check pinned engine inputs, assembly schema, and engine control tests.
+[no-cd]
+engine-schema:
+    {{ python }} {{ justfile_directory() }}/scripts/engine.py check --mode controls
+
 [no-cd]
 write-hooks-schema:
     cargo run --manifest-path {{ justfile_directory() }}/codex-rs/Cargo.toml -p codex-hooks --bin write_hooks_schema_fixtures

@@ -29,6 +29,7 @@ Usage: scripts/verify-container.sh [options] [full|fast|run -- command]
 
 Options:
   --engine docker|podman   container engine (default: the first one that responds)
+  --engine-workspace       verify the assembled .engine/workspace instead of the source tree
   --reset-cache            delete Cargo, target, and sccache volumes first
   --no-cache               rebuild the image without layer cache
   -h, --help               show this help
@@ -89,7 +90,7 @@ configure_inner_env() {
 prepare_v8() {
     local host prepared
     host="$(rustc -vV | sed -n 's/^host: //p')"
-    prepared="$(python3 "$ROOT/scripts/verify_container.py" prepare-v8 --cache /var/cache/nyacode-v8 --target "$host")"
+    prepared="$(python3 "$ROOT/scripts/verify_container.py" --root "$WORKSPACE_ROOT" prepare-v8 --cache /var/cache/nyacode-v8 --target "$host")"
     local paths=()
     mapfile -t paths <<<"$prepared"
     [[ ${#paths[@]} == 2 ]]
@@ -137,7 +138,8 @@ run_build() {
 }
 
 run_tests() {
-    cargo nextest run --locked --workspace --features codex-v8-poc/sandbox --no-fail-fast --test-threads "${CARGO_BUILD_JOBS}"
+    CODEX_EXEC_PATH="${CARGO_TARGET_DIR}/debug/codex" \
+        cargo nextest run --locked --workspace --features codex-v8-poc/sandbox --no-fail-fast --test-threads "${CARGO_BUILD_JOBS}"
 }
 
 run_cli_smoke() {
@@ -163,6 +165,16 @@ print_timing_summary() {
 
 run_inner() {
     local mode="${1:-full}"
+    WORKSPACE_ROOT="$ROOT"
+    if [[ "${NYACODE_VERIFY_ENGINE_WORKSPACE:-}" == "1" ]]; then
+        WORKSPACE_ROOT="$ROOT/.engine/workspace"
+        python3 "$ROOT/scripts/engine.py" --root "$ROOT" prepare --output "$WORKSPACE_ROOT"
+        if [[ ! -f "$WORKSPACE_ROOT/codex-rs/Cargo.toml" ]]; then
+            echo "engine preparation did not produce $WORKSPACE_ROOT" >&2
+            exit 1
+        fi
+    fi
+    export CODEX_REPO_ROOT="$WORKSPACE_ROOT"
     configure_inner_env
     refuse_if_home_is_mounted
     TIMING_LOG="$(mktemp)"
@@ -173,7 +185,7 @@ run_inner() {
     echo "CARGO_TARGET_DIR=${CARGO_TARGET_DIR}"
     echo "CARGO_BUILD_JOBS=${CARGO_BUILD_JOBS}"
     echo "RUST_MIN_STACK=${RUST_MIN_STACK} ulimit_stack_kib=$(ulimit -s)"
-    cd "$ROOT/codex-rs"
+    cd "$WORKSPACE_ROOT/codex-rs"
 
     case "$mode" in
         full)
@@ -188,7 +200,7 @@ run_inner() {
         fast)
             phase fmt run_fmt
             local affected
-            affected="$(python3 "$ROOT/scripts/verify_container.py" affected)"
+            affected="$(python3 "$ROOT/scripts/verify_container.py" --root "$ROOT" --workspace "$WORKSPACE_ROOT" affected)"
             local packages=()
             local package
             while IFS= read -r package; do
@@ -287,6 +299,7 @@ run_outer() {
     local engine_name=""
     local reset_cache=0
     local no_cache=0
+    local engine_workspace=0
     local -a mode_args=()
     while (($#)); do
         case "$1" in
@@ -297,6 +310,10 @@ run_outer() {
                     exit 2
                 fi
                 shift 2
+                ;;
+            --engine-workspace)
+                engine_workspace=1
+                shift
                 ;;
             --reset-cache)
                 reset_cache=1
@@ -390,6 +407,9 @@ run_outer() {
     )
     if [[ -n "${CARGO_BUILD_JOBS:-}" ]]; then
         run_args+=(-e "CARGO_BUILD_JOBS=${CARGO_BUILD_JOBS}")
+    fi
+    if ((engine_workspace)); then
+        run_args+=(-e NYACODE_VERIFY_ENGINE_WORKSPACE=1)
     fi
     if [[ "$engine_bin" == "podman" ]]; then
         run_args+=(--userns keep-id --security-opt label=disable --security-opt 'unmask=/proc/*')

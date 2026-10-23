@@ -20,6 +20,8 @@ python3 scripts/build_nyacode.py
 
 The build helper verifies the pinned V8 archive and bindings before building both executable names and the Code Mode host. The default V8 crate download does not provide every artifact used by this fork.
 
+To rehearse the pinned engine assembly without changing the default build, use `python3 scripts/build_nyacode.py --engine`. The assembled workspace and its qualification commands are documented in [engine migration](engine.md).
+
 For an optimized installation into `~/.local/bin` on macOS or Linux:
 
 ```sh

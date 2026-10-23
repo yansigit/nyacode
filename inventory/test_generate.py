@@ -33,7 +33,9 @@ class InventoryTests(unittest.TestCase):
         self.assertEqual(len(assembly["deletes"]), 7)
         for overlay in assembly["overlays"]:
             source = ROOT / overlay["source"]
-            if overlay["source"].startswith("scripts/"):
+            if overlay["source"].startswith("scripts/") or overlay["source"] in {
+                "Containerfile", "Dockerfile"
+            }:
                 self.assertTrue(source.is_file(), overlay["source"])
                 continue
             if overlay["source"].startswith(("integration/codex/adapter/", "crates/providers/")):
