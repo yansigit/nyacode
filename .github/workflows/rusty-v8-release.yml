@@ -26,19 +26,9 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Set up Python
-        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
-        with:
-          python-version: "3.12"
-
       - name: Prepare pinned engine source
         id: engine
-        env:
-          GH_TOKEN: ${{ github.token }}
-        shell: bash
-        run: |
-          python3 scripts/engine.py --json prepare > "$RUNNER_TEMP/engine.json"
-          python3 -c 'import json, os; root = json.load(open(os.environ["RUNNER_TEMP"] + "/engine.json"))["output"]; print("root=" + root, file=open(os.environ["GITHUB_OUTPUT"], "a")); print("NYACODE_ENGINE_ROOT=" + root + "\nCODEX_REPO_ROOT=" + root, file=open(os.environ["GITHUB_ENV"], "a"))'
+        uses: ./.github/actions/prepare-engine
 
       - name: Resolve exact v8 crate version
         id: v8_version
@@ -170,25 +160,15 @@ jobs:
         with:
           persist-credentials: false
 
+      - name: Prepare pinned engine source
+        id: engine
+        uses: ./.github/actions/prepare-engine
+
       - name: Prepare Bazel CI
         uses: ./.github/actions/prepare-bazel-ci
         with:
           target: ${{ matrix.target }}
           cache-scope: bazel-v8
-
-      - name: Set up Python
-        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
-        with:
-          python-version: "3.12"
-
-      - name: Prepare pinned engine source
-        id: engine
-        env:
-          GH_TOKEN: ${{ github.token }}
-        shell: bash
-        run: |
-          python3 scripts/engine.py --json prepare > "$RUNNER_TEMP/engine.json"
-          python3 -c 'import json, os; root = json.load(open(os.environ["RUNNER_TEMP"] + "/engine.json"))["output"]; print("root=" + root, file=open(os.environ["GITHUB_OUTPUT"], "a")); print("NYACODE_ENGINE_ROOT=" + root + "\nCODEX_REPO_ROOT=" + root, file=open(os.environ["GITHUB_ENV"], "a"))'
 
       - name: Set up Rust toolchain for Cargo smoke
         uses: dtolnay/rust-toolchain@e2a55d2ffb04f378e9626c28d38b36d230d1e12f # master, 2026-10-12
@@ -361,27 +341,11 @@ jobs:
           echo "fbe28d541ecc20d2e5d67f3ad859b1b35b60e4b069b0795a3d4766aa0828da2c  tools/win/DebugVisualizers/blink.natvis" | sha256sum --check
           echo "56fe0993b70365e1d2d848ad67739aed5fd70284910665b559fc3c9369b24593  tools/win/DebugVisualizers/chrome.natvis" | sha256sum --check
 
-      - name: Set up Python
-        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
-        with:
-          python-version: "3.11"
-          architecture: x64
-
-      - name: Preserve Windows engine paths and symlinks
-        shell: pwsh
-        run: |
-          git config --global core.longpaths true
-          New-Item -Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock' -Force | Out-Null
-          New-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock' -Name AllowDevelopmentWithoutDevLicense -PropertyType DWord -Value 1 -Force | Out-Null
-
       - name: Prepare pinned engine source
         id: engine
-        env:
-          GH_TOKEN: ${{ github.token }}
-        shell: bash
-        run: |
-          python3 scripts/engine.py --json prepare > "$RUNNER_TEMP/engine.json"
-          python3 -c 'import json, os; root = json.load(open(os.environ["RUNNER_TEMP"] + "/engine.json"))["output"]; print("root=" + root, file=open(os.environ["GITHUB_OUTPUT"], "a")); print("NYACODE_ENGINE_ROOT=" + root + "\nCODEX_REPO_ROOT=" + root, file=open(os.environ["GITHUB_ENV"], "a"))'
+        uses: ./.github/actions/prepare-engine
+        with:
+          python-version: "3.11"
 
       - name: Set up Codex Rust toolchain for Cargo smoke
         uses: dtolnay/rust-toolchain@e2a55d2ffb04f378e9626c28d38b36d230d1e12f # master, 2026-10-12

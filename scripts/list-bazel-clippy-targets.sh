@@ -2,8 +2,8 @@
 
 set -euo pipefail
 
-repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-cd "${repo_root}"
+script_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+cd "${NYACODE_ENGINE_ROOT:-${script_root}}"
 
 windows_cross_compile=0
 while [[ $# -gt 0 ]]; do
@@ -23,7 +23,7 @@ done
 # continue with a partial list if `bazel query` fails. Target discovery is
 # local on all platforms.
 manual_rust_test_targets="$(
-  ./.github/scripts/run-bazel-query-ci.sh \
+  "${script_root}/.github/scripts/run-bazel-query-ci.sh" \
     --output=label \
     -- 'kind("rust_test rule", attr(tags, "manual", //codex-rs/... except //codex-rs/v8-poc/...))'
 )"
