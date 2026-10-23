@@ -23,6 +23,19 @@ class ProductVersionTests(unittest.TestCase):
                 with self.assertRaises(RuntimeError):
                     version.read_workspace_version()
 
+    def test_explicit_product_root_overrides_assembled_engine_root(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            product = root / "product"
+            engine = root / "engine"
+            product.mkdir()
+            engine.mkdir()
+            (product / "VERSION").write_text("1.2.3\n")
+            (engine / "VERSION").write_text("9.8.7\n")
+            with patch.object(version, "REPO_ROOT", engine):
+                self.assertEqual(version.read_workspace_version(), "9.8.7")
+                self.assertEqual(version.read_workspace_version(product), "1.2.3")
+
 
 if __name__ == "__main__":
     unittest.main()

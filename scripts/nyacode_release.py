@@ -17,13 +17,18 @@ import tempfile
 import tomllib
 
 ROOT = Path(__file__).resolve().parents[1]
-os.environ.setdefault("CODEX_REPO_ROOT", str(ROOT))
+# Package helpers resolve runtime inputs at import time.
+if os.environ.get("NYACODE_ENGINE_ROOT"):
+    os.environ["CODEX_REPO_ROOT"] = os.environ["NYACODE_ENGINE_ROOT"]
+else:
+    os.environ.setdefault("CODEX_REPO_ROOT", str(ROOT))
 sys.path.insert(0, str(ROOT / ".github/scripts"))
 
 from releases import is_valid_release_version
 from codex_package.archive import write_archive
 from codex_package.cli import assemble_package, create_parser
 from codex_package.layout import validate_package_dir
+from codex_package.ripgrep import fetch_rg
 from codex_package.targets import PACKAGE_VARIANTS, TARGET_SPECS
 from codex_package.version import read_workspace_version
 
@@ -85,18 +90,37 @@ def engine_provenance() -> dict:
     workspace = os.environ.get("NYACODE_ENGINE_ROOT")
     if workspace is None:
         return {}
-    from engine import assembly_report, blob, digest, file_mode, source_modes
+    from engine import (
+        assembly_report,
+        blob,
+        digest,
+        file_mode,
+        load_lock,
+        located,
+        source_modes,
+    )
 
     report = assembly_report(Path(workspace))
-    lock = json.loads((ROOT / "engine.lock").read_text())
+    lock = load_lock(ROOT)
     if (
         report["revision"] != lock["revision"]
         or report["archive_sha256"] != lock["archive_sha256"]
     ):
         raise ValueError("Assembled engine does not match the accepted engine pin")
+    if (
+        report.get("generated_by") != "nyacode-engine-v1"
+        or "engine.lock" not in report["inputs"]
+        or digest(json.dumps(report["inputs"], sort_keys=True).encode())
+        != report["input_sha256"]
+    ):
+        raise ValueError("Invalid assembled engine input provenance")
     modes = source_modes(ROOT)
+    if os.name == "nt":
+        manifest = json.loads((ROOT / lock["assembly_manifest"]).read_text())
+        for overlay in manifest.get("overlays", []):
+            modes.setdefault(overlay["source"], overlay["mode"])
     for relative, expected in report["inputs"].items():
-        path = ROOT / relative
+        path = located(ROOT, relative)
         if (
             not (path.exists() or path.is_symlink())
             or digest(blob(path)) != expected["sha256"]
@@ -112,7 +136,7 @@ def engine_provenance() -> dict:
 
 
 def metadata(tag: str | None, output: Path | None) -> None:
-    version = read_workspace_version()
+    version = read_workspace_version(ROOT)
     validate_version(version, tag)
     if tag:
         # A version must be reviewed on main before it can become a release.
@@ -200,10 +224,12 @@ def smoke(package: Path, target: str, version: str) -> None:
 
 
 def assemble(target: str, binaries: Path, dist: Path) -> None:
-    engine_root = Path(os.environ.get("NYACODE_ENGINE_ROOT", ROOT))
+    if not os.environ.get("NYACODE_ENGINE_ROOT"):
+        raise ValueError("NYACODE_ENGINE_ROOT is required to assemble a release")
+    engine_root = Path(os.environ["NYACODE_ENGINE_ROOT"])
     provenance = engine_provenance()
     spec = TARGET_SPECS[target]
-    version = read_workspace_version()
+    version = read_workspace_version(ROOT)
     validate_version(version)
     dist.mkdir(parents=True, exist_ok=True)
     archive_name = f"codex-package-{target}.tar.gz"
@@ -223,6 +249,8 @@ def assemble(target: str, binaries: Path, dist: Path) -> None:
             "release",
             "--strip",
             "all",
+            "--rg-bin",
+            str(fetch_rg(spec, manifest_path=engine_root / "scripts/codex_package/rg")),
             "--entrypoint-bin",
             str(binaries / f"nyacode{spec.exe_suffix}"),
             "--code-mode-host-bin",
@@ -281,6 +309,7 @@ def extract_package(archive: Path, destination: Path) -> None:
 
 def verify(dist: Path, version: str, commit: str) -> list[dict]:
     provenance = engine_provenance()
+    toolchain = json.loads((ROOT / "engine.lock").read_text())["toolchain"]
     expected = {
         name
         for target in RELEASE_TARGETS
@@ -300,7 +329,7 @@ def verify(dist: Path, version: str, commit: str) -> list[dict]:
             "commit": commit,
             "target": target,
             "profile": "release",
-            "rust_toolchain": "1.95.0",
+            "rust_toolchain": toolchain,
             "archive": f"codex-package-{target}.tar.gz",
             "smoke_test": "passed",
             "platform_signed": False,
