@@ -1,9 +1,0 @@
----
-source: tui/src/keymap_setup.rs
-expression: "render_debug(&view, 80)"
----
-Keypress Inspector
-Press any key to see what Nyacode receives. Esc is inspected; Ctrl+C closes.
-Tip: Nyacode can only inspect keys your terminal sends.
-
-Waiting for a keypress...
