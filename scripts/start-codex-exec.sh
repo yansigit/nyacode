@@ -104,7 +104,7 @@ export CODEX_REPO_ROOT="$remote_repo_root/.engine/workspace"
 python3 "$remote_repo_root/scripts/engine.py" prepare >&2
 
 cd "${remote_codex_rs}"
-cargo build -p codex-cli --bin codex
+cargo build --locked -p codex-cli --bin codex
 
 rm -f "${remote_exec_server_log_path}" "${remote_exec_server_pid_path}"
 nohup "$CARGO_TARGET_DIR/debug/codex" exec-server --listen ws://127.0.0.1:0 \
