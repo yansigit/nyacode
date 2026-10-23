@@ -14321,7 +14321,7 @@ index f7cabb697538c8135a4f38c98fc3d142f7e13b57..1893ebd7d61a57475c8a6158c22c1d5c
      "winbase",
      "wincon",
 diff --git a/codex-rs/utils/pty/src/spawn_helper_tests.rs b/codex-rs/utils/pty/src/spawn_helper_tests.rs
-index 49a7738eeb762d9675c5826327c6436f5307fba6..71049051ad6bbf8a4ddd00a9f0eacfb6fd4db061 100644
+index 49a7738eeb762d9675c5826327c6436f5307fba6..983493c2a11b7559b3ce4554fe5f5912583308d7 100644
 --- a/codex-rs/utils/pty/src/spawn_helper_tests.rs
 +++ b/codex-rs/utils/pty/src/spawn_helper_tests.rs
 @@ -19,7 +19,7 @@ use crate::spawn_pipe_process_no_stdin;
@@ -14333,6 +14333,16 @@ index 49a7738eeb762d9675c5826327c6436f5307fba6..71049051ad6bbf8a4ddd00a9f0eacfb6
  fn initialize_spawn_helper() {
      if let Ok(arguments) = std::fs::read("/proc/self/cmdline") {
          let mut arguments = arguments.split(|byte| *byte == 0).skip(1);
+@@ -162,7 +162,8 @@ async fn helper_target_dies_when_parent_is_killed() -> anyhow::Result<()> {
+         .expect("child reports its PID after verifying PDEATHSIG")
+         .parse::<libc::pid_t>()?;
+     // The fixture child waits on the cleanup pipe while its parent is alive.
+-    let child = tokio::io::unix::AsyncFd::new(open_pidfd(pid)?)?;
++    // SAFETY: AsyncFd owns the fresh pidfd; it is never closed or replaced separately.
++    let child = unsafe { tokio::io::unix::AsyncFd::register(open_pidfd(pid)?) }?;
+     parent.kill().await?;
+     let stopped = tokio::time::timeout(Duration::from_secs(5), child.readable()).await;
+     drop(cleanup);
 diff --git a/codex-rs/utils/pty/src/windows_tests.rs b/codex-rs/utils/pty/src/windows_tests.rs
 index 6d6c389b14e8b68a2dcc1a3771636f01f7502951..63dec95ca63156cbdf12f36b3cd6c8918076ccf8 100644
 --- a/codex-rs/utils/pty/src/windows_tests.rs

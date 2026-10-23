@@ -3818,6 +3818,7 @@
       "path": "integration/codex/patches/dependency_override.patch",
       "paths": [
         "MODULE.bazel.lock",
+        "codex-rs/utils/pty/src/unix_io.rs",
         "pnpm-lock.yaml",
         "scripts/uv.lock",
         "sdk/python/uv.lock"
