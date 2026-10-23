@@ -676,21 +676,20 @@ def promote(args, repository: str, branch: str) -> None:
     if current_base(repository, branch) != base:
         raise ValueError("Default branch moved during promotion checks")
     # Merge immediately; never queue approval that a later head could inherit.
-    subprocess.run(
+    result = command(
         [
             "gh",
-            "pr",
-            "merge",
-            str(number),
-            "--repo",
-            repository,
-            "--squash",
-            "--match-head-commit",
-            run["head_sha"],
+            "api",
+            f"repos/{repository}/pulls/{number}/merge",
+            "--method",
+            "PUT",
+            "--input",
+            "-",
         ],
-        cwd=ROOT,
-        check=True,
+        data={"sha": run["head_sha"], "merge_method": "squash"},
     )
+    if result.get("merged") is not True:
+        raise ValueError("GitHub did not immediately merge the qualified candidate")
 
 
 def main() -> int:

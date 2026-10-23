@@ -704,7 +704,7 @@ class ControllerFlowTest(unittest.TestCase):
     def test_promoter_merges_only_exact_qualified_head_and_stops_on_late_base_move(
         self,
     ):
-        for moved in (False, True):
+        for moved, merged in ((False, True), (True, True), (False, False)):
             fixture = qualification()
             fixture["report"]["engine_lock_sha256"] = hashlib.sha256(
                 (json.dumps(self.candidate, indent=2) + "\n").encode()
@@ -731,7 +731,7 @@ class ControllerFlowTest(unittest.TestCase):
                 return {"parents": [{"sha": BASE}]}
 
             with (
-                self.subTest(moved=moved),
+                self.subTest(moved=moved, merged=merged),
                 patch.object(candidates, "api", side_effect=api),
                 patch.object(candidates, "report_for", return_value=fixture["report"]),
                 patch.object(
@@ -747,20 +747,37 @@ class ControllerFlowTest(unittest.TestCase):
                     candidates, "lock_at", side_effect=[self.original, self.candidate]
                 ),
                 patch.object(candidates, "stable_release", return_value=REVISION),
-                patch.object(candidates.subprocess, "run") as run,
+                patch.object(
+                    candidates, "command", return_value={"merged": merged}
+                ) as command,
             ):
                 if moved:
                     with self.assertRaisesRegex(ValueError, "moved"):
                         candidates.promote(
                             SimpleNamespace(run_id=123), REPOSITORY, "main"
                         )
-                    run.assert_not_called()
+                    command.assert_not_called()
+                elif not merged:
+                    with self.assertRaisesRegex(
+                        ValueError, "did not immediately merge"
+                    ):
+                        candidates.promote(
+                            SimpleNamespace(run_id=123), REPOSITORY, "main"
+                        )
                 else:
                     candidates.promote(SimpleNamespace(run_id=123), REPOSITORY, "main")
-                    command = run.call_args.args[0]
-                    self.assertEqual(command[:4], ["gh", "pr", "merge", "7"])
-                    self.assertNotIn("--auto", command)
-                    self.assertEqual(command[-2:], ["--match-head-commit", HEAD])
+                    command.assert_called_once_with(
+                        [
+                            "gh",
+                            "api",
+                            f"repos/{REPOSITORY}/pulls/7/merge",
+                            "--method",
+                            "PUT",
+                            "--input",
+                            "-",
+                        ],
+                        data={"sha": HEAD, "merge_method": "squash"},
+                    )
 
 
 if __name__ == "__main__":
