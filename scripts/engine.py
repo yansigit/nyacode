@@ -96,6 +96,8 @@ def file_mode(path: Path) -> str:
 
 
 def read_json(path: Path) -> dict[str, Any]:
+    if path.is_symlink():
+        raise EngineError(f"structural input must be a regular file: {path}")
     value = json.loads(path.read_text())
     if not isinstance(value, dict):
         raise EngineError(f"expected a JSON object: {path}")
@@ -368,8 +370,10 @@ def assemble(
     inputs: dict[str, Any] = {}
     canonical = source_modes(root)
 
-    def input_file(name: str) -> Path:
+    def input_file(name: str, *, symlink: bool = False) -> Path:
         path = located(root, name)
+        if path.is_symlink() and not symlink:
+            raise EngineError(f"structural input must be a regular file: {name}")
         if not path.is_file() and not path.is_symlink():
             raise EngineError(f"missing assembly input: {name}")
         inputs[name] = {
@@ -472,7 +476,7 @@ def assemble(
         mode = overlay["mode"]
         if os.name == "nt":
             canonical.setdefault(overlay["source"], mode)
-        source = input_file(overlay["source"])
+        source = input_file(overlay["source"], symlink=mode == "120000")
         if (
             mode not in {"100644", "100755", "120000"}
             or inputs[overlay["source"]]["mode"] != mode

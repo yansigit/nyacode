@@ -204,6 +204,67 @@ class EngineTest(unittest.TestCase):
         ):
             self.prepare()
 
+    def test_structural_inputs_cannot_follow_leaf_symlinks_outside_product(self):
+        self.add_patch("unused patch", ["README.md"])
+        self.manifest.update(
+            {
+                "inventory": "inventory/downstream.json",
+                "regression_manifest": "contract.json",
+            }
+        )
+        self.write("inventory/downstream.json", "{}")
+        self.write("contract.json", "{}")
+        self.write("scripts/engine.py", "script")
+        self.save_inputs()
+        names = (
+            "engine.lock",
+            self.lock["assembly_manifest"],
+            self.lock["assembled_lock"],
+            "VERSION",
+            "scripts/engine.py",
+            "inventory/downstream.json",
+            "contract.json",
+            "change.patch",
+        )
+        module = SimpleNamespace(validate_assembly_ownership=lambda root, assembly: [])
+        for index, name in enumerate(names):
+            with self.subTest(name=name):
+                source = self.root / name
+                contents = source.read_bytes()
+                mode = source.stat().st_mode
+                outside = self.base / f"external-{index}"
+                outside.write_bytes(contents)
+                source.unlink()
+                source.symlink_to(outside)
+                try:
+                    with (
+                        patch.dict(
+                            sys.modules, {"native_provider_architecture": module}
+                        ),
+                        self.assertRaisesRegex(
+                            engine.EngineError,
+                            "structural input must be a regular file",
+                        ),
+                    ):
+                        self.prepare()
+                    self.assertFalse((self.root / ".engine/workspace").exists())
+                finally:
+                    source.unlink()
+                    source.write_bytes(contents)
+                    source.chmod(mode)
+
+    def test_declared_symlink_overlay_hashes_target_bytes_and_preserves_link(self):
+        source = self.write("owned/readme", "placeholder")
+        source.unlink()
+        source.symlink_to("../README.md")
+        self.overlay("owned/readme", "docs/readme", False, "120000")
+        output = self.prepare()
+        self.assertEqual(os.readlink(output / "docs/readme"), "../README.md")
+        observed = engine.assembly_report(output)["inputs"]["owned/readme"]
+        self.assertEqual(
+            observed, {"mode": "120000", "sha256": engine.digest(b"../README.md")}
+        )
+
     def test_input_version_and_toolchain_must_match_committed_lock(self):
         self.write("VERSION", "0.1.0\n")
         with self.assertRaisesRegex(engine.EngineError, "explicitly regenerate"):
