@@ -21,6 +21,7 @@ except ModuleNotFoundError:
     import tomli as tomllib
 
 ROOT = Path(__file__).resolve().parents[1]
+PRODUCT_CHECKOUT = (ROOT.parents[1] / "engine.lock").is_file()
 
 
 def _load_root_format_script_module():
@@ -121,13 +122,24 @@ def test_root_fmt_recipes_use_shared_formatter_driver() -> None:
             if line.strip() and not line.startswith("#")
         ],
         "fmt_check_commands": [
-            line.strip() for line in lines[fmt_check_index + 1 : next_recipe_index] if line.strip()
+            line.strip()
+            for line in lines[fmt_check_index + 1 : next_recipe_index]
+            if line.strip() and not line.startswith("#")
         ],
     }
+    driver = (
+        "{{ justfile_directory() }}/scripts/format.py"
+        if PRODUCT_CHECKOUT
+        else "../scripts/format.py"
+    )
     expected = {
-        "working_directory": 'set working-directory := "codex-rs"',
-        "fmt_commands": ["@{{ python }} ../scripts/format.py"],
-        "fmt_check_commands": ["@{{ python }} ../scripts/format.py --check"],
+        "working_directory": (
+            'set working-directory := "."'
+            if PRODUCT_CHECKOUT
+            else 'set working-directory := "codex-rs"'
+        ),
+        "fmt_commands": [f"@{{{{ python }}}} {driver}"],
+        "fmt_check_commands": [f"@{{{{ python }}}} {driver} --check"],
     }
 
     assert actual == expected, (
@@ -144,11 +156,18 @@ def test_root_format_driver_covers_all_formatter_groups(
 ) -> None:
     """The shared driver should retain every formatter in both modes."""
     script = _load_root_format_script_module()
-    for name in (
+    rust_sources = [
         "bazel/rules/example.rs",
         "codex-rs/src/lib.rs",
         "codex-rs/new file.rs",
-    ):
+    ]
+    if PRODUCT_CHECKOUT:
+        rust_sources += [
+            ".engine/workspace/codex-rs/src/lib.rs",
+            "crates/providers/provider-api/src/lib.rs",
+            "integration/codex/adapter/src/new file.rs",
+        ]
+    for name in [*rust_sources, "scripts/owned.py"]:
         path = tmp_path / name
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text("")
@@ -165,13 +184,13 @@ def test_root_format_driver_covers_all_formatter_groups(
     def fake_check_output(args, *, cwd):
         assert cwd == tmp_path
         if args == git_ls_files_args + ["--", "*.rs"]:
-            return (
-                b"codex-rs/src/lib.rs\0bazel/rules/example.rs\0"
-                b"codex-rs/new file.rs\0codex-rs/deleted.rs\0"
-            )
+            return b"\0".join(name.encode() for name in [*rust_sources, "codex-rs/deleted.rs"])
+        if args == git_ls_files_args + ["--", "*.py"]:
+            return b"scripts/owned.py\0scripts/deleted.py\0"
         assert args == git_ls_files_args
         return b"MODULE.bazel\0README.md\0third_party/v8/libcxx.BUILD.bazel\0"
 
+    (tmp_path / "engine.lock").write_text(json.dumps({"toolchain": "1.96.0"}))
     monkeypatch.setattr(script, "REPO_ROOT", tmp_path)
     monkeypatch.setattr(script.subprocess, "check_output", fake_check_output)
     formatters = script.formatter_groups(check=False)
@@ -231,24 +250,33 @@ def test_root_format_driver_covers_all_formatter_groups(
     assert formatters[0].commands[-1].args == ("just", "--unstable", "--fmt")
     assert checks[0].commands[-1].args == ("just", "--unstable", "--fmt", "--check")
     rustfmt_args = (
-        "rustfmt",
-        "--edition",
-        "2024",
-        "--config-path",
-        str(tmp_path / "codex-rs/rustfmt.toml"),
-        "--config",
-        "imports_granularity=Item,skip_children=true",
-    )
+        ("rustup", "run", "1.96.0", "rustfmt", "--edition", "2024")
+        if PRODUCT_CHECKOUT
+        else (
+            "rustfmt",
+            "--edition",
+            "2024",
+            "--config-path",
+            str(tmp_path / "codex-rs/rustfmt.toml"),
+        )
+    ) + ("--config", "imports_granularity=Item,skip_children=true")
+    rust_cwd = tmp_path if PRODUCT_CHECKOUT else tmp_path / "codex-rs"
     rust_files = (
-        os.path.join("..", "bazel", "rules", "example.rs"),
-        "new file.rs",
-        os.path.join("src", "lib.rs"),
+        (
+            str(tmp_path / "bazel/rules/example.rs"),
+            str(tmp_path / "crates/providers/provider-api/src/lib.rs"),
+            str(tmp_path / "integration/codex/adapter/src/new file.rs"),
+        )
+        if PRODUCT_CHECKOUT
+        else (
+            os.path.join("..", "bazel", "rules", "example.rs"),
+            "new file.rs",
+            os.path.join("src", "lib.rs"),
+        )
     )
-    assert formatters[1].commands == (
-        script.Command(rustfmt_args + rust_files, tmp_path / "codex-rs"),
-    )
+    assert formatters[1].commands == (script.Command(rustfmt_args + rust_files, rust_cwd),)
     assert checks[1].commands == (
-        script.Command(rustfmt_args + ("--check",) + rust_files, tmp_path / "codex-rs"),
+        script.Command(rustfmt_args + ("--check",) + rust_files, rust_cwd),
     )
     format_buildifier_args = formatters[2].commands[-1].args
     check_buildifier_args = checks[2].commands[-1].args
@@ -269,14 +297,23 @@ def test_root_format_driver_covers_all_formatter_groups(
         "MODULE.bazel",
         "third_party/v8/libcxx.BUILD.bazel",
     )
-    assert [group.commands[-1].args[-3:] for group in formatters[3:]] == [
-        ("ruff", "format", "sdk/python"),
-        ("ruff", "format", "."),
-    ]
-    assert [group.commands[-1].args[-4:] for group in checks[3:]] == [
-        ("ruff", "format", "--check", "sdk/python"),
-        ("ruff", "format", "--check", "."),
-    ]
+    assert formatters[3].commands[-1].args[-3:] == ("ruff", "format", "sdk/python")
+    assert checks[3].commands[-1].args[-4:] == ("ruff", "format", "--check", "sdk/python")
+    script_paths = ("scripts/owned.py",) if PRODUCT_CHECKOUT else (".",)
+    force_exclude = ("--force-exclude",) if PRODUCT_CHECKOUT else ()
+    assert formatters[4].commands[-1].args[len(scripts_uv_run_args) :] == (
+        "ruff",
+        "format",
+        *force_exclude,
+        *script_paths,
+    )
+    assert checks[4].commands[-1].args[len(scripts_uv_run_args) :] == (
+        "ruff",
+        "format",
+        *force_exclude,
+        "--check",
+        *script_paths,
+    )
 
 
 def test_root_format_driver_discards_successful_command_output(
@@ -377,15 +414,22 @@ def test_generate_types_wires_all_generation_steps() -> None:
     ]
 
 
+@pytest.mark.parametrize("engine_override", [None, "prepared-engine"])
 @pytest.mark.parametrize("schema_override", [None, "override-schema"])
 def test_generation_resolves_configured_schema_and_explicit_override(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, schema_override: str | None
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    schema_override: str | None,
+    engine_override: str | None,
 ) -> None:
     script = _load_update_script_module()
     sdk_dir = tmp_path / "sdk" / "python"
     sdk_dir.mkdir(parents=True)
     monkeypatch.setattr(script, "sdk_root", lambda: sdk_dir)
     monkeypatch.chdir(tmp_path)
+    monkeypatch.delenv("NYACODE_ENGINE_ROOT", raising=False)
+    if engine_override:
+        monkeypatch.setenv("NYACODE_ENGINE_ROOT", str(tmp_path / engine_override))
     selected_schemas: list[Path] = []
     monkeypatch.setattr(script, "generate_types_from_schema_dir", selected_schemas.append)
     args = ["generate-types"]
@@ -393,7 +437,11 @@ def test_generation_resolves_configured_schema_and_explicit_override(
         (sdk_dir / "pyproject.toml").write_text(
             '[tool.codex.codegen]\nschema-dir = "../../configured-schema"\n'
         )
-        expected_schema = tmp_path / "configured-schema"
+        expected_schema = (
+            tmp_path / engine_override / "codex-rs/app-server-protocol/schema/json"
+            if engine_override
+            else tmp_path / "configured-schema"
+        )
     else:
         args.extend(["--schema-dir", schema_override])
         expected_schema = tmp_path / schema_override
@@ -403,11 +451,33 @@ def test_generation_resolves_configured_schema_and_explicit_override(
     assert selected_schemas == [expected_schema]
 
 
+@pytest.mark.parametrize("assembled", [False, True])
+def test_generation_default_schema_path_follows_checkout_layout(tmp_path, monkeypatch, assembled):
+    script = _load_update_script_module()
+    sdk_dir = tmp_path / "sdk/python"
+    sdk_dir.mkdir(parents=True)
+    (sdk_dir / "pyproject.toml").write_bytes((ROOT / "pyproject.toml").read_bytes())
+    monkeypatch.setattr(script, "sdk_root", lambda: sdk_dir)
+    monkeypatch.delenv("NYACODE_ENGINE_ROOT", raising=False)
+    local_schemas = tmp_path / "codex-rs/app-server-protocol/schema/json"
+    if assembled:
+        local_schemas.mkdir(parents=True)
+    selected_schemas = []
+    monkeypatch.setattr(script, "generate_types_from_schema_dir", selected_schemas.append)
+
+    script.main(["generate-types"])
+
+    assert selected_schemas == [
+        local_schemas
+        if assembled
+        else tmp_path / ".engine/workspace/codex-rs/app-server-protocol/schema/json"
+    ]
+
+
 def _load_repository_schema_bundle() -> dict:
     """Read the repository app-server schema bundle used by generation."""
     script = _load_update_script_module()
-    pyproject = tomllib.loads((ROOT / "pyproject.toml").read_text())
-    schema_dir = ROOT / pyproject["tool"]["codex"]["codegen"]["schema-dir"]
+    schema_dir = script.default_schema_dir()
     return json.loads(script.schema_bundle_path(schema_dir).read_text())
 
 

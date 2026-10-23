@@ -74,6 +74,12 @@ run on Python 3.15 ([upstream issue #4589](https://github.com/datamodel-code-gen
 This development toolchain pin does not change the SDK's supported runtime
 versions.
 
+Prepare the engine with `python3 scripts/engine.py prepare` from the product
+repository root before schema generation or SDK tests. The maintenance script uses
+schemas under `.engine/workspace` by default; `NYACODE_ENGINE_ROOT` selects another
+prepared workspace, and `--schema-dir` overrides either default. Set
+`CODEX_EXEC_PATH` to the packaged CLI being qualified when running SDK tests.
+
 - [Getting started](https://github.com/openai/codex/blob/main/sdk/python/docs/getting-started.md)
 - [API reference](https://github.com/openai/codex/blob/main/sdk/python/docs/api-reference.md)
 - [Untrusted external messages](https://github.com/openai/codex/blob/main/sdk/python/docs/api-reference.md#externalmessage)

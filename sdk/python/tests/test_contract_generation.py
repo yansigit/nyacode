@@ -11,6 +11,14 @@ from pathlib import Path
 import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
+ENGINE_ROOT = Path(
+    os.environ.get("NYACODE_ENGINE_ROOT")
+    or (
+        ROOT.parents[1]
+        if (ROOT.parents[1] / "codex-rs").is_dir()
+        else ROOT.parents[1] / ".engine/workspace"
+    )
+).resolve()
 GENERATED_TARGETS = [
     Path("src/openai_codex/generated/notification_registry.py"),
     Path("src/openai_codex/generated/v2_all.py"),
@@ -60,7 +68,7 @@ def test_generated_files_are_up_to_date(tmp_path, format_output):
         "scripts/update_sdk_artifacts.py",
         "generate-types",
         "--schema-dir",
-        str(ROOT.parents[1] / "codex-rs/app-server-protocol/schema/json"),
+        str(ENGINE_ROOT / "codex-rs/app-server-protocol/schema/json"),
     ]
     if not format_output:
         command.append("--no-format")
@@ -82,7 +90,7 @@ def test_generated_files_are_up_to_date(tmp_path, format_output):
 
 @pytest.mark.parametrize("mode", ["repository", "scratch", "experimental"])
 def test_schema_refresh_only_updates_python_for_repository_schemas(monkeypatch, tmp_path, mode):
-    script = ROOT.parents[1] / "codex-rs/app-server-protocol/scripts/write_schema_fixtures.py"
+    script = ENGINE_ROOT / "codex-rs/app-server-protocol/scripts/write_schema_fixtures.py"
     arguments = {
         "repository": [],
         "scratch": ["--schema-root", str(tmp_path / "schema")],
@@ -102,12 +110,12 @@ def test_schema_refresh_only_updates_python_for_repository_schemas(monkeypatch, 
         assert calls[1][0][-3:] == [
             "generate-types",
             "--schema-dir",
-            str(ROOT.parents[1] / "codex-rs/app-server-protocol/schema/json"),
+            str(ENGINE_ROOT / "codex-rs/app-server-protocol/schema/json"),
         ]
 
 
 def test_schema_generation_failure_does_not_update_python(monkeypatch):
-    script = ROOT.parents[1] / "codex-rs/app-server-protocol/scripts/write_schema_fixtures.py"
+    script = ENGINE_ROOT / "codex-rs/app-server-protocol/scripts/write_schema_fixtures.py"
     calls = []
 
     def fail(args, **_kwargs):
