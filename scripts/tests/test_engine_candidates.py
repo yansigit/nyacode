@@ -316,6 +316,43 @@ class PromotionTest(unittest.TestCase):
 
 
 class GitHubBoundaryTest(unittest.TestCase):
+    def test_manual_replay_validates_run_id_before_any_github_request(self):
+        for value in ("", "0", "-1", "+123", "1.5", "true", "123\n456"):
+            with (
+                self.subTest(value=value),
+                patch.object(
+                    candidates.sys, "argv", ["controller", "observe", "--run-id", value]
+                ),
+                patch.object(candidates.sys, "stderr", io.StringIO()),
+                patch.object(candidates, "api") as api,
+                self.assertRaises(SystemExit) as error,
+            ):
+                candidates.main()
+            self.assertEqual(error.exception.code, 2)
+            api.assert_not_called()
+
+    def test_manual_replay_invokes_only_observation_for_the_requested_run(self):
+        with (
+            patch.object(
+                candidates.sys,
+                "argv",
+                ["controller", "observe", "--run-id", "123", "--wait-seconds", "21000"],
+            ),
+            patch.dict(os.environ, {"GITHUB_REPOSITORY": REPOSITORY}),
+            patch.object(candidates, "api", return_value={"default_branch": "main"}),
+            patch.object(candidates, "observe") as observe,
+            patch.object(candidates, "discover") as discover,
+            patch.object(candidates, "publish") as publish,
+            patch.object(candidates, "promote") as promote,
+        ):
+            self.assertEqual(candidates.main(), 0)
+            args, repository, branch = observe.call_args.args
+            self.assertEqual((args.run_id, args.wait_seconds), (123, 21000))
+            self.assertEqual((repository, branch), (REPOSITORY, "main"))
+            discover.assert_not_called()
+            publish.assert_not_called()
+            promote.assert_not_called()
+
     def test_prerelease_and_draft_releases_are_ineligible(self):
         for flag in ("draft", "prerelease"):
             response = {
@@ -393,6 +430,62 @@ class GitHubBoundaryTest(unittest.TestCase):
             self.assertEqual(run.call_args.args[0][0:2], ["gh", "api"])
 
 
+class WorkflowBoundaryTest(unittest.TestCase):
+    def test_manual_and_fallback_observation_survive_skipped_publication(self):
+        workflow = (
+            candidates.ROOT / ".github/workflows/engine-upgrades.yml"
+        ).read_text()
+        discovery = workflow.split("\n  discover:\n", 1)[1].split(
+            "\n  publish-candidate:\n", 1
+        )[0]
+        observer = workflow.split("\n  observe:\n", 1)[1].split("\n  promote:\n", 1)[0]
+        self.assertIn(
+            "if: github.event_name != 'workflow_run' && inputs.qualification_run == ''",
+            discovery,
+        )
+        self.assertIn("needs: publish-candidate", observer)
+        # A status function overrides GitHub's implicit success() after a skipped need.
+        self.assertIn("!cancelled() &&", observer)
+        self.assertIn(
+            "github.event_name == 'workflow_run' || inputs.qualification_run != '' ||",
+            observer,
+        )
+        self.assertIn(
+            "needs.publish-candidate.outputs.qualification_run != ''", observer
+        )
+        self.assertIn("timeout-minutes: 360", observer)
+        self.assertIn("--wait-seconds 21000", observer)
+
+    def test_continuation_keeps_trusted_checkouts_and_separate_promotion_permissions(
+        self,
+    ):
+        workflow = (
+            candidates.ROOT / ".github/workflows/engine-upgrades.yml"
+        ).read_text()
+        observer = workflow.split("\n  observe:\n", 1)[1].split("\n  promote:\n", 1)[0]
+        promoter = workflow.split("\n  promote:\n", 1)[1]
+        self.assertIn(
+            "contents: read\n      pull-requests: write\n      actions: read", observer
+        )
+        self.assertNotIn("contents: write", observer)
+        self.assertNotIn("actions: write", observer)
+        for job in (observer, promoter):
+            self.assertIn("ref: ${{ github.event.repository.default_branch }}", job)
+            self.assertIn("persist-credentials: false", job)
+        self.assertIn(
+            "QUALIFICATION_RUN: ${{ needs.observe.outputs.qualification_run }}",
+            promoter,
+        )
+        self.assertIn(
+            "if: needs.observe.outputs.consider_promotion == 'true'", promoter
+        )
+        qualification_workflow = (
+            candidates.ROOT / ".github/workflows/engine-qualification.yml"
+        ).read_text()
+        self.assertIn("permissions:\n  contents: read", qualification_workflow)
+        self.assertNotIn("actions: write", qualification_workflow)
+
+
 class ControllerFlowTest(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
@@ -432,6 +525,7 @@ class ControllerFlowTest(unittest.TestCase):
         self,
     ):
         calls = []
+        output = self.root / "github-output"
 
         def api(path, *, data=None):
             calls.append((path, data))
@@ -443,6 +537,8 @@ class ControllerFlowTest(unittest.TestCase):
                 return {"tree": {"sha": "tree"}}
             if path.endswith("/pulls"):
                 return {"number": 7, "html_url": "https://example.invalid/pr/7"}
+            if path.endswith("/dispatches"):
+                return {"workflow_run_id": 789}
             return {"sha": HEAD}
 
         with (
@@ -453,21 +549,74 @@ class ControllerFlowTest(unittest.TestCase):
             patch.object(candidates.subprocess, "run") as run,
         ):
             candidates.publish(
-                SimpleNamespace(proposal=self.proposal), REPOSITORY, "main"
+                SimpleNamespace(proposal=self.proposal, github_output=output),
+                REPOSITORY,
+                "main",
             )
-            self.assertEqual(run.call_count, 1)
-            command = run.call_args.args[0]
+            run.assert_not_called()
+            self.assertEqual(output.read_text(), "qualification_run=789\n")
+            dispatch_path, dispatch = calls[-1]
             self.assertEqual(
-                command[:4], ["gh", "workflow", "run", candidates.WORKFLOW]
+                dispatch_path,
+                f"repos/{REPOSITORY}/actions/workflows/{candidates.WORKFLOW}/dispatches",
             )
-            self.assertIn(f"base_sha={BASE}", command)
-            self.assertIn("pull_request=7", command)
+            self.assertEqual(
+                dispatch,
+                {
+                    "ref": f"engine/{TAG}",
+                    "inputs": {
+                        "base_sha": BASE,
+                        "pull_request": "7",
+                        "release_tag": TAG,
+                    },
+                    "return_run_details": True,
+                },
+            )
             tree = next(data for path, data in calls if path.endswith("/git/trees"))
             self.assertEqual([entry["path"] for entry in tree["tree"]], ["engine.lock"])
             blob = next(data for path, data in calls if path.endswith("/git/blobs"))
             self.assertEqual(json.loads(blob["content"]), self.candidate)
             pr = next(data for path, data in calls if path.endswith("/pulls"))
             self.assertFalse(pr["draft"])
+
+    def test_publish_never_exports_an_invalid_dispatch_run_id(self):
+        output = self.root / "github-output"
+        for response in (
+            None,
+            {},
+            {"workflow_run_id": True},
+            {"workflow_run_id": "123"},
+            {"workflow_run_id": 0},
+            {"workflow_run_id": -1},
+        ):
+            with (
+                self.subTest(response=response),
+                patch.object(candidates, "current_base", return_value=BASE),
+                patch.object(candidates, "lock_at", return_value=self.original),
+                patch.object(candidates, "stable_release", return_value=REVISION),
+                patch.object(
+                    candidates,
+                    "api",
+                    side_effect=[
+                        [],
+                        subprocess.CalledProcessError(1, ["gh"], stderr=b"HTTP 404"),
+                        {"tree": {"sha": "tree"}},
+                        {"sha": "blob"},
+                        {"sha": "tree"},
+                        {"sha": HEAD},
+                        {},
+                        {"number": 7, "html_url": "https://example.invalid/pr/7"},
+                        response,
+                    ],
+                ),
+                self.assertRaisesRegex(ValueError, "valid workflow run ID"),
+            ):
+                candidates.publish(
+                    SimpleNamespace(proposal=self.proposal, github_output=output),
+                    REPOSITORY,
+                    "main",
+                )
+            self.assertFalse(output.exists())
 
     def test_failed_preflight_retains_valid_candidate_and_accepted_pin(self):
         (self.root / "engine.lock").write_text(json.dumps(self.original))
@@ -532,6 +681,8 @@ class ControllerFlowTest(unittest.TestCase):
                 return {"tree": {"sha": "tree"}}
             if path.endswith("/pulls"):
                 return {"number": 7, "html_url": "https://example.invalid/pr/7"}
+            if path.endswith("/dispatches"):
+                return {"workflow_run_id": 789}
             return {"sha": HEAD}
 
         with (
@@ -552,7 +703,7 @@ class ControllerFlowTest(unittest.TestCase):
                 f"https://github.com/{REPOSITORY}/actions/runs/321", pr["body"]
             )
             self.assertNotIn("attacker", pr["body"])
-            self.assertEqual(run.call_count, 1)
+            run.assert_not_called()
 
     def test_existing_candidate_reuses_branch_without_rewriting_it(self):
         proposal = json.loads(self.proposal.read_text())
@@ -630,6 +781,109 @@ class ControllerFlowTest(unittest.TestCase):
             self.assertNotIn("Old report", report)
             self.assertEqual(report.count("<!-- engine-qualification:start -->"), 1)
             self.assertIn("consider_promotion=true", output.read_text())
+            self.assertIn("qualification_run=123\n", output.read_text())
+
+    def test_observer_waits_for_the_exact_run_and_reports_its_failed_attempt(self):
+        fixture = qualification()
+        fixture["run"]["conclusion"] = "failure"
+        fixture["jobs"][0]["conclusion"] = "failure"
+        output = self.root / "github-output"
+        runs = iter(
+            [
+                {**fixture["run"], "status": status, "conclusion": None}
+                for status in ("queued", "in_progress")
+            ]
+            + [fixture["run"]]
+        )
+
+        def api(path, *, data=None):
+            if "/runs/" in path:
+                self.assertEqual(path, f"repos/{REPOSITORY}/actions/runs/123")
+                return next(runs)
+            if "/workflows/" in path:
+                return {"id": 456}
+            if "/pulls?" in path:
+                return [fixture["pr"]]
+            return {**fixture["pr"], "body": "Candidate details."}
+
+        with (
+            patch.object(candidates, "api", side_effect=api),
+            patch.object(candidates.time, "monotonic", side_effect=[100, 100, 130]),
+            patch.object(candidates.time, "sleep") as sleep,
+            patch.object(candidates, "run_jobs", return_value=fixture["jobs"]),
+            patch.object(candidates, "report_for") as artifact,
+            patch.object(candidates, "command") as command,
+            patch.object(candidates.subprocess, "run"),
+        ):
+            candidates.observe(
+                SimpleNamespace(run_id=123, wait_seconds=90, github_output=output),
+                REPOSITORY,
+                "main",
+            )
+            self.assertEqual(
+                [call.args for call in sleep.call_args_list], [(30,), (30,)]
+            )
+            artifact.assert_not_called()
+            self.assertIn(
+                "Qualification **failure**", command.call_args.kwargs["data"]["body"]
+            )
+            self.assertEqual(
+                output.read_text(), "qualification_run=123\nconsider_promotion=false\n"
+            )
+
+    def test_observer_wait_expires_without_reporting_or_exporting_promotion(self):
+        run = {**qualification()["run"], "status": "in_progress", "conclusion": None}
+        output = self.root / "github-output"
+        with (
+            patch.object(candidates, "api", side_effect=[{"id": 456}, run, run, run]),
+            patch.object(
+                candidates.time, "monotonic", side_effect=[100, 100, 130, 145]
+            ),
+            patch.object(candidates.time, "sleep") as sleep,
+            patch.object(candidates, "command") as command,
+            patch.object(candidates, "run_jobs") as jobs,
+            patch.object(candidates.subprocess, "run") as mutation,
+            self.assertRaisesRegex(
+                ValueError, "replay Engine upgrades with qualification_run"
+            ),
+        ):
+            candidates.observe(
+                SimpleNamespace(run_id=123, wait_seconds=45, github_output=output),
+                REPOSITORY,
+                "main",
+            )
+        self.assertEqual([call.args for call in sleep.call_args_list], [(30,), (15,)])
+        command.assert_not_called()
+        jobs.assert_not_called()
+        mutation.assert_not_called()
+        self.assertFalse(output.exists())
+
+    def test_observer_rejects_foreign_identity_before_waiting(self):
+        for field, value in (
+            ("id", 999),
+            ("workflow_id", 999),
+            ("event", "push"),
+            ("path", ".github/workflows/untrusted.yml"),
+            ("head_repository", {"full_name": "attacker/product"}),
+            ("head_sha", "invalid"),
+            ("head_branch", "engine/not-a-release"),
+        ):
+            run = {**qualification()["run"], "status": "in_progress", field: value}
+            with (
+                self.subTest(field=field),
+                patch.object(candidates, "api", side_effect=[{"id": 456}, run]),
+                patch.object(candidates.time, "sleep") as sleep,
+                patch.object(candidates, "command") as command,
+                patch.object(candidates.subprocess, "run") as mutation,
+            ):
+                candidates.observe(
+                    SimpleNamespace(run_id=123, wait_seconds=90, github_output=None),
+                    REPOSITORY,
+                    "main",
+                )
+                sleep.assert_not_called()
+                command.assert_not_called()
+                mutation.assert_not_called()
 
     def test_observer_reports_failure_cancel_and_missing_artifact_as_draft(self):
         for conclusion in ("failure", "cancelled", "success"):

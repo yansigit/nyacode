@@ -12,6 +12,7 @@ import os
 import re
 import subprocess
 import sys
+import time
 import zipfile
 from pathlib import Path
 
@@ -39,6 +40,12 @@ REQUIRED_JOBS = {
     "Engine acceptance",
     *(f"Package {target}" for target in TARGETS),
 }
+
+
+def positive_integer(value: str) -> int:
+    if not re.fullmatch(r"[1-9][0-9]*", value):
+        raise argparse.ArgumentTypeError("Expected a positive decimal integer")
+    return int(value)
 
 
 def select_mode(paths: list[str], candidate_branch: str = "") -> str:
@@ -459,26 +466,29 @@ def publish(args, repository: str, branch: str) -> None:
             },
         )
     )
-    subprocess.run(
-        [
-            "gh",
-            "workflow",
-            "run",
-            WORKFLOW,
-            "--repo",
-            repository,
-            "--ref",
-            candidate_branch,
-            "-f",
-            f"base_sha={base}",
-            "-f",
-            f"pull_request={pr['number']}",
-            "-f",
-            f"release_tag={proposal['tag']}",
-        ],
-        cwd=ROOT,
-        check=True,
+    dispatched = api(
+        f"repos/{repository}/actions/workflows/{WORKFLOW}/dispatches",
+        data={
+            "ref": candidate_branch,
+            "inputs": {
+                "base_sha": base,
+                "pull_request": str(pr["number"]),
+                "release_tag": proposal["tag"],
+            },
+            "return_run_details": True,
+        },
     )
+    if (
+        not isinstance(dispatched, dict)
+        or type(dispatched.get("workflow_run_id")) is not int
+        or dispatched["workflow_run_id"] <= 0
+    ):
+        raise ValueError(
+            "Qualification dispatch did not return a valid workflow run ID"
+        )
+    if getattr(args, "github_output", None):
+        with args.github_output.open("a") as output:
+            output.write(f"qualification_run={dispatched['workflow_run_id']}\n")
     print(pr["html_url"])
 
 
@@ -493,22 +503,33 @@ def discovery_url(repository: str) -> str:
 
 def observe(args, repository: str, branch: str) -> None:
     """Report completed runs using their branch/head, never an artifact's PR number."""
-    run = api(f"repos/{repository}/actions/runs/{args.run_id}")
     workflow = api(f"repos/{repository}/actions/workflows/{WORKFLOW}")
-    candidate_branch = run.get("head_branch", "")
-    tag = candidate_branch.removeprefix("engine/")
-    if (
-        run["workflow_id"] != workflow["id"]
-        or run["event"] != "workflow_dispatch"
-        or run["path"] != f".github/workflows/{WORKFLOW}"
-        or run["status"] != "completed"
-        or run["head_repository"]["full_name"] != repository
-        or not SHA.fullmatch(run["head_sha"])
-        or candidate_branch != f"engine/{tag}"
-        or not TAG.fullmatch(tag)
-    ):
-        print("No automatic candidate report for this qualification run")
-        return
+    deadline = time.monotonic() + getattr(args, "wait_seconds", 0)
+    while True:
+        run = api(f"repos/{repository}/actions/runs/{args.run_id}")
+        candidate_branch = run.get("head_branch", "")
+        tag = candidate_branch.removeprefix("engine/")
+        if (
+            run["id"] != args.run_id
+            or run["workflow_id"] != workflow["id"]
+            or run["event"] != "workflow_dispatch"
+            or run["path"] != f".github/workflows/{WORKFLOW}"
+            or run["head_repository"]["full_name"] != repository
+            or not SHA.fullmatch(run["head_sha"])
+            or candidate_branch != f"engine/{tag}"
+            or not TAG.fullmatch(tag)
+        ):
+            print("No automatic candidate report for this qualification run")
+            return
+        if run["status"] == "completed":
+            break
+        remaining = deadline - time.monotonic()
+        if remaining <= 0:
+            raise ValueError(
+                f"Qualification run {args.run_id} is still incomplete; "
+                "replay Engine upgrades with qualification_run set to this run ID"
+            )
+        time.sleep(min(30, remaining))
     prs = api(
         f"repos/{repository}/pulls?state=open&head={repository.split('/')[0]}:{candidate_branch}&per_page=100"
     )
@@ -610,6 +631,7 @@ def observe(args, repository: str, branch: str) -> None:
     if args.github_output:
         with args.github_output.open("a") as output:
             output.write(
+                f"qualification_run={run['id']}\n"
                 f"consider_promotion={'true' if consider_promotion else 'false'}\n"
             )
 
@@ -706,10 +728,12 @@ def main() -> int:
     discovery.add_argument("--output", type=Path, required=True)
     writer = sub.add_parser("publish")
     writer.add_argument("--proposal", type=Path, required=True)
+    writer.add_argument("--github-output", type=Path)
     promotion = sub.add_parser("promote")
-    promotion.add_argument("--run-id", type=int, required=True)
+    promotion.add_argument("--run-id", type=positive_integer, required=True)
     observation = sub.add_parser("observe")
-    observation.add_argument("--run-id", type=int, required=True)
+    observation.add_argument("--run-id", type=positive_integer, required=True)
+    observation.add_argument("--wait-seconds", type=positive_integer, default=0)
     observation.add_argument("--github-output", type=Path)
     args = parser.parse_args()
     try:

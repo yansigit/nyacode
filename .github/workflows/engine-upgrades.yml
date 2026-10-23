@@ -9,6 +9,10 @@ on:
         description: Stable rust-vX.Y.Z tag (empty selects latest); manual rehearsal bypasses the schedule gate.
         type: string
         default: ""
+      qualification_run:
+        description: Existing qualification run ID to observe without proposing or publishing a candidate.
+        type: string
+        default: ""
   workflow_run:
     workflows: [Engine qualification]
     types: [completed]
@@ -23,7 +27,7 @@ concurrency:
 jobs:
   discover:
     name: Propose stable engine pin without write credentials
-    if: github.event_name != 'workflow_run'
+    if: github.event_name != 'workflow_run' && inputs.qualification_run == ''
     runs-on: ubuntu-24.04
     permissions:
       contents: read
@@ -76,6 +80,8 @@ jobs:
       contents: write
       pull-requests: write
       actions: write
+    outputs:
+      qualification_run: ${{ steps.publish.outputs.qualification_run }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -86,20 +92,29 @@ jobs:
           name: engine-candidate-proposal
           path: ${{ runner.temp }}/candidate
       - name: Validate untrusted proposal data with the trusted base controller
+        id: publish
         env:
           GH_TOKEN: ${{ github.token }}
-        run: python3 scripts/engine_candidates.py publish --proposal "$RUNNER_TEMP/candidate/candidate.json"
+        run: python3 scripts/engine_candidates.py publish --proposal "$RUNNER_TEMP/candidate/candidate.json" --github-output "$GITHUB_OUTPUT"
 
   observe:
     name: Report completed candidate qualification
-    if: github.event_name == 'workflow_run'
+    needs: publish-candidate
+    # Explicit continuation also covers GITHUB_TOKEN runs whose workflow_run event is suppressed.
+    # The status function permits manual replay and fallback when publication was skipped.
+    if: >-
+      !cancelled() &&
+      (github.event_name == 'workflow_run' || inputs.qualification_run != '' ||
+       needs.publish-candidate.outputs.qualification_run != '')
     runs-on: ubuntu-24.04
+    timeout-minutes: 360
     permissions:
       contents: read
       pull-requests: write
       actions: read
     outputs:
       consider_promotion: ${{ steps.report.outputs.consider_promotion }}
+      qualification_run: ${{ steps.report.outputs.qualification_run }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -109,8 +124,9 @@ jobs:
         id: report
         env:
           GH_TOKEN: ${{ github.token }}
-          QUALIFICATION_RUN: ${{ github.event.workflow_run.id }}
-        run: python3 scripts/engine_candidates.py observe --run-id "$QUALIFICATION_RUN" --github-output "$GITHUB_OUTPUT"
+          QUALIFICATION_RUN: ${{ github.event.workflow_run.id || inputs.qualification_run || needs.publish-candidate.outputs.qualification_run }}
+        # Leave ten minutes within the hosted job limit to fail closed and allow manual replay.
+        run: python3 scripts/engine_candidates.py observe --run-id "$QUALIFICATION_RUN" --wait-seconds 21000 --github-output "$GITHUB_OUTPUT"
 
   promote:
     name: Promote only the exact fully qualified candidate
@@ -129,5 +145,5 @@ jobs:
       - name: Verify run, jobs, base, head, report, and allowed lock changes
         env:
           GH_TOKEN: ${{ github.token }}
-          QUALIFICATION_RUN: ${{ github.event.workflow_run.id }}
+          QUALIFICATION_RUN: ${{ needs.observe.outputs.qualification_run }}
         run: python3 scripts/engine_candidates.py promote --run-id "$QUALIFICATION_RUN"

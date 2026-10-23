@@ -58,6 +58,25 @@ diagnostics. Promotion verifies the exact candidate commit, current base, allowe
 files, complete qualification, and strict branch protection before an immediate
 squash merge. Product release tags and publication remain explicit.
 
+The trusted publisher records the exact qualification run ID returned by GitHub.
+A separate trusted observer waits up to 350 minutes for that run, reports its
+result, and passes its validated ID to the separate promotion job. Candidate
+qualification keeps read-only credentials. The `workflow_run` trigger remains a
+fallback, but automatic continuation does not depend on delivery of bot-generated
+events.
+
+Qualification packages may run for 360 minutes. If observation times out or an
+older run needs its report restored, replay only the observer from the default
+branch with the existing run ID:
+
+```sh
+gh workflow run engine-upgrades.yml --ref main -f qualification_run=RUN_ID
+```
+
+Replay skips discovery and publication, waits boundedly if the run is still in
+progress, and keeps all exact-head and promotion checks. An incomplete run cannot
+be promoted.
+
 The Nix development shell uses the exact Rust version from `engine.lock` and
 includes the GitHub CLI, Python, and Git required for explicit preparation:
 

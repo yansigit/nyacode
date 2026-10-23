@@ -38734,7 +38734,8 @@
       "path": "codex-rs/utils/pty/src/spawn_helper_tests.rs",
       "purpose": "backend_dispatch",
       "regression_groups": [
-        "backend_dispatch"
+        "backend_dispatch",
+        "dependency_build"
       ],
       "source": {
         "mode": "100644",
@@ -38745,6 +38746,34 @@
         "mode": "100644",
         "path": "codex-rs/utils/pty/src/spawn_helper_tests.rs",
         "sha256": "e1553f0b6919b0db72d226cbabb64d698042e86bccfa74cc1899720ac0bd7ccf"
+      }
+    },
+    {
+      "added_after_baseline": true,
+      "artifact": "source",
+      "change": "modified",
+      "destination": {
+        "kind": "patch",
+        "patch": "integration/codex/patches/dependency_override.patch",
+        "path": "codex-rs/utils/pty/src/unix_io.rs"
+      },
+      "git_status": "M",
+      "mode_changed": false,
+      "owner": "downstream-build",
+      "path": "codex-rs/utils/pty/src/unix_io.rs",
+      "purpose": "Use Tokio registration with an explicit owned-descriptor lifetime contract after the I/O safety fix.",
+      "regression_groups": [
+        "dependency_build"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "codex-rs/utils/pty/src/unix_io.rs",
+        "sha256": "8a7101850c01ad37075d6ee4278024d342086537256c8b82e0198085e8641798"
+      },
+      "upstream_source": {
+        "mode": "100644",
+        "path": "codex-rs/utils/pty/src/unix_io.rs",
+        "sha256": "8c5c543f48aca6f231e99ca69d660612c0174a495e0e7fcc11619eacbcdccef8"
       }
     },
     {
