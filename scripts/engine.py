@@ -668,12 +668,18 @@ def check(
                 ],
             ]
         )
+    env = {**os.environ, "RUSTUP_TOOLCHAIN": load_lock(root)["toolchain"]}
     stages = []
     for index, command in enumerate(commands):
         log = artifacts / f"{index + 1:02d}.log"
         with log.open("w") as stream:
             result = subprocess.run(
-                command, cwd=root, stdout=stream, stderr=subprocess.STDOUT, check=False
+                command,
+                cwd=root,
+                env=env,
+                stdout=stream,
+                stderr=subprocess.STDOUT,
+                check=False,
             )
         stages.append(
             {"command": command, "exit_code": result.returncode, "log": str(log)}

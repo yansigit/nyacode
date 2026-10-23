@@ -30,4 +30,4 @@ runs:
       shell: bash
       run: |
         python3 scripts/engine.py --json prepare > "$RUNNER_TEMP/engine.json"
-        python3 -c 'import json, os; root = json.load(open(os.environ["RUNNER_TEMP"] + "/engine.json"))["output"]; print("root=" + root, file=open(os.environ["GITHUB_OUTPUT"], "a")); print("NYACODE_ENGINE_ROOT=" + root + "\nCODEX_REPO_ROOT=" + root, file=open(os.environ["GITHUB_ENV"], "a"))'
+        python3 -c 'import json, os; root = json.load(open(os.environ["RUNNER_TEMP"] + "/engine.json"))["output"]; print("root=" + root, file=open(os.environ["GITHUB_OUTPUT"], "a")); print("NYACODE_ENGINE_ROOT=" + root + "\nCODEX_REPO_ROOT=" + root + "\nRUSTUP_TOOLCHAIN=" + json.load(open("engine.lock"))["toolchain"], file=open(os.environ["GITHUB_ENV"], "a"))'

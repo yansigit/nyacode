@@ -1,4 +1,5 @@
 import importlib.util
+import json
 import os
 from pathlib import Path
 import re
@@ -27,6 +28,38 @@ def load_python_harness():
 
 
 class EnginePathTests(unittest.TestCase):
+    def test_proxy_npm_sources_come_from_prepared_engine(self):
+        spec = importlib.util.spec_from_file_location(
+            "engine_proxy_npm", ROOT / "codex-cli/scripts/build_npm_package.py"
+        )
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        with tempfile.TemporaryDirectory() as temporary:
+            workspace = Path(temporary) / "engine"
+            proxy = workspace / "codex-rs/responses-api-proxy/npm"
+            (proxy / "bin").mkdir(parents=True)
+            (proxy / "bin/codex-responses-api-proxy.js").write_text("prepared launcher")
+            (proxy / "package.json").write_text(
+                json.dumps({"name": "codex-responses-api-proxy"})
+            )
+            output = Path(temporary) / "package"
+            output.mkdir()
+            engine = types.ModuleType("engine")
+            engine.prepare = Mock(return_value=workspace)
+            with (
+                patch.dict(sys.modules, {"engine": engine}),
+                patch.object(sys, "path", sys.path.copy()),
+            ):
+                module.stage_sources(output, "1.2.3", "codex-responses-api-proxy")
+            engine.prepare.assert_called_once_with(root=ROOT)
+            self.assertEqual(
+                (output / "bin/codex-responses-api-proxy.js").read_text(),
+                "prepared launcher",
+            )
+            self.assertEqual(
+                json.loads((output / "package.json").read_text())["version"], "1.2.3"
+            )
+
     def test_public_commands_are_available(self):
         result = subprocess.run(
             [sys.executable, str(ROOT / "scripts/build_nyacode.py"), "--help"],
@@ -101,6 +134,7 @@ class EnginePathTests(unittest.TestCase):
                 call.kwargs["env"]["NYACODE_ENGINE_ROOT"], str(engine_root)
             )
             self.assertEqual(call.kwargs["env"]["RUSTY_V8_ARCHIVE"], "pinned")
+            self.assertEqual(call.kwargs["env"]["RUSTUP_TOOLCHAIN"], "1.95.0")
             self.assertEqual(
                 call.kwargs["env"]["CARGO_TARGET_DIR"], str(ROOT / ".engine/target")
             )
@@ -130,6 +164,7 @@ class EnginePathTests(unittest.TestCase):
                     {
                         "CARGO_TARGET_DIR": "/external-target",
                         "NYACODE_ENGINE_ROOT": "/stale-engine",
+                        "RUSTUP_TOOLCHAIN": "unexpected-toolchain",
                     },
                 ),
                 patch(
@@ -152,6 +187,9 @@ class EnginePathTests(unittest.TestCase):
                     run.call_args.kwargs["env"]["NYACODE_ENGINE_ROOT"], str(workspace)
                 )
                 self.assertNotIn("--", run.call_args.args[0])
+                self.assertEqual(
+                    run.call_args.kwargs["env"]["RUSTUP_TOOLCHAIN"], "1.95.0"
+                )
 
     def test_engine_run_locks_cargo_before_cli_arguments(self):
         engine = types.ModuleType("engine")

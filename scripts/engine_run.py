@@ -2,6 +2,7 @@
 """Run a developer command in the pinned, assembled engine workspace."""
 
 import argparse
+import json
 import os
 from pathlib import Path
 import subprocess
@@ -47,6 +48,9 @@ def main() -> int:
     env = os.environ.copy()
     env["CODEX_REPO_ROOT"] = str(workspace)
     env["NYACODE_ENGINE_ROOT"] = str(workspace)
+    env["RUSTUP_TOOLCHAIN"] = json.loads((ROOT / "engine.lock").read_text())[
+        "toolchain"
+    ]
     env.setdefault("CARGO_TARGET_DIR", str(ROOT / ".engine/target"))
     return subprocess.run(
         locked_command(args.command),
