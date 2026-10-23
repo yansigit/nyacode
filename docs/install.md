@@ -8,26 +8,26 @@ artifacts; matching `rust-vX.Y.Z` tags publish GitHub Releases after validation.
 
 ## Build from source
 
-Install Git, Python 3.11 or newer, the pinned Rust toolchain (via rustup), and your platform's C/C++ build tools. Linux builds also need `pkg-config`, OpenSSL development headers, Clang/libclang, CMake, and Protocol Buffers. On Ubuntu:
+Install Git, the GitHub CLI (`gh`), Python 3.11 or newer, the pinned Rust toolchain (via rustup), and your platform's C/C++ build tools. Linux builds also need `pkg-config`, OpenSSL development headers, Clang/libclang, CMake, and Protocol Buffers. On Ubuntu:
 
 ```sh
 sudo apt-get install build-essential pkg-config libssl-dev clang libclang-dev cmake protobuf-compiler
-git clone https://github.com/yansigit/nyacode.git
+gh repo clone yansigit/nyacode
 cd nyacode
 python3 scripts/build_nyacode.py
-./codex-rs/target/debug/nyacode
+./.engine/target/debug/nyacode
 ```
 
 The build helper verifies the pinned V8 archive and bindings before building both executable names and the Code Mode host. The default V8 crate download does not provide every artifact used by this fork.
 
-To rehearse the pinned engine assembly without changing the default build, use `python3 scripts/build_nyacode.py --engine`. The assembled workspace and its qualification commands are documented in [engine migration](engine.md).
+The build first assembles the pinned engine in `.engine/workspace`; its source and locked dependencies are disposable. Edit owned crates, overlays, or patches in the product checkout. See [engine development](engine.md) for qualification and regeneration commands.
 
 For an optimized installation into `~/.local/bin` on macOS or Linux:
 
 ```sh
 python3 scripts/build_nyacode.py --release
 mkdir -p ~/.local/bin
-install -m 755 codex-rs/target/release/nyacode codex-rs/target/release/codex-code-mode-host ~/.local/bin/
+install -m 755 .engine/target/release/nyacode .engine/target/release/codex-code-mode-host ~/.local/bin/
 nyacode --help
 ```
 
