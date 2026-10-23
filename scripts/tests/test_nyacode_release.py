@@ -230,7 +230,9 @@ class ReleaseSetTest(unittest.TestCase):
     def test_overlay_license_inputs_exist_in_product_source(self):
         lock = json.loads((ROOT / "engine.lock").read_text())
         manifest = json.loads((ROOT / lock["assembly_manifest"]).read_text())
-        overlays = {item["destination"]: item["source"] for item in manifest["overlays"]}
+        overlays = {
+            item["destination"]: item["source"] for item in manifest["overlays"]
+        }
         for notice in release.NOTICES:
             if notice in overlays:
                 self.assertTrue((ROOT / overlays[notice]).is_file(), notice)
@@ -266,9 +268,18 @@ class EngineReleaseTest(unittest.TestCase):
         release.write_json(self.root / "engine.lock", self.lock)
         manifest = self.root / self.lock["assembly_manifest"]
         manifest.parent.mkdir(parents=True)
-        release.write_json(manifest, {"overlays": [
-            {"source": "helper.sh", "destination": "helper.sh", "mode": "100755"}
-        ]})
+        release.write_json(
+            manifest,
+            {
+                "overlays": [
+                    {
+                        "source": "helper.sh",
+                        "destination": "helper.sh",
+                        "mode": "100755",
+                    }
+                ]
+            },
+        )
         (self.root / "VERSION").write_text(VERSION + "\n")
         (self.root / "helper.sh").write_text("engine input\n")
         (self.root / "helper.sh").chmod(0o755)
@@ -277,9 +288,16 @@ class EngineReleaseTest(unittest.TestCase):
             "revision": self.lock["revision"],
             "archive_sha256": self.lock["archive_sha256"],
             "inputs": {
-                name: {"sha256": engine.digest(engine.blob(self.root / name)),
-                       "mode": engine.file_mode(self.root / name)}
-                for name in ("engine.lock", self.lock["assembly_manifest"], "VERSION", "helper.sh")
+                name: {
+                    "sha256": engine.digest(engine.blob(self.root / name)),
+                    "mode": engine.file_mode(self.root / name),
+                }
+                for name in (
+                    "engine.lock",
+                    self.lock["assembly_manifest"],
+                    "VERSION",
+                    "helper.sh",
+                )
             },
         }
         self.report["input_sha256"] = engine.digest(
@@ -297,12 +315,17 @@ class EngineReleaseTest(unittest.TestCase):
         self.engine.write_json(self.workspace / self.engine.MARKER, self.report)
 
     def test_release_records_the_accepted_pin_and_input_digest(self):
-        self.assertEqual(release.engine_provenance(), {
-            "engine_revision": self.lock["revision"],
-            "engine_archive_sha256": self.lock["archive_sha256"],
-            "integration_input_sha256": self.report["input_sha256"],
-            "integration_contract_version": self.lock["integration_contract_version"],
-        })
+        self.assertEqual(
+            release.engine_provenance(),
+            {
+                "engine_revision": self.lock["revision"],
+                "engine_archive_sha256": self.lock["archive_sha256"],
+                "integration_input_sha256": self.report["input_sha256"],
+                "integration_contract_version": self.lock[
+                    "integration_contract_version"
+                ],
+            },
+        )
 
     def test_changed_pin_or_archive_is_rejected(self):
         for key, value in (("revision", "e" * 40), ("archive_sha256", "a" * 64)):
@@ -333,7 +356,9 @@ class EngineReleaseTest(unittest.TestCase):
 
     def test_windows_uses_canonical_git_modes(self):
         (self.root / "helper.sh").chmod(0o644)
-        with patch.object(self.engine, "source_modes", return_value={"helper.sh": "100755"}):
+        with patch.object(
+            self.engine, "source_modes", return_value={"helper.sh": "100755"}
+        ):
             self.assertTrue(release.engine_provenance())
 
     def test_windows_untracked_overlay_uses_declared_mode(self):
@@ -348,7 +373,9 @@ class EngineReleaseTest(unittest.TestCase):
         with patch.dict(os.environ):
             os.environ.pop("NYACODE_ENGINE_ROOT")
             with self.assertRaisesRegex(ValueError, "NYACODE_ENGINE_ROOT is required"):
-                release.assemble(release.RELEASE_TARGETS[0], self.root, self.root / "dist")
+                release.assemble(
+                    release.RELEASE_TARGETS[0], self.root, self.root / "dist"
+                )
 
     def test_assembly_ships_engine_resources_with_product_metadata(self):
         from codex_package import version
@@ -368,7 +395,9 @@ class EngineReleaseTest(unittest.TestCase):
         (self.workspace / "VERSION").write_text("9.8.7\n")
         dist = self.root / "dist"
         with (
-            patch.object(release, "fetch_rg", return_value=self.root / "nyacode") as fetch,
+            patch.object(
+                release, "fetch_rg", return_value=self.root / "nyacode"
+            ) as fetch,
             patch.object(release, "smoke"),
             patch.object(release, "source_commit", return_value=COMMIT),
             patch("codex_package.cli.strip_binary"),
@@ -376,15 +405,18 @@ class EngineReleaseTest(unittest.TestCase):
         ):
             release.assemble(target, self.root, dist)
         fetch.assert_called_once_with(
-            TARGET_SPECS[target], manifest_path=self.workspace / "scripts/codex_package/rg"
+            TARGET_SPECS[target],
+            manifest_path=self.workspace / "scripts/codex_package/rg",
         )
         report = json.loads((dist / f"nyacode-{target}.json").read_text())
         self.assertEqual((report["version"], report["commit"]), (VERSION, COMMIT))
         extracted = self.root / "extracted"
         release.extract_package(dist / report["archive"], extracted)
         for notice in release.NOTICES:
-            self.assertEqual((extracted / "licenses" / notice).read_text(),
-                             "assembled engine license\n")
+            self.assertEqual(
+                (extracted / "licenses" / notice).read_text(),
+                "assembled engine license\n",
+            )
 
     def test_packaging_helpers_use_engine_while_metadata_uses_product(self):
         code = """
@@ -395,18 +427,35 @@ print(json.dumps([str(targets.REPO_ROOT), str(cargo.CODEX_RS_ROOT), str(v8.REPO_
 release.metadata(None, None)
 """
         result = subprocess.run(
-            [sys.executable, "-c", code], cwd=ROOT,
-            env={**os.environ, "PYTHONPATH": str(ROOT / "scripts"),
-                 "CODEX_REPO_ROOT": str(ROOT)},
-            check=True, text=True, capture_output=True,
+            [sys.executable, "-c", code],
+            cwd=ROOT,
+            env={
+                **os.environ,
+                "PYTHONPATH": str(ROOT / "scripts"),
+                "CODEX_REPO_ROOT": str(ROOT),
+            },
+            check=True,
+            text=True,
+            capture_output=True,
         )
         roots, metadata = map(json.loads, result.stdout.splitlines())
-        self.assertEqual(roots, [str(self.workspace), str(self.workspace / "codex-rs"),
-                                 str(self.workspace)])
+        self.assertEqual(
+            roots,
+            [
+                str(self.workspace),
+                str(self.workspace / "codex-rs"),
+                str(self.workspace),
+            ],
+        )
         self.assertEqual(metadata["version"], (ROOT / "VERSION").read_text().strip())
-        self.assertEqual(metadata["commit"], subprocess.check_output(
-            ["git", "rev-parse", "HEAD"], cwd=ROOT, text=True,
-        ).strip())
+        self.assertEqual(
+            metadata["commit"],
+            subprocess.check_output(
+                ["git", "rev-parse", "HEAD"],
+                cwd=ROOT,
+                text=True,
+            ).strip(),
+        )
 
 
 class PublicationTest(unittest.TestCase):

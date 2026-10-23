@@ -29,6 +29,7 @@ TARGETS = (
     "aarch64-pc-windows-msvc",
 )
 REQUIRED_JOBS = {
+    "Dependency policy / cargo-deny",
     "Engine controls",
     "Standalone providers",
     "Release tooling and version",
@@ -175,6 +176,7 @@ def validate_promotion(
         != {
             name: "success"
             for name in (
+                "dependency_policy",
                 "controls",
                 "providers",
                 "validate",

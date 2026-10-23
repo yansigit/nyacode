@@ -1,0 +1,160 @@
+{
+  "linked_binaries": [
+    "nyacode",
+    "codex",
+    "codex-code-mode-host"
+  ],
+  "product_baseline": "b8bbac5e2ad84168eee5a8b08564a910e8006564",
+  "schema_version": 1,
+  "source_changed_after_build_and_tests": false,
+  "source_parity_files": 9712,
+  "target": "x86_64-unknown-linux-gnu",
+  "tests": [
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "scripts/tests",
+        "-p",
+        "test_nyacode_branding.py"
+      ],
+      "exit_code": 0,
+      "ignored_count": 0,
+      "log_sha256": "25150929fd0dfdd4739a130bbff429a29a97523a5c7482fdd292d40f8de7f7d7",
+      "name": "nyacode-branding",
+      "state": "passed",
+      "test_count": 7
+    },
+    {
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--manifest-path",
+        "codex-rs/Cargo.toml",
+        "-p",
+        "codex-code-mode-host",
+        "--test",
+        "stdio",
+        "--",
+        "--test-threads",
+        "2"
+      ],
+      "exit_code": 0,
+      "ignored_count": 0,
+      "log_sha256": "a87865e4c4cbea20bb73525dca351b4efd8bfdf4e2a670b7036d0736f0162c8d",
+      "name": "code-mode-host-stdio",
+      "state": "passed",
+      "test_count": 9
+    },
+    {
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--manifest-path",
+        "codex-rs/Cargo.toml",
+        "-p",
+        "codex-provider-api",
+        "-p",
+        "codex-provider-auth",
+        "-p",
+        "codex-provider-codecs",
+        "-p",
+        "codex-provider-cursor",
+        "-p",
+        "codex-provider-opencode",
+        "-p",
+        "codex-provider-claude",
+        "-p",
+        "codex-provider-antigravity",
+        "-p",
+        "codex-provider-registry",
+        "-p",
+        "codex-provider-runtime",
+        "-p",
+        "codex-provider-adapter",
+        "--",
+        "--test-threads",
+        "2"
+      ],
+      "exit_code": 0,
+      "ignored_count": 2,
+      "log_sha256": "c9d58704f734618d536aa1d3c2a7da31748a2da4b9e0d5aa9dcd8d134f20aa11",
+      "name": "provider-packages",
+      "state": "passed",
+      "test_count": 174
+    },
+    {
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--manifest-path",
+        "codex-rs/Cargo.toml",
+        "-p",
+        "codex-core",
+        "--lib",
+        "native_provider",
+        "--",
+        "--test-threads",
+        "2"
+      ],
+      "exit_code": 0,
+      "ignored_count": 0,
+      "log_sha256": "1b10d6b2b399bf6b12bf34e4c7afb398c647256e83d94616210e08dbec1b9664",
+      "name": "core-native-provider",
+      "state": "passed",
+      "test_count": 2
+    },
+    {
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--manifest-path",
+        "codex-rs/Cargo.toml",
+        "-p",
+        "codex-state",
+        "--lib",
+        "runtime::chat::tests",
+        "--",
+        "--test-threads",
+        "2"
+      ],
+      "exit_code": 0,
+      "ignored_count": 0,
+      "log_sha256": "b91d25a9f07a21b637aef677df0f94054844b2be9c9e75132d52ab5d459e63ee",
+      "name": "chat-saved-storage-recovery",
+      "state": "passed",
+      "test_count": 30
+    },
+    {
+      "command": [
+        "cargo",
+        "test",
+        "--locked",
+        "--manifest-path",
+        "codex-rs/Cargo.toml",
+        "-p",
+        "codex-app-server",
+        "--lib",
+        "chat::saved::tests",
+        "--",
+        "--test-threads",
+        "2"
+      ],
+      "exit_code": 0,
+      "ignored_count": 0,
+      "log_sha256": "f0f0f5c231263059272bf2876823167dc4f4ce1a9320ea1c0362d1e5953ab00f",
+      "name": "chat-saved-service-recovery",
+      "state": "passed",
+      "test_count": 7
+    }
+  ],
+  "toolchain": "1.95.0",
+  "upstream_base": "ce0323f2f2d3b25e82806cd555237da3db4e1897"
+}

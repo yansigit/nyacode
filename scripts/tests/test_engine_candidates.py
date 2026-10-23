@@ -87,6 +87,7 @@ def qualification():
         "results": {
             name: "success"
             for name in (
+                "dependency_policy",
                 "controls",
                 "providers",
                 "validate",

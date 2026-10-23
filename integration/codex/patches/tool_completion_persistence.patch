@@ -1808,7 +1808,7 @@ index 5bd73ec2a7ce2808062aa349a5cade9a0861fd89..b726eca3fdbd54219e70d9d4f0e6ae6b
 -Line::from_iter([Span::from("and run "), Span::from("codex app").fg(Color::Rgb(166, 227, 161)), Span::from(".")]) []
 +Line::from_iter([Span::from("and run "), Span::from("nyacode app").fg(Color::Rgb(166, 227, 161)), Span::from(".")]) []
 diff --git a/codex-rs/tui/src/tooltips.rs b/codex-rs/tui/src/tooltips.rs
-index 4319a0988c2a1c5db5abb2ec54218b96d3193b80..b095fccf2e13700fbf4cfdc7f78959b5336bff16 100644
+index 4319a0988c2a1c5db5abb2ec54218b96d3193b80..ee8dc2218f7612718c39f384164bf6daa60657c9 100644
 --- a/codex-rs/tui/src/tooltips.rs
 +++ b/codex-rs/tui/src/tooltips.rs
 @@ -6,6 +6,7 @@ use codex_features::FEATURES;
@@ -1848,15 +1848,6 @@ index 4319a0988c2a1c5db5abb2ec54218b96d3193b80..b095fccf2e13700fbf4cfdc7f78959b5
  pub(crate) fn get_tooltip(plan: Option<PlanType>, keymap: &TuiKeymap) -> Option<String> {
      let mut rng = rand::rng();
      preferred_tooltip(&mut rng, plan).or_else(|| pick_tooltip(&mut rng, keymap))
-@@ -242,7 +242,7 @@ pub(crate) mod announcement {
-             } else if cfg!(target_os = "windows") {
-                 Self::Windows
-             } else {
--                // Codex currently publishes CLI builds for macOS, Windows, and Linux.
-+                // Nyacode currently publishes CLI builds for macOS, Windows, and Linux.
-                 Self::Linux
-             }
-         }
 @@ -560,7 +560,7 @@ from_date = "2000-01-01"
      #[test]
      fn announcement_tip_toml_parse_comments() {

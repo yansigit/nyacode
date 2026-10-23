@@ -2363,28 +2363,6 @@ index 700c23784e13e843d05b3dc82ae5ad30ead5f030..51ea9590f250f86ce3d513d481b749dc
      The running daemon will restart; active or queued work may be interrupted.
      ");
  }
-diff --git a/codex-rs/cli/src/debug_sandbox.rs b/codex-rs/cli/src/debug_sandbox.rs
-index c0efcdb1f6e308a56ba8d5a2d734f449862f1380..3e93298ed73900eaf6ad37cfd7f352d99370457c 100644
---- a/codex-rs/cli/src/debug_sandbox.rs
-+++ b/codex-rs/cli/src/debug_sandbox.rs
-@@ -411,7 +411,7 @@ async fn run_command_under_sandbox(
-             .map_err(|err| anyhow::anyhow!(err))?;
-             // This CLI inherits the user's controlling terminal. Keep this deny
-             // after every shared policy allowance so the child cannot queue input
--            // for the unsandboxed shell that resumes when Codex exits.
-+            // for the unsandboxed shell that resumes when Nyacode exits.
-             match args.as_mut_slice() {
-                 [flag, policy, ..] if flag.as_str() == "-p" => {
-                     // Older macOS policy compilers do not define the TIOCSTI symbol.
-@@ -689,7 +689,7 @@ async fn load_debug_sandbox_config_with_codex_home(
-         ));
-     }
- 
--    // For legacy configs, `codex sandbox` historically defaulted to read-only
-+    // For legacy configs, `nyacode sandbox` historically defaulted to read-only
-     // instead of inheriting ambient `sandbox_mode` settings from user/system
-     // config. Keep that behavior unless this invocation explicitly passes a
-     // legacy `sandbox_mode` CLI override for compatibility with older callers.
 diff --git a/codex-rs/cli/src/doctor.rs b/codex-rs/cli/src/doctor.rs
 index 10d1cefc92cc412d752157aa2b3823b092a57e81..8395b93cdecfb236e06c4045bd4ac73f17bd556c 100644
 --- a/codex-rs/cli/src/doctor.rs
@@ -3170,7 +3148,7 @@ index 703fadc10cf2db87b7e4319e8b8da35e09eed224..494351f2d7784cecbd344aadcb8048a8
      .await?;
  
 diff --git a/codex-rs/cli/src/login.rs b/codex-rs/cli/src/login.rs
-index 1d6421b060ba22fae1cf3553a0c1e9ea582a30d5..7c8db3705738674dac6d3875901368e6ad0f3b71 100644
+index 1d6421b060ba22fae1cf3553a0c1e9ea582a30d5..1f70f2e8e62f97cbd270c9719c75b2b827847873 100644
 --- a/codex-rs/cli/src/login.rs
 +++ b/codex-rs/cli/src/login.rs
 @@ -1,7 +1,7 @@
@@ -3191,15 +3169,6 @@ index 1d6421b060ba22fae1cf3553a0c1e9ea582a30d5..7c8db3705738674dac6d3875901368e6
  ///
  /// This deliberately duplicates a narrow slice of the TUI logging setup instead of reusing it
  /// wholesale. The TUI stack includes session-oriented layers that are valuable for interactive
-@@ -103,7 +103,7 @@ fn init_login_file_logging(config: &Config) -> Option<WorkerGuard> {
-         .with_ansi(false)
-         .with_filter(env_filter);
- 
--    // Direct `codex login` otherwise relies on ephemeral stderr and browser output.
-+    // Direct `nyacode login` otherwise relies on ephemeral stderr and browser output.
-     // Persist the same login targets to a file so support can inspect auth failures
-     // without reproducing them through TUI or app-server.
-     if let Err(err) = tracing_subscriber::registry().with(file_layer).try_init() {
 @@ -119,7 +119,7 @@ fn init_login_file_logging(config: &Config) -> Option<WorkerGuard> {
  
  fn print_login_server_start(actual_port: u16, auth_url: &str) {
@@ -3246,7 +3215,7 @@ index 1d6421b060ba22fae1cf3553a0c1e9ea582a30d5..7c8db3705738674dac6d3875901368e6
              codex_home.path(),
              "sk-existing",
 diff --git a/codex-rs/cli/src/main.rs b/codex-rs/cli/src/main.rs
-index c3beb4f7c0af970717468a1e735bf19edd66ba66..5a8d481c46bbf43de20b80861870d2701bb03dad 100644
+index c3beb4f7c0af970717468a1e735bf19edd66ba66..4be1492fc24949a948358c54ce23e36f76de1efc 100644
 --- a/codex-rs/cli/src/main.rs
 +++ b/codex-rs/cli/src/main.rs
 @@ -73,6 +73,7 @@ mod mcp_cmd;
@@ -3645,15 +3614,6 @@ index c3beb4f7c0af970717468a1e735bf19edd66ba66..5a8d481c46bbf43de20b80861870d270
  fn finalize_resume_interactive(
      mut interactive: TuiCli,
      root_config_overrides: CliConfigOverrides,
-@@ -2630,7 +2643,7 @@ fn finalize_resume_interactive(
-     mut resume_cli: TuiCli,
- ) -> TuiCli {
-     // Start with the parsed interactive CLI so resume shares the same
--    // configuration surface area as `codex` without additional flags.
-+    // configuration surface area as `nyacode` without additional flags.
-     // Clap assigns the first positional to `session_id`. With `--last`, reinterpret it as the
-     // prompt when no second positional prompt was provided.
-     let resume_session_id = if last && resume_cli.prompt.is_none() {
 @@ -2654,7 +2667,7 @@ fn finalize_resume_interactive(
      interactive
  }
@@ -3663,15 +3623,6 @@ index c3beb4f7c0af970717468a1e735bf19edd66ba66..5a8d481c46bbf43de20b80861870d270
  fn finalize_fork_interactive(
      mut interactive: TuiCli,
      root_config_overrides: CliConfigOverrides,
-@@ -2664,7 +2677,7 @@ fn finalize_fork_interactive(
-     mut fork_cli: TuiCli,
- ) -> TuiCli {
-     // Start with the parsed interactive CLI so fork shares the same
--    // configuration surface area as `codex` without additional flags.
-+    // configuration surface area as `nyacode` without additional flags.
-     // Clap assigns the first positional to `session_id`. With `--last`, reinterpret it as the
-     // prompt when no second positional prompt was provided.
-     let fork_session_id = if last && fork_cli.prompt.is_none() {
 @@ -2757,7 +2770,7 @@ fn merge_interactive_cli_flags(interactive: &mut TuiCli, subcommand_cli: TuiCli)
  
  fn print_completion(cmd: CompletionCommand) {
@@ -5551,7 +5502,7 @@ index 1823275ea4e8a690f6b233a934a044d839a5efb6..5fd20121de01ad695ca10c542ade554d
          http_headers: None,
          env_http_headers: None,
 diff --git a/codex-rs/deny.toml b/codex-rs/deny.toml
-index 31c5517af07dbbfa196c874d3fcf32032bfd575b..51dfa460c198f45b65a826eed0b236b3b81d58ce 100644
+index 31c5517af07dbbfa196c874d3fcf32032bfd575b..44fe80e840be9ce691370b602536536bfc9a7662 100644
 --- a/codex-rs/deny.toml
 +++ b/codex-rs/deny.toml
 @@ -73,17 +73,16 @@ ignore = [
@@ -5603,6 +5554,14 @@ index 31c5517af07dbbfa196c874d3fcf32032bfd575b..51dfa460c198f45b65a826eed0b236b3
          # Third-party crates that own their reqwest integration. These are not part of the
          # first-party migration count above.
          "oauth2",
+@@ -316,6 +329,7 @@ allow-git = [
+     # CONNECT request handling needs this pinned H3 revision until released.
+     "https://github.com/hyperium/h3",
+     "https://github.com/juberti-oai/rust-sdks.git",
++    "https://github.com/kellpossible/cargo-i18n",
+     "https://github.com/microsoft/mxc",
+     "https://github.com/modelcontextprotocol/rust-sdk",
+     "https://github.com/openai-oss-forks/crossterm",
 diff --git a/codex-rs/exec-server/Cargo.toml b/codex-rs/exec-server/Cargo.toml
 index 0d1f1f5209ca66c6efdd9f6bb54058e89bc7a542..86eed960308a0152d694225eff6ff3e8d11f10c6 100644
 --- a/codex-rs/exec-server/Cargo.toml
@@ -5927,7 +5886,7 @@ index 073d4e341141ea59286b5563b4b6af1930d7ca51..3e7e7b42eae92d5dda7ed4edb6eef63f
  tokio = { workspace = true, features = ["macros", "net", "time"] }
  tokio-tungstenite = { workspace = true }
 diff --git a/codex-rs/exec/src/cli.rs b/codex-rs/exec/src/cli.rs
-index 6a268da298380344c22ea12620606c3e6713f5fa..6ce63a72bf702585e6a940d0497390d9ff48ed98 100644
+index 6a268da298380344c22ea12620606c3e6713f5fa..a3a3f22e272f50f07bb59b696a8e4750ed8d6b7b 100644
 --- a/codex-rs/exec/src/cli.rs
 +++ b/codex-rs/exec/src/cli.rs
 @@ -10,14 +10,14 @@ use std::path::PathBuf;
@@ -5956,15 +5915,6 @@ index 6a268da298380344c22ea12620606c3e6713f5fa..6ce63a72bf702585e6a940d0497390d9
      #[arg(long = "skip-git-repo-check", global = true, default_value_t = false)]
      pub skip_git_repo_check: bool,
  
-@@ -205,7 +205,7 @@ pub struct ForkArgs {
- #[derive(Args, Debug)]
- struct ResumeArgsRaw {
-     // Note: This is the direct clap shape. We reinterpret the positional when --last is set
--    // so "codex resume --last <prompt>" treats the positional as a prompt, not a session id.
-+    // so "nyacode resume --last <prompt>" treats the positional as a prompt, not a session id.
-     /// Conversation/session id (UUID) or thread name. UUIDs take precedence if it parses.
-     /// If omitted, use --last to pick the most recent recorded session.
-     #[arg(value_name = "SESSION_ID")]
 diff --git a/codex-rs/exec/src/daybreak.rs b/codex-rs/exec/src/daybreak.rs
 index e3fdf41bf45dc986fc3ef14850f96a25022f5dbd..4262e2e806297c90e64d15119120fa97f49e4af6 100644
 --- a/codex-rs/exec/src/daybreak.rs
@@ -6018,7 +5968,7 @@ index 06565c097b28d3bf2ad592943cc30c776b45e236..34a15c6981b40f5b91c87e723de8e8c8
  #[serde(tag = "type")]
  pub enum ThreadEvent {
 diff --git a/codex-rs/exec/src/lib.rs b/codex-rs/exec/src/lib.rs
-index 0fde82a3263f6d97e34529464bd1b62246c12c8f..83bd1089573d20d791b7cdafe2b87c67d9a88b4f 100644
+index 0fde82a3263f6d97e34529464bd1b62246c12c8f..cacd40cc43f9526a3bc0f6736027694a67eb20b3 100644
 --- a/codex-rs/exec/src/lib.rs
 +++ b/codex-rs/exec/src/lib.rs
 @@ -192,9 +192,9 @@ enum InitialOperation {
@@ -6067,15 +6017,6 @@ index 0fde82a3263f6d97e34529464bd1b62246c12c8f..83bd1089573d20d791b7cdafe2b87c67
              }
              Some(ExecCommand::Fork(_)) | None => {}
          }
-@@ -1173,7 +1176,7 @@ async fn run_exec_session(args: ExecRunArgs) -> anyhow::Result<()> {
- 
-     exec_span.record("thread.id", primary_thread_id_for_span.as_str());
- 
--    // Print the effective configuration and initial request so users can see what Codex
-+    // Print the effective configuration and initial request so users can see what Nyacode
-     // is using.
-     event_processor.print_config_summary(&config, &prompt_summary, &session_configured);
-     if !json_mode
 @@ -1185,7 +1188,7 @@ async fn run_exec_session(args: ExecRunArgs) -> anyhow::Result<()> {
          event_processor.process_warning(message);
      }
@@ -11315,10 +11256,10 @@ index 3b864d7a497626028991e3fb14c40680a6f0ab19..bf4b25191b60f4542726e0febc8c3819
          },
          WarningEntry {
 diff --git a/codex-rs/tui/src/cli.rs b/codex-rs/tui/src/cli.rs
-index 29469b295e97de8a2a5f9b1f1e1c0c79d4b445d8..be333dcbce77600cece38904405aaf4a63520c37 100644
+index 29469b295e97de8a2a5f9b1f1e1c0c79d4b445d8..092cb36f7288c728688355600e4bf992a2815b6e 100644
 --- a/codex-rs/tui/src/cli.rs
 +++ b/codex-rs/tui/src/cli.rs
-@@ -17,12 +17,12 @@ pub struct Cli {
+@@ -17,7 +17,7 @@ pub struct Cli {
      #[arg(value_name = "PROMPT", value_hint = clap::ValueHint::Other)]
      pub prompt: Option<String>,
  
@@ -11326,13 +11267,6 @@ index 29469b295e97de8a2a5f9b1f1e1c0c79d4b445d8..be333dcbce77600cece38904405aaf4a
 +    /// Error out when config.toml contains fields that are not recognized by this version of Nyacode.
      #[arg(long = "strict-config", default_value_t = false)]
      pub strict_config: bool,
- 
--    // Internal controls set by the top-level `codex resume` subcommand.
--    // These are not exposed as user flags on the base `codex` command.
-+    // Internal controls set by the top-level `nyacode resume` subcommand.
-+    // These are not exposed as user flags on the base `nyacode` command.
-     #[clap(skip)]
-     pub resume_picker: bool,
  
 @@ -30,7 +30,7 @@ pub struct Cli {
      pub resume_last: bool,
@@ -11342,17 +11276,6 @@ index 29469b295e97de8a2a5f9b1f1e1c0c79d4b445d8..be333dcbce77600cece38904405aaf4a
 +    /// top-level `nyacode resume <SESSION_ID>` wrapper; not exposed as a public flag.
      #[clap(skip)]
      pub resume_session_id: Option<String>,
- 
-@@ -50,8 +50,8 @@ pub struct Cli {
-     #[clap(skip)]
-     pub managed_daemon: bool,
- 
--    // Internal controls set by the top-level `codex fork` subcommand.
--    // These are not exposed as user flags on the base `codex` command.
-+    // Internal controls set by the top-level `nyacode fork` subcommand.
-+    // These are not exposed as user flags on the base `nyacode` command.
-     #[clap(skip)]
-     pub fork_picker: bool,
  
 @@ -59,7 +59,7 @@ pub struct Cli {
      pub fork_last: bool,
@@ -11364,7 +11287,7 @@ index 29469b295e97de8a2a5f9b1f1e1c0c79d4b445d8..be333dcbce77600cece38904405aaf4a
      pub fork_session_id: Option<String>,
  
 diff --git a/codex-rs/tui/src/clipboard_copy.rs b/codex-rs/tui/src/clipboard_copy.rs
-index 4d229364bc85e78700c3ddfb628de7bc95a02e74..ed342311d39819ab5fd17a8c4d78aee1b9e8103f 100644
+index 4d229364bc85e78700c3ddfb628de7bc95a02e74..2fbf06170b3a57fa64c7e9b1c53fc73d5a7dc14f 100644
 --- a/codex-rs/tui/src/clipboard_copy.rs
 +++ b/codex-rs/tui/src/clipboard_copy.rs
 @@ -1,7 +1,7 @@
@@ -11376,15 +11299,6 @@ index 4d229364bc85e78700c3ddfb628de7bc95a02e74..ed342311d39819ab5fd17a8c4d78aee1
  //! started receive the copy. Over SSH without a multiplexer, send OSC 52 directly.
  //!
  //! Terminal writes have no delivery acknowledgement: a successful send must not
-@@ -229,7 +229,7 @@ fn copy_to_clipboard_with(
-     };
-     // Copy natively first: an X11 SelectionClear from a terminal write can otherwise
-     // race with arboard reusing its ownership window and clear the new native data.
--    // Persistent multiplexer sessions may gain remote clients after Codex starts, so still
-+    // Persistent multiplexer sessions may gain remote clients after Nyacode starts, so still
-     // forward even when no SSH variables were inherited or native copying succeeded.
-     let terminal_result =
-         (environment.tmux_session || environment.herdr_session || environment.ssh_session)
 diff --git a/codex-rs/tui/src/clipboard_paste.rs b/codex-rs/tui/src/clipboard_paste.rs
 index ff291801ea12ede0d7bec749f644fd3d52077961..3a476db2b045908fff942c48c50e4ccbd302d787 100644
 --- a/codex-rs/tui/src/clipboard_paste.rs
@@ -13589,7 +13503,7 @@ index 6cbc2f1e92dbee16c39ca76cd9ebfad3ab48caf2..a6b0c80cffa96c0a230b5d5649a3bfa7
                  code = Some((range.start..range.start, String::new()))
              }
 diff --git a/codex-rs/tui/src/tui.rs b/codex-rs/tui/src/tui.rs
-index 2a573f1e9702161d69feacb763f7d99d0712f74d..3e858aece9c0d6d340e0e22852bf81468bcf2701 100644
+index 2a573f1e9702161d69feacb763f7d99d0712f74d..3efae5cdd8e0f5b990958d4ec5356545956b29a6 100644
 --- a/codex-rs/tui/src/tui.rs
 +++ b/codex-rs/tui/src/tui.rs
 @@ -397,7 +397,7 @@ pub(super) fn reapply_raw_mode_after_resume() -> Result<()> {
@@ -13610,28 +13524,6 @@ index 2a573f1e9702161d69feacb763f7d99d0712f74d..3e858aece9c0d6d340e0e22852bf8146
      /// and stderr suppression before resuming events.
      pub(crate) async fn with_restored<R, F, Fut>(&mut self, handoff: TerminalHandoff, f: F) -> R
      where
-@@ -942,7 +942,7 @@ impl Tui {
-         self.pause_events();
- 
-         // Restore both screens' input modes before giving the terminal to an editor. Repaint the
--        // last frame on the alternate screen so separate-window editors leave Codex visible.
-+        // last frame on the alternate screen so separate-window editors leave Nyacode visible.
-         let was_alt_screen = self.is_alt_screen_active();
-         let visible_frame = (was_alt_screen && matches!(handoff, TerminalHandoff::KeepScreen))
-             .then(|| self.terminal.previous_buffer().clone());
-diff --git a/codex-rs/tui/src/tui/alternate_screen.rs b/codex-rs/tui/src/tui/alternate_screen.rs
-index 2313da69dff6ca3686df3936f7c925b5dc34cfda..75bc59b73a9ab414d457ca2ad3e55be7953f9372 100644
---- a/codex-rs/tui/src/tui/alternate_screen.rs
-+++ b/codex-rs/tui/src/tui/alternate_screen.rs
-@@ -45,7 +45,7 @@ pub(super) struct AlternateScreen {
-     mouse_capture_disabled: AtomicBool,
-     // A cleanup/setup error must not make the next identical request look already applied.
-     input_configured: AtomicBool,
--    // An editor can take over the screen after Codex has popped its keyboard mode.
-+    // An editor can take over the screen after Nyacode has popped its keyboard mode.
-     keyboard_active: AtomicBool,
- }
- 
 diff --git a/codex-rs/tui/src/tui/link_pointer.rs b/codex-rs/tui/src/tui/link_pointer.rs
 index b10ee5b87fea0bf3eada07dbf7d16d9062ae01f6..6050248b77df0185150df24d5fc9d5b47cc7167e 100644
 --- a/codex-rs/tui/src/tui/link_pointer.rs

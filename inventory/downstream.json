@@ -7497,6 +7497,7 @@
       }
     },
     {
+      "added_after_baseline": true,
       "artifact": "source",
       "change": "modified",
       "destination": {
@@ -14537,33 +14538,6 @@
         "mode": "100644",
         "path": "codex-rs/cli/src/daemon_install_tests.rs",
         "sha256": "6d02b507ca74df7bcc2c380c9bd148758bc5e09d888501c8302cd6143767642c"
-      }
-    },
-    {
-      "artifact": "source",
-      "change": "modified",
-      "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/backend_dispatch.patch",
-        "path": "codex-rs/cli/src/debug_sandbox.rs"
-      },
-      "git_status": "M",
-      "mode_changed": false,
-      "owner": "codex-rs",
-      "path": "codex-rs/cli/src/debug_sandbox.rs",
-      "purpose": "backend_dispatch",
-      "regression_groups": [
-        "backend_dispatch"
-      ],
-      "source": {
-        "mode": "100644",
-        "path": "codex-rs/cli/src/debug_sandbox.rs",
-        "sha256": "45fac663962202b68b7315682cd8495f62db503ba19ac1547a948fc9797d9e8f"
-      },
-      "upstream_source": {
-        "mode": "100644",
-        "path": "codex-rs/cli/src/debug_sandbox.rs",
-        "sha256": "9d0d45513cae0a63926e9880b485e4b364e41c65169ede93e85c40d71c37c3fd"
       }
     },
     {
@@ -38076,33 +38050,6 @@
       "change": "modified",
       "destination": {
         "kind": "patch",
-        "patch": "integration/codex/patches/backend_dispatch.patch",
-        "path": "codex-rs/tui/src/tui/alternate_screen.rs"
-      },
-      "git_status": "M",
-      "mode_changed": false,
-      "owner": "codex-rs",
-      "path": "codex-rs/tui/src/tui/alternate_screen.rs",
-      "purpose": "backend_dispatch",
-      "regression_groups": [
-        "backend_dispatch"
-      ],
-      "source": {
-        "mode": "100644",
-        "path": "codex-rs/tui/src/tui/alternate_screen.rs",
-        "sha256": "be43fe67693b8a83a2fa17b4473c0e1d66c86a80bbb93b12d1e06bfe9a179279"
-      },
-      "upstream_source": {
-        "mode": "100644",
-        "path": "codex-rs/tui/src/tui/alternate_screen.rs",
-        "sha256": "13e839247994d73e3bcd579662eda671163df6fe157896da3791deb0966a7a3a"
-      }
-    },
-    {
-      "artifact": "source",
-      "change": "modified",
-      "destination": {
-        "kind": "patch",
         "patch": "integration/codex/patches/tool_completion_persistence.patch",
         "path": "codex-rs/tui/src/tui/history_tail_tests.rs"
       },
@@ -41923,6 +41870,64 @@
     }
   ],
   "product_baseline": "b8bbac5e2ad84168eee5a8b08564a910e8006564",
+  "retired_entries": [
+    {
+      "artifact": "source",
+      "change": "modified",
+      "destination": {
+        "kind": "patch",
+        "patch": "integration/codex/patches/backend_dispatch.patch",
+        "path": "codex-rs/cli/src/debug_sandbox.rs"
+      },
+      "git_status": "M",
+      "mode_changed": false,
+      "owner": "codex-rs",
+      "path": "codex-rs/cli/src/debug_sandbox.rs",
+      "purpose": "backend_dispatch",
+      "regression_groups": [
+        "backend_dispatch"
+      ],
+      "retirement_reason": "Restored incidental branding in ordinary comments to pristine upstream wording.",
+      "source": {
+        "mode": "100644",
+        "path": "codex-rs/cli/src/debug_sandbox.rs",
+        "sha256": "45fac663962202b68b7315682cd8495f62db503ba19ac1547a948fc9797d9e8f"
+      },
+      "upstream_source": {
+        "mode": "100644",
+        "path": "codex-rs/cli/src/debug_sandbox.rs",
+        "sha256": "9d0d45513cae0a63926e9880b485e4b364e41c65169ede93e85c40d71c37c3fd"
+      }
+    },
+    {
+      "artifact": "source",
+      "change": "modified",
+      "destination": {
+        "kind": "patch",
+        "patch": "integration/codex/patches/backend_dispatch.patch",
+        "path": "codex-rs/tui/src/tui/alternate_screen.rs"
+      },
+      "git_status": "M",
+      "mode_changed": false,
+      "owner": "codex-rs",
+      "path": "codex-rs/tui/src/tui/alternate_screen.rs",
+      "purpose": "backend_dispatch",
+      "regression_groups": [
+        "backend_dispatch"
+      ],
+      "retirement_reason": "Restored incidental branding in ordinary comments to pristine upstream wording.",
+      "source": {
+        "mode": "100644",
+        "path": "codex-rs/tui/src/tui/alternate_screen.rs",
+        "sha256": "be43fe67693b8a83a2fa17b4473c0e1d66c86a80bbb93b12d1e06bfe9a179279"
+      },
+      "upstream_source": {
+        "mode": "100644",
+        "path": "codex-rs/tui/src/tui/alternate_screen.rs",
+        "sha256": "13e839247994d73e3bcd579662eda671163df6fe157896da3791deb0966a7a3a"
+      }
+    }
+  ],
   "schema_version": 1,
   "upstream_base": "ce0323f2f2d3b25e82806cd555237da3db4e1897"
 }

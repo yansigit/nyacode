@@ -201,6 +201,24 @@ def validate_assembly_ownership(root: Path, assembly: dict[str, Any]) -> list[st
     declared.update(item["destination"] for item in assembly["overlays"])
     for patch in assembly["patches"]:
         declared.update(patch["paths"])
+    # A new owned module must not silently disappear from the linked product.
+    sources = {item.get("source") for item in assembly["overlays"]}
+    owned_roots = [
+        root / "crates/chatgpt-chat",
+        root / "integration/codex/adapter",
+        root / "integration/codex/overlays",
+        *(root / "crates/providers").glob("provider-*"),
+    ]
+    for owned in owned_roots:
+        for path in owned.rglob("*"):
+            if any(part in {"target", "__pycache__", ".git"} for part in path.parts):
+                continue
+            if (path.is_file() or path.is_symlink()) and path.relative_to(
+                root
+            ).as_posix() not in sources:
+                errors.append(
+                    f"owned engine input has no assembly mapping: {path.relative_to(root)}"
+                )
     if declared != set(by_path):
         errors.append(
             f"assembly ownership differs from inventory: undeclared={sorted(declared - set(by_path))}, "

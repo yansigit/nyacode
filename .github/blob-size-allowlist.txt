@@ -12,3 +12,14 @@ codex-rs/models-manager/models.json
 codex-rs/tui/tests/fixtures/oss-story.jsonl
 codex-rs/tui_app_server/tests/fixtures/oss-story.jsonl
 codex-rs/tui/src/app.rs
+# Owned copies of the existing Chat assets.
+crates/chatgpt-chat/fonts/DejaVuSans.ttf
+crates/chatgpt-chat/pdf-validator/validator.wasm
+# Independent RPC compatibility fixture and exact baseline inventory.
+integration/codex/compatibility/rpc.json
+inventory/baseline-tree.json
+inventory/downstream.json
+# Strict integration patches include generated schemas and vendored binary data.
+integration/codex/patches/backend_dispatch.patch
+integration/codex/patches/dependency_override.patch
+integration/codex/patches/sdk_protocol.patch
