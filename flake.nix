@@ -60,16 +60,53 @@
           pkgs = pkgsFor system;
           rust = (toolchainFor pkgs).minimal;
           rustPlatform = pkgs.makeRustPlatform { cargo = rust; rustc = rust; };
+          cargoLock = builtins.fromTOML (builtins.readFile (preparedEngine + "/codex-rs/Cargo.lock"));
+          v8Packages = builtins.filter (package: package.name == "v8") cargoLock.package;
+          v8Version = assert builtins.length v8Packages == 1; (builtins.head v8Packages).version;
+          target = {
+            x86_64-linux = "x86_64-unknown-linux-gnu";
+            aarch64-linux = "aarch64-unknown-linux-gnu";
+            x86_64-darwin = "x86_64-apple-darwin";
+            aarch64-darwin = "aarch64-apple-darwin";
+          }.${system};
+          v8Repo = "rusty_v8_${builtins.replaceStrings [ "." ] [ "_" ] v8Version}_${builtins.replaceStrings [ "-" ] [ "_" ] target}";
+          # Reuse the assembled Bazel release pins and reject missing or ambiguous assets.
+          moduleBlocks = map (block: builtins.head (pkgs.lib.splitString ")" block))
+            (pkgs.lib.splitString "http_file(" (builtins.readFile (preparedEngine + "/MODULE.bazel")));
+          capture = pattern: text:
+            let result = builtins.match pattern text;
+            in if result == null then throw "Unexpected pinned V8 http_file declaration" else builtins.head result;
+          v8Asset = kind:
+            let
+              blocks = builtins.filter (block:
+                builtins.match ''[[:space:]]*name = "${v8Repo}_${kind}",[^)]*'' block != null
+              ) moduleBlocks;
+              block = assert builtins.length blocks == 1; builtins.head blocks;
+              filename = if kind == "archive"
+                then "librusty_v8_ptrcomp_sandbox_release_${target}.a.gz"
+                else "src_binding_ptrcomp_sandbox_release_${target}.rs";
+              url = "https://github.com/openai/codex/releases/download/rusty-v8-v${v8Version}/${filename}";
+            in
+            assert capture ''[^)]*downloaded_file_path = "([^"]+)",[^)]*'' block == filename;
+            assert capture ''[^)]*urls = [[][[:space:]]*"([^"]+)",[[:space:]]*[]],[[:space:]]*'' block == url;
+            pkgs.fetchurl {
+              inherit url;
+              name = filename;
+              sha256 = capture ''[^)]*sha256 = "([0-9a-f]{64})",[^)]*'' block;
+            };
           nyacode = rustPlatform.buildRustPackage {
             pname = "nyacode";
             inherit version;
-            src = preparedEngine + "/codex-rs";
+            src = preparedEngine;
+            cargoRoot = "codex-rs";
+            buildAndTestSubdir = "codex-rs";
             cargoLock = {
               lockFile = preparedEngine + "/codex-rs/Cargo.lock";
               # Git revisions remain fixed by the committed assembled lock.
               allowBuiltinFetchGit = true;
             };
             cargoBuildFlags = [
+              "--locked"
               "-p" "codex-cli" "-p" "codex-code-mode-host"
               "--bin" "nyacode" "--bin" "codex" "--bin" "codex-code-mode-host"
             ];
@@ -82,6 +119,7 @@
             nativeBuildInputs = [
               pkgs.cmake
               pkgs.pkg-config
+              pkgs.protobuf
               pkgs.llvmPackages.clang
               pkgs.llvmPackages.libclang.lib
             ];
@@ -89,6 +127,9 @@
               ++ pkgs.lib.optionals pkgs.stdenv.isLinux [ pkgs.libcap ];
             env = {
               LIBCLANG_PATH = "${pkgs.llvmPackages.libclang.lib}/lib";
+              PROTOC = "${pkgs.protobuf}/bin/protoc";
+              RUSTY_V8_ARCHIVE = v8Asset "archive";
+              RUSTY_V8_SRC_BINDING_PATH = v8Asset "binding";
               CC = "clang";
               CXX = "clang++";
             };
@@ -121,6 +162,7 @@
               pkgs.python3
               pkgs.git
               pkgs.pkg-config
+              pkgs.protobuf
               pkgs.openssl
               pkgs.cmake
               pkgs.llvmPackages.clang
