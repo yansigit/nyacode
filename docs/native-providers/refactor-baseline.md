@@ -6,7 +6,7 @@ The architecture refactor starts from provider implementation commit
 The checked-in compatibility fixtures were captured at the baseline and
 rebased across the move commit.
 
-The [persisted-state fixture suite](../../codex-rs/providers/provider-runtime/tests/compatibility_fixtures.rs)
+The [persisted-state fixture suite](../../crates/providers/provider-runtime/tests/compatibility_fixtures.rs)
 freezes credential/account selection, checkpoint and tool-journal JSON, the
 checkpoint host-lineage/signature fields, thread-scoped interrupted-execution
 markers, and provider namespace hashes. All credential-like values and
@@ -41,7 +41,9 @@ because it contains machine-specific absolute paths. Recreate it by checking
 out the baseline commit and running:
 
 ```sh
-cargo metadata --manifest-path codex-rs/Cargo.toml --format-version 1 \
+python3 scripts/engine.py prepare
+cargo metadata --manifest-path .engine/workspace/codex-rs/Cargo.toml \
+  --locked --format-version 1 \
   > /tmp/native-refactor-receipts/baseline-metadata.json
 sha256sum /tmp/native-refactor-receipts/baseline-metadata.json
 ```
