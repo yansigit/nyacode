@@ -60,7 +60,7 @@
       "destination": {
         "kind": "overlay",
         "path": ".dockerignore",
-        "source": "integration/codex/overlays/.dockerignore"
+        "source": ".dockerignore"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -260,7 +260,7 @@
       "destination": {
         "kind": "overlay",
         "path": ".github/ISSUE_TEMPLATE/config.yml",
-        "source": "integration/codex/overlays/.github/ISSUE_TEMPLATE/config.yml"
+        "source": ".github/ISSUE_TEMPLATE/config.yml"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -499,7 +499,7 @@
       "destination": {
         "kind": "overlay",
         "path": ".github/nyacode-logo.svg",
-        "source": "integration/codex/overlays/.github/nyacode-logo.svg"
+        "source": ".github/nyacode-logo.svg"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -549,7 +549,7 @@
       "destination": {
         "kind": "overlay",
         "path": ".github/scripts/install-musl-cxx-runtime.sh",
-        "source": "integration/codex/overlays/.github/scripts/install-musl-cxx-runtime.sh"
+        "source": ".github/scripts/install-musl-cxx-runtime.sh"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -599,7 +599,7 @@
       "destination": {
         "kind": "overlay",
         "path": ".github/scripts/publish_nyacode_release.py",
-        "source": "integration/codex/overlays/.github/scripts/publish_nyacode_release.py"
+        "source": ".github/scripts/publish_nyacode_release.py"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -622,7 +622,7 @@
       "destination": {
         "kind": "overlay",
         "path": ".github/scripts/run_v8_bazel_build.py",
-        "source": "integration/codex/overlays/.github/scripts/run_v8_bazel_build.py"
+        "source": ".github/scripts/run_v8_bazel_build.py"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -645,7 +645,7 @@
       "destination": {
         "kind": "overlay",
         "path": ".github/scripts/test_run_v8_bazel_build.py",
-        "source": "integration/codex/overlays/.github/scripts/test_run_v8_bazel_build.py"
+        "source": ".github/scripts/test_run_v8_bazel_build.py"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -695,7 +695,7 @@
       "destination": {
         "kind": "overlay",
         "path": ".github/scripts/test_verify_cargo_workspace_manifests.py",
-        "source": "integration/codex/overlays/.github/scripts/test_verify_cargo_workspace_manifests.py"
+        "source": ".github/scripts/test_verify_cargo_workspace_manifests.py"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -772,7 +772,7 @@
       "destination": {
         "kind": "overlay",
         "path": ".github/scripts/windows-arm64-cmake.cmake",
-        "source": "integration/codex/overlays/.github/scripts/windows-arm64-cmake.cmake"
+        "source": ".github/scripts/windows-arm64-cmake.cmake"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -930,7 +930,7 @@
       "destination": {
         "kind": "overlay",
         "path": ".github/workflows/container-verify.yml",
-        "source": "integration/codex/overlays/.github/workflows/container-verify.yml"
+        "source": ".github/workflows/container-verify.yml"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -953,7 +953,7 @@
       "destination": {
         "kind": "overlay",
         "path": ".github/workflows/native-providers.yml",
-        "source": "integration/codex/overlays/.github/workflows/native-providers.yml"
+        "source": ".github/workflows/native-providers.yml"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -976,7 +976,7 @@
       "destination": {
         "kind": "overlay",
         "path": ".github/workflows/nyacode-release.yml",
-        "source": "integration/codex/overlays/.github/workflows/nyacode-release.yml"
+        "source": ".github/workflows/nyacode-release.yml"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -1535,7 +1535,7 @@
       "destination": {
         "kind": "overlay",
         "path": "Containerfile",
-        "source": "integration/codex/overlays/Containerfile"
+        "source": "Containerfile"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -1558,7 +1558,7 @@
       "destination": {
         "kind": "overlay",
         "path": "Dockerfile",
-        "source": "integration/codex/overlays/Dockerfile"
+        "source": "Dockerfile"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -9507,7 +9507,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/BUILD.bazel",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/BUILD.bazel"
+        "source": "crates/chatgpt-chat/BUILD.bazel"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -9530,7 +9530,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/Cargo.toml",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/Cargo.toml"
+        "source": "crates/chatgpt-chat/Cargo.toml"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -9553,7 +9553,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/NOTICE",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/NOTICE"
+        "source": "crates/chatgpt-chat/NOTICE"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -9576,7 +9576,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/README.md",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/README.md"
+        "source": "crates/chatgpt-chat/README.md"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -9599,7 +9599,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/live-browser-emulated-probe-2026-10-11.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/live-browser-emulated-probe-2026-10-11.json"
+        "source": "crates/chatgpt-chat/evidence/live-browser-emulated-probe-2026-10-11.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -9622,7 +9622,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/live-native-two-phase-probe-2026-10-11-v2.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/live-native-two-phase-probe-2026-10-11-v2.json"
+        "source": "crates/chatgpt-chat/evidence/live-native-two-phase-probe-2026-10-11-v2.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -9645,7 +9645,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/live-native-two-phase-probe-2026-10-11.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/live-native-two-phase-probe-2026-10-11.json"
+        "source": "crates/chatgpt-chat/evidence/live-native-two-phase-probe-2026-10-11.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -9668,7 +9668,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/live-native-two-phase-probe-2026-10-12.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/live-native-two-phase-probe-2026-10-12.json"
+        "source": "crates/chatgpt-chat/evidence/live-native-two-phase-probe-2026-10-12.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -9691,7 +9691,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/live-preparation-probe-2026-10-11.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/live-preparation-probe-2026-10-11.json"
+        "source": "crates/chatgpt-chat/evidence/live-preparation-probe-2026-10-11.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -9714,7 +9714,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/live-preparation-source-2026-10-11.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/live-preparation-source-2026-10-11.json"
+        "source": "crates/chatgpt-chat/evidence/live-preparation-source-2026-10-11.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -9737,7 +9737,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/live-read-probe-2026-10-11.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/live-read-probe-2026-10-11.json"
+        "source": "crates/chatgpt-chat/evidence/live-read-probe-2026-10-11.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -9760,7 +9760,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/live-standard-comparison-2026-10-11.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/live-standard-comparison-2026-10-11.json"
+        "source": "crates/chatgpt-chat/evidence/live-standard-comparison-2026-10-11.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -9783,7 +9783,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/local-service-foundation-2026-10-12.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/local-service-foundation-2026-10-12.json"
+        "source": "crates/chatgpt-chat/evidence/local-service-foundation-2026-10-12.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -9806,7 +9806,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-attachments-2026-10-12-report.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-attachments-2026-10-12-report.json"
+        "source": "crates/chatgpt-chat/evidence/native-attachments-2026-10-12-report.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -9829,7 +9829,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-attachments-2026-10-12-source.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-attachments-2026-10-12-source.json"
+        "source": "crates/chatgpt-chat/evidence/native-attachments-2026-10-12-source.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -9852,7 +9852,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-blocker-audit-2026-10-11.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-blocker-audit-2026-10-11.json"
+        "source": "crates/chatgpt-chat/evidence/native-blocker-audit-2026-10-11.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -9875,7 +9875,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-cache-pdf-validation-2026-10-12.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-cache-pdf-validation-2026-10-12.json"
+        "source": "crates/chatgpt-chat/evidence/native-cache-pdf-validation-2026-10-12.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -9898,7 +9898,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-cancellation-contract-research-2026-10-12.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-cancellation-contract-research-2026-10-12.json"
+        "source": "crates/chatgpt-chat/evidence/native-cancellation-contract-research-2026-10-12.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -9921,7 +9921,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-conduit-resume-contracts-2026-10-12.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-conduit-resume-contracts-2026-10-12.json"
+        "source": "crates/chatgpt-chat/evidence/native-conduit-resume-contracts-2026-10-12.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -9944,7 +9944,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-daemon-accepted-jpeg-reconciliation-2026-10-12.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-daemon-accepted-jpeg-reconciliation-2026-10-12.json"
+        "source": "crates/chatgpt-chat/evidence/native-daemon-accepted-jpeg-reconciliation-2026-10-12.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -9967,7 +9967,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-daemon-observer-budget-2026-10-12.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-daemon-observer-budget-2026-10-12.json"
+        "source": "crates/chatgpt-chat/evidence/native-daemon-observer-budget-2026-10-12.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -9990,7 +9990,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-embedded-rpc-attachments-2026-10-12-report.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-embedded-rpc-attachments-2026-10-12-report.json"
+        "source": "crates/chatgpt-chat/evidence/native-embedded-rpc-attachments-2026-10-12-report.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -10013,7 +10013,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-embedded-rpc-attachments-2026-10-12-source.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-embedded-rpc-attachments-2026-10-12-source.json"
+        "source": "crates/chatgpt-chat/evidence/native-embedded-rpc-attachments-2026-10-12-source.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -10036,7 +10036,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-embedded-rpc-attachments-initial-2026-10-12-report.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-embedded-rpc-attachments-initial-2026-10-12-report.json"
+        "source": "crates/chatgpt-chat/evidence/native-embedded-rpc-attachments-initial-2026-10-12-report.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -10059,7 +10059,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-embedded-rpc-attachments-initial-2026-10-12-source.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-embedded-rpc-attachments-initial-2026-10-12-source.json"
+        "source": "crates/chatgpt-chat/evidence/native-embedded-rpc-attachments-initial-2026-10-12-source.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -10082,7 +10082,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-embedded-rpc-read-2026-10-12-report.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-embedded-rpc-read-2026-10-12-report.json"
+        "source": "crates/chatgpt-chat/evidence/native-embedded-rpc-read-2026-10-12-report.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -10105,7 +10105,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-embedded-rpc-read-2026-10-12-source.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-embedded-rpc-read-2026-10-12-source.json"
+        "source": "crates/chatgpt-chat/evidence/native-embedded-rpc-read-2026-10-12-source.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -10128,7 +10128,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-embedded-rpc-saved-2026-10-12-report.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-embedded-rpc-saved-2026-10-12-report.json"
+        "source": "crates/chatgpt-chat/evidence/native-embedded-rpc-saved-2026-10-12-report.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -10151,7 +10151,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-embedded-rpc-saved-2026-10-12-source.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-embedded-rpc-saved-2026-10-12-source.json"
+        "source": "crates/chatgpt-chat/evidence/native-embedded-rpc-saved-2026-10-12-source.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -10174,7 +10174,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-embedded-rpc-temporary-2026-10-12-report.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-embedded-rpc-temporary-2026-10-12-report.json"
+        "source": "crates/chatgpt-chat/evidence/native-embedded-rpc-temporary-2026-10-12-report.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -10197,7 +10197,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-embedded-rpc-temporary-2026-10-12-source.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-embedded-rpc-temporary-2026-10-12-source.json"
+        "source": "crates/chatgpt-chat/evidence/native-embedded-rpc-temporary-2026-10-12-source.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -10220,7 +10220,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-embedded-rpc-temporary-audit-2026-10-12-report.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-embedded-rpc-temporary-audit-2026-10-12-report.json"
+        "source": "crates/chatgpt-chat/evidence/native-embedded-rpc-temporary-audit-2026-10-12-report.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -10243,7 +10243,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-embedded-rpc-temporary-audit-2026-10-12-source.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-embedded-rpc-temporary-audit-2026-10-12-source.json"
+        "source": "crates/chatgpt-chat/evidence/native-embedded-rpc-temporary-audit-2026-10-12-source.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -10266,7 +10266,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-embedded-rpc-temporary-validation-2026-10-12.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-embedded-rpc-temporary-validation-2026-10-12.json"
+        "source": "crates/chatgpt-chat/evidence/native-embedded-rpc-temporary-validation-2026-10-12.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -10289,7 +10289,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-embedded-rpc-validation-2026-10-12.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-embedded-rpc-validation-2026-10-12.json"
+        "source": "crates/chatgpt-chat/evidence/native-embedded-rpc-validation-2026-10-12.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -10312,7 +10312,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-history-image-reference-2026-10-12.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-history-image-reference-2026-10-12.json"
+        "source": "crates/chatgpt-chat/evidence/native-history-image-reference-2026-10-12.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -10335,7 +10335,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-integrated-acceptance-2026-10-12.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-integrated-acceptance-2026-10-12.json"
+        "source": "crates/chatgpt-chat/evidence/native-integrated-acceptance-2026-10-12.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -10358,7 +10358,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-layout-dependencies-2026-10-12.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-layout-dependencies-2026-10-12.json"
+        "source": "crates/chatgpt-chat/evidence/native-layout-dependencies-2026-10-12.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -10381,7 +10381,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-layout-research-2026-10-12.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-layout-research-2026-10-12.json"
+        "source": "crates/chatgpt-chat/evidence/native-layout-research-2026-10-12.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -10404,7 +10404,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-linux-aarch64-gnu-transport-link-2026-10-12.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-linux-aarch64-gnu-transport-link-2026-10-12.json"
+        "source": "crates/chatgpt-chat/evidence/native-linux-aarch64-gnu-transport-link-2026-10-12.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -10427,7 +10427,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-linux-aarch64-musl-transport-link-2026-10-12.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-linux-aarch64-musl-transport-link-2026-10-12.json"
+        "source": "crates/chatgpt-chat/evidence/native-linux-aarch64-musl-transport-link-2026-10-12.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -10450,7 +10450,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-linux-final-tools-2026-10-12.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-linux-final-tools-2026-10-12.json"
+        "source": "crates/chatgpt-chat/evidence/native-linux-final-tools-2026-10-12.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -10473,7 +10473,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-linux-musl-transport-tests-2026-10-12.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-linux-musl-transport-tests-2026-10-12.json"
+        "source": "crates/chatgpt-chat/evidence/native-linux-musl-transport-tests-2026-10-12.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -10496,7 +10496,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-macos-aarch64-transport-link-2026-10-12.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-macos-aarch64-transport-link-2026-10-12.json"
+        "source": "crates/chatgpt-chat/evidence/native-macos-aarch64-transport-link-2026-10-12.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -10519,7 +10519,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-macos-x86_64-transport-link-2026-10-12.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-macos-x86_64-transport-link-2026-10-12.json"
+        "source": "crates/chatgpt-chat/evidence/native-macos-x86_64-transport-link-2026-10-12.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -10542,7 +10542,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-msvc-accepted-transport-builds-2026-10-12.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-msvc-accepted-transport-builds-2026-10-12.json"
+        "source": "crates/chatgpt-chat/evidence/native-msvc-accepted-transport-builds-2026-10-12.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -10565,7 +10565,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-msvc-candidate-final-platform-matrix-2026-10-12.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-msvc-candidate-final-platform-matrix-2026-10-12.json"
+        "source": "crates/chatgpt-chat/evidence/native-msvc-candidate-final-platform-matrix-2026-10-12.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -10588,7 +10588,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-msvc-candidate-linux-cli-2026-10-12.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-msvc-candidate-linux-cli-2026-10-12.json"
+        "source": "crates/chatgpt-chat/evidence/native-msvc-candidate-linux-cli-2026-10-12.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -10611,7 +10611,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-msvc-candidate-linux-link-2026-10-12.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-msvc-candidate-linux-link-2026-10-12.json"
+        "source": "crates/chatgpt-chat/evidence/native-msvc-candidate-linux-link-2026-10-12.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -10634,7 +10634,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-msvc-candidate-platform-matrix-2026-10-12.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-msvc-candidate-platform-matrix-2026-10-12.json"
+        "source": "crates/chatgpt-chat/evidence/native-msvc-candidate-platform-matrix-2026-10-12.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -10657,7 +10657,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-msvc-final-platform-regressions-2026-10-12.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-msvc-final-platform-regressions-2026-10-12.json"
+        "source": "crates/chatgpt-chat/evidence/native-msvc-final-platform-regressions-2026-10-12.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -10680,7 +10680,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-msvc-sdk-path-research-2026-10-12.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-msvc-sdk-path-research-2026-10-12.json"
+        "source": "crates/chatgpt-chat/evidence/native-msvc-sdk-path-research-2026-10-12.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -10703,7 +10703,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-msvc-toolchain-adoption-2026-10-12.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-msvc-toolchain-adoption-2026-10-12.json"
+        "source": "crates/chatgpt-chat/evidence/native-msvc-toolchain-adoption-2026-10-12.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -10726,7 +10726,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-msvc-toolchain-research-2026-10-12.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-msvc-toolchain-research-2026-10-12.json"
+        "source": "crates/chatgpt-chat/evidence/native-msvc-toolchain-research-2026-10-12.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -10749,7 +10749,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-normalized-history-2026-10-12-report.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-normalized-history-2026-10-12-report.json"
+        "source": "crates/chatgpt-chat/evidence/native-normalized-history-2026-10-12-report.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -10772,7 +10772,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-normalized-history-2026-10-12-source.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-normalized-history-2026-10-12-source.json"
+        "source": "crates/chatgpt-chat/evidence/native-normalized-history-2026-10-12-source.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -10795,7 +10795,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-normalized-history-validation-2026-10-12.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-normalized-history-validation-2026-10-12.json"
+        "source": "crates/chatgpt-chat/evidence/native-normalized-history-validation-2026-10-12.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -10818,7 +10818,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-pdf-bounds-2026-10-12.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-pdf-bounds-2026-10-12.json"
+        "source": "crates/chatgpt-chat/evidence/native-pdf-bounds-2026-10-12.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -10841,7 +10841,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-pdf-dependencies-2026-10-12.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-pdf-dependencies-2026-10-12.json"
+        "source": "crates/chatgpt-chat/evidence/native-pdf-dependencies-2026-10-12.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -10864,7 +10864,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-pdf-resource-research-2026-10-12.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-pdf-resource-research-2026-10-12.json"
+        "source": "crates/chatgpt-chat/evidence/native-pdf-resource-research-2026-10-12.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -10887,7 +10887,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-preparation-validation-2026-10-12.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-preparation-validation-2026-10-12.json"
+        "source": "crates/chatgpt-chat/evidence/native-preparation-validation-2026-10-12.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -10910,7 +10910,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-publish-validation-2026-10-12.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-publish-validation-2026-10-12.json"
+        "source": "crates/chatgpt-chat/evidence/native-publish-validation-2026-10-12.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -10933,7 +10933,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-release-validation-2026-10-12.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-release-validation-2026-10-12.json"
+        "source": "crates/chatgpt-chat/evidence/native-release-validation-2026-10-12.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -10956,7 +10956,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-rpc-daemon-attachments-2026-10-12-report.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-rpc-daemon-attachments-2026-10-12-report.json"
+        "source": "crates/chatgpt-chat/evidence/native-rpc-daemon-attachments-2026-10-12-report.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -10979,7 +10979,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-rpc-daemon-attachments-2026-10-12-source.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-rpc-daemon-attachments-2026-10-12-source.json"
+        "source": "crates/chatgpt-chat/evidence/native-rpc-daemon-attachments-2026-10-12-source.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -11002,7 +11002,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-rpc-daemon-attachments-initial-2026-10-12-report.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-rpc-daemon-attachments-initial-2026-10-12-report.json"
+        "source": "crates/chatgpt-chat/evidence/native-rpc-daemon-attachments-initial-2026-10-12-report.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -11025,7 +11025,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-rpc-daemon-attachments-initial-2026-10-12-source.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-rpc-daemon-attachments-initial-2026-10-12-source.json"
+        "source": "crates/chatgpt-chat/evidence/native-rpc-daemon-attachments-initial-2026-10-12-source.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -11048,7 +11048,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-rpc-daemon-lifecycle-2026-10-12-report.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-rpc-daemon-lifecycle-2026-10-12-report.json"
+        "source": "crates/chatgpt-chat/evidence/native-rpc-daemon-lifecycle-2026-10-12-report.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -11071,7 +11071,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-rpc-daemon-lifecycle-2026-10-12-source.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-rpc-daemon-lifecycle-2026-10-12-source.json"
+        "source": "crates/chatgpt-chat/evidence/native-rpc-daemon-lifecycle-2026-10-12-source.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -11094,7 +11094,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-rpc-daemon-parallel-2026-10-12-audit.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-rpc-daemon-parallel-2026-10-12-audit.json"
+        "source": "crates/chatgpt-chat/evidence/native-rpc-daemon-parallel-2026-10-12-audit.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -11117,7 +11117,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-rpc-daemon-parallel-v1-0-2026-10-12-report.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-rpc-daemon-parallel-v1-0-2026-10-12-report.json"
+        "source": "crates/chatgpt-chat/evidence/native-rpc-daemon-parallel-v1-0-2026-10-12-report.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -11140,7 +11140,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-rpc-daemon-parallel-v1-0-2026-10-12-source.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-rpc-daemon-parallel-v1-0-2026-10-12-source.json"
+        "source": "crates/chatgpt-chat/evidence/native-rpc-daemon-parallel-v1-0-2026-10-12-source.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -11163,7 +11163,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-rpc-daemon-parallel-v1-1-2026-10-12-report.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-rpc-daemon-parallel-v1-1-2026-10-12-report.json"
+        "source": "crates/chatgpt-chat/evidence/native-rpc-daemon-parallel-v1-1-2026-10-12-report.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -11186,7 +11186,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-rpc-daemon-parallel-v1-1-2026-10-12-source.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-rpc-daemon-parallel-v1-1-2026-10-12-source.json"
+        "source": "crates/chatgpt-chat/evidence/native-rpc-daemon-parallel-v1-1-2026-10-12-source.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -11209,7 +11209,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-rpc-daemon-read-v1-2026-10-12-report.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-rpc-daemon-read-v1-2026-10-12-report.json"
+        "source": "crates/chatgpt-chat/evidence/native-rpc-daemon-read-v1-2026-10-12-report.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -11232,7 +11232,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-rpc-daemon-read-v1-2026-10-12-source.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-rpc-daemon-read-v1-2026-10-12-source.json"
+        "source": "crates/chatgpt-chat/evidence/native-rpc-daemon-read-v1-2026-10-12-source.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -11255,7 +11255,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-rpc-daemon-restart-2026-10-12-audit.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-rpc-daemon-restart-2026-10-12-audit.json"
+        "source": "crates/chatgpt-chat/evidence/native-rpc-daemon-restart-2026-10-12-audit.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -11278,7 +11278,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-rpc-daemon-restart-initial-2026-10-12-report.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-rpc-daemon-restart-initial-2026-10-12-report.json"
+        "source": "crates/chatgpt-chat/evidence/native-rpc-daemon-restart-initial-2026-10-12-report.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -11301,7 +11301,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-rpc-daemon-restart-initial-2026-10-12-source.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-rpc-daemon-restart-initial-2026-10-12-source.json"
+        "source": "crates/chatgpt-chat/evidence/native-rpc-daemon-restart-initial-2026-10-12-source.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -11324,7 +11324,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-rpc-daemon-restart-resume-2026-10-12-report.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-rpc-daemon-restart-resume-2026-10-12-report.json"
+        "source": "crates/chatgpt-chat/evidence/native-rpc-daemon-restart-resume-2026-10-12-report.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -11347,7 +11347,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-rpc-daemon-restart-resume-2026-10-12-source.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-rpc-daemon-restart-resume-2026-10-12-source.json"
+        "source": "crates/chatgpt-chat/evidence/native-rpc-daemon-restart-resume-2026-10-12-source.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -11370,7 +11370,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-rpc-daemon-saved-v1-2026-10-12-report.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-rpc-daemon-saved-v1-2026-10-12-report.json"
+        "source": "crates/chatgpt-chat/evidence/native-rpc-daemon-saved-v1-2026-10-12-report.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -11393,7 +11393,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-rpc-daemon-saved-v1-2026-10-12-source.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-rpc-daemon-saved-v1-2026-10-12-source.json"
+        "source": "crates/chatgpt-chat/evidence/native-rpc-daemon-saved-v1-2026-10-12-source.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -11416,7 +11416,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-rpc-daemon-temporary-2026-10-12-report.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-rpc-daemon-temporary-2026-10-12-report.json"
+        "source": "crates/chatgpt-chat/evidence/native-rpc-daemon-temporary-2026-10-12-report.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -11439,7 +11439,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-rpc-daemon-temporary-2026-10-12-source.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-rpc-daemon-temporary-2026-10-12-source.json"
+        "source": "crates/chatgpt-chat/evidence/native-rpc-daemon-temporary-2026-10-12-source.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -11462,7 +11462,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-rpc-daemon-temporary-initial-2026-10-12-report.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-rpc-daemon-temporary-initial-2026-10-12-report.json"
+        "source": "crates/chatgpt-chat/evidence/native-rpc-daemon-temporary-initial-2026-10-12-report.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -11485,7 +11485,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-rpc-daemon-temporary-initial-2026-10-12-source.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-rpc-daemon-temporary-initial-2026-10-12-source.json"
+        "source": "crates/chatgpt-chat/evidence/native-rpc-daemon-temporary-initial-2026-10-12-source.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -11508,7 +11508,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-rpc-embedded-lifecycle-2026-10-12-report.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-rpc-embedded-lifecycle-2026-10-12-report.json"
+        "source": "crates/chatgpt-chat/evidence/native-rpc-embedded-lifecycle-2026-10-12-report.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -11531,7 +11531,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-rpc-embedded-lifecycle-2026-10-12-source.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-rpc-embedded-lifecycle-2026-10-12-source.json"
+        "source": "crates/chatgpt-chat/evidence/native-rpc-embedded-lifecycle-2026-10-12-source.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -11554,7 +11554,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-rpc-embedded-restart-2026-10-12-audit.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-rpc-embedded-restart-2026-10-12-audit.json"
+        "source": "crates/chatgpt-chat/evidence/native-rpc-embedded-restart-2026-10-12-audit.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -11577,7 +11577,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-rpc-embedded-restart-initial-2026-10-12-report.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-rpc-embedded-restart-initial-2026-10-12-report.json"
+        "source": "crates/chatgpt-chat/evidence/native-rpc-embedded-restart-initial-2026-10-12-report.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -11600,7 +11600,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-rpc-embedded-restart-initial-2026-10-12-source.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-rpc-embedded-restart-initial-2026-10-12-source.json"
+        "source": "crates/chatgpt-chat/evidence/native-rpc-embedded-restart-initial-2026-10-12-source.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -11623,7 +11623,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-rpc-embedded-restart-resume-2026-10-12-report.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-rpc-embedded-restart-resume-2026-10-12-report.json"
+        "source": "crates/chatgpt-chat/evidence/native-rpc-embedded-restart-resume-2026-10-12-report.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -11646,7 +11646,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-rpc-embedded-restart-resume-2026-10-12-source.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-rpc-embedded-restart-resume-2026-10-12-source.json"
+        "source": "crates/chatgpt-chat/evidence/native-rpc-embedded-restart-resume-2026-10-12-source.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -11669,7 +11669,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-rpc-embedded-resume-initial-2026-10-12-report.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-rpc-embedded-resume-initial-2026-10-12-report.json"
+        "source": "crates/chatgpt-chat/evidence/native-rpc-embedded-resume-initial-2026-10-12-report.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -11692,7 +11692,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-rpc-embedded-resume-initial-2026-10-12-source.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-rpc-embedded-resume-initial-2026-10-12-source.json"
+        "source": "crates/chatgpt-chat/evidence/native-rpc-embedded-resume-initial-2026-10-12-source.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -11715,7 +11715,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-rpc-lifecycle-runtime-initial-2026-10-12.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-rpc-lifecycle-runtime-initial-2026-10-12.json"
+        "source": "crates/chatgpt-chat/evidence/native-rpc-lifecycle-runtime-initial-2026-10-12.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -11738,7 +11738,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-saved-follow-up-2026-10-12-report.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-saved-follow-up-2026-10-12-report.json"
+        "source": "crates/chatgpt-chat/evidence/native-saved-follow-up-2026-10-12-report.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -11761,7 +11761,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-saved-follow-up-2026-10-12-source.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-saved-follow-up-2026-10-12-source.json"
+        "source": "crates/chatgpt-chat/evidence/native-saved-follow-up-2026-10-12-source.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -11784,7 +11784,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-saved-restart-resume-2026-10-12-report.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-saved-restart-resume-2026-10-12-report.json"
+        "source": "crates/chatgpt-chat/evidence/native-saved-restart-resume-2026-10-12-report.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -11807,7 +11807,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-saved-restart-resume-2026-10-12-source.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-saved-restart-resume-2026-10-12-source.json"
+        "source": "crates/chatgpt-chat/evidence/native-saved-restart-resume-2026-10-12-source.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -11830,7 +11830,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-saved-resume-after-uploads-2026-10-12-report.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-saved-resume-after-uploads-2026-10-12-report.json"
+        "source": "crates/chatgpt-chat/evidence/native-saved-resume-after-uploads-2026-10-12-report.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -11853,7 +11853,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-saved-resume-after-uploads-2026-10-12-source.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-saved-resume-after-uploads-2026-10-12-source.json"
+        "source": "crates/chatgpt-chat/evidence/native-saved-resume-after-uploads-2026-10-12-source.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -11876,7 +11876,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-saved-service-2026-10-12-report.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-saved-service-2026-10-12-report.json"
+        "source": "crates/chatgpt-chat/evidence/native-saved-service-2026-10-12-report.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -11899,7 +11899,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-saved-service-2026-10-12-source.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-saved-service-2026-10-12-source.json"
+        "source": "crates/chatgpt-chat/evidence/native-saved-service-2026-10-12-source.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -11922,7 +11922,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-saved-service-validation-2026-10-12.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-saved-service-validation-2026-10-12.json"
+        "source": "crates/chatgpt-chat/evidence/native-saved-service-validation-2026-10-12.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -11945,7 +11945,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-saved-text-2026-10-12-report.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-saved-text-2026-10-12-report.json"
+        "source": "crates/chatgpt-chat/evidence/native-saved-text-2026-10-12-report.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -11968,7 +11968,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-saved-text-2026-10-12-source.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-saved-text-2026-10-12-source.json"
+        "source": "crates/chatgpt-chat/evidence/native-saved-text-2026-10-12-source.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -11991,7 +11991,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-send-contracts-2026-10-12.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-send-contracts-2026-10-12.json"
+        "source": "crates/chatgpt-chat/evidence/native-send-contracts-2026-10-12.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -12014,7 +12014,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-stream-budget-validation-2026-10-12.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-stream-budget-validation-2026-10-12.json"
+        "source": "crates/chatgpt-chat/evidence/native-stream-budget-validation-2026-10-12.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -12037,7 +12037,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-temporary-after-uploads-2026-10-12-report.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-temporary-after-uploads-2026-10-12-report.json"
+        "source": "crates/chatgpt-chat/evidence/native-temporary-after-uploads-2026-10-12-report.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -12060,7 +12060,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-temporary-after-uploads-2026-10-12-source.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-temporary-after-uploads-2026-10-12-source.json"
+        "source": "crates/chatgpt-chat/evidence/native-temporary-after-uploads-2026-10-12-source.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -12083,7 +12083,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-temporary-conduit-2026-10-12-report.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-temporary-conduit-2026-10-12-report.json"
+        "source": "crates/chatgpt-chat/evidence/native-temporary-conduit-2026-10-12-report.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -12106,7 +12106,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-temporary-conduit-2026-10-12-source.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-temporary-conduit-2026-10-12-source.json"
+        "source": "crates/chatgpt-chat/evidence/native-temporary-conduit-2026-10-12-source.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -12129,7 +12129,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-temporary-initial-2026-10-12-report.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-temporary-initial-2026-10-12-report.json"
+        "source": "crates/chatgpt-chat/evidence/native-temporary-initial-2026-10-12-report.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -12152,7 +12152,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-temporary-initial-2026-10-12-source.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-temporary-initial-2026-10-12-source.json"
+        "source": "crates/chatgpt-chat/evidence/native-temporary-initial-2026-10-12-source.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -12175,7 +12175,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-transport-dependencies-2026-10-11.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-transport-dependencies-2026-10-11.json"
+        "source": "crates/chatgpt-chat/evidence/native-transport-dependencies-2026-10-11.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -12198,7 +12198,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-transport-source-2026-10-11.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-transport-source-2026-10-11.json"
+        "source": "crates/chatgpt-chat/evidence/native-transport-source-2026-10-11.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -12221,7 +12221,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-tui-daemon-approval-2026-10-12-report.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-tui-daemon-approval-2026-10-12-report.json"
+        "source": "crates/chatgpt-chat/evidence/native-tui-daemon-approval-2026-10-12-report.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -12244,7 +12244,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-tui-daemon-attachments-disable-2026-10-12-report.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-tui-daemon-attachments-disable-2026-10-12-report.json"
+        "source": "crates/chatgpt-chat/evidence/native-tui-daemon-attachments-disable-2026-10-12-report.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -12267,7 +12267,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-tui-daemon-lifecycle-initial-2026-10-12-report.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-tui-daemon-lifecycle-initial-2026-10-12-report.json"
+        "source": "crates/chatgpt-chat/evidence/native-tui-daemon-lifecycle-initial-2026-10-12-report.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -12290,7 +12290,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-tui-daemon-reconnect-2026-10-12-report.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-tui-daemon-reconnect-2026-10-12-report.json"
+        "source": "crates/chatgpt-chat/evidence/native-tui-daemon-reconnect-2026-10-12-report.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -12313,7 +12313,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-tui-daemon-reconnect-initial-2026-10-12-report.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-tui-daemon-reconnect-initial-2026-10-12-report.json"
+        "source": "crates/chatgpt-chat/evidence/native-tui-daemon-reconnect-initial-2026-10-12-report.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -12336,7 +12336,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-tui-embedded-attachments-2026-10-12-report.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-tui-embedded-attachments-2026-10-12-report.json"
+        "source": "crates/chatgpt-chat/evidence/native-tui-embedded-attachments-2026-10-12-report.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -12359,7 +12359,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-tui-embedded-cancel-approval-2026-10-12-report.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-tui-embedded-cancel-approval-2026-10-12-report.json"
+        "source": "crates/chatgpt-chat/evidence/native-tui-embedded-cancel-approval-2026-10-12-report.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -12382,7 +12382,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-tui-embedded-initial-2026-10-12-report.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-tui-embedded-initial-2026-10-12-report.json"
+        "source": "crates/chatgpt-chat/evidence/native-tui-embedded-initial-2026-10-12-report.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -12405,7 +12405,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-tui-embedded-lifecycle-initial-2026-10-12-report.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-tui-embedded-lifecycle-initial-2026-10-12-report.json"
+        "source": "crates/chatgpt-chat/evidence/native-tui-embedded-lifecycle-initial-2026-10-12-report.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -12428,7 +12428,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-tui-feature-disabled-2026-10-12-report.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-tui-feature-disabled-2026-10-12-report.json"
+        "source": "crates/chatgpt-chat/evidence/native-tui-feature-disabled-2026-10-12-report.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -12451,7 +12451,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-tui-inline-rejected-2026-10-12-report.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-tui-inline-rejected-2026-10-12-report.json"
+        "source": "crates/chatgpt-chat/evidence/native-tui-inline-rejected-2026-10-12-report.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -12474,7 +12474,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-tui-lifecycle-validation-2026-10-12.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-tui-lifecycle-validation-2026-10-12.json"
+        "source": "crates/chatgpt-chat/evidence/native-tui-lifecycle-validation-2026-10-12.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -12497,7 +12497,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-tui-no-alt-rejected-2026-10-12-report.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-tui-no-alt-rejected-2026-10-12-report.json"
+        "source": "crates/chatgpt-chat/evidence/native-tui-no-alt-rejected-2026-10-12-report.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -12520,7 +12520,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-two-phase-iterations-2026-10-11-v2.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-two-phase-iterations-2026-10-11-v2.json"
+        "source": "crates/chatgpt-chat/evidence/native-two-phase-iterations-2026-10-11-v2.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -12543,7 +12543,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-two-phase-iterations-2026-10-12.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-two-phase-iterations-2026-10-12.json"
+        "source": "crates/chatgpt-chat/evidence/native-two-phase-iterations-2026-10-12.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -12566,7 +12566,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-two-phase-source-2026-10-11-v2.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-two-phase-source-2026-10-11-v2.json"
+        "source": "crates/chatgpt-chat/evidence/native-two-phase-source-2026-10-11-v2.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -12589,7 +12589,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-two-phase-source-2026-10-11.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-two-phase-source-2026-10-11.json"
+        "source": "crates/chatgpt-chat/evidence/native-two-phase-source-2026-10-11.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -12612,7 +12612,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-two-phase-source-2026-10-12.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-two-phase-source-2026-10-12.json"
+        "source": "crates/chatgpt-chat/evidence/native-two-phase-source-2026-10-12.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -12635,7 +12635,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-two-phase-validation-2026-10-11-v2.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-two-phase-validation-2026-10-11-v2.json"
+        "source": "crates/chatgpt-chat/evidence/native-two-phase-validation-2026-10-11-v2.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -12658,7 +12658,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-two-phase-validation-2026-10-11.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-two-phase-validation-2026-10-11.json"
+        "source": "crates/chatgpt-chat/evidence/native-two-phase-validation-2026-10-11.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -12681,7 +12681,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-upload-contracts-2026-10-12.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-upload-contracts-2026-10-12.json"
+        "source": "crates/chatgpt-chat/evidence/native-upload-contracts-2026-10-12.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -12704,7 +12704,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-upload-validation-2026-10-12.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-upload-validation-2026-10-12.json"
+        "source": "crates/chatgpt-chat/evidence/native-upload-validation-2026-10-12.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -12727,7 +12727,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-windows-gnullvm-final-tools-2026-10-12.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-windows-gnullvm-final-tools-2026-10-12.json"
+        "source": "crates/chatgpt-chat/evidence/native-windows-gnullvm-final-tools-2026-10-12.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -12750,7 +12750,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/native-windows-gnullvm-transport-link-2026-10-12.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-windows-gnullvm-transport-link-2026-10-12.json"
+        "source": "crates/chatgpt-chat/evidence/native-windows-gnullvm-transport-link-2026-10-12.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -12773,7 +12773,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/evidence/official-runtime-contracts-2026-10-12.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/official-runtime-contracts-2026-10-12.json"
+        "source": "crates/chatgpt-chat/evidence/official-runtime-contracts-2026-10-12.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -12796,7 +12796,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/fixtures/attachments/README.md",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/fixtures/attachments/README.md"
+        "source": "crates/chatgpt-chat/fixtures/attachments/README.md"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -12819,7 +12819,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/fixtures/attachments/fixture.jpg",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/fixtures/attachments/fixture.jpg"
+        "source": "crates/chatgpt-chat/fixtures/attachments/fixture.jpg"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -12842,7 +12842,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/fixtures/attachments/fixture.pdf",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/fixtures/attachments/fixture.pdf"
+        "source": "crates/chatgpt-chat/fixtures/attachments/fixture.pdf"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -12865,7 +12865,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/fixtures/attachments/fixture.png",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/fixtures/attachments/fixture.png"
+        "source": "crates/chatgpt-chat/fixtures/attachments/fixture.png"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -12888,7 +12888,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/fixtures/attachments/fixture.txt",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/fixtures/attachments/fixture.txt"
+        "source": "crates/chatgpt-chat/fixtures/attachments/fixture.txt"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -12911,7 +12911,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/fixtures/attachments/fixture.webp",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/fixtures/attachments/fixture.webp"
+        "source": "crates/chatgpt-chat/fixtures/attachments/fixture.webp"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -12934,7 +12934,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/fixtures/attachments/manifest.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/fixtures/attachments/manifest.json"
+        "source": "crates/chatgpt-chat/fixtures/attachments/manifest.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -12957,7 +12957,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/fonts/DejaVuSans.ttf",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/fonts/DejaVuSans.ttf"
+        "source": "crates/chatgpt-chat/fonts/DejaVuSans.ttf"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -12980,7 +12980,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/fonts/DejaVuSansMono.ttf",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/fonts/DejaVuSansMono.ttf"
+        "source": "crates/chatgpt-chat/fonts/DejaVuSansMono.ttf"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -13003,7 +13003,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/fonts/DejaVuSerif.ttf",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/fonts/DejaVuSerif.ttf"
+        "source": "crates/chatgpt-chat/fonts/DejaVuSerif.ttf"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -13026,7 +13026,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/fonts/LICENSE",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/fonts/LICENSE"
+        "source": "crates/chatgpt-chat/fonts/LICENSE"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -13049,7 +13049,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/fonts/profile.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/fonts/profile.json"
+        "source": "crates/chatgpt-chat/fonts/profile.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -13072,7 +13072,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/pdf-validator/.gitignore",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/pdf-validator/.gitignore"
+        "source": "crates/chatgpt-chat/pdf-validator/.gitignore"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -13095,7 +13095,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/pdf-validator/Cargo.lock",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/pdf-validator/Cargo.lock"
+        "source": "crates/chatgpt-chat/pdf-validator/Cargo.lock"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -13118,7 +13118,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/pdf-validator/Cargo.toml",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/pdf-validator/Cargo.toml"
+        "source": "crates/chatgpt-chat/pdf-validator/Cargo.toml"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -13141,7 +13141,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/pdf-validator/README.md",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/pdf-validator/README.md"
+        "source": "crates/chatgpt-chat/pdf-validator/README.md"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -13164,7 +13164,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/pdf-validator/RUST_LIBRARY_NOTICES",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/pdf-validator/RUST_LIBRARY_NOTICES"
+        "source": "crates/chatgpt-chat/pdf-validator/RUST_LIBRARY_NOTICES"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -13187,7 +13187,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/pdf-validator/THIRD_PARTY_NOTICES",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/pdf-validator/THIRD_PARTY_NOTICES"
+        "source": "crates/chatgpt-chat/pdf-validator/THIRD_PARTY_NOTICES"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -13210,7 +13210,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/pdf-validator/build.py",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/pdf-validator/build.py"
+        "source": "crates/chatgpt-chat/pdf-validator/build.py"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -13233,7 +13233,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/pdf-validator/manifest.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/pdf-validator/manifest.json"
+        "source": "crates/chatgpt-chat/pdf-validator/manifest.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -13256,7 +13256,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/pdf-validator/src/lib.rs",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/pdf-validator/src/lib.rs"
+        "source": "crates/chatgpt-chat/pdf-validator/src/lib.rs"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -13279,7 +13279,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/pdf-validator/validator.wasm",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/pdf-validator/validator.wasm"
+        "source": "crates/chatgpt-chat/pdf-validator/validator.wasm"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -13302,7 +13302,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/research/msvc-toolchain-candidate/aws-lc-5.1.0-msvc-driver.patch",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/research/msvc-toolchain-candidate/aws-lc-5.1.0-msvc-driver.patch"
+        "source": "crates/chatgpt-chat/research/msvc-toolchain-candidate/aws-lc-5.1.0-msvc-driver.patch"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -13325,7 +13325,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/research/msvc-toolchain-candidate/btls-sys_msvc_bindgen_driver.patch",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/research/msvc-toolchain-candidate/btls-sys_msvc_bindgen_driver.patch"
+        "source": "crates/chatgpt-chat/research/msvc-toolchain-candidate/btls-sys_msvc_bindgen_driver.patch"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -13348,7 +13348,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/research/msvc-toolchain-candidate/btls-sys_msvc_compatibility_version.patch",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/research/msvc-toolchain-candidate/btls-sys_msvc_compatibility_version.patch"
+        "source": "crates/chatgpt-chat/research/msvc-toolchain-candidate/btls-sys_msvc_compatibility_version.patch"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -13371,7 +13371,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/research/msvc-toolchain-candidate/llvm-0.8.24-relocatable-msvc-vfs.patch",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/research/msvc-toolchain-candidate/llvm-0.8.24-relocatable-msvc-vfs.patch"
+        "source": "crates/chatgpt-chat/research/msvc-toolchain-candidate/llvm-0.8.24-relocatable-msvc-vfs.patch"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -13394,7 +13394,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/research/msvc-toolchain-candidate/llvm-0.8.24.patch",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/research/msvc-toolchain-candidate/llvm-0.8.24.patch"
+        "source": "crates/chatgpt-chat/research/msvc-toolchain-candidate/llvm-0.8.24.patch"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -13417,7 +13417,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/research/msvc-toolchain-candidate/manifest.json",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/research/msvc-toolchain-candidate/manifest.json"
+        "source": "crates/chatgpt-chat/research/msvc-toolchain-candidate/manifest.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -13440,7 +13440,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/research/msvc-toolchain-candidate/ring_msvc_declared_clang.patch",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/research/msvc-toolchain-candidate/ring_msvc_declared_clang.patch"
+        "source": "crates/chatgpt-chat/research/msvc-toolchain-candidate/ring_msvc_declared_clang.patch"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -13463,7 +13463,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/research/msvc-toolchain-candidate/rules_cc-0.2.25-grep-includes.patch",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/research/msvc-toolchain-candidate/rules_cc-0.2.25-grep-includes.patch"
+        "source": "crates/chatgpt-chat/research/msvc-toolchain-candidate/rules_cc-0.2.25-grep-includes.patch"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -13486,7 +13486,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/research/msvc-toolchain-candidate/rules_rust_msvc_build_script_paths.patch",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/research/msvc-toolchain-candidate/rules_rust_msvc_build_script_paths.patch"
+        "source": "crates/chatgpt-chat/research/msvc-toolchain-candidate/rules_rust_msvc_build_script_paths.patch"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -13509,7 +13509,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/research/msvc-toolchain-candidate/rules_rust_msvc_linker_paths.patch",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/research/msvc-toolchain-candidate/rules_rust_msvc_linker_paths.patch"
+        "source": "crates/chatgpt-chat/research/msvc-toolchain-candidate/rules_rust_msvc_linker_paths.patch"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -13532,7 +13532,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/research/msvc-toolchain-candidate/windows-support-0.4.1.patch",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/research/msvc-toolchain-candidate/windows-support-0.4.1.patch"
+        "source": "crates/chatgpt-chat/research/msvc-toolchain-candidate/windows-support-0.4.1.patch"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -13555,7 +13555,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/research/msvc-toolchain-candidate/workspace-toolchain.patch",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/research/msvc-toolchain-candidate/workspace-toolchain.patch"
+        "source": "crates/chatgpt-chat/research/msvc-toolchain-candidate/workspace-toolchain.patch"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -13578,7 +13578,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/src/attachment.rs",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/src/attachment.rs"
+        "source": "crates/chatgpt-chat/src/attachment.rs"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -13601,7 +13601,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/src/content.rs",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/src/content.rs"
+        "source": "crates/chatgpt-chat/src/content.rs"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -13624,7 +13624,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/src/conversation.rs",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/src/conversation.rs"
+        "source": "crates/chatgpt-chat/src/conversation.rs"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -13647,7 +13647,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/src/conversation/tests.rs",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/src/conversation/tests.rs"
+        "source": "crates/chatgpt-chat/src/conversation/tests.rs"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -13670,7 +13670,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/src/journal.rs",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/src/journal.rs"
+        "source": "crates/chatgpt-chat/src/journal.rs"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -13693,7 +13693,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/src/lib.rs",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/src/lib.rs"
+        "source": "crates/chatgpt-chat/src/lib.rs"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -13716,7 +13716,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/src/models.rs",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/src/models.rs"
+        "source": "crates/chatgpt-chat/src/models.rs"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -13739,7 +13739,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/src/native_preparation.rs",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/src/native_preparation.rs"
+        "source": "crates/chatgpt-chat/src/native_preparation.rs"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -13762,7 +13762,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/src/pdf.rs",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/src/pdf.rs"
+        "source": "crates/chatgpt-chat/src/pdf.rs"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -13785,7 +13785,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/src/pdf/tests.rs",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/src/pdf/tests.rs"
+        "source": "crates/chatgpt-chat/src/pdf/tests.rs"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -13808,7 +13808,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/src/preparation.rs",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/src/preparation.rs"
+        "source": "crates/chatgpt-chat/src/preparation.rs"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -13831,7 +13831,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/src/probe.rs",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/src/probe.rs"
+        "source": "crates/chatgpt-chat/src/probe.rs"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -13854,7 +13854,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/src/probe_tests.rs",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/src/probe_tests.rs"
+        "source": "crates/chatgpt-chat/src/probe_tests.rs"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -13877,7 +13877,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/src/report.rs",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/src/report.rs"
+        "source": "crates/chatgpt-chat/src/report.rs"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -13900,7 +13900,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/src/send.rs",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/src/send.rs"
+        "source": "crates/chatgpt-chat/src/send.rs"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -13923,7 +13923,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/src/sentinel/layout.rs",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/src/sentinel/layout.rs"
+        "source": "crates/chatgpt-chat/src/sentinel/layout.rs"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -13946,7 +13946,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/src/sentinel/mod.rs",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/src/sentinel/mod.rs"
+        "source": "crates/chatgpt-chat/src/sentinel/mod.rs"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -13969,7 +13969,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/src/sentinel/pattern.rs",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/src/sentinel/pattern.rs"
+        "source": "crates/chatgpt-chat/src/sentinel/pattern.rs"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -13992,7 +13992,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/src/sentinel/profile.rs",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/src/sentinel/profile.rs"
+        "source": "crates/chatgpt-chat/src/sentinel/profile.rs"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -14015,7 +14015,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/src/sentinel/proof.rs",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/src/sentinel/proof.rs"
+        "source": "crates/chatgpt-chat/src/sentinel/proof.rs"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -14038,7 +14038,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/src/sentinel/storage.rs",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/src/sentinel/storage.rs"
+        "source": "crates/chatgpt-chat/src/sentinel/storage.rs"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -14061,7 +14061,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/src/sentinel/style.rs",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/src/sentinel/style.rs"
+        "source": "crates/chatgpt-chat/src/sentinel/style.rs"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -14084,7 +14084,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/src/sentinel/vm.rs",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/src/sentinel/vm.rs"
+        "source": "crates/chatgpt-chat/src/sentinel/vm.rs"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -14107,7 +14107,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/src/session.rs",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/src/session.rs"
+        "source": "crates/chatgpt-chat/src/session.rs"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -14130,7 +14130,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/src/session/tests.rs",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/src/session/tests.rs"
+        "source": "crates/chatgpt-chat/src/session/tests.rs"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -14153,7 +14153,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/src/stream.rs",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/src/stream.rs"
+        "source": "crates/chatgpt-chat/src/stream.rs"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -14176,7 +14176,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/src/stream/delta.rs",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/src/stream/delta.rs"
+        "source": "crates/chatgpt-chat/src/stream/delta.rs"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -14199,7 +14199,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/src/stream/turn.rs",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/src/stream/turn.rs"
+        "source": "crates/chatgpt-chat/src/stream/turn.rs"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -14222,7 +14222,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/src/temporary.rs",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/src/temporary.rs"
+        "source": "crates/chatgpt-chat/src/temporary.rs"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -14245,7 +14245,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/src/temporary_session.rs",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/src/temporary_session.rs"
+        "source": "crates/chatgpt-chat/src/temporary_session.rs"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -14268,7 +14268,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/src/temporary_session/tests.rs",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/src/temporary_session/tests.rs"
+        "source": "crates/chatgpt-chat/src/temporary_session/tests.rs"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -14291,7 +14291,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/src/upload.rs",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/src/upload.rs"
+        "source": "crates/chatgpt-chat/src/upload.rs"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -14314,7 +14314,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/src/upload/processing.rs",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/src/upload/processing.rs"
+        "source": "crates/chatgpt-chat/src/upload/processing.rs"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -14337,7 +14337,7 @@
       "destination": {
         "kind": "overlay",
         "path": "codex-rs/chatgpt-chat/src/upload_tests.rs",
-        "source": "integration/codex/overlays/codex-rs/chatgpt-chat/src/upload_tests.rs"
+        "source": "crates/chatgpt-chat/src/upload_tests.rs"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -39400,7 +39400,7 @@
       "destination": {
         "kind": "overlay",
         "path": "docs/container-verify.md",
-        "source": "integration/codex/overlays/docs/container-verify.md"
+        "source": "docs/container-verify.md"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -39450,7 +39450,7 @@
       "destination": {
         "kind": "overlay",
         "path": "docs/dependency-upgrades.md",
-        "source": "integration/codex/overlays/docs/dependency-upgrades.md"
+        "source": "docs/dependency-upgrades.md"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -39500,7 +39500,7 @@
       "destination": {
         "kind": "overlay",
         "path": "docs/native-providers/README.md",
-        "source": "integration/codex/overlays/docs/native-providers/README.md"
+        "source": "docs/native-providers/README.md"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -39523,7 +39523,7 @@
       "destination": {
         "kind": "overlay",
         "path": "docs/native-providers/account-pools-checks.json",
-        "source": "integration/codex/overlays/docs/native-providers/account-pools-checks.json"
+        "source": "docs/native-providers/account-pools-checks.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -39546,7 +39546,7 @@
       "destination": {
         "kind": "overlay",
         "path": "docs/native-providers/account-pools-live-acceptance.json",
-        "source": "integration/codex/overlays/docs/native-providers/account-pools-live-acceptance.json"
+        "source": "docs/native-providers/account-pools-live-acceptance.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -39569,7 +39569,7 @@
       "destination": {
         "kind": "overlay",
         "path": "docs/native-providers/account-pools.md",
-        "source": "integration/codex/overlays/docs/native-providers/account-pools.md"
+        "source": "docs/native-providers/account-pools.md"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -39592,7 +39592,7 @@
       "destination": {
         "kind": "overlay",
         "path": "docs/native-providers/coverage-matrix.md",
-        "source": "integration/codex/overlays/docs/native-providers/coverage-matrix.md"
+        "source": "docs/native-providers/coverage-matrix.md"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -39615,7 +39615,7 @@
       "destination": {
         "kind": "overlay",
         "path": "docs/native-providers/integration-manifest.json",
-        "source": "integration/codex/overlays/docs/native-providers/integration-manifest.json"
+        "source": "docs/native-providers/integration-manifest.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -39638,7 +39638,7 @@
       "destination": {
         "kind": "overlay",
         "path": "docs/native-providers/ledger.md",
-        "source": "integration/codex/overlays/docs/native-providers/ledger.md"
+        "source": "docs/native-providers/ledger.md"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -39661,7 +39661,7 @@
       "destination": {
         "kind": "overlay",
         "path": "docs/native-providers/multi-provider-agents-checks.json",
-        "source": "integration/codex/overlays/docs/native-providers/multi-provider-agents-checks.json"
+        "source": "docs/native-providers/multi-provider-agents-checks.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -39684,7 +39684,7 @@
       "destination": {
         "kind": "overlay",
         "path": "docs/native-providers/multi-provider-agents-live.json",
-        "source": "integration/codex/overlays/docs/native-providers/multi-provider-agents-live.json"
+        "source": "docs/native-providers/multi-provider-agents-live.json"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -39707,7 +39707,7 @@
       "destination": {
         "kind": "overlay",
         "path": "docs/native-providers/multi-provider-agents.md",
-        "source": "integration/codex/overlays/docs/native-providers/multi-provider-agents.md"
+        "source": "docs/native-providers/multi-provider-agents.md"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -39730,7 +39730,7 @@
       "destination": {
         "kind": "overlay",
         "path": "docs/native-providers/refactor-architecture.md",
-        "source": "integration/codex/overlays/docs/native-providers/refactor-architecture.md"
+        "source": "docs/native-providers/refactor-architecture.md"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -39753,7 +39753,7 @@
       "destination": {
         "kind": "overlay",
         "path": "docs/native-providers/refactor-baseline.md",
-        "source": "integration/codex/overlays/docs/native-providers/refactor-baseline.md"
+        "source": "docs/native-providers/refactor-baseline.md"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -39776,7 +39776,7 @@
       "destination": {
         "kind": "overlay",
         "path": "docs/native-providers/refactor-validation.md",
-        "source": "integration/codex/overlays/docs/native-providers/refactor-validation.md"
+        "source": "docs/native-providers/refactor-validation.md"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -39799,7 +39799,7 @@
       "destination": {
         "kind": "overlay",
         "path": "docs/native-providers/references.md",
-        "source": "integration/codex/overlays/docs/native-providers/references.md"
+        "source": "docs/native-providers/references.md"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -39822,7 +39822,7 @@
       "destination": {
         "kind": "overlay",
         "path": "docs/native-providers/usage.md",
-        "source": "integration/codex/overlays/docs/native-providers/usage.md"
+        "source": "docs/native-providers/usage.md"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -39845,7 +39845,7 @@
       "destination": {
         "kind": "overlay",
         "path": "docs/rebranding.md",
-        "source": "integration/codex/overlays/docs/rebranding.md"
+        "source": "docs/rebranding.md"
       },
       "git_status": "A",
       "mode_changed": false,
@@ -39868,7 +39868,7 @@
       "destination": {
         "kind": "overlay",
         "path": "docs/releases.md",
-        "source": "integration/codex/overlays/docs/releases.md"
+        "source": "docs/releases.md"
       },
       "git_status": "A",
       "mode_changed": false,

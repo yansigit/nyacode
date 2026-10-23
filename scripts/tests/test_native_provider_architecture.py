@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import sys
+import json
 import tempfile
 import unittest
 from pathlib import Path
@@ -345,6 +346,44 @@ class NativeProviderArchitectureTests(unittest.TestCase):
         self.assertTrue(
             any("must require at least one test" in error for error in errors)
         )
+
+
+class AssemblyOwnershipTests(unittest.TestCase):
+    def test_undeclared_changes_and_missing_regressions_fail(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            assembly = {
+                "inventory": "inventory.json",
+                "regression_manifest": "tests.json",
+                "deletes": [],
+                "patches": [],
+                "overlays": [],
+            }
+            entry = {
+                "path": "codex-rs/Cargo.lock",
+                "owner": "build",
+                "purpose": "locked dependencies",
+                "regression_groups": ["build"],
+            }
+            (root / "inventory.json").write_text(json.dumps({"entries": [entry]}))
+            (root / "tests.json").write_text(
+                json.dumps(
+                    {
+                        "product_test_groups": {
+                            "build": {"checks": ["linked-build"], "minimum_tests": 1}
+                        }
+                    }
+                )
+            )
+            self.assertEqual(
+                architecture.validate_assembly_ownership(root, assembly), []
+            )
+            assembly["overlays"] = [{"destination": "codex-rs/core/src/unknown.rs"}]
+            self.assertTrue(architecture.validate_assembly_ownership(root, assembly))
+            assembly["overlays"] = []
+            entry["regression_groups"] = ["missing"]
+            (root / "inventory.json").write_text(json.dumps({"entries": [entry]}))
+            self.assertTrue(architecture.validate_assembly_ownership(root, assembly))
 
 
 if __name__ == "__main__":

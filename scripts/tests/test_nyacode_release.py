@@ -138,6 +138,33 @@ class ReleaseSetTest(unittest.TestCase):
             release.seal(self.dist, VERSION, COMMIT)
         self.assertFalse((self.dist / release.CHECKSUMS).exists())
 
+    def test_engine_provenance_must_match_the_qualified_assembly(self):
+        provenance = {
+            "engine_revision": "e" * 40,
+            "engine_archive_sha256": "a" * 64,
+            "integration_input_sha256": "b" * 64,
+            "integration_contract_version": 1,
+        }
+        for path in self.dist.glob("*.json"):
+            release.write_json(path, {**json.loads(path.read_text()), **provenance})
+        with patch.object(release, "engine_provenance", return_value=provenance):
+            self.assertEqual(len(release.verify(self.dist, VERSION, COMMIT)), 6)
+            path = next(self.dist.glob("*.json"))
+            value = json.loads(path.read_text())
+            value["integration_input_sha256"] = "c" * 64
+            release.write_json(path, value)
+            with self.assertRaisesRegex(ValueError, "Inconsistent build report"):
+                release.verify(self.dist, VERSION, COMMIT)
+
+    def test_assembled_reports_cannot_bypass_input_validation(self):
+        path = next(self.dist.glob("*.json"))
+        release.write_json(
+            path, {**json.loads(path.read_text()), "engine_revision": "e" * 40}
+        )
+        with patch.object(release, "engine_provenance", return_value={}):
+            with self.assertRaises(ValueError):
+                release.verify(self.dist, VERSION, COMMIT)
+
     def test_unexpected_asset_blocks_publication(self):
         (self.dist / "surprise.zip").write_bytes(b"unexpected")
         with self.assertRaises(ValueError):

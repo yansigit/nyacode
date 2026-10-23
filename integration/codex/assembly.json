@@ -8,104 +8,105 @@
     "patches/rules_rust_build_script_tools_transition.patch",
     "patches/rules_rust_windows_process_wrapper_skip_temp_outputs.patch"
   ],
+  "inventory": "inventory/downstream.json",
   "overlays": [
     {
       "destination": ".dockerignore",
       "mode": "100644",
       "replace": false,
       "sha256": "43cd2983cad22acf359deb56e4c46c6aa8d8df7597a08d4b7d21b52367d354fd",
-      "source": "integration/codex/overlays/.dockerignore"
+      "source": ".dockerignore"
     },
     {
       "destination": ".github/ISSUE_TEMPLATE/config.yml",
       "mode": "100644",
       "replace": false,
       "sha256": "611c314fd4da81255646a41f2c1cd665aab56b1996464185317b5d6abd4bd3e3",
-      "source": "integration/codex/overlays/.github/ISSUE_TEMPLATE/config.yml"
+      "source": ".github/ISSUE_TEMPLATE/config.yml"
     },
     {
       "destination": ".github/nyacode-logo.svg",
       "mode": "100644",
       "replace": false,
       "sha256": "967e147c52c563c3910a4cf468ac53bb20a83e6a6ec47c2c65a6c14b5936a7f4",
-      "source": "integration/codex/overlays/.github/nyacode-logo.svg"
+      "source": ".github/nyacode-logo.svg"
     },
     {
       "destination": ".github/scripts/install-musl-cxx-runtime.sh",
       "mode": "100644",
       "replace": false,
       "sha256": "a55de7bc8596971c2894d384d90f98ba4f9f451c14c28a6b6568b18e3775ab18",
-      "source": "integration/codex/overlays/.github/scripts/install-musl-cxx-runtime.sh"
+      "source": ".github/scripts/install-musl-cxx-runtime.sh"
     },
     {
       "destination": ".github/scripts/publish_nyacode_release.py",
       "mode": "100644",
       "replace": false,
       "sha256": "a5f5a54b63886c54cdaebb35a4e250afae3f4c0263cc61f1a358e526b86c4035",
-      "source": "integration/codex/overlays/.github/scripts/publish_nyacode_release.py"
+      "source": ".github/scripts/publish_nyacode_release.py"
     },
     {
       "destination": ".github/scripts/run_v8_bazel_build.py",
       "mode": "100755",
       "replace": false,
       "sha256": "51070f8db0f34d0896919e4ad70051534d6453a5e19991a877faae79e1acea50",
-      "source": "integration/codex/overlays/.github/scripts/run_v8_bazel_build.py"
+      "source": ".github/scripts/run_v8_bazel_build.py"
     },
     {
       "destination": ".github/scripts/test_run_v8_bazel_build.py",
       "mode": "100644",
       "replace": false,
       "sha256": "9365561713d897c430204089bdfec39ec2482259e3a3bd8574e24a91aa4ec473",
-      "source": "integration/codex/overlays/.github/scripts/test_run_v8_bazel_build.py"
+      "source": ".github/scripts/test_run_v8_bazel_build.py"
     },
     {
       "destination": ".github/scripts/test_verify_cargo_workspace_manifests.py",
       "mode": "100644",
       "replace": false,
       "sha256": "ae741f2be2085d6cd8fef202ee3b8865a7870f7b88840c8813cf4a26b3c1e66c",
-      "source": "integration/codex/overlays/.github/scripts/test_verify_cargo_workspace_manifests.py"
+      "source": ".github/scripts/test_verify_cargo_workspace_manifests.py"
     },
     {
       "destination": ".github/scripts/windows-arm64-cmake.cmake",
       "mode": "100644",
       "replace": false,
       "sha256": "552b670ca9575602606076f01df4e4f6a304cc40c99de2c8b87e76db44ad64e5",
-      "source": "integration/codex/overlays/.github/scripts/windows-arm64-cmake.cmake"
+      "source": ".github/scripts/windows-arm64-cmake.cmake"
     },
     {
       "destination": ".github/workflows/container-verify.yml",
       "mode": "100644",
       "replace": false,
       "sha256": "74fd55ccf433198771bdf634ad579228036a7e60bea409a87aa6fd0906cbba9a",
-      "source": "integration/codex/overlays/.github/workflows/container-verify.yml"
+      "source": ".github/workflows/container-verify.yml"
     },
     {
       "destination": ".github/workflows/native-providers.yml",
       "mode": "100644",
       "replace": false,
       "sha256": "5a023c543a37d84f3ea1e750be4df4b7c188cb093a0183d294cde34ba9810c4d",
-      "source": "integration/codex/overlays/.github/workflows/native-providers.yml"
+      "source": ".github/workflows/native-providers.yml"
     },
     {
       "destination": ".github/workflows/nyacode-release.yml",
       "mode": "100644",
       "replace": false,
       "sha256": "e6571785b057105c1cfda203147991d9fcfbd22bd136692680e6213b6c3e1b15",
-      "source": "integration/codex/overlays/.github/workflows/nyacode-release.yml"
+      "source": ".github/workflows/nyacode-release.yml"
     },
     {
       "destination": "Containerfile",
       "mode": "100644",
       "replace": false,
       "sha256": "9e41d593cc57f8444bb413eb671a685fb102f563ea30f7f538b0f9f3ecc77768",
-      "source": "integration/codex/overlays/Containerfile"
+      "source": "Containerfile"
     },
     {
       "destination": "Dockerfile",
       "mode": "120000",
       "replace": false,
       "sha256": "5fcdf9b4580789697d834d1456a22bcfaa236d668fc180cad4775afc36ed5914",
-      "source": "integration/codex/overlays/Dockerfile"
+      "source": "Dockerfile"
     },
     {
       "destination": "bazel/toolchains/browser_chat/BUILD.bazel",
@@ -462,1477 +463,1477 @@
       "mode": "100644",
       "replace": false,
       "sha256": "93b8ee3986d7bf4f036c78a00bbc0b10be28cacefade42aba2c62793155bd3ef",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/BUILD.bazel"
+      "source": "crates/chatgpt-chat/BUILD.bazel"
     },
     {
       "destination": "codex-rs/chatgpt-chat/Cargo.toml",
       "mode": "100644",
       "replace": false,
       "sha256": "508e4f25f0c670b2485baba1df4f43113d30a595b950318c62672b77a81ab82f",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/Cargo.toml"
+      "source": "crates/chatgpt-chat/Cargo.toml"
     },
     {
       "destination": "codex-rs/chatgpt-chat/NOTICE",
       "mode": "100644",
       "replace": false,
       "sha256": "6efd026aae3cc42a0c2047a116dd8bc29f2f44fb2a2a5974c6b97cb06f6b1047",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/NOTICE"
+      "source": "crates/chatgpt-chat/NOTICE"
     },
     {
       "destination": "codex-rs/chatgpt-chat/README.md",
       "mode": "100644",
       "replace": false,
       "sha256": "9db396693fc75f2471d306db254e6a7bef906ffc6b53d8ed6290cb0c5a2d03aa",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/README.md"
+      "source": "crates/chatgpt-chat/README.md"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/live-browser-emulated-probe-2026-10-11.json",
       "mode": "100644",
       "replace": false,
       "sha256": "c58882973d6eafbf8713c77667be1a54e5c519e4ddccb0cdb9aab6ea346bb23f",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/live-browser-emulated-probe-2026-10-11.json"
+      "source": "crates/chatgpt-chat/evidence/live-browser-emulated-probe-2026-10-11.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/live-native-two-phase-probe-2026-10-11-v2.json",
       "mode": "100644",
       "replace": false,
       "sha256": "3239468ffacd24fb2283dd4e3291e40799d28fb77838235e0b48e2623b700c7c",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/live-native-two-phase-probe-2026-10-11-v2.json"
+      "source": "crates/chatgpt-chat/evidence/live-native-two-phase-probe-2026-10-11-v2.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/live-native-two-phase-probe-2026-10-11.json",
       "mode": "100644",
       "replace": false,
       "sha256": "e98b23da3e606b53c6b091c8dcb75733e5c37e40ae59e11839e4d50932273449",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/live-native-two-phase-probe-2026-10-11.json"
+      "source": "crates/chatgpt-chat/evidence/live-native-two-phase-probe-2026-10-11.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/live-native-two-phase-probe-2026-10-12.json",
       "mode": "100644",
       "replace": false,
       "sha256": "1b08d41d592eb2cbdd6ac13582abd0a1c63f0f2fe50d22044529c6ee1035155f",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/live-native-two-phase-probe-2026-10-12.json"
+      "source": "crates/chatgpt-chat/evidence/live-native-two-phase-probe-2026-10-12.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/live-preparation-probe-2026-10-11.json",
       "mode": "100644",
       "replace": false,
       "sha256": "3121f1e467b124313d816703bdda8aae892c7e9161f0b52791f6ad5e394af8c6",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/live-preparation-probe-2026-10-11.json"
+      "source": "crates/chatgpt-chat/evidence/live-preparation-probe-2026-10-11.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/live-preparation-source-2026-10-11.json",
       "mode": "100644",
       "replace": false,
       "sha256": "f558cd885a837834c772b835ac7fce3c5292e923a2f16e3b522680d690742f13",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/live-preparation-source-2026-10-11.json"
+      "source": "crates/chatgpt-chat/evidence/live-preparation-source-2026-10-11.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/live-read-probe-2026-10-11.json",
       "mode": "100644",
       "replace": false,
       "sha256": "0744b614066eb72161983a77d020dbf8cb75227d987c4aad3bdba7e52fed6537",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/live-read-probe-2026-10-11.json"
+      "source": "crates/chatgpt-chat/evidence/live-read-probe-2026-10-11.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/live-standard-comparison-2026-10-11.json",
       "mode": "100644",
       "replace": false,
       "sha256": "bb1faa6fb903df23623d0f037f825f2c4e8befcd5c1436bf087be138dd1bbee2",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/live-standard-comparison-2026-10-11.json"
+      "source": "crates/chatgpt-chat/evidence/live-standard-comparison-2026-10-11.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/local-service-foundation-2026-10-12.json",
       "mode": "100644",
       "replace": false,
       "sha256": "933fdfab97801f5c93149fe2e3e995fcf8fb32eabe6994e9c6eafa6965bd76e9",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/local-service-foundation-2026-10-12.json"
+      "source": "crates/chatgpt-chat/evidence/local-service-foundation-2026-10-12.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-attachments-2026-10-12-report.json",
       "mode": "100644",
       "replace": false,
       "sha256": "e916752ed1c392fb1a880f9962390cc15df82cde889e81f8a77796e970fdf2d1",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-attachments-2026-10-12-report.json"
+      "source": "crates/chatgpt-chat/evidence/native-attachments-2026-10-12-report.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-attachments-2026-10-12-source.json",
       "mode": "100644",
       "replace": false,
       "sha256": "45e162cb4d613c108cab677abd23649edaecbe6a5efad226d345262215d9ff7a",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-attachments-2026-10-12-source.json"
+      "source": "crates/chatgpt-chat/evidence/native-attachments-2026-10-12-source.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-blocker-audit-2026-10-11.json",
       "mode": "100644",
       "replace": false,
       "sha256": "627e478edc958cea9e15cf929bda5c70c6541e23f774f89e94d069ab9053c7a3",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-blocker-audit-2026-10-11.json"
+      "source": "crates/chatgpt-chat/evidence/native-blocker-audit-2026-10-11.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-cache-pdf-validation-2026-10-12.json",
       "mode": "100644",
       "replace": false,
       "sha256": "77c23d5efd7663c7010f0c5d057bddafe9d33a109b3b2ee743e1868afbe83fdf",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-cache-pdf-validation-2026-10-12.json"
+      "source": "crates/chatgpt-chat/evidence/native-cache-pdf-validation-2026-10-12.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-cancellation-contract-research-2026-10-12.json",
       "mode": "100644",
       "replace": false,
       "sha256": "581dc8b3dbf71595accc145b66978cc7ed5d1e5fcba1cac02c6e895667fa9878",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-cancellation-contract-research-2026-10-12.json"
+      "source": "crates/chatgpt-chat/evidence/native-cancellation-contract-research-2026-10-12.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-conduit-resume-contracts-2026-10-12.json",
       "mode": "100644",
       "replace": false,
       "sha256": "bd70e63d0b61d19c30abc075cffbe1c40ab5f0a531183abbf2b45af6bda27d64",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-conduit-resume-contracts-2026-10-12.json"
+      "source": "crates/chatgpt-chat/evidence/native-conduit-resume-contracts-2026-10-12.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-daemon-accepted-jpeg-reconciliation-2026-10-12.json",
       "mode": "100644",
       "replace": false,
       "sha256": "bb97e66b6cb0044e8b3a1ad7ddacf42128f61a85bfc7b9865ef5c7e66f9b5a07",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-daemon-accepted-jpeg-reconciliation-2026-10-12.json"
+      "source": "crates/chatgpt-chat/evidence/native-daemon-accepted-jpeg-reconciliation-2026-10-12.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-daemon-observer-budget-2026-10-12.json",
       "mode": "100644",
       "replace": false,
       "sha256": "34bc8b666b11e4db06ef4780737b10a8d65a9e750ebd9bad262b392e3d259c30",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-daemon-observer-budget-2026-10-12.json"
+      "source": "crates/chatgpt-chat/evidence/native-daemon-observer-budget-2026-10-12.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-embedded-rpc-attachments-2026-10-12-report.json",
       "mode": "100644",
       "replace": false,
       "sha256": "23fd238104ee3bdac5f789c376454f2b80d62fbe464216d7b4c0acc84c240770",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-embedded-rpc-attachments-2026-10-12-report.json"
+      "source": "crates/chatgpt-chat/evidence/native-embedded-rpc-attachments-2026-10-12-report.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-embedded-rpc-attachments-2026-10-12-source.json",
       "mode": "100644",
       "replace": false,
       "sha256": "d0f01267150c51546f041e353c77a0aec542ebb5286f8ac7fed92b5a6e76812c",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-embedded-rpc-attachments-2026-10-12-source.json"
+      "source": "crates/chatgpt-chat/evidence/native-embedded-rpc-attachments-2026-10-12-source.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-embedded-rpc-attachments-initial-2026-10-12-report.json",
       "mode": "100644",
       "replace": false,
       "sha256": "5a01f190756b478066d483f274b2dd5378b61c0ece499d27f0fcc0aa3cc5a08f",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-embedded-rpc-attachments-initial-2026-10-12-report.json"
+      "source": "crates/chatgpt-chat/evidence/native-embedded-rpc-attachments-initial-2026-10-12-report.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-embedded-rpc-attachments-initial-2026-10-12-source.json",
       "mode": "100644",
       "replace": false,
       "sha256": "34abf59ad1b18aebdfdb1319a5210c97246e276ddb927d588f36754030725783",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-embedded-rpc-attachments-initial-2026-10-12-source.json"
+      "source": "crates/chatgpt-chat/evidence/native-embedded-rpc-attachments-initial-2026-10-12-source.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-embedded-rpc-read-2026-10-12-report.json",
       "mode": "100644",
       "replace": false,
       "sha256": "731d0670964631eb0bdb659b02792b8c5459d5e591b80f5b11c3be984a7fd6b9",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-embedded-rpc-read-2026-10-12-report.json"
+      "source": "crates/chatgpt-chat/evidence/native-embedded-rpc-read-2026-10-12-report.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-embedded-rpc-read-2026-10-12-source.json",
       "mode": "100644",
       "replace": false,
       "sha256": "b86cc9946a174996472da6a38ebe49733382309da10306fb96a103a64df4778e",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-embedded-rpc-read-2026-10-12-source.json"
+      "source": "crates/chatgpt-chat/evidence/native-embedded-rpc-read-2026-10-12-source.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-embedded-rpc-saved-2026-10-12-report.json",
       "mode": "100644",
       "replace": false,
       "sha256": "52839ed4576791f4bb0ef1734e0371aa024158bc408f1732918e9e5fb221c8b5",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-embedded-rpc-saved-2026-10-12-report.json"
+      "source": "crates/chatgpt-chat/evidence/native-embedded-rpc-saved-2026-10-12-report.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-embedded-rpc-saved-2026-10-12-source.json",
       "mode": "100644",
       "replace": false,
       "sha256": "691eb77c182e702b60ed46489b798f5b42feaf065c01548dc74a2c0556ec7dc7",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-embedded-rpc-saved-2026-10-12-source.json"
+      "source": "crates/chatgpt-chat/evidence/native-embedded-rpc-saved-2026-10-12-source.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-embedded-rpc-temporary-2026-10-12-report.json",
       "mode": "100644",
       "replace": false,
       "sha256": "ac85aedc9554f61b1f8fedcc6e076e09993def9b39f8ed7f8d6f9d930873c99d",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-embedded-rpc-temporary-2026-10-12-report.json"
+      "source": "crates/chatgpt-chat/evidence/native-embedded-rpc-temporary-2026-10-12-report.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-embedded-rpc-temporary-2026-10-12-source.json",
       "mode": "100644",
       "replace": false,
       "sha256": "2757d787fce3dd9473c7abd0f62c2c5d4ae6bab737af8dabca04e30615e93a7a",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-embedded-rpc-temporary-2026-10-12-source.json"
+      "source": "crates/chatgpt-chat/evidence/native-embedded-rpc-temporary-2026-10-12-source.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-embedded-rpc-temporary-audit-2026-10-12-report.json",
       "mode": "100644",
       "replace": false,
       "sha256": "a1997b640b4fa2372b33a9446adb5e97b8fed711fc886d883288eb2dd8495d92",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-embedded-rpc-temporary-audit-2026-10-12-report.json"
+      "source": "crates/chatgpt-chat/evidence/native-embedded-rpc-temporary-audit-2026-10-12-report.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-embedded-rpc-temporary-audit-2026-10-12-source.json",
       "mode": "100644",
       "replace": false,
       "sha256": "ac8eebe5306523adedf3ed3fd9127799ecec4d69f6655063260f0cb30f290d9e",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-embedded-rpc-temporary-audit-2026-10-12-source.json"
+      "source": "crates/chatgpt-chat/evidence/native-embedded-rpc-temporary-audit-2026-10-12-source.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-embedded-rpc-temporary-validation-2026-10-12.json",
       "mode": "100644",
       "replace": false,
       "sha256": "f89b87e3fa4b332d7c23226d39aadfccc2633477720446288e14e87236e8078f",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-embedded-rpc-temporary-validation-2026-10-12.json"
+      "source": "crates/chatgpt-chat/evidence/native-embedded-rpc-temporary-validation-2026-10-12.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-embedded-rpc-validation-2026-10-12.json",
       "mode": "100644",
       "replace": false,
       "sha256": "b1e4ad6054bd2b03bfa54ca7ee862a1e530ed20ef131ff385552a52accf56919",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-embedded-rpc-validation-2026-10-12.json"
+      "source": "crates/chatgpt-chat/evidence/native-embedded-rpc-validation-2026-10-12.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-history-image-reference-2026-10-12.json",
       "mode": "100644",
       "replace": false,
       "sha256": "1f32169981864c41e03c0e5bbcfbf50755ea4e4cfa99d90dde2d1c478a93e4f4",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-history-image-reference-2026-10-12.json"
+      "source": "crates/chatgpt-chat/evidence/native-history-image-reference-2026-10-12.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-integrated-acceptance-2026-10-12.json",
       "mode": "100644",
       "replace": false,
       "sha256": "f282537a90d536aa9e00ce871f49bc95b7a972cd5b38058852eeb8eb418b1f79",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-integrated-acceptance-2026-10-12.json"
+      "source": "crates/chatgpt-chat/evidence/native-integrated-acceptance-2026-10-12.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-layout-dependencies-2026-10-12.json",
       "mode": "100644",
       "replace": false,
       "sha256": "96ab0dc0bd00d203055e4e3da26e01591f9b4adb3e402c9ee57883f9b57d8835",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-layout-dependencies-2026-10-12.json"
+      "source": "crates/chatgpt-chat/evidence/native-layout-dependencies-2026-10-12.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-layout-research-2026-10-12.json",
       "mode": "100644",
       "replace": false,
       "sha256": "5c14e4d788fffdc2f7d7530484f136d88c282295368cd43b54f8b25e4244959e",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-layout-research-2026-10-12.json"
+      "source": "crates/chatgpt-chat/evidence/native-layout-research-2026-10-12.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-linux-aarch64-gnu-transport-link-2026-10-12.json",
       "mode": "100644",
       "replace": false,
       "sha256": "8467ef02c6a05afcefe23e63d2d004af0388a56835ad1b06b7e99a70cc1d84e9",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-linux-aarch64-gnu-transport-link-2026-10-12.json"
+      "source": "crates/chatgpt-chat/evidence/native-linux-aarch64-gnu-transport-link-2026-10-12.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-linux-aarch64-musl-transport-link-2026-10-12.json",
       "mode": "100644",
       "replace": false,
       "sha256": "e75a3b39ff583768f4f117e05fb469aa40f6f67c395f6f02c1e635afa7494e57",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-linux-aarch64-musl-transport-link-2026-10-12.json"
+      "source": "crates/chatgpt-chat/evidence/native-linux-aarch64-musl-transport-link-2026-10-12.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-linux-final-tools-2026-10-12.json",
       "mode": "100644",
       "replace": false,
       "sha256": "24774e55f6e2f01b46834a48391d0356384370fb1999ff690c84bf093bc2f13a",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-linux-final-tools-2026-10-12.json"
+      "source": "crates/chatgpt-chat/evidence/native-linux-final-tools-2026-10-12.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-linux-musl-transport-tests-2026-10-12.json",
       "mode": "100644",
       "replace": false,
       "sha256": "b1cfcc9ec15b8b222ae10605b7481b29f413169ca6c62801a8f52fd05166568b",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-linux-musl-transport-tests-2026-10-12.json"
+      "source": "crates/chatgpt-chat/evidence/native-linux-musl-transport-tests-2026-10-12.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-macos-aarch64-transport-link-2026-10-12.json",
       "mode": "100644",
       "replace": false,
       "sha256": "5e55510b7a5bee985094ec02b86b60ec4a451306d10a5a61beb354a3c02a7ac2",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-macos-aarch64-transport-link-2026-10-12.json"
+      "source": "crates/chatgpt-chat/evidence/native-macos-aarch64-transport-link-2026-10-12.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-macos-x86_64-transport-link-2026-10-12.json",
       "mode": "100644",
       "replace": false,
       "sha256": "d87ec343b8c83b46bd6d2558d181090d26cc5c74ef0287b66844d6cf98681bc1",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-macos-x86_64-transport-link-2026-10-12.json"
+      "source": "crates/chatgpt-chat/evidence/native-macos-x86_64-transport-link-2026-10-12.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-msvc-accepted-transport-builds-2026-10-12.json",
       "mode": "100644",
       "replace": false,
       "sha256": "78a5fd24926f06817387e97f596aa6a7133d9a7ebf15c59c052af92d727c1e48",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-msvc-accepted-transport-builds-2026-10-12.json"
+      "source": "crates/chatgpt-chat/evidence/native-msvc-accepted-transport-builds-2026-10-12.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-msvc-candidate-final-platform-matrix-2026-10-12.json",
       "mode": "100644",
       "replace": false,
       "sha256": "0696bd3bb060af4bc7af5522e8760c290bb691ecc698d07eae1ef1ee53de727f",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-msvc-candidate-final-platform-matrix-2026-10-12.json"
+      "source": "crates/chatgpt-chat/evidence/native-msvc-candidate-final-platform-matrix-2026-10-12.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-msvc-candidate-linux-cli-2026-10-12.json",
       "mode": "100644",
       "replace": false,
       "sha256": "2acbe4c36b174168c4409ddf13f36ae80dd12240b6930232393fbbc066e09358",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-msvc-candidate-linux-cli-2026-10-12.json"
+      "source": "crates/chatgpt-chat/evidence/native-msvc-candidate-linux-cli-2026-10-12.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-msvc-candidate-linux-link-2026-10-12.json",
       "mode": "100644",
       "replace": false,
       "sha256": "36dcaddb765555b66e875db133281f835968109577b8594956d3ca83f41d66bf",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-msvc-candidate-linux-link-2026-10-12.json"
+      "source": "crates/chatgpt-chat/evidence/native-msvc-candidate-linux-link-2026-10-12.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-msvc-candidate-platform-matrix-2026-10-12.json",
       "mode": "100644",
       "replace": false,
       "sha256": "8b960901a504348da17d4bd7fb0183ec0ccd7e1194da8e7c5a1fafb3df0e840d",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-msvc-candidate-platform-matrix-2026-10-12.json"
+      "source": "crates/chatgpt-chat/evidence/native-msvc-candidate-platform-matrix-2026-10-12.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-msvc-final-platform-regressions-2026-10-12.json",
       "mode": "100644",
       "replace": false,
       "sha256": "f4e2e0293728b9dddc3147f0df7ac1c47a7f3745e5ba254f0a5b408efd383b8f",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-msvc-final-platform-regressions-2026-10-12.json"
+      "source": "crates/chatgpt-chat/evidence/native-msvc-final-platform-regressions-2026-10-12.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-msvc-sdk-path-research-2026-10-12.json",
       "mode": "100644",
       "replace": false,
       "sha256": "9542ac3250845eeb76d88554c58140b15657139ef04c08c38e277e0b1353e60a",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-msvc-sdk-path-research-2026-10-12.json"
+      "source": "crates/chatgpt-chat/evidence/native-msvc-sdk-path-research-2026-10-12.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-msvc-toolchain-adoption-2026-10-12.json",
       "mode": "100644",
       "replace": false,
       "sha256": "39d87ad51211881f1f6256a44075e159b74a8c3fff61f5d530bd6ee9587a4662",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-msvc-toolchain-adoption-2026-10-12.json"
+      "source": "crates/chatgpt-chat/evidence/native-msvc-toolchain-adoption-2026-10-12.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-msvc-toolchain-research-2026-10-12.json",
       "mode": "100644",
       "replace": false,
       "sha256": "c63b8ca76ecd2fb2de649cb08856e39a72456783e327ecc5438bed4cb912e9c9",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-msvc-toolchain-research-2026-10-12.json"
+      "source": "crates/chatgpt-chat/evidence/native-msvc-toolchain-research-2026-10-12.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-normalized-history-2026-10-12-report.json",
       "mode": "100644",
       "replace": false,
       "sha256": "9efc4a74c373bed1d71d35e11d21915ff8ca398e61c5f55fd8595ed741dd8759",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-normalized-history-2026-10-12-report.json"
+      "source": "crates/chatgpt-chat/evidence/native-normalized-history-2026-10-12-report.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-normalized-history-2026-10-12-source.json",
       "mode": "100644",
       "replace": false,
       "sha256": "8859530d64eb5e252392a082ce5730237abb5932401a383c2b8d523db3148659",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-normalized-history-2026-10-12-source.json"
+      "source": "crates/chatgpt-chat/evidence/native-normalized-history-2026-10-12-source.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-normalized-history-validation-2026-10-12.json",
       "mode": "100644",
       "replace": false,
       "sha256": "94374069d8c1d3093d3107984434cdaa538b070bffccbe3f6b18d7358c793218",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-normalized-history-validation-2026-10-12.json"
+      "source": "crates/chatgpt-chat/evidence/native-normalized-history-validation-2026-10-12.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-pdf-bounds-2026-10-12.json",
       "mode": "100644",
       "replace": false,
       "sha256": "b7953121bf8d7dd9eb5f15f374cc7ef76e7a9bd79471ca7a917d199e8d67d6b5",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-pdf-bounds-2026-10-12.json"
+      "source": "crates/chatgpt-chat/evidence/native-pdf-bounds-2026-10-12.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-pdf-dependencies-2026-10-12.json",
       "mode": "100644",
       "replace": false,
       "sha256": "47be888c163e94788cf6ea2c7882600714d0c2b586a11478fd378bdc7825f2ec",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-pdf-dependencies-2026-10-12.json"
+      "source": "crates/chatgpt-chat/evidence/native-pdf-dependencies-2026-10-12.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-pdf-resource-research-2026-10-12.json",
       "mode": "100644",
       "replace": false,
       "sha256": "92865c5e3d8e34f610e35b46bbf346f65d2d1fa7c1c1f65ecaca9ccbd3f9584b",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-pdf-resource-research-2026-10-12.json"
+      "source": "crates/chatgpt-chat/evidence/native-pdf-resource-research-2026-10-12.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-preparation-validation-2026-10-12.json",
       "mode": "100644",
       "replace": false,
       "sha256": "431d599ac1b3c306fa1fac9c16570be3dd99ed1b5d3a7830c6f0c81009473be4",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-preparation-validation-2026-10-12.json"
+      "source": "crates/chatgpt-chat/evidence/native-preparation-validation-2026-10-12.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-publish-validation-2026-10-12.json",
       "mode": "100644",
       "replace": false,
       "sha256": "d3a96a54f78ab591d62db17e1f50c72b45042eaa8605a8061c70dc54409a69b2",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-publish-validation-2026-10-12.json"
+      "source": "crates/chatgpt-chat/evidence/native-publish-validation-2026-10-12.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-release-validation-2026-10-12.json",
       "mode": "100644",
       "replace": false,
       "sha256": "c45952025b3ed92f6e60e89a62f09278acf5084ddcc15af29ad49d54d75f3156",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-release-validation-2026-10-12.json"
+      "source": "crates/chatgpt-chat/evidence/native-release-validation-2026-10-12.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-rpc-daemon-attachments-2026-10-12-report.json",
       "mode": "100644",
       "replace": false,
       "sha256": "576d928af9d3c6b3256bb282a30d894886cfeb9ff71cfc87e0fa7554e1debc30",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-rpc-daemon-attachments-2026-10-12-report.json"
+      "source": "crates/chatgpt-chat/evidence/native-rpc-daemon-attachments-2026-10-12-report.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-rpc-daemon-attachments-2026-10-12-source.json",
       "mode": "100644",
       "replace": false,
       "sha256": "f4aac596b5f1823b37cf7985a523541bf7d2df3e12c25a1db140e0db6be9d78c",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-rpc-daemon-attachments-2026-10-12-source.json"
+      "source": "crates/chatgpt-chat/evidence/native-rpc-daemon-attachments-2026-10-12-source.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-rpc-daemon-attachments-initial-2026-10-12-report.json",
       "mode": "100644",
       "replace": false,
       "sha256": "bc94990661ff4fda4caf1c756976105b84cfbe85a976cd42f60cde3c7bba2ff5",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-rpc-daemon-attachments-initial-2026-10-12-report.json"
+      "source": "crates/chatgpt-chat/evidence/native-rpc-daemon-attachments-initial-2026-10-12-report.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-rpc-daemon-attachments-initial-2026-10-12-source.json",
       "mode": "100644",
       "replace": false,
       "sha256": "520d9e0fb581250dab0cb5eccbc980de925adaa6b63163958f611e04d75231de",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-rpc-daemon-attachments-initial-2026-10-12-source.json"
+      "source": "crates/chatgpt-chat/evidence/native-rpc-daemon-attachments-initial-2026-10-12-source.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-rpc-daemon-lifecycle-2026-10-12-report.json",
       "mode": "100644",
       "replace": false,
       "sha256": "2ef53cdf27d23713e021f86f859b03144646949f0511ebc801572472d584c290",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-rpc-daemon-lifecycle-2026-10-12-report.json"
+      "source": "crates/chatgpt-chat/evidence/native-rpc-daemon-lifecycle-2026-10-12-report.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-rpc-daemon-lifecycle-2026-10-12-source.json",
       "mode": "100644",
       "replace": false,
       "sha256": "7b6a15e5161143e674af8983a1a2c990a26c1f195bedbb664de91a7bca4052ad",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-rpc-daemon-lifecycle-2026-10-12-source.json"
+      "source": "crates/chatgpt-chat/evidence/native-rpc-daemon-lifecycle-2026-10-12-source.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-rpc-daemon-parallel-2026-10-12-audit.json",
       "mode": "100644",
       "replace": false,
       "sha256": "a5f7face2106eff8979cd59b7f143a5cdbbea715657e8d5d9184bd00442bf4be",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-rpc-daemon-parallel-2026-10-12-audit.json"
+      "source": "crates/chatgpt-chat/evidence/native-rpc-daemon-parallel-2026-10-12-audit.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-rpc-daemon-parallel-v1-0-2026-10-12-report.json",
       "mode": "100644",
       "replace": false,
       "sha256": "635bc9d36252958222a73bdf22ff4b34d55ecf9f17e305c27c2e9fbc78ae4303",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-rpc-daemon-parallel-v1-0-2026-10-12-report.json"
+      "source": "crates/chatgpt-chat/evidence/native-rpc-daemon-parallel-v1-0-2026-10-12-report.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-rpc-daemon-parallel-v1-0-2026-10-12-source.json",
       "mode": "100644",
       "replace": false,
       "sha256": "6f6368bb9711beef7439c43252da228a448e9d4a1187311ab59e9cc8090b69d6",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-rpc-daemon-parallel-v1-0-2026-10-12-source.json"
+      "source": "crates/chatgpt-chat/evidence/native-rpc-daemon-parallel-v1-0-2026-10-12-source.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-rpc-daemon-parallel-v1-1-2026-10-12-report.json",
       "mode": "100644",
       "replace": false,
       "sha256": "175226f57ed87f9b4c635ae89fe8d8ecc8bcb071e6ede7549c4f70ace1784dac",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-rpc-daemon-parallel-v1-1-2026-10-12-report.json"
+      "source": "crates/chatgpt-chat/evidence/native-rpc-daemon-parallel-v1-1-2026-10-12-report.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-rpc-daemon-parallel-v1-1-2026-10-12-source.json",
       "mode": "100644",
       "replace": false,
       "sha256": "fd4f2827fb7e5623033c91696dda4bf5bb2adcb1ee8d0a4b22f14861acb64f4a",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-rpc-daemon-parallel-v1-1-2026-10-12-source.json"
+      "source": "crates/chatgpt-chat/evidence/native-rpc-daemon-parallel-v1-1-2026-10-12-source.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-rpc-daemon-read-v1-2026-10-12-report.json",
       "mode": "100644",
       "replace": false,
       "sha256": "7bae8764278d79d907c6ec2639e09e65a7ef3638c218f119d23ab31ce7927c69",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-rpc-daemon-read-v1-2026-10-12-report.json"
+      "source": "crates/chatgpt-chat/evidence/native-rpc-daemon-read-v1-2026-10-12-report.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-rpc-daemon-read-v1-2026-10-12-source.json",
       "mode": "100644",
       "replace": false,
       "sha256": "75939c3aee4caea2e8912071e4dbfa507546df3681b9b6efe22da4ee8ae57c90",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-rpc-daemon-read-v1-2026-10-12-source.json"
+      "source": "crates/chatgpt-chat/evidence/native-rpc-daemon-read-v1-2026-10-12-source.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-rpc-daemon-restart-2026-10-12-audit.json",
       "mode": "100644",
       "replace": false,
       "sha256": "022fd42f22a607a30da818d500b0d587fad14e1a9734794bfd4488ce1d0511c8",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-rpc-daemon-restart-2026-10-12-audit.json"
+      "source": "crates/chatgpt-chat/evidence/native-rpc-daemon-restart-2026-10-12-audit.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-rpc-daemon-restart-initial-2026-10-12-report.json",
       "mode": "100644",
       "replace": false,
       "sha256": "1c03057d6762e5c47db9131b3784580e77f403fad2516151636656b001e2e453",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-rpc-daemon-restart-initial-2026-10-12-report.json"
+      "source": "crates/chatgpt-chat/evidence/native-rpc-daemon-restart-initial-2026-10-12-report.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-rpc-daemon-restart-initial-2026-10-12-source.json",
       "mode": "100644",
       "replace": false,
       "sha256": "640cba38d8d89f67434a40a907cac9fb938c4a5d958bacdfd9ca6b4712506dcd",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-rpc-daemon-restart-initial-2026-10-12-source.json"
+      "source": "crates/chatgpt-chat/evidence/native-rpc-daemon-restart-initial-2026-10-12-source.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-rpc-daemon-restart-resume-2026-10-12-report.json",
       "mode": "100644",
       "replace": false,
       "sha256": "8395df4a2c4c263e881e30eb66365dc7b867dc4a06ad0845ffb9f66b84fe9955",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-rpc-daemon-restart-resume-2026-10-12-report.json"
+      "source": "crates/chatgpt-chat/evidence/native-rpc-daemon-restart-resume-2026-10-12-report.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-rpc-daemon-restart-resume-2026-10-12-source.json",
       "mode": "100644",
       "replace": false,
       "sha256": "9b32e09fab4f4bf7403899f54ce3d759e09ec9fd016d2982f25fa917c37a2470",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-rpc-daemon-restart-resume-2026-10-12-source.json"
+      "source": "crates/chatgpt-chat/evidence/native-rpc-daemon-restart-resume-2026-10-12-source.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-rpc-daemon-saved-v1-2026-10-12-report.json",
       "mode": "100644",
       "replace": false,
       "sha256": "d4d9839982266bddb819ab79f81483585b9e49a2c6162e17e0072ad3e2e1388b",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-rpc-daemon-saved-v1-2026-10-12-report.json"
+      "source": "crates/chatgpt-chat/evidence/native-rpc-daemon-saved-v1-2026-10-12-report.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-rpc-daemon-saved-v1-2026-10-12-source.json",
       "mode": "100644",
       "replace": false,
       "sha256": "540176e5003edb672987b12f3280cb1e1b07e0cfecbbea536316d266bca6d15d",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-rpc-daemon-saved-v1-2026-10-12-source.json"
+      "source": "crates/chatgpt-chat/evidence/native-rpc-daemon-saved-v1-2026-10-12-source.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-rpc-daemon-temporary-2026-10-12-report.json",
       "mode": "100644",
       "replace": false,
       "sha256": "921e50baac4c3cba53824053f5ca359067487f0d1167645e3867fb9172bd89bb",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-rpc-daemon-temporary-2026-10-12-report.json"
+      "source": "crates/chatgpt-chat/evidence/native-rpc-daemon-temporary-2026-10-12-report.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-rpc-daemon-temporary-2026-10-12-source.json",
       "mode": "100644",
       "replace": false,
       "sha256": "bcbc59b08a3bdcf8c9828732a4032b48724d300209da3f6a183775458eea48b0",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-rpc-daemon-temporary-2026-10-12-source.json"
+      "source": "crates/chatgpt-chat/evidence/native-rpc-daemon-temporary-2026-10-12-source.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-rpc-daemon-temporary-initial-2026-10-12-report.json",
       "mode": "100644",
       "replace": false,
       "sha256": "cb19db1f2c4bff21e594c9ca4068600c1bfc6d674a8d1449d7464802bf090d49",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-rpc-daemon-temporary-initial-2026-10-12-report.json"
+      "source": "crates/chatgpt-chat/evidence/native-rpc-daemon-temporary-initial-2026-10-12-report.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-rpc-daemon-temporary-initial-2026-10-12-source.json",
       "mode": "100644",
       "replace": false,
       "sha256": "89a6ae1ce7caf9fea7220c74b4de8ff91362d91d52cddc2f51bb68f6eaba8a92",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-rpc-daemon-temporary-initial-2026-10-12-source.json"
+      "source": "crates/chatgpt-chat/evidence/native-rpc-daemon-temporary-initial-2026-10-12-source.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-rpc-embedded-lifecycle-2026-10-12-report.json",
       "mode": "100644",
       "replace": false,
       "sha256": "e551eb3cdab2b386d7372f5e172d3fbdf800f7fb5af03caa61b5091e8a94981a",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-rpc-embedded-lifecycle-2026-10-12-report.json"
+      "source": "crates/chatgpt-chat/evidence/native-rpc-embedded-lifecycle-2026-10-12-report.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-rpc-embedded-lifecycle-2026-10-12-source.json",
       "mode": "100644",
       "replace": false,
       "sha256": "55441838907a8be99d735a34ed3e8c631aa51c035f98bc5f7f1af1cf25445cde",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-rpc-embedded-lifecycle-2026-10-12-source.json"
+      "source": "crates/chatgpt-chat/evidence/native-rpc-embedded-lifecycle-2026-10-12-source.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-rpc-embedded-restart-2026-10-12-audit.json",
       "mode": "100644",
       "replace": false,
       "sha256": "22d38ccdd3e272f6f4d8521f32bcaf4edbcd06a61781acd822a22154cfc13bc5",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-rpc-embedded-restart-2026-10-12-audit.json"
+      "source": "crates/chatgpt-chat/evidence/native-rpc-embedded-restart-2026-10-12-audit.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-rpc-embedded-restart-initial-2026-10-12-report.json",
       "mode": "100644",
       "replace": false,
       "sha256": "34ef49dec1037994d3ad0622410d96e9b6847fa24194386130627e9c19b35d1c",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-rpc-embedded-restart-initial-2026-10-12-report.json"
+      "source": "crates/chatgpt-chat/evidence/native-rpc-embedded-restart-initial-2026-10-12-report.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-rpc-embedded-restart-initial-2026-10-12-source.json",
       "mode": "100644",
       "replace": false,
       "sha256": "0caadf465f9a8cf20e81b92f3fd6a8489e1cfa14c96a890e9f39c713988b79fd",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-rpc-embedded-restart-initial-2026-10-12-source.json"
+      "source": "crates/chatgpt-chat/evidence/native-rpc-embedded-restart-initial-2026-10-12-source.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-rpc-embedded-restart-resume-2026-10-12-report.json",
       "mode": "100644",
       "replace": false,
       "sha256": "b343c2d5820ff4ebd62ce59a8f6ea90082cc68bf9d36185742bd2b23d8cbab00",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-rpc-embedded-restart-resume-2026-10-12-report.json"
+      "source": "crates/chatgpt-chat/evidence/native-rpc-embedded-restart-resume-2026-10-12-report.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-rpc-embedded-restart-resume-2026-10-12-source.json",
       "mode": "100644",
       "replace": false,
       "sha256": "b0a5eeab666d3c14aaa35832c94f88a5aa14f99153edfa6c52b6a8b675def4c8",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-rpc-embedded-restart-resume-2026-10-12-source.json"
+      "source": "crates/chatgpt-chat/evidence/native-rpc-embedded-restart-resume-2026-10-12-source.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-rpc-embedded-resume-initial-2026-10-12-report.json",
       "mode": "100644",
       "replace": false,
       "sha256": "27a225fd61778aa7d9a4eed05bd3e815826846176261fabee860931d4b455b63",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-rpc-embedded-resume-initial-2026-10-12-report.json"
+      "source": "crates/chatgpt-chat/evidence/native-rpc-embedded-resume-initial-2026-10-12-report.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-rpc-embedded-resume-initial-2026-10-12-source.json",
       "mode": "100644",
       "replace": false,
       "sha256": "de4c31595135fb4ca3759bb2937f16a2f7a3c12515319c9180f8b46d925de6af",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-rpc-embedded-resume-initial-2026-10-12-source.json"
+      "source": "crates/chatgpt-chat/evidence/native-rpc-embedded-resume-initial-2026-10-12-source.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-rpc-lifecycle-runtime-initial-2026-10-12.json",
       "mode": "100644",
       "replace": false,
       "sha256": "36a2d4cea47e566bc0b2b7c780b9f26d4f222a9986a35f24c6c2b2bc3defac4f",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-rpc-lifecycle-runtime-initial-2026-10-12.json"
+      "source": "crates/chatgpt-chat/evidence/native-rpc-lifecycle-runtime-initial-2026-10-12.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-saved-follow-up-2026-10-12-report.json",
       "mode": "100644",
       "replace": false,
       "sha256": "9b2bdc693524c3f1a8e4691f36570d6681a841319f42e8e9e553246f8b161440",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-saved-follow-up-2026-10-12-report.json"
+      "source": "crates/chatgpt-chat/evidence/native-saved-follow-up-2026-10-12-report.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-saved-follow-up-2026-10-12-source.json",
       "mode": "100644",
       "replace": false,
       "sha256": "7dc512f3139f6f0461a969178861fe0d941f113b9543c6f332e8d8bdef53d01a",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-saved-follow-up-2026-10-12-source.json"
+      "source": "crates/chatgpt-chat/evidence/native-saved-follow-up-2026-10-12-source.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-saved-restart-resume-2026-10-12-report.json",
       "mode": "100644",
       "replace": false,
       "sha256": "4434bce82118163588142689fbe64a13ba8ee8eed291f42d8b3e018b8c5e3176",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-saved-restart-resume-2026-10-12-report.json"
+      "source": "crates/chatgpt-chat/evidence/native-saved-restart-resume-2026-10-12-report.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-saved-restart-resume-2026-10-12-source.json",
       "mode": "100644",
       "replace": false,
       "sha256": "197c985038b36f4aff2f20ad6144385699f30982498078adb331dc5546ca04da",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-saved-restart-resume-2026-10-12-source.json"
+      "source": "crates/chatgpt-chat/evidence/native-saved-restart-resume-2026-10-12-source.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-saved-resume-after-uploads-2026-10-12-report.json",
       "mode": "100644",
       "replace": false,
       "sha256": "8173c349a49aea30f38be4dc70e3dd8edac643df2089ae434ebd49dff965f720",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-saved-resume-after-uploads-2026-10-12-report.json"
+      "source": "crates/chatgpt-chat/evidence/native-saved-resume-after-uploads-2026-10-12-report.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-saved-resume-after-uploads-2026-10-12-source.json",
       "mode": "100644",
       "replace": false,
       "sha256": "89d73f68907af19abaacb2ed737d2419ff7ed58285913965e4119c23ca8a1438",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-saved-resume-after-uploads-2026-10-12-source.json"
+      "source": "crates/chatgpt-chat/evidence/native-saved-resume-after-uploads-2026-10-12-source.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-saved-service-2026-10-12-report.json",
       "mode": "100644",
       "replace": false,
       "sha256": "dbea53fc7b6233d26d513d6b6d0d41b5b416495de47f61be3b376065a874c36b",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-saved-service-2026-10-12-report.json"
+      "source": "crates/chatgpt-chat/evidence/native-saved-service-2026-10-12-report.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-saved-service-2026-10-12-source.json",
       "mode": "100644",
       "replace": false,
       "sha256": "c8a794fb1acfca07b0955b8603c78f10ea54620ab18bcbcced8159e4ea6511fd",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-saved-service-2026-10-12-source.json"
+      "source": "crates/chatgpt-chat/evidence/native-saved-service-2026-10-12-source.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-saved-service-validation-2026-10-12.json",
       "mode": "100644",
       "replace": false,
       "sha256": "d1ee94c5cfcc6caf7bf00f013e3d0778c6d88851ec4564a5bf7a7b6c3704a08a",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-saved-service-validation-2026-10-12.json"
+      "source": "crates/chatgpt-chat/evidence/native-saved-service-validation-2026-10-12.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-saved-text-2026-10-12-report.json",
       "mode": "100644",
       "replace": false,
       "sha256": "6c2b9c95ee42a529272c9d411db42fbda9bc7c893974a8aa4e0eb1b3d7929e4d",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-saved-text-2026-10-12-report.json"
+      "source": "crates/chatgpt-chat/evidence/native-saved-text-2026-10-12-report.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-saved-text-2026-10-12-source.json",
       "mode": "100644",
       "replace": false,
       "sha256": "f0955ead5f66d039e4e2822d39e127e44ee9982d2d66ba64c0621bef5abd7bfc",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-saved-text-2026-10-12-source.json"
+      "source": "crates/chatgpt-chat/evidence/native-saved-text-2026-10-12-source.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-send-contracts-2026-10-12.json",
       "mode": "100644",
       "replace": false,
       "sha256": "727252b3126a9ce9bcd0bcadcff2a210abcc4972c2ae87e0fa109c144090f3bb",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-send-contracts-2026-10-12.json"
+      "source": "crates/chatgpt-chat/evidence/native-send-contracts-2026-10-12.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-stream-budget-validation-2026-10-12.json",
       "mode": "100644",
       "replace": false,
       "sha256": "4ee763cfb1ea37e79a43aac409411ccb73d09e7d371844e84916d0a0026cc58c",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-stream-budget-validation-2026-10-12.json"
+      "source": "crates/chatgpt-chat/evidence/native-stream-budget-validation-2026-10-12.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-temporary-after-uploads-2026-10-12-report.json",
       "mode": "100644",
       "replace": false,
       "sha256": "26e3a109c9ea3a16beb779f9dee7f0881ccb28e736e18a2ae8af15fe64d9054f",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-temporary-after-uploads-2026-10-12-report.json"
+      "source": "crates/chatgpt-chat/evidence/native-temporary-after-uploads-2026-10-12-report.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-temporary-after-uploads-2026-10-12-source.json",
       "mode": "100644",
       "replace": false,
       "sha256": "3657930c0271a0c8502a7e90d7f6585513d9863b836fcf252cdafd9de0439b4e",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-temporary-after-uploads-2026-10-12-source.json"
+      "source": "crates/chatgpt-chat/evidence/native-temporary-after-uploads-2026-10-12-source.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-temporary-conduit-2026-10-12-report.json",
       "mode": "100644",
       "replace": false,
       "sha256": "0cb237d9654e388c565d53c8b0c3cd4e561410ee70ec0c9653e9d67db0333cbf",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-temporary-conduit-2026-10-12-report.json"
+      "source": "crates/chatgpt-chat/evidence/native-temporary-conduit-2026-10-12-report.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-temporary-conduit-2026-10-12-source.json",
       "mode": "100644",
       "replace": false,
       "sha256": "947a6d6e21a7c17fbd1f911812c2531604201ea511f4649096f2b64f2f7871bd",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-temporary-conduit-2026-10-12-source.json"
+      "source": "crates/chatgpt-chat/evidence/native-temporary-conduit-2026-10-12-source.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-temporary-initial-2026-10-12-report.json",
       "mode": "100644",
       "replace": false,
       "sha256": "66ef5109414eac1c2c9a47a0946eb2085dff9a0108ba22af6f32eba8c022f0bc",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-temporary-initial-2026-10-12-report.json"
+      "source": "crates/chatgpt-chat/evidence/native-temporary-initial-2026-10-12-report.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-temporary-initial-2026-10-12-source.json",
       "mode": "100644",
       "replace": false,
       "sha256": "6e6e6dd68f3f6466f34f6adf0e64da51a47ef4275932e8feb71bc602ccea2782",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-temporary-initial-2026-10-12-source.json"
+      "source": "crates/chatgpt-chat/evidence/native-temporary-initial-2026-10-12-source.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-transport-dependencies-2026-10-11.json",
       "mode": "100644",
       "replace": false,
       "sha256": "3f7bb5a5aadd5ceb71d43fe298a877ebd173eacad0cafbbc5c281b1648062ea8",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-transport-dependencies-2026-10-11.json"
+      "source": "crates/chatgpt-chat/evidence/native-transport-dependencies-2026-10-11.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-transport-source-2026-10-11.json",
       "mode": "100644",
       "replace": false,
       "sha256": "5a98319bceafbfd9639b541609ea8d7fa184b5c9894bc19f16644184d7c8a0c3",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-transport-source-2026-10-11.json"
+      "source": "crates/chatgpt-chat/evidence/native-transport-source-2026-10-11.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-tui-daemon-approval-2026-10-12-report.json",
       "mode": "100644",
       "replace": false,
       "sha256": "0eecbe1adc041847c9e9ba06ead768b49adaf1a7a3760ea162c99e49b317533c",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-tui-daemon-approval-2026-10-12-report.json"
+      "source": "crates/chatgpt-chat/evidence/native-tui-daemon-approval-2026-10-12-report.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-tui-daemon-attachments-disable-2026-10-12-report.json",
       "mode": "100644",
       "replace": false,
       "sha256": "847e95ea7c506ded665ca8512e8326c788349e32c3b3bbd6733b7b7fa4e51113",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-tui-daemon-attachments-disable-2026-10-12-report.json"
+      "source": "crates/chatgpt-chat/evidence/native-tui-daemon-attachments-disable-2026-10-12-report.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-tui-daemon-lifecycle-initial-2026-10-12-report.json",
       "mode": "100644",
       "replace": false,
       "sha256": "41c489a3e211a4ea588e1e53ab9246da4922be84cf1d0203e5c9f149b9e41021",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-tui-daemon-lifecycle-initial-2026-10-12-report.json"
+      "source": "crates/chatgpt-chat/evidence/native-tui-daemon-lifecycle-initial-2026-10-12-report.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-tui-daemon-reconnect-2026-10-12-report.json",
       "mode": "100644",
       "replace": false,
       "sha256": "05f6732204676753dad7967406806a1f87450869c5e60b68b72aaadc77e4acd8",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-tui-daemon-reconnect-2026-10-12-report.json"
+      "source": "crates/chatgpt-chat/evidence/native-tui-daemon-reconnect-2026-10-12-report.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-tui-daemon-reconnect-initial-2026-10-12-report.json",
       "mode": "100644",
       "replace": false,
       "sha256": "7cf33b84c165b98bc9add968e661a4a1e843032c4b9967c463bf4efadc0c1dfe",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-tui-daemon-reconnect-initial-2026-10-12-report.json"
+      "source": "crates/chatgpt-chat/evidence/native-tui-daemon-reconnect-initial-2026-10-12-report.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-tui-embedded-attachments-2026-10-12-report.json",
       "mode": "100644",
       "replace": false,
       "sha256": "a90ee7dce049c51727977b5ca5132a853ec87b5ff7f913f2e5f9e0a7fe670ca4",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-tui-embedded-attachments-2026-10-12-report.json"
+      "source": "crates/chatgpt-chat/evidence/native-tui-embedded-attachments-2026-10-12-report.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-tui-embedded-cancel-approval-2026-10-12-report.json",
       "mode": "100644",
       "replace": false,
       "sha256": "a73f54122f32935d162795aaebe9d16e1a9458d677a64f5e4b597966c36ad82f",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-tui-embedded-cancel-approval-2026-10-12-report.json"
+      "source": "crates/chatgpt-chat/evidence/native-tui-embedded-cancel-approval-2026-10-12-report.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-tui-embedded-initial-2026-10-12-report.json",
       "mode": "100644",
       "replace": false,
       "sha256": "293f874bc5f15fc5d1b32b8557b9778e9488b15179e10227075d027790f2a8de",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-tui-embedded-initial-2026-10-12-report.json"
+      "source": "crates/chatgpt-chat/evidence/native-tui-embedded-initial-2026-10-12-report.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-tui-embedded-lifecycle-initial-2026-10-12-report.json",
       "mode": "100644",
       "replace": false,
       "sha256": "d7c86a97a97bc22d0bf1d4b03070dab2d53dd9b949a9ba8788d822c60ca35852",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-tui-embedded-lifecycle-initial-2026-10-12-report.json"
+      "source": "crates/chatgpt-chat/evidence/native-tui-embedded-lifecycle-initial-2026-10-12-report.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-tui-feature-disabled-2026-10-12-report.json",
       "mode": "100644",
       "replace": false,
       "sha256": "b7559b4cf7c021c8e60e8107641430dcabb9059c35b737d2d8da93787b22d369",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-tui-feature-disabled-2026-10-12-report.json"
+      "source": "crates/chatgpt-chat/evidence/native-tui-feature-disabled-2026-10-12-report.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-tui-inline-rejected-2026-10-12-report.json",
       "mode": "100644",
       "replace": false,
       "sha256": "1107aa85f147019ed54cb52e02ae46a344024568ebcd9769a5f93dea380d949c",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-tui-inline-rejected-2026-10-12-report.json"
+      "source": "crates/chatgpt-chat/evidence/native-tui-inline-rejected-2026-10-12-report.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-tui-lifecycle-validation-2026-10-12.json",
       "mode": "100644",
       "replace": false,
       "sha256": "e6583c51786dd498fa0005ac1f7dc1ce68775cd3ed03aa259365903aa331318c",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-tui-lifecycle-validation-2026-10-12.json"
+      "source": "crates/chatgpt-chat/evidence/native-tui-lifecycle-validation-2026-10-12.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-tui-no-alt-rejected-2026-10-12-report.json",
       "mode": "100644",
       "replace": false,
       "sha256": "c67db58c91ea7f1d5c33ecab7b237fea74bcefe435b84b3b85548e4936e7b35f",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-tui-no-alt-rejected-2026-10-12-report.json"
+      "source": "crates/chatgpt-chat/evidence/native-tui-no-alt-rejected-2026-10-12-report.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-two-phase-iterations-2026-10-11-v2.json",
       "mode": "100644",
       "replace": false,
       "sha256": "aa670fd98727a9944678b561363287d04de6e8f38d1eb8f88b4f636b3f49fd29",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-two-phase-iterations-2026-10-11-v2.json"
+      "source": "crates/chatgpt-chat/evidence/native-two-phase-iterations-2026-10-11-v2.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-two-phase-iterations-2026-10-12.json",
       "mode": "100644",
       "replace": false,
       "sha256": "1f5da26211d2fddbc6797b79fdbc516397529d066bf2f0099a0cbbd34112c933",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-two-phase-iterations-2026-10-12.json"
+      "source": "crates/chatgpt-chat/evidence/native-two-phase-iterations-2026-10-12.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-two-phase-source-2026-10-11-v2.json",
       "mode": "100644",
       "replace": false,
       "sha256": "78a64d73b395e95e118e7ae80a2bb246da4519374a17b3a8a57b93c09b3100ba",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-two-phase-source-2026-10-11-v2.json"
+      "source": "crates/chatgpt-chat/evidence/native-two-phase-source-2026-10-11-v2.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-two-phase-source-2026-10-11.json",
       "mode": "100644",
       "replace": false,
       "sha256": "65f5782967daff3a15abe2121cbec3b59430c2abf1de33d3618715d575e0acf2",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-two-phase-source-2026-10-11.json"
+      "source": "crates/chatgpt-chat/evidence/native-two-phase-source-2026-10-11.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-two-phase-source-2026-10-12.json",
       "mode": "100644",
       "replace": false,
       "sha256": "e9d416d2947bad72dd96b1ba2aea99f6a21d1a7d638c8dbafa180c4ee8a2fede",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-two-phase-source-2026-10-12.json"
+      "source": "crates/chatgpt-chat/evidence/native-two-phase-source-2026-10-12.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-two-phase-validation-2026-10-11-v2.json",
       "mode": "100644",
       "replace": false,
       "sha256": "d653d375675f7047a34ffcf009965014e262856171c23657821c6eb3c8ec7547",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-two-phase-validation-2026-10-11-v2.json"
+      "source": "crates/chatgpt-chat/evidence/native-two-phase-validation-2026-10-11-v2.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-two-phase-validation-2026-10-11.json",
       "mode": "100644",
       "replace": false,
       "sha256": "95934d7e1926dad4b77d067d82a24b5dfff86a6cd50965a8799fb4ee7cea4348",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-two-phase-validation-2026-10-11.json"
+      "source": "crates/chatgpt-chat/evidence/native-two-phase-validation-2026-10-11.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-upload-contracts-2026-10-12.json",
       "mode": "100644",
       "replace": false,
       "sha256": "e76e5eddf526bb8eba35868cfeaf1b4471dc76258ada39d9dfb5a3fbfa1e5d51",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-upload-contracts-2026-10-12.json"
+      "source": "crates/chatgpt-chat/evidence/native-upload-contracts-2026-10-12.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-upload-validation-2026-10-12.json",
       "mode": "100644",
       "replace": false,
       "sha256": "e05395a6c400c2e1d4fd71af8190baa88ac8b190257e0667ece54c2684eabe1f",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-upload-validation-2026-10-12.json"
+      "source": "crates/chatgpt-chat/evidence/native-upload-validation-2026-10-12.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-windows-gnullvm-final-tools-2026-10-12.json",
       "mode": "100644",
       "replace": false,
       "sha256": "89fadf90d6eebf8682172bd5133396317aafd144c7e181e459c587b0ed373d78",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-windows-gnullvm-final-tools-2026-10-12.json"
+      "source": "crates/chatgpt-chat/evidence/native-windows-gnullvm-final-tools-2026-10-12.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/native-windows-gnullvm-transport-link-2026-10-12.json",
       "mode": "100644",
       "replace": false,
       "sha256": "27fadaf780fba05559167326b6d2c098c6ff69b66fb9c12b064b04c270e5f91d",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/native-windows-gnullvm-transport-link-2026-10-12.json"
+      "source": "crates/chatgpt-chat/evidence/native-windows-gnullvm-transport-link-2026-10-12.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/evidence/official-runtime-contracts-2026-10-12.json",
       "mode": "100644",
       "replace": false,
       "sha256": "bcdd3f0e9b6d37912081d4f55d967722bb62c60484d4b1a9cfd8066a802973f9",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/evidence/official-runtime-contracts-2026-10-12.json"
+      "source": "crates/chatgpt-chat/evidence/official-runtime-contracts-2026-10-12.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/fixtures/attachments/README.md",
       "mode": "100644",
       "replace": false,
       "sha256": "e66e2cde36286f2f4fdb444a88a389837b22567a2a57456a8575eb7c6f1bfe30",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/fixtures/attachments/README.md"
+      "source": "crates/chatgpt-chat/fixtures/attachments/README.md"
     },
     {
       "destination": "codex-rs/chatgpt-chat/fixtures/attachments/fixture.jpg",
       "mode": "100644",
       "replace": false,
       "sha256": "e991e3e7162eda49abc8ba3d8c41dda75eb075795e830c07e57ebbcb34dc1065",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/fixtures/attachments/fixture.jpg"
+      "source": "crates/chatgpt-chat/fixtures/attachments/fixture.jpg"
     },
     {
       "destination": "codex-rs/chatgpt-chat/fixtures/attachments/fixture.pdf",
       "mode": "100644",
       "replace": false,
       "sha256": "93a909cef29ee735cc7d835b07fa1c711df21d9206342805b9b79084024029b1",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/fixtures/attachments/fixture.pdf"
+      "source": "crates/chatgpt-chat/fixtures/attachments/fixture.pdf"
     },
     {
       "destination": "codex-rs/chatgpt-chat/fixtures/attachments/fixture.png",
       "mode": "100644",
       "replace": false,
       "sha256": "0b81b1ad46a19b644fb4048be86577b6e88aaff406ee7bafc561e998b5469600",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/fixtures/attachments/fixture.png"
+      "source": "crates/chatgpt-chat/fixtures/attachments/fixture.png"
     },
     {
       "destination": "codex-rs/chatgpt-chat/fixtures/attachments/fixture.txt",
       "mode": "100644",
       "replace": false,
       "sha256": "d8a37a99a3b426f3da18cce67bb98cc6cc98b6c85d420b1046ea899c83a2d6cc",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/fixtures/attachments/fixture.txt"
+      "source": "crates/chatgpt-chat/fixtures/attachments/fixture.txt"
     },
     {
       "destination": "codex-rs/chatgpt-chat/fixtures/attachments/fixture.webp",
       "mode": "100644",
       "replace": false,
       "sha256": "afcefd8a251bf95a75924734ee7c283bc5571c0763407c444c64a206e86ecffc",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/fixtures/attachments/fixture.webp"
+      "source": "crates/chatgpt-chat/fixtures/attachments/fixture.webp"
     },
     {
       "destination": "codex-rs/chatgpt-chat/fixtures/attachments/manifest.json",
       "mode": "100644",
       "replace": false,
       "sha256": "04627c5e416c262231f00640ee6b230cc908a28baf931cce92e584029455cc76",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/fixtures/attachments/manifest.json"
+      "source": "crates/chatgpt-chat/fixtures/attachments/manifest.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/fonts/DejaVuSans.ttf",
       "mode": "100644",
       "replace": false,
       "sha256": "ae7b7855e115a5966d8b1b3f80f254ccc117ec86f9965e202ee2940453837280",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/fonts/DejaVuSans.ttf"
+      "source": "crates/chatgpt-chat/fonts/DejaVuSans.ttf"
     },
     {
       "destination": "codex-rs/chatgpt-chat/fonts/DejaVuSansMono.ttf",
       "mode": "100644",
       "replace": false,
       "sha256": "c805f9436dbc268644c1d9584f01a601a653e028e08fd74b9b949f6cf8304d88",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/fonts/DejaVuSansMono.ttf"
+      "source": "crates/chatgpt-chat/fonts/DejaVuSansMono.ttf"
     },
     {
       "destination": "codex-rs/chatgpt-chat/fonts/DejaVuSerif.ttf",
       "mode": "100644",
       "replace": false,
       "sha256": "8f2c103bfa3fd5de71f1b92b18f21906b5a26871fb7e19a9a4c9af539c3cc7ab",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/fonts/DejaVuSerif.ttf"
+      "source": "crates/chatgpt-chat/fonts/DejaVuSerif.ttf"
     },
     {
       "destination": "codex-rs/chatgpt-chat/fonts/LICENSE",
       "mode": "100644",
       "replace": false,
       "sha256": "e180b3d65bf650dffffd71dd21b6180767b469a18dd87e1d8552be69bb9ecdf0",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/fonts/LICENSE"
+      "source": "crates/chatgpt-chat/fonts/LICENSE"
     },
     {
       "destination": "codex-rs/chatgpt-chat/fonts/profile.json",
       "mode": "100644",
       "replace": false,
       "sha256": "eff46b99b6473cfec6699cd043f9c488ded99b22923a9f29639d7d81bd9f1b62",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/fonts/profile.json"
+      "source": "crates/chatgpt-chat/fonts/profile.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/pdf-validator/.gitignore",
       "mode": "100644",
       "replace": false,
       "sha256": "32612892f1c9e15fe772b8034945f8072b83e025153aef597e45d5eccbe98c43",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/pdf-validator/.gitignore"
+      "source": "crates/chatgpt-chat/pdf-validator/.gitignore"
     },
     {
       "destination": "codex-rs/chatgpt-chat/pdf-validator/Cargo.lock",
       "mode": "100644",
       "replace": false,
       "sha256": "89ad39703f649a10cb4e4bf1a8557e48dc8fc34b85429adca05c6f1b5c47f4f5",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/pdf-validator/Cargo.lock"
+      "source": "crates/chatgpt-chat/pdf-validator/Cargo.lock"
     },
     {
       "destination": "codex-rs/chatgpt-chat/pdf-validator/Cargo.toml",
       "mode": "100644",
       "replace": false,
       "sha256": "6e388816d69a666943cb71d9d18f8e5b657ce414c449df1f0a1c162341360d8c",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/pdf-validator/Cargo.toml"
+      "source": "crates/chatgpt-chat/pdf-validator/Cargo.toml"
     },
     {
       "destination": "codex-rs/chatgpt-chat/pdf-validator/README.md",
       "mode": "100644",
       "replace": false,
       "sha256": "481d80c81444f526de3a8174232897969b598e7c0a9b2b46356751988b17a49d",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/pdf-validator/README.md"
+      "source": "crates/chatgpt-chat/pdf-validator/README.md"
     },
     {
       "destination": "codex-rs/chatgpt-chat/pdf-validator/RUST_LIBRARY_NOTICES",
       "mode": "100644",
       "replace": false,
       "sha256": "b78774ed72a086ddd7457ff6721ed71ee9e1165ae7830904701e811963ab1caf",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/pdf-validator/RUST_LIBRARY_NOTICES"
+      "source": "crates/chatgpt-chat/pdf-validator/RUST_LIBRARY_NOTICES"
     },
     {
       "destination": "codex-rs/chatgpt-chat/pdf-validator/THIRD_PARTY_NOTICES",
       "mode": "100644",
       "replace": false,
       "sha256": "4660c7ea0b1fa5efd22c7775569cf6708a052053f8683e77bf51d48316ea53ce",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/pdf-validator/THIRD_PARTY_NOTICES"
+      "source": "crates/chatgpt-chat/pdf-validator/THIRD_PARTY_NOTICES"
     },
     {
       "destination": "codex-rs/chatgpt-chat/pdf-validator/build.py",
       "mode": "100644",
       "replace": false,
       "sha256": "fed8696002f8613696ca510d59aee748ce197bf28e4db9363edd3e2924ba8a10",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/pdf-validator/build.py"
+      "source": "crates/chatgpt-chat/pdf-validator/build.py"
     },
     {
       "destination": "codex-rs/chatgpt-chat/pdf-validator/manifest.json",
       "mode": "100644",
       "replace": false,
       "sha256": "f97fb4dc425b62e61c376d8a1d534d048e161efb4f52314db3b76d49184f116f",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/pdf-validator/manifest.json"
+      "source": "crates/chatgpt-chat/pdf-validator/manifest.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/pdf-validator/src/lib.rs",
       "mode": "100644",
       "replace": false,
       "sha256": "186fcf892a7b169a824574aa06e1f2b787c1fe8c5340d33a840ab9c0c333bb32",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/pdf-validator/src/lib.rs"
+      "source": "crates/chatgpt-chat/pdf-validator/src/lib.rs"
     },
     {
       "destination": "codex-rs/chatgpt-chat/pdf-validator/validator.wasm",
       "mode": "100644",
       "replace": false,
       "sha256": "aad790fb295c9072897e252d6ef268190947e0c63c7bd8b0c28be885162b50ff",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/pdf-validator/validator.wasm"
+      "source": "crates/chatgpt-chat/pdf-validator/validator.wasm"
     },
     {
       "destination": "codex-rs/chatgpt-chat/research/msvc-toolchain-candidate/aws-lc-5.1.0-msvc-driver.patch",
       "mode": "100644",
       "replace": false,
       "sha256": "ce37e38047ba4d4e1d3f95da7f9d6b28678cb0d5d1d6f10526e966eff25cb85d",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/research/msvc-toolchain-candidate/aws-lc-5.1.0-msvc-driver.patch"
+      "source": "crates/chatgpt-chat/research/msvc-toolchain-candidate/aws-lc-5.1.0-msvc-driver.patch"
     },
     {
       "destination": "codex-rs/chatgpt-chat/research/msvc-toolchain-candidate/btls-sys_msvc_bindgen_driver.patch",
       "mode": "100644",
       "replace": false,
       "sha256": "55b4bae5c363de2075056cd62629802df597633732e27c52e8e3823da8e87322",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/research/msvc-toolchain-candidate/btls-sys_msvc_bindgen_driver.patch"
+      "source": "crates/chatgpt-chat/research/msvc-toolchain-candidate/btls-sys_msvc_bindgen_driver.patch"
     },
     {
       "destination": "codex-rs/chatgpt-chat/research/msvc-toolchain-candidate/btls-sys_msvc_compatibility_version.patch",
       "mode": "100644",
       "replace": false,
       "sha256": "76933db5128494459a88a17775a3de83880bb5355baec829f94a079e04f9120d",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/research/msvc-toolchain-candidate/btls-sys_msvc_compatibility_version.patch"
+      "source": "crates/chatgpt-chat/research/msvc-toolchain-candidate/btls-sys_msvc_compatibility_version.patch"
     },
     {
       "destination": "codex-rs/chatgpt-chat/research/msvc-toolchain-candidate/llvm-0.8.24-relocatable-msvc-vfs.patch",
       "mode": "100644",
       "replace": false,
       "sha256": "60790bbf78a53c18044288a8efa511bc1f740a89f9b0131a89c43dfe2117339e",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/research/msvc-toolchain-candidate/llvm-0.8.24-relocatable-msvc-vfs.patch"
+      "source": "crates/chatgpt-chat/research/msvc-toolchain-candidate/llvm-0.8.24-relocatable-msvc-vfs.patch"
     },
     {
       "destination": "codex-rs/chatgpt-chat/research/msvc-toolchain-candidate/llvm-0.8.24.patch",
       "mode": "100644",
       "replace": false,
       "sha256": "1c729c4e82194b3b07808249adb10050f454a156bf0ed3fa78ad1d5af71c2c61",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/research/msvc-toolchain-candidate/llvm-0.8.24.patch"
+      "source": "crates/chatgpt-chat/research/msvc-toolchain-candidate/llvm-0.8.24.patch"
     },
     {
       "destination": "codex-rs/chatgpt-chat/research/msvc-toolchain-candidate/manifest.json",
       "mode": "100644",
       "replace": false,
       "sha256": "116f1b1c068e574fb764e2bb2b886a0afc596baff46ff3c858d2a23812a49785",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/research/msvc-toolchain-candidate/manifest.json"
+      "source": "crates/chatgpt-chat/research/msvc-toolchain-candidate/manifest.json"
     },
     {
       "destination": "codex-rs/chatgpt-chat/research/msvc-toolchain-candidate/ring_msvc_declared_clang.patch",
       "mode": "100644",
       "replace": false,
       "sha256": "aadcd1e835d831e857507d4a957876c43ce07a11b1caffb4853acec138511d13",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/research/msvc-toolchain-candidate/ring_msvc_declared_clang.patch"
+      "source": "crates/chatgpt-chat/research/msvc-toolchain-candidate/ring_msvc_declared_clang.patch"
     },
     {
       "destination": "codex-rs/chatgpt-chat/research/msvc-toolchain-candidate/rules_cc-0.2.25-grep-includes.patch",
       "mode": "100644",
       "replace": false,
       "sha256": "fba33bddfc411d2265d291a0c06b7fd8a63ebf421633c4d629eb9bba0d9f5253",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/research/msvc-toolchain-candidate/rules_cc-0.2.25-grep-includes.patch"
+      "source": "crates/chatgpt-chat/research/msvc-toolchain-candidate/rules_cc-0.2.25-grep-includes.patch"
     },
     {
       "destination": "codex-rs/chatgpt-chat/research/msvc-toolchain-candidate/rules_rust_msvc_build_script_paths.patch",
       "mode": "100644",
       "replace": false,
       "sha256": "df2adba4e98d41fb8b1ecbb5539bf3f54f35f5784c08e82a0eb2340c5bb731bf",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/research/msvc-toolchain-candidate/rules_rust_msvc_build_script_paths.patch"
+      "source": "crates/chatgpt-chat/research/msvc-toolchain-candidate/rules_rust_msvc_build_script_paths.patch"
     },
     {
       "destination": "codex-rs/chatgpt-chat/research/msvc-toolchain-candidate/rules_rust_msvc_linker_paths.patch",
       "mode": "100644",
       "replace": false,
       "sha256": "adfb8b786224e1b07c229c1cc4ce9fcce9c9941ef574fb14e73b766fe313a8d9",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/research/msvc-toolchain-candidate/rules_rust_msvc_linker_paths.patch"
+      "source": "crates/chatgpt-chat/research/msvc-toolchain-candidate/rules_rust_msvc_linker_paths.patch"
     },
     {
       "destination": "codex-rs/chatgpt-chat/research/msvc-toolchain-candidate/windows-support-0.4.1.patch",
       "mode": "100644",
       "replace": false,
       "sha256": "dac7c792ee3ed7c6a46bb91bcdcf6f0fe361958548052a2826c6967f84c5c0f9",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/research/msvc-toolchain-candidate/windows-support-0.4.1.patch"
+      "source": "crates/chatgpt-chat/research/msvc-toolchain-candidate/windows-support-0.4.1.patch"
     },
     {
       "destination": "codex-rs/chatgpt-chat/research/msvc-toolchain-candidate/workspace-toolchain.patch",
       "mode": "100644",
       "replace": false,
       "sha256": "013d41587aee5e97f417be85a297c303aa5f59aae60fb8c89a6df09b8424aa71",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/research/msvc-toolchain-candidate/workspace-toolchain.patch"
+      "source": "crates/chatgpt-chat/research/msvc-toolchain-candidate/workspace-toolchain.patch"
     },
     {
       "destination": "codex-rs/chatgpt-chat/src/attachment.rs",
       "mode": "100644",
       "replace": false,
       "sha256": "bdbc0043dc73f59d719a886856c2d148a37025a7eb188b7e00e8a5dd5c015ff9",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/src/attachment.rs"
+      "source": "crates/chatgpt-chat/src/attachment.rs"
     },
     {
       "destination": "codex-rs/chatgpt-chat/src/content.rs",
       "mode": "100644",
       "replace": false,
       "sha256": "02504d1f83f6df8de044dbd2c8f420386a850255d8c3360951d741d92e3f75a3",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/src/content.rs"
+      "source": "crates/chatgpt-chat/src/content.rs"
     },
     {
       "destination": "codex-rs/chatgpt-chat/src/conversation.rs",
       "mode": "100644",
       "replace": false,
       "sha256": "8a2b9b9a842d1405149f6e709f791449443651a0326353b50288f3b2d82c05da",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/src/conversation.rs"
+      "source": "crates/chatgpt-chat/src/conversation.rs"
     },
     {
       "destination": "codex-rs/chatgpt-chat/src/conversation/tests.rs",
       "mode": "100644",
       "replace": false,
       "sha256": "565d9a64c2bd46d7a24ef06aa39a8c0928c7c578261b337b457ffe1fc2e999be",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/src/conversation/tests.rs"
+      "source": "crates/chatgpt-chat/src/conversation/tests.rs"
     },
     {
       "destination": "codex-rs/chatgpt-chat/src/journal.rs",
       "mode": "100644",
       "replace": false,
       "sha256": "6f6d7309429f910e96b959f0691999f70dd2e5b8ef4e835f2a802b8bfd0d4f76",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/src/journal.rs"
+      "source": "crates/chatgpt-chat/src/journal.rs"
     },
     {
       "destination": "codex-rs/chatgpt-chat/src/lib.rs",
       "mode": "100644",
       "replace": false,
       "sha256": "829a9b1bc02a11d4e2da944ede1a92ccc4c2e5db836b028019caafc440420bcb",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/src/lib.rs"
+      "source": "crates/chatgpt-chat/src/lib.rs"
     },
     {
       "destination": "codex-rs/chatgpt-chat/src/models.rs",
       "mode": "100644",
       "replace": false,
       "sha256": "3c06eb9b5c4738877d74d17d960252dd573202c93ef522e1d520648536400b98",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/src/models.rs"
+      "source": "crates/chatgpt-chat/src/models.rs"
     },
     {
       "destination": "codex-rs/chatgpt-chat/src/native_preparation.rs",
       "mode": "100644",
       "replace": false,
       "sha256": "41a7387b2371b5e6b2632ea19322c25a23e60eadc23b5f9f5fdcdf8a910ee697",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/src/native_preparation.rs"
+      "source": "crates/chatgpt-chat/src/native_preparation.rs"
     },
     {
       "destination": "codex-rs/chatgpt-chat/src/pdf.rs",
       "mode": "100644",
       "replace": false,
       "sha256": "af3407d5218fc11250a2b12383d998381f310fdff0911ff409998d3423fc2b42",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/src/pdf.rs"
+      "source": "crates/chatgpt-chat/src/pdf.rs"
     },
     {
       "destination": "codex-rs/chatgpt-chat/src/pdf/tests.rs",
       "mode": "100644",
       "replace": false,
       "sha256": "ca745ce26d237fa498cea5d5d2714e4061bbd2be4c0448a53692ab7e507aece5",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/src/pdf/tests.rs"
+      "source": "crates/chatgpt-chat/src/pdf/tests.rs"
     },
     {
       "destination": "codex-rs/chatgpt-chat/src/preparation.rs",
       "mode": "100644",
       "replace": false,
       "sha256": "2c06708044041455bc26f00366c4fd514bde244d949a2443b7e32a4739b4ea26",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/src/preparation.rs"
+      "source": "crates/chatgpt-chat/src/preparation.rs"
     },
     {
       "destination": "codex-rs/chatgpt-chat/src/probe.rs",
       "mode": "100644",
       "replace": false,
       "sha256": "7cec4d83e4b1664d84f1ba86d52e76c0ac97f6fe622591d22fe1e5452f0fdc54",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/src/probe.rs"
+      "source": "crates/chatgpt-chat/src/probe.rs"
     },
     {
       "destination": "codex-rs/chatgpt-chat/src/probe_tests.rs",
       "mode": "100644",
       "replace": false,
       "sha256": "216f09b60372b487f9668689384c2171a106a718696ea9c655e40268c3a1159c",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/src/probe_tests.rs"
+      "source": "crates/chatgpt-chat/src/probe_tests.rs"
     },
     {
       "destination": "codex-rs/chatgpt-chat/src/report.rs",
       "mode": "100644",
       "replace": false,
       "sha256": "259e9eb97a0814e0a40e2d5544c5b169f92b944c5e192c17e697119a7d1a440a",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/src/report.rs"
+      "source": "crates/chatgpt-chat/src/report.rs"
     },
     {
       "destination": "codex-rs/chatgpt-chat/src/send.rs",
       "mode": "100644",
       "replace": false,
       "sha256": "93485c2674c19ff73d141d7c4d68c3091d459ea3fba52a2217edfdc2d9495603",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/src/send.rs"
+      "source": "crates/chatgpt-chat/src/send.rs"
     },
     {
       "destination": "codex-rs/chatgpt-chat/src/sentinel/layout.rs",
       "mode": "100644",
       "replace": false,
       "sha256": "0ea8d0052fae6b8a7caedda239679ac9df3b6e4b2571128696a75938873ede64",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/src/sentinel/layout.rs"
+      "source": "crates/chatgpt-chat/src/sentinel/layout.rs"
     },
     {
       "destination": "codex-rs/chatgpt-chat/src/sentinel/mod.rs",
       "mode": "100644",
       "replace": false,
       "sha256": "12e76d3274e483d9266e1622a6fdeebba8864bef3e65d33538a12977c777ab77",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/src/sentinel/mod.rs"
+      "source": "crates/chatgpt-chat/src/sentinel/mod.rs"
     },
     {
       "destination": "codex-rs/chatgpt-chat/src/sentinel/pattern.rs",
       "mode": "100644",
       "replace": false,
       "sha256": "5ebfdb879672ee28e088945c59ce476758de6ff1b7ae59018ebcd277a565c5ff",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/src/sentinel/pattern.rs"
+      "source": "crates/chatgpt-chat/src/sentinel/pattern.rs"
     },
     {
       "destination": "codex-rs/chatgpt-chat/src/sentinel/profile.rs",
       "mode": "100644",
       "replace": false,
       "sha256": "473f43e0ae622c6f09ec61fed6aff874dc2cfdbb9d750f2aee6f979e224f098e",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/src/sentinel/profile.rs"
+      "source": "crates/chatgpt-chat/src/sentinel/profile.rs"
     },
     {
       "destination": "codex-rs/chatgpt-chat/src/sentinel/proof.rs",
       "mode": "100644",
       "replace": false,
       "sha256": "f138962ccc9ad33e447c9a6d63992b9591f5a7234cb677f58209cfec200f75b4",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/src/sentinel/proof.rs"
+      "source": "crates/chatgpt-chat/src/sentinel/proof.rs"
     },
     {
       "destination": "codex-rs/chatgpt-chat/src/sentinel/storage.rs",
       "mode": "100644",
       "replace": false,
       "sha256": "199fd6a169f02e372c1f03c059fdf8b86883056aff2d6433fe05844dca47f021",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/src/sentinel/storage.rs"
+      "source": "crates/chatgpt-chat/src/sentinel/storage.rs"
     },
     {
       "destination": "codex-rs/chatgpt-chat/src/sentinel/style.rs",
       "mode": "100644",
       "replace": false,
       "sha256": "7817575393036d172e0f9b225525ea06072bbf219d22cdc93cdc2315dd63c453",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/src/sentinel/style.rs"
+      "source": "crates/chatgpt-chat/src/sentinel/style.rs"
     },
     {
       "destination": "codex-rs/chatgpt-chat/src/sentinel/vm.rs",
       "mode": "100644",
       "replace": false,
       "sha256": "a201b1895e9289a692b9f7b304dea605c9f7e2e5e1a65fe9e60cf0bb648f6641",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/src/sentinel/vm.rs"
+      "source": "crates/chatgpt-chat/src/sentinel/vm.rs"
     },
     {
       "destination": "codex-rs/chatgpt-chat/src/session.rs",
       "mode": "100644",
       "replace": false,
       "sha256": "aa6a29561867912dc2dc8647036a49cd41d13b254e470ce4b2fb66f4393d841d",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/src/session.rs"
+      "source": "crates/chatgpt-chat/src/session.rs"
     },
     {
       "destination": "codex-rs/chatgpt-chat/src/session/tests.rs",
       "mode": "100644",
       "replace": false,
       "sha256": "00fbd6879dd08839223b694c16ace7046904ae72d2831291c223b21640a66b0b",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/src/session/tests.rs"
+      "source": "crates/chatgpt-chat/src/session/tests.rs"
     },
     {
       "destination": "codex-rs/chatgpt-chat/src/stream.rs",
       "mode": "100644",
       "replace": false,
       "sha256": "44dfa0ca3507813325d22cb31c58a858e47251487070062be51766911bfffc92",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/src/stream.rs"
+      "source": "crates/chatgpt-chat/src/stream.rs"
     },
     {
       "destination": "codex-rs/chatgpt-chat/src/stream/delta.rs",
       "mode": "100644",
       "replace": false,
       "sha256": "52b2bb5a23f09ec5dd29ebaf8ef8a73fabe695e125468ecacaf7a1a630cee15f",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/src/stream/delta.rs"
+      "source": "crates/chatgpt-chat/src/stream/delta.rs"
     },
     {
       "destination": "codex-rs/chatgpt-chat/src/stream/turn.rs",
       "mode": "100644",
       "replace": false,
       "sha256": "578aecd1a759a2aac9d0e070ac1b3b342be769386e20ac4f8e916e23b9d06b2b",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/src/stream/turn.rs"
+      "source": "crates/chatgpt-chat/src/stream/turn.rs"
     },
     {
       "destination": "codex-rs/chatgpt-chat/src/temporary.rs",
       "mode": "100644",
       "replace": false,
       "sha256": "01c692f93eb4a69e220d149c2a1ccad98164360f1d33d03198c2eb8a364c76bb",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/src/temporary.rs"
+      "source": "crates/chatgpt-chat/src/temporary.rs"
     },
     {
       "destination": "codex-rs/chatgpt-chat/src/temporary_session.rs",
       "mode": "100644",
       "replace": false,
       "sha256": "64dcd3948fc06c5def1888d3e7872a4a95cd057f1dc3946f7052d714b1983b29",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/src/temporary_session.rs"
+      "source": "crates/chatgpt-chat/src/temporary_session.rs"
     },
     {
       "destination": "codex-rs/chatgpt-chat/src/temporary_session/tests.rs",
       "mode": "100644",
       "replace": false,
       "sha256": "79be27fcb0359775b931209f1053012049c8eb96b69e3ceb7d51168df5ae09af",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/src/temporary_session/tests.rs"
+      "source": "crates/chatgpt-chat/src/temporary_session/tests.rs"
     },
     {
       "destination": "codex-rs/chatgpt-chat/src/upload.rs",
       "mode": "100644",
       "replace": false,
       "sha256": "87f342dae3c8d4064d191168676c875e705caafc9159d81f94f17f2e934102bb",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/src/upload.rs"
+      "source": "crates/chatgpt-chat/src/upload.rs"
     },
     {
       "destination": "codex-rs/chatgpt-chat/src/upload/processing.rs",
       "mode": "100644",
       "replace": false,
       "sha256": "9801a93d1d6faac1426d430381226d2065398bd1166fa6f4733593faeaed70b2",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/src/upload/processing.rs"
+      "source": "crates/chatgpt-chat/src/upload/processing.rs"
     },
     {
       "destination": "codex-rs/chatgpt-chat/src/upload_tests.rs",
       "mode": "100644",
       "replace": false,
       "sha256": "8626c9c1fa1c630577ef3f8b457c1e41abbb676757bb7d9f7b34c3ed0bd973b7",
-      "source": "integration/codex/overlays/codex-rs/chatgpt-chat/src/upload_tests.rs"
+      "source": "crates/chatgpt-chat/src/upload_tests.rs"
     },
     {
       "destination": "codex-rs/cli/src/bin/nyacode.rs",
@@ -2723,133 +2724,133 @@
       "mode": "100644",
       "replace": false,
       "sha256": "65b05647fa2a0169f22e133b0de8773fb5b4c0509ccfdc80ec0473bbef8daacf",
-      "source": "integration/codex/overlays/docs/container-verify.md"
+      "source": "docs/container-verify.md"
     },
     {
       "destination": "docs/dependency-upgrades.md",
       "mode": "100644",
       "replace": false,
       "sha256": "e3060ee3037ebf5ca4732d54a8925ff2c662bd4fae2ef8c256ed3a8e2846ff1a",
-      "source": "integration/codex/overlays/docs/dependency-upgrades.md"
+      "source": "docs/dependency-upgrades.md"
     },
     {
       "destination": "docs/native-providers/README.md",
       "mode": "100644",
       "replace": false,
       "sha256": "17e52e436e3660e602a0182e16787353c6ea1ae8678aedd2678e92b06021aa4f",
-      "source": "integration/codex/overlays/docs/native-providers/README.md"
+      "source": "docs/native-providers/README.md"
     },
     {
       "destination": "docs/native-providers/account-pools-checks.json",
       "mode": "100644",
       "replace": false,
       "sha256": "7d86b3d5601a32da1c441c9a02f31d4f5dabf3c119b8d6fb5ede9e5098b5bab9",
-      "source": "integration/codex/overlays/docs/native-providers/account-pools-checks.json"
+      "source": "docs/native-providers/account-pools-checks.json"
     },
     {
       "destination": "docs/native-providers/account-pools-live-acceptance.json",
       "mode": "100644",
       "replace": false,
       "sha256": "7b9c40798956944b09afc1e3cd7ccbf6e51847a62324ede684f5a3a17700b11a",
-      "source": "integration/codex/overlays/docs/native-providers/account-pools-live-acceptance.json"
+      "source": "docs/native-providers/account-pools-live-acceptance.json"
     },
     {
       "destination": "docs/native-providers/account-pools.md",
       "mode": "100644",
       "replace": false,
       "sha256": "dd23b876ec1e6dcfea132970f00aa9de4c6aa35dc95371284a18bc956093930c",
-      "source": "integration/codex/overlays/docs/native-providers/account-pools.md"
+      "source": "docs/native-providers/account-pools.md"
     },
     {
       "destination": "docs/native-providers/coverage-matrix.md",
       "mode": "100644",
       "replace": false,
       "sha256": "4f18adaa8c8fd3ff4634ff928e126aca43b09a2821441871fd54c65848abfdff",
-      "source": "integration/codex/overlays/docs/native-providers/coverage-matrix.md"
+      "source": "docs/native-providers/coverage-matrix.md"
     },
     {
       "destination": "docs/native-providers/integration-manifest.json",
       "mode": "100644",
       "replace": false,
       "sha256": "52a32d104dc15a0d2fb2eca1f63dcaa79bf2ed31c4ca3890ad25e02d31a4b24b",
-      "source": "integration/codex/overlays/docs/native-providers/integration-manifest.json"
+      "source": "docs/native-providers/integration-manifest.json"
     },
     {
       "destination": "docs/native-providers/ledger.md",
       "mode": "100644",
       "replace": false,
       "sha256": "6809400b51d4e2e3dd3bf1e4d2460691f12e1bd66e3e1cfd1b10c653a1e2aae7",
-      "source": "integration/codex/overlays/docs/native-providers/ledger.md"
+      "source": "docs/native-providers/ledger.md"
     },
     {
       "destination": "docs/native-providers/multi-provider-agents-checks.json",
       "mode": "100644",
       "replace": false,
       "sha256": "59859247920afd0689fa61339e09615221349a1f09f64bd676d528054698033e",
-      "source": "integration/codex/overlays/docs/native-providers/multi-provider-agents-checks.json"
+      "source": "docs/native-providers/multi-provider-agents-checks.json"
     },
     {
       "destination": "docs/native-providers/multi-provider-agents-live.json",
       "mode": "100644",
       "replace": false,
       "sha256": "9730219d499373ec568a737955662cd5678550e8ebf737692c614463e1c1119d",
-      "source": "integration/codex/overlays/docs/native-providers/multi-provider-agents-live.json"
+      "source": "docs/native-providers/multi-provider-agents-live.json"
     },
     {
       "destination": "docs/native-providers/multi-provider-agents.md",
       "mode": "100644",
       "replace": false,
       "sha256": "d609d48853af5e39480b2990356d8c52021cde9b8b1f1e535570ad62e907a1ef",
-      "source": "integration/codex/overlays/docs/native-providers/multi-provider-agents.md"
+      "source": "docs/native-providers/multi-provider-agents.md"
     },
     {
       "destination": "docs/native-providers/refactor-architecture.md",
       "mode": "100644",
       "replace": false,
       "sha256": "18ac0bfbdf533c5aa8fba630c0a96420ee6db0afc293852c48d22d396093d424",
-      "source": "integration/codex/overlays/docs/native-providers/refactor-architecture.md"
+      "source": "docs/native-providers/refactor-architecture.md"
     },
     {
       "destination": "docs/native-providers/refactor-baseline.md",
       "mode": "100644",
       "replace": false,
       "sha256": "fa3167a1378400e3184e17e051982240ec6604ec072cb4e40e93bfd808e8963d",
-      "source": "integration/codex/overlays/docs/native-providers/refactor-baseline.md"
+      "source": "docs/native-providers/refactor-baseline.md"
     },
     {
       "destination": "docs/native-providers/refactor-validation.md",
       "mode": "100644",
       "replace": false,
       "sha256": "5a77c255bf4fdf87c79499f590f79f1cce8ce21d93122ea1a3797a6aca7a035e",
-      "source": "integration/codex/overlays/docs/native-providers/refactor-validation.md"
+      "source": "docs/native-providers/refactor-validation.md"
     },
     {
       "destination": "docs/native-providers/references.md",
       "mode": "100644",
       "replace": false,
       "sha256": "f8dac8c5d71d31dcebac8b5141ce106bf684de9dfcf3bfbb4ad7b7218c03adb4",
-      "source": "integration/codex/overlays/docs/native-providers/references.md"
+      "source": "docs/native-providers/references.md"
     },
     {
       "destination": "docs/native-providers/usage.md",
       "mode": "100644",
       "replace": false,
       "sha256": "94b06b3351a5ccc14b23ad652f30b80ad34a4707caaf12bd3c2c353117002d0b",
-      "source": "integration/codex/overlays/docs/native-providers/usage.md"
+      "source": "docs/native-providers/usage.md"
     },
     {
       "destination": "docs/rebranding.md",
       "mode": "100644",
       "replace": false,
       "sha256": "c8ef804589f15f32a88c37bd10fbc99f934645f6e6f06776a346b654f0768ec5",
-      "source": "integration/codex/overlays/docs/rebranding.md"
+      "source": "docs/rebranding.md"
     },
     {
       "destination": "docs/releases.md",
       "mode": "100644",
       "replace": false,
       "sha256": "9acb88d6938492ae72a06eee90f002bebbead11a8b35ea36c5810c2ad90dd7fd",
-      "source": "integration/codex/overlays/docs/releases.md"
+      "source": "docs/releases.md"
     },
     {
       "destination": "patches/aws-lc-5.1.0-msvc-driver.patch",
@@ -4260,5 +4261,6 @@
       ]
     }
   ],
+  "regression_manifest": "docs/native-providers/integration-manifest.json",
   "schema_version": 1
 }

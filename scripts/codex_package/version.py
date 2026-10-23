@@ -9,6 +9,12 @@ WORKSPACE_VERSION_PATTERN = re.compile(r'^version\s*=\s*"([^"]+)"')
 
 
 def read_workspace_version() -> str:
+    product_version = REPO_ROOT / "VERSION"
+    if product_version.is_file():
+        version = product_version.read_text(encoding="utf-8").strip()
+        if not re.fullmatch(r"\d+\.\d+\.\d+(?:[-+][0-9A-Za-z.-]+)?", version):
+            raise RuntimeError(f"Invalid product version in {product_version}")
+        return version
     cargo_toml = REPO_ROOT / "codex-rs" / "Cargo.toml"
     in_workspace_package = False
     with open(cargo_toml, encoding="utf-8") as fh:

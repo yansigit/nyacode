@@ -53,12 +53,16 @@ class NativeProviderChecksTest(unittest.TestCase):
                         helper.parent.mkdir(parents=True, exist_ok=True)
                         helper.touch()
                 if command[:2] == ["cargo", "test"]:
+                    self.assertIn("--locked", command)
                     if "codex-core" in command and not all(
                         helper.is_file() for helper in helpers
                     ):
                         log.write("required integration test helper is missing\n")
                         return subprocess.CompletedProcess(command, 101)
                     log.write("test result: ok. 1 passed; 0 failed;\n")
+                if "test_nyacode_branding.py" in command:
+                    log.write("Ran 7 tests in 0.1s\nOK\n")
+                    self.assertIn("NYACODE_TEST_BINARY", kwargs["env"])
                 return subprocess.CompletedProcess(command, 0)
 
             with (

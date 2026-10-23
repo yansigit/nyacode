@@ -2,6 +2,7 @@
 
 import hashlib
 import io
+import json
 import os
 import re
 import shlex
@@ -73,6 +74,49 @@ class PackageSelectionTests(unittest.TestCase):
     def test_documentation_only_change_has_no_rust_packages(self):
         self.assertEqual(
             verifier.select_packages(self.root, {"docs/usage.md"}, self.packages), []
+        )
+
+    def test_owned_sources_and_patches_select_assembled_consumers(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            manifest = root / "integration/codex/assembly.json"
+            manifest.parent.mkdir(parents=True)
+            manifest.write_text(
+                json.dumps(
+                    {
+                        "overlays": [
+                            {
+                                "source": "crates/providers/leaf/src/lib.rs",
+                                "destination": "codex-rs/leaf/src/lib.rs",
+                            }
+                        ],
+                        "patches": [
+                            {
+                                "path": "integration/codex/patches/leaf.patch",
+                                "paths": ["codex-rs/leaf/src/lib.rs"],
+                            }
+                        ],
+                    }
+                )
+            )
+            for source in (
+                "crates/providers/leaf/src/lib.rs",
+                "integration/codex/patches/leaf.patch",
+            ):
+                changed = verifier.assembly_changes(root, {source})
+                self.assertEqual(
+                    verifier.select_packages(self.root, changed, self.packages),
+                    ["cli", "core", "leaf"],
+                )
+
+    def test_undeclared_owned_source_selects_all_consumers(self):
+        self.assertEqual(
+            len(
+                verifier.select_packages(
+                    self.root, {"crates/new/src/lib.rs"}, self.packages
+                )
+            ),
+            4,
         )
 
     def test_missing_base_fails_instead_of_claiming_no_tests(self):

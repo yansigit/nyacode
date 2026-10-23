@@ -331,5 +331,84 @@
       "regression_test_group": "pool-rpc-compatibility"
     }
   ],
-  "registry_metadata_source": "codex-rs/providers/provider-registry/src/lib.rs"
+  "registry_metadata_source": "codex-rs/providers/provider-registry/src/lib.rs",
+  "product_test_groups": {
+    "backend_dispatch": {
+      "checks": [
+        "core-native-provider",
+        "provider-packages"
+      ],
+      "minimum_tests": 1
+    },
+    "native_provider": {
+      "checks": [
+        "provider-packages",
+        "pool-selection-and-recovery",
+        "pool-fifth-provider-handoffs",
+        "pool-account-concurrency"
+      ],
+      "minimum_tests": 1
+    },
+    "tool_completion_persistence": {
+      "checks": [
+        "core-native-provider",
+        "core-responses-retry",
+        "core-background-terminal-lifetime",
+        "pool-fifth-provider-handoffs"
+      ],
+      "minimum_tests": 1
+    },
+    "thread_model_child_routing": {
+      "checks": [
+        "thread-config",
+        "core-child-provider-routing",
+        "core-child-provider-reload",
+        "app-server-account-and-fork"
+      ],
+      "minimum_tests": 1
+    },
+    "product_registration_config_branding": {
+      "checks": [
+        "cli-provider-choices",
+        "pool-cli-management",
+        "pool-tui-management",
+        "pool-tui-slash-commands",
+        "nyacode-branding"
+      ],
+      "minimum_tests": 1
+    },
+    "chat_integration": {
+      "checks": [
+        "chat-saved-storage-recovery",
+        "chat-saved-service-recovery",
+        "chat-transport"
+      ],
+      "minimum_tests": 1
+    },
+    "dependency_build": {
+      "checks": [
+        "architecture",
+        "dependency-consumers",
+        "six-platform-packages"
+      ],
+      "minimum_tests": 1
+    },
+    "sdk_protocol": {
+      "checks": [
+        "schema-fixtures",
+        "compatibility-fixtures",
+        "typescript-sdk",
+        "python-sdk"
+      ],
+      "minimum_tests": 1
+    },
+    "documentation": {
+      "checks": [
+        "python-controls",
+        "installer-tests"
+      ],
+      "minimum_tests": 1
+    }
+  },
+  "assembly_manifest": "integration/codex/assembly.json"
 }

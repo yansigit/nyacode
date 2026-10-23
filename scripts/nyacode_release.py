@@ -81,6 +81,36 @@ def source_commit() -> str:
     ).strip()
 
 
+def engine_provenance() -> dict:
+    workspace = os.environ.get("NYACODE_ENGINE_ROOT")
+    if workspace is None:
+        return {}
+    from engine import assembly_report, blob, digest, file_mode, source_modes
+
+    report = assembly_report(Path(workspace))
+    lock = json.loads((ROOT / "engine.lock").read_text())
+    if (
+        report["revision"] != lock["revision"]
+        or report["archive_sha256"] != lock["archive_sha256"]
+    ):
+        raise ValueError("Assembled engine does not match the accepted engine pin")
+    modes = source_modes(ROOT)
+    for relative, expected in report["inputs"].items():
+        path = ROOT / relative
+        if (
+            not (path.exists() or path.is_symlink())
+            or digest(blob(path)) != expected["sha256"]
+            or modes.get(relative, file_mode(path)) != expected["mode"]
+        ):
+            raise ValueError(f"Assembly input changed since preparation: {relative}")
+    return {
+        "engine_revision": lock["revision"],
+        "engine_archive_sha256": lock["archive_sha256"],
+        "integration_input_sha256": report["input_sha256"],
+        "integration_contract_version": lock["integration_contract_version"],
+    }
+
+
 def metadata(tag: str | None, output: Path | None) -> None:
     version = read_workspace_version()
     validate_version(version, tag)
@@ -170,6 +200,8 @@ def smoke(package: Path, target: str, version: str) -> None:
 
 
 def assemble(target: str, binaries: Path, dist: Path) -> None:
+    engine_root = Path(os.environ.get("NYACODE_ENGINE_ROOT", ROOT))
+    provenance = engine_provenance()
     spec = TARGET_SPECS[target]
     version = read_workspace_version()
     validate_version(version)
@@ -209,7 +241,7 @@ def assemble(target: str, binaries: Path, dist: Path) -> None:
         for relative in NOTICES:
             destination = package / "licenses" / relative
             destination.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copy2(ROOT / relative, destination)
+            shutil.copy2(engine_root / relative, destination)
         check_package(package, target, version)
         archive_path = dist / archive_name
         write_archive(package, archive_path, force=False)
@@ -217,7 +249,9 @@ def assemble(target: str, binaries: Path, dist: Path) -> None:
         extracted = Path(temp) / "extracted"
         extract_package(archive_path, extracted)
         smoke(extracted, target, version)
-    toolchain = tomllib.loads((ROOT / "codex-rs/rust-toolchain.toml").read_text())
+    toolchain = tomllib.loads(
+        (engine_root / "codex-rs/rust-toolchain.toml").read_text()
+    )
     write_json(
         report_path,
         {
@@ -231,6 +265,7 @@ def assemble(target: str, binaries: Path, dist: Path) -> None:
             "sha256": sha256(archive_path),
             "smoke_test": "passed",
             "platform_signed": False,
+            **provenance,
         },
     )
 
@@ -245,6 +280,7 @@ def extract_package(archive: Path, destination: Path) -> None:
 
 
 def verify(dist: Path, version: str, commit: str) -> list[dict]:
+    provenance = engine_provenance()
     expected = {
         name
         for target in RELEASE_TARGETS
@@ -268,9 +304,24 @@ def verify(dist: Path, version: str, commit: str) -> list[dict]:
             "archive": f"codex-package-{target}.tar.gz",
             "smoke_test": "passed",
             "platform_signed": False,
+            **provenance,
         }
         if any(report.get(key) != value for key, value in expected_fields.items()):
             raise ValueError(f"Inconsistent build report: {target}")
+        if report.get("engine_revision") and not provenance:
+            raise ValueError(
+                "NYACODE_ENGINE_ROOT is required to verify assembled packages"
+            )
+        if reports and any(
+            report.get(key) != reports[0].get(key)
+            for key in (
+                "engine_revision",
+                "engine_archive_sha256",
+                "integration_input_sha256",
+                "integration_contract_version",
+            )
+        ):
+            raise ValueError(f"Inconsistent engine provenance: {target}")
         archive = dist / report["archive"]
         if report.get("sha256") != sha256(archive):
             raise ValueError(f"Archive digest mismatch: {target}")
@@ -290,6 +341,7 @@ def seal(dist: Path, version: str, commit: str) -> None:
             "schema_version": 1,
             "version": version,
             "commit": commit,
+            **engine_provenance(),
             "packages": reports,
         },
     )

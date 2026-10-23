@@ -172,6 +172,7 @@ def load_metadata(metadata_path: Path | None) -> dict[str, Any]:
         [
             "cargo",
             "metadata",
+            "--locked",
             "--manifest-path",
             str(CARGO_MANIFEST),
             "--format-version",
@@ -183,6 +184,43 @@ def load_metadata(metadata_path: Path | None) -> dict[str, Any]:
         text=True,
     )
     return json.loads(result.stdout)
+
+
+def validate_assembly_ownership(root: Path, assembly: dict[str, Any]) -> list[str]:
+    """Every engine delta needs an explicit owner and an executable regression group."""
+    errors: list[str] = []
+    inventory = json.loads((root / assembly["inventory"]).read_text())
+    contract = json.loads((root / assembly["regression_manifest"]).read_text())
+    groups = contract["product_test_groups"]
+    entries = inventory["entries"]
+    by_path = {entry["path"]: entry for entry in entries}
+    if len(by_path) != len(entries):
+        errors.append("downstream inventory contains duplicate paths")
+    declared = {"codex-rs/Cargo.lock"}
+    declared.update(assembly["deletes"])
+    declared.update(item["destination"] for item in assembly["overlays"])
+    for patch in assembly["patches"]:
+        declared.update(patch["paths"])
+    if declared != set(by_path):
+        errors.append(
+            f"assembly ownership differs from inventory: undeclared={sorted(declared - set(by_path))}, "
+            f"unused={sorted(set(by_path) - declared)}"
+        )
+    for path, entry in by_path.items():
+        if not entry.get("owner") or not entry.get("purpose"):
+            errors.append(f"engine modification needs an owner and purpose: {path}")
+        regressions = entry.get("regression_groups", [])
+        if not regressions:
+            errors.append(f"engine modification needs a regression group: {path}")
+        for name in regressions:
+            group = groups.get(name)
+            if (
+                not group
+                or not group.get("checks")
+                or group.get("minimum_tests", 0) < 1
+            ):
+                errors.append(f"unknown or unguarded regression group {name!r}: {path}")
+    return errors
 
 
 def validate(
@@ -435,12 +473,16 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--metadata-json", type=Path, help="use saved Cargo metadata")
     parser.add_argument("--manifest", type=Path, default=MANIFEST)
+    parser.add_argument("--repo", type=Path, default=ROOT)
     parser.add_argument(
         "--list-test-packages",
         action="store_true",
         help="print manifested provider package names one per line",
     )
     args = parser.parse_args()
+
+    global CARGO_MANIFEST
+    CARGO_MANIFEST = args.repo.resolve() / "codex-rs/Cargo.toml"
 
     manifest = json.loads(args.manifest.read_text())
     if args.list_test_packages:
@@ -453,7 +495,12 @@ def main() -> int:
     except (OSError, subprocess.CalledProcessError, json.JSONDecodeError) as error:
         print(f"unable to load Cargo metadata: {error}", file=sys.stderr)
         return 2
-    errors = validate(metadata, manifest, ROOT)
+    errors = validate(metadata, manifest, args.repo.resolve())
+    assembly_path = ROOT / "integration/codex/assembly.json"
+    if assembly_path.is_file():
+        assembly = json.loads(assembly_path.read_text())
+        if "inventory" in assembly:
+            errors.extend(validate_assembly_ownership(ROOT, assembly))
     if errors:
         print("native provider architecture check failed:", file=sys.stderr)
         for error in errors:
