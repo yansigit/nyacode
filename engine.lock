@@ -1,13 +1,13 @@
 {
-  "schema_version": 1,
-  "repository": "openai/codex",
-  "revision": "ce0323f2f2d3b25e82806cd555237da3db4e1897",
-  "release_tag": null,
-  "archive_sha256": "4f4f81de5d8d5099a116db41ea8e2f0d1e60406b398280500344b931092e7794",
-  "toolchain": "1.95.0",
-  "integration_contract_version": 1,
-  "baseline_product_revision": "b8bbac5e2ad84168eee5a8b08564a910e8006564",
-  "product_version_file": "VERSION",
+  "archive_sha256": "a0a2e1f349139b712fd72f85193ca40b57611415093ead730de5f07308380d52",
+  "assembled_lock": "integration/codex/Cargo.lock",
   "assembly_manifest": "integration/codex/assembly.json",
-  "assembled_lock": "integration/codex/Cargo.lock"
+  "baseline_product_revision": "b8bbac5e2ad84168eee5a8b08564a910e8006564",
+  "integration_contract_version": 1,
+  "product_version_file": "VERSION",
+  "release_tag": "rust-v0.164.0",
+  "repository": "openai/codex",
+  "revision": "6aaac694803004a63c6f393d153c96d22521a6b9",
+  "schema_version": 1,
+  "toolchain": "1.95.0"
 }
