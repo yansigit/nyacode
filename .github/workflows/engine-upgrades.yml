@@ -1,0 +1,107 @@
+name: Engine upgrades
+
+on:
+  schedule:
+    - cron: "17 4 * * *"
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: Stable rust-vX.Y.Z tag (empty selects latest); manual rehearsal bypasses the schedule gate.
+        type: string
+        default: ""
+  workflow_run:
+    workflows: [Engine qualification]
+    types: [completed]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: engine-upgrades
+  cancel-in-progress: false
+
+jobs:
+  discover:
+    name: Propose stable engine pin without write credentials
+    if: github.event_name != 'workflow_run'
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      actions: read
+    outputs:
+      proposed: ${{ steps.proposal.outputs.proposed }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          persist-credentials: false
+      - name: Resolve stable release and retain proposal diagnostics
+        id: proposal
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ inputs.release_tag || '' }}
+          SCHEDULED: ${{ github.event_name == 'schedule' }}
+          NYACODE_ENGINE_UPGRADES_ENABLED: ${{ vars.NYACODE_ENGINE_UPGRADES_ENABLED }}
+        run: |
+          args=()
+          if [[ "$SCHEDULED" == 'true' ]]; then args+=(--scheduled); fi
+          python3 scripts/engine_candidates.py discover --tag "$RELEASE_TAG" --output "$RUNNER_TEMP/candidate/candidate.json" "${args[@]}"
+          if [[ -f "$RUNNER_TEMP/candidate/candidate.json" ]]; then echo 'proposed=true' >> "$GITHUB_OUTPUT"; fi
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: steps.proposal.outputs.proposed == 'true'
+        with:
+          name: engine-candidate-proposal
+          path: ${{ runner.temp }}/candidate/candidate.json
+          if-no-files-found: error
+          retention-days: 7
+      - name: Retain failed proposal evidence
+        if: failure()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: engine-candidate-diagnostics
+          path: .engine/upgrades/
+          include-hidden-files: true
+          if-no-files-found: warn
+          retention-days: 7
+
+  publish-candidate:
+    name: Publish approved pin and explicitly dispatch qualification
+    needs: discover
+    if: needs.discover.outputs.proposed == 'true'
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+      pull-requests: write
+      actions: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          persist-credentials: false
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: engine-candidate-proposal
+          path: ${{ runner.temp }}/candidate
+      - name: Validate untrusted proposal data with the trusted base controller
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 scripts/engine_candidates.py publish --proposal "$RUNNER_TEMP/candidate/candidate.json"
+
+  promote:
+    name: Promote only the exact fully qualified candidate
+    if: github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+      pull-requests: write
+      actions: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          persist-credentials: false
+      - name: Verify run, jobs, base, head, report, and allowed lock changes
+        env:
+          GH_TOKEN: ${{ github.token }}
+          QUALIFICATION_RUN: ${{ github.event.workflow_run.id }}
+        run: python3 scripts/engine_candidates.py promote --run-id "$QUALIFICATION_RUN"

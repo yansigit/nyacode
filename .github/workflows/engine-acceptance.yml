@@ -1,0 +1,96 @@
+name: Engine acceptance
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  select:
+    name: Select acceptance scope
+    runs-on: ubuntu-24.04
+    outputs:
+      mode: ${{ steps.scope.outputs.mode }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Select conservatively from every changed path
+        id: scope
+        env:
+          BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
+          HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
+          CANDIDATE_BRANCH: ${{ github.head_ref || github.ref_name }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          : > "$RUNNER_TEMP/changed-paths"
+          if [[ "$BASE" =~ ^[0-9a-f]{40}$ && "$HEAD" =~ ^[0-9a-f]{40}$ ]]; then
+            git diff --name-only "$BASE" "$HEAD" > "$RUNNER_TEMP/changed-paths"
+          fi
+          python3 scripts/engine_candidates.py select --paths-file "$RUNNER_TEMP/changed-paths" --github-output "$GITHUB_OUTPUT" --candidate-branch "$CANDIDATE_BRANCH" --base "$BASE"
+
+  controls:
+    name: Assembly controls
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - run: python3 scripts/engine.py check --mode controls
+        env:
+          GH_TOKEN: ${{ github.token }}
+      - run: python3 -m unittest discover -s scripts/tests -p test_engine_candidates.py
+
+  providers:
+    name: Standalone providers
+    needs: select
+    if: needs.select.outputs.mode == 'providers'
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: dtolnay/rust-toolchain@e2a55d2ffb04f378e9626c28d38b36d230d1e12f
+        with:
+          toolchain: 1.95.0
+      - run: cargo test --manifest-path crates/providers/Cargo.toml --locked --all-features
+
+  affected:
+    name: Affected adapter and linked CLI
+    needs: select
+    if: needs.select.outputs.mode == 'providers'
+    uses: ./.github/workflows/native-providers.yml
+
+  full:
+    name: Full engine qualification
+    needs: select
+    if: needs.select.outputs.mode == 'full'
+    uses: ./.github/workflows/engine-qualification.yml
+
+  acceptance:
+    name: Engine acceptance
+    if: always()
+    needs: [select, controls, providers, affected, full]
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Require all checks selected for this change
+        env:
+          RESULTS: ${{ toJSON(needs) }}
+          MODE: ${{ needs.select.outputs.mode }}
+        run: |
+          python3 - <<'PYCODE'
+          import json, os
+          results = json.loads(os.environ["RESULTS"])
+          required = ["select", "controls"]
+          mode = os.environ["MODE"]
+          if mode == "providers": required += ["providers", "affected"]
+          elif mode == "full": required += ["full"]
+          elif mode != "controls": raise SystemExit("Missing acceptance scope")
+          if any(results[name]["result"] != "success" for name in required):
+              raise SystemExit("Required acceptance checks did not all succeed")
+          PYCODE
