@@ -5,12 +5,17 @@
 from __future__ import annotations
 
 import re
+import os
 import sys
 import tomllib
 from pathlib import Path
 
 
-ROOT = Path(__file__).resolve().parents[2]
+ROOT = Path(
+    os.environ.get(
+        "CODEX_REPO_ROOT", Path(__file__).resolve().parents[2] / ".engine/workspace"
+    )
+)
 TUI_ROOT = ROOT / "codex-rs" / "tui"
 TUI_MANIFEST = TUI_ROOT / "Cargo.toml"
 FORBIDDEN_PACKAGE = "codex-core"

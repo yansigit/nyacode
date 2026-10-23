@@ -3,7 +3,11 @@ name: Container verification
 on:
   pull_request:
     paths:
-      - "codex-rs/**"
+      - "engine.lock"
+      - "VERSION"
+      - "integration/codex/**"
+      - "crates/**"
+      - "scripts/engine*.py"
       - "third_party/v8/**"
       - "Containerfile"
       - "Dockerfile"
@@ -15,7 +19,11 @@ on:
   push:
     branches: [main]
     paths:
-      - "codex-rs/**"
+      - "engine.lock"
+      - "VERSION"
+      - "integration/codex/**"
+      - "crates/**"
+      - "scripts/engine*.py"
       - "third_party/v8/**"
       - "Containerfile"
       - "Dockerfile"
@@ -57,6 +65,8 @@ jobs:
             sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
           fi
       - name: Verify every Rust workspace crate in the container
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           set -o pipefail
           scripts/verify-container.sh --engine docker full 2>&1 | tee "$RUNNER_TEMP/container-verification.log"

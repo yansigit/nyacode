@@ -3,7 +3,10 @@
 set -euo pipefail
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-cargo_root="$repo_root/codex-rs"
+cargo_root="$repo_root/.engine/workspace/codex-rs"
+python3 "$repo_root/scripts/engine.py" prepare >/dev/null
+export CODEX_REPO_ROOT="$repo_root/.engine/workspace"
+export CARGO_TARGET_DIR="${CARGO_TARGET_DIR:-$repo_root/.engine/target}"
 listen_url="${CODEX_EXEC_SERVER_LISTEN_URL:-ws://127.0.0.1:0}"
 start_timeout_seconds="${CODEX_EXEC_SERVER_START_TIMEOUT_SECONDS:-120}"
 tmp_dir="$(mktemp -d "${TMPDIR:-/tmp}/codex-tui-with-exec-server.XXXXXX")"

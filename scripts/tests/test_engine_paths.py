@@ -27,7 +27,7 @@ def load_python_harness():
 
 
 class EnginePathTests(unittest.TestCase):
-    def test_public_commands_are_opt_in_and_available(self):
+    def test_public_commands_are_available(self):
         result = subprocess.run(
             [sys.executable, str(ROOT / "scripts/build_nyacode.py"), "--help"],
             cwd=ROOT,
@@ -80,14 +80,12 @@ class EnginePathTests(unittest.TestCase):
         self.assertEqual(exit_code.exception.code, 0)
         return engine.prepare, v8.resolve_codex_v8_cargo_env, run.call_args
 
-    def test_builder_engine_is_opt_in_and_keeps_packaging_setup(self):
+    def test_builder_defaults_to_engine_and_keeps_packaging_setup(self):
         with tempfile.TemporaryDirectory() as temp:
             engine_root = Path(temp)
             (engine_root / "codex-rs").mkdir()
             (engine_root / "scripts").mkdir()
-            prepare, resolve_v8, call = self.run_builder(
-                ["--engine", "--release"], engine_root
-            )
+            prepare, resolve_v8, call = self.run_builder(["--release"], engine_root)
             prepare.assert_called_once_with(root=ROOT)
             resolve_v8.assert_called_once()
             command = call.args[0]
@@ -104,10 +102,42 @@ class EnginePathTests(unittest.TestCase):
                 call.kwargs["env"]["CARGO_TARGET_DIR"], str(ROOT / ".engine/target")
             )
 
-    def test_builder_default_stays_on_checked_in_workspace(self):
-        prepare, _, call = self.run_builder([])
-        prepare.assert_not_called()
-        self.assertEqual(call.kwargs["cwd"], ROOT / "codex-rs")
+    def test_builder_engine_flag_remains_compatible(self):
+        with tempfile.TemporaryDirectory() as temp:
+            engine_root = Path(temp)
+            prepare, _, call = self.run_builder(["--engine"], engine_root)
+            prepare.assert_called_once_with(root=ROOT)
+            self.assertEqual(call.kwargs["cwd"], engine_root / "codex-rs")
+
+    def test_engine_run_uses_assembly_and_external_target(self):
+        engine = types.ModuleType("engine")
+        workspace = ROOT / ".engine/workspace"
+        engine.prepare = Mock(return_value=workspace)
+        for args, cwd in [
+            (["cargo", "check"], workspace / "codex-rs"),
+            (["--workspace-root", "bazel", "test", "//..."], workspace),
+        ]:
+            with (
+                self.subTest(args=args),
+                patch.dict(sys.modules, {"engine": engine}),
+                patch.object(sys, "argv", ["engine_run.py", *args]),
+                patch.dict(os.environ, {"CARGO_TARGET_DIR": "/external-target"}),
+                patch(
+                    "subprocess.run", return_value=types.SimpleNamespace(returncode=7)
+                ) as run,
+            ):
+                with self.assertRaises(SystemExit) as code:
+                    runpy.run_path(
+                        str(ROOT / "scripts/engine_run.py"), run_name="__main__"
+                    )
+                self.assertEqual(code.exception.code, 7)
+                self.assertEqual(run.call_args.kwargs["cwd"], cwd)
+                self.assertEqual(
+                    run.call_args.kwargs["env"]["CODEX_REPO_ROOT"], str(workspace)
+                )
+                self.assertEqual(
+                    run.call_args.kwargs["env"]["CARGO_TARGET_DIR"], "/external-target"
+                )
 
     def test_python_sdk_binary_precedence(self):
         harness = load_python_harness()

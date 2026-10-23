@@ -29,7 +29,7 @@ Usage: scripts/verify-container.sh [options] [full|fast|run -- command]
 
 Options:
   --engine docker|podman   container engine (default: the first one that responds)
-  --engine-workspace       verify the assembled .engine/workspace instead of the source tree
+  --engine-workspace       compatibility flag; the assembled workspace is always used
   --reset-cache            delete Cargo, target, and sccache volumes first
   --no-cache               rebuild the image without layer cache
   -h, --help               show this help
@@ -165,14 +165,11 @@ print_timing_summary() {
 
 run_inner() {
     local mode="${1:-full}"
-    WORKSPACE_ROOT="$ROOT"
-    if [[ "${NYACODE_VERIFY_ENGINE_WORKSPACE:-}" == "1" ]]; then
-        WORKSPACE_ROOT="$ROOT/.engine/workspace"
-        python3 "$ROOT/scripts/engine.py" --root "$ROOT" prepare --output "$WORKSPACE_ROOT"
-        if [[ ! -f "$WORKSPACE_ROOT/codex-rs/Cargo.toml" ]]; then
-            echo "engine preparation did not produce $WORKSPACE_ROOT" >&2
-            exit 1
-        fi
+    WORKSPACE_ROOT="$ROOT/.engine/workspace"
+    python3 "$ROOT/scripts/engine.py" --root "$ROOT" prepare --output "$WORKSPACE_ROOT"
+    if [[ ! -f "$WORKSPACE_ROOT/codex-rs/Cargo.toml" ]]; then
+        echo "engine preparation did not produce $WORKSPACE_ROOT" >&2
+        exit 1
     fi
     export CODEX_REPO_ROOT="$WORKSPACE_ROOT"
     configure_inner_env
@@ -405,6 +402,9 @@ run_outer() {
         --cap-add SYS_PTRACE
         --security-opt seccomp=unconfined
     )
+    if [[ -n "${GH_TOKEN:-}" ]]; then
+        run_args+=(-e GH_TOKEN)
+    fi
     if [[ -n "${CARGO_BUILD_JOBS:-}" ]]; then
         run_args+=(-e "CARGO_BUILD_JOBS=${CARGO_BUILD_JOBS}")
     fi

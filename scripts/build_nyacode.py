@@ -16,15 +16,13 @@ def main() -> int:
     parser.add_argument(
         "--engine",
         action="store_true",
-        help="Prepare and build the pinned engine workspace",
+        help="Compatibility flag; the pinned engine workspace is always used",
     )
     args = parser.parse_args()
     root = Path(__file__).resolve().parents[1]
-    build_root = root
-    if args.engine:
-        from engine import prepare
+    from engine import prepare
 
-        build_root = prepare(root=root)
+    build_root = prepare(root=root)
     os.environ["CODEX_REPO_ROOT"] = str(build_root)
     # Reuse the package builder's archive/bindings checksum validation.
     sys.path.insert(0, str(build_root / "scripts"))
@@ -43,8 +41,7 @@ def main() -> int:
     if target not in TARGET_SPECS:
         parser.error(f"No pinned V8 package configuration for {target}")
     env = os.environ.copy()
-    if args.engine:
-        env.setdefault("CARGO_TARGET_DIR", str(root / ".engine/target"))
+    env.setdefault("CARGO_TARGET_DIR", str(root / ".engine/target"))
     env.update(resolve_codex_v8_cargo_env(TARGET_SPECS[target]))
     command = [
         "cargo",
