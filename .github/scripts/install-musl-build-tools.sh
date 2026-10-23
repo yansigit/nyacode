@@ -63,7 +63,7 @@ if [[ ! -f "${libcap_prefix}/lib/libcap.a" ]]; then
   mkdir -p "${libcap_src_root}" "${libcap_prefix}/lib" "${libcap_prefix}/include/sys" "${libcap_prefix}/include/linux" "${libcap_pkgconfig_dir}"
   libcap_tarball="${libcap_root}/${libcap_tarball_name}"
 
-  curl -fsSL "${libcap_download_url}" -o "${libcap_tarball}"
+  curl -fsSL --retry 3 --retry-all-errors "${libcap_download_url}" -o "${libcap_tarball}"
   echo "${libcap_sha256}  ${libcap_tarball}" | sha256sum -c -
 
   tar -xJf "${libcap_tarball}" -C "${libcap_src_root}"
