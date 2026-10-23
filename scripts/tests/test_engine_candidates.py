@@ -62,6 +62,7 @@ def qualification():
         "status": "completed",
         "conclusion": "success",
         "head_sha": HEAD,
+        "head_branch": f"engine/{TAG}",
         "head_repository": {"full_name": REPOSITORY},
     }
     pr = {
@@ -405,6 +406,7 @@ class ControllerFlowTest(unittest.TestCase):
                     "tag": TAG,
                     "revision": REVISION,
                     "engine_lock": self.candidate,
+                    "prepared": True,
                 }
             )
         )
@@ -461,8 +463,98 @@ class ControllerFlowTest(unittest.TestCase):
             self.assertEqual([entry["path"] for entry in tree["tree"]], ["engine.lock"])
             blob = next(data for path, data in calls if path.endswith("/git/blobs"))
             self.assertEqual(json.loads(blob["content"]), self.candidate)
+            pr = next(data for path, data in calls if path.endswith("/pulls"))
+            self.assertFalse(pr["draft"])
+
+    def test_failed_preflight_retains_valid_candidate_and_accepted_pin(self):
+        (self.root / "engine.lock").write_text(json.dumps(self.original))
+        proposal_dir = self.root / ".engine/upgrades" / TAG
+        proposal_dir.mkdir(parents=True)
+        (proposal_dir / "engine.lock").write_text(json.dumps(self.candidate))
+        with (
+            patch.object(candidates, "ROOT", self.root),
+            patch.object(candidates, "current_base", return_value=BASE),
+            patch.object(candidates.subprocess, "check_output", return_value=BASE),
+            patch.object(candidates, "stable_release", return_value=REVISION),
+            patch.object(candidates, "pages", return_value=[]),
+            patch.object(candidates, "api", return_value={"status": "ahead"}),
+            patch.dict(os.environ, {"GITHUB_RUN_ID": "321"}),
+            patch.object(
+                candidates.subprocess,
+                "run",
+                return_value=subprocess.CompletedProcess([], 1),
+            ) as run,
+        ):
+            candidates.discover(
+                SimpleNamespace(tag=TAG, scheduled=False, output=self.proposal),
+                REPOSITORY,
+                "main",
+            )
+            proposal = json.loads(self.proposal.read_text())
+            self.assertFalse(proposal["prepared"])
+            self.assertEqual(proposal["engine_lock"], self.candidate)
+            self.assertEqual(
+                proposal["diagnostics_url"],
+                f"https://github.com/{REPOSITORY}/actions/runs/321",
+            )
+            self.assertEqual(
+                json.loads((self.root / "engine.lock").read_text()), self.original
+            )
+            self.assertFalse(run.call_args.kwargs["check"])
+            self.proposal.unlink()
+            (proposal_dir / "engine.lock").write_text(
+                json.dumps({**self.candidate, "repository": "attacker/engine"})
+            )
+            with self.assertRaisesRegex(ValueError, "integration contract"):
+                candidates.discover(
+                    SimpleNamespace(tag=TAG, scheduled=False, output=self.proposal),
+                    REPOSITORY,
+                    "main",
+                )
+            self.assertFalse(self.proposal.exists())
+
+    def test_failed_preflight_publishes_draft_with_trusted_diagnostics(self):
+        proposal = json.loads(self.proposal.read_text())
+        proposal.update(prepared=False, diagnostics_url="https://attacker.invalid/")
+        self.proposal.write_text(json.dumps(proposal))
+        calls = []
+
+        def api(path, *, data=None):
+            calls.append((path, data))
+            if "/pulls?" in path:
+                return []
+            if "/git/ref/" in path:
+                raise subprocess.CalledProcessError(1, ["gh"], stderr=b"HTTP 404")
+            if path.endswith(BASE):
+                return {"tree": {"sha": "tree"}}
+            if path.endswith("/pulls"):
+                return {"number": 7, "html_url": "https://example.invalid/pr/7"}
+            return {"sha": HEAD}
+
+        with (
+            patch.object(candidates, "current_base", return_value=BASE),
+            patch.object(candidates, "lock_at", return_value=self.original),
+            patch.object(candidates, "stable_release", return_value=REVISION),
+            patch.object(candidates, "api", side_effect=api),
+            patch.dict(os.environ, {"GITHUB_RUN_ID": "321"}),
+            patch.object(candidates.subprocess, "run") as run,
+        ):
+            candidates.publish(
+                SimpleNamespace(proposal=self.proposal), REPOSITORY, "main"
+            )
+            pr = next(data for path, data in calls if path.endswith("/pulls"))
+            self.assertTrue(pr["draft"])
+            self.assertIn("Preflight failed", pr["body"])
+            self.assertIn(
+                f"https://github.com/{REPOSITORY}/actions/runs/321", pr["body"]
+            )
+            self.assertNotIn("attacker", pr["body"])
+            self.assertEqual(run.call_count, 1)
 
     def test_existing_candidate_reuses_branch_without_rewriting_it(self):
+        proposal = json.loads(self.proposal.read_text())
+        proposal["prepared"] = False
+        self.proposal.write_text(json.dumps(proposal))
         writes = []
 
         def api(path, *, data=None):
@@ -473,6 +565,7 @@ class ControllerFlowTest(unittest.TestCase):
                     {
                         "number": 7,
                         "state": "open",
+                        "draft": True,
                         "html_url": "https://example.invalid/pr/7",
                     }
                 ]
@@ -486,7 +579,7 @@ class ControllerFlowTest(unittest.TestCase):
         with (
             patch.object(candidates, "current_base", return_value=BASE),
             patch.object(
-                candidates, "lock_at", side_effect=[self.original, self.candidate]
+                candidates, "lock_at", side_effect=[self.original, self.candidate] * 2
             ),
             patch.object(candidates, "stable_release", return_value=REVISION),
             patch.object(candidates, "api", side_effect=api),
@@ -495,8 +588,115 @@ class ControllerFlowTest(unittest.TestCase):
             candidates.publish(
                 SimpleNamespace(proposal=self.proposal), REPOSITORY, "main"
             )
+            candidates.publish(
+                SimpleNamespace(proposal=self.proposal), REPOSITORY, "main"
+            )
             self.assertFalse(writes)
-            self.assertEqual(run.call_count, 1)
+            run.assert_not_called()
+
+    def test_observer_replaces_report_and_preserves_ready_success_candidate(self):
+        fixture = qualification()
+        body = (
+            "Candidate details.\n\n<!-- engine-qualification:start -->"
+            "Old report<!-- engine-qualification:end -->"
+        )
+        output = self.root / "github-output"
+
+        def api(path, *, data=None):
+            if "/runs/" in path:
+                return fixture["run"]
+            if "/workflows/" in path:
+                return {"id": 456}
+            if "/pulls?" in path:
+                return [fixture["pr"]]
+            return {**fixture["pr"], "body": body}
+
+        with (
+            patch.object(candidates, "api", side_effect=api),
+            patch.object(candidates, "run_jobs", return_value=fixture["jobs"]),
+            patch.object(candidates, "report_for", return_value=fixture["report"]),
+            patch.object(candidates, "command") as command,
+            patch.object(candidates.subprocess, "run") as run,
+        ):
+            candidates.observe(
+                SimpleNamespace(run_id=123, github_output=output), REPOSITORY, "main"
+            )
+            run.assert_not_called()
+            report = command.call_args.kwargs["data"]["body"]
+            self.assertIn("Candidate details.", report)
+            self.assertNotIn("Old report", report)
+            self.assertEqual(report.count("<!-- engine-qualification:start -->"), 1)
+            self.assertIn("consider_promotion=true", output.read_text())
+
+    def test_observer_reports_failure_cancel_and_missing_artifact_as_draft(self):
+        for conclusion in ("failure", "cancelled", "success"):
+            fixture = qualification()
+            fixture["run"]["conclusion"] = conclusion
+            output = self.root / "github-output"
+            output.unlink(missing_ok=True)
+
+            def api(path, *, data=None, fixture=fixture):
+                if "/runs/" in path:
+                    return fixture["run"]
+                if "/workflows/" in path:
+                    return {"id": 456}
+                if "/pulls?" in path:
+                    return [fixture["pr"]]
+                return {**fixture["pr"], "body": "Original candidate details."}
+
+            with (
+                self.subTest(conclusion=conclusion),
+                patch.object(candidates, "api", side_effect=api),
+                patch.object(candidates, "run_jobs", return_value=fixture["jobs"]),
+                patch.object(
+                    candidates, "report_for", side_effect=ValueError("missing")
+                ),
+                patch.object(candidates, "command") as command,
+                patch.object(candidates.subprocess, "run") as run,
+            ):
+                candidates.observe(
+                    SimpleNamespace(run_id=123, github_output=output),
+                    REPOSITORY,
+                    "main",
+                )
+                self.assertEqual(
+                    run.call_args.args[0][:5], ["gh", "pr", "ready", "7", "--undo"]
+                )
+                body = command.call_args.kwargs["data"]["body"]
+                self.assertIn("Original candidate details.", body)
+                self.assertIn(f"Qualification **{conclusion}**", body)
+                self.assertIn(f"`{HEAD}`", body)
+                self.assertIn("/actions/runs/123/attempts/2", body)
+                self.assertIn("consider_promotion=false", output.read_text())
+
+    def test_observer_never_writes_report_to_a_different_or_moved_head(self):
+        for moved in (False, True):
+            fixture = qualification()
+            other = copy.deepcopy(fixture["pr"])
+            other["head"]["sha"] = REVISION
+
+            def api(path, *, data=None, fixture=fixture, moved=moved, other=other):
+                if "/runs/" in path:
+                    return fixture["run"]
+                if "/workflows/" in path:
+                    return {"id": 456}
+                if "/pulls?" in path:
+                    return [fixture["pr"] if moved else other]
+                return other
+
+            with (
+                self.subTest(moved=moved),
+                patch.object(candidates, "api", side_effect=api),
+                patch.object(candidates, "run_jobs", return_value=fixture["jobs"]),
+                patch.object(candidates, "report_for", return_value=fixture["report"]),
+                patch.object(candidates, "command") as command,
+                patch.object(candidates.subprocess, "run") as run,
+            ):
+                candidates.observe(
+                    SimpleNamespace(run_id=123, github_output=None), REPOSITORY, "main"
+                )
+                command.assert_not_called()
+                run.assert_not_called()
 
     def test_promoter_merges_only_exact_qualified_head_and_stops_on_late_base_move(
         self,

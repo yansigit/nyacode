@@ -46,7 +46,10 @@ jobs:
           args=()
           if [[ "$SCHEDULED" == 'true' ]]; then args+=(--scheduled); fi
           python3 scripts/engine_candidates.py discover --tag "$RELEASE_TAG" --output "$RUNNER_TEMP/candidate/candidate.json" "${args[@]}"
-          if [[ -f "$RUNNER_TEMP/candidate/candidate.json" ]]; then echo 'proposed=true' >> "$GITHUB_OUTPUT"; fi
+          if [[ -f "$RUNNER_TEMP/candidate/candidate.json" ]]; then
+            echo 'proposed=true' >> "$GITHUB_OUTPUT"
+            python3 -c 'import json, os; proposal = json.load(open(os.environ["RUNNER_TEMP"] + "/candidate/candidate.json")); print("prepared=" + str(proposal["prepared"]).lower(), file=open(os.environ["GITHUB_OUTPUT"], "a"))'
+          fi
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         if: steps.proposal.outputs.proposed == 'true'
         with:
@@ -55,7 +58,7 @@ jobs:
           if-no-files-found: error
           retention-days: 7
       - name: Retain failed proposal evidence
-        if: failure()
+        if: failure() || steps.proposal.outputs.prepared == 'false'
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: engine-candidate-diagnostics
@@ -87,9 +90,32 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: python3 scripts/engine_candidates.py publish --proposal "$RUNNER_TEMP/candidate/candidate.json"
 
+  observe:
+    name: Report completed candidate qualification
+    if: github.event_name == 'workflow_run'
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      pull-requests: write
+      actions: read
+    outputs:
+      consider_promotion: ${{ steps.report.outputs.consider_promotion }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          persist-credentials: false
+      - name: Link results only to the candidate at the run's exact branch and head
+        id: report
+        env:
+          GH_TOKEN: ${{ github.token }}
+          QUALIFICATION_RUN: ${{ github.event.workflow_run.id }}
+        run: python3 scripts/engine_candidates.py observe --run-id "$QUALIFICATION_RUN" --github-output "$GITHUB_OUTPUT"
+
   promote:
     name: Promote only the exact fully qualified candidate
-    if: github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success'
+    needs: observe
+    if: needs.observe.outputs.consider_promotion == 'true'
     runs-on: ubuntu-24.04
     permissions:
       contents: write

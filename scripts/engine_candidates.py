@@ -315,7 +315,7 @@ def discover(args, repository: str, branch: str) -> None:
     ):
         print("No newer stable engine release is available")
         return
-    subprocess.run(
+    preflight = subprocess.run(
         [
             sys.executable,
             str(ROOT / "scripts/engine.py"),
@@ -325,7 +325,7 @@ def discover(args, repository: str, branch: str) -> None:
             "controls",
         ],
         cwd=ROOT,
-        check=True,
+        check=False,
     )
     candidate = json.loads(
         (ROOT / ".engine/upgrades" / tag / "engine.lock").read_text()
@@ -340,6 +340,8 @@ def discover(args, repository: str, branch: str) -> None:
                 "tag": tag,
                 "revision": revision,
                 "engine_lock": candidate,
+                "prepared": preflight.returncode == 0,
+                "diagnostics_url": discovery_url(repository),
             },
             indent=2,
         )
@@ -354,6 +356,8 @@ def publish(args, repository: str, branch: str) -> None:
     base = current_base(repository, branch)
     if proposal.get("schema_version") != 1 or proposal.get("base_sha") != base:
         raise ValueError("Proposal base is stale")
+    if type(proposal.get("prepared")) is not bool:
+        raise ValueError("Proposal must record its preflight result")
     original = lock_at(repository, base)
     revision = stable_release(proposal["tag"], original["repository"])
     if proposal.get("revision") != revision:
@@ -387,6 +391,9 @@ def publish(args, repository: str, branch: str) -> None:
             raise ValueError(
                 "Existing candidate requires manual repair; its branch was not changed"
             )
+        if existing:
+            print(f"Unchanged candidate already published: {existing[0]['html_url']}")
+            return
     else:
         commit = api(f"repos/{repository}/git/commits/{base}")
         content = json.dumps(proposal["engine_lock"], indent=2) + "\n"
@@ -429,7 +436,21 @@ def publish(args, repository: str, branch: str) -> None:
                 "title": f"Qualify engine {proposal['tag']}",
                 "head": candidate_branch,
                 "base": branch,
-                "body": f"Pin upstream {revision}. Full engine qualification is dispatched explicitly. Only engine.lock is eligible for automatic promotion; any integration repair requires review.",
+                "body": (
+                    f"Pin upstream {revision}. Full engine qualification is dispatched explicitly. "
+                    "Only engine.lock is eligible for automatic promotion; any integration repair requires review.\n\n"
+                    + (
+                        "Preflight passed."
+                        if proposal["prepared"]
+                        else "Preflight failed. This draft requires targeted integration repair before promotion."
+                    )
+                    + (
+                        f" [Preflight diagnostics]({discovery_url(repository)})."
+                        if discovery_url(repository)
+                        else ""
+                    )
+                ),
+                "draft": not proposal["prepared"],
             },
         )
     )
@@ -454,6 +475,138 @@ def publish(args, repository: str, branch: str) -> None:
         check=True,
     )
     print(pr["html_url"])
+
+
+def discovery_url(repository: str) -> str:
+    run_id = os.environ.get("GITHUB_RUN_ID", "")
+    return (
+        f"https://github.com/{repository}/actions/runs/{run_id}"
+        if run_id.isdecimal()
+        else ""
+    )
+
+
+def observe(args, repository: str, branch: str) -> None:
+    """Report completed runs using their branch/head, never an artifact's PR number."""
+    run = api(f"repos/{repository}/actions/runs/{args.run_id}")
+    workflow = api(f"repos/{repository}/actions/workflows/{WORKFLOW}")
+    candidate_branch = run.get("head_branch", "")
+    tag = candidate_branch.removeprefix("engine/")
+    if (
+        run["workflow_id"] != workflow["id"]
+        or run["event"] != "workflow_dispatch"
+        or run["path"] != f".github/workflows/{WORKFLOW}"
+        or run["status"] != "completed"
+        or run["head_repository"]["full_name"] != repository
+        or not SHA.fullmatch(run["head_sha"])
+        or candidate_branch != f"engine/{tag}"
+        or not TAG.fullmatch(tag)
+    ):
+        print("No automatic candidate report for this qualification run")
+        return
+    prs = api(
+        f"repos/{repository}/pulls?state=open&head={repository.split('/')[0]}:{candidate_branch}&per_page=100"
+    )
+    prs = [
+        pr
+        for pr in prs
+        if pr["head"]["sha"] == run["head_sha"]
+        and pr["head"]["ref"] == candidate_branch
+        and pr["head"]["repo"]["full_name"] == repository
+        and pr["base"]["ref"] == branch
+    ]
+    if len(prs) != 1:
+        print("Qualification has no unique open candidate at this exact head")
+        return
+    pr = prs[0]
+    conclusion = run["conclusion"]
+    if conclusion not in {
+        "success",
+        "failure",
+        "cancelled",
+        "timed_out",
+        "action_required",
+        "neutral",
+        "skipped",
+        "stale",
+        "startup_failure",
+    }:
+        conclusion = "incomplete"
+    lines = [
+        "<!-- engine-qualification:start -->",
+        (
+            f"Qualification **{conclusion}** for `{run['head_sha']}`: "
+            f"[run {run['id']}, attempt {run['run_attempt']}](https://github.com/{repository}/actions/runs/{run['id']}/attempts/{run['run_attempt']})."
+        ),
+    ]
+    jobs = run_jobs(repository, run)
+    incomplete = sorted(
+        REQUIRED_JOBS
+        - {
+            job["name"]
+            for job in jobs
+            if job["status"] == "completed"
+            and job["conclusion"] == "success"
+            and job.get("head_sha") == run["head_sha"]
+        }
+    )
+    if incomplete:
+        lines.append(
+            "Required checks needing attention: " + ", ".join(incomplete) + "."
+        )
+    consider_promotion = conclusion == "success" and not incomplete
+    if conclusion == "success":
+        try:
+            report_for(repository, run["id"])
+        except (ValueError, zipfile.BadZipFile):
+            lines.append(
+                "Qualification report is missing or invalid; automatic promotion is blocked."
+            )
+            consider_promotion = False
+    latest = api(f"repos/{repository}/pulls/{pr['number']}")
+    if (
+        latest["state"] != "open"
+        or latest["head"]["sha"] != run["head_sha"]
+        or latest["head"]["ref"] != candidate_branch
+        or latest["head"]["repo"]["full_name"] != repository
+        or latest["base"]["ref"] != branch
+    ):
+        print("Candidate moved while observing qualification; no report was changed")
+        return
+    if not consider_promotion and not latest["draft"]:
+        subprocess.run(
+            ["gh", "pr", "ready", str(pr["number"]), "--undo", "--repo", repository],
+            cwd=ROOT,
+            check=True,
+        )
+        latest["draft"] = True
+    consider_promotion = consider_promotion and not latest["draft"]
+    if latest["draft"]:
+        lines.append("Draft candidate requires targeted repair before promotion.")
+    lines.append("<!-- engine-qualification:end -->")
+    body = latest.get("body") or ""
+    marker = re.compile(
+        r"<!-- engine-qualification:start -->.*?<!-- engine-qualification:end -->",
+        re.DOTALL,
+    )
+    body = marker.sub("", body).rstrip() + "\n\n" + "\n".join(lines)
+    command(
+        [
+            "gh",
+            "api",
+            f"repos/{repository}/pulls/{pr['number']}",
+            "--method",
+            "PATCH",
+            "--input",
+            "-",
+        ],
+        data={"body": body},
+    )
+    if args.github_output:
+        with args.github_output.open("a") as output:
+            output.write(
+                f"consider_promotion={'true' if consider_promotion else 'false'}\n"
+            )
 
 
 def promote(args, repository: str, branch: str) -> None:
@@ -508,6 +661,8 @@ def promote(args, repository: str, branch: str) -> None:
     if (
         latest["head"]["sha"] != run["head_sha"]
         or latest["base"]["sha"] != base
+        or latest["state"] != "open"
+        or latest["draft"]
         or latest.get("mergeable_state") != "clean"
     ):
         raise ValueError(
@@ -549,6 +704,9 @@ def main() -> int:
     writer.add_argument("--proposal", type=Path, required=True)
     promotion = sub.add_parser("promote")
     promotion.add_argument("--run-id", type=int, required=True)
+    observation = sub.add_parser("observe")
+    observation.add_argument("--run-id", type=int, required=True)
+    observation.add_argument("--github-output", type=Path)
     args = parser.parse_args()
     try:
         if args.command == "select":
@@ -579,9 +737,12 @@ def main() -> int:
         else:
             repository = os.environ["GITHUB_REPOSITORY"]
             branch = api(f"repos/{repository}")["default_branch"]
-            {"discover": discover, "publish": publish, "promote": promote}[
-                args.command
-            ](args, repository, branch)
+            {
+                "discover": discover,
+                "publish": publish,
+                "observe": observe,
+                "promote": promote,
+            }[args.command](args, repository, branch)
     except (
         ValueError,
         KeyError,
