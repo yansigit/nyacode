@@ -148,6 +148,40 @@ class PackageSelectionTests(unittest.TestCase):
 
 
 class MountTests(unittest.TestCase):
+    def test_container_build_uses_the_pinned_rust_toolchain(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            log = Path(temporary) / "arguments.jsonl"
+            engine = Path(temporary) / "container-engine"
+            engine.write_text(
+                f"#!{sys.executable}\n"
+                "import json, sys\n"
+                f"with open({str(log)!r}, 'a') as stream:\n"
+                "    stream.write(json.dumps(sys.argv[1:]) + '\\n')\n"
+            )
+            engine.chmod(0o755)
+            subprocess.run(
+                [
+                    "bash",
+                    str(verifier.ROOT / "scripts/verify-container.sh"),
+                    "--engine",
+                    str(engine),
+                    "run",
+                    "--",
+                    "true",
+                ],
+                check=True,
+                capture_output=True,
+                text=True,
+            )
+            calls = [json.loads(line) for line in log.read_text().splitlines()]
+            build = next(call for call in calls if call[0] == "build")
+            toolchain = json.loads((verifier.ROOT / "engine.lock").read_text())[
+                "toolchain"
+            ]
+            self.assertEqual(
+                build[build.index("--build-arg") + 1], f"RUST_VERSION={toolchain}"
+            )
+
     def check_mount(self, source):
         script = (verifier.ROOT / "scripts/verify-container.sh").read_text()
         function = re.search(

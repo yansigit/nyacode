@@ -172,6 +172,8 @@ run_inner() {
         exit 1
     fi
     export CODEX_REPO_ROOT="$WORKSPACE_ROOT"
+    export NYACODE_ENGINE_ROOT="$WORKSPACE_ROOT"
+    export RUSTUP_TOOLCHAIN="$(python3 -c 'import json, sys; print(json.load(open(sys.argv[1]))["toolchain"])' "$ROOT/engine.lock")"
     configure_inner_env
     refuse_if_home_is_mounted
     TIMING_LOG="$(mktemp)"
@@ -342,7 +344,9 @@ run_outer() {
     local engine_bin="${ENGINE[-1]}"
     echo "engine: ${ENGINE[*]}"
 
-    local -a build_args=(build --network=host -f "$ROOT/Containerfile" -t "$IMAGE_TAG")
+    local rust_version
+    rust_version="$(python3 -c 'import json, sys; print(json.load(open(sys.argv[1]))["toolchain"])' "$ROOT/engine.lock")"
+    local -a build_args=(build --network=host --build-arg "RUST_VERSION=$rust_version" -f "$ROOT/Containerfile" -t "$IMAGE_TAG")
     if ((no_cache)); then
         build_args+=(--no-cache)
     fi
