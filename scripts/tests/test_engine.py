@@ -425,6 +425,72 @@ class EngineTest(unittest.TestCase):
                     engine.upgrade(root=self.root, tag=tag, cache_dir=self.cache)
                 run.assert_not_called()
 
+    def test_upgrade_rejects_draft_prerelease_and_mismatched_release_before_download(
+        self,
+    ):
+        original = (self.root / "engine.lock").read_bytes()
+        for index, changed in enumerate(
+            (
+                {"draft": True},
+                {"prerelease": True},
+                {"tag_name": "other"},
+                {"draft": None},
+            )
+        ):
+            release = {
+                "tag_name": "rust-v1.2.3",
+                "draft": False,
+                "prerelease": False,
+                **changed,
+            }
+            output = self.base / f"rejected-{index}"
+            with (
+                patch.object(engine, "github_json", return_value=release),
+                patch.object(engine, "download") as download,
+            ):
+                with self.assertRaisesRegex(engine.EngineError, "published stable"):
+                    engine.upgrade(
+                        root=self.root,
+                        tag="rust-v1.2.3",
+                        output=output,
+                        cache_dir=self.cache,
+                    )
+                download.assert_not_called()
+            self.assertEqual((self.root / "engine.lock").read_bytes(), original)
+            self.assertFalse((output / "engine.lock").exists())
+            self.assertEqual(
+                json.loads((output / "result.json").read_text())["result"], "failed"
+            )
+
+    def test_upgrade_rejects_downgrade_divergence_and_same_revision(self):
+        for index, comparison in enumerate(
+            (
+                {"status": "behind"},
+                {"status": "identical"},
+                {"status": "diverged"},
+                {"status": "ahead", "merge_base_commit": {"sha": "c" * 40}},
+            )
+        ):
+            responses = [
+                {"tag_name": "rust-v1.2.3", "draft": False, "prerelease": False},
+                {"sha": "b" * 40},
+                comparison,
+            ]
+            with (
+                patch.object(engine, "github_json", side_effect=responses),
+                patch.object(engine, "download") as download,
+            ):
+                with self.assertRaisesRegex(
+                    engine.EngineError, "newer than the accepted"
+                ):
+                    engine.upgrade(
+                        root=self.root,
+                        tag="rust-v1.2.3",
+                        output=self.base / f"ancestry-{index}",
+                        cache_dir=self.cache,
+                    )
+                download.assert_not_called()
+
     def test_failed_upgrade_retains_candidate_and_never_edits_accepted_inputs(self):
         before = {
             path.relative_to(self.root): path.read_bytes()
@@ -440,7 +506,34 @@ class EngineTest(unittest.TestCase):
             patch.object(
                 engine.subprocess,
                 "run",
-                return_value=subprocess.CompletedProcess([], 0, "b" * 40 + "\n", ""),
+                side_effect=[
+                    subprocess.CompletedProcess(
+                        [],
+                        0,
+                        json.dumps(
+                            {
+                                "tag_name": "rust-v1.2.3",
+                                "draft": False,
+                                "prerelease": False,
+                            }
+                        ),
+                        "",
+                    ),
+                    subprocess.CompletedProcess(
+                        [], 0, json.dumps({"sha": "b" * 40}), ""
+                    ),
+                    subprocess.CompletedProcess(
+                        [],
+                        0,
+                        json.dumps(
+                            {
+                                "status": "ahead",
+                                "merge_base_commit": {"sha": self.lock["revision"]},
+                            }
+                        ),
+                        "",
+                    ),
+                ],
             ),
             patch.object(engine, "download", side_effect=download),
             patch.object(

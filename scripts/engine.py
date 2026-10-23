@@ -680,6 +680,19 @@ def check(
     return workspace
 
 
+def github_json(endpoint: str, log: Path) -> dict[str, Any]:
+    result = subprocess.run(
+        ["gh", "api", endpoint], capture_output=True, text=True, check=False
+    )
+    log.write_text(result.stdout + result.stderr)
+    if result.returncode:
+        raise EngineError(f"GitHub lookup failed; see {log}")
+    value = json.loads(result.stdout)
+    if not isinstance(value, dict):
+        raise EngineError(f"unexpected GitHub response; see {log}")
+    return value
+
+
 def upgrade(
     *,
     root: Path = ROOT,
@@ -702,17 +715,33 @@ def upgrade(
         raise EngineError("archive cache must be outside the tracked product tree")
     proposal.mkdir(parents=True)
     try:
-        result = subprocess.run(
-            ["gh", "api", f"repos/{lock['repository']}/commits/{tag}", "--jq", ".sha"],
-            capture_output=True,
-            text=True,
-            check=False,
+        release = github_json(
+            f"repos/{lock['repository']}/releases/tags/{tag}", proposal / "release.log"
         )
-        (proposal / "resolve.log").write_text(result.stdout + result.stderr)
-        revision = result.stdout.strip()
-        if result.returncode or not re.fullmatch(r"[0-9a-f]{40}", revision):
+        if (
+            release.get("tag_name") != tag
+            or release.get("draft") is not False
+            or release.get("prerelease") is not False
+        ):
+            raise EngineError("upgrade requires a published stable GitHub release")
+        commit = github_json(
+            f"repos/{lock['repository']}/commits/{tag}", proposal / "resolve.log"
+        )
+        revision = commit.get("sha", "")
+        if not isinstance(revision, str) or not re.fullmatch(r"[0-9a-f]{40}", revision):
             raise EngineError(
                 "gh could not resolve stable release to an immutable commit"
+            )
+        comparison = github_json(
+            f"repos/{lock['repository']}/compare/{lock['revision']}...{revision}",
+            proposal / "ancestry.log",
+        )
+        if (
+            comparison.get("status") != "ahead"
+            or comparison.get("merge_base_commit", {}).get("sha") != lock["revision"]
+        ):
+            raise EngineError(
+                "release must descend from and be newer than the accepted engine"
             )
         archive = proposal / "upstream.tar.gz"
         download(lock["repository"], revision, archive)
