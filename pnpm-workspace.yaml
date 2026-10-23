@@ -3,7 +3,9 @@ packages:
   - sdk/typescript
 
 minimumReleaseAge: 10080
-minimumReleaseAgeExclude: []
+# Reviewed fix for GHSA-27r3-jxmh-p828; the age policy still applies to other versions.
+minimumReleaseAgeExclude:
+  - body-parser@2.4.0
 
 blockExoticSubdeps: true
 strictDepBuilds: true
@@ -29,6 +31,10 @@ preferWorkspacePackages: true
 # load-nyc-config uses yaml.load, which is supported by js-yaml 4 and removes
 # the obsolete argparse/sprintf-js dependency (GHSA-hp3w-g68c-fv3c).
 overrides:
+  # GHSA-mrhx-c7xc-m3w5 affects the pinned conformance tool too.
+  zod: "4.6.6"
+  # Reject trailing bytes after compressed requests (GHSA-27r3-jxmh-p828).
+  body-parser: "2.4.0"
   "@modelcontextprotocol/sdk": "1.32.1"
   esbuild: "0.28.2"
   # Reject quadratic zone-identifier parsing (GHSA-rxp7-6hxx-x8q5).
