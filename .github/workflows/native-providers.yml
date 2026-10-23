@@ -34,6 +34,7 @@ jobs:
         run: |
           python3 scripts/engine.py --json prepare > "$RUNNER_TEMP/engine.json"
           python3 -c 'import json, os; root = json.load(open(os.environ["RUNNER_TEMP"] + "/engine.json"))["output"]; print("root=" + root, file=open(os.environ["GITHUB_OUTPUT"], "a")); print("NYACODE_ENGINE_ROOT=" + root, file=open(os.environ["GITHUB_ENV"], "a"))'
+      - uses: ./.github/actions/setup-ci
       - name: Read assembled Rust toolchain
         id: rust
         env:
@@ -46,7 +47,9 @@ jobs:
       - name: Install hosted Linux build dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y clang cmake libclang-dev libssl-dev pkg-config protobuf-compiler ripgrep
+          sudo apt-get install -y bubblewrap clang cmake libclang-dev libssl-dev pkg-config protobuf-compiler ripgrep
+      - name: Verify Linux sandbox prerequisites
+        run: bwrap --unshare-user --unshare-pid --unshare-net --ro-bind / / --proc /proc --dev /dev -- /bin/true
       - name: Verify pinned V8 archive and bindings
         uses: ./.github/actions/setup-rusty-v8
         with:
@@ -79,6 +82,16 @@ jobs:
       - name: Check Code Mode execution and bundled ICU data
         working-directory: ${{ steps.engine.outputs.root }}/codex-rs
         run: cargo test --locked -p codex-code-mode-runtime --all-targets
+      - name: Build cross-crate helpers for core integration tests
+        if: inputs.full_engine == true
+        working-directory: ${{ steps.engine.outputs.root }}/codex-rs
+        run: >-
+          cargo build --locked
+          -p codex-cli -p codex-exec -p codex-linux-sandbox
+          -p codex-code-mode-host -p codex-rmcp-client
+          --bin codex --bin codex-exec --bin codex-linux-sandbox
+          --bin codex-code-mode-host --bin test_stdio_server
+          --bin test_streamable_http_server
       - name: Check all core targets for an engine qualification
         if: inputs.full_engine == true
         working-directory: ${{ steps.engine.outputs.root }}/codex-rs
