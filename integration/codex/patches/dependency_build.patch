@@ -4875,10 +4875,10 @@ index 6b6537cb9cd7696a0e3402f644c9ef6404a1c08b..464e596ff87e679ac99ab54a2c426a85
   namespace {
   
 diff --git a/pnpm-workspace.yaml b/pnpm-workspace.yaml
-index 376f420d31d49b608b79238c66a694365d14a45b..e58daa9940f8aae5ae8528eacf00fee11891e569 100644
+index 376f420d31d49b608b79238c66a694365d14a45b..e98e40fa317314657674869fb5648180bef81945 100644
 --- a/pnpm-workspace.yaml
 +++ b/pnpm-workspace.yaml
-@@ -1,13 +1,11 @@
+@@ -1,13 +1,12 @@
  packages:
    - codex-cli
 -  - codex-rs/responses-api-proxy/npm
@@ -4889,13 +4889,14 @@ index 376f420d31d49b608b79238c66a694365d14a45b..e58daa9940f8aae5ae8528eacf00fee1
 -
  minimumReleaseAge: 10080
 -minimumReleaseAgeExclude: []
-+# Reviewed fix for GHSA-27r3-jxmh-p828; the age policy still applies to other versions.
++# Reviewed security fixes; the seven-day policy still applies to other versions.
 +minimumReleaseAgeExclude:
 +  - body-parser@2.4.0
++  - fast-uri@3.1.9
  
  blockExoticSubdeps: true
  strictDepBuilds: true
-@@ -15,5 +13,30 @@ trustPolicy: no-downgrade
+@@ -15,5 +14,34 @@ trustPolicy: no-downgrade
  trustPolicyIgnoreAfter: 10080
  trustPolicyExclude: []
  allowBuilds:
@@ -4917,6 +4918,10 @@ index 376f420d31d49b608b79238c66a694365d14a45b..e58daa9940f8aae5ae8528eacf00fee1
 +# load-nyc-config uses yaml.load, which is supported by js-yaml 4 and removes
 +# the obsolete argparse/sprintf-js dependency (GHSA-hp3w-g68c-fv3c).
 +overrides:
++  # Bound EventSource memory and validate SRI algorithm tokens.
++  undici: "7.30.1"
++  # Preserve URI scheme, host, and path semantics during parsing.
++  fast-uri: "3.1.9"
 +  # GHSA-mrhx-c7xc-m3w5 affects the pinned conformance tool too.
 +  zod: "4.6.6"
 +  # Reject trailing bytes after compressed requests (GHSA-27r3-jxmh-p828).
