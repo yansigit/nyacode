@@ -1,0 +1,30 @@
+{
+  "base_revision": "3a88aafe4632364ec30f6c402f68d9d09770a9fc",
+  "working_tree_dirty": true,
+  "report": "live-preparation-probe-2026-10-11.json",
+  "report_sha256": "3121f1e467b124313d816703bdda8aae892c7e9161f0b52791f6ad5e394af8c6",
+  "tested_at_utc": "2026-10-11T18:03:01.489Z",
+  "command": "cargo run -p codex-app-server --example chatgpt_chat_probe -- -c features.chatgpt_chat=true --live --current-account --write-scenario all",
+  "exit_code": 2,
+  "conversation_sends_attempted": 0,
+  "uploads_attempted": 0,
+  "requested_model": null,
+  "resolved_model": null,
+  "integrated_acceptance_run": false,
+  "source_sha256": {
+    "codex-rs/Cargo.toml": "761d5f0d7f74fc151d475a4e3016756894c495925a67a29a2fec721c711e3abd",
+    "codex-rs/Cargo.lock": "aaed989b5febbbc8a4df19688bcc8a1540f2491011a689e0d27f5f31d0a739d0",
+    "codex-rs/rust-toolchain.toml": "570656042681cfd8795403a455baf9a33035331a07db0645e866bbcea89a3d64",
+    "codex-rs/chatgpt-chat/Cargo.toml": "d3c20ad557070430827cc6b88a6cf71f73cbb82a1cc1110361107b63082bc2f3",
+    "codex-rs/chatgpt-chat/src/history.rs": "c50d5ae04e3f1f4c651ae53fd072ad2c93e1ab4c89b9d0eed58de71e2264cb11",
+    "codex-rs/chatgpt-chat/src/lib.rs": "1dc489253dcc6dbe8c310a050709ed0cfa90d08dbede9cd64794fb4b0adfdb92",
+    "codex-rs/chatgpt-chat/src/preparation.rs": "4a1b4a7d4154c0df5d9901e4c9a13751a9a92c0e2ce4507f8a2ddba306451056",
+    "codex-rs/chatgpt-chat/src/probe.rs": "50c3ec4c9743dc66bf26c8d934d5bd0f2f2861b10e96774ca235bc943a4ca168",
+    "codex-rs/chatgpt-chat/src/probe_tests.rs": "abe28a30afd128ecd2efc448adbca307976d32e9d8c9329048fff22fbb693a3c",
+    "codex-rs/chatgpt-chat/src/report.rs": "2db55ad0a74c678e78f24de8f17e921b012f5861ff1452ab876a39b23db9cbf5",
+    "codex-rs/app-server/Cargo.toml": "94d6b1d6ad3ddaeb710ccda9f8ecb0720a0f72ac22d208430385bf213b2591ff",
+    "codex-rs/app-server/examples/chatgpt_chat_probe.rs": "741c664e26f01de8fe977db4cffcb836772bfe4f7f1649ee69ce46836f1291ba",
+    "codex-rs/features/src/lib.rs": "3d53b3f1ac852f610844ef11e5ec374380d09b71ec78fa2345b8c1ce9706f138",
+    "codex-rs/features/src/tests.rs": "4fbf3db867c71026c2662341665f92b432a78fe0e745b15b8191c670614d621f"
+  }
+}

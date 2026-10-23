@@ -1,0 +1,489 @@
+{
+  "version": 1,
+  "date": "2026-10-11",
+  "production_source_commit": "d191219e35e5520c35a5bac96dffe849d88349af",
+  "evidence_method": "Real app-server, real provider inference, real fixture commands, managed pools in .nyacode. No quota rejection injection in these workflows. Saved child ownership, provider/model, command records, pool account labels and exact files determine success.",
+  "verified_binary_sha256": "ad7e8ebaa63e3d4b483879e4b752d58b20b958e7bd4c5b5818da11d22ff5617a",
+  "representative_runs": [
+    {
+      "receipt_name": "antigravity-lifecycle-6.json",
+      "receipt_sha256": "a0a924e1d430c888ab5993bc5ca99c6c205daa14dcbb06ebca1a07eac25dda6c",
+      "result": "passed",
+      "apps_enabled": false,
+      "parent_provider": "antigravity",
+      "parent_model": "claude-sonnet-4-6",
+      "children": [
+        {
+          "provider": "opencode-go",
+          "model": "gpt-6-luna"
+        },
+        {
+          "provider": "opencode-go",
+          "model": "glm-5.3"
+        }
+      ],
+      "accounts": [
+        {
+          "provider": "antigravity",
+          "model": "claude-sonnet-4-6",
+          "account": "adn"
+        },
+        {
+          "provider": "opencode-go",
+          "model": "gpt-6-luna",
+          "account": "opencode_go_1"
+        },
+        {
+          "provider": "opencode-go",
+          "model": "glm-5.3",
+          "account": "opencode_go_1"
+        }
+      ],
+      "checks": [
+        "provider_model_routing",
+        "fresh_children",
+        "workspace_inheritance",
+        "chained_tools",
+        "failed_tool_recovery",
+        "followup_task",
+        "parent_aggregation",
+        "exactly_once_fixture_writes",
+        "child_approval_decline",
+        "child_approval_accept",
+        "child_turn_interruption",
+        "child_background_terminal_termination"
+      ],
+      "workspace": "/tmp/nyacode-multiagent-iv15bn99",
+      "thread": "01a129cb-6455-7dd1-bab1-695091ecaacb",
+      "binary_sha256": "ad7e8ebaa63e3d4b483879e4b752d58b20b958e7bd4c5b5818da11d22ff5617a"
+    },
+    {
+      "receipt_name": "cursor-8.json",
+      "receipt_sha256": "0f25c5d4b9ec038c9c9c4a4fc72c1005d16c30b8841caaf6b54fff4a0280c96a",
+      "result": "passed",
+      "apps_enabled": false,
+      "parent_provider": "cursor",
+      "parent_model": "gpt-5.6-luna-none",
+      "children": [
+        {
+          "provider": "antigravity",
+          "model": "claude-sonnet-4-6"
+        },
+        {
+          "provider": "opencode-go",
+          "model": "glm-5.3"
+        }
+      ],
+      "accounts": [
+        {
+          "provider": "cursor",
+          "model": "gpt-5.6-luna-none",
+          "account": "house"
+        },
+        {
+          "provider": "antigravity",
+          "model": "claude-sonnet-4-6",
+          "account": "adn"
+        },
+        {
+          "provider": "opencode-go",
+          "model": "glm-5.3",
+          "account": "opencode_go_1"
+        }
+      ],
+      "checks": [
+        "provider_model_routing",
+        "fresh_children",
+        "workspace_inheritance",
+        "chained_tools",
+        "failed_tool_recovery",
+        "followup_task",
+        "parent_aggregation",
+        "exactly_once_fixture_writes"
+      ],
+      "workspace": "/tmp/nyacode-multiagent-obu1e3im",
+      "thread": "01a129bd-9bb0-7a62-846a-cc9619c3e51d",
+      "binary_sha256": "ad7e8ebaa63e3d4b483879e4b752d58b20b958e7bd4c5b5818da11d22ff5617a"
+    },
+    {
+      "receipt_name": "go-10.json",
+      "receipt_sha256": "0e011963cd6f56a8c6bedfc9715c1ed3847be4090b869e0f4d7bbd41c781d4de",
+      "result": "passed",
+      "apps_enabled": false,
+      "parent_provider": "opencode-go",
+      "parent_model": "gpt-6-luna",
+      "children": [
+        {
+          "provider": "antigravity",
+          "model": "gemini-3.5-flash-lite"
+        },
+        {
+          "provider": "opencode-go",
+          "model": "minimax-m3"
+        }
+      ],
+      "accounts": [
+        {
+          "provider": "opencode-go",
+          "model": "gpt-6-luna",
+          "account": "opencode_go_1"
+        },
+        {
+          "provider": "antigravity",
+          "model": "gemini-3.5-flash-lite",
+          "account": "adn"
+        },
+        {
+          "provider": "opencode-go",
+          "model": "minimax-m3",
+          "account": "opencode_go_1"
+        }
+      ],
+      "checks": [
+        "provider_model_routing",
+        "fresh_children",
+        "workspace_inheritance",
+        "chained_tools",
+        "failed_tool_recovery",
+        "followup_task",
+        "parent_aggregation",
+        "exactly_once_fixture_writes"
+      ],
+      "workspace": "/tmp/nyacode-multiagent-ad3onomp",
+      "thread": "01a129c7-88b1-7a70-9e7d-59bb8e09abd6",
+      "binary_sha256": "ad7e8ebaa63e3d4b483879e4b752d58b20b958e7bd4c5b5818da11d22ff5617a"
+    }
+  ],
+  "earlier_attempts": [
+    {
+      "receipt_name": "antigravity-3.json",
+      "receipt_sha256": "c781506b1e013f70b6617a5a4a16b87e727ed9c1831ef1eaa1bbecdae5ff0000",
+      "result": "passed",
+      "apps_enabled": false,
+      "parent_provider": "antigravity",
+      "parent_model": "claude-sonnet-4-6",
+      "children": [
+        {
+          "provider": "opencode-go",
+          "model": "gpt-6-luna"
+        },
+        {
+          "provider": "opencode-go",
+          "model": "glm-5.3"
+        }
+      ],
+      "accounts": [
+        {
+          "provider": "antigravity",
+          "model": "claude-sonnet-4-6",
+          "account": "adn"
+        },
+        {
+          "provider": "opencode-go",
+          "model": "gpt-6-luna",
+          "account": "opencode_go_1"
+        },
+        {
+          "provider": "opencode-go",
+          "model": "glm-5.3",
+          "account": "opencode_go_1"
+        }
+      ],
+      "checks": [
+        "provider_model_routing",
+        "fresh_children",
+        "workspace_inheritance",
+        "chained_tools",
+        "failed_tool_recovery",
+        "followup_task",
+        "parent_aggregation",
+        "exactly_once_fixture_writes"
+      ],
+      "workspace": "/tmp/nyacode-multiagent-saue97re",
+      "thread": "01a129c3-c701-7f93-a9b4-be148bf6680d",
+      "binary_sha256": "ad7e8ebaa63e3d4b483879e4b752d58b20b958e7bd4c5b5818da11d22ff5617a",
+      "assessment": "Additional successful workflow; use the representative runs for final acceptance scope."
+    },
+    {
+      "receipt_name": "antigravity-lifecycle-2.json",
+      "receipt_sha256": "4278a648159ddc578a542d3d5dfa9fdd310b08b716115fc72f9909689909e944",
+      "result": "failed",
+      "apps_enabled": false,
+      "parent_provider": "antigravity",
+      "parent_model": "gemini-3.5-flash-lite",
+      "reason": "child command counts did not match chained tools and follow-up",
+      "workspace": "/tmp/nyacode-multiagent-xbalunv2",
+      "thread": "01a129bd-9bad-77c0-9096-111510c68538",
+      "binary_sha256": "ad7e8ebaa63e3d4b483879e4b752d58b20b958e7bd4c5b5818da11d22ff5617a",
+      "assessment": "Model failed delegation instructions, ran child work itself, and rewrote input. Children also had shell quoting/native timeout failures; fixture rejected the claimed success."
+    },
+    {
+      "receipt_name": "antigravity-lifecycle-4.json",
+      "receipt_sha256": "f8fe6bcf1df01d938a1cf0f4aa7f7dd2ed933ffd160c459ceb5e8887e4e06c0c",
+      "result": "failed",
+      "apps_enabled": false,
+      "parent_provider": "antigravity",
+      "parent_model": "claude-sonnet-4-6",
+      "reason": "child approval lacks recorded command evidence",
+      "workspace": "/tmp/nyacode-multiagent-iga76y8k",
+      "thread": "01a129c5-02ea-7eb2-b06d-fe4c21d4d0c3",
+      "binary_sha256": "ad7e8ebaa63e3d4b483879e4b752d58b20b958e7bd4c5b5818da11d22ff5617a",
+      "assessment": "Harness assumption corrected: approval denial occurs before process creation and need not create a commandExecution item. Verification now uses the exact child-scoped approval RPC and absence of execution/write."
+    },
+    {
+      "receipt_name": "antigravity-lifecycle-5.json",
+      "receipt_sha256": "6e07e474590db48d72d3e24163b3ec55ffe32782aa0433840e0104c0932925c6",
+      "result": "failed",
+      "apps_enabled": false,
+      "parent_provider": "antigravity",
+      "parent_model": "claude-sonnet-4-6",
+      "reason": "interrupted child command completed its delayed write",
+      "workspace": "/tmp/nyacode-multiagent-b1kvp4il",
+      "thread": "01a129c7-88b7-7ba1-accd-c015c74bdfbc",
+      "binary_sha256": "ad7e8ebaa63e3d4b483879e4b752d58b20b958e7bd4c5b5818da11d22ff5617a",
+      "assessment": "Harness assumption corrected: resumable terminals deliberately survive turn interruption. The final lifecycle test separately terminates the exact terminal and waits past its delayed-write deadline."
+    },
+    {
+      "receipt_name": "antigravity-lifecycle.json",
+      "receipt_sha256": "41440905f89e82e8c9387a5491cf3bf6f494852b05caabbbd3730f5ede2ee374",
+      "result": "failed",
+      "apps_enabled": false,
+      "parent_provider": "antigravity",
+      "parent_model": "gemini-3.5-flash-lite",
+      "reason": "parent turn failed: stream disconnected before completion: provider checkpoint error: account attempt was interrupted after dispatch; inspect its effects and explicitly branch the thread before continuing",
+      "workspace": "/tmp/nyacode-multiagent-m5sou48u",
+      "thread": "01a129b2-f318-7270-a7d0-6b13a22ef8d8",
+      "binary_sha256": "a45834aa78a80764cd270b75fd7927d3f1ea3fc3103edffe6ae821238264e999",
+      "assessment": "Fixed: native mailbox preemption left the previous attempt uncertain."
+    },
+    {
+      "receipt_name": "cursor-2.json",
+      "receipt_sha256": "a2e62aab13d62a4f23ff632a76f23cf24c814f5eaf98e571a94b9977859c8082",
+      "result": "failed",
+      "parent_provider": "cursor",
+      "parent_model": "gpt-5.6-luna-none",
+      "reason": "expected exactly two child threads",
+      "assessment": "Fixed during plaintext agent-message integration; no successful two-child workflow."
+    },
+    {
+      "receipt_name": "cursor-3.json",
+      "receipt_sha256": "bb81da27e3d2e79dbc8ca47f29f50194e641098ab7afc5123ae675301708c184",
+      "result": "failed",
+      "parent_provider": "cursor",
+      "parent_model": "gpt-5.6-luna-none",
+      "reason": "child antigravity/claude-sonnet-4-6: stream disconnected before completion: native provider requires a nonempty plaintext agent message; encrypted agent messages cannot cross this transport",
+      "workspace": "/tmp/nyacode-multiagent-3wu0lblz",
+      "thread": "01a1299b-f008-7433-acb4-eee09e3454ce",
+      "assessment": "Fixed: native adapter now declares plaintext argument metadata and translates plaintext agent messages."
+    },
+    {
+      "receipt_name": "cursor-4.json",
+      "receipt_sha256": "0bebca0840f1cecef432bb7ac45923f7b726d89589f096c550888d7fe77119a8",
+      "result": "failed",
+      "parent_provider": "cursor",
+      "parent_model": "gpt-5.6-luna-none",
+      "reason": "child antigravity/claude-sonnet-4-6: stream disconnected before completion: unsupported provider operation: Antigravity tool schema keyword $ref",
+      "workspace": "/tmp/nyacode-multiagent-ft9hixia",
+      "thread": "01a129a5-747a-7453-8f3f-f37d9d500c98",
+      "binary_sha256": "fd0930f76e07915c100550c29153b7a56b0c529b4a9bee723b92a573e5ff2046",
+      "assessment": "Fixed: bounded local schema references are expanded for Antigravity."
+    },
+    {
+      "receipt_name": "cursor-5.json",
+      "receipt_sha256": "501c90775e3b99c6dfb462f4d4d47a11cae867b2c95caf52e9843f67e78f26a7",
+      "result": "failed",
+      "parent_provider": "cursor",
+      "parent_model": "gpt-5.6-luna-none",
+      "reason": "child antigravity/claude-sonnet-4-6: stream disconnected before completion: unsupported provider operation: Antigravity tool schema keyword additionalProperties",
+      "workspace": "/tmp/nyacode-multiagent-mt37jwsq",
+      "thread": "01a129ae-28f1-7362-bdb5-f0d44e4f771f",
+      "binary_sha256": "a45834aa78a80764cd270b75fd7927d3f1ea3fc3103edffe6ae821238264e999",
+      "assessment": "Remaining compatibility gap: connected app schemas with schema-valued additionalProperties are refused. Later representative runs explicitly disable apps/plugins."
+    },
+    {
+      "receipt_name": "cursor-6.json",
+      "receipt_sha256": "4683a833467cd95de8f9439ea5ea25d89e9dcedc6ff342c7eaf1c85b1389d7de",
+      "result": "failed",
+      "apps_enabled": false,
+      "parent_provider": "cursor",
+      "parent_model": "gpt-5.6-luna-none",
+      "reason": "child opencode-go/glm-5.3: stream disconnected before completion: provider checkpoint error: account attempt was interrupted after dispatch; inspect its effects and explicitly branch the thread before continuing",
+      "workspace": "/tmp/nyacode-multiagent-2hsdhg4b",
+      "thread": "01a129b1-cb02-71a3-b0b4-38bed0d22d53",
+      "binary_sha256": "a45834aa78a80764cd270b75fd7927d3f1ea3fc3103edffe6ae821238264e999",
+      "assessment": "Fixed: incoming agent mail could preempt a native request and leave uncertain history. Native mail now waits for durable completion. Follow-up timing also requires completed child status."
+    },
+    {
+      "receipt_name": "cursor-7.json",
+      "receipt_sha256": "1c2921d549982299123f8c1d8a1cfefbef103eccfc4448068a64e18593ad0642",
+      "result": "failed",
+      "apps_enabled": false,
+      "parent_provider": "cursor",
+      "parent_model": "gpt-5.6-luna-none",
+      "reason": "fixture output or exactly-once audit mismatch: parent.txt",
+      "workspace": "/tmp/nyacode-multiagent-5gm5vxmu",
+      "thread": "01a129b3-a66f-7d33-9f7b-653efff31e49",
+      "binary_sha256": "a45834aa78a80764cd270b75fd7927d3f1ea3fc3103edffe6ae821238264e999",
+      "assessment": "Remaining input boundary: Cursor native shell supplied a timeout above the host maximum. The representative fixture requests exec_command; host limits were retained."
+    },
+    {
+      "receipt_name": "cursor.json",
+      "receipt_sha256": "c9e447b499b1e4e48cb8bb23540a542732717e5cfaa2e13c0a4aaf9c3f2ea23e",
+      "result": "failed",
+      "parent_provider": "cursor",
+      "parent_model": "gpt-5.6-luna-none",
+      "reason": "parent turn did not complete",
+      "assessment": "Fixed: local Cursor catalog serialization cap rejected the collaboration catalog."
+    },
+    {
+      "receipt_name": "go-2.json",
+      "receipt_sha256": "9aca1f2d5d283941fbaaa71dbe4139f4c3f5879ad9afa37961f10ee793d289ad",
+      "result": "failed",
+      "parent_provider": "opencode-go",
+      "parent_model": "gpt-6-luna",
+      "reason": "expected exactly two child threads",
+      "assessment": "Fixed during plaintext agent-message integration; no successful two-child workflow."
+    },
+    {
+      "receipt_name": "go-3.json",
+      "receipt_sha256": "352f7cdc4cf087ebd9d3fe0552910b24ba61aa9b49659850f8841eac8bcf15f3",
+      "result": "failed",
+      "parent_provider": "opencode-go",
+      "parent_model": "gpt-6-luna",
+      "reason": "child antigravity/gemini-3.5-flash-lite: stream disconnected before completion: native provider requires a nonempty plaintext agent message; encrypted agent messages cannot cross this transport",
+      "workspace": "/tmp/nyacode-multiagent-8norovvj",
+      "thread": "01a1299b-f006-7573-9ad1-9f3dc14d9939",
+      "assessment": "Fixed: native adapter now declares plaintext argument metadata and translates plaintext agent messages."
+    },
+    {
+      "receipt_name": "go-4.json",
+      "receipt_sha256": "c50d4f1e13c177f2bbb6bca58ccb449abc349d66a22cf2609b259808b7a49507",
+      "result": "failed",
+      "parent_provider": "opencode-go",
+      "parent_model": "gpt-6-luna",
+      "reason": "child antigravity/gemini-3.5-flash-lite: stream disconnected before completion: unsupported provider operation: Antigravity tool schema keyword $ref",
+      "workspace": "/tmp/nyacode-multiagent-oe3zk2m0",
+      "thread": "01a129a5-747a-7572-b6e4-6d401afd5e73",
+      "binary_sha256": "fd0930f76e07915c100550c29153b7a56b0c529b4a9bee723b92a573e5ff2046",
+      "assessment": "Fixed: bounded local schema references are expanded for Antigravity."
+    },
+    {
+      "receipt_name": "go-5.json",
+      "receipt_sha256": "55fe01623b7ee5853a50b17f717c41d4e95086ef777a3c4d832ee79cfdb12582",
+      "result": "failed",
+      "parent_provider": "opencode-go",
+      "parent_model": "gpt-6-luna",
+      "reason": "child antigravity/gemini-3.5-flash-lite: stream disconnected before completion: unsupported provider operation: Antigravity tool schema keyword additionalProperties",
+      "workspace": "/tmp/nyacode-multiagent-mgqy951w",
+      "thread": "01a129ae-2948-7fe0-b681-ca589439fef0",
+      "binary_sha256": "a45834aa78a80764cd270b75fd7927d3f1ea3fc3103edffe6ae821238264e999",
+      "assessment": "Remaining compatibility gap: connected app schemas with schema-valued additionalProperties are refused. Later representative runs explicitly disable apps/plugins."
+    },
+    {
+      "receipt_name": "go-6.json",
+      "receipt_sha256": "3a90283ed21edc4106cc30df277621eff97358170ee04b5dec43f1e66d2b92e7",
+      "result": "passed",
+      "apps_enabled": false,
+      "parent_provider": "opencode-go",
+      "parent_model": "gpt-6-luna",
+      "children": [
+        {
+          "provider": "antigravity",
+          "model": "gemini-3.5-flash-lite"
+        },
+        {
+          "provider": "opencode-go",
+          "model": "minimax-m3"
+        }
+      ],
+      "accounts": [
+        {
+          "provider": "opencode-go",
+          "model": "gpt-6-luna",
+          "account": "opencode_go_1"
+        },
+        {
+          "provider": "antigravity",
+          "model": "gemini-3.5-flash-lite",
+          "account": "adn"
+        },
+        {
+          "provider": "opencode-go",
+          "model": "minimax-m3",
+          "account": "opencode_go_1"
+        }
+      ],
+      "checks": [
+        "provider_model_routing",
+        "fresh_children",
+        "workspace_inheritance",
+        "chained_tools",
+        "failed_tool_recovery",
+        "followup_task",
+        "parent_aggregation",
+        "exactly_once_fixture_writes"
+      ],
+      "workspace": "/tmp/nyacode-multiagent-84rhjjxk",
+      "thread": "01a129b1-cb04-7811-9fdb-e68fb9e8d1f8",
+      "binary_sha256": "a45834aa78a80764cd270b75fd7927d3f1ea3fc3103edffe6ae821238264e999",
+      "assessment": "Additional successful workflow; use the representative runs for final acceptance scope."
+    },
+    {
+      "receipt_name": "go-7.json",
+      "receipt_sha256": "7ae57d0949600311ce3183dbc24080d82eee50bfad81d824fe4ca4df09e46f2e",
+      "result": "failed",
+      "apps_enabled": false,
+      "parent_provider": "opencode-go",
+      "parent_model": "gpt-6-luna",
+      "reason": "fixture output or exactly-once audit mismatch: parent.txt",
+      "workspace": "/tmp/nyacode-multiagent-mn6oy8wy",
+      "thread": "01a129c0-234c-7e03-9812-cfda5be40f92",
+      "binary_sha256": "ad7e8ebaa63e3d4b483879e4b752d58b20b958e7bd4c5b5818da11d22ff5617a",
+      "assessment": "Model mangled nested shell quoting. The harness now writes fixture scripts and supplies simple commands."
+    },
+    {
+      "receipt_name": "go-9.json",
+      "receipt_sha256": "2f6f0a9adf51ec33ea5c017d39bc1e63182354a8f608ff2d0681fd24e9f1ad03",
+      "result": "failed",
+      "apps_enabled": false,
+      "parent_provider": "opencode-go",
+      "parent_model": "gpt-6-luna",
+      "reason": "fixture output or exactly-once audit mismatch: left.txt",
+      "workspace": "/tmp/nyacode-multiagent-9ia3pdmy",
+      "thread": "01a129c5-3990-79d1-b6b7-31c06b5fc31a",
+      "binary_sha256": "ad7e8ebaa63e3d4b483879e4b752d58b20b958e7bd4c5b5818da11d22ff5617a",
+      "assessment": "Model issued dependent commands in one response, allowing parallel execution. The fixture now explicitly requires awaiting the first result."
+    },
+    {
+      "receipt_name": "go-lifecycle-8.json",
+      "receipt_sha256": "c0c685fd79f59333267817acc1a38a04270cdf5fc5523598aa7866219f31ac8c",
+      "result": "failed",
+      "apps_enabled": false,
+      "parent_provider": "opencode-go",
+      "parent_model": "gpt-6-luna",
+      "reason": "child command counts did not match chained tools and follow-up",
+      "workspace": "/tmp/nyacode-multiagent-vk1bau68",
+      "thread": "01a129c3-c705-77a2-a832-15871b29e5d3",
+      "binary_sha256": "ad7e8ebaa63e3d4b483879e4b752d58b20b958e7bd4c5b5818da11d22ff5617a",
+      "assessment": "Model mistyped a fixture path and retried. Correct output did not satisfy the exact command-count assertion."
+    },
+    {
+      "receipt_name": "go.json",
+      "receipt_sha256": "9aca1f2d5d283941fbaaa71dbe4139f4c3f5879ad9afa37961f10ee793d289ad",
+      "result": "failed",
+      "parent_provider": "opencode-go",
+      "parent_model": "gpt-6-luna",
+      "reason": "expected exactly two child threads",
+      "assessment": "Fixed: Responses tools lacked explicit strict=false, causing optional spawn fields to be supplied incorrectly."
+    }
+  ],
+  "verification_gaps": [
+    "No combined live account failover during the complex multiagent workflow. Separate prior live pool acceptance used test-only conclusive rejection injection; new parallel-tool handoff coverage is deterministic.",
+    "Native Claude has no new two-account complex multiagent run. Antigravity Claude is a different route.",
+    "Connected apps/plugins were disabled in successful workflows. Antigravity still refuses some app schemas rather than weaken their constraints.",
+    "Cursor mid-turn account handoff, unverified signature portability, encrypted agent messages and cross-provider full-history forks remain explicit refusals.",
+    "Representative model runs passed after fixture clarification; failed model attempts are retained and do not establish universal model instruction-following reliability.",
+    "The cancellation case separates turn interruption from explicit background terminal termination. Earlier restart checks do not establish that turn interruption alone kills resumable processes.",
+    "No exhaustive model/tool/platform matrix or remote hosted CI run."
+  ]
+}

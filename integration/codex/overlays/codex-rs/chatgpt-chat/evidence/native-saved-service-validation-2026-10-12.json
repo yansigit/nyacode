@@ -1,0 +1,82 @@
+{
+  "version": 1,
+  "source_manifest": "native-saved-service-2026-10-12-source.json",
+  "live_report": "native-saved-service-2026-10-12-report.json",
+  "live_saved_service_passed": true,
+  "native_transport_gate_previously_passed": true,
+  "integrated_release_gate_passed": false,
+  "feature_stage": "under_development",
+  "feature_default_enabled": false,
+  "checks": [
+    {
+      "name": "app_server_unit_tests",
+      "passed": true,
+      "tests": 400,
+      "log_sha256": "f0434ec9c737627538ad1e93450d50548989a33d1b7650c89a46c2b55b84b765"
+    },
+    {
+      "name": "native_chat_unit_tests",
+      "passed": true,
+      "tests": 157,
+      "log_sha256": "5f6da383f757be552c80e17d3432f5f7dd6cf4f3ac0b5ea0a2e37f60e2406f1c"
+    },
+    {
+      "name": "probe_cli_tests",
+      "passed": true,
+      "tests": 5,
+      "log_sha256": "0147809b6446c5906e911a32a27963a13e01405fa790d86fff44029f6bbc7178"
+    },
+    {
+      "name": "app_server_service_bazel_tests",
+      "passed": true,
+      "tests": 13,
+      "log_sha256": "d222169489634f9e2e87f56c136202f84488899a19cde95778c1f9ab8865251f"
+    },
+    {
+      "name": "native_chat_bazel_tests",
+      "passed": true,
+      "tests": 157,
+      "log_sha256": "da1a03f0fe96e304a418e3eb5cb2cc8dc03adae4770cbaf3f6970b5cf15b672e"
+    },
+    {
+      "name": "app_server_clippy",
+      "passed": true,
+      "tests": null,
+      "log_sha256": "88e3fe80e6c9b497f6eeaa6ab412b5469b83af0f8435292c99eff7d185cd3162"
+    },
+    {
+      "name": "native_chat_clippy",
+      "passed": true,
+      "tests": null,
+      "log_sha256": "cc8153a9da3a708416c2b4f2ea0b511f33ff7604d9032366dff72cfb51618082"
+    },
+    {
+      "name": "probe_build",
+      "passed": true,
+      "tests": null,
+      "log_sha256": "579ab731590ae456050a71d6a46986ac052a3f584d268ecf45e9b6cac05ee370"
+    }
+  ],
+  "coverage": [
+    "async durable journal checkpoint before native message POST",
+    "unknown acceptance remains pending after local cancellation",
+    "accepted user message preserved after generation failure and draft edits",
+    "independent owner lease takeover fences old callbacks and forbids resend",
+    "same conversation overlap rejected while independent local turns remain cancellable",
+    "managed auth refresh and account or principal switches revoke scopes",
+    "feature disable revokes session immediately and retains saved drafts",
+    "trusted origin check precedes account data or local file access",
+    "missing and changed source files rejected before native upload",
+    "validated attachment metadata and digests persisted without attachment bytes",
+    "read-only native session remains available when recovery storage fails"
+  ],
+  "remaining": [
+    "experimental RPC registration, schemas and SDK bindings",
+    "temporary in-memory service and persistence audit",
+    "conversation/message cache migration",
+    "terminal surfaces and composer integration",
+    "embedded and ordinary daemon live integration acceptance",
+    "confirmed native server cancellation protocol evidence",
+    "supported-platform native transport builds"
+  ]
+}

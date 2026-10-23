@@ -1,0 +1,28 @@
+{
+  "version": 1,
+  "status": "public-script contract research; native cancellation not implemented or live-verified",
+  "scripts_sha256": {
+    "8b34dbc2-oy2s1bd3byon2h8k.js": "7d6d30831cd1b598f1f313c041a4b7b6437102cf33575379646f5d4b3bcff4ac",
+    "conversation-small-lvkutckbb0elz96z.js": "eebd1388ad1aa96590daea4da561f0720b0f1880e86ce590a15a7ed8b39f2c80"
+  },
+  "observations": [
+    "The submission runtime retains the initial preparation conduit token in stopConduitToken when sending. It is distinct from the response-issued token used for stream resume.",
+    "The stop handler POSTs /backend-api/stop_conversation with conversation_id and exclude_async_types. The latter is either [pro_mode] or [] depending on service feature state.",
+    "The stop handler adds x-conduit-token only when the retained stop token exists, and may add x-oai-turn-trace-id.",
+    "The handler awaits the HTTP operation, then locally aborts the request. It does not expose an explicit server-cancelled response schema in this function."
+  ],
+  "unverified": [
+    "Native HTTP acknowledgement schema",
+    "An authoritative indication separating server cancellation from naturally completed generation",
+    "Exact capability and exclusion behavior for models and asynchronous modes"
+  ],
+  "constraints": [
+    "Do not call this on personal history or another operation; use an explicitly created test fixture.",
+    "Do not infer confirmed server cancellation from a closed local stream or HTTP success.",
+    "No imported browser token or cookie is needed or authorized by this research."
+  ],
+  "primary_asset_urls": [
+    "https://chatgpt.com/cdn/assets/8b34dbc2-oy2s1bd3byon2h8k.js",
+    "https://chatgpt.com/cdn/assets/conversation-small-lvkutckbb0elz96z.js"
+  ]
+}

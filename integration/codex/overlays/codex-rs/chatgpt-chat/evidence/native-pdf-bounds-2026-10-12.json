@@ -1,0 +1,61 @@
+{
+  "version": 1,
+  "checked_at_utc": "2026-10-12T07:39:39.088360+00:00",
+  "corrects": "native-pdf-resource-research-2026-10-12.json",
+  "correction": "Installed lopdf 0.45.0 propagates object-stream errors in the strict, unencrypted load path. The earlier record incorrectly generalized the encrypted/lenient error-discarding path. Registry source was matched to the Cargo.lock archive checksum. Document-wide allocation and predictor-row limits were still absent.",
+  "parser": "lopdf 0.45.0",
+  "interpreter": "wasmi 2.0.0",
+  "interpreter_revision": "2970aa871cc1001b57b267ccecdcd1e42306199e",
+  "implementation": "Original Rust validator compiled to import-free Wasm, executed by a bounded native interpreter. No browser, JavaScript, WASI, external worker, or host imports.",
+  "limits": {
+    "input_bytes": 33554432,
+    "linear_memory_bytes": 134217728,
+    "value_stack_bytes": 131072,
+    "call_depth": 256,
+    "fuel_units": 200000000,
+    "fuel_quantum": 100000,
+    "elapsed_seconds": 5,
+    "per_stream_decompressed_bytes": 8388608
+  },
+  "fuel_growth_handling": "The limiter allows MemoryError/TableError::OutOfFuel to yield and resume; actual growth failures trap. StoreLimits trap_on_grow_failure alone incorrectly converts a required-fuel yield into a terminal allocation failure.",
+  "artifact_sha256": "aad790fb295c9072897e252d6ef268190947e0c63c7bd8b0c28be885162b50ff",
+  "sources": [
+    {
+      "url": "https://github.com/J-F-Liu/lopdf/issues/569",
+      "state_at_check": "open"
+    },
+    {
+      "url": "https://github.com/J-F-Liu/lopdf/issues/563",
+      "state_at_check": "open"
+    },
+    {
+      "url": "https://github.com/wasmi-labs/wasmi/blob/2970aa871cc1001b57b267ccecdcd1e42306199e/crates/wasmi/src/limiter.rs"
+    },
+    {
+      "url": "https://github.com/wasmi-labs/wasmi/blob/2970aa871cc1001b57b267ccecdcd1e42306199e/crates/core/src/memory/mod.rs"
+    },
+    {
+      "url": "https://docs.rs/wasmi/2.0.0/wasmi/enum.CompilationMode.html"
+    },
+    {
+      "url": "https://docs.rs/wasmi/2.0.0/wasmi/enum.TypedResumableCall.html"
+    }
+  ],
+  "checks": {
+    "native_unit_tests": 179,
+    "failed": 0,
+    "reproducible_module": true,
+    "actual_pdf_predictor_allocation_limited": true,
+    "valid_large_pdf_after_fuel_yields": true,
+    "native_test_log_sha256": "a36dc7b26d1b601f1d3e898570d7d6b1ba3bfe89f6184c6348cb303f8c9cc2f8"
+  },
+  "github_access": "gh CLI",
+  "browser_used": false,
+  "new_live_upload_acceptance": false,
+  "integrated_release_gate_passed": false,
+  "parser_registry_vcs": {
+    "revision": "1e3d646ca249ebf1a6ff479278c07e9c0f9377a8",
+    "dirty_at_package": true,
+    "authority": "Cargo.lock crate archive checksum; repository commit alone does not reproduce a dirty packaged source"
+  }
+}

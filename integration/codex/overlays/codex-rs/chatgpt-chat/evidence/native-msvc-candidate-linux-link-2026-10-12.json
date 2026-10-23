@@ -1,0 +1,28 @@
+{
+  "version": 1,
+  "recorded_at_utc": "2026-10-12T11:28:43.768239+00:00",
+  "toolchain": "Rust 1.95.0",
+  "llvm": "0.8.24",
+  "target": "x86_64-unknown-linux-gnu",
+  "build_passed": true,
+  "runtime_tests_at_this_checkpoint": false,
+  "elapsed_seconds": 2607.699,
+  "actions": 12817,
+  "source_sha256": {
+    "MODULE.bazel": "6bd739d70e9453eb6c42d701c3b6714952efa88c3763c812442fd448c58d0d0f",
+    "MODULE.bazel.lock": "ea44fba0f791060c8049bffc219be2d08b86816e681f2f594af1936ba4070d21",
+    "patches/llvm-0.8.24.patch": "1c729c4e82194b3b07808249adb10050f454a156bf0ed3fa78ad1d5af71c2c61",
+    "patches/windows-support-0.4.1.patch": "dac7c792ee3ed7c6a46bb91bcdcf6f0fe361958548052a2826c6967f84c5c0f9",
+    "patches/btls-sys_native_tools.patch": "7d5ef3bb940ec18ebba186689e8179e1e70a59b6bff7a58fdc4a3a84a3383c57",
+    "bazel/toolchains/browser_chat/BUILD.bazel": "4fa7322d51a0c5cf76432eb2e5f4969c654cb2cd9514d42327342428ed801f0e",
+    "bazel/toolchains/browser_chat/toolchain.cmake": "cbb06201f37a370f340b3988cedd7bd44545cc08286c0190225765f0926b10ad",
+    "codex-rs/Cargo.lock": "e9d408091ec7826c25edc1bcbedc147757b2ee9a0e6782e4c327262b0fd2007e"
+  },
+  "bazelrc_sha256_at_build_start": "cdbd41cb47ae1ed8c77526e90af3c5a236ea3e2b03af1341597768cdde795dba",
+  "configuration_note": "The final candidate additionally disables dynamic_link_msvcrt for its static MSVC CRT configuration. Follow-up matrix checks use that candidate configuration.",
+  "build_log_sha256": "bd7a4857addc9a8b1379afae8ef1d18b7fa0eaea96ea693a521bf63872d4e624",
+  "production_toolchain_changed": false,
+  "microsoft_license_acceptance_asserted": false,
+  "microsoft_repositories_materialized": false,
+  "integrated_gate_passed": false
+}

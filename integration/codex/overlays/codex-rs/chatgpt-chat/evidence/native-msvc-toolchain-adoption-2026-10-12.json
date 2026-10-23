@@ -1,0 +1,52 @@
+{
+  "version": 1,
+  "recorded_at_utc": "2026-10-12T22:32:33.054173+00:00",
+  "baseline_revision": "3a88aafe4632364ec30f6c402f68d9d09770a9fc",
+  "production_toolchain_changed": true,
+  "rust": "1.95.0",
+  "llvm": "0.8.24",
+  "microsoft_license_acceptance_asserted": true,
+  "acceptance_basis": "User explicitly accepted both Microsoft Visual Studio and Windows SDK licenses in the conversation before the MSVC build.",
+  "prior_working_tree_preserved": true,
+  "base_sha256": {
+    ".bazelrc": "cdbd41cb47ae1ed8c77526e90af3c5a236ea3e2b03af1341597768cdde795dba",
+    "MODULE.bazel": "70df789e964480007798d5c15b2b4af882c9429f2faf4f86b9549fcb7deb250e",
+    "MODULE.bazel.lock": "0890a56a06fe4edfae5de83f9abf16fbf5aa2c63ab27a43813a033fbd03cf0e2",
+    "patches/BUILD.bazel": "bf190399faa15f53a8ea0c622b3e25cba949cd893872a2b038b55f1ebc6671fc",
+    "bazel/toolchains/browser_chat/toolchain.cmake": "cbb06201f37a370f340b3988cedd7bd44545cc08286c0190225765f0926b10ad"
+  },
+  "adopted_sha256": {
+    ".bazelrc": "b4dd2bd74ec14e80ee211a53bdb1b8eebf0337462e624093fc5ea4a05eb34519",
+    "MODULE.bazel": "7ea181788097b06d3f4e6a572a7ac38645403d6da26a13843d99d7644c8b874e",
+    "MODULE.bazel.lock": "ea44fba0f791060c8049bffc219be2d08b86816e681f2f594af1936ba4070d21",
+    "patches/BUILD.bazel": "c12d2e897dd760803f50ab9b122df9117ba006eafc1f35421e3e5b7648a396d3",
+    "bazel/toolchains/browser_chat/toolchain.cmake": "404eb87bd886ee10aabc6aa30dc3badeb6d88648485bc5d020cc28276797ef5e",
+    "patches/aws-lc-5.1.0-msvc-driver.patch": "ce37e38047ba4d4e1d3f95da7f9d6b28678cb0d5d1d6f10526e966eff25cb85d",
+    "patches/btls-sys_msvc_bindgen_driver.patch": "55b4bae5c363de2075056cd62629802df597633732e27c52e8e3823da8e87322",
+    "patches/btls-sys_msvc_compatibility_version.patch": "76933db5128494459a88a17775a3de83880bb5355baec829f94a079e04f9120d",
+    "patches/llvm-0.8.24-relocatable-msvc-vfs.patch": "60790bbf78a53c18044288a8efa511bc1f740a89f9b0131a89c43dfe2117339e",
+    "patches/llvm-0.8.24.patch": "1c729c4e82194b3b07808249adb10050f454a156bf0ed3fa78ad1d5af71c2c61",
+    "patches/ring_msvc_declared_clang.patch": "aadcd1e835d831e857507d4a957876c43ce07a11b1caffb4853acec138511d13",
+    "patches/rules_cc-0.2.25-grep-includes.patch": "fba33bddfc411d2265d291a0c06b7fd8a63ebf421633c4d629eb9bba0d9f5253",
+    "patches/rules_rust_msvc_build_script_paths.patch": "df2adba4e98d41fb8b1ecbb5539bf3f54f35f5784c08e82a0eb2340c5bb731bf",
+    "patches/rules_rust_msvc_linker_paths.patch": "adfb8b786224e1b07c229c1cc4ce9fcce9c9941ef574fb14e73b766fe313a8d9",
+    "patches/windows-support-0.4.1.patch": "dac7c792ee3ed7c6a46bb91bcdcf6f0fe361958548052a2826c6967f84c5c0f9"
+  },
+  "workspace_patch_sha256": "013d41587aee5e97f417be85a297c303aa5f59aae60fb8c89a6df09b8424aa71",
+  "candidate_manifest_sha256_at_adoption": "515c89f2dd8863381dfe6ad9dfdefeee054bed5ab49e16cc3378a519d972097f",
+  "driver_sha256": "e597ce4e23638e5c95ef02a05a63d6625e17cedd902ac87bfdfad247af925ec1",
+  "validation_report_sha256": {
+    "nyacode-msvc-final-verification-chain-v1.json": "a9e4b3f3a8fa4e5e35dd8bdaacbb53422743e4bb94d3ee7db5540693e48ce453",
+    "nyacode-msvc-candidate-matrix-v5.json": "bf0d4c5ed28f7a0cf623c8acd6426be429dd5c6a0366569b02a50ecd9de276cf",
+    "nyacode-msvc-accepted-matrix-v14.json": "629f33ef897a89a5a8bad05acace7b99a19c4862446d380bdcd306de7b1b8943",
+    "nyacode-msvc-candidate-cli-v3.json": "040eb623a304d2982f88498492bb8541c34d54d8ad03d77afcb2836860d3673b",
+    "nyacode-msvc-import-audit-v1.json": "5940e5f35a5274a37981e73a1383fd86b560d9b5733755923764c8be81365cfd",
+    "nyacode-msvc-vfs-bazel-tests-v1.json": "dcb691e183a687fdf4016318970f7fd0f147d37ffec39a946b02e21c5c86ed79"
+  },
+  "passed": true,
+  "interpretation": [
+    "The unchanged working-tree inputs were patched only after the exact isolated candidate passed all required platform builds and final Linux regressions.",
+    "Linux x86_64 GNU and musl executed transport tests. Other platforms establish compile/link results; native foreign-platform execution is not claimed.",
+    "Feature-stage promotion and final application validation are recorded separately."
+  ]
+}

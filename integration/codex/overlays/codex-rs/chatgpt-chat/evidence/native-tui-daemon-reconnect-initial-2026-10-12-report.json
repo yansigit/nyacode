@@ -1,0 +1,346 @@
+{
+  "version": 4,
+  "mode": "daemon",
+  "screen_mode": "owned",
+  "started_at_utc": "2026-10-12T10:37:11.575384+00:00",
+  "finished_at_utc": "2026-10-12T10:41:45.993988+00:00",
+  "binary_sha256": "573987d8ececc1245f7cdfaf04d2e1a159c53aceb47972862392591cf062f51f",
+  "command": [
+    "codex",
+    "--ask-for-approval",
+    "on-request",
+    "--sandbox",
+    "read-only",
+    "-c",
+    "agents.enabled=false",
+    "-c",
+    "features.multi_agent_v2=false",
+    "-c",
+    "features.chatgpt_chat=true",
+    "-c",
+    "tui.fullscreen_transcript=true",
+    "-c",
+    "tui.alternate_screen=\"always\"",
+    "--remote",
+    "<private-test-socket>"
+  ],
+  "source_sha256": {
+    "codex-rs/config/src/tui_keymap.rs": "e90fb2485366ae5f4d5d9fddc266b20b8637dced8b2c1d13b08b030b07a11193",
+    "codex-rs/tui/src/app.rs": "b7044e31e2a7d6c38b529a8143b3d1d12d700df04fd67d56bd4c0a9d636b41ff",
+    "codex-rs/tui/src/app/app_server_event_targets.rs": "f576ce1fef04e18c669591b851507fa7313c35e581711310bb28b087d235ca6c",
+    "codex-rs/tui/src/app/app_server_events.rs": "420c4d0e26ae7bb09c207c5057cae62a254771bae100ff48a1582975cd0725c6",
+    "codex-rs/tui/src/app/event_dispatch.rs": "e14ec8e752236e49dcbd714cc72d595811727bd68845b1b31dbcfb703b240fdc",
+    "codex-rs/tui/src/app/input.rs": "cda8ed091407f6b5a0ff8d0c900d131ec88c0168ecde9c8adc320e8fee847af1",
+    "codex-rs/tui/src/app/native_chat/input.rs": "c4bc568fb8b8e3469fdea296bcd057359f8e7d1705e4226a50815c531cd68384",
+    "codex-rs/tui/src/app/native_chat/mod.rs": "c8f660dbeb8d36076962638807130c17e00b3dd2976b2a13ded3076e7100c394",
+    "codex-rs/tui/src/app/native_chat/render.rs": "f3859872e92eaa2c924c2e0bb6d29f3f9f027637552bad65996297bea06b7a3b",
+    "codex-rs/tui/src/app/native_chat/snapshots/codex_tui__app__native_chat__tests__chat_temporary_surface.snap": "814a0d1bf409c83dd91d11b94ceb70367d9b772155245d7c248295ccc921dd20",
+    "codex-rs/tui/src/app/native_chat/state.rs": "030f9c7269ee0970bdadc083ca010c393f545abd91b58a22416bf2d483aa0a46",
+    "codex-rs/tui/src/app/native_chat/tests.rs": "f69355a3dedbee59c62e44940b6d7b088cb4a74c1395efe1c110c51574ae556c",
+    "codex-rs/tui/src/app/owned_transcript.rs": "5f2409382fbb7f688d36c5b67818edf1302e1e51d880b9c12af8759e67345e80",
+    "codex-rs/tui/src/app/reconnect.rs": "a6215a6bac3ba1140a7b96c97bc672d2f9cf9cb69dff3d3956375867ccb67a59",
+    "codex-rs/tui/src/app/startup.rs": "ee76085f28af79a7e108c54b84c3ec6f4a8d47948bc1f63265112b9cd955dd4c",
+    "codex-rs/tui/src/app/test_support.rs": "5730b6f18040b5e8fa125855ac781184aae8f2903160a61b5f278efef1ef29d3",
+    "codex-rs/tui/src/app/tests.rs": "d189db4fbffeac0bf78bc74ae20f6751a2705190d9a24c2ff310d9edb4f7bb61",
+    "codex-rs/tui/src/app_event.rs": "2ee2664054e998ce315df880109d455ef732863ea2929396f5e15d67372fe92b",
+    "codex-rs/tui/src/bottom_pane/chat_composer.rs": "1c3a30dd89f2675d4a4819d307659d34998f6594d47df59dcc888e0efebdee96",
+    "codex-rs/tui/src/bottom_pane/chat_composer/slash_input.rs": "925cf0d4cc451b396fb95d6e257b71170a08d0d3f0349449b3fbcb03b2d4d6f3",
+    "codex-rs/tui/src/bottom_pane/command_popup.rs": "a2ce50ec55fc037a2e0720fb92192c84f064fe258ac66bd894b4242c7ee83097",
+    "codex-rs/tui/src/bottom_pane/mod.rs": "cd41dd882e536dbc6774b2a37904c5a5dcdbaf5f12c497e2792d2d1ea5110da3",
+    "codex-rs/tui/src/bottom_pane/paste_burst.rs": "3775947918c74ca097a8435b44607e8cf46552065dafde6dd3c2ee8120704f6b",
+    "codex-rs/tui/src/bottom_pane/slash_commands.rs": "ce5a27b4028c876c052850c3d001cf57cc4ee184ebab1defa3274598dfc815dc",
+    "codex-rs/tui/src/chatwidget.rs": "c6fb780374ea0587d52c1ac016bba275cb80273acf4e184c7d4f31efc37425b4",
+    "codex-rs/tui/src/chatwidget/keymap_picker.rs": "d34e9712dcc5e2a250baedb08a1d7cdfbf67af2ff3a288025fd1c3ffce1bb39b",
+    "codex-rs/tui/src/chatwidget/protocol.rs": "50b5f5fdede2d54b551ede9c8c092e13edaf39e4b11d9f7874ca435fdb27bb95",
+    "codex-rs/tui/src/chatwidget/settings.rs": "34f4c6dafd4360a3c95a158b7d4a5411db7fc5ae91f5ec8c94513b77900bf5ae",
+    "codex-rs/tui/src/chatwidget/slash_dispatch.rs": "f269643fbcaafacb0f85576ae0132dfe0231ed97c95b3e1abf649ea03f13377f",
+    "codex-rs/tui/src/chatwidget/tests.rs": "0864f50e6ef858fd6549822e5437d43bbec797a57d24a65f49828c7964aa683d",
+    "codex-rs/tui/src/clipboard_paste.rs": "2d14cda6ac850545a030c39f6a04e30c8e194aefee6e3c8ce294502249b0b418",
+    "codex-rs/tui/src/keymap.rs": "9df0f63b8d6006dee3e46c3eb490bea455b22e89c045d8c6621e3f9728bf57b0",
+    "codex-rs/tui/src/keymap/bindings.rs": "72378203ac82fbda2101304b5ed030074875325512f492ea78e132078182ce28",
+    "codex-rs/tui/src/keymap/chords.rs": "2256b12568dcdc0b29560ddf9fe9de57aba1e30c1ca1fee8d93a6e4f7badddea",
+    "codex-rs/tui/src/keymap_setup.rs": "5373d5706fc1b72675cf31cbef8f75e4334172e95e4ccba9757dd594e57fb153",
+    "codex-rs/tui/src/keymap_setup/actions.rs": "b075e30a45f155d7e3ca351085d12315b44a2765590c8227b2b39ac50d827002",
+    "codex-rs/tui/src/slash_command.rs": "796da3df45367b8282b851fa25682c2315eb5c54dc969b2c5177d1c37fc94981"
+  },
+  "browser_used": false,
+  "isolated_fixture_clipboard": true,
+  "managed_authentication": true,
+  "terminal_contents_written_to_disk": false,
+  "automatic_resend": false,
+  "process_exit_code": 0,
+  "integrated_gate_passed": false,
+  "events": [
+    {
+      "mode": "daemon",
+      "running": true,
+      "exit_code": null,
+      "visible_markers": ["Codex", "Chat", "under development"],
+      "stage": "startup"
+    },
+    {
+      "mode": "daemon",
+      "running": true,
+      "exit_code": null,
+      "visible_markers": [
+        "Codex",
+        "Chat",
+        "under development",
+        "Saved to ChatGPT",
+        "Temporary",
+        "backend default",
+        "Message",
+        "Account session ready"
+      ],
+      "stage": "open-chat-through-local-proxy",
+      "wait_matched": true,
+      "checks": {},
+      "occurrences": {},
+      "control": null
+    },
+    {
+      "mode": "daemon",
+      "running": true,
+      "exit_code": null,
+      "visible_markers": [
+        "Codex",
+        "Chat",
+        "under development",
+        "Saved to ChatGPT",
+        "backend default",
+        "Message",
+        "failed"
+      ],
+      "stage": "drop-with-unsent-draft",
+      "wait_matched": true,
+      "checks": {
+        "0": true,
+        "1": false,
+        "2": false
+      },
+      "occurrences": {},
+      "control": [
+        {
+          "injected_disconnect": true
+        }
+      ]
+    },
+    {
+      "mode": "daemon",
+      "running": true,
+      "exit_code": null,
+      "visible_markers": [
+        "Codex",
+        "Chat",
+        "under development",
+        "Saved to ChatGPT",
+        "backend default",
+        "Message",
+        "failed"
+      ],
+      "stage": "draft-retained-after-reconnect",
+      "wait_matched": true,
+      "checks": {
+        "0": true,
+        "1": false,
+        "2": false,
+        "3": true
+      },
+      "occurrences": {},
+      "control": null
+    },
+    {
+      "mode": "daemon",
+      "running": true,
+      "exit_code": null,
+      "visible_markers": ["Codex", "Chat", "under development"],
+      "stage": "codex-reconnect-failure-detail",
+      "wait_matched": true,
+      "checks": {},
+      "occurrences": {},
+      "control": null
+    },
+    {
+      "mode": "daemon",
+      "running": true,
+      "exit_code": null,
+      "visible_markers": ["Codex", "Chat", "under development"],
+      "stage": "reconnect-review",
+      "wait_matched": true,
+      "checks": {},
+      "occurrences": {},
+      "control": null
+    },
+    {
+      "mode": "daemon",
+      "running": true,
+      "exit_code": null,
+      "visible_markers": [
+        "Codex",
+        "Chat",
+        "under development",
+        "Saved to ChatGPT",
+        "backend default",
+        "Message",
+        "failed"
+      ],
+      "stage": "return-reconnected-chat",
+      "wait_matched": true,
+      "checks": {},
+      "occurrences": {},
+      "control": null
+    },
+    {
+      "mode": "daemon",
+      "running": true,
+      "exit_code": null,
+      "visible_markers": [
+        "Codex",
+        "Chat",
+        "under development",
+        "Saved to ChatGPT",
+        "backend default",
+        "Message",
+        "failed"
+      ],
+      "stage": "explicit-chat-refresh",
+      "wait_matched": true,
+      "checks": {
+        "0": true,
+        "1": false,
+        "2": true,
+        "3": false,
+        "4": false,
+        "5": true
+      },
+      "occurrences": {},
+      "control": null
+    },
+    {
+      "mode": "daemon",
+      "running": true,
+      "exit_code": null,
+      "visible_markers": [
+        "Codex",
+        "Chat",
+        "under development",
+        "Saved to ChatGPT",
+        "backend default",
+        "Message",
+        "failed"
+      ],
+      "stage": "reconnect-draft-save-state",
+      "wait_matched": true,
+      "checks": {
+        "0": false,
+        "1": false,
+        "2": true,
+        "3": false,
+        "4": true
+      },
+      "occurrences": {},
+      "control": null
+    },
+    {
+      "mode": "daemon",
+      "running": true,
+      "exit_code": null,
+      "visible_markers": [
+        "Codex",
+        "Chat",
+        "under development",
+        "Saved to ChatGPT",
+        "backend default",
+        "Message",
+        "failed"
+      ],
+      "stage": "new-draft-after-reconnect",
+      "wait_matched": true,
+      "checks": {},
+      "occurrences": {},
+      "control": null
+    },
+    {
+      "mode": "daemon",
+      "running": true,
+      "exit_code": null,
+      "visible_markers": [
+        "Codex",
+        "Chat",
+        "under development",
+        "Saved to ChatGPT",
+        "backend default",
+        "Receiving response"
+      ],
+      "stage": "drop-during-accepted-stream",
+      "wait_matched": true,
+      "checks": {},
+      "occurrences": {},
+      "control": [
+        {
+          "injected_disconnect": true
+        }
+      ]
+    },
+    {
+      "mode": "daemon",
+      "running": true,
+      "exit_code": null,
+      "visible_markers": [
+        "Codex",
+        "Chat",
+        "under development",
+        "Saved to ChatGPT",
+        "backend default",
+        "Response completed"
+      ],
+      "stage": "reconnected-stream-outcome",
+      "wait_matched": true,
+      "checks": {
+        "0": true,
+        "1": false,
+        "2": false,
+        "3": false
+      },
+      "occurrences": {},
+      "control": null
+    },
+    {
+      "mode": "daemon",
+      "running": true,
+      "exit_code": null,
+      "visible_markers": [
+        "Codex",
+        "Chat",
+        "under development",
+        "Saved to ChatGPT",
+        "backend default",
+        "Response completed"
+      ],
+      "stage": "audit",
+      "new_submissions": 1,
+      "maximum_active": 1,
+      "maximum_accepted_active": 1,
+      "distinct_conversations": 1,
+      "accepted": 1,
+      "completed_inactive": 1,
+      "saved_tables_unchanged_since_checkpoint": null
+    },
+    {
+      "mode": "daemon",
+      "running": false,
+      "exit_code": 0,
+      "visible_markers": [],
+      "stage": "quit"
+    }
+  ],
+  "assessment": {
+    "unsent_draft_retained_and_saved_after_reconnect": true,
+    "accepted_stream_recovered": true,
+    "exactly_one_new_saved_submission": true,
+    "accepted_completed_inactive": true,
+    "automatic_resend": false,
+    "graceful_shutdown": true,
+    "remaining_issue": "A stale Transport notice remained after successful idle-draft reconnection. The subsequent fix immediately resynchronizes the new connection and replaces stale notices; live rerun pending."
+  }
+}

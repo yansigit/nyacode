@@ -1,0 +1,65 @@
+{
+  "version": 1,
+  "source_manifest": "native-embedded-rpc-temporary-2026-10-12-source.json",
+  "live_report": "native-embedded-rpc-temporary-2026-10-12-report.json",
+  "live_temporary_embedded_rpc_passed": true,
+  "native_transport_gate_previously_passed": true,
+  "integrated_release_gate_passed": false,
+  "feature_stage": "under_development",
+  "feature_default_enabled": false,
+  "checks": [
+    {
+      "name": "app_server_unit_tests",
+      "passed": true,
+      "tests": 435,
+      "log_sha256": "45dba37c1217ddd9b0ffda7530b0d51ba759b642499a2ba3f018acb50d8dc649"
+    },
+    {
+      "name": "native_chat_unit_tests",
+      "passed": true,
+      "tests": 171,
+      "log_sha256": "45dba37c1217ddd9b0ffda7530b0d51ba759b642499a2ba3f018acb50d8dc649"
+    },
+    {
+      "name": "probe_tests",
+      "passed": true,
+      "tests": 6,
+      "log_sha256": "9a19f26a880074ba9c3d8ef593d6e5aaaac5238ce9508b5d8b2dbb41f0d6aa12"
+    },
+    {
+      "name": "app_server_and_probe_clippy",
+      "passed": true,
+      "tests": null,
+      "log_sha256": "bf2e6b8cc2b1eaccfa4864cc5f31c061b60db9287df6176fc4b58f7a9b284e8e"
+    },
+    {
+      "name": "probe_build",
+      "passed": true,
+      "tests": null,
+      "log_sha256": "c3d249efb74e02a0672730e6bb033737e9e1bbb6107fcf65e84da18f84bb15db"
+    }
+  ],
+  "coverage": [
+    "memory-only temporary drafts, native sessions, uploads and turns; no SavedChatStore ownership",
+    "temporary RPCs remain available with closed recovery storage",
+    "response-issued conduit refresh verifies exact prior message IDs and parent before follow-up",
+    "unknown acceptance blocks resend and retains the original submitted snapshot",
+    "accepted user messages retained after generation failure; concurrent draft edits preserved",
+    "partial transcripts readable during streaming without invented assistant-parent links",
+    "pre-transmission follow-up cancellation preserves prior completed branch",
+    "scoped upload operations retain persistence mode; invalid cancellation IDs do not create owners",
+    "scope lookup rejects another live service scope",
+    "live embedded two-turn temporary completion with ordered notifications, literal fixture access, correct parent and cleared pending snapshot",
+    "live temporary saved read rejected; absent from recent saved history; complete saved Chat table digests unchanged",
+    "private saved-run journals unchanged; temporary contents and IDs excluded from diagnostic reports"
+  ],
+  "remaining": [
+    "conversation/message/branch/attachment cache migration",
+    "independent terminal surfaces and composer",
+    "embedded saved follow-up, restart, parallel and attachment scenarios",
+    "ordinary local daemon live acceptance",
+    "PDF document-wide parser resource bounds",
+    "confirmed server-cancellation protocol evidence",
+    "CLI/TUI and supported-platform transport validation"
+  ]
+}

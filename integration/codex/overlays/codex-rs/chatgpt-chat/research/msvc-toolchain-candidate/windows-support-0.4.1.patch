@@ -1,0 +1,375 @@
+diff --git a/windows/private/extensions/msvc_runtime.BUILD.bazel b/windows/private/extensions/msvc_runtime.BUILD.bazel
+index 6d05080..4d659e7 100644
+--- a/windows/private/extensions/msvc_runtime.BUILD.bazel
++++ b/windows/private/extensions/msvc_runtime.BUILD.bazel
+@@ -19,6 +19,7 @@ directory(
+     name = "sysroot_files",
+     srcs = glob(
+         ["__MSVC_RUNTIME_DIR__/**"],
++        exclude = ["__MSVC_RUNTIME_DIR__/Contents/VC/Tools/MSVC/__MSVC_VERSION__/bin/**"],
+         allow_empty = True,
+     ),
+ )
+@@ -151,6 +152,7 @@ filegroup(
+             "**/*.hh",
+             "**/*.hpp",
+         ],
++        exclude = ["__MSVC_RUNTIME_DIR__/Contents/VC/Tools/MSVC/__MSVC_VERSION__/bin/**"],
+         allow_empty = True,
+     ),
+ )
+@@ -159,6 +161,37 @@ filegroup(
+     name = "libs",
+     srcs = glob(
+         ["**/*.lib"],
++        exclude = ["__MSVC_RUNTIME_DIR__/Contents/VC/Tools/MSVC/__MSVC_VERSION__/bin/**"],
+         allow_empty = True,
+     ),
+ )
++
++# Native build tools are opt-in; ordinary sysroot users keep only headers/libs.
++
++directory(
++    name = "msvc_tools_x64_files",
++    srcs = glob(
++        ["__MSVC_RUNTIME_DIR__/Contents/VC/Tools/MSVC/__MSVC_VERSION__/bin/Hostx64/x64/**"],
++        allow_empty = True,
++    ),
++)
++
++subdirectory(
++    name = "msvc_tools_x64",
++    parent = ":msvc_tools_x64_files",
++    path = "__MSVC_RUNTIME_DIR__/Contents/VC/Tools/MSVC/__MSVC_VERSION__/bin/Hostx64/x64",
++)
++
++directory(
++    name = "msvc_tools_arm64_files",
++    srcs = glob(
++        ["__MSVC_RUNTIME_DIR__/Contents/VC/Tools/MSVC/__MSVC_VERSION__/bin/HostArm64/arm64/**"],
++        allow_empty = True,
++    ),
++)
++
++subdirectory(
++    name = "msvc_tools_arm64",
++    parent = ":msvc_tools_arm64_files",
++    path = "__MSVC_RUNTIME_DIR__/Contents/VC/Tools/MSVC/__MSVC_VERSION__/bin/HostArm64/arm64",
++)
+diff --git a/windows/private/extensions/msvc_runtime.bzl b/windows/private/extensions/msvc_runtime.bzl
+index 0d1476c..956a826 100644
+--- a/windows/private/extensions/msvc_runtime.bzl
++++ b/windows/private/extensions/msvc_runtime.bzl
+@@ -256,7 +256,7 @@ def _keep_exposed_runtime_files(repository_ctx, sysroot_dir, msvc_version, archi
+     _keep_only_children(
+         repository_ctx,
+         repository_ctx.path("{}/Contents/VC/Tools/MSVC/{}".format(sysroot_dir, msvc_version)),
+-        ["include", "lib"],
++        ["include", "lib", "bin"],
+     )
+     _keep_only_children(
+         repository_ctx,
+@@ -264,6 +264,13 @@ def _keep_exposed_runtime_files(repository_ctx, sysroot_dir, msvc_version, archi
+         architectures,
+     )
+ 
++    # Keep native-host tools and their support files separate from runtime inputs.
++    bin_dir = "{}/Contents/VC/Tools/MSVC/{}/bin".format(sysroot_dir, msvc_version)
++    _keep_only_children(repository_ctx, repository_ctx.path(bin_dir), ["HostArm64" if arch == "arm64" else "Host" + arch for arch in architectures])
++    for arch in architectures:
++        host = "HostArm64" if arch == "arm64" else "Host" + arch
++        _keep_only_children(repository_ctx, repository_ctx.path(bin_dir + "/" + host), [arch])
++
+     if redist_version:
+         redist_architectures = _redist_architectures(architectures)
+         _keep_only_children(
+diff --git a/windows/private/extensions/windows_sdk.BUILD.bazel b/windows/private/extensions/windows_sdk.BUILD.bazel
+index 4b4c626..047f5eb 100644
+--- a/windows/private/extensions/windows_sdk.BUILD.bazel
++++ b/windows/private/extensions/windows_sdk.BUILD.bazel
+@@ -7,6 +7,8 @@ package(default_visibility = ["//visibility:public"])
+ 
+ exports_files(["versions.bzl"])
+ 
++_LOGICAL_ALIASES = __WINSDK_LOGICAL_ALIASES__
++
+ config_setting(
+     name = "windows_aarch64",
+     constraint_values = [
+@@ -19,8 +21,9 @@ directory(
+     name = "sysroot_files",
+     srcs = glob(
+         ["__WINSDK_DIR__/**"],
++        exclude = ["__WINSDK_DIR__/base/c/bin/__WINSDK_INCLUDE_VERSION__/**"],
+         allow_empty = True,
+-    ),
++    ) + _LOGICAL_ALIASES,
+ )
+ 
+ subdirectory(
+@@ -34,7 +37,11 @@ directory(
+     srcs = glob(
+         ["__WINSDK_DIR__/base/c/Include/__WINSDK_INCLUDE_VERSION__/ucrt/**"],
+         allow_empty = True,
+-    ),
++    ) + [
++        f
++        for f in _LOGICAL_ALIASES
++        if f.startswith("__WINSDK_DIR__/base/c/Include/__WINSDK_INCLUDE_VERSION__/ucrt/")
++    ],
+ )
+ 
+ subdirectory(
+@@ -48,7 +55,11 @@ directory(
+     srcs = glob(
+         ["__WINSDK_DIR__/base/c/Include/__WINSDK_INCLUDE_VERSION__/shared/**"],
+         allow_empty = True,
+-    ),
++    ) + [
++        f
++        for f in _LOGICAL_ALIASES
++        if f.startswith("__WINSDK_DIR__/base/c/Include/__WINSDK_INCLUDE_VERSION__/shared/")
++    ],
+ )
+ 
+ subdirectory(
+@@ -62,7 +73,11 @@ directory(
+     srcs = glob(
+         ["__WINSDK_DIR__/base/c/Include/__WINSDK_INCLUDE_VERSION__/um/**"],
+         allow_empty = True,
+-    ),
++    ) + [
++        f
++        for f in _LOGICAL_ALIASES
++        if f.startswith("__WINSDK_DIR__/base/c/Include/__WINSDK_INCLUDE_VERSION__/um/")
++    ],
+ )
+ 
+ subdirectory(
+@@ -76,7 +91,11 @@ directory(
+     srcs = glob(
+         ["__WINSDK_DIR__/base/c/Include/__WINSDK_INCLUDE_VERSION__/winrt/**"],
+         allow_empty = True,
+-    ),
++    ) + [
++        f
++        for f in _LOGICAL_ALIASES
++        if f.startswith("__WINSDK_DIR__/base/c/Include/__WINSDK_INCLUDE_VERSION__/winrt/")
++    ],
+ )
+ 
+ subdirectory(
+@@ -90,7 +109,11 @@ directory(
+     srcs = glob(
+         ["__WINSDK_DIR__/arm64/c/ucrt/arm64/**"],
+         allow_empty = True,
+-    ),
++    ) + [
++        f
++        for f in _LOGICAL_ALIASES
++        if f.startswith("__WINSDK_DIR__/arm64/c/ucrt/arm64/")
++    ],
+ )
+ 
+ subdirectory(
+@@ -104,7 +127,11 @@ directory(
+     srcs = glob(
+         ["__WINSDK_DIR__/x64/c/ucrt/x64/**"],
+         allow_empty = True,
+-    ),
++    ) + [
++        f
++        for f in _LOGICAL_ALIASES
++        if f.startswith("__WINSDK_DIR__/x64/c/ucrt/x64/")
++    ],
+ )
+ 
+ subdirectory(
+@@ -118,7 +145,11 @@ directory(
+     srcs = glob(
+         ["__WINSDK_DIR__/arm64/c/um/arm64/**"],
+         allow_empty = True,
+-    ),
++    ) + [
++        f
++        for f in _LOGICAL_ALIASES
++        if f.startswith("__WINSDK_DIR__/arm64/c/um/arm64/")
++    ],
+ )
+ 
+ subdirectory(
+@@ -132,7 +163,11 @@ directory(
+     srcs = glob(
+         ["__WINSDK_DIR__/x64/c/um/x64/**"],
+         allow_empty = True,
+-    ),
++    ) + [
++        f
++        for f in _LOGICAL_ALIASES
++        if f.startswith("__WINSDK_DIR__/x64/c/um/x64/")
++    ],
+ )
+ 
+ subdirectory(
+@@ -162,7 +197,7 @@ filegroup(
+     srcs = glob(
+         ["**"],
+         allow_empty = True,
+-    ),
++    ) + _LOGICAL_ALIASES,
+ )
+ 
+ filegroup(
+@@ -178,14 +213,54 @@ filegroup(
+             "**/*.hh",
+             "**/*.hpp",
+         ],
++        exclude = ["__WINSDK_DIR__/base/c/bin/__WINSDK_INCLUDE_VERSION__/**"],
+         allow_empty = True,
+-    ),
++    ) + [
++        f
++        for f in _LOGICAL_ALIASES
++        if f.endswith(".h") or f.endswith(".hh") or f.endswith(".hpp")
++    ],
+ )
+ 
+ filegroup(
+     name = "libs",
+     srcs = glob(
+         ["**/*.lib"],
++        exclude = ["__WINSDK_DIR__/base/c/bin/__WINSDK_INCLUDE_VERSION__/**"],
++        allow_empty = True,
++    ) + [
++        f
++        for f in _LOGICAL_ALIASES
++        if f.endswith(".lib")
++    ],
++)
++
++# Native build tools are opt-in; ordinary sysroot users keep only headers/libs.
++
++directory(
++    name = "winsdk_tools_x64_files",
++    srcs = glob(
++        ["__WINSDK_DIR__/base/c/bin/__WINSDK_INCLUDE_VERSION__/x64/**"],
++        allow_empty = True,
++    ),
++)
++
++subdirectory(
++    name = "winsdk_tools_x64",
++    parent = ":winsdk_tools_x64_files",
++    path = "__WINSDK_DIR__/base/c/bin/__WINSDK_INCLUDE_VERSION__/x64",
++)
++
++directory(
++    name = "winsdk_tools_arm64_files",
++    srcs = glob(
++        ["__WINSDK_DIR__/base/c/bin/__WINSDK_INCLUDE_VERSION__/arm64/**"],
+         allow_empty = True,
+     ),
+ )
++
++subdirectory(
++    name = "winsdk_tools_arm64",
++    parent = ":winsdk_tools_arm64_files",
++    path = "__WINSDK_DIR__/base/c/bin/__WINSDK_INCLUDE_VERSION__/arm64",
++)
+diff --git a/windows/private/extensions/windows_sdk.bzl b/windows/private/extensions/windows_sdk.bzl
+index 70f2c7b..3f1bc86 100644
+--- a/windows/private/extensions/windows_sdk.bzl
++++ b/windows/private/extensions/windows_sdk.bzl
+@@ -31,7 +31,7 @@ def _keep_only_children(repository_ctx, directory, child_names):
+ def _keep_exposed_windows_sdk_files(repository_ctx, sysroot_dir, include_version, architectures):
+     _keep_only_children(repository_ctx, repository_ctx.path(sysroot_dir), ["base"] + architectures)
+     _keep_only_children(repository_ctx, repository_ctx.path("{}/base".format(sysroot_dir)), ["c"])
+-    _keep_only_children(repository_ctx, repository_ctx.path("{}/base/c".format(sysroot_dir)), ["Include"])
++    _keep_only_children(repository_ctx, repository_ctx.path("{}/base/c".format(sysroot_dir)), ["Include", "bin"])
+     _keep_only_children(repository_ctx, repository_ctx.path("{}/base/c/Include".format(sysroot_dir)), [include_version])
+     _keep_only_children(
+         repository_ctx,
+@@ -39,6 +39,11 @@ def _keep_exposed_windows_sdk_files(repository_ctx, sysroot_dir, include_version
+         ["ucrt", "shared", "um", "winrt"],
+     )
+ 
++    # Resource and manifest tools share the selected SDK's versioned bin tree.
++    bin_dir = "{}/base/c/bin".format(sysroot_dir)
++    _keep_only_children(repository_ctx, repository_ctx.path(bin_dir), [include_version])
++    _keep_only_children(repository_ctx, repository_ctx.path(bin_dir + "/" + include_version), architectures)
++
+     seen_architectures = {}
+     for arch in architectures:
+         if seen_architectures.get(arch, False):
+@@ -138,19 +143,18 @@ def _repository_fs_is_case_sensitive(repository_ctx):
+ def _apply_transformations(repository_ctx):
+     transformations = repository_ctx.attr.transformations
+     if not transformations:
+-        return
++        return []
+ 
+     sysroot = repository_ctx.path(_SYSROOT_DIR)
+     if not sysroot.exists:
+-        return
+-    if not _repository_fs_is_case_sensitive(repository_ctx):
+-        # Case-only aliases cannot be materialized on case-insensitive filesystems.
+-        return
++        return []
++    repository_fs_is_case_sensitive = _repository_fs_is_case_sensitive(repository_ctx)
+ 
+     all_files = []
+     _collect_files_recursive(sysroot, all_files)
+     all_rel_files = [_relative_to_repo_root(repository_ctx, f) for f in all_files]
+     created = {}
++    logical_aliases = []
+ 
+     for src_pattern, transform in transformations.items():
+         src_pattern = _normalize_relpath(src_pattern)
+@@ -170,11 +174,18 @@ def _apply_transformations(repository_ctx):
+             if not dst_rel or dst_rel == src_rel or created.get(dst_rel, False):
+                 continue
+             if repository_ctx.path(dst_rel).exists:
++                if not repository_fs_is_case_sensitive and src_rel.lower() == dst_rel.lower():
++                    # Keep the alternate spelling as a Bazel source label. Bazel then
++                    # preserves that spelling in a case-sensitive remote input tree.
++                    logical_aliases.append(dst_rel)
++                    created[dst_rel] = True
+                 continue
+ 
+             repository_ctx.symlink(src_rel, dst_rel)
+             created[dst_rel] = True
+ 
++    return sorted(logical_aliases)
++
+ def _windows_sdk_repository_impl(repository_ctx):
+     if not repository_ctx.attr.windows_sdk_version:
+         fail("windows_sdk_version must be set")
+@@ -225,8 +236,8 @@ def _windows_sdk_repository_impl(repository_ctx):
+         "windows_sdk_include_versions",
+     )
+ 
+-    _apply_transformations(repository_ctx)
+     _keep_exposed_windows_sdk_files(repository_ctx, _SYSROOT_DIR, include_version, requested_architectures)
++    logical_aliases = _apply_transformations(repository_ctx)
+ 
+     repository_ctx.file(
+         "versions.bzl",
+@@ -249,6 +260,7 @@ WINDOWS_SDK_INCLUDE_VERSION = {windows_sdk_include_version}
+         substitutions = {
+             "__WINSDK_DIR__": _SYSROOT_DIR,
+             "__WINSDK_INCLUDE_VERSION__": include_version,
++            "__WINSDK_LOGICAL_ALIASES__": repr(logical_aliases),
+         },
+     )
+ 
+@@ -278,7 +290,9 @@ _WINDOWS_SDK_ATTR = {
+     "transformations": attr.string_dict(
+         default = {},
+         doc = """
+-            Dict of source path patterns to transformations applied when run on case-sensitive filesystems.
++            Dict of source path patterns to transformations applied to extracted Windows SDK files.
++            Case-only transformations are Bazel aliases on case-insensitive filesystems and symlinks on
++            case-sensitive filesystems.
+ 
+             Supports exact paths and `**/*.ext` patterns. Use value `lowercase` to create lowercase aliases.
+ 

@@ -1,0 +1,14 @@
+{
+  "coordinator_lock_source": "product baseline codex-rs/Cargo.lock",
+  "expected_paths": 9712,
+  "extra_paths": 0,
+  "hash_or_mode_mismatches": 0,
+  "overlays_applied": 434,
+  "passed": true,
+  "product_baseline": "b8bbac5e2ad84168eee5a8b08564a910e8006564",
+  "provider_source_commit": "d0b5ef7ad34dde7be10d5ba263583b99277882bb",
+  "reconstructed_paths": 9712,
+  "schema_version": 1,
+  "strict_patches_applied": 9,
+  "upstream_base": "ce0323f2f2d3b25e82806cd555237da3db4e1897"
+}

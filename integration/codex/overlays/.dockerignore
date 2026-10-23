@@ -1,0 +1,6 @@
+# The verification image does not copy the repository. Ignore the build
+# context so image builds do not upload the workspace. Keep the image
+# definition itself so the engine can read it from the context.
+*
+!Containerfile
+!Dockerfile

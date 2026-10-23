@@ -1,0 +1,622 @@
+{
+  "version": 1,
+  "date": "2026-10-10",
+  "source_commit": "cdb6ca11ffda920158deb955b8de9847e877023f",
+  "baseline": "34b445493b7b4af0542eeaf8f35630e6ad77c42d",
+  "platform": "Linux x86_64",
+  "result": "passed_after_schema_regeneration",
+  "consolidated_suite": {
+    "command": "python3 scripts/native_provider_checks.py --artifact-dir /tmp/provider-pool-verified",
+    "result": "failed",
+    "recorded_start_commit": "34b445493b7b4af0542eeaf8f35630e6ad77c42d",
+    "source_note": "The run started with the implementation in the working tree before commit a1bcb8842. The endpoint regression fixture was corrected in bfbc3fcf0 before the app-server stage. The missing experimental schema bundle was regenerated in cdb6ca11f after schema-fixtures detected it; that stage was rerun independently. Runtime source did not change during the run.",
+    "artifact_manifest_sha256": "6dae17d01c2fd6d37a300fca1023ffe50ee044973a125fae370aa099ca22193a",
+    "stages": [
+      {
+        "name": "architecture",
+        "command": [
+          "/usr/bin/python3",
+          "scripts/native_provider_architecture.py"
+        ],
+        "exit_code": 0,
+        "log_sha256": "d3efde41a2d5a4dd596fbe48cfce7b978d021d49df01c795d6be2f6b5a5ffc40"
+      },
+      {
+        "name": "python-controls",
+        "command": [
+          "/usr/bin/python3",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "scripts/tests",
+          "-p",
+          "test_native_provider_*.py"
+        ],
+        "exit_code": 0,
+        "log_sha256": "4129e59ff2628a95cca337da1214d154c9c46b420db64c7a49b8fe5a50929293"
+      },
+      {
+        "name": "rust-format",
+        "command": [
+          "cargo",
+          "fmt",
+          "--manifest-path",
+          "codex-rs/Cargo.toml",
+          "--all",
+          "--",
+          "--config",
+          "imports_granularity=Item",
+          "--check"
+        ],
+        "exit_code": 0,
+        "log_sha256": "9b96cee97746a9e4a5ce5ba4b1813501f13b4835a9f94c54ee9c24345e60cec5"
+      },
+      {
+        "name": "provider-clippy",
+        "command": [
+          "cargo",
+          "clippy",
+          "--manifest-path",
+          "codex-rs/Cargo.toml",
+          "-p",
+          "codex-provider-api",
+          "-p",
+          "codex-provider-auth",
+          "-p",
+          "codex-provider-codecs",
+          "-p",
+          "codex-provider-cursor",
+          "-p",
+          "codex-provider-opencode",
+          "-p",
+          "codex-provider-claude",
+          "-p",
+          "codex-provider-antigravity",
+          "-p",
+          "codex-provider-registry",
+          "-p",
+          "codex-provider-runtime",
+          "-p",
+          "codex-provider-adapter",
+          "--all-targets",
+          "--",
+          "-D",
+          "warnings"
+        ],
+        "exit_code": 0,
+        "log_sha256": "46b3eda814bd3aa8d0e324b26b0a94e7c8b888b0b2c5ac8e8831760a04d94324"
+      },
+      {
+        "name": "provider-packages",
+        "command": [
+          "cargo",
+          "test",
+          "--manifest-path",
+          "codex-rs/Cargo.toml",
+          "-p",
+          "codex-provider-api",
+          "-p",
+          "codex-provider-auth",
+          "-p",
+          "codex-provider-codecs",
+          "-p",
+          "codex-provider-cursor",
+          "-p",
+          "codex-provider-opencode",
+          "-p",
+          "codex-provider-claude",
+          "-p",
+          "codex-provider-antigravity",
+          "-p",
+          "codex-provider-registry",
+          "-p",
+          "codex-provider-runtime",
+          "-p",
+          "codex-provider-adapter"
+        ],
+        "exit_code": 0,
+        "test_count": 166,
+        "log_sha256": "de16cedd59ff2204754a9051f4a8cd1487ddab67c0d33bf2b405f8c3d7a0a429"
+      },
+      {
+        "name": "thread-config",
+        "command": [
+          "cargo",
+          "test",
+          "--manifest-path",
+          "codex-rs/Cargo.toml",
+          "-p",
+          "codex-config"
+        ],
+        "exit_code": 0,
+        "test_count": 363,
+        "log_sha256": "2b3b0a726e995004538fef0ab299aa2d051f61c183f4837e135680d21ba82e03"
+      },
+      {
+        "name": "model-provider-facade",
+        "command": [
+          "cargo",
+          "test",
+          "--manifest-path",
+          "codex-rs/Cargo.toml",
+          "-p",
+          "codex-model-provider"
+        ],
+        "exit_code": 0,
+        "test_count": 103,
+        "log_sha256": "ba85ea02520816548bca3f072e5cda6ae24c679419c1d44de7ec169eeef0f1ca"
+      },
+      {
+        "name": "model-provider-metadata",
+        "command": [
+          "cargo",
+          "test",
+          "--manifest-path",
+          "codex-rs/Cargo.toml",
+          "-p",
+          "codex-model-provider-info"
+        ],
+        "exit_code": 0,
+        "test_count": 40,
+        "log_sha256": "0a58d9d413903844cffab79bc175041d9b7154e0f59657e46785c9ce3cfc9429"
+      },
+      {
+        "name": "core-native-provider",
+        "command": [
+          "cargo",
+          "test",
+          "--manifest-path",
+          "codex-rs/Cargo.toml",
+          "-p",
+          "codex-core",
+          "--lib",
+          "native_provider"
+        ],
+        "exit_code": 0,
+        "test_count": 1,
+        "log_sha256": "d45829ff0b22c1a31414046f9b1210ade6a79ed3e8630d8bcdddad58c7aa3ffd"
+      },
+      {
+        "name": "core-responses-retry",
+        "command": [
+          "cargo",
+          "test",
+          "--manifest-path",
+          "codex-rs/Cargo.toml",
+          "-p",
+          "codex-core",
+          "--lib",
+          "client::tests::",
+          "--",
+          "--test-threads",
+          "1"
+        ],
+        "exit_code": 0,
+        "test_count": 33,
+        "log_sha256": "e961aa0a87e624ae3a272c7194509bda223a84548589ba18e9949a2a99892b16"
+      },
+      {
+        "name": "app-server-account-and-fork",
+        "command": [
+          "cargo",
+          "test",
+          "--manifest-path",
+          "codex-rs/Cargo.toml",
+          "-p",
+          "codex-app-server",
+          "--test",
+          "all",
+          "native_account"
+        ],
+        "exit_code": 0,
+        "test_count": 4,
+        "log_sha256": "0d62c81139a0a0e8af59f076f6dd54051897ba87848174ccddcac6bc06e34428"
+      },
+      {
+        "name": "schema-fixtures",
+        "command": [
+          "cargo",
+          "test",
+          "--manifest-path",
+          "codex-rs/Cargo.toml",
+          "-p",
+          "codex-app-server-protocol",
+          "schema_fixtures"
+        ],
+        "exit_code": 101,
+        "test_count": 5,
+        "log_sha256": "b3d313e30931cfd736571fd890b5c6e7d837bf900e8f35be6cfb929ef19ace1a"
+      },
+      {
+        "name": "cli-provider-choices",
+        "command": [
+          "cargo",
+          "test",
+          "--manifest-path",
+          "codex-rs/Cargo.toml",
+          "-p",
+          "codex-cli",
+          "--bin",
+          "codex",
+          "provider_cli_parses_each_supported_provider_and_rejects_unknown_values"
+        ],
+        "exit_code": 0,
+        "test_count": 1,
+        "log_sha256": "b61844d092d0cf8cae0ac5a2be8803b2428aca5a620e2dab9121610ae71dae6f"
+      },
+      {
+        "name": "pool-selection-and-recovery",
+        "command": [
+          "cargo",
+          "test",
+          "--manifest-path",
+          "codex-rs/Cargo.toml",
+          "-p",
+          "codex-provider-runtime",
+          "--test",
+          "pool"
+        ],
+        "exit_code": 0,
+        "test_count": 9,
+        "log_sha256": "d92b32012a33a7492edf8cd72a69834528788a43f34d850d51940d532e20cb10"
+      },
+      {
+        "name": "pool-fifth-provider-handoffs",
+        "command": [
+          "cargo",
+          "test",
+          "--manifest-path",
+          "codex-rs/Cargo.toml",
+          "-p",
+          "codex-provider-runtime",
+          "--test",
+          "pooled_turn"
+        ],
+        "exit_code": 0,
+        "test_count": 5,
+        "log_sha256": "78bc7492548bd1aa844b743f72debdf9de19a5b7feccf567d75db58b1941762b"
+      },
+      {
+        "name": "pool-account-concurrency",
+        "command": [
+          "cargo",
+          "test",
+          "--manifest-path",
+          "codex-rs/Cargo.toml",
+          "-p",
+          "codex-provider-auth",
+          "--test",
+          "accounts"
+        ],
+        "exit_code": 0,
+        "test_count": 5,
+        "log_sha256": "1dd9f4db0a655947f10828f015811907325ad12d09fd92bd211ac1d5aa4636a7"
+      },
+      {
+        "name": "pool-cli-management",
+        "command": [
+          "cargo",
+          "test",
+          "--manifest-path",
+          "codex-rs/Cargo.toml",
+          "-p",
+          "codex-cli",
+          "--bin",
+          "codex",
+          "provider_pool_cli"
+        ],
+        "exit_code": 0,
+        "test_count": 1,
+        "log_sha256": "b13285f59d981f1b876ab8be1e30200f4314fadfdeae8dcaa338b103a8c482d3"
+      },
+      {
+        "name": "pool-rpc-compatibility",
+        "command": [
+          "cargo",
+          "test",
+          "--manifest-path",
+          "codex-rs/Cargo.toml",
+          "-p",
+          "codex-app-server-protocol",
+          "--lib",
+          "provider_pool"
+        ],
+        "exit_code": 0,
+        "test_count": 2,
+        "log_sha256": "0a3240fe14f818a7a0cc80c68ab685d7cb4fda651491bed624739c5d6226e169"
+      },
+      {
+        "name": "pool-tui-management",
+        "command": [
+          "cargo",
+          "test",
+          "--manifest-path",
+          "codex-rs/Cargo.toml",
+          "-p",
+          "codex-tui",
+          "--lib",
+          "provider_manager"
+        ],
+        "exit_code": 0,
+        "test_count": 1,
+        "log_sha256": "cdd1be09927394bb14df8bec4738becb639f549f95dc05ea759bec5b280e7245"
+      },
+      {
+        "name": "pool-tui-slash-commands",
+        "command": [
+          "cargo",
+          "test",
+          "--manifest-path",
+          "codex-rs/Cargo.toml",
+          "-p",
+          "codex-tui",
+          "--lib",
+          "slash"
+        ],
+        "exit_code": 0,
+        "test_count": 229,
+        "log_sha256": "94859df2740cc6100e126bc306108acf88f0b04938db7df2af1e58b637d1d573"
+      },
+      {
+        "name": "registry-metadata-only",
+        "command": [
+          "cargo",
+          "test",
+          "--manifest-path",
+          "codex-rs/Cargo.toml",
+          "-p",
+          "codex-provider-registry",
+          "--no-default-features",
+          "--lib"
+        ],
+        "exit_code": 0,
+        "test_count": 2,
+        "log_sha256": "9739d003e88f192fb5bcce6c8e3c37facdbe990149541b4e45c1c44e4d168e42"
+      },
+      {
+        "name": "registry-runtime-only",
+        "command": [
+          "cargo",
+          "test",
+          "--manifest-path",
+          "codex-rs/Cargo.toml",
+          "-p",
+          "codex-provider-registry",
+          "--no-default-features",
+          "--features",
+          "runtime",
+          "--lib"
+        ],
+        "exit_code": 0,
+        "test_count": 3,
+        "log_sha256": "bff609cd5a9bbff3074a15ba1a08ca4f82cdbab973c0ba6ce0e0e439afb467ad"
+      },
+      {
+        "name": "cli-build",
+        "command": [
+          "cargo",
+          "build",
+          "--manifest-path",
+          "codex-rs/Cargo.toml",
+          "-p",
+          "codex-cli"
+        ],
+        "exit_code": 0,
+        "log_sha256": "fd7bd3ec151128d32b17429182c2c519e8f17697d2dfa90eb0e1357d60585d35"
+      },
+      {
+        "name": "adapter-no-default-features",
+        "command": [
+          "cargo",
+          "check",
+          "--manifest-path",
+          "codex-rs/Cargo.toml",
+          "-p",
+          "codex-provider-adapter",
+          "--no-default-features"
+        ],
+        "exit_code": 0,
+        "log_sha256": "869e15081aa28abd47c79d41cb736ea7af4edbf232e39538d3d94ad88ed49379"
+      },
+      {
+        "name": "adapter-provider-cursor",
+        "command": [
+          "cargo",
+          "check",
+          "--manifest-path",
+          "codex-rs/Cargo.toml",
+          "-p",
+          "codex-provider-adapter",
+          "--no-default-features",
+          "--features",
+          "provider-cursor"
+        ],
+        "exit_code": 0,
+        "log_sha256": "ef9d6fecc0e07ab05092e318a9863f99b794bbfae44175b607cd501cc255f7dd"
+      },
+      {
+        "name": "adapter-provider-opencode",
+        "command": [
+          "cargo",
+          "check",
+          "--manifest-path",
+          "codex-rs/Cargo.toml",
+          "-p",
+          "codex-provider-adapter",
+          "--no-default-features",
+          "--features",
+          "provider-opencode"
+        ],
+        "exit_code": 0,
+        "log_sha256": "2ac53b872c741b4d6b299b114d6638aa70a10ad43e136cf23db4e825c0d7e48d"
+      },
+      {
+        "name": "adapter-provider-claude",
+        "command": [
+          "cargo",
+          "check",
+          "--manifest-path",
+          "codex-rs/Cargo.toml",
+          "-p",
+          "codex-provider-adapter",
+          "--no-default-features",
+          "--features",
+          "provider-claude"
+        ],
+        "exit_code": 0,
+        "log_sha256": "1ea2f0d160cd035f054a3d528061885f038b058d3bb773cf3a77b30230738ff9"
+      },
+      {
+        "name": "adapter-provider-antigravity",
+        "command": [
+          "cargo",
+          "check",
+          "--manifest-path",
+          "codex-rs/Cargo.toml",
+          "-p",
+          "codex-provider-adapter",
+          "--no-default-features",
+          "--features",
+          "provider-antigravity"
+        ],
+        "exit_code": 0,
+        "log_sha256": "40a3eeefa095fb7d5ca95973ae4b6d6ce74d1ee78b82a54db6a9c0e85c1e2f5d"
+      },
+      {
+        "name": "adapter-all-features",
+        "command": [
+          "cargo",
+          "check",
+          "--manifest-path",
+          "codex-rs/Cargo.toml",
+          "-p",
+          "codex-provider-adapter",
+          "--all-features"
+        ],
+        "exit_code": 0,
+        "log_sha256": "ae41a13962ca8293e35061dbdd96b883812b8527d300d27f9a6751b5eef8762f"
+      }
+    ]
+  },
+  "corrections": [
+    {
+      "stage": "schema-fixtures",
+      "command": "cargo test --manifest-path codex-rs/Cargo.toml -p codex-app-server-protocol --lib schema_fixtures",
+      "result": "passed",
+      "test_count": 6,
+      "log_sha256": "d2ca69d9fa85ccf1dc0494176f7d48e543458622c8475295e22c1e1886f49767",
+      "fix_commit": "cdb6ca11f"
+    }
+  ],
+  "additional_checks": [
+    {
+      "name": "affected-host-clippy",
+      "command": "cargo clippy --manifest-path codex-rs/Cargo.toml -p codex-core -p codex-app-server -p codex-app-server-protocol -p codex-tui -p codex-cli --all-targets -- -D warnings",
+      "result": "passed",
+      "log_sha256": "58c2546ff01a8791e990c22c676c8b56629169794e818b1bcacfb273da5f4220"
+    },
+    {
+      "name": "endpoint-fixture-clippy",
+      "command": "cargo clippy --manifest-path codex-rs/Cargo.toml -p codex-app-server --test all -- -D warnings",
+      "result": "passed",
+      "log_sha256": "e4c6fe31f237a76e8d7b663c000239a8e269843f2be890a1a1f14eec5c4ad454"
+    },
+    {
+      "name": "python-sdk-contracts",
+      "command": "uv run --project sdk/python pytest sdk/python/tests/test_contract_generation.py",
+      "result": "passed",
+      "log_sha256": "0eecbfa50dcda996004cf2185d604dc2d58e3e4809de2d98ac5290dfebf63338"
+    },
+    {
+      "name": "cli-pool-smoke",
+      "command": "Isolated home: stdin fixture tokens; account JSON; add, order, account enablement, prefer, pool disable/enable, remove/enroll, named logout",
+      "result": "passed",
+      "log_sha256": "3d9207aae700202397324b2f22c38f1cc8d8db68053c8ba95e049f9c794cb850"
+    },
+    {
+      "name": "bazel-providers",
+      "command": "bazel test //codex-rs/providers/... --jobs=12",
+      "result": "passed",
+      "log_sha256": "bf421fadd16b436f7669fe7bcc378ba377ffe99fdaa8baef39fd637671871478",
+      "passed_targets": [
+        "//codex-rs/providers/provider-antigravity:provider-antigravity-unit-tests",
+        "//codex-rs/providers/provider-api:provider-api-unit-tests",
+        "//codex-rs/providers/provider-auth:provider-auth-accounts-test",
+        "//codex-rs/providers/provider-auth:provider-auth-security-test",
+        "//codex-rs/providers/provider-auth:provider-auth-unit-tests",
+        "//codex-rs/providers/provider-claude:provider-claude-unit-tests",
+        "//codex-rs/providers/provider-cursor:provider-cursor-unit-tests",
+        "//codex-rs/providers/provider-opencode:provider-opencode-unit-tests",
+        "//codex-rs/providers/provider-registry:provider-registry-unit-tests",
+        "//codex-rs/providers/provider-runtime:provider-runtime-pool-test",
+        "//codex-rs/providers/provider-runtime:provider-runtime-pooled_turn-test",
+        "//codex-rs/providers/provider-runtime:provider-runtime-unit-tests",
+        "//codex-rs/providers/provider-adapter:provider-adapter-live_pool-test",
+        "//codex-rs/providers/provider-adapter:provider-adapter-unit-tests",
+        "//codex-rs/providers/provider-codecs:provider-codecs-unit-tests",
+        "//codex-rs/providers/provider-runtime:provider-runtime-compatibility_fixtures-test",
+        "//codex-rs/providers/provider-runtime:provider-runtime-driver-test",
+        "//codex-rs/providers/provider-runtime:provider-runtime-security-test"
+      ],
+      "skipped_targets": [
+        "//codex-rs/providers/provider-adapter:provider-adapter-live_pool-test-windows-cross",
+        "//codex-rs/providers/provider-auth:provider-auth-accounts-test-windows-cross",
+        "//codex-rs/providers/provider-auth:provider-auth-security-test-windows-cross",
+        "//codex-rs/providers/provider-runtime:provider-runtime-compatibility_fixtures-test-windows-cross",
+        "//codex-rs/providers/provider-runtime:provider-runtime-driver-test-windows-cross",
+        "//codex-rs/providers/provider-runtime:provider-runtime-pool-test-windows-cross",
+        "//codex-rs/providers/provider-runtime:provider-runtime-pooled_turn-test-windows-cross",
+        "//codex-rs/providers/provider-runtime:provider-runtime-security-test-windows-cross"
+      ]
+    },
+    {
+      "name": "bazel-host-native",
+      "command": "bazel test //codex-rs/core:core-unit-tests //codex-rs/tui:tui-unit-tests //codex-rs/cli:codex-bin-unit-tests //codex-rs/app-server-protocol:app-server-protocol-unit-tests --test_filter=provider --jobs=12",
+      "result": "passed",
+      "log_sha256": "523db8a643c64f9a7c82179e14d61ac4dd5fad1ee6338f92cb8b3d7deef73434",
+      "passed_targets": [
+        "//codex-rs/app-server-protocol:app-server-protocol-unit-tests",
+        "//codex-rs/cli:codex-bin-unit-tests",
+        "//codex-rs/core:core-unit-tests",
+        "//codex-rs/tui:tui-unit-tests"
+      ],
+      "skipped_targets": []
+    },
+    {
+      "name": "bazel-management",
+      "command": "bazel test //codex-rs/tui:tui-unit-tests //codex-rs/cli:codex-bin-unit-tests --test_filter=provider --jobs=12",
+      "result": "passed",
+      "log_sha256": "62b2354f2f2107c3c4414afbeb85ee9f86160b40d6dda5781cff125fa9aa0d5a",
+      "passed_targets": [
+        "//codex-rs/cli:codex-bin-unit-tests",
+        "//codex-rs/tui:tui-unit-tests"
+      ],
+      "skipped_targets": []
+    },
+    {
+      "name": "bazel-schema",
+      "command": "bazel test //codex-rs/app-server-protocol:app-server-protocol-unit-tests --test_filter=schema_fixtures --jobs=12",
+      "result": "passed",
+      "log_sha256": "a71e68fbec20c813a524157aaa78e27ff59f46876f999b46d8980a9b98329545",
+      "passed_targets": [
+        "//codex-rs/app-server-protocol:app-server-protocol-unit-tests"
+      ],
+      "skipped_targets": []
+    },
+    {
+      "name": "bazel-app-server",
+      "command": "bazel test //codex-rs/app-server:app-server-all-test --test_filter=native_account --jobs=12",
+      "result": "passed",
+      "log_sha256": "05db22bb5675f492e1a559b6e27aab1630726b3e5f67f26566704afcc6655294",
+      "passed_targets": ["//codex-rs/app-server:app-server-all-test"],
+      "skipped_targets": []
+    }
+  ],
+  "scope_notes": [
+    "The consolidated suite is the same command invoked by the hosted Linux workflow and upstream merge probe; those remote jobs were not dispatched in this local run.",
+    "Repeated focused groups overlap the full crate tests; test counts must not be summed as unique tests.",
+    "Ordinary Bazel execution skips the opt-in live tests. Separate authorized live evidence is recorded in account-pools-live-acceptance.json.",
+    "Windows-only Bazel targets are skipped on Linux."
+  ]
+}

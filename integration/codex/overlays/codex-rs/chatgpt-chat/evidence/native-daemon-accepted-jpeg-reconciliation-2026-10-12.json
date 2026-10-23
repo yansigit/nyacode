@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "at_utc": "2026-10-12T08:38:16.208484+00:00",
+  "diagnostic_only": true,
+  "rust_acceptance_gate": false,
+  "user_messages_sent": 0,
+  "automatic_resend": false,
+  "authoritative": true,
+  "exact_user_message_id_found": true,
+  "expected_parent_matched": true,
+  "accepted_user_preserved_in_journal": true,
+  "server_completed_fixture_descendants": 1,
+  "pending_cleared": true,
+  "recovery_available": true,
+  "reconciliation_error": null,
+  "continuation_blocker": null,
+  "identifiers_or_contents_in_report": false
+}

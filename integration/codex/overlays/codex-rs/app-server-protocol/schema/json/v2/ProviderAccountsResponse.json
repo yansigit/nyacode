@@ -1,0 +1,129 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "ProviderAccountAvailability": {
+      "properties": {
+        "knownResetAt": {
+          "format": "uint64",
+          "minimum": 0,
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "model": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "nextAttemptAt": {
+          "format": "uint64",
+          "minimum": 0,
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "reason": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "reason"
+      ],
+      "type": "object"
+    },
+    "ProviderAccountStatus": {
+      "properties": {
+        "availability": {
+          "items": {
+            "$ref": "#/definitions/ProviderAccountAvailability"
+          },
+          "type": "array"
+        },
+        "credentialCondition": {
+          "type": "string"
+        },
+        "enabled": {
+          "type": "boolean"
+        },
+        "enrolled": {
+          "type": "boolean"
+        },
+        "label": {
+          "type": "string"
+        },
+        "priority": {
+          "format": "uint32",
+          "minimum": 0,
+          "type": [
+            "integer",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "availability",
+        "credentialCondition",
+        "enabled",
+        "enrolled",
+        "label"
+      ],
+      "type": "object"
+    }
+  },
+  "properties": {
+    "accounts": {
+      "items": {
+        "$ref": "#/definitions/ProviderAccountStatus"
+      },
+      "type": "array"
+    },
+    "configuredToken": {
+      "type": "boolean"
+    },
+    "effectiveAccount": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "enabled": {
+      "type": "boolean"
+    },
+    "endpoint": {
+      "type": "string"
+    },
+    "explicitlyEnabled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "preferredAccount": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "provider": {
+      "type": "string"
+    },
+    "revision": {
+      "format": "uint64",
+      "minimum": 0,
+      "type": "integer"
+    }
+  },
+  "required": [
+    "accounts",
+    "configuredToken",
+    "enabled",
+    "endpoint",
+    "provider",
+    "revision"
+  ],
+  "title": "ProviderAccountsResponse",
+  "type": "object"
+}

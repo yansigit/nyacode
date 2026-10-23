@@ -1,0 +1,573 @@
+{
+  "version": 1,
+  "recorded_at_utc": "2026-10-12T23:03:43.050004+00:00",
+  "baseline_revision": "3a88aafe4632364ec30f6c402f68d9d09770a9fc",
+  "dirty_tree": true,
+  "source_sha256": {
+    ".bazelrc": "b4dd2bd74ec14e80ee211a53bdb1b8eebf0337462e624093fc5ea4a05eb34519",
+    "MODULE.bazel": "7ea181788097b06d3f4e6a572a7ac38645403d6da26a13843d99d7644c8b874e",
+    "MODULE.bazel.lock": "ea44fba0f791060c8049bffc219be2d08b86816e681f2f594af1936ba4070d21",
+    "bazel/toolchains/browser_chat/BUILD.bazel": "4fa7322d51a0c5cf76432eb2e5f4969c654cb2cd9514d42327342428ed801f0e",
+    "bazel/toolchains/browser_chat/toolchain.cmake": "404eb87bd886ee10aabc6aa30dc3badeb6d88648485bc5d020cc28276797ef5e",
+    "codex-rs/Cargo.lock": "e9d408091ec7826c25edc1bcbedc147757b2ee9a0e6782e4c327262b0fd2007e",
+    "codex-rs/Cargo.toml": "04d0e271b02f5d8c69b4df354979cdbba6269c6d2c8255cde1b355f8d35bf657",
+    "codex-rs/app-server-protocol/schema/precomputed/app-server-exports-experimental.json.zst": "ff5a42b45d67ef6e96964ff3fc40a62d9a2e85975a5ccd5556128196a7a979e2",
+    "codex-rs/app-server-protocol/src/export.rs": "40e2e8b6ced99889baabbee329695d979df1e730453a44d3c1ad6e6595fd6868",
+    "codex-rs/app-server-protocol/src/protocol/common.rs": "3d03bad19edd271c86ab88566d4926d3a8f147a05ba0ad1d4407d9587b9ffe5b",
+    "codex-rs/app-server-protocol/src/protocol/v2/chat.rs": "0210e253dd1fde26fd07a48ad418795aba0dddbd4ae1ace5761c40d42799bd2a",
+    "codex-rs/app-server-protocol/src/protocol/v2/mod.rs": "77062d18bc729b86df0e62870ef22dc4c9fbad1c23ca643bb85d8b29122f892e",
+    "codex-rs/app-server-transport/src/transport/mod.rs": "e7330a872a1916fce4d816f8fcecc2ce6f117c812b29156233d5d74e6df84905",
+    "codex-rs/app-server-transport/src/transport/unix_socket.rs": "fb65a774d7e412013dba9917d2d3ea99c6d8a1aa58cba931ae1c4db9840d6eba",
+    "codex-rs/app-server-transport/src/transport/unix_socket_tests.rs": "821715c61fd5d8aa53d72fcbc836b0ff9c6a30b8d124ed31b2b1d6b36f43fd5c",
+    "codex-rs/app-server-transport/src/transport/websocket.rs": "50ed17252813f7a63798400af1a020d27a2e7dfada851c93e24e17728b4c3ff1",
+    "codex-rs/app-server/Cargo.toml": "93fd044df5db153ba680e22c9918779e9221b220fd3bde1e4963e659828b0ba9",
+    "codex-rs/app-server/examples/chatgpt_chat_probe.rs": "e6b1b7d64f36e0a9cf8588310a809bf30f5ece4d08a9eae0e6fe350f1f0f58e3",
+    "codex-rs/app-server/examples/chatgpt_chat_probe/fixtures.rs": "8aadfa298b1ae6b2443d0e91404c93eb50cd45b89293018c8f82b387d274b64e",
+    "codex-rs/app-server/examples/chatgpt_chat_probe/rpc.rs": "f9988dd6bd80981f2f42c732dbc267c8f4207475044f6dd77e931fa5c841cc1e",
+    "codex-rs/app-server/examples/chatgpt_chat_probe/rpc_attachments.rs": "2b6e667539d030d0a5ea94454beead5c026262a2b726a99f502f93b00ba198c2",
+    "codex-rs/app-server/examples/chatgpt_chat_probe/rpc_client.rs": "411909e375efbdc88de6492ef00cf13d296940c36b49775a2f8e7f8dfe97f514",
+    "codex-rs/app-server/examples/chatgpt_chat_probe/rpc_lifecycle.rs": "30ab7ce553565f2482ac3db4940a3a9ad5286cafc974f232ecf5003c76642304",
+    "codex-rs/app-server/examples/chatgpt_chat_probe/rpc_saved.rs": "c8255ff40b672298878c997fdb6e5635580a34b5361beac0c1e1ca8b83bfb4cc",
+    "codex-rs/app-server/examples/chatgpt_chat_probe/service.rs": "771aa00f743019e699560da5609b082e7d090dd79ad479cca2be17fee38f7c4d",
+    "codex-rs/app-server/src/chat/cache.rs": "692b13e3ca0db20707462b30ce3a4f13e7287683632b84025238aeeb81b7f838",
+    "codex-rs/app-server/src/chat/cache/tests.rs": "90129de46e933154558e8ac052ef6a50ce9f54ceea6a07b80567adbb8b5053ad",
+    "codex-rs/app-server/src/chat/mod.rs": "62a975f61882f0cf83897fc1a7be490b49bce1e6a0dc9d015cf691b64e930c73",
+    "codex-rs/app-server/src/chat/operation.rs": "1635cc8f2a48de9f046bec47a6ec43519e553ba32552a1ab1fc7edf9373ed2f0",
+    "codex-rs/app-server/src/chat/saved.rs": "a9bda2f158b8827646be45effa363acb4c32438db663affa612e857c0bc4bfe9",
+    "codex-rs/app-server/src/chat/saved/tests.rs": "e7779eee3ad369db15103f368d7df57a1b61cb34cae05f0173d47a763f18b04b",
+    "codex-rs/app-server/src/chat/temporary.rs": "22693640c4183164f9542b3db7147ec1465b38ed8bc675a490747e43418b6640",
+    "codex-rs/app-server/src/chat/temporary/tests.rs": "1802b22c0e956e26f1e5131496d3cdc7ccacfdbf22cd0480e5a1e8edd6b87099",
+    "codex-rs/app-server/src/chat/temporary/turns.rs": "ff35309f1c522272c3e69c04a518408ecd762c1b80573c2dc5c9c57cc23cfcc9",
+    "codex-rs/app-server/src/chat/temporary/turns/tests.rs": "4b6c45dee2b9ad79bb58215aa85eaa4d3461ebacb3f04bc2b4d873e1f61dfb20",
+    "codex-rs/app-server/src/chat/temporary/uploads.rs": "b6369b83c00f82b77526b4ca0bfbca76a0f362a583d582867bf49742e3f9eb6c",
+    "codex-rs/app-server/src/chat/tests.rs": "0224962b86549f61f89ed387c784b9c829c0c20390c778f5ae563c1add9b41b6",
+    "codex-rs/app-server/src/chat/uploads.rs": "c5cc74ae97c1d5e8e4c0a4471f65a89c18db3687649902bd402ee0c6ccac0229",
+    "codex-rs/app-server/src/chat_rpc.rs": "4923b6bb0fecef0f901f9fc221d01b79f0a5180b0bbb0018bbbde1a08d90e465",
+    "codex-rs/app-server/src/chat_rpc/adapter.rs": "58aa241fe087b426102ca8fe308bb7eab3befed4d60fb4412ab56f38ca6a2b26",
+    "codex-rs/app-server/src/chat_rpc/dispatcher_tests.rs": "d8c176db1b24ab261f61ca8dd61237d1b194bd5ee015cb21c60ecc7965186c59",
+    "codex-rs/app-server/src/chat_rpc/events.rs": "59d8c16b2ff8deb5fe542b099a729fe0c981f57822e319a8f112ecb57db4f198",
+    "codex-rs/app-server/src/chat_rpc/session.rs": "c62aaed167627006a21bb9e3a2a2e27c9bb61f2c08f085d604174e8a1f8aae0c",
+    "codex-rs/app-server/src/chat_rpc/tests.rs": "086732c1a540a639894fe0dd29ff280c28102cd76ed02d54ff3050d7c44177c3",
+    "codex-rs/app-server/src/chat_rpc/uploads.rs": "a2387f5f02c9e1eb8946b880de33237b43801fb1875e4307f4c9a805bca3857d",
+    "codex-rs/app-server/src/config_manager.rs": "d9971053b7ad13badc0fae5a4dfcf9ba764e4a4d62e085fba09aca6f0f3658f7",
+    "codex-rs/app-server/src/in_process.rs": "aead846f9f1ceff9d3f463d7b316a255ea69bde8aa9744c8e5d653625d5b795a",
+    "codex-rs/app-server/src/lib.rs": "8e74f35cd0a6b2b8c44cfae9ec36da24b3ef90fd55bb5aef60d120cad1b5e981",
+    "codex-rs/app-server/src/message_processor.rs": "e94e4bc00ca538459a195d206eaa0930e05b164228e72ab4e915cef8428c8534",
+    "codex-rs/app-server/src/notification_media.rs": "f8ec702eca77b02d35ee651e179e1252fb4d17e00bfd3fcc75aeadeff76df236",
+    "codex-rs/app-server/src/outgoing_message.rs": "b09319be6333146c262328c2857a05fd0d5baa9118a22de13cb8d5786016dd52",
+    "codex-rs/app-server/src/request_processors/config_processor.rs": "facb9d292a8adf545c2c088f0e1a31c8e5a62a8d500da84a9f70c06e6c03b874",
+    "codex-rs/app-server/src/user_verification.rs": "75acff4fdd2bd22ad309ba617fcde1ade67a9f1eb02460382d13a87dc0be22f4",
+    "codex-rs/app-server/src/user_verification_activation_tests.rs": "4dd4c9e823ef76033c722eb64b5b7bbf9ed5ea4ff7b256b7c6e41eec3b8286ce",
+    "codex-rs/app-server/src/user_verification_rpc_tests.rs": "be6d3c469e1a795e27f03891c2da7a8a1ee29c152e1a04232dea546da1792ccf",
+    "codex-rs/app-server/src/user_verification_test_support.rs": "5ee786a833094425af65e47caf75ee10e7ca9a943a868297d6be1a8874154969",
+    "codex-rs/app-server/tests/suite/v2/experimental_feature_list.rs": "ac3077272ddf1250c25af14b1f8f8d73e6deb1c0ed2f265d13d8cef6b1f5e95f",
+    "codex-rs/chatgpt-chat/BUILD.bazel": "93b8ee3986d7bf4f036c78a00bbc0b10be28cacefade42aba2c62793155bd3ef",
+    "codex-rs/chatgpt-chat/Cargo.toml": "16f8dac7f94b5ade0b8da60648b1702a9c5902382677185851e9235963a5db2c",
+    "codex-rs/chatgpt-chat/NOTICE": "6efd026aae3cc42a0c2047a116dd8bc29f2f44fb2a2a5974c6b97cb06f6b1047",
+    "codex-rs/chatgpt-chat/README.md": "9db396693fc75f2471d306db254e6a7bef906ffc6b53d8ed6290cb0c5a2d03aa",
+    "codex-rs/chatgpt-chat/fixtures/attachments/README.md": "e66e2cde36286f2f4fdb444a88a389837b22567a2a57456a8575eb7c6f1bfe30",
+    "codex-rs/chatgpt-chat/fixtures/attachments/fixture.jpg": "e991e3e7162eda49abc8ba3d8c41dda75eb075795e830c07e57ebbcb34dc1065",
+    "codex-rs/chatgpt-chat/fixtures/attachments/fixture.pdf": "93a909cef29ee735cc7d835b07fa1c711df21d9206342805b9b79084024029b1",
+    "codex-rs/chatgpt-chat/fixtures/attachments/fixture.png": "0b81b1ad46a19b644fb4048be86577b6e88aaff406ee7bafc561e998b5469600",
+    "codex-rs/chatgpt-chat/fixtures/attachments/fixture.txt": "d8a37a99a3b426f3da18cce67bb98cc6cc98b6c85d420b1046ea899c83a2d6cc",
+    "codex-rs/chatgpt-chat/fixtures/attachments/fixture.webp": "afcefd8a251bf95a75924734ee7c283bc5571c0763407c444c64a206e86ecffc",
+    "codex-rs/chatgpt-chat/fixtures/attachments/manifest.json": "04627c5e416c262231f00640ee6b230cc908a28baf931cce92e584029455cc76",
+    "codex-rs/chatgpt-chat/fonts/DejaVuSans.ttf": "ae7b7855e115a5966d8b1b3f80f254ccc117ec86f9965e202ee2940453837280",
+    "codex-rs/chatgpt-chat/fonts/DejaVuSansMono.ttf": "c805f9436dbc268644c1d9584f01a601a653e028e08fd74b9b949f6cf8304d88",
+    "codex-rs/chatgpt-chat/fonts/DejaVuSerif.ttf": "8f2c103bfa3fd5de71f1b92b18f21906b5a26871fb7e19a9a4c9af539c3cc7ab",
+    "codex-rs/chatgpt-chat/fonts/LICENSE": "e180b3d65bf650dffffd71dd21b6180767b469a18dd87e1d8552be69bb9ecdf0",
+    "codex-rs/chatgpt-chat/fonts/profile.json": "eff46b99b6473cfec6699cd043f9c488ded99b22923a9f29639d7d81bd9f1b62",
+    "codex-rs/chatgpt-chat/pdf-validator/.gitignore": "32612892f1c9e15fe772b8034945f8072b83e025153aef597e45d5eccbe98c43",
+    "codex-rs/chatgpt-chat/pdf-validator/Cargo.lock": "89ad39703f649a10cb4e4bf1a8557e48dc8fc34b85429adca05c6f1b5c47f4f5",
+    "codex-rs/chatgpt-chat/pdf-validator/Cargo.toml": "6e388816d69a666943cb71d9d18f8e5b657ce414c449df1f0a1c162341360d8c",
+    "codex-rs/chatgpt-chat/pdf-validator/README.md": "481d80c81444f526de3a8174232897969b598e7c0a9b2b46356751988b17a49d",
+    "codex-rs/chatgpt-chat/pdf-validator/RUST_LIBRARY_NOTICES": "b78774ed72a086ddd7457ff6721ed71ee9e1165ae7830904701e811963ab1caf",
+    "codex-rs/chatgpt-chat/pdf-validator/THIRD_PARTY_NOTICES": "4660c7ea0b1fa5efd22c7775569cf6708a052053f8683e77bf51d48316ea53ce",
+    "codex-rs/chatgpt-chat/pdf-validator/build.py": "fed8696002f8613696ca510d59aee748ce197bf28e4db9363edd3e2924ba8a10",
+    "codex-rs/chatgpt-chat/pdf-validator/manifest.json": "f97fb4dc425b62e61c376d8a1d534d048e161efb4f52314db3b76d49184f116f",
+    "codex-rs/chatgpt-chat/pdf-validator/src/lib.rs": "186fcf892a7b169a824574aa06e1f2b787c1fe8c5340d33a840ab9c0c333bb32",
+    "codex-rs/chatgpt-chat/pdf-validator/validator.wasm": "aad790fb295c9072897e252d6ef268190947e0c63c7bd8b0c28be885162b50ff",
+    "codex-rs/chatgpt-chat/research/msvc-toolchain-candidate/aws-lc-5.1.0-msvc-driver.patch": "ce37e38047ba4d4e1d3f95da7f9d6b28678cb0d5d1d6f10526e966eff25cb85d",
+    "codex-rs/chatgpt-chat/research/msvc-toolchain-candidate/btls-sys_msvc_bindgen_driver.patch": "55b4bae5c363de2075056cd62629802df597633732e27c52e8e3823da8e87322",
+    "codex-rs/chatgpt-chat/research/msvc-toolchain-candidate/btls-sys_msvc_compatibility_version.patch": "76933db5128494459a88a17775a3de83880bb5355baec829f94a079e04f9120d",
+    "codex-rs/chatgpt-chat/research/msvc-toolchain-candidate/llvm-0.8.24-relocatable-msvc-vfs.patch": "60790bbf78a53c18044288a8efa511bc1f740a89f9b0131a89c43dfe2117339e",
+    "codex-rs/chatgpt-chat/research/msvc-toolchain-candidate/llvm-0.8.24.patch": "1c729c4e82194b3b07808249adb10050f454a156bf0ed3fa78ad1d5af71c2c61",
+    "codex-rs/chatgpt-chat/research/msvc-toolchain-candidate/manifest.json": "116f1b1c068e574fb764e2bb2b886a0afc596baff46ff3c858d2a23812a49785",
+    "codex-rs/chatgpt-chat/research/msvc-toolchain-candidate/ring_msvc_declared_clang.patch": "aadcd1e835d831e857507d4a957876c43ce07a11b1caffb4853acec138511d13",
+    "codex-rs/chatgpt-chat/research/msvc-toolchain-candidate/rules_cc-0.2.25-grep-includes.patch": "fba33bddfc411d2265d291a0c06b7fd8a63ebf421633c4d629eb9bba0d9f5253",
+    "codex-rs/chatgpt-chat/research/msvc-toolchain-candidate/rules_rust_msvc_build_script_paths.patch": "df2adba4e98d41fb8b1ecbb5539bf3f54f35f5784c08e82a0eb2340c5bb731bf",
+    "codex-rs/chatgpt-chat/research/msvc-toolchain-candidate/rules_rust_msvc_linker_paths.patch": "adfb8b786224e1b07c229c1cc4ce9fcce9c9941ef574fb14e73b766fe313a8d9",
+    "codex-rs/chatgpt-chat/research/msvc-toolchain-candidate/windows-support-0.4.1.patch": "dac7c792ee3ed7c6a46bb91bcdcf6f0fe361958548052a2826c6967f84c5c0f9",
+    "codex-rs/chatgpt-chat/research/msvc-toolchain-candidate/workspace-toolchain.patch": "013d41587aee5e97f417be85a297c303aa5f59aae60fb8c89a6df09b8424aa71",
+    "codex-rs/chatgpt-chat/src/attachment.rs": "fec6e4ab29bcfbb62245325dcbf46b5739eb3ae97932e5a56560c72420ba8d0a",
+    "codex-rs/chatgpt-chat/src/content.rs": "02504d1f83f6df8de044dbd2c8f420386a850255d8c3360951d741d92e3f75a3",
+    "codex-rs/chatgpt-chat/src/conversation.rs": "0281f332d863eb5ab71e73b3fec3daaded4f7c34c07304a1a9f3d96bd45ff304",
+    "codex-rs/chatgpt-chat/src/conversation/tests.rs": "7542b2c3c44d6298d5bcc6ab24b7e6e2f02171a46109ce326c52ab57860a02bb",
+    "codex-rs/chatgpt-chat/src/journal.rs": "6f6d7309429f910e96b959f0691999f70dd2e5b8ef4e835f2a802b8bfd0d4f76",
+    "codex-rs/chatgpt-chat/src/lib.rs": "829a9b1bc02a11d4e2da944ede1a92ccc4c2e5db836b028019caafc440420bcb",
+    "codex-rs/chatgpt-chat/src/models.rs": "285e0bfd4520b64cf7c9363f04a2c8278e5d13d66cb5491a2d117c0b61ec9e4b",
+    "codex-rs/chatgpt-chat/src/native_preparation.rs": "41a7387b2371b5e6b2632ea19322c25a23e60eadc23b5f9f5fdcdf8a910ee697",
+    "codex-rs/chatgpt-chat/src/pdf.rs": "af3407d5218fc11250a2b12383d998381f310fdff0911ff409998d3423fc2b42",
+    "codex-rs/chatgpt-chat/src/pdf/tests.rs": "2f89e1c4538591c359562ff7fd3ad9a8d2f1227a04ccc28c24598b969282d159",
+    "codex-rs/chatgpt-chat/src/preparation.rs": "2c06708044041455bc26f00366c4fd514bde244d949a2443b7e32a4739b4ea26",
+    "codex-rs/chatgpt-chat/src/probe.rs": "7cec4d83e4b1664d84f1ba86d52e76c0ac97f6fe622591d22fe1e5452f0fdc54",
+    "codex-rs/chatgpt-chat/src/probe_tests.rs": "fe6616510fd0f8481a4ba0110dc52a8d3543d23b12f7eb87c93b7eaf64c0e31a",
+    "codex-rs/chatgpt-chat/src/report.rs": "259e9eb97a0814e0a40e2d5544c5b169f92b944c5e192c17e697119a7d1a440a",
+    "codex-rs/chatgpt-chat/src/send.rs": "93485c2674c19ff73d141d7c4d68c3091d459ea3fba52a2217edfdc2d9495603",
+    "codex-rs/chatgpt-chat/src/sentinel/layout.rs": "0ea8d0052fae6b8a7caedda239679ac9df3b6e4b2571128696a75938873ede64",
+    "codex-rs/chatgpt-chat/src/sentinel/mod.rs": "12e76d3274e483d9266e1622a6fdeebba8864bef3e65d33538a12977c777ab77",
+    "codex-rs/chatgpt-chat/src/sentinel/pattern.rs": "5ebfdb879672ee28e088945c59ce476758de6ff1b7ae59018ebcd277a565c5ff",
+    "codex-rs/chatgpt-chat/src/sentinel/profile.rs": "473f43e0ae622c6f09ec61fed6aff874dc2cfdbb9d750f2aee6f979e224f098e",
+    "codex-rs/chatgpt-chat/src/sentinel/proof.rs": "f138962ccc9ad33e447c9a6d63992b9591f5a7234cb677f58209cfec200f75b4",
+    "codex-rs/chatgpt-chat/src/sentinel/storage.rs": "199fd6a169f02e372c1f03c059fdf8b86883056aff2d6433fe05844dca47f021",
+    "codex-rs/chatgpt-chat/src/sentinel/style.rs": "7817575393036d172e0f9b225525ea06072bbf219d22cdc93cdc2315dd63c453",
+    "codex-rs/chatgpt-chat/src/sentinel/vm.rs": "a201b1895e9289a692b9f7b304dea605c9f7e2e5e1a65fe9e60cf0bb648f6641",
+    "codex-rs/chatgpt-chat/src/session.rs": "d1c7de9f552c3535849ecbcbb3ebf27a13b6ec6450cd0558006a45fa7aa97984",
+    "codex-rs/chatgpt-chat/src/session/tests.rs": "00fbd6879dd08839223b694c16ace7046904ae72d2831291c223b21640a66b0b",
+    "codex-rs/chatgpt-chat/src/stream.rs": "44dfa0ca3507813325d22cb31c58a858e47251487070062be51766911bfffc92",
+    "codex-rs/chatgpt-chat/src/stream/delta.rs": "52b2bb5a23f09ec5dd29ebaf8ef8a73fabe695e125468ecacaf7a1a630cee15f",
+    "codex-rs/chatgpt-chat/src/stream/turn.rs": "21bd1cd36dc1ee74c48041bbdda2b608e52a995468844a1a6dcc81b8af6dc04c",
+    "codex-rs/chatgpt-chat/src/temporary.rs": "01c692f93eb4a69e220d149c2a1ccad98164360f1d33d03198c2eb8a364c76bb",
+    "codex-rs/chatgpt-chat/src/temporary_session.rs": "64dcd3948fc06c5def1888d3e7872a4a95cd057f1dc3946f7052d714b1983b29",
+    "codex-rs/chatgpt-chat/src/temporary_session/tests.rs": "79be27fcb0359775b931209f1053012049c8eb96b69e3ceb7d51168df5ae09af",
+    "codex-rs/chatgpt-chat/src/upload.rs": "87f342dae3c8d4064d191168676c875e705caafc9159d81f94f17f2e934102bb",
+    "codex-rs/chatgpt-chat/src/upload/processing.rs": "9801a93d1d6faac1426d430381226d2065398bd1166fa6f4733593faeaed70b2",
+    "codex-rs/chatgpt-chat/src/upload_tests.rs": "cbb48aff65d970587a2f6120893408fab54847cb03f6853fb5cace55021acd58",
+    "codex-rs/config/src/tui_keymap.rs": "e90fb2485366ae5f4d5d9fddc266b20b8637dced8b2c1d13b08b030b07a11193",
+    "codex-rs/core/config.schema.json": "03349f5250304202cf37f3530bc055e89f41ca3c51b7c5458cd55c69d7309172",
+    "codex-rs/features/src/lib.rs": "2c99c33a0f5d1d78a9dbe12c2f87b775be3cd3670fe3af93488c38a7aa794c90",
+    "codex-rs/features/src/tests.rs": "865342f08d619b43936b6c2d926820deafe1f9b35b205722a1c9aded231c41a4",
+    "codex-rs/http-client/Cargo.toml": "e604b430ae3ec52859cb5c6937d30dbc8a16ee6e41bc3b5d188524a06f9b54be",
+    "codex-rs/http-client/src/browser_chat.rs": "4e435882e8cb75f59bc2858b804eced74e65a6202493e1bbfb28729fa89ffc7c",
+    "codex-rs/http-client/src/browser_chat_tests.rs": "8a405f5464750e9e6f2615372b0e47195c2ebaabb787505902fda6e1f79aab1c",
+    "codex-rs/http-client/src/client.rs": "2fd2b962a96aa78e3025486f8a70c2fae03311e7fc875bc26817305aaa66cece",
+    "codex-rs/http-client/src/client_builder.rs": "bfe31bc44eb48d32d35c7ef69186b2ad36d7ecf5326d1f587322d48fb56ad695",
+    "codex-rs/http-client/src/client_builder_tests.rs": "35d7d7e93b348536132a9c22a50ec06f2ffbfd66a608977538dafa7c14da8f90",
+    "codex-rs/http-client/src/custom_ca.rs": "0858fabdc570c96f37fe98ee2d7420cf4972f2721dccf884e1a0dd5fc4addde3",
+    "codex-rs/http-client/src/lib.rs": "f8fd0bf70ce740fafc0e4180f179c555303497e5083c92385e49ee583c1ccfa4",
+    "codex-rs/http-client/src/outbound_proxy.rs": "0bb76f60b842075a8f54828fb90a1b67758ebf1b9446a9b0a1e810a3002f8734",
+    "codex-rs/http-client/src/request_builder.rs": "17c1067f1d6e4076fa85b8bd33525f1e778cfb017b61f41177fbecab4bdd919e",
+    "codex-rs/http-client/src/transport.rs": "53ca18caa59bb3bfede3d41e6444708759ea46b69f180899259b25a40876813a",
+    "codex-rs/rust-toolchain.toml": "570656042681cfd8795403a455baf9a33035331a07db0645e866bbcea89a3d64",
+    "codex-rs/state/Cargo.toml": "8fd31a38a832ee8ff4ff04f1d16faeb1aa53e5246741cc7e27b50fc53fcd2ed0",
+    "codex-rs/state/migrations/0062_saved_chat.sql": "45da65287bb7c1d3f50d23a49cfb3db4f1a645de077172f66c6d4161ce996dbe",
+    "codex-rs/state/migrations/0063_chat_cache.sql": "649a2763a61fabc046f5cc89d45cdd8a64e6b93250c8ceb5102477fca1ef50ca",
+    "codex-rs/state/src/lib.rs": "ecbff31083e992ee839f95764f6bdef49f1826fa928478e5e9db15f6dff988a4",
+    "codex-rs/state/src/runtime.rs": "55783392165838f5375b29164264d2e3e953b8c0d0204e8225917d71c682281f",
+    "codex-rs/state/src/runtime/chat.rs": "b97f112c11042ee2ae31b2c16fad3cbcc256c7ea9070e6c45dc3b1cdd1f3010a",
+    "codex-rs/state/src/runtime/chat/cache.rs": "06502dbdff6c6a2262773edcbe0f5e3da15f532594dbe8c4ab6eb80eba0a71f6",
+    "codex-rs/state/src/runtime/chat/cache/tests.rs": "49043184ffca3d1f58c13cf753c392d9e675148a553e79d0ea7fee2a6d35ab58",
+    "codex-rs/state/src/runtime/chat/cache/types.rs": "20855f8a43abe395a9dbb221f71bafab66a185796b0eac013b5a597a55c58d4a",
+    "codex-rs/state/src/runtime/chat/drafts.rs": "8c8983ed6968436eaef565a21d211a422535c77798db56f8308b78d51b9f0d8b",
+    "codex-rs/state/src/runtime/chat/submissions.rs": "73588979457b28c213986fab782a9b6e5a14445663aed91da0b1fad8182b1825",
+    "codex-rs/state/src/runtime/chat/tests.rs": "2f565b2e276b5b1c2d8976da6da52fc1d30514013d2f91833be55369ee224584",
+    "codex-rs/state/src/runtime/chat/types.rs": "aa488d928c3eb96c0560061208e34c807c3018d7e1e5115524372aa25b03b6af",
+    "codex-rs/tui/src/app.rs": "b7044e31e2a7d6c38b529a8143b3d1d12d700df04fd67d56bd4c0a9d636b41ff",
+    "codex-rs/tui/src/app/app_server_event_targets.rs": "f576ce1fef04e18c669591b851507fa7313c35e581711310bb28b087d235ca6c",
+    "codex-rs/tui/src/app/app_server_events.rs": "420c4d0e26ae7bb09c207c5057cae62a254771bae100ff48a1582975cd0725c6",
+    "codex-rs/tui/src/app/event_dispatch.rs": "e14ec8e752236e49dcbd714cc72d595811727bd68845b1b31dbcfb703b240fdc",
+    "codex-rs/tui/src/app/input.rs": "cda8ed091407f6b5a0ff8d0c900d131ec88c0168ecde9c8adc320e8fee847af1",
+    "codex-rs/tui/src/app/native_chat/input.rs": "c4bc568fb8b8e3469fdea296bcd057359f8e7d1705e4226a50815c531cd68384",
+    "codex-rs/tui/src/app/native_chat/mod.rs": "70d6fd2b3503d16fea0b1c7a81f2669248e773c3019a8d71522098133a0ede9a",
+    "codex-rs/tui/src/app/native_chat/render.rs": "8c42d5139de4f6ae8f2c93b894430b0b7d9dd46edb991828d34a3852e1f305cb",
+    "codex-rs/tui/src/app/native_chat/snapshots/codex_tui__app__native_chat__tests__chat_temporary_surface.snap": "8b911729ba61aaf7ed95099b174e326d292cc35cd453c616c34c182bb72ec0dd",
+    "codex-rs/tui/src/app/native_chat/state.rs": "030f9c7269ee0970bdadc083ca010c393f545abd91b58a22416bf2d483aa0a46",
+    "codex-rs/tui/src/app/native_chat/tests.rs": "157c4d76a63dd912044e1b2b82c70cf741c7a8598d7ee5e85fe874c6a1ad6819",
+    "codex-rs/tui/src/app/owned_transcript.rs": "5f2409382fbb7f688d36c5b67818edf1302e1e51d880b9c12af8759e67345e80",
+    "codex-rs/tui/src/app/reconnect.rs": "b6dab4a3716838c782d3559b5a672cd08a9ca2da1c35fd67e67c2bcef0bc6f2c",
+    "codex-rs/tui/src/app/startup.rs": "ee76085f28af79a7e108c54b84c3ec6f4a8d47948bc1f63265112b9cd955dd4c",
+    "codex-rs/tui/src/app/test_support.rs": "5730b6f18040b5e8fa125855ac781184aae8f2903160a61b5f278efef1ef29d3",
+    "codex-rs/tui/src/app/tests.rs": "d189db4fbffeac0bf78bc74ae20f6751a2705190d9a24c2ff310d9edb4f7bb61",
+    "codex-rs/tui/src/app_event.rs": "2ee2664054e998ce315df880109d455ef732863ea2929396f5e15d67372fe92b",
+    "codex-rs/tui/src/bottom_pane/chat_composer.rs": "1c3a30dd89f2675d4a4819d307659d34998f6594d47df59dcc888e0efebdee96",
+    "codex-rs/tui/src/bottom_pane/chat_composer/slash_input.rs": "925cf0d4cc451b396fb95d6e257b71170a08d0d3f0349449b3fbcb03b2d4d6f3",
+    "codex-rs/tui/src/bottom_pane/command_popup.rs": "a2ce50ec55fc037a2e0720fb92192c84f064fe258ac66bd894b4242c7ee83097",
+    "codex-rs/tui/src/bottom_pane/mod.rs": "cd41dd882e536dbc6774b2a37904c5a5dcdbaf5f12c497e2792d2d1ea5110da3",
+    "codex-rs/tui/src/bottom_pane/paste_burst.rs": "3775947918c74ca097a8435b44607e8cf46552065dafde6dd3c2ee8120704f6b",
+    "codex-rs/tui/src/bottom_pane/slash_commands.rs": "ce5a27b4028c876c052850c3d001cf57cc4ee184ebab1defa3274598dfc815dc",
+    "codex-rs/tui/src/chatwidget.rs": "c6fb780374ea0587d52c1ac016bba275cb80273acf4e184c7d4f31efc37425b4",
+    "codex-rs/tui/src/chatwidget/keymap_picker.rs": "d34e9712dcc5e2a250baedb08a1d7cdfbf67af2ff3a288025fd1c3ffce1bb39b",
+    "codex-rs/tui/src/chatwidget/protocol.rs": "50b5f5fdede2d54b551ede9c8c092e13edaf39e4b11d9f7874ca435fdb27bb95",
+    "codex-rs/tui/src/chatwidget/settings.rs": "34f4c6dafd4360a3c95a158b7d4a5411db7fc5ae91f5ec8c94513b77900bf5ae",
+    "codex-rs/tui/src/chatwidget/slash_dispatch.rs": "f269643fbcaafacb0f85576ae0132dfe0231ed97c95b3e1abf649ea03f13377f",
+    "codex-rs/tui/src/chatwidget/tests.rs": "0864f50e6ef858fd6549822e5437d43bbec797a57d24a65f49828c7964aa683d",
+    "codex-rs/tui/src/chatwidget/tests/native_chat_isolation_tests.rs": "3213f713e9f7b077a667d8e0d4fcdd73367a8ce73fba293c81b1839c5d89fa18",
+    "codex-rs/tui/src/clipboard_paste.rs": "2d14cda6ac850545a030c39f6a04e30c8e194aefee6e3c8ce294502249b0b418",
+    "codex-rs/tui/src/keymap.rs": "9df0f63b8d6006dee3e46c3eb490bea455b22e89c045d8c6621e3f9728bf57b0",
+    "codex-rs/tui/src/keymap/bindings.rs": "72378203ac82fbda2101304b5ed030074875325512f492ea78e132078182ce28",
+    "codex-rs/tui/src/keymap/chords.rs": "2256b12568dcdc0b29560ddf9fe9de57aba1e30c1ca1fee8d93a6e4f7badddea",
+    "codex-rs/tui/src/keymap_setup.rs": "5373d5706fc1b72675cf31cbef8f75e4334172e95e4ccba9757dd594e57fb153",
+    "codex-rs/tui/src/keymap_setup/actions.rs": "b075e30a45f155d7e3ca351085d12315b44a2765590c8227b2b39ac50d827002",
+    "codex-rs/tui/src/slash_command.rs": "796da3df45367b8282b851fa25682c2315eb5c54dc969b2c5177d1c37fc94981",
+    "docs/config.md": "b684574a1d137ed1da915258260c060ab6c4956b67dd9dca46117d883a921f56",
+    "patches/BUILD.bazel": "c12d2e897dd760803f50ab9b122df9117ba006eafc1f35421e3e5b7648a396d3",
+    "patches/aws-lc-5.1.0-msvc-driver.patch": "ce37e38047ba4d4e1d3f95da7f9d6b28678cb0d5d1d6f10526e966eff25cb85d",
+    "patches/btls-sys_msvc_bindgen_driver.patch": "55b4bae5c363de2075056cd62629802df597633732e27c52e8e3823da8e87322",
+    "patches/btls-sys_msvc_compatibility_version.patch": "76933db5128494459a88a17775a3de83880bb5355baec829f94a079e04f9120d",
+    "patches/btls-sys_native_tools.patch": "7d5ef3bb940ec18ebba186689e8179e1e70a59b6bff7a58fdc4a3a84a3383c57",
+    "patches/llvm-0.8.24-relocatable-msvc-vfs.patch": "60790bbf78a53c18044288a8efa511bc1f740a89f9b0131a89c43dfe2117339e",
+    "patches/llvm-0.8.24.patch": "1c729c4e82194b3b07808249adb10050f454a156bf0ed3fa78ad1d5af71c2c61",
+    "patches/ring_msvc_declared_clang.patch": "aadcd1e835d831e857507d4a957876c43ce07a11b1caffb4853acec138511d13",
+    "patches/rules_cc-0.2.25-grep-includes.patch": "fba33bddfc411d2265d291a0c06b7fd8a63ebf421633c4d629eb9bba0d9f5253",
+    "patches/rules_rust_msvc_build_script_paths.patch": "df2adba4e98d41fb8b1ecbb5539bf3f54f35f5784c08e82a0eb2340c5bb731bf",
+    "patches/rules_rust_msvc_linker_paths.patch": "adfb8b786224e1b07c229c1cc4ce9fcce9c9941ef574fb14e73b766fe313a8d9",
+    "patches/windows-support-0.4.1.patch": "dac7c792ee3ed7c6a46bb91bcdcf6f0fe361958548052a2826c6967f84c5c0f9"
+  },
+  "source_manifest_sha256": "d0c633b68facfb7ea1cc66f126662e61bf37c636a68cae451bc32bac2dca646e",
+  "rust": "1.95.0",
+  "rustc": "rustc 1.95.0 (59807616e 2026-04-14)",
+  "transport": "wreq=6.0.0-rc.29;wreq-util=3.0.0-rc.14",
+  "profile": "chrome_136_linux",
+  "production_toolchain_changed": true,
+  "feature_stage": "experimental",
+  "feature_default_enabled": false,
+  "transport_gate_passed": true,
+  "integrated_release_gate_passed": true,
+  "final_checks": {
+    "version": 1,
+    "started_at_utc": "2026-10-12T22:33:04.704671+00:00",
+    "steps": [
+      {
+        "name": "features",
+        "command": ["cargo", "test", "-p", "codex-features", "--lib"],
+        "exit_code": 0,
+        "passed": true,
+        "log_sha256": "af785ba9df063f2b2b36d4525bff4ba659a44b18149b6846bffe7aa9b7f287ab",
+        "test_summaries": [
+          "test result: ok. 44 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s"
+        ]
+      },
+      {
+        "name": "native-chat",
+        "command": ["cargo", "test", "-p", "codex-chatgpt-chat", "--lib"],
+        "exit_code": 0,
+        "passed": true,
+        "log_sha256": "e64f2f4dc7645becdf87100ed89edbf9f7851ebae92654c8b04d33a8d643216a",
+        "test_summaries": [
+          "test result: ok. 183 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.93s"
+        ]
+      },
+      {
+        "name": "probe",
+        "command": [
+          "cargo",
+          "test",
+          "-p",
+          "codex-app-server",
+          "--example",
+          "chatgpt_chat_probe"
+        ],
+        "exit_code": 0,
+        "passed": true,
+        "log_sha256": "29a20d9c0d357670514e348eafbd28a6e87ddee0c0d01824d5a0ec8c040062c5",
+        "test_summaries": [
+          "test result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s"
+        ]
+      },
+      {
+        "name": "tui",
+        "command": [
+          "cargo",
+          "nextest",
+          "run",
+          "-p",
+          "codex-tui",
+          "-E",
+          "test(native_chat) | test(experimental_features)"
+        ],
+        "exit_code": 0,
+        "passed": true,
+        "log_sha256": "fcb0ff677a96ed694cdfbef74cc58160a715268b28fb1cce287b8e6d342eb9e5",
+        "test_summaries": [
+          "Summary [   5.442s] 33 tests run: 33 passed, 5768 skipped"
+        ]
+      },
+      {
+        "name": "experimental-feature-rpc",
+        "command": [
+          "cargo",
+          "nextest",
+          "run",
+          "-p",
+          "codex-app-server",
+          "--test",
+          "all",
+          "-E",
+          "test(experimental_feature_list)"
+        ],
+        "exit_code": 0,
+        "passed": true,
+        "log_sha256": "d77df8189e5848f49247d51809a7200a9da7831eb2b2d9bb987f46507d1ba170",
+        "test_summaries": [
+          "Summary [   6.892s] 11 tests run: 11 passed, 1532 skipped"
+        ]
+      },
+      {
+        "name": "stable-exports",
+        "command": [
+          "cargo",
+          "test",
+          "-p",
+          "codex-app-server-protocol",
+          "--lib",
+          "stable_exports_exclude_all_chat_methods_and_dependencies"
+        ],
+        "exit_code": 0,
+        "passed": true,
+        "log_sha256": "fef9f9b645859de6967f139b288504b8941b035d0282481fa1b4c81f57ca6be9",
+        "test_summaries": [
+          "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 324 filtered out; finished in 5.89s"
+        ]
+      },
+      {
+        "name": "config-schema",
+        "command": [
+          "cargo",
+          "run",
+          "-p",
+          "codex-config-schema",
+          "--bin",
+          "codex-write-config-schema",
+          "--",
+          "--out",
+          "/tmp/nyacode-chat-release-config-schema-v1.json"
+        ],
+        "exit_code": 0,
+        "passed": true,
+        "log_sha256": "43f1b5f87b35843d930fb65bfb18ba42dc17287f5f3e057d6f3ebbb5e0eb9f69",
+        "test_summaries": [],
+        "canonical_schema_matches": true
+      },
+      {
+        "name": "clippy",
+        "command": [
+          "cargo",
+          "clippy",
+          "-p",
+          "codex-features",
+          "-p",
+          "codex-chatgpt-chat",
+          "-p",
+          "codex-tui",
+          "--all-targets",
+          "--",
+          "-D",
+          "warnings"
+        ],
+        "exit_code": 0,
+        "passed": true,
+        "log_sha256": "92061cbc50355799296c2443c09c27998d9f4d762ddeafc05d7f904dca8e4beb",
+        "test_summaries": []
+      },
+      {
+        "name": "probe-clippy",
+        "command": [
+          "cargo",
+          "clippy",
+          "-p",
+          "codex-app-server",
+          "--example",
+          "chatgpt_chat_probe",
+          "--",
+          "-D",
+          "warnings"
+        ],
+        "exit_code": 0,
+        "passed": true,
+        "log_sha256": "0abc1e07629ec5d828446cac5b2b251d01e355f7f412a48a0f49318393e5191d",
+        "test_summaries": []
+      },
+      {
+        "name": "cli",
+        "command": ["cargo", "build", "-p", "codex-cli"],
+        "exit_code": 0,
+        "passed": true,
+        "log_sha256": "9dd28ed5c21d535d784e178cef5b4832c59f1e4397467cc08452ed1c3759a26e",
+        "test_summaries": [],
+        "binary_sha256": "a00885f71d58289bbac8df1bcc236b20f35ab1dd95e2b1d076829e36a8dc46a1",
+        "smoke_checks": [
+          {
+            "argument": "--version",
+            "exit_code": 0,
+            "output_sha256": "311f8a5f980e6f4c89ebcaeae9a1c5b32ad0e9918bdf639d8b29f67a80a9a9d1"
+          },
+          {
+            "argument": "--help",
+            "exit_code": 0,
+            "output_sha256": "9ed1816eaaf91416d8f04724d8f2220d489a279a05138da2373da2c40663b2a1"
+          }
+        ]
+      },
+      {
+        "name": "bazel-cli",
+        "command": [
+          "bazel",
+          "build",
+          "--lockfile_mode=error",
+          "//codex-rs/cli:codex"
+        ],
+        "exit_code": 0,
+        "passed": true,
+        "log_sha256": "94a89b42bbbffcfcc0c97745add804b40b07f766dc13ecbf421e0dfb68d42e7c",
+        "test_summaries": [],
+        "binary_sha256": "cced571efbdb9358399c3ffc32f8553bec3591214866ab30aa5f86ffe8ca3af2",
+        "smoke_checks": [
+          {
+            "argument": "--version",
+            "exit_code": 0,
+            "output_sha256": "311f8a5f980e6f4c89ebcaeae9a1c5b32ad0e9918bdf639d8b29f67a80a9a9d1"
+          },
+          {
+            "argument": "--help",
+            "exit_code": 0,
+            "output_sha256": "9ed1816eaaf91416d8f04724d8f2220d489a279a05138da2373da2c40663b2a1"
+          }
+        ]
+      },
+      {
+        "name": "rustfmt",
+        "command": ["cargo", "fmt", "--all", "--", "--check"],
+        "exit_code": 0,
+        "passed": true,
+        "log_sha256": "be18fcac6279f65c153293123d14864798eb9044f86e5fe7c17cfea44a2e27c6",
+        "test_summaries": []
+      }
+    ],
+    "environment": "Private fixture umask 077; inherited NO_COLOR removed; 32 MiB debug test stacks. The test runner removes Cargo-injected CA overrides only for fixture processes.",
+    "updated_at_utc": "2026-10-12T23:03:41.413083+00:00",
+    "passed": true
+  },
+  "review_checks": [
+    "Adopted toolchain hashes still match the tested candidate.",
+    "Buildifier passed.",
+    "Documentation Prettier check passed.",
+    "git diff --check passed.",
+    "The only terminal snapshot change replaces under development with experimental."
+  ],
+  "proof_sha256": {
+    "native-msvc-accepted-transport-builds-2026-10-12.json": "78a5fd24926f06817387e97f596aa6a7133d9a7ebf15c59c052af92d727c1e48",
+    "native-msvc-final-platform-regressions-2026-10-12.json": "f4e2e0293728b9dddc3147f0df7ac1c47a7f3745e5ba254f0a5b408efd383b8f",
+    "native-msvc-toolchain-adoption-2026-10-12.json": "39d87ad51211881f1f6256a44075e159b74a8c3fff61f5d530bd6ee9587a4662",
+    "native-msvc-sdk-path-research-2026-10-12.json": "9542ac3250845eeb76d88554c58140b15657139ef04c08c38e277e0b1353e60a",
+    "native-tui-lifecycle-validation-2026-10-12.json": "e6583c51786dd498fa0005ac1f7dc1ce68775cd3ed03aa259365903aa331318c"
+  },
+  "live_scenario_assessment": [
+    {
+      "scenario": "saved_create_retrieve_followup_restart",
+      "status": "passed",
+      "evidence": [
+        "native-rpc-embedded-restart-2026-10-12-audit.json",
+        "native-rpc-daemon-restart-2026-10-12-audit.json"
+      ]
+    },
+    {
+      "scenario": "parallel_conversations",
+      "status": "passed",
+      "evidence": [
+        "native-tui-embedded-initial-2026-10-12-report.json",
+        "native-rpc-daemon-parallel-2026-10-12-audit.json"
+      ]
+    },
+    {
+      "scenario": "temporary_creation_continuation_without_saved_state",
+      "status": "passed",
+      "evidence": [
+        "native-embedded-rpc-temporary-2026-10-12-report.json",
+        "native-rpc-daemon-temporary-2026-10-12-report.json",
+        "native-tui-embedded-lifecycle-initial-2026-10-12-report.json",
+        "native-tui-daemon-lifecycle-initial-2026-10-12-report.json"
+      ]
+    },
+    {
+      "scenario": "all_five_attachment_formats",
+      "status": "passed",
+      "evidence": [
+        "native-embedded-rpc-attachments-2026-10-12-report.json",
+        "native-rpc-daemon-attachments-2026-10-12-report.json",
+        "native-tui-embedded-attachments-2026-10-12-report.json",
+        "native-tui-daemon-attachments-disable-2026-10-12-report.json"
+      ]
+    },
+    {
+      "scenario": "local_cancellation_distinct_from_server_cancellation",
+      "status": "passed",
+      "evidence": [
+        "native-rpc-embedded-lifecycle-2026-10-12-report.json",
+        "native-rpc-daemon-lifecycle-2026-10-12-report.json",
+        "native-tui-embedded-cancel-approval-2026-10-12-report.json"
+      ]
+    },
+    {
+      "scenario": "switching_during_streams_and_uploads",
+      "status": "passed",
+      "evidence": [
+        "native-tui-embedded-initial-2026-10-12-report.json",
+        "native-tui-embedded-attachments-2026-10-12-report.json",
+        "native-tui-daemon-attachments-disable-2026-10-12-report.json"
+      ]
+    },
+    {
+      "scenario": "codex_approval_from_chat",
+      "status": "passed_with_fixture_configuration",
+      "evidence": [
+        "native-tui-embedded-cancel-approval-2026-10-12-report.json",
+        "native-tui-daemon-approval-2026-10-12-report.json"
+      ]
+    },
+    {
+      "scenario": "active_disablement_preserves_saved_messages",
+      "status": "passed",
+      "evidence": [
+        "native-rpc-embedded-lifecycle-2026-10-12-report.json",
+        "native-rpc-daemon-lifecycle-2026-10-12-report.json",
+        "native-tui-daemon-attachments-disable-2026-10-12-report.json"
+      ]
+    },
+    {
+      "scenario": "socket_reconnection_without_resend",
+      "status": "passed",
+      "evidence": ["native-tui-daemon-reconnect-2026-10-12-report.json"]
+    },
+    {
+      "scenario": "screen_modes_and_feature_disabled_codex",
+      "status": "passed",
+      "evidence": [
+        "native-tui-inline-rejected-2026-10-12-report.json",
+        "native-tui-no-alt-rejected-2026-10-12-report.json",
+        "native-tui-feature-disabled-2026-10-12-report.json"
+      ]
+    }
+  ],
+  "live_evidence_sha256": {
+    "native-embedded-rpc-attachments-2026-10-12-report.json": "23fd238104ee3bdac5f789c376454f2b80d62fbe464216d7b4c0acc84c240770",
+    "native-embedded-rpc-temporary-2026-10-12-report.json": "ac85aedc9554f61b1f8fedcc6e076e09993def9b39f8ed7f8d6f9d930873c99d",
+    "native-rpc-daemon-attachments-2026-10-12-report.json": "576d928af9d3c6b3256bb282a30d894886cfeb9ff71cfc87e0fa7554e1debc30",
+    "native-rpc-daemon-lifecycle-2026-10-12-report.json": "2ef53cdf27d23713e021f86f859b03144646949f0511ebc801572472d584c290",
+    "native-rpc-daemon-parallel-2026-10-12-audit.json": "a5f7face2106eff8979cd59b7f143a5cdbbea715657e8d5d9184bd00442bf4be",
+    "native-rpc-daemon-restart-2026-10-12-audit.json": "022fd42f22a607a30da818d500b0d587fad14e1a9734794bfd4488ce1d0511c8",
+    "native-rpc-daemon-temporary-2026-10-12-report.json": "921e50baac4c3cba53824053f5ca359067487f0d1167645e3867fb9172bd89bb",
+    "native-rpc-embedded-lifecycle-2026-10-12-report.json": "e551eb3cdab2b386d7372f5e172d3fbdf800f7fb5af03caa61b5091e8a94981a",
+    "native-rpc-embedded-restart-2026-10-12-audit.json": "22d38ccdd3e272f6f4d8521f32bcaf4edbcd06a61781acd822a22154cfc13bc5",
+    "native-tui-daemon-approval-2026-10-12-report.json": "0eecbe1adc041847c9e9ba06ead768b49adaf1a7a3760ea162c99e49b317533c",
+    "native-tui-daemon-attachments-disable-2026-10-12-report.json": "847e95ea7c506ded665ca8512e8326c788349e32c3b3bbd6733b7b7fa4e51113",
+    "native-tui-daemon-lifecycle-initial-2026-10-12-report.json": "41c489a3e211a4ea588e1e53ab9246da4922be84cf1d0203e5c9f149b9e41021",
+    "native-tui-daemon-reconnect-2026-10-12-report.json": "05f6732204676753dad7967406806a1f87450869c5e60b68b72aaadc77e4acd8",
+    "native-tui-embedded-attachments-2026-10-12-report.json": "a90ee7dce049c51727977b5ca5132a853ec87b5ff7f913f2e5f9e0a7fe670ca4",
+    "native-tui-embedded-cancel-approval-2026-10-12-report.json": "a73f54122f32935d162795aaebe9d16e1a9458d677a64f5e4b597966c36ad82f",
+    "native-tui-embedded-initial-2026-10-12-report.json": "293f874bc5f15fc5d1b32b8557b9778e9488b15179e10227075d027790f2a8de",
+    "native-tui-embedded-lifecycle-initial-2026-10-12-report.json": "d7c86a97a97bc22d0bf1d4b03070dab2d53dd9b949a9ba8788d822c60ca35852",
+    "native-tui-feature-disabled-2026-10-12-report.json": "b7559b4cf7c021c8e60e8107641430dcabb9059c35b737d2d8da93787b22d369",
+    "native-tui-inline-rejected-2026-10-12-report.json": "1107aa85f147019ed54cb52e02ae46a344024568ebcd9769a5f93dea380d949c",
+    "native-tui-no-alt-rejected-2026-10-12-report.json": "c67db58c91ea7f1d5c33ecab7b237fea74bcefe435b84b3b85548e4936e7b35f"
+  },
+  "limitations": [
+    "Scenario assessments combine versioned incremental runs, not a single all-green final invocation. Original failures remain in their reports.",
+    "Temporary transcript retention and cancellation notices were corrected and verified in subsequent runs; earlier scenario passes do not erase those failures.",
+    "Approval fixtures set agents.enabled=false and features.multi_agent_v2=false because the current Codex model rejected the reserved collaboration tool schema before reaching an approval. The unrelated schema rejection is not fixed.",
+    "No confirmed server cancellation is claimed. Local stopping and accepted-message preservation are the verified behavior.",
+    "Cross-link checks do not establish native Windows, macOS, or ARM runtime behavior.",
+    "The final checks target the release metadata, native Chat, RPC feature metadata, TUI behavior and snapshots, stable exports, config schema, linting, formatting, and Cargo/Bazel CLI builds. Earlier full-suite outcomes and environment corrections remain in the lifecycle validation report.",
+    "The compatibility probe remains conservative: selected scenarios never claim to establish full release acceptance. Its version 15 stage now matches the experimental feature."
+  ],
+  "driver_sha256": "0f4e98fa65df84e9df8ff33d3f099bf4857b15aba5ecc995768db5bf14ac8f86"
+}

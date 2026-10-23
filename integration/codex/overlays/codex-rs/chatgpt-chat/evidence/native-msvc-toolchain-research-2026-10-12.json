@@ -1,0 +1,34 @@
+{
+  "version": 1,
+  "recorded_at_utc": "2026-10-12T09:29:34.597755+00:00",
+  "github_access": "gh CLI",
+  "current_hermetic_llvm": "0.8.11",
+  "researched_release": "0.8.24",
+  "release_revision": "39e71f9391895169b05ccd62cbb1956ae5322ff3",
+  "sources": [
+    "https://github.com/hermeticbuild/hermetic-llvm/releases/tag/v0.8.24",
+    "https://github.com/hermeticbuild/hermetic-llvm/blob/v0.8.24/README.md#windows",
+    "https://github.com/hermeticbuild/hermetic-llvm/issues/811"
+  ],
+  "findings": [
+    "The pinned 0.8.11 C toolchain supplies MinGW headers and runtimes for Windows and has no native MSVC SDK composition. Rust direct-linker patches alone cannot supply missing SDK libraries.",
+    "Release 0.8.24 documents native MSVC ABI toolchains using clang-cl, lld-link, the Microsoft runtime, and Windows SDK; it depends on windows_support 0.4.1.",
+    "Upstream issue 811 identifies the missing legacy_stdio_definitions.lib runtime allowlist entry required by Rust libc.",
+    "A version upgrade also requires rebasing the existing custom V8 C++ header and MinGW compatibility patches; dry-run checks do not apply cleanly."
+  ],
+  "next_steps": [
+    "Review the candidate LLVM/windows_support patches and expanded dependency graph.",
+    "Run MSVC executable validation after explicit Microsoft license acceptance, then revalidate all currently passing target builds before a production upgrade."
+  ],
+  "license_gate": {
+    "visual_studio_terms_acceptance_confirmed": false,
+    "windows_sdk_terms_acceptance_confirmed": false,
+    "acceptance_environment_variables_set": false,
+    "microsoft_inputs_fetched_for_this_research": false
+  },
+  "workspace_toolchain_upgraded": false,
+  "msvc_executable_gate_passed": false,
+  "integrated_gate_passed": false,
+  "candidate_prepared": true,
+  "candidate_manifest": "../research/msvc-toolchain-candidate/manifest.json"
+}

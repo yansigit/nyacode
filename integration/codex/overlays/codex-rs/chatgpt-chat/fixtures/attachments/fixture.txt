@@ -1,0 +1,2 @@
+Harmless UTF-8 upload fixture. Accents: café. Symbol: ☀.
+Verification code: UTF8-BIRCH-825

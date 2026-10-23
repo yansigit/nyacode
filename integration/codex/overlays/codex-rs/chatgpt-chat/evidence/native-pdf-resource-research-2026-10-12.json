@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "checked_at_utc": "2026-10-12T06:02:00.967898+00:00",
+  "dependency": "lopdf 0.45.0",
+  "upstream_revision": "49fd07494226ce9fc3646929caea432c076cb2b3",
+  "sources": [
+    {
+      "url": "https://docs.rs/lopdf/0.45.0/lopdf/struct.LoadOptions.html",
+      "finding": "The configured decompression ceiling applies to each decoded stream, not total document allocations."
+    },
+    {
+      "url": "https://github.com/J-F-Liu/lopdf/issues/569",
+      "state_at_check": "open",
+      "finding": "Upstream reports swallowed object-stream limit failures and predictor row allocations outside the stream budget. Installed 0.45.0 still contains the object-stream error-discarding path."
+    },
+    {
+      "url": "https://github.com/J-F-Liu/lopdf/issues/563",
+      "state_at_check": "open",
+      "finding": "Chained cross-reference revisions have no document-wide retained-entry budget."
+    }
+  ],
+  "current_local_controls": [
+    "32 MiB aggregate input limit",
+    "one decoder worker per Chat service",
+    "strict structural parsing",
+    "8 MiB per decoded PDF stream",
+    "post-parse object count limit",
+    "bounded and cycle-checked page-tree traversal"
+  ],
+  "remaining_work": "Enforce document-wide parser memory and elapsed-time limits before accepting untrusted PDFs; post-parse object limits do not bound allocations during parsing. Evaluate a bounded native validation worker or explicit parser budgets, without relaxing attachment validation.",
+  "fixture_acceptance_unchanged": true,
+  "integrated_release_gate_passed": false,
+  "github_access": "gh CLI",
+  "browser_used": false
+}

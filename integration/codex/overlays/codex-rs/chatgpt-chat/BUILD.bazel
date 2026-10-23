@@ -1,0 +1,16 @@
+load("//:defs.bzl", "codex_rust_crate")
+
+codex_rust_crate(
+    name = "chatgpt-chat",
+    compile_data = glob([
+        "fonts/*.ttf",
+        "pdf-validator/validator.wasm",
+        "pdf-validator/manifest.json",
+        "pdf-validator/Cargo.toml",
+        "pdf-validator/Cargo.lock",
+        "pdf-validator/src/lib.rs",
+        "pdf-validator/build.py",
+        "fixtures/attachments/*",
+    ]),
+    crate_name = "codex_chatgpt_chat",
+)

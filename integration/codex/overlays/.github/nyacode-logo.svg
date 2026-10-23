@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="Nyacode">
+  <rect width="100" height="100" rx="24" fill="#202136"/>
+  <path d="M20 76V24L35 37H65L80 24V76Z" fill="#c4b5fd"/>
+  <path d="M33 66V42H39L61 58V42H67V66H61L39 50V66Z" fill="#202136"/>
+</svg>

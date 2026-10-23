@@ -1,0 +1,145 @@
+{
+  "version": 1,
+  "checked_at_utc": "2026-10-12T10:50:53.066120+00:00",
+  "revision": "3a88aafe4632364ec30f6c402f68d9d09770a9fc",
+  "dirty_tree": true,
+  "rust": "1.95.0",
+  "source_sha256": {
+    "codex-rs/app-server/examples/chatgpt_chat_probe.rs": "2a2ee0b6596b6d6a1925e4abcffa7312c0d492728715071c5da6bbebac1a585c",
+    "codex-rs/app-server/examples/chatgpt_chat_probe/fixtures.rs": "8aadfa298b1ae6b2443d0e91404c93eb50cd45b89293018c8f82b387d274b64e",
+    "codex-rs/app-server/examples/chatgpt_chat_probe/rpc.rs": "f9988dd6bd80981f2f42c732dbc267c8f4207475044f6dd77e931fa5c841cc1e",
+    "codex-rs/app-server/examples/chatgpt_chat_probe/rpc_attachments.rs": "2b6e667539d030d0a5ea94454beead5c026262a2b726a99f502f93b00ba198c2",
+    "codex-rs/app-server/examples/chatgpt_chat_probe/rpc_client.rs": "411909e375efbdc88de6492ef00cf13d296940c36b49775a2f8e7f8dfe97f514",
+    "codex-rs/app-server/examples/chatgpt_chat_probe/rpc_lifecycle.rs": "30ab7ce553565f2482ac3db4940a3a9ad5286cafc974f232ecf5003c76642304",
+    "codex-rs/app-server/examples/chatgpt_chat_probe/rpc_saved.rs": "c8255ff40b672298878c997fdb6e5635580a34b5361beac0c1e1ca8b83bfb4cc",
+    "codex-rs/app-server/examples/chatgpt_chat_probe/service.rs": "771aa00f743019e699560da5609b082e7d090dd79ad479cca2be17fee38f7c4d",
+    "codex-rs/chatgpt-chat/src/lib.rs": "829a9b1bc02a11d4e2da944ede1a92ccc4c2e5db836b028019caafc440420bcb",
+    "codex-rs/chatgpt-chat/src/report.rs": "106efb376296dbfea143ccd5d47ddd1cc83192b4499c6cd12aa74804939a73ef",
+    "codex-rs/core/config.schema.json": "03349f5250304202cf37f3530bc055e89f41ca3c51b7c5458cd55c69d7309172",
+    "codex-rs/tui/src/app/native_chat/input.rs": "c4bc568fb8b8e3469fdea296bcd057359f8e7d1705e4226a50815c531cd68384",
+    "codex-rs/tui/src/app/native_chat/mod.rs": "4532905136524c31d088f3467e1714a7c63e20dc825d6d183a2ca846930ee569",
+    "codex-rs/tui/src/app/native_chat/render.rs": "f3859872e92eaa2c924c2e0bb6d29f3f9f027637552bad65996297bea06b7a3b",
+    "codex-rs/tui/src/app/native_chat/snapshots/codex_tui__app__native_chat__tests__chat_temporary_surface.snap": "814a0d1bf409c83dd91d11b94ceb70367d9b772155245d7c248295ccc921dd20",
+    "codex-rs/tui/src/app/native_chat/state.rs": "030f9c7269ee0970bdadc083ca010c393f545abd91b58a22416bf2d483aa0a46",
+    "codex-rs/tui/src/app/native_chat/tests.rs": "157c4d76a63dd912044e1b2b82c70cf741c7a8598d7ee5e85fe874c6a1ad6819",
+    "codex-rs/tui/src/app/reconnect.rs": "b6dab4a3716838c782d3559b5a672cd08a9ca2da1c35fd67e67c2bcef0bc6f2c",
+    "codex-rs/features/src/lib.rs": "a1049a7fbb6bb39d40e2ca56da090041ee2beeddc9937b19e7e1ca81409d6793"
+  },
+  "cli_binary_sha256": "654b8b2e7e67880698025dcada4643aa80286b5f61a0e6100b7490b3b6febeb1",
+  "checks": [
+    {
+      "name": "tui-full-nextest-v1",
+      "passed": false,
+      "tests": 5768,
+      "log_sha256": "a349fc2db3ae3ccda39214e2247cfcd7f8692a1f0ac27662ad593faa3b41b8c2"
+    },
+    {
+      "name": "tui-ipc-recheck-v1",
+      "passed": true,
+      "tests": 7,
+      "log_sha256": "e453751db89a1b4ce8b607a10ce837a1a5ed87cf9d0c7011a3702a6515c46338"
+    },
+    {
+      "name": "tui-cursor-recheck-v1",
+      "passed": true,
+      "tests": 6,
+      "log_sha256": "3a94fe5d2174df360f0cdb437fc59122ae8d6732aba24c2e5a2ea7612408f686"
+    },
+    {
+      "name": "tui-reconnect-tests-v1",
+      "passed": true,
+      "tests": 43,
+      "log_sha256": "9a1636eacbc58c9959873d540c4b08b101148227dbf84d32d6a4b967f7725536"
+    },
+    {
+      "name": "surface-all-targets-clippy-v4",
+      "passed": true,
+      "tests": null,
+      "log_sha256": "15985cd11cf00cb378c5b8d39da7faf3205386eb73e64c40f9bc407d31adfd20"
+    },
+    {
+      "name": "surface-cli-build-v5",
+      "passed": true,
+      "tests": null,
+      "log_sha256": "9500ce38b296a5905465f919e0249f9741bc00f49331c79bc97cbed972e2bc19"
+    },
+    {
+      "name": "lifecycle-probe-tests-v3",
+      "passed": true,
+      "tests": 15,
+      "log_sha256": "e7564746de307cc152ab9f25b0e67fd215d206ce0b0d47f710777b7c0fdd6a60"
+    },
+    {
+      "name": "lifecycle-probe-clippy-v3",
+      "passed": true,
+      "tests": null,
+      "log_sha256": "c59aaa253e62d69407771d46eca39a4f49d292e39f11762ae1e63798173803e1"
+    },
+    {
+      "name": "lifecycle-probe-build-v3",
+      "passed": true,
+      "tests": null,
+      "log_sha256": "80b6c1d21df619a839d55668e2c1aacf66888570c76724f82edc49bd437f6866"
+    },
+    {
+      "name": "final-fmt-v1",
+      "passed": true,
+      "tests": null,
+      "log_sha256": "be18fcac6279f65c153293123d14864798eb9044f86e5fe7c17cfea44a2e27c6"
+    },
+    {
+      "name": "final-prettier-v2",
+      "passed": true,
+      "tests": null,
+      "log_sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    },
+    {
+      "name": "final-schema-v1",
+      "passed": true,
+      "tests": 4,
+      "log_sha256": "ba3963b721a48234dac82270215ac41567d0c9b25e36d0508c9774e69ab26f2c",
+      "ignored": 1
+    },
+    {
+      "name": "final-stable-exports-v1",
+      "passed": true,
+      "tests": 1,
+      "log_sha256": "9ec4a6953a3ba8e9c315400b4bde3a22338d3dd08a8e071478e89196996eba38"
+    }
+  ],
+  "tui_full_suite_assessment": {
+    "initial_run_passed": 5758,
+    "initial_run_failed": 10,
+    "initial_run_skipped": 4,
+    "all_initially_selected_tests_passed_across_run_and_targeted_rechecks": true,
+    "single_clean_full_run_claimed": false,
+    "environment_corrections": [
+      "32 MiB debug test thread stacks; the existing core Config::clone path overflowed at 8 MiB. Production stack configuration was unchanged.",
+      "Private fixture umask 077; inherited umask 002 made IPC test directories group writable and correctly rejected.",
+      "Unset inherited NO_COLOR=1 for terminal color assertions."
+    ],
+    "targeted_latest_change": "43 reconnect and native Chat state tests passed after the final notice fix."
+  },
+  "config_schema_canonical_match": true,
+  "live_results": {
+    "embedded_rpc_lifecycle": "native-rpc-embedded-lifecycle-2026-10-12-report.json",
+    "daemon_rpc_lifecycle": "native-rpc-daemon-lifecycle-2026-10-12-report.json",
+    "embedded_tui_attachments": "native-tui-embedded-attachments-2026-10-12-report.json",
+    "embedded_tui_cancellation_and_approval": "native-tui-embedded-cancel-approval-2026-10-12-report.json",
+    "daemon_tui_attachments_and_active_disable": "native-tui-daemon-attachments-disable-2026-10-12-report.json",
+    "daemon_tui_approval": "native-tui-daemon-approval-2026-10-12-report.json",
+    "daemon_tui_reconnect": "native-tui-daemon-reconnect-2026-10-12-report.json",
+    "inline_screen_rejection": "native-tui-inline-rejected-2026-10-12-report.json",
+    "alternate_screen_rejection": "native-tui-no-alt-rejected-2026-10-12-report.json",
+    "feature_disabled_codex": "native-tui-feature-disabled-2026-10-12-report.json"
+  },
+  "limitations": [
+    "Server cancellation remains unconfirmed; the service and TUI explicitly report only local stopping.",
+    "Codex approval fixtures disabled collaboration tools because the current Codex model rejected their reserved schema before any approval. No Codex tool-schema fix or Chat inference fallback is claimed.",
+    "MSVC executable verification awaits Microsoft license acceptance and candidate toolchain verification."
+  ],
+  "integrated_release_gate_passed": false,
+  "feature_stage": "under_development",
+  "feature_default_enabled": false,
+  "fixture_process_cleanup": "Private daemon, Unix disconnect relay, isolated X display and fixture clipboard stopped after live checks; personal daemon and clipboard unchanged."
+}

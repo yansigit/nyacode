@@ -1,0 +1,170 @@
+{
+  "version": 19,
+  "created_at_utc": "2026-10-12T09:49:00.631744+00:00",
+  "status": "adopted; all required platform and final application checks passed",
+  "production_toolchain_changed": true,
+  "microsoft_inputs_downloaded": true,
+  "license_acceptance_asserted": true,
+  "llvm_revision": "39e71f9391895169b05ccd62cbb1956ae5322ff3",
+  "windows_support_revision": "43dce21da77d8cb4a486709e34f1d887e69058c6",
+  "rules_cc_revision": "77064f0caa37d0fb2232f54feb5fba275aeebbd3",
+  "patch_sha256": {
+    "aws-lc-5.1.0-msvc-driver.patch": "ce37e38047ba4d4e1d3f95da7f9d6b28678cb0d5d1d6f10526e966eff25cb85d",
+    "btls-sys_msvc_bindgen_driver.patch": "55b4bae5c363de2075056cd62629802df597633732e27c52e8e3823da8e87322",
+    "btls-sys_msvc_compatibility_version.patch": "76933db5128494459a88a17775a3de83880bb5355baec829f94a079e04f9120d",
+    "llvm-0.8.24-relocatable-msvc-vfs.patch": "60790bbf78a53c18044288a8efa511bc1f740a89f9b0131a89c43dfe2117339e",
+    "llvm-0.8.24.patch": "1c729c4e82194b3b07808249adb10050f454a156bf0ed3fa78ad1d5af71c2c61",
+    "ring_msvc_declared_clang.patch": "aadcd1e835d831e857507d4a957876c43ce07a11b1caffb4853acec138511d13",
+    "rules_cc-0.2.25-grep-includes.patch": "fba33bddfc411d2265d291a0c06b7fd8a63ebf421633c4d629eb9bba0d9f5253",
+    "rules_rust_msvc_build_script_paths.patch": "df2adba4e98d41fb8b1ecbb5539bf3f54f35f5784c08e82a0eb2340c5bb731bf",
+    "rules_rust_msvc_linker_paths.patch": "adfb8b786224e1b07c229c1cc4ce9fcce9c9941ef574fb14e73b766fe313a8d9",
+    "windows-support-0.4.1.patch": "dac7c792ee3ed7c6a46bb91bcdcf6f0fe361958548052a2826c6967f84c5c0f9",
+    "workspace-toolchain.patch": "013d41587aee5e97f417be85a297c303aa5f59aae60fb8c89a6df09b8424aa71"
+  },
+  "preserved_customizations": [
+    "rusty_v8 custom libc++ headers",
+    "MinGW ARM64 powl and extension library",
+    "MinGW compatibility archives",
+    "case-sensitive remote SDK aliases",
+    "declared Microsoft native tool inputs",
+    "Static MSVC CRT verified for x86_64 and ARM64 by native /MT flags and final PE DLL import audits."
+  ],
+  "native_msvc_fix": "Add legacy_stdio_definitions.lib to both dynamic and static runtime library allowlists (upstream LLVM issue 811).",
+  "dependency_changes_required": {
+    "llvm": "0.8.24",
+    "windows_support": "0.4.1",
+    "rules_cc": "0.2.25",
+    "platforms": "1.1.0",
+    "apple_support": "2.8.0",
+    "rules_python": "1.8.0",
+    "zstd": "1.5.7.bcr.1"
+  },
+  "validation": [
+    "git diff --check on both candidate trees",
+    "existing rules_cc custom libc++ patch dry-run applies to 0.2.25",
+    "Bazel 9.2.0 module graph resolved in an isolated worktree with both Microsoft acceptance variables unset; transitive-version requirements are reflected in workspace-toolchain.patch.",
+    "The initial candidate copied the upstream comma-separated CRT feature example. MSVC verification showed that Bazel 9.2 treated it as one feature value. Separate options now produce /MT in the native compiler arguments.",
+    "Candidate MODULE.bazel and patch exports pass the repository-pinned Buildifier; workspace-toolchain.patch passes git apply --check against its recorded base.",
+    "Initial Linux HTTP test executable compiled and linked successfully: 12,817 actions on Rust 1.95.0. See ../../evidence/native-msvc-candidate-linux-link-2026-10-12.json. The final configuration and CLI results are recorded separately.",
+    "Final candidate transport regression matrix passed: Linux GNU 127 HTTP and 183 Chat tests, static x86_64 musl 127 HTTP tests, ARM64 Linux GNU/musl, macOS ARM64/x86_64, and Windows GNU x86_64 cross-links. See ../../evidence/native-msvc-candidate-platform-matrix-2026-10-12.json.",
+    "Full Linux CLI built after backporting upstream rules_cc PR 888; --version and --help both passed. The original analysis failure is retained in ../../evidence/native-msvc-candidate-linux-cli-2026-10-12.json.",
+    "Final seven-target transport matrix passed with all three candidate source patches. GNU reused valid Bazel test results; static x86_64 musl freshly ran all 127 HTTP tests. See ../../evidence/native-msvc-candidate-final-platform-matrix-2026-10-12.json.",
+    "All 27 rules_rust Cargo compiler-argument analysis tests passed, including new MSVC relative/absolute SDK and /clang:-wrapped path cases. Earlier fixture setup failures were corrected; log /tmp/nyacode-msvc-path-analysis-suite-v1.log.",
+    "A real Windows SDK mixed-case include reproduced the overlay working-directory failure. The relocatable overlay passed from both directories; generator unit and relocation tests also passed. Native Bazel actions retain their original overlay to preserve dependency-path validation. See ../../evidence/native-msvc-sdk-path-research-2026-10-12.json.",
+    "A focused libclang probe failed with ignored MSVC defines and CRT flags, then passed with --driver-mode=cl. The full v6 build was deliberately interrupted to apply the fix; its completed native actions remain cached. Full v7 link verification is pending.",
+    "The CMake static-CRT fixture reproduced the dynamic override and passed with the staged toolchain. The full v7 build completed compiler dependencies and exposed the llvm-ar/lib.exe syntax mismatch; v8 now verifies both corrections.",
+    "The v8 full build passed CMake compiler detection with llvm-lib, then exposed the bundled BoringSSL compatibility-version conflict. v10 uses the exact upstream removal; v9 was deliberately interrupted before completion to replace the provisional guard.",
+    "The v10 native BoringSSL libraries compiled successfully, then binding generation failed. The exact pinned libclang and SDK reproduced the multi-header -include failure; the complete header set passed through a C wrapper, including an unsaved in-memory wrapper matching bindgen. Full v11 verification is pending.",
+    "The wrapper initially needed a borrowed string for bindgen 0.72.1 header_contents; v11 caught that compile error before native compilation. The borrow is corrected and v12 is the current full build.",
+    "The v12 native TLS libraries, bindings and Rust crates compiled; final linking exposed discarded SDK/CRT paths. All 3 new direct-linker regression tests pass after correcting the test rule names. Full v13 executable verification is in progress.",
+    "The v13 x86_64 MSVC transport executable linked successfully and its PE import audit found no dynamic CRT dependency. ARM64 exposed ring's compiler-family check; the targeted correction is being verified in v14 for both architectures.",
+    "Both MSVC architectures compiled and linked in v14. PE machine fields matched x86_64 and ARM64; DLL import audits found no dynamic CRT dependency. See ../../evidence/native-msvc-accepted-transport-builds-2026-10-12.json.",
+    "Final Bazel SDK generator unit and relocation tests both passed with the complete candidate patch set; see native-msvc-sdk-path-research-2026-10-12.json. Earlier pending statements in this ordered validation history describe their checkpoints, not the current state.",
+    "The complete candidate passed the final seven-target non-MSVC matrix and full Linux CLI build/startup checks, then was adopted without changing its tested toolchain inputs. See native-msvc-final-platform-regressions-2026-10-12.json and native-msvc-toolchain-adoption-2026-10-12.json."
+  ],
+  "remaining": [],
+  "sources": [
+    "https://github.com/hermeticbuild/hermetic-llvm/releases/tag/v0.8.24",
+    "https://github.com/hermeticbuild/hermetic-llvm/issues/811",
+    "https://github.com/hermeticbuild/windows_support/tree/v0.4.1",
+    "https://github.com/bazelbuild/rules_cc/tree/0.2.25",
+    "https://github.com/hermeticbuild/hermetic-llvm/blob/v0.8.24/README.md#windows",
+    "https://github.com/bazelbuild/rules_cc/pull/888"
+  ],
+  "updated_at_utc": "2026-10-12T23:03:43.050004+00:00",
+  "application": [
+    "Copy all source patches listed in patch_sha256, excluding workspace-toolchain.patch, from this directory into patches/.",
+    "Apply workspace-toolchain.patch from the repository root after review; it includes the resolved MODULE.bazel.lock delta.",
+    "Run the required build checks before replacing the production toolchain."
+  ],
+  "workspace_patch_base_sha256": {
+    ".bazelrc": "cdbd41cb47ae1ed8c77526e90af3c5a236ea3e2b03af1341597768cdde795dba",
+    "MODULE.bazel": "70df789e964480007798d5c15b2b4af882c9429f2faf4f86b9549fcb7deb250e",
+    "MODULE.bazel.lock": "0890a56a06fe4edfae5de83f9abf16fbf5aa2c63ab27a43813a033fbd03cf0e2",
+    "patches/BUILD.bazel": "bf190399faa15f53a8ea0c622b3e25cba949cd893872a2b038b55f1ebc6671fc",
+    "bazel/toolchains/browser_chat/toolchain.cmake": "cbb06201f37a370f340b3988cedd7bd44545cc08286c0190225765f0926b10ad"
+  },
+  "upstream_readme_sha256": "ef9a922331ce00196121ea931e1d513335bc6675f2e48961e6a62419697ea28c",
+  "required_msvc_targets": [
+    "x86_64-pc-windows-msvc",
+    "aarch64-pc-windows-msvc"
+  ],
+  "release_matrix_source_sha256": {
+    ".github/workflows/rust-release-windows.yml": "3118336ae0599286a5624d706c688c8b3f5688359c35d56fbbbef91c25bf0682",
+    "scripts/stage_npm_packages.py": "81503a1ea19de03db18b5f0a82a2cf4a90699803b84bd6b3224d2c409e3309da"
+  },
+  "rules_cc_compatibility_fix": {
+    "revision": "eaafbd34240f0d0968f25782385cf013f823ea69",
+    "source": "https://github.com/bazelbuild/rules_cc/pull/888",
+    "license": "Apache-2.0",
+    "reason": "Bazel 9.2 and transitive C++ rules still resolve the removed grep-includes target. Backport the upstream restoration without upgrading Bazel or changing the toolchain versions."
+  },
+  "candidate_source_sha256": {
+    ".bazelrc": "b4dd2bd74ec14e80ee211a53bdb1b8eebf0337462e624093fc5ea4a05eb34519",
+    "MODULE.bazel": "7ea181788097b06d3f4e6a572a7ac38645403d6da26a13843d99d7644c8b874e",
+    "MODULE.bazel.lock": "ea44fba0f791060c8049bffc219be2d08b86816e681f2f594af1936ba4070d21",
+    "patches/BUILD.bazel": "c12d2e897dd760803f50ab9b122df9117ba006eafc1f35421e3e5b7648a396d3",
+    "bazel/toolchains/browser_chat/toolchain.cmake": "404eb87bd886ee10aabc6aa30dc3badeb6d88648485bc5d020cc28276797ef5e"
+  },
+  "license_acceptance_basis": "User explicitly accepted both Microsoft Visual Studio and Windows SDK licenses in the conversation before the MSVC build.",
+  "msvc_followup_fixes": [
+    {
+      "issue": "AWS-LC jitterentropy passed GCC-only options to clang-cl.",
+      "fix": "Select the MSVC argument branch for both clang-cl and cl.exe, matching the CMake driver convention.",
+      "patch": "aws-lc-5.1.0-msvc-driver.patch"
+    },
+    {
+      "issue": "Cargo build scripts changed directory while retaining execroot-relative MSVC SDK and VFS paths.",
+      "fix": "Normalize /clang: wrappers, rebase SDK/overlay paths, then preserve the original driver syntax.",
+      "patch": "rules_rust_msvc_build_script_paths.patch"
+    },
+    {
+      "issue": "The upstream comma-separated feature example is a single feature value in Bazel 9.2; emitted commands still used /MD.",
+      "fix": "Use separate --features and --host_features occurrences to disable dynamic CRT and enable static CRT.",
+      "source": "https://github.com/bazelbuild/bazel/blob/9.2.0/src/main/java/com/google/devtools/build/lib/analysis/config/CoreOptions.java"
+    },
+    {
+      "issue": "SDK overlay entries depended on the original compiler working directory; a global relocation fix also changed Bazel dependency paths.",
+      "fix": "Generate a relocatable overlay for compiler argument exports without source_file, retaining the original overlay for native compilation.",
+      "patch": "llvm-0.8.24-relocatable-msvc-vfs.patch"
+    },
+    {
+      "issue": "libclang ignored MSVC-style compiler flags because it did not receive the clang-cl executable name.",
+      "fix": "Select --driver-mode=cl for the MSVC compiler convention and parse the validated headers through one in-memory C wrapper, avoiding bindgen's GCC-style forced includes.",
+      "patch": "btls-sys_msvc_bindgen_driver.patch",
+      "source": "https://github.com/rust-lang/rust-bindgen/issues/3085"
+    },
+    {
+      "issue": "CMake selected a dynamic CRT and passed lib.exe archive arguments to llvm-ar.",
+      "fix": "In the browser transport CMake toolchain, select MultiThreaded and the declared llvm-lib tool for windows-msvc.",
+      "files": [
+        "bazel/toolchains/browser_chat/toolchain.cmake",
+        "MODULE.bazel"
+      ],
+      "sources": [
+        "https://cmake.org/cmake/help/latest/variable/CMAKE_MSVC_RUNTIME_LIBRARY.html",
+        "https://llvm.org/docs/CommandGuide/llvm-lib.html"
+      ]
+    },
+    {
+      "issue": "Bundled BoringSSL forced -fmsc-version=1900, conflicting with the declared SDK compatibility version.",
+      "fix": "Backport the exact upstream removal of the obsolete compatibility flag.",
+      "patch": "btls-sys_msvc_compatibility_version.patch",
+      "revision": "9342bed00500767b9eee5279a0c23b4ca7fc69cf",
+      "source": "https://github.com/google/boringssl/commit/9342bed00500767b9eee5279a0c23b4ca7fc69cf",
+      "license": "Apache-2.0 (BoringSSL CMakeLists.txt header)"
+    },
+    {
+      "issue": "The direct Rust linker filter discarded clang-cl-wrapped SDK and CRT library paths.",
+      "fix": "Unwrap and preserve only declared library search paths, VFS overlays and the hermetic environment option for direct MSVC linking.",
+      "patch": "rules_rust_msvc_linker_paths.patch"
+    },
+    {
+      "issue": "ring treated clang-cl as non-Clang on Windows ARM64 and replaced the configured compiler with a PATH lookup.",
+      "fix": "Accept both cc compiler-family variants of Clang and preserve the declared clang-cl path.",
+      "patch": "ring_msvc_declared_clang.patch"
+    }
+  ],
+  "adoption_report": "../../evidence/native-msvc-toolchain-adoption-2026-10-12.json",
+  "release_validation": "../../evidence/native-release-validation-2026-10-12.json"
+}

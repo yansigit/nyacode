@@ -1,0 +1,327 @@
+{
+  "version": 4,
+  "recorded_at_utc": "2026-10-12T20:37:22.101456+00:00",
+  "microsoft_licenses_explicitly_accepted": true,
+  "production_toolchain_changed": true,
+  "fixes": [
+    {
+      "area": "AWS-LC compiler options",
+      "observed_failure": "clang-cl interpreted the GCC-only ssp-buffer-size operand as an extra input file.",
+      "resolution": "Use the existing MSVC C11 and unoptimized jitterentropy flags for both cl.exe and clang-cl.",
+      "source": "https://github.com/bazelbuild/bazel-central-registry/tree/main/modules/aws-lc/5.1.0.bcr.1"
+    },
+    {
+      "area": "CRT configuration",
+      "observed_failure": "Bazel 9.2 parsed the comma-separated feature example as one string; the emitted native command used /MD.",
+      "resolution": "Use separate feature options to disable dynamic_link_msvcrt and enable static_link_msvcrt for target and host. The subsequent MSVC compilation parameter file contains /MT.",
+      "source": "https://github.com/bazelbuild/bazel/blob/9.2.0/src/main/java/com/google/devtools/build/lib/analysis/config/CoreOptions.java"
+    },
+    {
+      "area": "Cargo compiler argument paths",
+      "observed_failure": "The SDK VFS file was missing after the build script changed its working directory.",
+      "resolution": "Rebase /imsvc, /external:I and -ivfsoverlay paths, including /clang:-wrapped flags and operands, without changing driver syntax.",
+      "validation": "27 compiler-argument analysis tests passed, including both new MSVC cases. Earlier fixture label and empty-flag setup failures are retained."
+    },
+    {
+      "area": "SDK overlay working directory",
+      "observed_failure": "A mixed-case Windows SDK include compiled from the execroot but failed from a crate directory, even when the overlay file path was absolute.",
+      "resolution": "Export a relocatable overlay for compiler-argument queries without source_file; retain the original overlay for native actions so Bazel dependency validation sees execroot-relative paths.",
+      "validation": "Existing generator unit tests and CLI tests passed. Added CLI cases passed from a different working directory and after moving the complete SDK/overlay fixture. The real Windows SDK mixed-case include then passed from both directories. Full Bazel MSVC validation remains in progress."
+    }
+  ],
+  "real_sdk_probe_before": [
+    {
+      "working_directory": "execroot",
+      "exit_code": 0
+    },
+    {
+      "working_directory": "crate_directory",
+      "exit_code": 1
+    }
+  ],
+  "real_sdk_probe_after": [
+    {
+      "working_directory": "execroot",
+      "exit_code": 0
+    },
+    {
+      "working_directory": "crate_directory",
+      "exit_code": 0
+    }
+  ],
+  "log_sha256": {
+    "nyacode-msvc-path-analysis-tests-v1.log": "acd05756fe18728b1249ebb677946f6afe3c98477924889199a79d89af2cea96",
+    "nyacode-msvc-path-analysis-tests-v2.log": "cfcee5556e344a344065f632a9766d74bd710e5725c26105af1014452de6d2c2",
+    "nyacode-msvc-path-analysis-tests-v3.log": "294588ef1e8129506ff449ba0b86461a41d5313f12cab5791f004862eb4f4570",
+    "nyacode-msvc-path-analysis-suite-v1.log": "4fc1979bd89d25c186cb8ee62cfba0e0eb6d0594c67bb066000f4d1063899557",
+    "nyacode-msvc-vfs-unit-tests-v1.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "probe_sha256": {
+    "nyacode-msvc-vfs-probe-v1.py": "7d618dee3b276486a6d0d3a21934a3ca1e4e6f58880805ebd21bb1784a0e0933",
+    "nyacode-msvc-vfs-probe-v2.py": "b90b506d2ffcd5708ae54a6abe7a262ac0864f1701cfbbbdabc904069f2332d5"
+  },
+  "interpretation": "The focused diagnostics retain failures and checkpoint statuses. Final executable acceptance, non-MSVC regressions, and adoption are recorded in the linked reports.",
+  "updated_at_utc": "2026-10-12T22:33:18.722769+00:00",
+  "binding_driver_probe": {
+    "library_distribution": "libclang",
+    "version": "18.1.1",
+    "result": {
+      "version": 1,
+      "recorded_at_utc": "2026-10-12T20:51:33.070476+00:00",
+      "results": [
+        {
+          "mode": "default",
+          "parsed": true,
+          "passed": false,
+          "diagnostics": [
+            {
+              "severity": 2,
+              "message": "/DDRIVER_TEST=1: 'linker' input unused"
+            },
+            {
+              "severity": 2,
+              "message": "/MT: 'linker' input unused"
+            },
+            {
+              "severity": 2,
+              "message": "/clang:-fms-compatibility-version=19.50.35717: 'linker' input unused"
+            },
+            {
+              "severity": 3,
+              "message": "MSVC compiler arguments were not applied"
+            },
+            {
+              "severity": 3,
+              "message": "Static CRT compiler argument was not applied"
+            }
+          ]
+        },
+        {
+          "mode": "explicit_cl",
+          "parsed": true,
+          "passed": true,
+          "diagnostics": [
+            {
+              "severity": 2,
+              "message": "unknown argument ignored in clang-cl: '-fno-spell-checking'"
+            },
+            {
+              "severity": 2,
+              "message": "unknown argument ignored in clang-cl: '-fallow-editor-placeholders'"
+            }
+          ]
+        }
+      ]
+    },
+    "script_sha256": "837ef763d2d8a3fb7856333e62bb51d066dfaa126fde72c1240695b0c3bea63c",
+    "source_fixture": "#ifndef DRIVER_TEST\n#error MSVC compiler arguments were not applied\n#endif\n#ifndef _MT\n#error Static CRT compiler argument was not applied\n#endif\ntypedef unsigned long driver_probe;\n",
+    "compiler_arguments": [
+      "--target=x86_64-pc-windows-msvc",
+      "/DDRIVER_TEST=1",
+      "/MT",
+      "/clang:-fms-compatibility-version=19.50.35717"
+    ],
+    "passing_addition": "--driver-mode=cl",
+    "sources": [
+      "https://github.com/rust-lang/rust-bindgen/issues/3085",
+      "https://clang.llvm.org/doxygen/ToolChain_8cpp_source.html"
+    ],
+    "interpretation": "Focused parser validation only. Complete pinned-toolchain executable builds remain required."
+  },
+  "cmake_crt_probe": {
+    "source": "https://cmake.org/cmake/help/latest/variable/CMAKE_MSVC_RUNTIME_LIBRARY.html",
+    "compiler": "Clang 23.1.2, MSVC driver",
+    "results": [
+      {
+        "mode": "default",
+        "configure_exit_code": 0,
+        "build_exit_code": 1,
+        "selected_runtime_flag": "-MD"
+      },
+      {
+        "mode": "static_runtime",
+        "configure_exit_code": 0,
+        "build_exit_code": 0,
+        "selected_runtime_flag": "-MT"
+      }
+    ],
+    "source_fixture": "#ifndef _MT\n#error Threaded CRT flag missing\n#endif\n#ifdef _DLL\n#error Dynamic CRT unexpectedly selected\n#endif\nint crt_probe(void) { return 1; }\n",
+    "cmake_fixture": "cmake_minimum_required(VERSION 3.22)\nproject(crt_probe C)\nadd_library(probe STATIC probe.c)\n",
+    "source_sha256": "cbb06201f37a370f340b3988cedd7bd44545cc08286c0190225765f0926b10ad",
+    "script_sha256": "fc5ce00e2ac294679c48c7481b82d0d286051d9fc2cfe140c81544cffaa97a67",
+    "probe_report_sha256": "c554fb5909cfeeca13b77502e7141888ea085fe4f651dcec7149d5ed23946c1c",
+    "fix": "Set MultiThreaded in the browser transport CMake toolchain for windows-msvc, matching the workspace static CRT policy.",
+    "actual_toolchain_validation": {
+      "results": [
+        {
+          "mode": "workspace_default",
+          "configure_exit_code": 0,
+          "build_exit_code": 1
+        },
+        {
+          "mode": "staged_toolchain",
+          "configure_exit_code": 0,
+          "build_exit_code": 0
+        }
+      ],
+      "report_sha256": "9971982e0740a8010e85268800a441fdf93d81204f7ac8f8f59e3cb99189df95",
+      "staged_toolchain_sha256": "58335a9fffefa9f7efa2310c177e50ebd267da08a5a1283af16864639ab92bfa"
+    },
+    "status_at_checkpoint": "Applied to the isolated candidate with an explicit llvm-lib selection; full v8 executable verification is in progress."
+  },
+  "archiver_driver": {
+    "observed_failure": "CMake compiler check invoked llvm-ar with /nologo /machine:x64 /out: flags; llvm-ar rejected the MSVC argument syntax.",
+    "log_sha256": "f0a5aa68aa9379d7ad6d6083d57fc83aefca13ae7a975acc8bf66bb735722c77",
+    "source": "https://llvm.org/docs/CommandGuide/llvm-lib.html",
+    "fix": "Declare @llvm//tools:llvm-lib as a build-script tool and select it only for windows-msvc in the browser transport CMake toolchain.",
+    "status_at_checkpoint": "Applied to isolated candidate; complete executable verification pending."
+  },
+  "compatibility_version": {
+    "observed_failure": "clang-cl rejected -fmsc-version=1900 together with -fms-compatibility-version=19.50.35717.",
+    "failed_run": "v8",
+    "log_sha256": "0ef25e986ded7161f63553772326267aacba7aa1eac43611bb37324ece092a17",
+    "upstream_revision": "9342bed00500767b9eee5279a0c23b4ca7fc69cf",
+    "source": "https://github.com/google/boringssl/commit/9342bed00500767b9eee5279a0c23b4ca7fc69cf",
+    "fix": "Exact upstream removal of the obsolete compatibility flag.",
+    "status_at_checkpoint": "Full v10 executable verification in progress."
+  },
+  "binding_multiple_headers": {
+    "observed_failure": "bindgen passes all but the last header with GCC-style -include, which clang-cl cannot parse.",
+    "failed_run": "v10",
+    "native_libraries_compiled": true,
+    "log_sha256": "6eb3bdead0569fc0b24e20a16f26b647428c4628eed10c1e0fe1a1cd41db9946",
+    "pinned_library": "LLVM 0.8.24 toolchain libclang",
+    "results": [
+      {
+        "scenario": "filename",
+        "parsed": true,
+        "passed": true,
+        "diagnostics": []
+      },
+      {
+        "scenario": "single_argument",
+        "parsed": true,
+        "passed": true,
+        "diagnostics": []
+      },
+      {
+        "scenario": "multiple_gnu_include",
+        "parsed": false,
+        "passed": false,
+        "error": "Error parsing translation unit."
+      },
+      {
+        "scenario": "multiple_cl_include",
+        "parsed": true,
+        "passed": true,
+        "diagnostics": []
+      },
+      {
+        "scenario": "wrapper",
+        "parsed": true,
+        "passed": true,
+        "diagnostics": []
+      },
+      {
+        "scenario": "wrapper_force_c",
+        "parsed": true,
+        "passed": true,
+        "diagnostics": []
+      },
+      {
+        "scenario": "unsaved_wrapper",
+        "parsed": true,
+        "passed": true,
+        "diagnostics": []
+      }
+    ],
+    "probe_script_sha256": "15bf5f57dc164115eed55cdf24a59e605763239c7f63b9bff111e49a010cab02",
+    "header_wrapper": "#include <openssl/aes.h>\n#include <openssl/asn1_mac.h>\n#include <openssl/asn1t.h>\n#include <openssl/blake2.h>\n#include <openssl/blowfish.h>\n#include <openssl/cast.h>\n#include <openssl/chacha.h>\n#include <openssl/cmac.h>\n#include <openssl/cpu.h>\n#include <openssl/curve25519.h>\n#include <openssl/des.h>\n#include <openssl/dtls1.h>\n#include <openssl/err.h>\n#include <openssl/hkdf.h>\n#include <openssl/hpke.h>\n#include <openssl/ossl_typ.h>\n#include <openssl/pkcs12.h>\n#include <openssl/poly1305.h>\n#include <openssl/x509v3.h>\n#include <openssl/hmac.h>\n#include <openssl/hrss.h>\n#include <openssl/md4.h>\n#include <openssl/md5.h>\n#include <openssl/mlkem.h>\n#include <openssl/obj_mac.h>\n#include <openssl/objects.h>\n#include <openssl/opensslv.h>\n#include <openssl/rand.h>\n#include <openssl/rc4.h>\n#include <openssl/ripemd.h>\n#include <openssl/siphash.h>\n#include <openssl/srtp.h>\n#include <openssl/trust_token.h>\n",
+    "fix": "When using the MSVC driver, preserve the validated header order in one in-memory C wrapper; keep other compiler paths unchanged.",
+    "status_at_checkpoint": "Verified in the full v12 build: bindings and Rust TLS crates compiled; execution advanced to the final link."
+  },
+  "direct_linker_lookup": {
+    "failed_run": "v12",
+    "log_sha256": "342e8ed2b549cd40ec1dfe44b277ea359e057593bd2e7df42985e1ae522b8169",
+    "failure": "Final rust-lld invocation lacked the SDK/CRT lookup paths; all requested Windows system libraries were unavailable.",
+    "fix": "Preserve clang-cl-wrapped /LIBPATH, /vfsoverlay and /lldignoreenv when using the direct MSVC linker.",
+    "regression_tests": {
+      "version": 2,
+      "started_at_utc": "2026-10-12T21:33:54.701465+00:00",
+      "command": [
+        "bazel",
+        "test",
+        "--lockfile_mode=update",
+        "--repo_env=BAZEL_MSVC_RUNTIME_VISUAL_STUDIO_EULA=1",
+        "--repo_env=BAZEL_WINDOWS_SDK_EULA=1",
+        "--extra_execution_platforms=//:local_linux,@rules_rs//rs/platforms:x86_64-unknown-linux-gnu,@rules_rs//rs/platforms:x86_64-unknown-linux-musl,@rules_rs//rs/platforms:aarch64-unknown-linux-gnu,@rules_rs//rs/platforms:aarch64-unknown-linux-musl,@rules_rs//rs/platforms:aarch64-apple-darwin,@rules_rs//rs/platforms:x86_64-apple-darwin,@rules_rs//rs/platforms:x86_64-pc-windows-gnullvm,@rules_rs//rs/platforms:x86_64-pc-windows-msvc,@rules_rs//rs/platforms:aarch64-pc-windows-msvc",
+        "--platforms=@rules_rs//rs/platforms:x86_64-unknown-linux-gnu",
+        "--test_output=all",
+        "@rules_rust//test/unit/msvc_linker_args:msvc_linker_args_test_suite"
+      ],
+      "source_patch_sha256": "adfb8b786224e1b07c229c1cc4ce9fcce9c9941ef574fb14e73b766fe313a8d9",
+      "exit_code": 0,
+      "passed": true,
+      "log_sha256": "19bde7c79e966ba879369afe3d4490c1fcfe7a98f71be724ee44049742c24569",
+      "finished_at_utc": "2026-10-12T21:33:57.321398+00:00"
+    },
+    "rust_1_95_lld_flags_verified": [
+      "/libpath",
+      "/vfsoverlay",
+      "/lldignoreenv"
+    ],
+    "status": "Verified by a successful x86_64 executable link in v13; no dynamic CRT DLL import was found."
+  },
+  "x86_64_executable_checkpoint": {
+    "target": "x86_64-pc-windows-msvc",
+    "executable_sha256": "e27777b19235e4c1ac86c01ebbdbc3ec10a38f0ddf8781836f76f2d6e917dafd",
+    "pe_machine": "0x8664",
+    "dll_imports": [
+      "kernel32.dll",
+      "api-ms-win-core-synch-l1-2-0.dll",
+      "winhttp.dll",
+      "crypt32.dll",
+      "bcryptprimitives.dll",
+      "advapi32.dll",
+      "ws2_32.dll",
+      "ntdll.dll",
+      "userenv.dll",
+      "bcrypt.dll",
+      "secur32.dll"
+    ],
+    "unexpected_dynamic_crt": [],
+    "passed": true,
+    "native_windows_execution": false
+  },
+  "ring_arm64_compiler": {
+    "failed_run": "v13",
+    "log_sha256": "2fe26d0aa19e5fa5748b2e8fd117a29b4c20ebba28811dbd5343907338e8ebe9",
+    "failure": "The declared absolute clang-cl compiler was replaced with an unavailable PATH lookup because cc::Tool::is_like_clang excludes its clang-cl family.",
+    "fix": "Retain an existing compiler when is_like_clang or is_like_clang_cl is true.",
+    "status_at_checkpoint": "Full v14 cross-build verification is in progress."
+  },
+  "current_status": "All recorded MSVC failures are resolved. Both MSVC executables and static CRT import audits passed, the revised non-MSVC regressions and CLI checks passed, and the complete candidate was adopted.",
+  "final_executable_validation": "native-msvc-accepted-transport-builds-2026-10-12.json",
+  "sdk_generator_final_bazel_tests": {
+    "version": 1,
+    "started_at_utc": "2026-10-12T21:49:02.751222+00:00",
+    "command": [
+      "bazel",
+      "test",
+      "--lockfile_mode=update",
+      "--repo_env=BAZEL_MSVC_RUNTIME_VISUAL_STUDIO_EULA=1",
+      "--repo_env=BAZEL_WINDOWS_SDK_EULA=1",
+      "--extra_execution_platforms=//:local_linux,@rules_rs//rs/platforms:x86_64-unknown-linux-gnu,@rules_rs//rs/platforms:x86_64-unknown-linux-musl,@rules_rs//rs/platforms:aarch64-unknown-linux-gnu,@rules_rs//rs/platforms:aarch64-unknown-linux-musl,@rules_rs//rs/platforms:aarch64-apple-darwin,@rules_rs//rs/platforms:x86_64-apple-darwin,@rules_rs//rs/platforms:x86_64-pc-windows-gnullvm,@rules_rs//rs/platforms:x86_64-pc-windows-msvc,@rules_rs//rs/platforms:aarch64-pc-windows-msvc",
+      "--platforms=@rules_rs//rs/platforms:x86_64-unknown-linux-gnu",
+      "--test_output=all",
+      "@llvm//tools/case_insensitive_vfs:test",
+      "@llvm//tools/case_insensitive_vfs:cli_test"
+    ],
+    "source_patch_sha256": "60790bbf78a53c18044288a8efa511bc1f740a89f9b0131a89c43dfe2117339e",
+    "exit_code": 0,
+    "passed": true,
+    "log_sha256": "c6440b738bac626001a7dfb24e59856a42374a8012b4def48756943dbb95d484",
+    "finished_at_utc": "2026-10-12T21:49:15.414107+00:00"
+  },
+  "adoption_report": "native-msvc-toolchain-adoption-2026-10-12.json"
+}

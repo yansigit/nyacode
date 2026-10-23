@@ -1,0 +1,98 @@
+{
+  "report_version": 2,
+  "stage": "under_development",
+  "live": true,
+  "release_gate_passed": false,
+  "capabilities": [
+    {
+      "capability": "models",
+      "status": "failed",
+      "error": "challenge_required",
+      "latency_ms": 173
+    },
+    {
+      "capability": "history_list",
+      "status": "failed",
+      "error": "challenge_required",
+      "latency_ms": 198
+    },
+    {
+      "capability": "history_read",
+      "status": "not_run"
+    },
+    {
+      "capability": "conversation_preparation",
+      "status": "failed",
+      "error": "challenge_required",
+      "latency_ms": 197
+    },
+    {
+      "capability": "saved_text",
+      "status": "blocked",
+      "error": "challenge_required",
+      "blocked_by": "conversation_preparation"
+    },
+    {
+      "capability": "follow_up",
+      "status": "blocked",
+      "error": "challenge_required",
+      "blocked_by": "conversation_preparation"
+    },
+    {
+      "capability": "restart_resume",
+      "status": "blocked",
+      "error": "challenge_required",
+      "blocked_by": "conversation_preparation"
+    },
+    {
+      "capability": "temporary_chat",
+      "status": "blocked",
+      "error": "challenge_required",
+      "blocked_by": "conversation_preparation"
+    },
+    {
+      "capability": "png_upload",
+      "status": "blocked",
+      "error": "challenge_required",
+      "blocked_by": "conversation_preparation"
+    },
+    {
+      "capability": "jpeg_upload",
+      "status": "blocked",
+      "error": "challenge_required",
+      "blocked_by": "conversation_preparation"
+    },
+    {
+      "capability": "webp_upload",
+      "status": "blocked",
+      "error": "challenge_required",
+      "blocked_by": "conversation_preparation"
+    },
+    {
+      "capability": "pdf_upload",
+      "status": "blocked",
+      "error": "challenge_required",
+      "blocked_by": "conversation_preparation"
+    },
+    {
+      "capability": "utf8_upload",
+      "status": "blocked",
+      "error": "challenge_required",
+      "blocked_by": "conversation_preparation"
+    },
+    {
+      "capability": "server_cancellation",
+      "status": "not_run"
+    }
+  ],
+  "write_scenario": "all",
+  "preparation": [
+    {
+      "operation": "session_bootstrap",
+      "latency_ms": 197,
+      "http_status": 403,
+      "cloudflare_challenge": true,
+      "error": "challenge_required"
+    }
+  ]
+}

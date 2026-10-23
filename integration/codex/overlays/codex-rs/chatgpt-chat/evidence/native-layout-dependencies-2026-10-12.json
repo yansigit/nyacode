@@ -1,0 +1,409 @@
+{
+  "manifest_version": 1,
+  "recorded_at_utc": "2026-10-12T01:11:15.865383+00:00",
+  "purpose": "Native bounded text layout; no full DOM engine integrated",
+  "parley_version": "0.12.0",
+  "rust_toolchain": "1.95.0",
+  "features": ["std"],
+  "system_fonts": false,
+  "network_or_javascript_backends": false,
+  "dependency_count": 58,
+  "packages": [
+    {
+      "name": "allocator-api2",
+      "version": "0.2.21",
+      "rust_version": "1.63",
+      "features": ["alloc"]
+    },
+    {
+      "name": "bitflags",
+      "version": "2.13.1",
+      "rust_version": "1.56.0",
+      "features": ["serde", "serde_core", "std"]
+    },
+    {
+      "name": "bytemuck",
+      "version": "1.25.0",
+      "rust_version": null,
+      "features": [
+        "bytemuck_derive",
+        "const_zeroed",
+        "derive",
+        "extern_crate_alloc",
+        "min_const_generics",
+        "must_cast",
+        "nightly_stdsimd"
+      ]
+    },
+    {
+      "name": "bytemuck_derive",
+      "version": "1.10.2",
+      "rust_version": "1.61",
+      "features": []
+    },
+    {
+      "name": "critical-section",
+      "version": "1.2.0",
+      "rust_version": null,
+      "features": []
+    },
+    {
+      "name": "displaydoc",
+      "version": "0.2.5",
+      "rust_version": "1.56.0",
+      "features": ["default", "std"]
+    },
+    {
+      "name": "equivalent",
+      "version": "1.0.2",
+      "rust_version": "1.6",
+      "features": []
+    },
+    {
+      "name": "foldhash",
+      "version": "0.2.0",
+      "rust_version": "1.60",
+      "features": []
+    },
+    {
+      "name": "font-types",
+      "version": "0.12.6",
+      "rust_version": "1.85",
+      "features": ["bytemuck", "std"]
+    },
+    {
+      "name": "fontique",
+      "version": "0.12.0",
+      "rust_version": "1.88",
+      "features": ["std"]
+    },
+    {
+      "name": "harfrust",
+      "version": "0.12.0",
+      "rust_version": "1.85",
+      "features": ["std"]
+    },
+    {
+      "name": "hashbrown",
+      "version": "0.17.1",
+      "rust_version": "1.85.0",
+      "features": [
+        "allocator-api2",
+        "default",
+        "default-hasher",
+        "equivalent",
+        "inline-more",
+        "raw-entry"
+      ]
+    },
+    {
+      "name": "icu_collections",
+      "version": "2.3.0",
+      "rust_version": "1.88",
+      "features": []
+    },
+    {
+      "name": "icu_locale_core",
+      "version": "2.3.0",
+      "rust_version": "1.88",
+      "features": ["alloc", "zerovec"]
+    },
+    {
+      "name": "icu_locale_fallback",
+      "version": "2.3.0",
+      "rust_version": "1.88",
+      "features": ["compiled_data"]
+    },
+    {
+      "name": "icu_locale_fallback_data",
+      "version": "2.3.0",
+      "rust_version": "1.88",
+      "features": []
+    },
+    {
+      "name": "icu_normalizer",
+      "version": "2.3.0",
+      "rust_version": "1.88",
+      "features": ["compiled_data"]
+    },
+    {
+      "name": "icu_normalizer_data",
+      "version": "2.3.0",
+      "rust_version": "1.88",
+      "features": []
+    },
+    {
+      "name": "icu_properties",
+      "version": "2.3.0",
+      "rust_version": "1.88",
+      "features": ["compiled_data"]
+    },
+    {
+      "name": "icu_properties_data",
+      "version": "2.3.0",
+      "rust_version": "1.88",
+      "features": []
+    },
+    {
+      "name": "icu_provider",
+      "version": "2.3.1",
+      "rust_version": "1.88",
+      "features": ["alloc", "baked", "sync"]
+    },
+    {
+      "name": "icu_segmenter",
+      "version": "2.3.0",
+      "rust_version": "1.88",
+      "features": ["compiled_data"]
+    },
+    {
+      "name": "icu_segmenter_data",
+      "version": "2.3.0",
+      "rust_version": "1.88",
+      "features": []
+    },
+    {
+      "name": "libc",
+      "version": "0.2.186",
+      "rust_version": "1.65",
+      "features": ["default", "extra_traits", "std"]
+    },
+    {
+      "name": "linebender_resource_handle",
+      "version": "0.1.1",
+      "rust_version": "1.70",
+      "features": []
+    },
+    {
+      "name": "litemap",
+      "version": "0.8.1",
+      "rust_version": "1.82",
+      "features": ["alloc"]
+    },
+    {
+      "name": "memmap2",
+      "version": "0.9.11",
+      "rust_version": "1.65",
+      "features": []
+    },
+    {
+      "name": "once_cell",
+      "version": "1.21.4",
+      "rust_version": "1.65",
+      "features": [
+        "alloc",
+        "critical-section",
+        "default",
+        "portable-atomic",
+        "race",
+        "std"
+      ]
+    },
+    {
+      "name": "parlance",
+      "version": "0.1.1",
+      "rust_version": "1.88",
+      "features": ["std"]
+    },
+    {
+      "name": "parley",
+      "version": "0.12.0",
+      "rust_version": "1.88",
+      "features": ["std"]
+    },
+    {
+      "name": "parley_data",
+      "version": "0.12.0",
+      "rust_version": "1.88",
+      "features": ["baked"]
+    },
+    {
+      "name": "parley_emoji",
+      "version": "0.12.0",
+      "rust_version": "1.88",
+      "features": ["std"]
+    },
+    {
+      "name": "parley_engine",
+      "version": "0.12.0",
+      "rust_version": "1.88",
+      "features": ["std"]
+    },
+    {
+      "name": "portable-atomic",
+      "version": "1.13.1",
+      "rust_version": "1.34",
+      "features": ["default", "fallback", "require-cas", "std"]
+    },
+    {
+      "name": "potential_utf",
+      "version": "0.1.4",
+      "rust_version": "1.82",
+      "features": ["alloc", "writeable", "zerovec"]
+    },
+    {
+      "name": "proc-macro2",
+      "version": "1.0.106",
+      "rust_version": "1.68",
+      "features": ["default", "proc-macro"]
+    },
+    {
+      "name": "quote",
+      "version": "1.0.45",
+      "rust_version": "1.71",
+      "features": ["default", "proc-macro"]
+    },
+    {
+      "name": "read-fonts",
+      "version": "0.41.0",
+      "rust_version": "1.85",
+      "features": ["experimental_font_api", "std"]
+    },
+    {
+      "name": "serde",
+      "version": "1.0.228",
+      "rust_version": "1.56",
+      "features": ["alloc", "default", "derive", "rc", "serde_derive", "std"]
+    },
+    {
+      "name": "serde_core",
+      "version": "1.0.228",
+      "rust_version": "1.56",
+      "features": ["alloc", "default", "rc", "result", "std"]
+    },
+    {
+      "name": "serde_derive",
+      "version": "1.0.228",
+      "rust_version": "1.61",
+      "features": ["default"]
+    },
+    {
+      "name": "skrifa",
+      "version": "0.44.0",
+      "rust_version": "1.85",
+      "features": ["std"]
+    },
+    {
+      "name": "smallvec",
+      "version": "1.16.3",
+      "rust_version": null,
+      "features": ["const_generics", "const_new", "serde", "union", "write"]
+    },
+    {
+      "name": "stable_deref_trait",
+      "version": "1.2.1",
+      "rust_version": null,
+      "features": ["alloc"]
+    },
+    {
+      "name": "syn",
+      "version": "2.0.117",
+      "rust_version": "1.71",
+      "features": [
+        "clone-impls",
+        "default",
+        "derive",
+        "extra-traits",
+        "fold",
+        "full",
+        "parsing",
+        "printing",
+        "proc-macro",
+        "visit",
+        "visit-mut"
+      ]
+    },
+    {
+      "name": "syn",
+      "version": "3.0.3",
+      "rust_version": "1.71",
+      "features": [
+        "clone-impls",
+        "default",
+        "derive",
+        "extra-traits",
+        "full",
+        "parsing",
+        "printing",
+        "proc-macro"
+      ]
+    },
+    {
+      "name": "synstructure",
+      "version": "0.13.2",
+      "rust_version": null,
+      "features": ["default", "proc-macro"]
+    },
+    {
+      "name": "tinystr",
+      "version": "0.8.4",
+      "rust_version": "1.82",
+      "features": ["alloc", "default", "zerovec"]
+    },
+    {
+      "name": "unicode-ident",
+      "version": "1.0.22",
+      "rust_version": "1.31",
+      "features": []
+    },
+    {
+      "name": "utf8_iter",
+      "version": "1.0.4",
+      "rust_version": null,
+      "features": []
+    },
+    {
+      "name": "writeable",
+      "version": "0.6.4",
+      "rust_version": "1.82",
+      "features": ["alloc", "default"]
+    },
+    {
+      "name": "yoke",
+      "version": "0.8.3",
+      "rust_version": "1.82",
+      "features": ["alloc", "derive", "zerofrom"]
+    },
+    {
+      "name": "yoke-derive",
+      "version": "0.8.2",
+      "rust_version": null,
+      "features": []
+    },
+    {
+      "name": "zerofrom",
+      "version": "0.1.6",
+      "rust_version": "1.81",
+      "features": ["alloc", "derive"]
+    },
+    {
+      "name": "zerofrom-derive",
+      "version": "0.1.6",
+      "rust_version": null,
+      "features": []
+    },
+    {
+      "name": "zerotrie",
+      "version": "0.2.5",
+      "rust_version": "1.82",
+      "features": ["alloc", "default", "yoke", "zerofrom"]
+    },
+    {
+      "name": "zerovec",
+      "version": "0.11.8",
+      "rust_version": "1.83",
+      "features": ["alloc", "derive", "yoke"]
+    },
+    {
+      "name": "zerovec-derive",
+      "version": "0.11.6",
+      "rust_version": null,
+      "features": []
+    }
+  ],
+  "all_declared_rust_versions_within_toolchain": true,
+  "cargo_lock_sha256": "5c73d664fecbcbd37f892bab70362ae4154edb19b590669ba4cd39a73cadfb23",
+  "module_lock_sha256": "b97ac2c91b81a2d6f32d74eaf05820fbd2f68e44be1d095a570841fc9290253e",
+  "native_platform_validated": "x86_64-unknown-linux-gnu",
+  "other_platforms": "not yet built"
+}

@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "recorded_at_utc": "2026-10-12T08:48:43.143918+00:00",
+  "source_sha256": {
+    "codex-rs/chatgpt-chat/src/send.rs": "93485c2674c19ff73d141d7c4d68c3091d459ea3fba52a2217edfdc2d9495603",
+    "codex-rs/chatgpt-chat/src/probe.rs": "7cec4d83e4b1664d84f1ba86d52e76c0ac97f6fe622591d22fe1e5452f0fdc54",
+    "codex-rs/chatgpt-chat/src/probe_tests.rs": "fe6616510fd0f8481a4ba0110dc52a8d3543d23b12f7eb87c93b7eaf64c0e31a",
+    "codex-rs/http-client/src/browser_chat.rs": "4e435882e8cb75f59bc2858b804eced74e65a6202493e1bbfb28729fa89ffc7c",
+    "codex-rs/http-client/src/browser_chat_tests.rs": "8a405f5464750e9e6f2615372b0e47195c2ebaabb787505902fda6e1f79aab1c",
+    "codex-rs/app-server/examples/chatgpt_chat_probe.rs": "b40a25c9f2701c89a46a3e6c7a7d97a3316f9ceac0a31aca299c9b4aa21c5a37",
+    "codex-rs/app-server/examples/chatgpt_chat_probe/rpc.rs": "ec285a10393d115f72d1f6e183483ec02efceeaa8b0701fbc41e205379687cef",
+    "codex-rs/app-server/examples/chatgpt_chat_probe/rpc_saved.rs": "2c48964ef02b64e8c4cd40cebf6b16a86389907b8c3595380ea22ecc7f6eee14",
+    "codex-rs/chatgpt-chat/src/report.rs": "7676c90e105f4f923296da1cbce9cfca177205bc93921fe7f07058ea937b66db"
+  },
+  "native_stream_budget_seconds": 180,
+  "response_header_and_idle_read_budget_seconds": 30,
+  "http_body_timeout_category_preserved": true,
+  "original_live_failure_cause_proven": false,
+  "automatic_resend": false,
+  "tests": {
+    "cargo_native_library": 183,
+    "cargo_http_library": 127,
+    "cargo_probe": 13,
+    "bazel_native_library": 183,
+    "bazel_http_library": 127,
+    "bazel_checkpoint_note": "Bazel passed before the test polling helper changed from the async-await-gated poll macro to FutureExt::now_or_never; runtime code is identical."
+  },
+  "live_after_stream_change": "not_run_yet",
+  "integrated_gate_passed": false,
+  "feature_stage": "under_development",
+  "enabled_by_default": false
+}

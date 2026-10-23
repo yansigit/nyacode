@@ -1,0 +1,68 @@
+{
+  "version": 1,
+  "observed_at_utc": "2026-10-12T02:08:20.417107+00:00",
+  "purpose": "Candidate native send and stream contracts; no conversation POST, observer ping or live SSE capture has run",
+  "primary_sources": [
+    {
+      "url": "https://chatgpt.com/cdn/assets/4813494d-fw16x7sd7iounac7.js",
+      "sha256": "37fe958daac58a1ab73037f7f01fed13a480ca1fb1f2634391965097a241425c"
+    },
+    {
+      "url": "https://chatgpt.com/cdn/assets/8b34dbc2-oy2s1bd3byon2h8k.js",
+      "sha256": "7d6d30831cd1b598f1f313c041a4b7b6437102cf33575379646f5d4b3bcff4ac"
+    },
+    {
+      "url": "https://chatgpt.com/cdn/assets/conversation-small-lvkutckbb0elz96z.js",
+      "sha256": "eebd1388ad1aa96590daea4da561f0720b0f1880e86ce590a15a7ed8b39f2c80"
+    }
+  ],
+  "send": {
+    "endpoint": "/backend-api/f/conversation",
+    "parent": "Preparation and send share the same parent_message_id; continuation sends include the server conversation_id",
+    "messages": "Each carries a stable id, author role, creation time and content object; text is content_type=text with parts array",
+    "identity": "Routed managed authentication; native session device/profile headers retained",
+    "integrity_headers": [
+      "OpenAI-Sentinel-Chat-Requirements-Token",
+      "OpenAI-Sentinel-Turnstile-Token",
+      "OpenAI-Sentinel-Proof-Token",
+      "x-conduit-token"
+    ],
+    "persistence": "history_and_training_disabled explicitly selected; never toggled for handoff recovery",
+    "encoding": "supports_buffering=true; supported_encodings=[v1]",
+    "retry_policy": "Native implementation must not copy the browser automatic POST retry path"
+  },
+  "observer_ping": {
+    "endpoint": "/backend-api/sentinel/ping",
+    "token": "Raw native observer snapshot in OpenAI-Sentinel-SO-Token for this application flow; not the separate SentinelSDK wrapper protocol",
+    "headers": "Requirements/prepare, turnstile and proof tokens as available; OpenAI-Sentinel-Extra-Data is base64 JSON with + replaced by - and / by _, retaining padding",
+    "metadata": "v=1, sequence_number, signal presence flags and ping_source; conversation_id/last_message_id only when known",
+    "acceptance": "Not attempted; HTTP success would not establish message acceptance"
+  },
+  "delta_v1": {
+    "activation": "event=delta_encoding, data=v1; delta before activation is invalid",
+    "abbreviations": {
+      "c": "channel",
+      "p": "path",
+      "o": "op",
+      "v": "value"
+    },
+    "initial_previous_delta": {
+      "channel": 0,
+      "path": "",
+      "op": "add"
+    },
+    "inheritance": "Omitted channel/path/op inherit from the previous top-level delta; value never inherits. Values are kept separately per channel. Nested patch entries expand abbreviations without inheriting top-level fields.",
+    "operations": ["add", "remove", "replace", "append", "truncate", "patch"],
+    "paths": "Empty path is root; optional leading slash; canonical decimal indices; ~1 and ~0 decode pointer escapes",
+    "append": "Strings append text; arrays extend with an array or one scalar; objects shallow-merge; other targets replace",
+    "truncate": "String length uses UTF-16 units; array length changes must be bounded",
+    "completion": "EOF alone is incomplete. Terminal response and authoritative conversation state must establish outcome; handoff is not a finished response."
+  },
+  "secondary_reference": {
+    "repository": "https://github.com/robotlearning123/gpt2agent",
+    "revision": "20669693dd608a94a5b5aba54c4c4a036f064375",
+    "file": "gpt2agent/sse.py",
+    "license": "MIT",
+    "limits": "Its permissive patching and automatic recovery/fallback behavior are not adopted; current official codec exposes channel and operation inheritance that the new native parser must preserve."
+  }
+}

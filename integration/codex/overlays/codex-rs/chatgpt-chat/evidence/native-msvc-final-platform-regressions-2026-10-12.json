@@ -1,0 +1,369 @@
+{
+  "version": 1,
+  "recorded_at_utc": "2026-10-12T22:32:32.528447+00:00",
+  "baseline_revision": "3a88aafe4632364ec30f6c402f68d9d09770a9fc",
+  "production_toolchain_changed_at_test_time": false,
+  "microsoft_license_acceptance_asserted": true,
+  "rust": "1.95.0",
+  "llvm": "0.8.24",
+  "bazel": "9.2.0",
+  "passed": true,
+  "transport_results": [
+    {
+      "target": "x86_64-unknown-linux-gnu",
+      "action": "test",
+      "targets": [
+        "//codex-rs/http-client:http-client-unit-tests",
+        "//codex-rs/chatgpt-chat:chatgpt-chat-unit-tests"
+      ],
+      "command": [
+        "bazel",
+        "test",
+        "--lockfile_mode=update",
+        "--repo_env=BAZEL_MSVC_RUNTIME_VISUAL_STUDIO_EULA=1",
+        "--repo_env=BAZEL_WINDOWS_SDK_EULA=1",
+        "--extra_execution_platforms=//:local_linux,@rules_rs//rs/platforms:x86_64-unknown-linux-gnu,@rules_rs//rs/platforms:x86_64-unknown-linux-musl,@rules_rs//rs/platforms:aarch64-unknown-linux-gnu,@rules_rs//rs/platforms:aarch64-unknown-linux-musl,@rules_rs//rs/platforms:aarch64-apple-darwin,@rules_rs//rs/platforms:x86_64-apple-darwin,@rules_rs//rs/platforms:x86_64-pc-windows-gnullvm,@rules_rs//rs/platforms:x86_64-pc-windows-msvc,@rules_rs//rs/platforms:aarch64-pc-windows-msvc",
+        "--platforms=@rules_rs//rs/platforms:x86_64-unknown-linux-gnu",
+        "--test_output=all",
+        "//codex-rs/http-client:http-client-unit-tests",
+        "//codex-rs/chatgpt-chat:chatgpt-chat-unit-tests"
+      ],
+      "exit_code": 0,
+      "passed": true,
+      "log_sha256": "85718c21177bc2c44bd0c8cb8b32c21a2e2810dd9b768485821c682d8155d1e8",
+      "source_sha256": {
+        "bazel/toolchains/browser_chat/toolchain.cmake": "404eb87bd886ee10aabc6aa30dc3badeb6d88648485bc5d020cc28276797ef5e",
+        ".bazelrc": "b4dd2bd74ec14e80ee211a53bdb1b8eebf0337462e624093fc5ea4a05eb34519",
+        "MODULE.bazel": "7ea181788097b06d3f4e6a572a7ac38645403d6da26a13843d99d7644c8b874e",
+        "MODULE.bazel.lock": "ea44fba0f791060c8049bffc219be2d08b86816e681f2f594af1936ba4070d21",
+        "patches/llvm-0.8.24.patch": "1c729c4e82194b3b07808249adb10050f454a156bf0ed3fa78ad1d5af71c2c61",
+        "patches/windows-support-0.4.1.patch": "dac7c792ee3ed7c6a46bb91bcdcf6f0fe361958548052a2826c6967f84c5c0f9",
+        "patches/rules_cc-0.2.25-grep-includes.patch": "fba33bddfc411d2265d291a0c06b7fd8a63ebf421633c4d629eb9bba0d9f5253",
+        "patches/btls-sys_msvc_bindgen_driver.patch": "55b4bae5c363de2075056cd62629802df597633732e27c52e8e3823da8e87322",
+        "patches/btls-sys_msvc_compatibility_version.patch": "76933db5128494459a88a17775a3de83880bb5355baec829f94a079e04f9120d",
+        "patches/aws-lc-5.1.0-msvc-driver.patch": "ce37e38047ba4d4e1d3f95da7f9d6b28678cb0d5d1d6f10526e966eff25cb85d",
+        "patches/rules_rust_msvc_build_script_paths.patch": "df2adba4e98d41fb8b1ecbb5539bf3f54f35f5784c08e82a0eb2340c5bb731bf",
+        "patches/rules_rust_msvc_linker_paths.patch": "adfb8b786224e1b07c229c1cc4ce9fcce9c9941ef574fb14e73b766fe313a8d9",
+        "patches/ring_msvc_declared_clang.patch": "aadcd1e835d831e857507d4a957876c43ce07a11b1caffb4853acec138511d13",
+        "patches/llvm-0.8.24-relocatable-msvc-vfs.patch": "60790bbf78a53c18044288a8efa511bc1f740a89f9b0131a89c43dfe2117339e"
+      },
+      "http_executable_sha256": "890e7a7043d1726868a5e424dfcc354c53235d6c68e7e049f9f09666481e2e4a",
+      "test_summaries": [
+        "test result: ok. 127 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.18s",
+        "test result: ok. 183 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.00s"
+      ],
+      "tests_executed_freshly": true
+    },
+    {
+      "target": "x86_64-unknown-linux-musl",
+      "action": "build_and_run",
+      "targets": ["//codex-rs/http-client:http-client-unit-tests-bin"],
+      "command": [
+        "bazel",
+        "build",
+        "--lockfile_mode=update",
+        "--repo_env=BAZEL_MSVC_RUNTIME_VISUAL_STUDIO_EULA=1",
+        "--repo_env=BAZEL_WINDOWS_SDK_EULA=1",
+        "--extra_execution_platforms=//:local_linux,@rules_rs//rs/platforms:x86_64-unknown-linux-gnu,@rules_rs//rs/platforms:x86_64-unknown-linux-musl,@rules_rs//rs/platforms:aarch64-unknown-linux-gnu,@rules_rs//rs/platforms:aarch64-unknown-linux-musl,@rules_rs//rs/platforms:aarch64-apple-darwin,@rules_rs//rs/platforms:x86_64-apple-darwin,@rules_rs//rs/platforms:x86_64-pc-windows-gnullvm,@rules_rs//rs/platforms:x86_64-pc-windows-msvc,@rules_rs//rs/platforms:aarch64-pc-windows-msvc",
+        "--platforms=@rules_rs//rs/platforms:x86_64-unknown-linux-musl",
+        "//codex-rs/http-client:http-client-unit-tests-bin"
+      ],
+      "exit_code": 0,
+      "passed": true,
+      "log_sha256": "0106c04cb8d156849d6dd15ec316db5ee948b35f8a785e45767de13a945ef25c",
+      "source_sha256": {
+        "bazel/toolchains/browser_chat/toolchain.cmake": "404eb87bd886ee10aabc6aa30dc3badeb6d88648485bc5d020cc28276797ef5e",
+        ".bazelrc": "b4dd2bd74ec14e80ee211a53bdb1b8eebf0337462e624093fc5ea4a05eb34519",
+        "MODULE.bazel": "7ea181788097b06d3f4e6a572a7ac38645403d6da26a13843d99d7644c8b874e",
+        "MODULE.bazel.lock": "ea44fba0f791060c8049bffc219be2d08b86816e681f2f594af1936ba4070d21",
+        "patches/llvm-0.8.24.patch": "1c729c4e82194b3b07808249adb10050f454a156bf0ed3fa78ad1d5af71c2c61",
+        "patches/windows-support-0.4.1.patch": "dac7c792ee3ed7c6a46bb91bcdcf6f0fe361958548052a2826c6967f84c5c0f9",
+        "patches/rules_cc-0.2.25-grep-includes.patch": "fba33bddfc411d2265d291a0c06b7fd8a63ebf421633c4d629eb9bba0d9f5253",
+        "patches/btls-sys_msvc_bindgen_driver.patch": "55b4bae5c363de2075056cd62629802df597633732e27c52e8e3823da8e87322",
+        "patches/btls-sys_msvc_compatibility_version.patch": "76933db5128494459a88a17775a3de83880bb5355baec829f94a079e04f9120d",
+        "patches/aws-lc-5.1.0-msvc-driver.patch": "ce37e38047ba4d4e1d3f95da7f9d6b28678cb0d5d1d6f10526e966eff25cb85d",
+        "patches/rules_rust_msvc_build_script_paths.patch": "df2adba4e98d41fb8b1ecbb5539bf3f54f35f5784c08e82a0eb2340c5bb731bf",
+        "patches/rules_rust_msvc_linker_paths.patch": "adfb8b786224e1b07c229c1cc4ce9fcce9c9941ef574fb14e73b766fe313a8d9",
+        "patches/ring_msvc_declared_clang.patch": "aadcd1e835d831e857507d4a957876c43ce07a11b1caffb4853acec138511d13",
+        "patches/llvm-0.8.24-relocatable-msvc-vfs.patch": "60790bbf78a53c18044288a8efa511bc1f740a89f9b0131a89c43dfe2117339e"
+      },
+      "http_executable_sha256": "aac0ce6295c5a459b23af75a9a35f025fc27fbe509aeef1f242d5d1fa5d4a19e",
+      "runtime_tests_run": true,
+      "static_x86_64_elf_verified": true,
+      "runtime_exit_code": 0,
+      "runtime_log_sha256": "7dca7625ee98d49af00536bbb823234c1a556cfe276f11a297b00bd9f9733c8e",
+      "test_summaries": [
+        "test result: ok. 127 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.26s"
+      ]
+    },
+    {
+      "target": "aarch64-unknown-linux-gnu",
+      "action": "build",
+      "targets": ["//codex-rs/http-client:http-client-unit-tests-bin"],
+      "command": [
+        "bazel",
+        "build",
+        "--lockfile_mode=update",
+        "--repo_env=BAZEL_MSVC_RUNTIME_VISUAL_STUDIO_EULA=1",
+        "--repo_env=BAZEL_WINDOWS_SDK_EULA=1",
+        "--extra_execution_platforms=//:local_linux,@rules_rs//rs/platforms:x86_64-unknown-linux-gnu,@rules_rs//rs/platforms:x86_64-unknown-linux-musl,@rules_rs//rs/platforms:aarch64-unknown-linux-gnu,@rules_rs//rs/platforms:aarch64-unknown-linux-musl,@rules_rs//rs/platforms:aarch64-apple-darwin,@rules_rs//rs/platforms:x86_64-apple-darwin,@rules_rs//rs/platforms:x86_64-pc-windows-gnullvm,@rules_rs//rs/platforms:x86_64-pc-windows-msvc,@rules_rs//rs/platforms:aarch64-pc-windows-msvc",
+        "--platforms=@rules_rs//rs/platforms:aarch64-unknown-linux-gnu",
+        "//codex-rs/http-client:http-client-unit-tests-bin"
+      ],
+      "exit_code": 0,
+      "passed": true,
+      "log_sha256": "f2bbd0d93169ec292d01417cdc676476091f1473385cb9562a26dd3eb877c572",
+      "source_sha256": {
+        "bazel/toolchains/browser_chat/toolchain.cmake": "404eb87bd886ee10aabc6aa30dc3badeb6d88648485bc5d020cc28276797ef5e",
+        ".bazelrc": "b4dd2bd74ec14e80ee211a53bdb1b8eebf0337462e624093fc5ea4a05eb34519",
+        "MODULE.bazel": "7ea181788097b06d3f4e6a572a7ac38645403d6da26a13843d99d7644c8b874e",
+        "MODULE.bazel.lock": "ea44fba0f791060c8049bffc219be2d08b86816e681f2f594af1936ba4070d21",
+        "patches/llvm-0.8.24.patch": "1c729c4e82194b3b07808249adb10050f454a156bf0ed3fa78ad1d5af71c2c61",
+        "patches/windows-support-0.4.1.patch": "dac7c792ee3ed7c6a46bb91bcdcf6f0fe361958548052a2826c6967f84c5c0f9",
+        "patches/rules_cc-0.2.25-grep-includes.patch": "fba33bddfc411d2265d291a0c06b7fd8a63ebf421633c4d629eb9bba0d9f5253",
+        "patches/btls-sys_msvc_bindgen_driver.patch": "55b4bae5c363de2075056cd62629802df597633732e27c52e8e3823da8e87322",
+        "patches/btls-sys_msvc_compatibility_version.patch": "76933db5128494459a88a17775a3de83880bb5355baec829f94a079e04f9120d",
+        "patches/aws-lc-5.1.0-msvc-driver.patch": "ce37e38047ba4d4e1d3f95da7f9d6b28678cb0d5d1d6f10526e966eff25cb85d",
+        "patches/rules_rust_msvc_build_script_paths.patch": "df2adba4e98d41fb8b1ecbb5539bf3f54f35f5784c08e82a0eb2340c5bb731bf",
+        "patches/rules_rust_msvc_linker_paths.patch": "adfb8b786224e1b07c229c1cc4ce9fcce9c9941ef574fb14e73b766fe313a8d9",
+        "patches/ring_msvc_declared_clang.patch": "aadcd1e835d831e857507d4a957876c43ce07a11b1caffb4853acec138511d13",
+        "patches/llvm-0.8.24-relocatable-msvc-vfs.patch": "60790bbf78a53c18044288a8efa511bc1f740a89f9b0131a89c43dfe2117339e"
+      },
+      "http_executable_sha256": "545fa94092b6e35210dbfba42d91b80704efe290e54b3698149c647dc543ecaf"
+    },
+    {
+      "target": "aarch64-unknown-linux-musl",
+      "action": "build",
+      "targets": ["//codex-rs/http-client:http-client-unit-tests-bin"],
+      "command": [
+        "bazel",
+        "build",
+        "--lockfile_mode=update",
+        "--repo_env=BAZEL_MSVC_RUNTIME_VISUAL_STUDIO_EULA=1",
+        "--repo_env=BAZEL_WINDOWS_SDK_EULA=1",
+        "--extra_execution_platforms=//:local_linux,@rules_rs//rs/platforms:x86_64-unknown-linux-gnu,@rules_rs//rs/platforms:x86_64-unknown-linux-musl,@rules_rs//rs/platforms:aarch64-unknown-linux-gnu,@rules_rs//rs/platforms:aarch64-unknown-linux-musl,@rules_rs//rs/platforms:aarch64-apple-darwin,@rules_rs//rs/platforms:x86_64-apple-darwin,@rules_rs//rs/platforms:x86_64-pc-windows-gnullvm,@rules_rs//rs/platforms:x86_64-pc-windows-msvc,@rules_rs//rs/platforms:aarch64-pc-windows-msvc",
+        "--platforms=@rules_rs//rs/platforms:aarch64-unknown-linux-musl",
+        "//codex-rs/http-client:http-client-unit-tests-bin"
+      ],
+      "exit_code": 0,
+      "passed": true,
+      "log_sha256": "d67db131288bb8354e0cf96194c2c4d5be379bd7e618d64f61f92174619b6895",
+      "source_sha256": {
+        "bazel/toolchains/browser_chat/toolchain.cmake": "404eb87bd886ee10aabc6aa30dc3badeb6d88648485bc5d020cc28276797ef5e",
+        ".bazelrc": "b4dd2bd74ec14e80ee211a53bdb1b8eebf0337462e624093fc5ea4a05eb34519",
+        "MODULE.bazel": "7ea181788097b06d3f4e6a572a7ac38645403d6da26a13843d99d7644c8b874e",
+        "MODULE.bazel.lock": "ea44fba0f791060c8049bffc219be2d08b86816e681f2f594af1936ba4070d21",
+        "patches/llvm-0.8.24.patch": "1c729c4e82194b3b07808249adb10050f454a156bf0ed3fa78ad1d5af71c2c61",
+        "patches/windows-support-0.4.1.patch": "dac7c792ee3ed7c6a46bb91bcdcf6f0fe361958548052a2826c6967f84c5c0f9",
+        "patches/rules_cc-0.2.25-grep-includes.patch": "fba33bddfc411d2265d291a0c06b7fd8a63ebf421633c4d629eb9bba0d9f5253",
+        "patches/btls-sys_msvc_bindgen_driver.patch": "55b4bae5c363de2075056cd62629802df597633732e27c52e8e3823da8e87322",
+        "patches/btls-sys_msvc_compatibility_version.patch": "76933db5128494459a88a17775a3de83880bb5355baec829f94a079e04f9120d",
+        "patches/aws-lc-5.1.0-msvc-driver.patch": "ce37e38047ba4d4e1d3f95da7f9d6b28678cb0d5d1d6f10526e966eff25cb85d",
+        "patches/rules_rust_msvc_build_script_paths.patch": "df2adba4e98d41fb8b1ecbb5539bf3f54f35f5784c08e82a0eb2340c5bb731bf",
+        "patches/rules_rust_msvc_linker_paths.patch": "adfb8b786224e1b07c229c1cc4ce9fcce9c9941ef574fb14e73b766fe313a8d9",
+        "patches/ring_msvc_declared_clang.patch": "aadcd1e835d831e857507d4a957876c43ce07a11b1caffb4853acec138511d13",
+        "patches/llvm-0.8.24-relocatable-msvc-vfs.patch": "60790bbf78a53c18044288a8efa511bc1f740a89f9b0131a89c43dfe2117339e"
+      },
+      "http_executable_sha256": "0ffd76b3e58c80a896f5e5a20ee79a969a604f7a73cafecbeb6237b3f78d37f1"
+    },
+    {
+      "target": "aarch64-apple-darwin",
+      "action": "build",
+      "targets": ["//codex-rs/http-client:http-client-unit-tests-bin"],
+      "command": [
+        "bazel",
+        "build",
+        "--lockfile_mode=update",
+        "--repo_env=BAZEL_MSVC_RUNTIME_VISUAL_STUDIO_EULA=1",
+        "--repo_env=BAZEL_WINDOWS_SDK_EULA=1",
+        "--extra_execution_platforms=//:local_linux,@rules_rs//rs/platforms:x86_64-unknown-linux-gnu,@rules_rs//rs/platforms:x86_64-unknown-linux-musl,@rules_rs//rs/platforms:aarch64-unknown-linux-gnu,@rules_rs//rs/platforms:aarch64-unknown-linux-musl,@rules_rs//rs/platforms:aarch64-apple-darwin,@rules_rs//rs/platforms:x86_64-apple-darwin,@rules_rs//rs/platforms:x86_64-pc-windows-gnullvm,@rules_rs//rs/platforms:x86_64-pc-windows-msvc,@rules_rs//rs/platforms:aarch64-pc-windows-msvc",
+        "--platforms=@rules_rs//rs/platforms:aarch64-apple-darwin",
+        "//codex-rs/http-client:http-client-unit-tests-bin"
+      ],
+      "exit_code": 0,
+      "passed": true,
+      "log_sha256": "6a39818b04eafd06be033b28c371e1988dd24f3c0a727864948757ee962c8d71",
+      "source_sha256": {
+        "bazel/toolchains/browser_chat/toolchain.cmake": "404eb87bd886ee10aabc6aa30dc3badeb6d88648485bc5d020cc28276797ef5e",
+        ".bazelrc": "b4dd2bd74ec14e80ee211a53bdb1b8eebf0337462e624093fc5ea4a05eb34519",
+        "MODULE.bazel": "7ea181788097b06d3f4e6a572a7ac38645403d6da26a13843d99d7644c8b874e",
+        "MODULE.bazel.lock": "ea44fba0f791060c8049bffc219be2d08b86816e681f2f594af1936ba4070d21",
+        "patches/llvm-0.8.24.patch": "1c729c4e82194b3b07808249adb10050f454a156bf0ed3fa78ad1d5af71c2c61",
+        "patches/windows-support-0.4.1.patch": "dac7c792ee3ed7c6a46bb91bcdcf6f0fe361958548052a2826c6967f84c5c0f9",
+        "patches/rules_cc-0.2.25-grep-includes.patch": "fba33bddfc411d2265d291a0c06b7fd8a63ebf421633c4d629eb9bba0d9f5253",
+        "patches/btls-sys_msvc_bindgen_driver.patch": "55b4bae5c363de2075056cd62629802df597633732e27c52e8e3823da8e87322",
+        "patches/btls-sys_msvc_compatibility_version.patch": "76933db5128494459a88a17775a3de83880bb5355baec829f94a079e04f9120d",
+        "patches/aws-lc-5.1.0-msvc-driver.patch": "ce37e38047ba4d4e1d3f95da7f9d6b28678cb0d5d1d6f10526e966eff25cb85d",
+        "patches/rules_rust_msvc_build_script_paths.patch": "df2adba4e98d41fb8b1ecbb5539bf3f54f35f5784c08e82a0eb2340c5bb731bf",
+        "patches/rules_rust_msvc_linker_paths.patch": "adfb8b786224e1b07c229c1cc4ce9fcce9c9941ef574fb14e73b766fe313a8d9",
+        "patches/ring_msvc_declared_clang.patch": "aadcd1e835d831e857507d4a957876c43ce07a11b1caffb4853acec138511d13",
+        "patches/llvm-0.8.24-relocatable-msvc-vfs.patch": "60790bbf78a53c18044288a8efa511bc1f740a89f9b0131a89c43dfe2117339e"
+      },
+      "http_executable_sha256": "6390c9718b62c0bcbcfd1800c8ded311c0c5be0fa319eea81fea74c534cd1846"
+    },
+    {
+      "target": "x86_64-apple-darwin",
+      "action": "build",
+      "targets": ["//codex-rs/http-client:http-client-unit-tests-bin"],
+      "command": [
+        "bazel",
+        "build",
+        "--lockfile_mode=update",
+        "--repo_env=BAZEL_MSVC_RUNTIME_VISUAL_STUDIO_EULA=1",
+        "--repo_env=BAZEL_WINDOWS_SDK_EULA=1",
+        "--extra_execution_platforms=//:local_linux,@rules_rs//rs/platforms:x86_64-unknown-linux-gnu,@rules_rs//rs/platforms:x86_64-unknown-linux-musl,@rules_rs//rs/platforms:aarch64-unknown-linux-gnu,@rules_rs//rs/platforms:aarch64-unknown-linux-musl,@rules_rs//rs/platforms:aarch64-apple-darwin,@rules_rs//rs/platforms:x86_64-apple-darwin,@rules_rs//rs/platforms:x86_64-pc-windows-gnullvm,@rules_rs//rs/platforms:x86_64-pc-windows-msvc,@rules_rs//rs/platforms:aarch64-pc-windows-msvc",
+        "--platforms=@rules_rs//rs/platforms:x86_64-apple-darwin",
+        "//codex-rs/http-client:http-client-unit-tests-bin"
+      ],
+      "exit_code": 0,
+      "passed": true,
+      "log_sha256": "4b1a56d9b2b49cb9e63af1a0b6f7422e9741a0ffd7ba2ec9bd22d3f94d7c57f1",
+      "source_sha256": {
+        "bazel/toolchains/browser_chat/toolchain.cmake": "404eb87bd886ee10aabc6aa30dc3badeb6d88648485bc5d020cc28276797ef5e",
+        ".bazelrc": "b4dd2bd74ec14e80ee211a53bdb1b8eebf0337462e624093fc5ea4a05eb34519",
+        "MODULE.bazel": "7ea181788097b06d3f4e6a572a7ac38645403d6da26a13843d99d7644c8b874e",
+        "MODULE.bazel.lock": "ea44fba0f791060c8049bffc219be2d08b86816e681f2f594af1936ba4070d21",
+        "patches/llvm-0.8.24.patch": "1c729c4e82194b3b07808249adb10050f454a156bf0ed3fa78ad1d5af71c2c61",
+        "patches/windows-support-0.4.1.patch": "dac7c792ee3ed7c6a46bb91bcdcf6f0fe361958548052a2826c6967f84c5c0f9",
+        "patches/rules_cc-0.2.25-grep-includes.patch": "fba33bddfc411d2265d291a0c06b7fd8a63ebf421633c4d629eb9bba0d9f5253",
+        "patches/btls-sys_msvc_bindgen_driver.patch": "55b4bae5c363de2075056cd62629802df597633732e27c52e8e3823da8e87322",
+        "patches/btls-sys_msvc_compatibility_version.patch": "76933db5128494459a88a17775a3de83880bb5355baec829f94a079e04f9120d",
+        "patches/aws-lc-5.1.0-msvc-driver.patch": "ce37e38047ba4d4e1d3f95da7f9d6b28678cb0d5d1d6f10526e966eff25cb85d",
+        "patches/rules_rust_msvc_build_script_paths.patch": "df2adba4e98d41fb8b1ecbb5539bf3f54f35f5784c08e82a0eb2340c5bb731bf",
+        "patches/rules_rust_msvc_linker_paths.patch": "adfb8b786224e1b07c229c1cc4ce9fcce9c9941ef574fb14e73b766fe313a8d9",
+        "patches/ring_msvc_declared_clang.patch": "aadcd1e835d831e857507d4a957876c43ce07a11b1caffb4853acec138511d13",
+        "patches/llvm-0.8.24-relocatable-msvc-vfs.patch": "60790bbf78a53c18044288a8efa511bc1f740a89f9b0131a89c43dfe2117339e"
+      },
+      "http_executable_sha256": "ed6b86e25d4fc1ee7d3226f273baf545fa38841754bbefb7116aa9e981a36880"
+    },
+    {
+      "target": "x86_64-pc-windows-gnullvm",
+      "action": "build",
+      "targets": ["//codex-rs/http-client:http-client-unit-tests-bin"],
+      "command": [
+        "bazel",
+        "build",
+        "--lockfile_mode=update",
+        "--repo_env=BAZEL_MSVC_RUNTIME_VISUAL_STUDIO_EULA=1",
+        "--repo_env=BAZEL_WINDOWS_SDK_EULA=1",
+        "--extra_execution_platforms=//:local_linux,@rules_rs//rs/platforms:x86_64-unknown-linux-gnu,@rules_rs//rs/platforms:x86_64-unknown-linux-musl,@rules_rs//rs/platforms:aarch64-unknown-linux-gnu,@rules_rs//rs/platforms:aarch64-unknown-linux-musl,@rules_rs//rs/platforms:aarch64-apple-darwin,@rules_rs//rs/platforms:x86_64-apple-darwin,@rules_rs//rs/platforms:x86_64-pc-windows-gnullvm,@rules_rs//rs/platforms:x86_64-pc-windows-msvc,@rules_rs//rs/platforms:aarch64-pc-windows-msvc",
+        "--platforms=@rules_rs//rs/platforms:x86_64-pc-windows-gnullvm",
+        "//codex-rs/http-client:http-client-unit-tests-bin"
+      ],
+      "exit_code": 0,
+      "passed": true,
+      "log_sha256": "0dd2adcbc9555e8f758d8ace861f47c6e2603668f726377b2be9cf2036f1cd8d",
+      "source_sha256": {
+        "bazel/toolchains/browser_chat/toolchain.cmake": "404eb87bd886ee10aabc6aa30dc3badeb6d88648485bc5d020cc28276797ef5e",
+        ".bazelrc": "b4dd2bd74ec14e80ee211a53bdb1b8eebf0337462e624093fc5ea4a05eb34519",
+        "MODULE.bazel": "7ea181788097b06d3f4e6a572a7ac38645403d6da26a13843d99d7644c8b874e",
+        "MODULE.bazel.lock": "ea44fba0f791060c8049bffc219be2d08b86816e681f2f594af1936ba4070d21",
+        "patches/llvm-0.8.24.patch": "1c729c4e82194b3b07808249adb10050f454a156bf0ed3fa78ad1d5af71c2c61",
+        "patches/windows-support-0.4.1.patch": "dac7c792ee3ed7c6a46bb91bcdcf6f0fe361958548052a2826c6967f84c5c0f9",
+        "patches/rules_cc-0.2.25-grep-includes.patch": "fba33bddfc411d2265d291a0c06b7fd8a63ebf421633c4d629eb9bba0d9f5253",
+        "patches/btls-sys_msvc_bindgen_driver.patch": "55b4bae5c363de2075056cd62629802df597633732e27c52e8e3823da8e87322",
+        "patches/btls-sys_msvc_compatibility_version.patch": "76933db5128494459a88a17775a3de83880bb5355baec829f94a079e04f9120d",
+        "patches/aws-lc-5.1.0-msvc-driver.patch": "ce37e38047ba4d4e1d3f95da7f9d6b28678cb0d5d1d6f10526e966eff25cb85d",
+        "patches/rules_rust_msvc_build_script_paths.patch": "df2adba4e98d41fb8b1ecbb5539bf3f54f35f5784c08e82a0eb2340c5bb731bf",
+        "patches/rules_rust_msvc_linker_paths.patch": "adfb8b786224e1b07c229c1cc4ce9fcce9c9941ef574fb14e73b766fe313a8d9",
+        "patches/ring_msvc_declared_clang.patch": "aadcd1e835d831e857507d4a957876c43ce07a11b1caffb4853acec138511d13",
+        "patches/llvm-0.8.24-relocatable-msvc-vfs.patch": "60790bbf78a53c18044288a8efa511bc1f740a89f9b0131a89c43dfe2117339e"
+      },
+      "http_executable_sha256": "c064c9ad86c5df3e7d63ec3640849584f0e51638e1bae21e7957797b1d4c4d5d"
+    }
+  ],
+  "linux_cli": {
+    "version": 3,
+    "started_at_utc": "2026-10-12T22:26:03.743488+00:00",
+    "production_toolchain_changed": false,
+    "microsoft_license_acceptance_asserted": true,
+    "command": [
+      "bazel",
+      "build",
+      "--lockfile_mode=update",
+      "--repo_env=BAZEL_MSVC_RUNTIME_VISUAL_STUDIO_EULA=1",
+      "--repo_env=BAZEL_WINDOWS_SDK_EULA=1",
+      "--extra_execution_platforms=//:local_linux,@rules_rs//rs/platforms:x86_64-unknown-linux-gnu,@rules_rs//rs/platforms:x86_64-unknown-linux-musl,@rules_rs//rs/platforms:aarch64-unknown-linux-gnu,@rules_rs//rs/platforms:aarch64-unknown-linux-musl,@rules_rs//rs/platforms:aarch64-apple-darwin,@rules_rs//rs/platforms:x86_64-apple-darwin,@rules_rs//rs/platforms:x86_64-pc-windows-gnullvm,@rules_rs//rs/platforms:x86_64-pc-windows-msvc,@rules_rs//rs/platforms:aarch64-pc-windows-msvc",
+      "--platforms=@rules_rs//rs/platforms:x86_64-unknown-linux-gnu",
+      "//codex-rs/cli:codex"
+    ],
+    "source_sha256": {
+      "bazel/toolchains/browser_chat/toolchain.cmake": "404eb87bd886ee10aabc6aa30dc3badeb6d88648485bc5d020cc28276797ef5e",
+      ".bazelrc": "b4dd2bd74ec14e80ee211a53bdb1b8eebf0337462e624093fc5ea4a05eb34519",
+      "MODULE.bazel": "7ea181788097b06d3f4e6a572a7ac38645403d6da26a13843d99d7644c8b874e",
+      "MODULE.bazel.lock": "ea44fba0f791060c8049bffc219be2d08b86816e681f2f594af1936ba4070d21",
+      "patches/llvm-0.8.24.patch": "1c729c4e82194b3b07808249adb10050f454a156bf0ed3fa78ad1d5af71c2c61",
+      "patches/windows-support-0.4.1.patch": "dac7c792ee3ed7c6a46bb91bcdcf6f0fe361958548052a2826c6967f84c5c0f9",
+      "patches/rules_cc-0.2.25-grep-includes.patch": "fba33bddfc411d2265d291a0c06b7fd8a63ebf421633c4d629eb9bba0d9f5253",
+      "patches/btls-sys_msvc_bindgen_driver.patch": "55b4bae5c363de2075056cd62629802df597633732e27c52e8e3823da8e87322",
+      "patches/btls-sys_msvc_compatibility_version.patch": "76933db5128494459a88a17775a3de83880bb5355baec829f94a079e04f9120d",
+      "patches/aws-lc-5.1.0-msvc-driver.patch": "ce37e38047ba4d4e1d3f95da7f9d6b28678cb0d5d1d6f10526e966eff25cb85d",
+      "patches/rules_rust_msvc_build_script_paths.patch": "df2adba4e98d41fb8b1ecbb5539bf3f54f35f5784c08e82a0eb2340c5bb731bf",
+      "patches/rules_rust_msvc_linker_paths.patch": "adfb8b786224e1b07c229c1cc4ce9fcce9c9941ef574fb14e73b766fe313a8d9",
+      "patches/ring_msvc_declared_clang.patch": "aadcd1e835d831e857507d4a957876c43ce07a11b1caffb4853acec138511d13",
+      "patches/llvm-0.8.24-relocatable-msvc-vfs.patch": "60790bbf78a53c18044288a8efa511bc1f740a89f9b0131a89c43dfe2117339e",
+      "codex-rs/tui/src/app/native_chat/mod.rs": "4532905136524c31d088f3467e1714a7c63e20dc825d6d183a2ca846930ee569",
+      "codex-rs/tui/src/app/native_chat/state.rs": "030f9c7269ee0970bdadc083ca010c393f545abd91b58a22416bf2d483aa0a46",
+      "codex-rs/tui/src/app/reconnect.rs": "b6dab4a3716838c782d3559b5a672cd08a9ca2da1c35fd67e67c2bcef0bc6f2c",
+      "codex-rs/features/src/lib.rs": "a1049a7fbb6bb39d40e2ca56da090041ee2beeddc9937b19e7e1ca81409d6793"
+    },
+    "build_exit_code": 0,
+    "build_log_sha256": "8d0e45b85cb644082396b7f9e5a2c7d525f5fea89ddf84370449bd4e76e4cada",
+    "passed": true,
+    "binary_sha256": "9e4a24a5e0489e1abf94df52b4413ab0c4781ba56d0a2c408bd8474373c8f4ff",
+    "smoke_checks": [
+      {
+        "argument": "--version",
+        "exit_code": 0,
+        "output_sha256": "311f8a5f980e6f4c89ebcaeae9a1c5b32ad0e9918bdf639d8b29f67a80a9a9d1",
+        "output": "nyacode 0.0.0"
+      },
+      {
+        "argument": "--help",
+        "exit_code": 0,
+        "output_sha256": "9ed1816eaaf91416d8f04724d8f2220d489a279a05138da2373da2c40663b2a1"
+      }
+    ],
+    "finished_at_utc": "2026-10-12T22:32:27.431324+00:00",
+    "final_module_lock_sha256": "ea44fba0f791060c8049bffc219be2d08b86816e681f2f594af1936ba4070d21"
+  },
+  "sdk_generator_tests": {
+    "version": 1,
+    "started_at_utc": "2026-10-12T21:49:02.751222+00:00",
+    "command": [
+      "bazel",
+      "test",
+      "--lockfile_mode=update",
+      "--repo_env=BAZEL_MSVC_RUNTIME_VISUAL_STUDIO_EULA=1",
+      "--repo_env=BAZEL_WINDOWS_SDK_EULA=1",
+      "--extra_execution_platforms=//:local_linux,@rules_rs//rs/platforms:x86_64-unknown-linux-gnu,@rules_rs//rs/platforms:x86_64-unknown-linux-musl,@rules_rs//rs/platforms:aarch64-unknown-linux-gnu,@rules_rs//rs/platforms:aarch64-unknown-linux-musl,@rules_rs//rs/platforms:aarch64-apple-darwin,@rules_rs//rs/platforms:x86_64-apple-darwin,@rules_rs//rs/platforms:x86_64-pc-windows-gnullvm,@rules_rs//rs/platforms:x86_64-pc-windows-msvc,@rules_rs//rs/platforms:aarch64-pc-windows-msvc",
+      "--platforms=@rules_rs//rs/platforms:x86_64-unknown-linux-gnu",
+      "--test_output=all",
+      "@llvm//tools/case_insensitive_vfs:test",
+      "@llvm//tools/case_insensitive_vfs:cli_test"
+    ],
+    "source_patch_sha256": "60790bbf78a53c18044288a8efa511bc1f740a89f9b0131a89c43dfe2117339e",
+    "exit_code": 0,
+    "passed": true,
+    "log_sha256": "c6440b738bac626001a7dfb24e59856a42374a8012b4def48756943dbb95d484",
+    "finished_at_utc": "2026-10-12T21:49:15.414107+00:00"
+  },
+  "msvc_acceptance": "native-msvc-accepted-transport-builds-2026-10-12.json",
+  "msvc_acceptance_sha256": "78a5fd24926f06817387e97f596aa6a7133d9a7ebf15c59c052af92d727c1e48",
+  "candidate_manifest": "../research/msvc-toolchain-candidate/manifest.json",
+  "driver_and_report_sha256": {
+    "nyacode-msvc-final-verification-chain-v1.py": "02860823a607285ca46e5a3c602ad4327beee88bbe58d2ce41715a0ddb59add4",
+    "nyacode-msvc-final-verification-chain-v1.json": "a9e4b3f3a8fa4e5e35dd8bdaacbb53422743e4bb94d3ee7db5540693e48ce453",
+    "nyacode-msvc-candidate-matrix-v5.py": "ba345c14618f0923aabd21f3b90b20eb333f2531cf60a6a1aa4bc56d7c63ad49",
+    "nyacode-msvc-candidate-matrix-v5.json": "bf0d4c5ed28f7a0cf623c8acd6426be429dd5c6a0366569b02a50ecd9de276cf",
+    "nyacode-msvc-candidate-cli-v3.py": "ed809d9222a27a2af32f450e6dab0385a9c5b234a1c38271eb2a5d69ff376d76",
+    "nyacode-msvc-candidate-cli-v3.json": "040eb623a304d2982f88498492bb8541c34d54d8ad03d77afcb2836860d3673b",
+    "nyacode-record-msvc-final-regressions-v1.py": "d903bac1e2b15a433407a52b9a4dbf002842ab5348c9d31fb2698112f10c8697"
+  },
+  "interpretation": [
+    "These final regressions include every MSVC fix. The earlier platform and CLI reports remain historical checkpoints.",
+    "Linux GNU HTTP and Chat tests, static musl HTTP execution, foreign target cross-links, the SDK generator tests, and Linux CLI startup all passed.",
+    "Foreign targets establish compile/link results only. Native Windows, macOS and ARM runtime execution is not claimed.",
+    "Candidate adoption and feature-stage validation are recorded separately."
+  ]
+}

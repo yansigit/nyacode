@@ -1,0 +1,78 @@
+{
+  "stage": "under_development",
+  "live": true,
+  "release_gate_passed": false,
+  "capabilities": [
+    {
+      "capability": "models",
+      "status": "observed",
+      "item_count": 28,
+      "latency_ms": 683
+    },
+    {
+      "capability": "history_list",
+      "status": "observed",
+      "item_count": 20,
+      "latency_ms": 385
+    },
+    {
+      "capability": "history_read",
+      "status": "not_run"
+    },
+    {
+      "capability": "conversation_preparation",
+      "status": "blocked",
+      "error": "unsupported_capability"
+    },
+    {
+      "capability": "saved_text",
+      "status": "blocked",
+      "error": "unsupported_capability"
+    },
+    {
+      "capability": "follow_up",
+      "status": "blocked",
+      "error": "unsupported_capability"
+    },
+    {
+      "capability": "restart_resume",
+      "status": "blocked",
+      "error": "unsupported_capability"
+    },
+    {
+      "capability": "temporary_chat",
+      "status": "blocked",
+      "error": "unsupported_capability"
+    },
+    {
+      "capability": "png_upload",
+      "status": "blocked",
+      "error": "unsupported_capability"
+    },
+    {
+      "capability": "jpeg_upload",
+      "status": "blocked",
+      "error": "unsupported_capability"
+    },
+    {
+      "capability": "webp_upload",
+      "status": "blocked",
+      "error": "unsupported_capability"
+    },
+    {
+      "capability": "pdf_upload",
+      "status": "blocked",
+      "error": "unsupported_capability"
+    },
+    {
+      "capability": "utf8_upload",
+      "status": "blocked",
+      "error": "unsupported_capability"
+    },
+    {
+      "capability": "server_cancellation",
+      "status": "blocked",
+      "error": "unsupported_capability"
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "recorded_at_utc": "2026-10-12T09:20:16.288522+00:00",
+  "toolchain": "Rust 1.95.0",
+  "target": "x86_64-pc-windows-gnullvm",
+  "host": "x86_64-unknown-linux-gnu",
+  "transport": "wreq=6.0.0-rc.29;wreq-util=3.0.0-rc.14",
+  "passed": true,
+  "proof": "Full HTTP test executable cross-link with the final declared install-name-tool and ranlib configuration.",
+  "native_windows_runtime_tests_run": false,
+  "msvc_proof": false,
+  "source_sha256": {
+    "MODULE.bazel": "70df789e964480007798d5c15b2b4af882c9429f2faf4f86b9549fcb7deb250e",
+    "MODULE.bazel.lock": "0890a56a06fe4edfae5de83f9abf16fbf5aa2c63ab27a43813a033fbd03cf0e2",
+    "patches/btls-sys_native_tools.patch": "7d5ef3bb940ec18ebba186689e8179e1e70a59b6bff7a58fdc4a3a84a3383c57",
+    "bazel/toolchains/browser_chat/BUILD.bazel": "4fa7322d51a0c5cf76432eb2e5f4969c654cb2cd9514d42327342428ed801f0e",
+    "bazel/toolchains/browser_chat/toolchain.cmake": "cbb06201f37a370f340b3988cedd7bd44545cc08286c0190225765f0926b10ad",
+    "codex-rs/Cargo.lock": "e9d408091ec7826c25edc1bcbedc147757b2ee9a0e6782e4c327262b0fd2007e",
+    "codex-rs/http-client/Cargo.toml": "e604b430ae3ec52859cb5c6937d30dbc8a16ee6e41bc3b5d188524a06f9b54be",
+    "codex-rs/http-client/src/browser_chat.rs": "4e435882e8cb75f59bc2858b804eced74e65a6202493e1bbfb28729fa89ffc7c",
+    "codex-rs/http-client/src/browser_chat_tests.rs": "8a405f5464750e9e6f2615372b0e47195c2ebaabb787505902fda6e1f79aab1c"
+  },
+  "executable_sha256": "9a0d994b355ef275c0502f1838b3c0a5a2ed31dbf49de9c60a4d057c5362646d",
+  "build_log_sha256": "c3b49deb7f237d4dc24c858f4dc3111ea9b951ddf2b9a97f34e28e8af85b4199",
+  "integrated_gate_passed": false
+}

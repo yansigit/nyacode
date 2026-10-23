@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "mode": "embedded",
+  "first_process_started_at": "2026-10-12T08:50:14.377186+00:00",
+  "finished_at_utc": "2026-10-12T08:53:59.371943+00:00",
+  "fresh_rust_client_processes": 2,
+  "fresh_app_server_processes": true,
+  "daemon_process_changed": false,
+  "saved_draft_recovered": true,
+  "exact_authoritative_parent_matched": true,
+  "same_conversation": true,
+  "distinct_submission_and_client_message_ids": true,
+  "both_accepted_completed_inactive": true,
+  "automatic_resend": false,
+  "identifiers_or_contents_in_report": false,
+  "passed": true
+}

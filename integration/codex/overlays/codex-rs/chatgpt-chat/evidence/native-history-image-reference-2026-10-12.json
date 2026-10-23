@@ -1,0 +1,34 @@
+{
+  "version": 1,
+  "observed_at_utc": "2026-10-12T08:02:42.566328+00:00",
+  "request": "GET /backend-api/conversation/<fixture-conversation>",
+  "read_only": true,
+  "content_captured": false,
+  "tokens_cookies_urls_and_ids_captured": false,
+  "user_message_image_part": {
+    "keys": [
+      "content_type",
+      "asset_pointer",
+      "size_bytes",
+      "width",
+      "height",
+      "fovea",
+      "metadata"
+    ],
+    "content_type": "image_asset_pointer",
+    "asset_pointer_scheme": "sediment",
+    "opaque_suffix_passed_existing_id_validation": true
+  },
+  "previous_decoder": "Only file-service references were recognized; saved history showed unsupported metadata.",
+  "fix": "Accept the observed sediment namespace as bounded metadata only. No asset downloads or conversion into upload handles.",
+  "deterministic_tests": {
+    "native": 180,
+    "probe": 7
+  },
+  "live_validation": "native-embedded-rpc-attachments-2026-10-12-report.json",
+  "initial_failure": "native-embedded-rpc-attachments-initial-2026-10-12-report.json",
+  "no_automatic_resend": true,
+  "audit_correction": "The initial launcher and older embedded source manifests checked the legacy ~/.codex journal directory. Their private_saved_journals_unchanged field does not establish absence of writes in ~/.nyacode. The second run uses NYACODE_HOME, then CODEX_HOME, then ~/.nyacode, matching application home resolution. The independent temporary saved-table audit remains valid.",
+  "gate": "integrated acceptance closed",
+  "corrected_temporary_audit": "native-embedded-rpc-temporary-audit-2026-10-12-report.json"
+}

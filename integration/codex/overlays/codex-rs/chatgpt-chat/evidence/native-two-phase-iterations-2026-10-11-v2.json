@@ -1,0 +1,402 @@
+{
+  "index_version": 1,
+  "note": "Distinct fresh-process challenges. No replay, automatic resend or solved-challenge acceptance is implied. Full raw challenges and credentials are not retained.",
+  "iterations": [
+    {
+      "label": "explicit-presence",
+      "tested_at_utc": "2026-10-11T22:28:32.747370+00:00",
+      "source_manifest_sha256": "8775c2a8c900d49cd20027c9978c62e5df1626a24cf853beba6805493c3050f4",
+      "report_sha256": "041107151a0ad2077cfc98ddc8337a7c826e94c3e818175f57658fe499c9c911",
+      "binary_sha256": "d1a9e8db447db0d6d55205091746df3206697289489637b96a08b03d654eb54c",
+      "transport": "browser-emulated",
+      "preparation_protocol": "two-phase-v1",
+      "steps": [
+        {
+          "operation": "session_bootstrap",
+          "http_status": 200
+        },
+        {
+          "operation": "conversation_init",
+          "http_status": 200
+        },
+        {
+          "operation": "conversation_prepare",
+          "http_status": 200
+        },
+        {
+          "operation": "sentinel_prepare",
+          "http_status": 200
+        },
+        {
+          "operation": "sentinel_compute",
+          "error": "unsupported_challenge",
+          "native_failure": "required_router_context_unavailable"
+        }
+      ],
+      "sentinel_finalize_attempted": false,
+      "conversation_sends_attempted": 0,
+      "uploads_attempted": 0,
+      "release_gate_passed": false
+    },
+    {
+      "label": "presence-use",
+      "tested_at_utc": "2026-10-11T22:30:44.597794+00:00",
+      "source_manifest_sha256": "4ec354ad9ba7892dfd770b09994bd21fde9d92c297da6dbb1f0656650f4dd4bc",
+      "report_sha256": "0d40a22e40dfd14a16a3d17e5e001780ef7271e7daf50a6317206a1d0b942ef7",
+      "binary_sha256": "d920116fb605caf91ca1a986ce166ff8d94c05755874e2f96363570bfabc6603",
+      "transport": "browser-emulated",
+      "preparation_protocol": "two-phase-v1",
+      "steps": [
+        {
+          "operation": "session_bootstrap",
+          "http_status": 200
+        },
+        {
+          "operation": "conversation_init",
+          "http_status": 200
+        },
+        {
+          "operation": "conversation_prepare",
+          "http_status": 200
+        },
+        {
+          "operation": "sentinel_prepare",
+          "http_status": 200
+        },
+        {
+          "operation": "sentinel_compute",
+          "error": "unsupported_challenge",
+          "native_failure": "unsupported_script_regex_group"
+        }
+      ],
+      "sentinel_finalize_attempted": false,
+      "conversation_sends_attempted": 0,
+      "uploads_attempted": 0,
+      "release_gate_passed": false
+    },
+    {
+      "label": "literal-assertions",
+      "tested_at_utc": "2026-10-11T22:34:53.617490+00:00",
+      "source_manifest_sha256": "33f234c9e816640610536f18f88d234a85ca32ea688880f1ca8127487801c560",
+      "report_sha256": "f371822163fa2709a0b4a4b130fc554a35ac67ccc329d812dee1ee22f2cdd858",
+      "binary_sha256": "bdcac54b6c2dca689d040e9e6566dad2a021a5166e6d59c23cd4e134e5125045",
+      "transport": "browser-emulated",
+      "preparation_protocol": "two-phase-v1",
+      "steps": [
+        {
+          "operation": "session_bootstrap",
+          "http_status": 200
+        },
+        {
+          "operation": "conversation_init",
+          "http_status": 200
+        },
+        {
+          "operation": "conversation_prepare",
+          "http_status": 200
+        },
+        {
+          "operation": "sentinel_prepare",
+          "http_status": 200
+        },
+        {
+          "operation": "sentinel_compute",
+          "error": "unsupported_challenge",
+          "native_failure": "unsupported_dom_styling"
+        }
+      ],
+      "sentinel_finalize_attempted": false,
+      "conversation_sends_attempted": 0,
+      "uploads_attempted": 0,
+      "release_gate_passed": false
+    },
+    {
+      "label": "declared-style",
+      "tested_at_utc": "2026-10-11T22:38:26.010778+00:00",
+      "source_manifest_sha256": "6ee8bbce3d82b9e6a3e800d13f27903017dac8cd7cbe2cb8255d662e657cfac5",
+      "report_sha256": "582d9c244387d7e90df9bb6af7ae1c17ee58764d2b4b8883cd5043936d57e3f3",
+      "binary_sha256": "f283d7aa615ff2c7b155c740afa5b67f87a7a310d619e3f6ad91eaa856480760",
+      "transport": "browser-emulated",
+      "preparation_protocol": "two-phase-v1",
+      "steps": [
+        {
+          "operation": "session_bootstrap",
+          "http_status": 200
+        },
+        {
+          "operation": "conversation_init",
+          "http_status": 200
+        },
+        {
+          "operation": "conversation_prepare",
+          "http_status": 200
+        },
+        {
+          "operation": "sentinel_prepare",
+          "http_status": 200
+        },
+        {
+          "operation": "sentinel_compute",
+          "error": "unsupported_challenge",
+          "native_failure": "unsupported_script_regex_group"
+        }
+      ],
+      "sentinel_finalize_attempted": false,
+      "conversation_sends_attempted": 0,
+      "uploads_attempted": 0,
+      "release_gate_passed": false
+    },
+    {
+      "label": "bounded-regex-groups",
+      "tested_at_utc": "2026-10-11T22:42:06.891649+00:00",
+      "source_manifest_sha256": "458e80cd0fd5ce7e2c6d87dc284a76e0ccdf4b43136329d88a223a99e66896f8",
+      "report_sha256": "867a2657f41030bb5c086bb0abd6e8332f185ee5383b517b2a7eada5ba52a0f9",
+      "binary_sha256": "7bf667d6b4101dab59b8bd62b4833cc092b93ff46b3d8fb1b35a9e960658016b",
+      "transport": "browser-emulated",
+      "preparation_protocol": "two-phase-v1",
+      "steps": [
+        {
+          "operation": "session_bootstrap",
+          "http_status": 200
+        },
+        {
+          "operation": "conversation_init",
+          "http_status": 200
+        },
+        {
+          "operation": "conversation_prepare",
+          "http_status": 200
+        },
+        {
+          "operation": "sentinel_prepare",
+          "http_status": 200
+        },
+        {
+          "operation": "sentinel_compute",
+          "error": "unsupported_challenge",
+          "native_failure": "required_router_context_property"
+        }
+      ],
+      "sentinel_finalize_attempted": false,
+      "conversation_sends_attempted": 0,
+      "uploads_attempted": 0,
+      "release_gate_passed": false
+    },
+    {
+      "label": "explicit-guest-try",
+      "tested_at_utc": "2026-10-11T22:45:20.029862+00:00",
+      "source_manifest_sha256": "5fa3859e9d94d1a232817c588ee412010cebe74315483bf46719022600e8557d",
+      "report_sha256": "1b8ba07f1042f63c7689ba80456dbc415f2b921d6a3e6e8c31ded2ae84913598",
+      "binary_sha256": "9e1e86422ace8bdc524db3cf34ec25fb862e7177a57e2351c37e35e64d6d7bb0",
+      "transport": "browser-emulated",
+      "preparation_protocol": "two-phase-v1",
+      "steps": [
+        {
+          "operation": "session_bootstrap",
+          "http_status": 200
+        },
+        {
+          "operation": "conversation_init",
+          "http_status": 200
+        },
+        {
+          "operation": "conversation_prepare",
+          "http_status": 200
+        },
+        {
+          "operation": "sentinel_prepare",
+          "http_status": 200
+        },
+        {
+          "operation": "sentinel_compute",
+          "error": "unsupported_challenge",
+          "native_failure": "unsupported_script_regex_group"
+        }
+      ],
+      "sentinel_finalize_attempted": false,
+      "conversation_sends_attempted": 0,
+      "uploads_attempted": 0,
+      "release_gate_passed": false
+    },
+    {
+      "label": "native-dfa-assertions",
+      "tested_at_utc": "2026-10-11T22:53:51.573422+00:00",
+      "source_manifest_sha256": "d1457cf2be3f93309feb103fd93d68911cd3c50803f85dedfb90faee643f63c3",
+      "report_sha256": "55d45f253c90446535f5363c12bd22d01c1e36a8579f2d07043694924f9b7d11",
+      "binary_sha256": "081a801613bb415ff931678b9ad483215f89518d0f116dafeb6ca88742e89398",
+      "transport": "browser-emulated",
+      "preparation_protocol": "two-phase-v1",
+      "steps": [
+        {
+          "operation": "session_bootstrap",
+          "http_status": 200
+        },
+        {
+          "operation": "conversation_init",
+          "http_status": 200
+        },
+        {
+          "operation": "conversation_prepare",
+          "http_status": 200
+        },
+        {
+          "operation": "sentinel_prepare",
+          "http_status": 200
+        },
+        {
+          "operation": "sentinel_compute",
+          "error": "unsupported_challenge",
+          "native_failure": "unsupported_script_metadata"
+        }
+      ],
+      "sentinel_finalize_attempted": false,
+      "conversation_sends_attempted": 0,
+      "uploads_attempted": 0,
+      "release_gate_passed": false
+    },
+    {
+      "label": "script-presence",
+      "tested_at_utc": "2026-10-11T23:00:01.351585+00:00",
+      "source_manifest_sha256": "8ea616fbd434638938f9c3c49c722a27c924137f975c0c1fc168f8b19e37ad15",
+      "report_sha256": "1887798d06ef0294d53bd7090dc9e30a51dcce5da49eb509b7b512976b8f7f91",
+      "binary_sha256": "64f3b74ee9009c392977b5d41521a582ec50e667bbaffa151f2b1c48c78b62ea",
+      "transport": "browser-emulated",
+      "preparation_protocol": "two-phase-v1",
+      "steps": [
+        {
+          "operation": "session_bootstrap",
+          "http_status": 200
+        },
+        {
+          "operation": "conversation_init",
+          "http_status": 200
+        },
+        {
+          "operation": "conversation_prepare",
+          "http_status": 200
+        },
+        {
+          "operation": "sentinel_prepare",
+          "http_status": 200
+        },
+        {
+          "operation": "sentinel_compute",
+          "error": "unsupported_challenge",
+          "native_failure": "unsupported_dom_styling"
+        }
+      ],
+      "sentinel_finalize_attempted": false,
+      "conversation_sends_attempted": 0,
+      "uploads_attempted": 0,
+      "release_gate_passed": false
+    },
+    {
+      "label": "style-capability",
+      "tested_at_utc": "2026-10-11T23:01:22.365960+00:00",
+      "source_manifest_sha256": "7c4bc90c5ea95c90e7b8a539c83f66c20467c7980e5da57c2966555c3d48c28e",
+      "report_sha256": "6448b57b9a183d958f4c1c4b6b161fa93bca068f377b08979e7caec0b5386e15",
+      "binary_sha256": "df4e7456b6667c95c01ca38a4d0b6c8ddce3fa5a6b2391b88e6e647bc8cad8c8",
+      "transport": "browser-emulated",
+      "preparation_protocol": "two-phase-v1",
+      "steps": [
+        {
+          "operation": "session_bootstrap",
+          "http_status": 200
+        },
+        {
+          "operation": "conversation_init",
+          "http_status": 200
+        },
+        {
+          "operation": "conversation_prepare",
+          "http_status": 200
+        },
+        {
+          "operation": "sentinel_prepare",
+          "http_status": 200
+        },
+        {
+          "operation": "sentinel_compute",
+          "error": "unsupported_challenge",
+          "native_failure": "unsupported_property_target"
+        }
+      ],
+      "sentinel_finalize_attempted": false,
+      "conversation_sends_attempted": 0,
+      "uploads_attempted": 0,
+      "release_gate_passed": false
+    },
+    {
+      "label": "nullish-property",
+      "tested_at_utc": "2026-10-11T23:02:59.121044+00:00",
+      "source_manifest_sha256": "2e7767a28a49e5150d5d443803c8955fa91b4280c9e137b70f911584a785e74f",
+      "report_sha256": "2bfa85c7af1a408f4ee1f70d9375f30e64ead2532f0966321d7b643455297727",
+      "binary_sha256": "194b46eaf85152964b160e8d46d43314cfad22b0a113f562b6b24e170cba9b35",
+      "transport": "browser-emulated",
+      "preparation_protocol": "two-phase-v1",
+      "steps": [
+        {
+          "operation": "session_bootstrap",
+          "http_status": 200
+        },
+        {
+          "operation": "conversation_init",
+          "http_status": 200
+        },
+        {
+          "operation": "conversation_prepare",
+          "http_status": 200
+        },
+        {
+          "operation": "sentinel_prepare",
+          "http_status": 200
+        },
+        {
+          "operation": "sentinel_compute",
+          "error": "unsupported_challenge",
+          "native_failure": "unsupported_style_mutation"
+        }
+      ],
+      "sentinel_finalize_attempted": false,
+      "conversation_sends_attempted": 0,
+      "uploads_attempted": 0,
+      "release_gate_passed": false
+    },
+    {
+      "label": "inline-declarations",
+      "tested_at_utc": "2026-10-11T23:07:24.197101+00:00",
+      "source_manifest_sha256": "78a64d73b395e95e118e7ae80a2bb246da4519374a17b3a8a57b93c09b3100ba",
+      "report_sha256": "3239468ffacd24fb2283dd4e3291e40799d28fb77838235e0b48e2623b700c7c",
+      "binary_sha256": "40bd234627db94e200f6a92cbc22a6c09362296fc1cea9a25bbe34a685f597b4",
+      "transport": "browser-emulated",
+      "preparation_protocol": "two-phase-v1",
+      "steps": [
+        {
+          "operation": "session_bootstrap",
+          "http_status": 200
+        },
+        {
+          "operation": "conversation_init",
+          "http_status": 200
+        },
+        {
+          "operation": "conversation_prepare",
+          "http_status": 200
+        },
+        {
+          "operation": "sentinel_prepare",
+          "http_status": 200
+        },
+        {
+          "operation": "sentinel_compute",
+          "error": "unsupported_challenge",
+          "native_failure": "required_script_match_unavailable"
+        }
+      ],
+      "sentinel_finalize_attempted": false,
+      "conversation_sends_attempted": 0,
+      "uploads_attempted": 0,
+      "release_gate_passed": false
+    }
+  ]
+}

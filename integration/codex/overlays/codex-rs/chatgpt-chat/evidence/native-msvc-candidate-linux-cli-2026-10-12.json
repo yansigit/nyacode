@@ -1,0 +1,113 @@
+{
+  "version": 1,
+  "recorded_at_utc": "2026-10-12T12:50:06.668947+00:00",
+  "production_toolchain_changed": false,
+  "rust": "1.95.0",
+  "llvm": "0.8.24",
+  "bazel": "9.2.0",
+  "passed": true,
+  "attempts": [
+    {
+      "version": 1,
+      "started_at_utc": "2026-10-12T12:42:02.362302+00:00",
+      "production_toolchain_changed": false,
+      "microsoft_license_acceptance_asserted": false,
+      "command": [
+        "bazel",
+        "build",
+        "--lockfile_mode=update",
+        "--extra_execution_platforms=//:local_linux,@rules_rs//rs/platforms:x86_64-unknown-linux-gnu,@rules_rs//rs/platforms:x86_64-unknown-linux-musl,@rules_rs//rs/platforms:aarch64-unknown-linux-gnu,@rules_rs//rs/platforms:aarch64-unknown-linux-musl,@rules_rs//rs/platforms:aarch64-apple-darwin,@rules_rs//rs/platforms:x86_64-apple-darwin,@rules_rs//rs/platforms:x86_64-pc-windows-gnullvm",
+        "--platforms=@rules_rs//rs/platforms:x86_64-unknown-linux-gnu",
+        "//codex-rs/cli:codex"
+      ],
+      "source_sha256": {
+        ".bazelrc": "7913f4e50c162191d82f897d5a3cbda64bb004cf4791261814ba37f39a2079a0",
+        "MODULE.bazel": "6bd739d70e9453eb6c42d701c3b6714952efa88c3763c812442fd448c58d0d0f",
+        "MODULE.bazel.lock": "ea44fba0f791060c8049bffc219be2d08b86816e681f2f594af1936ba4070d21",
+        "patches/llvm-0.8.24.patch": "1c729c4e82194b3b07808249adb10050f454a156bf0ed3fa78ad1d5af71c2c61",
+        "patches/windows-support-0.4.1.patch": "dac7c792ee3ed7c6a46bb91bcdcf6f0fe361958548052a2826c6967f84c5c0f9",
+        "codex-rs/tui/src/app/native_chat/mod.rs": "4532905136524c31d088f3467e1714a7c63e20dc825d6d183a2ca846930ee569",
+        "codex-rs/tui/src/app/native_chat/state.rs": "030f9c7269ee0970bdadc083ca010c393f545abd91b58a22416bf2d483aa0a46",
+        "codex-rs/tui/src/app/reconnect.rs": "b6dab4a3716838c782d3559b5a672cd08a9ca2da1c35fd67e67c2bcef0bc6f2c",
+        "codex-rs/features/src/lib.rs": "a1049a7fbb6bb39d40e2ca56da090041ee2beeddc9937b19e7e1ca81409d6793"
+      },
+      "build_exit_code": 1,
+      "build_log_sha256": "ab56d2cb289f6b365d3fb413cfdba5b4a3ad602ea202bc93f97d7dc9994d47f7",
+      "passed": false,
+      "finished_at_utc": "2026-10-12T12:42:05.898392+00:00",
+      "final_module_lock_sha256": "ea44fba0f791060c8049bffc219be2d08b86816e681f2f594af1936ba4070d21"
+    },
+    {
+      "version": 2,
+      "started_at_utc": "2026-10-12T12:43:04.838414+00:00",
+      "production_toolchain_changed": false,
+      "microsoft_license_acceptance_asserted": false,
+      "command": [
+        "bazel",
+        "build",
+        "--lockfile_mode=update",
+        "--extra_execution_platforms=//:local_linux,@rules_rs//rs/platforms:x86_64-unknown-linux-gnu,@rules_rs//rs/platforms:x86_64-unknown-linux-musl,@rules_rs//rs/platforms:aarch64-unknown-linux-gnu,@rules_rs//rs/platforms:aarch64-unknown-linux-musl,@rules_rs//rs/platforms:aarch64-apple-darwin,@rules_rs//rs/platforms:x86_64-apple-darwin,@rules_rs//rs/platforms:x86_64-pc-windows-gnullvm",
+        "--platforms=@rules_rs//rs/platforms:x86_64-unknown-linux-gnu",
+        "//codex-rs/cli:codex"
+      ],
+      "source_sha256": {
+        ".bazelrc": "7913f4e50c162191d82f897d5a3cbda64bb004cf4791261814ba37f39a2079a0",
+        "MODULE.bazel": "0b2e15bc49c9151892f32c96522bc2ffc5c81c235adbab5abb037d1f9a5167a6",
+        "MODULE.bazel.lock": "ea44fba0f791060c8049bffc219be2d08b86816e681f2f594af1936ba4070d21",
+        "patches/llvm-0.8.24.patch": "1c729c4e82194b3b07808249adb10050f454a156bf0ed3fa78ad1d5af71c2c61",
+        "patches/windows-support-0.4.1.patch": "dac7c792ee3ed7c6a46bb91bcdcf6f0fe361958548052a2826c6967f84c5c0f9",
+        "patches/rules_cc-0.2.25-grep-includes.patch": "fba33bddfc411d2265d291a0c06b7fd8a63ebf421633c4d629eb9bba0d9f5253",
+        "codex-rs/tui/src/app/native_chat/mod.rs": "4532905136524c31d088f3467e1714a7c63e20dc825d6d183a2ca846930ee569",
+        "codex-rs/tui/src/app/native_chat/state.rs": "030f9c7269ee0970bdadc083ca010c393f545abd91b58a22416bf2d483aa0a46",
+        "codex-rs/tui/src/app/reconnect.rs": "b6dab4a3716838c782d3559b5a672cd08a9ca2da1c35fd67e67c2bcef0bc6f2c",
+        "codex-rs/features/src/lib.rs": "a1049a7fbb6bb39d40e2ca56da090041ee2beeddc9937b19e7e1ca81409d6793"
+      },
+      "build_exit_code": 0,
+      "build_log_sha256": "0d3c34c50a7b394397adb9b6ca62cb44cc01c3f62700167887606ce989d44e91",
+      "passed": true,
+      "binary_sha256": "35066adf8a83112c72c0c1ad9713797658d69b5d06c819ebbb23ad558831d007",
+      "smoke_checks": [
+        {
+          "argument": "--version",
+          "exit_code": 0,
+          "output_sha256": "311f8a5f980e6f4c89ebcaeae9a1c5b32ad0e9918bdf639d8b29f67a80a9a9d1",
+          "output": "nyacode 0.0.0"
+        },
+        {
+          "argument": "--help",
+          "exit_code": 0,
+          "output_sha256": "9ed1816eaaf91416d8f04724d8f2220d489a279a05138da2373da2c40663b2a1"
+        }
+      ],
+      "finished_at_utc": "2026-10-12T12:49:37.930219+00:00",
+      "final_module_lock_sha256": "ea44fba0f791060c8049bffc219be2d08b86816e681f2f594af1936ba4070d21"
+    }
+  ],
+  "regression": {
+    "failure": "Full CLI analysis failed because Bazel still referenced the grep-includes target removed from rules_cc 0.2.25.",
+    "resolution": "Backported the exact upstream alias restoration from eaafbd34240f0d0968f25782385cf013f823ea69 into the isolated candidate.",
+    "source": "https://github.com/bazelbuild/rules_cc/pull/888",
+    "license": "Apache-2.0",
+    "patch": "../research/msvc-toolchain-candidate/rules_cc-0.2.25-grep-includes.patch"
+  },
+  "input_report_sha256": {
+    "nyacode-msvc-candidate-cli-v1.json": "c78141b9c50da776dfb99c8539adada5de44246e8460b857f2ff156481e2f5c4",
+    "nyacode-msvc-candidate-cli-v2.json": "9f98604b546519232b1587ff2059b1d665696ead1e83946ee3b2ba2da0aaf471"
+  },
+  "driver_sha256": {
+    "nyacode-msvc-candidate-cli-v1.py": "586ace501557fec85e4d5228a052147c51dca991c0721de092f4423b729c6abe",
+    "nyacode-msvc-candidate-cli-v2.py": "c923193d36a989bd037343640ddaba097b46009f51461e0ae4d8bcc97b5ccd67"
+  },
+  "source_sync": {
+    "recorded_at_utc": "2026-10-12T12:32:07.606097+00:00",
+    "purpose": "Synchronize final reconnect implementation before candidate CLI validation",
+    "changed_source_sha256": {
+      "codex-rs/features/src/lib.rs": "a1049a7fbb6bb39d40e2ca56da090041ee2beeddc9937b19e7e1ca81409d6793"
+    }
+  },
+  "interpretation": [
+    "The complete Linux CLI compiled and linked, then --version and --help both exited successfully. These smoke checks do not repeat the live Chat acceptance scenarios.",
+    "The initial analysis failure is retained. The second attempt uses the upstream alias restoration, with the same candidate dependency versions and Rust 1.95.0.",
+    "No Microsoft license acceptance was asserted. Both Windows MSVC release architectures remain unverified."
+  ]
+}

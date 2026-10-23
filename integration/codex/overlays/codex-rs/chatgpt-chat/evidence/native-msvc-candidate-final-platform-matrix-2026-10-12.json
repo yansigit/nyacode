@@ -1,0 +1,216 @@
+{
+  "version": 1,
+  "recorded_at_utc": "2026-10-12T12:51:36.129459+00:00",
+  "production_toolchain_changed": false,
+  "microsoft_license_acceptance_asserted": false,
+  "microsoft_inputs_downloaded": false,
+  "rust": "1.95.0",
+  "llvm": "0.8.24",
+  "bazel": "9.2.0",
+  "passed": true,
+  "candidate_manifest": "../research/msvc-toolchain-candidate/manifest.json",
+  "prior_matrix": "native-msvc-candidate-platform-matrix-2026-10-12.json",
+  "cli_validation": "native-msvc-candidate-linux-cli-2026-10-12.json",
+  "results": [
+    {
+      "target": "x86_64-unknown-linux-gnu",
+      "action": "test",
+      "targets": [
+        "//codex-rs/http-client:http-client-unit-tests",
+        "//codex-rs/chatgpt-chat:chatgpt-chat-unit-tests"
+      ],
+      "command": [
+        "bazel",
+        "test",
+        "--lockfile_mode=update",
+        "--extra_execution_platforms=//:local_linux,@rules_rs//rs/platforms:x86_64-unknown-linux-gnu,@rules_rs//rs/platforms:x86_64-unknown-linux-musl,@rules_rs//rs/platforms:aarch64-unknown-linux-gnu,@rules_rs//rs/platforms:aarch64-unknown-linux-musl,@rules_rs//rs/platforms:aarch64-apple-darwin,@rules_rs//rs/platforms:x86_64-apple-darwin,@rules_rs//rs/platforms:x86_64-pc-windows-gnullvm",
+        "--platforms=@rules_rs//rs/platforms:x86_64-unknown-linux-gnu",
+        "--test_output=all",
+        "//codex-rs/http-client:http-client-unit-tests",
+        "//codex-rs/chatgpt-chat:chatgpt-chat-unit-tests"
+      ],
+      "exit_code": 0,
+      "passed": true,
+      "log_sha256": "c1d02d23171417fd6abc284df813c3ef35a2552d8195be7c0cb47d09f50be0c9",
+      "source_sha256": {
+        ".bazelrc": "7913f4e50c162191d82f897d5a3cbda64bb004cf4791261814ba37f39a2079a0",
+        "MODULE.bazel": "0b2e15bc49c9151892f32c96522bc2ffc5c81c235adbab5abb037d1f9a5167a6",
+        "MODULE.bazel.lock": "ea44fba0f791060c8049bffc219be2d08b86816e681f2f594af1936ba4070d21",
+        "patches/llvm-0.8.24.patch": "1c729c4e82194b3b07808249adb10050f454a156bf0ed3fa78ad1d5af71c2c61",
+        "patches/windows-support-0.4.1.patch": "dac7c792ee3ed7c6a46bb91bcdcf6f0fe361958548052a2826c6967f84c5c0f9",
+        "patches/rules_cc-0.2.25-grep-includes.patch": "fba33bddfc411d2265d291a0c06b7fd8a63ebf421633c4d629eb9bba0d9f5253"
+      },
+      "http_executable_sha256": "ab18ac924afa29e24f278a25259cedbf9bf6eb3b6c9b4baf652d5e4db9e988f5",
+      "test_summaries": [
+        "test result: ok. 183 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.90s",
+        "test result: ok. 127 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.17s"
+      ],
+      "test_result_reused_from_bazel_cache": true
+    },
+    {
+      "target": "x86_64-unknown-linux-musl",
+      "action": "build_and_run",
+      "targets": ["//codex-rs/http-client:http-client-unit-tests-bin"],
+      "command": [
+        "bazel",
+        "build",
+        "--lockfile_mode=update",
+        "--extra_execution_platforms=//:local_linux,@rules_rs//rs/platforms:x86_64-unknown-linux-gnu,@rules_rs//rs/platforms:x86_64-unknown-linux-musl,@rules_rs//rs/platforms:aarch64-unknown-linux-gnu,@rules_rs//rs/platforms:aarch64-unknown-linux-musl,@rules_rs//rs/platforms:aarch64-apple-darwin,@rules_rs//rs/platforms:x86_64-apple-darwin,@rules_rs//rs/platforms:x86_64-pc-windows-gnullvm",
+        "--platforms=@rules_rs//rs/platforms:x86_64-unknown-linux-musl",
+        "//codex-rs/http-client:http-client-unit-tests-bin"
+      ],
+      "exit_code": 0,
+      "passed": true,
+      "log_sha256": "ffa577731e3e367ff0c996927ed981c16e41842290a7a3f7bbe6103c49b36e34",
+      "source_sha256": {
+        ".bazelrc": "7913f4e50c162191d82f897d5a3cbda64bb004cf4791261814ba37f39a2079a0",
+        "MODULE.bazel": "0b2e15bc49c9151892f32c96522bc2ffc5c81c235adbab5abb037d1f9a5167a6",
+        "MODULE.bazel.lock": "ea44fba0f791060c8049bffc219be2d08b86816e681f2f594af1936ba4070d21",
+        "patches/llvm-0.8.24.patch": "1c729c4e82194b3b07808249adb10050f454a156bf0ed3fa78ad1d5af71c2c61",
+        "patches/windows-support-0.4.1.patch": "dac7c792ee3ed7c6a46bb91bcdcf6f0fe361958548052a2826c6967f84c5c0f9",
+        "patches/rules_cc-0.2.25-grep-includes.patch": "fba33bddfc411d2265d291a0c06b7fd8a63ebf421633c4d629eb9bba0d9f5253"
+      },
+      "http_executable_sha256": "f4a6e7a1e8045f117310169f9dc5dfc79c03d6c2dadabe971b17d4b9fa665b87",
+      "runtime_tests_run": true,
+      "static_x86_64_elf_verified": true,
+      "runtime_exit_code": 0,
+      "runtime_log_sha256": "4b71621c1a0c98a7df6585d383b5dd5be986b63f1474eec50897bb019309adb0",
+      "test_summaries": [
+        "test result: ok. 127 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.25s"
+      ]
+    },
+    {
+      "target": "aarch64-unknown-linux-gnu",
+      "action": "build",
+      "targets": ["//codex-rs/http-client:http-client-unit-tests-bin"],
+      "command": [
+        "bazel",
+        "build",
+        "--lockfile_mode=update",
+        "--extra_execution_platforms=//:local_linux,@rules_rs//rs/platforms:x86_64-unknown-linux-gnu,@rules_rs//rs/platforms:x86_64-unknown-linux-musl,@rules_rs//rs/platforms:aarch64-unknown-linux-gnu,@rules_rs//rs/platforms:aarch64-unknown-linux-musl,@rules_rs//rs/platforms:aarch64-apple-darwin,@rules_rs//rs/platforms:x86_64-apple-darwin,@rules_rs//rs/platforms:x86_64-pc-windows-gnullvm",
+        "--platforms=@rules_rs//rs/platforms:aarch64-unknown-linux-gnu",
+        "//codex-rs/http-client:http-client-unit-tests-bin"
+      ],
+      "exit_code": 0,
+      "passed": true,
+      "log_sha256": "53f955795b2ff1a22ec96dd949cc4b83e00c577b668915eb50b5157c64de3686",
+      "source_sha256": {
+        ".bazelrc": "7913f4e50c162191d82f897d5a3cbda64bb004cf4791261814ba37f39a2079a0",
+        "MODULE.bazel": "0b2e15bc49c9151892f32c96522bc2ffc5c81c235adbab5abb037d1f9a5167a6",
+        "MODULE.bazel.lock": "ea44fba0f791060c8049bffc219be2d08b86816e681f2f594af1936ba4070d21",
+        "patches/llvm-0.8.24.patch": "1c729c4e82194b3b07808249adb10050f454a156bf0ed3fa78ad1d5af71c2c61",
+        "patches/windows-support-0.4.1.patch": "dac7c792ee3ed7c6a46bb91bcdcf6f0fe361958548052a2826c6967f84c5c0f9",
+        "patches/rules_cc-0.2.25-grep-includes.patch": "fba33bddfc411d2265d291a0c06b7fd8a63ebf421633c4d629eb9bba0d9f5253"
+      },
+      "http_executable_sha256": "526ce5fa5fc41a42fbe3523966afdd2cb80b08b9aa3476a71e61871e60e056b4"
+    },
+    {
+      "target": "aarch64-unknown-linux-musl",
+      "action": "build",
+      "targets": ["//codex-rs/http-client:http-client-unit-tests-bin"],
+      "command": [
+        "bazel",
+        "build",
+        "--lockfile_mode=update",
+        "--extra_execution_platforms=//:local_linux,@rules_rs//rs/platforms:x86_64-unknown-linux-gnu,@rules_rs//rs/platforms:x86_64-unknown-linux-musl,@rules_rs//rs/platforms:aarch64-unknown-linux-gnu,@rules_rs//rs/platforms:aarch64-unknown-linux-musl,@rules_rs//rs/platforms:aarch64-apple-darwin,@rules_rs//rs/platforms:x86_64-apple-darwin,@rules_rs//rs/platforms:x86_64-pc-windows-gnullvm",
+        "--platforms=@rules_rs//rs/platforms:aarch64-unknown-linux-musl",
+        "//codex-rs/http-client:http-client-unit-tests-bin"
+      ],
+      "exit_code": 0,
+      "passed": true,
+      "log_sha256": "70d18ee21875ee2cb0de4a94683e0edbfbcd1cf61e874fbc19e0a5e20ed387b3",
+      "source_sha256": {
+        ".bazelrc": "7913f4e50c162191d82f897d5a3cbda64bb004cf4791261814ba37f39a2079a0",
+        "MODULE.bazel": "0b2e15bc49c9151892f32c96522bc2ffc5c81c235adbab5abb037d1f9a5167a6",
+        "MODULE.bazel.lock": "ea44fba0f791060c8049bffc219be2d08b86816e681f2f594af1936ba4070d21",
+        "patches/llvm-0.8.24.patch": "1c729c4e82194b3b07808249adb10050f454a156bf0ed3fa78ad1d5af71c2c61",
+        "patches/windows-support-0.4.1.patch": "dac7c792ee3ed7c6a46bb91bcdcf6f0fe361958548052a2826c6967f84c5c0f9",
+        "patches/rules_cc-0.2.25-grep-includes.patch": "fba33bddfc411d2265d291a0c06b7fd8a63ebf421633c4d629eb9bba0d9f5253"
+      },
+      "http_executable_sha256": "4673f2c75434783a7d0009412e1012d92646dae0785f587645a7b0b8d49d3b59"
+    },
+    {
+      "target": "aarch64-apple-darwin",
+      "action": "build",
+      "targets": ["//codex-rs/http-client:http-client-unit-tests-bin"],
+      "command": [
+        "bazel",
+        "build",
+        "--lockfile_mode=update",
+        "--extra_execution_platforms=//:local_linux,@rules_rs//rs/platforms:x86_64-unknown-linux-gnu,@rules_rs//rs/platforms:x86_64-unknown-linux-musl,@rules_rs//rs/platforms:aarch64-unknown-linux-gnu,@rules_rs//rs/platforms:aarch64-unknown-linux-musl,@rules_rs//rs/platforms:aarch64-apple-darwin,@rules_rs//rs/platforms:x86_64-apple-darwin,@rules_rs//rs/platforms:x86_64-pc-windows-gnullvm",
+        "--platforms=@rules_rs//rs/platforms:aarch64-apple-darwin",
+        "//codex-rs/http-client:http-client-unit-tests-bin"
+      ],
+      "exit_code": 0,
+      "passed": true,
+      "log_sha256": "7ab8073945cd8eb443190dc8373da9aca1286579da5daa75a4d88e23ff03083e",
+      "source_sha256": {
+        ".bazelrc": "7913f4e50c162191d82f897d5a3cbda64bb004cf4791261814ba37f39a2079a0",
+        "MODULE.bazel": "0b2e15bc49c9151892f32c96522bc2ffc5c81c235adbab5abb037d1f9a5167a6",
+        "MODULE.bazel.lock": "ea44fba0f791060c8049bffc219be2d08b86816e681f2f594af1936ba4070d21",
+        "patches/llvm-0.8.24.patch": "1c729c4e82194b3b07808249adb10050f454a156bf0ed3fa78ad1d5af71c2c61",
+        "patches/windows-support-0.4.1.patch": "dac7c792ee3ed7c6a46bb91bcdcf6f0fe361958548052a2826c6967f84c5c0f9",
+        "patches/rules_cc-0.2.25-grep-includes.patch": "fba33bddfc411d2265d291a0c06b7fd8a63ebf421633c4d629eb9bba0d9f5253"
+      },
+      "http_executable_sha256": "4865903a41f068043a5000c387e9fb5179cc7139fc00cf9020746690ef14a494"
+    },
+    {
+      "target": "x86_64-apple-darwin",
+      "action": "build",
+      "targets": ["//codex-rs/http-client:http-client-unit-tests-bin"],
+      "command": [
+        "bazel",
+        "build",
+        "--lockfile_mode=update",
+        "--extra_execution_platforms=//:local_linux,@rules_rs//rs/platforms:x86_64-unknown-linux-gnu,@rules_rs//rs/platforms:x86_64-unknown-linux-musl,@rules_rs//rs/platforms:aarch64-unknown-linux-gnu,@rules_rs//rs/platforms:aarch64-unknown-linux-musl,@rules_rs//rs/platforms:aarch64-apple-darwin,@rules_rs//rs/platforms:x86_64-apple-darwin,@rules_rs//rs/platforms:x86_64-pc-windows-gnullvm",
+        "--platforms=@rules_rs//rs/platforms:x86_64-apple-darwin",
+        "//codex-rs/http-client:http-client-unit-tests-bin"
+      ],
+      "exit_code": 0,
+      "passed": true,
+      "log_sha256": "45bf61b8ffa54d459fd4e9799b8c7cb70e385c6dd400bb245398d2afa95d399d",
+      "source_sha256": {
+        ".bazelrc": "7913f4e50c162191d82f897d5a3cbda64bb004cf4791261814ba37f39a2079a0",
+        "MODULE.bazel": "0b2e15bc49c9151892f32c96522bc2ffc5c81c235adbab5abb037d1f9a5167a6",
+        "MODULE.bazel.lock": "ea44fba0f791060c8049bffc219be2d08b86816e681f2f594af1936ba4070d21",
+        "patches/llvm-0.8.24.patch": "1c729c4e82194b3b07808249adb10050f454a156bf0ed3fa78ad1d5af71c2c61",
+        "patches/windows-support-0.4.1.patch": "dac7c792ee3ed7c6a46bb91bcdcf6f0fe361958548052a2826c6967f84c5c0f9",
+        "patches/rules_cc-0.2.25-grep-includes.patch": "fba33bddfc411d2265d291a0c06b7fd8a63ebf421633c4d629eb9bba0d9f5253"
+      },
+      "http_executable_sha256": "d8d0a1c1f1b06e14e448343aaad9dfe0284d54130df545032bc8aa6b27064bd5"
+    },
+    {
+      "target": "x86_64-pc-windows-gnullvm",
+      "action": "build",
+      "targets": ["//codex-rs/http-client:http-client-unit-tests-bin"],
+      "command": [
+        "bazel",
+        "build",
+        "--lockfile_mode=update",
+        "--extra_execution_platforms=//:local_linux,@rules_rs//rs/platforms:x86_64-unknown-linux-gnu,@rules_rs//rs/platforms:x86_64-unknown-linux-musl,@rules_rs//rs/platforms:aarch64-unknown-linux-gnu,@rules_rs//rs/platforms:aarch64-unknown-linux-musl,@rules_rs//rs/platforms:aarch64-apple-darwin,@rules_rs//rs/platforms:x86_64-apple-darwin,@rules_rs//rs/platforms:x86_64-pc-windows-gnullvm",
+        "--platforms=@rules_rs//rs/platforms:x86_64-pc-windows-gnullvm",
+        "//codex-rs/http-client:http-client-unit-tests-bin"
+      ],
+      "exit_code": 0,
+      "passed": true,
+      "log_sha256": "d038b8fb4fac359c89518c76feefc46f8d9d2d8f88569a97d1331d2e6eff3301",
+      "source_sha256": {
+        ".bazelrc": "7913f4e50c162191d82f897d5a3cbda64bb004cf4791261814ba37f39a2079a0",
+        "MODULE.bazel": "0b2e15bc49c9151892f32c96522bc2ffc5c81c235adbab5abb037d1f9a5167a6",
+        "MODULE.bazel.lock": "ea44fba0f791060c8049bffc219be2d08b86816e681f2f594af1936ba4070d21",
+        "patches/llvm-0.8.24.patch": "1c729c4e82194b3b07808249adb10050f454a156bf0ed3fa78ad1d5af71c2c61",
+        "patches/windows-support-0.4.1.patch": "dac7c792ee3ed7c6a46bb91bcdcf6f0fe361958548052a2826c6967f84c5c0f9",
+        "patches/rules_cc-0.2.25-grep-includes.patch": "fba33bddfc411d2265d291a0c06b7fd8a63ebf421633c4d629eb9bba0d9f5253"
+      },
+      "http_executable_sha256": "63e6f9d3f7a16d664f4ed3c3e21f32dccb50fabc105bd4c8b202b60c07d64f53"
+    }
+  ],
+  "input_report_sha256": "e71997428b23f2322e526512e283d3701e271c37144147688c5b411d5f839ee7",
+  "driver_sha256": "3f812a0c834fffc3a0021339b39e74905829d27538eb00d9f4a4525736768d74",
+  "interpretation": [
+    "All seven entries passed with the upstream rules_cc grep-includes restoration included. The prior matrix and full CLI report retain the earlier driver and compatibility failures.",
+    "Linux GNU reuses valid Bazel-cached HTTP and Chat test results; Linux x86_64 musl freshly runs the verified static HTTP test executable. Foreign targets establish compile/link results only, not native runtime execution.",
+    "Both Windows MSVC release architectures remain unverified pending explicit Microsoft license acceptance; the production toolchain is unchanged and the integrated release gate remains closed."
+  ],
+  "microsoft_repository_directories_materialized": []
+}

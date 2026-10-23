@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "started_at_utc": "2026-10-12T08:22:05.490931+00:00",
+  "finished_at_utc": "2026-10-12T08:22:19.511233+00:00",
+  "rust_rpc_clients": 2,
+  "local_daemon": true,
+  "maximum_concurrent_active_submissions": 2,
+  "maximum_concurrent_accepted_active_submissions": 2,
+  "new_submissions": 2,
+  "distinct_conversation_ids": 2,
+  "distinct_client_message_ids": 2,
+  "all_accepted_completed_inactive": true,
+  "process_exit_codes": [
+    0,
+    0
+  ],
+  "automatic_resend": false,
+  "contents_or_identifiers_in_report": false,
+  "user_message_posts_maximum": 2,
+  "passed": true
+}

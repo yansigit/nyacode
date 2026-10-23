@@ -1,0 +1,665 @@
+{
+  "crate": "lopdf",
+  "version": "0.45.0",
+  "upstream_commit": "e6a0cfbf837de321e77b9c4ac5aed5b9f08ed143",
+  "toolchain": "1.95.0",
+  "default_features": false,
+  "dependency_closure_packages": 85,
+  "above_toolchain": [],
+  "dependencies": [
+    {
+      "name": "adler2",
+      "version": "2.0.1",
+      "rust_version": null,
+      "license": "0BSD OR MIT OR Apache-2.0",
+      "features": []
+    },
+    {
+      "name": "aes",
+      "version": "0.9.3",
+      "rust_version": "1.89",
+      "license": "MIT OR Apache-2.0",
+      "features": []
+    },
+    {
+      "name": "alloc-no-stdlib",
+      "version": "2.0.4",
+      "rust_version": null,
+      "license": "BSD-3-Clause",
+      "features": []
+    },
+    {
+      "name": "alloc-stdlib",
+      "version": "0.2.4",
+      "rust_version": null,
+      "license": "BSD-3-Clause",
+      "features": []
+    },
+    {
+      "name": "allocator-api2",
+      "version": "0.2.21",
+      "rust_version": "1.63",
+      "license": "MIT OR Apache-2.0",
+      "features": ["alloc"]
+    },
+    {
+      "name": "anyhow",
+      "version": "1.0.103",
+      "rust_version": "1.68",
+      "license": "MIT OR Apache-2.0",
+      "features": ["default", "std"]
+    },
+    {
+      "name": "bitflags",
+      "version": "2.13.1",
+      "rust_version": "1.56.0",
+      "license": "MIT OR Apache-2.0",
+      "features": ["serde", "serde_core", "std"]
+    },
+    {
+      "name": "block-buffer",
+      "version": "0.12.0",
+      "rust_version": "1.85",
+      "license": "MIT OR Apache-2.0",
+      "features": []
+    },
+    {
+      "name": "block-padding",
+      "version": "0.4.2",
+      "rust_version": "1.85",
+      "license": "MIT OR Apache-2.0",
+      "features": []
+    },
+    {
+      "name": "brotli-decompressor",
+      "version": "5.0.3",
+      "rust_version": null,
+      "license": "BSD-3-Clause/MIT",
+      "features": ["alloc-stdlib", "default", "std"]
+    },
+    {
+      "name": "cbc",
+      "version": "0.2.1",
+      "rust_version": "1.85",
+      "license": "MIT OR Apache-2.0",
+      "features": ["block-padding", "default"]
+    },
+    {
+      "name": "cfg-if",
+      "version": "1.0.4",
+      "rust_version": "1.32",
+      "license": "MIT OR Apache-2.0",
+      "features": []
+    },
+    {
+      "name": "chacha20",
+      "version": "0.10.2",
+      "rust_version": "1.85",
+      "license": "MIT OR Apache-2.0",
+      "features": ["rng"]
+    },
+    {
+      "name": "cipher",
+      "version": "0.5.2",
+      "rust_version": "1.85",
+      "license": "MIT OR Apache-2.0",
+      "features": ["block-padding"]
+    },
+    {
+      "name": "cmov",
+      "version": "0.5.3",
+      "rust_version": "1.85",
+      "license": "Apache-2.0 OR MIT",
+      "features": []
+    },
+    {
+      "name": "const-oid",
+      "version": "0.10.2",
+      "rust_version": "1.85",
+      "license": "Apache-2.0 OR MIT",
+      "features": []
+    },
+    {
+      "name": "cpubits",
+      "version": "0.1.1",
+      "rust_version": "1.85",
+      "license": "MIT OR Apache-2.0",
+      "features": []
+    },
+    {
+      "name": "cpufeatures",
+      "version": "0.3.0",
+      "rust_version": "1.85",
+      "license": "MIT OR Apache-2.0",
+      "features": []
+    },
+    {
+      "name": "crc32fast",
+      "version": "1.5.0",
+      "rust_version": "1.63",
+      "license": "MIT OR Apache-2.0",
+      "features": ["default", "std"]
+    },
+    {
+      "name": "crypto-common",
+      "version": "0.2.2",
+      "rust_version": "1.85",
+      "license": "MIT OR Apache-2.0",
+      "features": []
+    },
+    {
+      "name": "ctutils",
+      "version": "0.4.2",
+      "rust_version": "1.85",
+      "license": "Apache-2.0 OR MIT",
+      "features": []
+    },
+    {
+      "name": "digest",
+      "version": "0.11.3",
+      "rust_version": "1.85",
+      "license": "MIT OR Apache-2.0",
+      "features": ["alloc", "block-api", "default", "mac", "oid"]
+    },
+    {
+      "name": "ecb",
+      "version": "0.2.1",
+      "rust_version": "1.85",
+      "license": "MIT OR Apache-2.0",
+      "features": ["block-padding", "default"]
+    },
+    {
+      "name": "encoding_rs",
+      "version": "0.8.35",
+      "rust_version": "1.36",
+      "license": "(Apache-2.0 OR MIT) AND BSD-3-Clause",
+      "features": ["alloc", "default"]
+    },
+    {
+      "name": "equivalent",
+      "version": "1.0.2",
+      "rust_version": "1.6",
+      "license": "Apache-2.0 OR MIT",
+      "features": []
+    },
+    {
+      "name": "flate2",
+      "version": "1.1.10",
+      "rust_version": "1.67.0",
+      "license": "MIT OR Apache-2.0",
+      "features": [
+        "any_impl",
+        "any_zlib",
+        "default",
+        "miniz_oxide",
+        "runtime_detection",
+        "rust_backend",
+        "zlib-rs"
+      ]
+    },
+    {
+      "name": "foldhash",
+      "version": "0.1.5",
+      "rust_version": "1.60",
+      "license": "Zlib",
+      "features": []
+    },
+    {
+      "name": "foldhash",
+      "version": "0.2.0",
+      "rust_version": "1.60",
+      "license": "Zlib",
+      "features": []
+    },
+    {
+      "name": "getrandom",
+      "version": "0.4.2",
+      "rust_version": "1.85",
+      "license": "MIT OR Apache-2.0",
+      "features": ["std", "sys_rng"]
+    },
+    {
+      "name": "hashbrown",
+      "version": "0.15.5",
+      "rust_version": "1.65.0",
+      "license": "MIT OR Apache-2.0",
+      "features": [
+        "allocator-api2",
+        "default",
+        "default-hasher",
+        "equivalent",
+        "inline-more",
+        "raw-entry"
+      ]
+    },
+    {
+      "name": "hashbrown",
+      "version": "0.17.1",
+      "rust_version": "1.85.0",
+      "license": "MIT OR Apache-2.0",
+      "features": [
+        "allocator-api2",
+        "default",
+        "default-hasher",
+        "equivalent",
+        "inline-more",
+        "raw-entry"
+      ]
+    },
+    {
+      "name": "heck",
+      "version": "0.5.0",
+      "rust_version": "1.56",
+      "license": "MIT OR Apache-2.0",
+      "features": []
+    },
+    {
+      "name": "hybrid-array",
+      "version": "0.4.12",
+      "rust_version": "1.85",
+      "license": "MIT OR Apache-2.0",
+      "features": []
+    },
+    {
+      "name": "id-arena",
+      "version": "2.3.0",
+      "rust_version": null,
+      "license": "MIT/Apache-2.0",
+      "features": ["default", "std"]
+    },
+    {
+      "name": "indexmap",
+      "version": "2.14.0",
+      "rust_version": "1.85",
+      "license": "Apache-2.0 OR MIT",
+      "features": ["default", "serde", "std"]
+    },
+    {
+      "name": "inout",
+      "version": "0.2.2",
+      "rust_version": "1.85",
+      "license": "MIT OR Apache-2.0",
+      "features": ["block-padding"]
+    },
+    {
+      "name": "itoa",
+      "version": "1.0.17",
+      "rust_version": "1.68",
+      "license": "MIT OR Apache-2.0",
+      "features": []
+    },
+    {
+      "name": "leb128fmt",
+      "version": "0.1.0",
+      "rust_version": "1.56.0",
+      "license": "MIT OR Apache-2.0",
+      "features": []
+    },
+    {
+      "name": "libc",
+      "version": "0.2.186",
+      "rust_version": "1.65",
+      "license": "MIT OR Apache-2.0",
+      "features": ["default", "extra_traits", "std"]
+    },
+    {
+      "name": "log",
+      "version": "0.4.34",
+      "rust_version": "1.71.0",
+      "license": "MIT OR Apache-2.0",
+      "features": ["alloc", "std"]
+    },
+    {
+      "name": "lopdf",
+      "version": "0.45.0",
+      "rust_version": "1.88",
+      "license": "MIT",
+      "features": []
+    },
+    {
+      "name": "md-5",
+      "version": "0.11.0",
+      "rust_version": "1.85",
+      "license": "MIT OR Apache-2.0",
+      "features": ["alloc", "default", "oid"]
+    },
+    {
+      "name": "memchr",
+      "version": "2.8.1",
+      "rust_version": "1.61",
+      "license": "Unlicense OR MIT",
+      "features": ["alloc", "default", "std"]
+    },
+    {
+      "name": "miniz_oxide",
+      "version": "0.9.1",
+      "rust_version": null,
+      "license": "MIT OR Zlib OR Apache-2.0",
+      "features": ["default", "simd", "simd-adler32", "with-alloc"]
+    },
+    {
+      "name": "nom",
+      "version": "8.0.0",
+      "rust_version": "1.65.0",
+      "license": "MIT",
+      "features": ["alloc", "default", "std"]
+    },
+    {
+      "name": "prettyplease",
+      "version": "0.2.37",
+      "rust_version": "1.62",
+      "license": "MIT OR Apache-2.0",
+      "features": ["verbatim"]
+    },
+    {
+      "name": "proc-macro2",
+      "version": "1.0.106",
+      "rust_version": "1.68",
+      "license": "MIT OR Apache-2.0",
+      "features": ["default", "proc-macro"]
+    },
+    {
+      "name": "quote",
+      "version": "1.0.45",
+      "rust_version": "1.71",
+      "license": "MIT OR Apache-2.0",
+      "features": ["default", "proc-macro"]
+    },
+    {
+      "name": "r-efi",
+      "version": "6.0.0",
+      "rust_version": "1.68",
+      "license": "MIT OR Apache-2.0 OR LGPL-2.1-or-later",
+      "features": []
+    },
+    {
+      "name": "rand",
+      "version": "0.10.1",
+      "rust_version": "1.85",
+      "license": "MIT OR Apache-2.0",
+      "features": [
+        "alloc",
+        "default",
+        "std",
+        "std_rng",
+        "sys_rng",
+        "thread_rng"
+      ]
+    },
+    {
+      "name": "rand_core",
+      "version": "0.10.1",
+      "rust_version": "1.85",
+      "license": "MIT OR Apache-2.0",
+      "features": []
+    },
+    {
+      "name": "rangemap",
+      "version": "1.8.0",
+      "rust_version": "1.81.0",
+      "license": "MIT/Apache-2.0",
+      "features": []
+    },
+    {
+      "name": "semver",
+      "version": "1.0.27",
+      "rust_version": "1.61",
+      "license": "MIT OR Apache-2.0",
+      "features": ["default", "serde", "std"]
+    },
+    {
+      "name": "serde",
+      "version": "1.0.228",
+      "rust_version": "1.56",
+      "license": "MIT OR Apache-2.0",
+      "features": ["alloc", "default", "derive", "rc", "serde_derive", "std"]
+    },
+    {
+      "name": "serde_core",
+      "version": "1.0.228",
+      "rust_version": "1.56",
+      "license": "MIT OR Apache-2.0",
+      "features": ["alloc", "default", "rc", "result", "std"]
+    },
+    {
+      "name": "serde_derive",
+      "version": "1.0.228",
+      "rust_version": "1.61",
+      "license": "MIT OR Apache-2.0",
+      "features": ["default"]
+    },
+    {
+      "name": "serde_json",
+      "version": "1.0.149",
+      "rust_version": "1.68",
+      "license": "MIT OR Apache-2.0",
+      "features": [
+        "alloc",
+        "arbitrary_precision",
+        "default",
+        "indexmap",
+        "preserve_order",
+        "raw_value",
+        "std"
+      ]
+    },
+    {
+      "name": "sha2",
+      "version": "0.11.0",
+      "rust_version": "1.85",
+      "license": "MIT OR Apache-2.0",
+      "features": ["alloc", "default", "oid"]
+    },
+    {
+      "name": "simd-adler32",
+      "version": "0.3.8",
+      "rust_version": null,
+      "license": "MIT",
+      "features": ["const-generics", "default", "std"]
+    },
+    {
+      "name": "stringprep",
+      "version": "0.1.5",
+      "rust_version": null,
+      "license": "MIT/Apache-2.0",
+      "features": []
+    },
+    {
+      "name": "syn",
+      "version": "2.0.117",
+      "rust_version": "1.71",
+      "license": "MIT OR Apache-2.0",
+      "features": [
+        "clone-impls",
+        "default",
+        "derive",
+        "extra-traits",
+        "fold",
+        "full",
+        "parsing",
+        "printing",
+        "proc-macro",
+        "visit",
+        "visit-mut"
+      ]
+    },
+    {
+      "name": "thiserror-impl",
+      "version": "2.0.18",
+      "rust_version": "1.68",
+      "license": "MIT OR Apache-2.0",
+      "features": []
+    },
+    {
+      "name": "thiserror",
+      "version": "2.0.18",
+      "rust_version": "1.68",
+      "license": "MIT OR Apache-2.0",
+      "features": ["default", "std"]
+    },
+    {
+      "name": "tinyvec",
+      "version": "1.10.0",
+      "rust_version": null,
+      "license": "Zlib OR Apache-2.0 OR MIT",
+      "features": ["alloc", "default", "tinyvec_macros"]
+    },
+    {
+      "name": "tinyvec_macros",
+      "version": "0.1.1",
+      "rust_version": null,
+      "license": "MIT OR Apache-2.0 OR Zlib",
+      "features": []
+    },
+    {
+      "name": "typenum",
+      "version": "1.20.0",
+      "rust_version": "1.41.0",
+      "license": "MIT OR Apache-2.0",
+      "features": ["const-generics"]
+    },
+    {
+      "name": "unicode-bidi",
+      "version": "0.3.18",
+      "rust_version": "1.47.0",
+      "license": "MIT OR Apache-2.0",
+      "features": ["default", "hardcoded-data", "std"]
+    },
+    {
+      "name": "unicode-ident",
+      "version": "1.0.22",
+      "rust_version": "1.31",
+      "license": "(MIT OR Apache-2.0) AND Unicode-3.0",
+      "features": []
+    },
+    {
+      "name": "unicode-normalization",
+      "version": "0.1.25",
+      "rust_version": "1.36",
+      "license": "MIT OR Apache-2.0",
+      "features": ["default", "std"]
+    },
+    {
+      "name": "unicode-properties",
+      "version": "0.1.4",
+      "rust_version": null,
+      "license": "MIT/Apache-2.0",
+      "features": ["default", "emoji", "general-category"]
+    },
+    {
+      "name": "unicode-xid",
+      "version": "0.2.6",
+      "rust_version": "1.17",
+      "license": "MIT OR Apache-2.0",
+      "features": ["default"]
+    },
+    {
+      "name": "wasip2",
+      "version": "1.0.2+wasi-0.2.9",
+      "rust_version": "1.87.0",
+      "license": "Apache-2.0 WITH LLVM-exception OR Apache-2.0 OR MIT",
+      "features": []
+    },
+    {
+      "name": "wasip3",
+      "version": "0.4.0+wasi-0.3.0-rc-2026-01-06",
+      "rust_version": "1.87.0",
+      "license": "Apache-2.0 WITH LLVM-exception OR Apache-2.0 OR MIT",
+      "features": []
+    },
+    {
+      "name": "wasm-encoder",
+      "version": "0.244.0",
+      "rust_version": "1.81.0",
+      "license": "Apache-2.0 WITH LLVM-exception OR Apache-2.0 OR MIT",
+      "features": ["component-model", "std", "wasmparser"]
+    },
+    {
+      "name": "wasm-metadata",
+      "version": "0.244.0",
+      "rust_version": "1.81.0",
+      "license": "Apache-2.0 WITH LLVM-exception OR Apache-2.0 OR MIT",
+      "features": []
+    },
+    {
+      "name": "wasmparser",
+      "version": "0.244.0",
+      "rust_version": "1.81.0",
+      "license": "Apache-2.0 WITH LLVM-exception OR Apache-2.0 OR MIT",
+      "features": [
+        "component-model",
+        "features",
+        "hash-collections",
+        "simd",
+        "std",
+        "validate"
+      ]
+    },
+    {
+      "name": "weezl",
+      "version": "0.2.1",
+      "rust_version": "1.88.0",
+      "license": "MIT OR Apache-2.0",
+      "features": ["alloc", "default", "std"]
+    },
+    {
+      "name": "wit-bindgen-core",
+      "version": "0.51.0",
+      "rust_version": "1.87.0",
+      "license": "Apache-2.0 WITH LLVM-exception OR Apache-2.0 OR MIT",
+      "features": []
+    },
+    {
+      "name": "wit-bindgen-rust-macro",
+      "version": "0.51.0",
+      "rust_version": null,
+      "license": "Apache-2.0 WITH LLVM-exception OR Apache-2.0 OR MIT",
+      "features": ["async"]
+    },
+    {
+      "name": "wit-bindgen-rust",
+      "version": "0.51.0",
+      "rust_version": "1.87.0",
+      "license": "Apache-2.0 WITH LLVM-exception OR Apache-2.0 OR MIT",
+      "features": []
+    },
+    {
+      "name": "wit-bindgen",
+      "version": "0.51.0",
+      "rust_version": "1.87.0",
+      "license": "Apache-2.0 WITH LLVM-exception OR Apache-2.0 OR MIT",
+      "features": ["async", "std"]
+    },
+    {
+      "name": "wit-component",
+      "version": "0.244.0",
+      "rust_version": "1.81.0",
+      "license": "Apache-2.0 WITH LLVM-exception OR Apache-2.0 OR MIT",
+      "features": []
+    },
+    {
+      "name": "wit-parser",
+      "version": "0.244.0",
+      "rust_version": "1.81.0",
+      "license": "Apache-2.0 WITH LLVM-exception OR Apache-2.0 OR MIT",
+      "features": ["decoding", "default", "serde", "serde_json"]
+    },
+    {
+      "name": "zlib-rs",
+      "version": "0.6.3",
+      "rust_version": "1.75",
+      "license": "Zlib",
+      "features": ["c-allocator", "default", "rust-allocator", "std"]
+    },
+    {
+      "name": "zmij",
+      "version": "1.0.19",
+      "rust_version": "1.68",
+      "license": "MIT",
+      "features": []
+    }
+  ],
+  "linux_cargo_check": "passed",
+  "linux_bazel_tests": "passed",
+  "other_platforms": "unverified"
+}

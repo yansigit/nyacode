@@ -1,0 +1,17 @@
+---
+source: tui/src/app/native_chat/tests.rs
+assertion_line: 249
+expression: rendered
+---
+ Codex ● ! │ Chat   f6 switch · experimental
+Temporary chat · Temporary · kept in memory · backend default
+
+
+
+
+[clipboard.png · selected]
+┌ Message ─────────────────────────────────────────────────────────────┐
+│! @ $ stay literal                                                    │
+└──────────────────────────────────────────────────────────────────────┘
+Clipboard image selected; upload starts on Submit.
+/help · F2 new · F3 chats · F5 refresh · Ctrl-V image

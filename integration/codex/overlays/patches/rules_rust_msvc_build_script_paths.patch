@@ -1,0 +1,120 @@
+diff --git a/cargo/private/cargo_build_script.bzl b/cargo/private/cargo_build_script.bzl
+--- a/cargo/private/cargo_build_script.bzl
++++ b/cargo/private/cargo_build_script.bzl
+@@ -268,7 +268,7 @@
+ 
+ def _pwd_flags_isystem(args):
+     """Prefix execroot-relative paths in -isystem-like arguments with ${pwd}."""
+-    return _prefix_pwd_to_flag(args, ["-isystem", "-isystem-after", "-internal-isystem", "-cxx-isystem", "-stdlib++-isystem", "/imsvc"])
++    return _prefix_pwd_to_flag(args, ["-isystem", "-isystem-after", "-internal-isystem", "-cxx-isystem", "-stdlib++-isystem", "/imsvc", "/external:I"])
+ 
+ def _pwd_flags_L(args):
+     """Prefix execroot-relative paths in -L arguments with ${pwd}."""
+diff --git a/cargo/tests/cargo_build_script/cc_args_and_env/cc_args_and_env_test.bzl b/cargo/tests/cargo_build_script/cc_args_and_env/cc_args_and_env_test.bzl
+--- a/cargo/tests/cargo_build_script/cc_args_and_env/cc_args_and_env_test.bzl
++++ b/cargo/tests/cargo_build_script/cc_args_and_env/cc_args_and_env_test.bzl
+@@ -375,7 +375,7 @@
+     )
+     with_extra_toolchains(
+         name = name,
+-        extra_toolchains = ["//%s:%s/test_cc_toolchain" % (native.package_name(), name)],
++        extra_toolchains = [str(Label("//%s:%s/test_cc_toolchain" % (native.package_name(), name)))],
+         target = "%s/cargo_build_script_impl" % name,
+         tags = ["manual"],
+     )
+@@ -845,3 +845,75 @@
+         forbidden_cflags = ["-DUSER_CXX_ONLY"],
+         forbidden_cxxflags = ["-DUSER_C_ONLY"],
+     )
++
++def msvc_paths_relative_test(name):
++    flags = [
++        "/imsvctest/sdk",
++        "/imsvc",
++        "test/runtime",
++        "/external:Itest/external",
++        "/clang:-ivfsoverlay",
++        "/clang:test/overlay.yaml",
++        "/clang:-internal-isystem",
++        "/clang:test/clang",
++        "/clang:-fms-compatibility-version=19.50.35717",
++        "/MT",
++    ]
++    expected = [
++        "/imsvc${pwd}/test/sdk",
++        "/imsvc",
++        "${pwd}/test/runtime",
++        "/external:I${pwd}/test/external",
++        "/clang:-ivfsoverlay",
++        "/clang:${pwd}/test/overlay.yaml",
++        "/clang:-internal-isystem",
++        "/clang:${pwd}/test/clang",
++        "/clang:-fms-compatibility-version=19.50.35717",
++        "/MT",
++    ]
++    cargo_build_script_with_extra_cc_compile_flags(
++        name = "%s/cargo_build_script" % name,
++        extra_cc_compile_flags = flags,
++        extra_cxx_compile_flags = ["/clang:-std=c++17"],
++    )
++    cc_args_and_env_analysis_test(
++        name = name,
++        target_under_test = "%s/cargo_build_script" % name,
++        expected_cflags = expected,
++        expected_cxxflags = expected + ["/clang:-std=c++17"],
++    )
++
++def msvc_paths_absolute_test(name):
++    flags = [
++        "/imsvc/test/sdk",
++        "/imsvcC:/test/runtime",
++        "/external:IC:/test/external",
++        "/clang:-ivfsoverlay",
++        "/clang:/test/overlay.yaml",
++        "/clang:-ivfsoverlay",
++        "/clang:C:/test/overlay.yaml",
++        "/clang:-fno-rtti",
++        "/MD",
++    ]
++    expected = [
++        "/imsvc/test/sdk",
++        "/imsvcC:/test/runtime",
++        "/external:IC:/test/external",
++        "/clang:-ivfsoverlay",
++        "/clang:/test/overlay.yaml",
++        "/clang:-ivfsoverlay",
++        "/clang:C:/test/overlay.yaml",
++        "/clang:-fno-rtti",
++        "/MD",
++    ]
++    cargo_build_script_with_extra_cc_compile_flags(
++        name = "%s/cargo_build_script" % name,
++        extra_cc_compile_flags = flags,
++        extra_cxx_compile_flags = ["/clang:-std=c++17"],
++    )
++    cc_args_and_env_analysis_test(
++        name = name,
++        target_under_test = "%s/cargo_build_script" % name,
++        expected_cflags = expected,
++        expected_cxxflags = expected + ["/clang:-std=c++17"],
++    )
+diff --git a/cargo/tests/cargo_build_script/cc_args_and_env/BUILD.bazel b/cargo/tests/cargo_build_script/cc_args_and_env/BUILD.bazel
+--- a/cargo/tests/cargo_build_script/cc_args_and_env/BUILD.bazel
++++ b/cargo/tests/cargo_build_script/cc_args_and_env/BUILD.bazel
+@@ -23,6 +23,8 @@
+     "libpath_relative_test",
+     "libpath_separated_relative_test",
+     "libtool_fallback_test",
++    "msvc_paths_absolute_test",
++    "msvc_paths_relative_test",
+     "resource_dir_absolute_test",
+     "resource_dir_relative_test",
+     "sysroot_absolute_test",
+@@ -97,3 +99,7 @@
+ direct_libs_as_flag_operand_test(name = "direct_libs_as_flag_operand_test")
+ 
+ user_compile_flags_test(name = "user_compile_flags_test")
++
++msvc_paths_absolute_test(name = "msvc_paths_absolute_test")
++
++msvc_paths_relative_test(name = "msvc_paths_relative_test")

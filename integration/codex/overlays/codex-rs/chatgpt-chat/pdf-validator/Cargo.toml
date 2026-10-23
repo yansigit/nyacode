@@ -1,0 +1,23 @@
+[package]
+name = "codex-chat-pdf-validator"
+version = "0.0.0"
+edition = "2024"
+rust-version = "1.95"
+license = "Apache-2.0"
+publish = false
+
+# This build targets Wasm only. The application embeds its reproducible output;
+# host builds do not need a second Rust target or execute a build-time parser.
+[workspace]
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+lopdf = { version = "=0.45.0", default-features = false }
+
+[profile.release]
+panic = "abort"
+opt-level = 2
+strip = true
+

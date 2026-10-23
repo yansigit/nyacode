@@ -1,0 +1,92 @@
+{
+  "version": 1,
+  "source_manifests": [
+    "native-embedded-rpc-read-2026-10-12-source.json",
+    "native-embedded-rpc-saved-2026-10-12-source.json"
+  ],
+  "live_reports": [
+    "native-embedded-rpc-read-2026-10-12-report.json",
+    "native-embedded-rpc-saved-2026-10-12-report.json"
+  ],
+  "live_saved_embedded_rpc_passed": true,
+  "native_transport_gate_previously_passed": true,
+  "integrated_release_gate_passed": false,
+  "feature_stage": "under_development",
+  "feature_default_enabled": false,
+  "checks": [
+    {
+      "name": "app_server_unit_tests",
+      "passed": true,
+      "tests": 417,
+      "log_sha256": "ee028b3b10d326fb7e1856f42e6eb2605325e2656d796bd57f6f3cd8796c222b"
+    },
+    {
+      "name": "native_chat_unit_tests",
+      "passed": true,
+      "tests": 162,
+      "log_sha256": "25648f6eddab69ab776877cb52638edd77ff3fc1c5bab6bb78263b038bf2e07d"
+    },
+    {
+      "name": "protocol_unit_tests",
+      "passed": true,
+      "tests": 324,
+      "log_sha256": "5861f2f4a77375565a0271d7977aa372d9c530312f586db78f9bdc3ce353a904"
+    },
+    {
+      "name": "probe_cli_tests",
+      "passed": true,
+      "tests": 5,
+      "log_sha256": "3291c51db7ee7f233e8954aaeca2a13d7a01fd861887ba90e970494a53dc6699"
+    },
+    {
+      "name": "small_worker_stack_regression",
+      "passed": true,
+      "tests": 1,
+      "log_sha256": "1d88c2bd7b399c862d849dd1ff91a8bc2c02b21d29afcfe08ed17d63e24e92bb"
+    },
+    {
+      "name": "app_server_clippy",
+      "passed": true,
+      "tests": null,
+      "log_sha256": "1026ec1e08a82bf3a45b3f10f4ee7dc8c011c94e5b854f3c705c0f76e090acb0"
+    },
+    {
+      "name": "native_chat_clippy",
+      "passed": true,
+      "tests": null,
+      "log_sha256": "d66da4232bee99a6a9042fc16ceecd37034c0ab53e0be86fe465efe0d907ad93"
+    },
+    {
+      "name": "probe_build",
+      "passed": true,
+      "tests": null,
+      "log_sha256": "36b0020e7e4fff89f55cb126d427db274395382dca708b1f9cd06477edb53602"
+    }
+  ],
+  "coverage": [
+    "12 experimental Chat methods and 5 notifications registered; stable exports unchanged",
+    "server-assigned trusted origins checked before parsing content-bearing Chat params",
+    "scoped draft revisions and stable submission identifiers",
+    "local-only cancellation and unknown acceptance preserved",
+    "bounded base64 and decoded clipboard staging; no temporary-file fallback",
+    "targeted notification ordering and revocation checks after queue waits",
+    "saved reads and sends share the persisted native profile and connection pool",
+    "Chat dispatch outside the large Codex RPC handler; 2 MiB worker regression",
+    "embedded current-account catalog, history, one saved stream and authoritative exact-ID retrieval"
+  ],
+  "debug_stack": {
+    "live_minimum_stack_bytes": 8388608,
+    "initial_failure": "Before separating dispatch, default 2 MiB worker overflowed in the Codex request handler; 8 MiB overflowed deeper in workspace-routing config deserialization. After separate Chat dispatch, both the 2 MiB local RPC regression and 8 MiB live native path passed.",
+    "user_messages_sent_during_failed_read_probes": 0
+  },
+  "remaining": [
+    "temporary memory-only service and RPCs",
+    "conversation/message cache migration",
+    "independent terminal surfaces and composer",
+    "embedded follow-up, restart, parallel and attachment scenarios",
+    "ordinary local daemon live acceptance",
+    "PDF document-wide parser resource bounds",
+    "confirmed server-cancellation protocol evidence",
+    "CLI/TUI and supported-platform transport validation"
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "recorded_at_utc": "2026-10-12T08:41:38.219454+00:00",
+  "toolchain": "Rust 1.95.0",
+  "target": "x86_64-pc-windows-gnullvm",
+  "host": "x86_64-unknown-linux-gnu",
+  "transport": "wreq=6.0.0-rc.29;wreq-util=3.0.0-rc.14",
+  "passed": true,
+  "proof": "Bazel compiled and linked the HTTP unit test executable with the full native TLS dependency graph.",
+  "runtime_tests_run": false,
+  "native_windows_host_run": false,
+  "msvc_acceptance": false,
+  "source_sha256": {
+    "MODULE.bazel": "0e09ee2d8e56295d3d7ddc8007d46736cbb66cbbb735eb1d505e7b8fbd9fa9d6",
+    "MODULE.bazel.lock": "0890a56a06fe4edfae5de83f9abf16fbf5aa2c63ab27a43813a033fbd03cf0e2",
+    "patches/btls-sys_native_tools.patch": "7d5ef3bb940ec18ebba186689e8179e1e70a59b6bff7a58fdc4a3a84a3383c57",
+    "bazel/toolchains/browser_chat/BUILD.bazel": "4fa7322d51a0c5cf76432eb2e5f4969c654cb2cd9514d42327342428ed801f0e",
+    "bazel/toolchains/browser_chat/toolchain.cmake": "a67c3fd03fb77e67cd002de1b0dadbc649c861819a1a129a49b63daa8cef9d30",
+    "codex-rs/Cargo.lock": "e9d408091ec7826c25edc1bcbedc147757b2ee9a0e6782e4c327262b0fd2007e",
+    "codex-rs/http-client/Cargo.toml": "e604b430ae3ec52859cb5c6937d30dbc8a16ee6e41bc3b5d188524a06f9b54be"
+  },
+  "executable_sha256": "7e51b42c834c13731cc379c0949dee9bafb0121c43360d807fab0fd497a2fd2c",
+  "build_log_sha256": "68717986738880353580d08f2006723ac566f56660f3f6c1de9c849500d40ef0",
+  "fixes": [
+    "Use the declared C toolchain for bindgen target and headers.",
+    "Disable assembly for Windows cross builds, matching upstream native Windows.",
+    "Skip the generated symbol-prefix callback on Windows and Apple, where upstream skips archive renaming.",
+    "Provide the selected static C++ runtime through CcInfo, suppressing a duplicate name-based runtime directive.",
+    "Propagate the hermetic MinGW pthread archive to the final Rust link."
+  ],
+  "upstream_revision": "4edbf5d716ba014384569ac5c631cea83827abfc",
+  "upstream_source": "https://github.com/0x676e67/btls/blob/4edbf5d716ba014384569ac5c631cea83827abfc/btls-sys/build/main.rs",
+  "github_inspection": "gh api",
+  "msvc_blocker": "Final executable linking still requires the configured Visual Studio SDK/runtime. MODULE.bazel explicitly requires user acceptance of Microsoft terms before materializing that repository; no acceptance was asserted."
+}

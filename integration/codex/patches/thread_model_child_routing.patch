@@ -1,0 +1,2895 @@
+diff --git a/codex-rs/agent-identity/src/lib.rs b/codex-rs/agent-identity/src/lib.rs
+index 14a9e3519..9b4cbc3a6 100644
+--- a/codex-rs/agent-identity/src/lib.rs
++++ b/codex-rs/agent-identity/src/lib.rs
+@@ -27,8 +27,8 @@ use jsonwebtoken::Validation;
+ use jsonwebtoken::decode;
+ use jsonwebtoken::decode_header;
+ use jsonwebtoken::jwk::JwkSet;
+-use rand::TryRngCore;
+-use rand::rngs::OsRng;
++use rand::TryRng;
++use rand::rngs::SysRng;
+ use serde::Deserialize;
+ use serde::Serialize;
+ use serde::de::DeserializeOwned;
+@@ -424,7 +424,7 @@ pub fn decrypt_task_id_response(
+ 
+ pub fn generate_agent_key_material() -> Result<GeneratedAgentKeyMaterial> {
+     let mut seed_material = [0u8; AGENT_IDENTITY_KEY_SEED_BYTES];
+-    OsRng
++    SysRng
+         .try_fill_bytes(&mut seed_material)
+         .context("failed to generate agent identity private key seed material")?;
+     // Ed25519 stores a 32-byte seed, so derive it from all sampled seed material.
+diff --git a/codex-rs/app-server-protocol/src/protocol/v2/thread_data.rs b/codex-rs/app-server-protocol/src/protocol/v2/thread_data.rs
+index 015d81346..149888ed0 100644
+--- a/codex-rs/app-server-protocol/src/protocol/v2/thread_data.rs
++++ b/codex-rs/app-server-protocol/src/protocol/v2/thread_data.rs
+@@ -15,9 +15,9 @@ use codex_protocol::protocol::ThreadHistoryMode as CoreThreadHistoryMode;
+ use codex_protocol::protocol::ThreadSource as CoreThreadSource;
+ use codex_utils_absolute_path::AbsolutePathBuf;
+ #[cfg(test)]
+-use schemars::r#gen::SchemaGenerator;
++use schemars::Schema;
+ #[cfg(test)]
+-use schemars::schema::Schema;
++use schemars::generate::SchemaGenerator;
+ use serde::Deserialize;
+ use serde::Serialize;
+ use std::fmt;
+@@ -113,8 +113,8 @@ pub enum ThreadSource {
+ 
+ #[cfg(test)]
+ impl JsonSchema for ThreadSource {
+-    fn schema_name() -> String {
+-        "ThreadSource".to_string()
++    fn schema_name() -> std::borrow::Cow<'static, str> {
++        "ThreadSource".into()
+     }
+ 
+     fn json_schema(generator: &mut SchemaGenerator) -> Schema {
+diff --git a/codex-rs/app-server/src/request_processors/account_processor/workspace_routing.rs b/codex-rs/app-server/src/request_processors/account_processor/workspace_routing.rs
+index e5028e337..a854b8336 100644
+--- a/codex-rs/app-server/src/request_processors/account_processor/workspace_routing.rs
++++ b/codex-rs/app-server/src/request_processors/account_processor/workspace_routing.rs
+@@ -231,7 +231,7 @@ impl AccountRequestProcessor {
+                 && response.workspace_routing.is_some()
+                 && auth_changes.borrow().owner_generation == owner_generation
+             {
+-                let notification = processor.current_account_updated_notification();
++                let notification = processor.current_account_updated_notification().await;
+                 processor
+                     .outgoing
+                     .send_account_notification(
+diff --git a/codex-rs/app-server/src/request_processors/thread_processor.rs b/codex-rs/app-server/src/request_processors/thread_processor.rs
+index 9563a250c..6c3b63aa6 100644
+--- a/codex-rs/app-server/src/request_processors/thread_processor.rs
++++ b/codex-rs/app-server/src/request_processors/thread_processor.rs
+@@ -1675,6 +1675,35 @@ impl ThreadRequestProcessor {
+         Ok(())
+     }
+ 
++    fn inherit_native_provider(
++        &self,
++        source: &StoredThread,
++        model: Option<String>,
++        provider: Option<String>,
++        overrides: Option<&HashMap<String, serde_json::Value>>,
++    ) -> (Option<String>, Option<String>) {
++        let native = self
++            .config
++            .model_providers
++            .get(&source.model_provider)
++            .is_some_and(|info| info.native_provider_id().is_some());
++        if native
++            && provider.is_none()
++            && !overrides.is_some_and(|values| values.contains_key("model_provider"))
++        {
++            let model = if model.is_none()
++                && !overrides.is_some_and(|values| values.contains_key("model"))
++            {
++                source.model.clone()
++            } else {
++                model
++            };
++            (model, Some(source.model_provider.clone()))
++        } else {
++            (model, provider)
++        }
++    }
++
+     #[allow(clippy::too_many_arguments)]
+     fn build_thread_config_overrides(
+         &self,
+@@ -4107,6 +4136,17 @@ impl ThreadRequestProcessor {
+                 runtime_workspace_roots = Some(resolve_runtime_workspace_roots(restored_roots));
+             }
+         }
++        // A saved native thread must not silently return to the server's
++        // default Responses provider when resumed without explicit overrides.
++        let (model, model_provider) = match resume_source_thread.as_ref() {
++            Some(source) => self.inherit_native_provider(
++                source,
++                model,
++                model_provider,
++                request_overrides.as_ref(),
++            ),
++            None => (model, model_provider),
++        };
+         let mut typesafe_overrides = self.build_thread_config_overrides(
+             model,
+             model_provider,
+@@ -5293,6 +5333,12 @@ impl ThreadRequestProcessor {
+             Some(cli_overrides)
+         };
+         let runtime_workspace_roots = runtime_workspace_roots.map(resolve_runtime_workspace_roots);
++        let (model, model_provider) = self.inherit_native_provider(
++            &source_thread,
++            model,
++            model_provider,
++            request_overrides.as_ref(),
++        );
+         let mut typesafe_overrides = self.build_thread_config_overrides(
+             model,
+             model_provider,
+diff --git a/codex-rs/app-server/src/request_processors/thread_processor_tests.rs b/codex-rs/app-server/src/request_processors/thread_processor_tests.rs
+index a42e06dc9..a39472759 100644
+--- a/codex-rs/app-server/src/request_processors/thread_processor_tests.rs
++++ b/codex-rs/app-server/src/request_processors/thread_processor_tests.rs
+@@ -644,6 +644,7 @@ mod thread_processor_behavior_tests {
+             gateway_oauth: None,
+             aws: None,
+             wire_api: WireApi::Responses,
++            native_provider: None,
+             query_params: None,
+             http_headers: None,
+             env_http_headers: None,
+diff --git a/codex-rs/app-server/tests/suite/v2/turn_cost_otel.rs b/codex-rs/app-server/tests/suite/v2/turn_cost_otel.rs
+index f9a06f2e4..67664c1e0 100644
+--- a/codex-rs/app-server/tests/suite/v2/turn_cost_otel.rs
++++ b/codex-rs/app-server/tests/suite/v2/turn_cost_otel.rs
+@@ -268,7 +268,8 @@ metrics_exporter = {{ otlp-http = {{ endpoint = "{}/metrics", protocol = "json"
+         }
+     }
+     assert_eq!(points.len(), 1);
+-    assert_eq!(points[0]["asInt"], json!(1250001));
++    // OTLP JSON represents 64-bit integers as decimal strings.
++    assert_eq!(points[0]["asInt"], json!("1250001"));
+     let attrs: std::collections::BTreeMap<_, _> = points[0]["attributes"]
+         .as_array()
+         .expect("attributes")
+diff --git a/codex-rs/cli/src/doctor/thread_inventory.rs b/codex-rs/cli/src/doctor/thread_inventory.rs
+index 971c32f83..37f2f8cc6 100644
+--- a/codex-rs/cli/src/doctor/thread_inventory.rs
++++ b/codex-rs/cli/src/doctor/thread_inventory.rs
+@@ -192,10 +192,10 @@ fn missing_state_db_check(scan: RolloutScan, details: Vec<String>) -> DoctorChec
+                 )
+                 .measured(format!("{} rollout files", scan.files.len()))
+                 .expected("state DB contains matching thread rows")
+-                .remedy("Start Codex with no state DB present so startup backfill can create it from rollout files."),
++                .remedy("Start Nyacode with no state DB present so startup backfill can create it from rollout files."),
+         )
+             .remediation(
+-                "Start Codex with no state DB present so startup backfill can create it from rollout files.",
++                "Start Nyacode with no state DB present so startup backfill can create it from rollout files.",
+             );
+     }
+     if !scan.scan_errors.is_empty() || !scan.malformed_names.is_empty() || scan.reached_scan_cap {
+@@ -842,7 +842,7 @@ mod tests {
+             !issue
+                 .remedy
+                 .as_deref()
+-                .is_some_and(|remedy| remedy.starts_with("Restart Codex"))
++                .is_some_and(|remedy| remedy.starts_with("Restart Nyacode"))
+         }));
+         let missing_sample = check
+             .details
+diff --git a/codex-rs/config/src/thread_config.rs b/codex-rs/config/src/thread_config.rs
+index 0518ea887..194a1c5b1 100644
+--- a/codex-rs/config/src/thread_config.rs
++++ b/codex-rs/config/src/thread_config.rs
+@@ -306,6 +306,7 @@ mod tests {
+             gateway_oauth: None,
+             aws: None,
+             wire_api: WireApi::Responses,
++            native_provider: None,
+             query_params: None,
+             http_headers: None,
+             env_http_headers: None,
+diff --git a/codex-rs/config/src/thread_config/proto/codex.thread_config.v1.proto b/codex-rs/config/src/thread_config/proto/codex.thread_config.v1.proto
+index b9f89c95c..13a1c7df3 100644
+--- a/codex-rs/config/src/thread_config/proto/codex.thread_config.v1.proto
++++ b/codex-rs/config/src/thread_config/proto/codex.thread_config.v1.proto
+@@ -50,6 +50,7 @@ message ModelProvider {
+   bool supports_websockets = 17;
+   bool supports_standalone_web_search = 18;
+   optional string model_catalog_url = 19;
++  optional string native_provider = 20;
+ }
+ 
+ message StringMap {
+@@ -67,4 +68,9 @@ message ModelProviderAuthInfo {
+ enum WireApi {
+   WIRE_API_UNSPECIFIED = 0;
+   WIRE_API_RESPONSES = 1;
++  WIRE_API_CURSOR = 2;
++  WIRE_API_OPEN_CODE_GO = 3;
++  WIRE_API_CLAUDE = 4;
++  WIRE_API_ANTIGRAVITY = 5;
++  WIRE_API_NATIVE = 6;
+ }
+diff --git a/codex-rs/config/src/thread_config/proto/codex.thread_config.v1.rs b/codex-rs/config/src/thread_config/proto/codex.thread_config.v1.rs
+index 6ffc7bbdf..138d5a476 100644
+--- a/codex-rs/config/src/thread_config/proto/codex.thread_config.v1.rs
++++ b/codex-rs/config/src/thread_config/proto/codex.thread_config.v1.rs
+@@ -1,6 +1,4 @@
+ // This file is @generated by prost-build.
+-#![allow(clippy::trivially_copy_pass_by_ref)]
+-
+ #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+ pub struct LoadThreadConfigRequest {
+     #[prost(string, optional, tag = "1")]
+@@ -79,6 +77,8 @@ pub struct ModelProvider {
+     pub supports_standalone_web_search: bool,
+     #[prost(string, optional, tag = "19")]
+     pub model_catalog_url: ::core::option::Option<::prost::alloc::string::String>,
++    #[prost(string, optional, tag = "20")]
++    pub native_provider: ::core::option::Option<::prost::alloc::string::String>,
+ }
+ #[derive(Clone, PartialEq, ::prost::Message)]
+ pub struct StringMap {
+@@ -104,6 +104,11 @@ pub struct ModelProviderAuthInfo {
+ pub enum WireApi {
+     Unspecified = 0,
+     Responses = 1,
++    Cursor = 2,
++    OpenCodeGo = 3,
++    Claude = 4,
++    Antigravity = 5,
++    Native = 6,
+ }
+ impl WireApi {
+     /// String value of the enum field names used in the ProtoBuf definition.
+@@ -114,6 +119,11 @@ impl WireApi {
+         match self {
+             Self::Unspecified => "WIRE_API_UNSPECIFIED",
+             Self::Responses => "WIRE_API_RESPONSES",
++            Self::Cursor => "WIRE_API_CURSOR",
++            Self::OpenCodeGo => "WIRE_API_OPEN_CODE_GO",
++            Self::Claude => "WIRE_API_CLAUDE",
++            Self::Antigravity => "WIRE_API_ANTIGRAVITY",
++            Self::Native => "WIRE_API_NATIVE",
+         }
+     }
+     /// Creates an enum from field names used in the ProtoBuf definition.
+@@ -121,6 +131,11 @@ impl WireApi {
+         match value {
+             "WIRE_API_UNSPECIFIED" => Some(Self::Unspecified),
+             "WIRE_API_RESPONSES" => Some(Self::Responses),
++            "WIRE_API_CURSOR" => Some(Self::Cursor),
++            "WIRE_API_OPEN_CODE_GO" => Some(Self::OpenCodeGo),
++            "WIRE_API_CLAUDE" => Some(Self::Claude),
++            "WIRE_API_ANTIGRAVITY" => Some(Self::Antigravity),
++            "WIRE_API_NATIVE" => Some(Self::Native),
+             _ => None,
+         }
+     }
+diff --git a/codex-rs/config/src/thread_config/remote.rs b/codex-rs/config/src/thread_config/remote.rs
+index da0af3bca..e4191c67a 100644
+--- a/codex-rs/config/src/thread_config/remote.rs
++++ b/codex-rs/config/src/thread_config/remote.rs
+@@ -20,6 +20,7 @@ use super::UserThreadConfig;
+ use proto::thread_config_loader_client::ThreadConfigLoaderClient;
+ 
+ #[path = "proto/codex.thread_config.v1.rs"]
++#[allow(clippy::trivially_copy_pass_by_ref)]
+ mod proto;
+ 
+ const REMOTE_THREAD_CONFIG_LOAD_TIMEOUT: Duration = Duration::from_secs(5);
+@@ -160,6 +161,11 @@ fn model_provider_from_proto(
+     let id = provider.id;
+     let wire_api = match proto::WireApi::try_from(provider.wire_api) {
+         Ok(proto::WireApi::Responses) => WireApi::Responses,
++        Ok(proto::WireApi::Native) => WireApi::Native,
++        Ok(proto::WireApi::Cursor) => WireApi::Cursor,
++        Ok(proto::WireApi::OpenCodeGo) => WireApi::OpenCodeGo,
++        Ok(proto::WireApi::Claude) => WireApi::Claude,
++        Ok(proto::WireApi::Antigravity) => WireApi::Antigravity,
+         Ok(proto::WireApi::Unspecified) => {
+             return Err(parse_error("remote thread config omitted wire_api"));
+         }
+@@ -184,6 +190,7 @@ fn model_provider_from_proto(
+         gateway_oauth: None,
+         aws: None,
+         wire_api,
++        native_provider: provider.native_provider,
+         query_params: provider.query_params.map(redacted_string_map),
+         http_headers: provider.http_headers.map(redacted_string_map),
+         env_http_headers: provider.env_http_headers.map(|map| map.values),
+@@ -197,6 +204,7 @@ fn model_provider_from_proto(
+         capabilities: None,
+         include_internal_metadata: false,
+     };
++    info.validate().map_err(parse_error)?;
+     Ok((id, info))
+ }
+ 
+@@ -216,6 +224,7 @@ fn model_provider_to_proto(
+         gateway_oauth: _,
+         aws: _,
+         wire_api,
++        native_provider,
+         query_params,
+         http_headers,
+         env_http_headers,
+@@ -240,6 +249,7 @@ fn model_provider_to_proto(
+         experimental_bearer_token: experimental_bearer_token.map(RedactedString::into_inner),
+         auth: auth.map(model_provider_auth_to_proto),
+         wire_api: proto_wire_api(wire_api).into(),
++        native_provider,
+         query_params: query_params.map(proto_string_map),
+         http_headers: http_headers.map(proto_string_map),
+         env_http_headers: env_http_headers.map(|values| proto::StringMap { values }),
+@@ -314,6 +324,11 @@ fn proto_string_map(values: HashMap<String, RedactedString>) -> proto::StringMap
+ fn proto_wire_api(wire_api: WireApi) -> proto::WireApi {
+     match wire_api {
+         WireApi::Responses => proto::WireApi::Responses,
++        WireApi::Native => proto::WireApi::Native,
++        WireApi::Cursor => proto::WireApi::Cursor,
++        WireApi::OpenCodeGo => proto::WireApi::OpenCodeGo,
++        WireApi::Claude => proto::WireApi::Claude,
++        WireApi::Antigravity => proto::WireApi::Antigravity,
+     }
+ }
+ 
+@@ -494,6 +509,7 @@ mod tests {
+                                 cwd: workspace_cwd,
+                             }),
+                             wire_api: proto::WireApi::Responses.into(),
++                            native_provider: None,
+                             query_params: Some(proto::StringMap {
+                                 values: HashMap::from([(
+                                     "api-version".to_string(),
+@@ -565,6 +581,7 @@ mod tests {
+                 cwd: workspace_dir(),
+             }),
+             wire_api: WireApi::Responses,
++            native_provider: None,
+             query_params: Some(HashMap::from([(
+                 "api-version".to_string(),
+                 "2026-04-16".into(),
+@@ -593,4 +610,38 @@ mod tests {
+             .expect("current dir")
+             .join("workspace")
+     }
++    #[test]
++    fn native_provider_remote_configuration_round_trips_generic_and_legacy_ids() {
++        for wire_api in [
++            WireApi::Native,
++            WireApi::Cursor,
++            WireApi::OpenCodeGo,
++            WireApi::Claude,
++            WireApi::Antigravity,
++        ] {
++            let native_provider = if wire_api == WireApi::Native {
++                Some("cursor".into())
++            } else {
++                None
++            };
++            let expected = ModelProviderInfo {
++                name: "Native".into(),
++                wire_api,
++                native_provider,
++                ..Default::default()
++            };
++            let proto = model_provider_to_proto("custom", expected.clone());
++            let (id, actual) = model_provider_from_proto(proto).unwrap();
++            assert_eq!(id, "custom");
++            assert_eq!(actual, expected);
++        }
++        let invalid = ModelProviderInfo {
++            wire_api: WireApi::Native,
++            native_provider: Some("unknown".into()),
++            ..Default::default()
++        };
++        assert!(model_provider_from_proto(model_provider_to_proto("custom", invalid)).is_err());
++        assert_eq!(proto::WireApi::Antigravity as i32, 5);
++        assert_eq!(proto::WireApi::Native as i32, 6);
++    }
+ }
+diff --git a/codex-rs/core/src/agent/child_config.rs b/codex-rs/core/src/agent/child_config.rs
+index 3d56d7e64..d8f62b497 100644
+--- a/codex-rs/core/src/agent/child_config.rs
++++ b/codex-rs/core/src/agent/child_config.rs
+@@ -11,6 +11,7 @@ use crate::session::step_context::StepContext;
+ use crate::session::turn_context::TurnContext;
+ use codex_features::Feature;
+ use codex_models_manager::manager::RefreshStrategy;
++use codex_models_manager::manager::SharedModelsManager;
+ use codex_protocol::config_types::SERVICE_TIER_DEFAULT_REQUEST_VALUE;
+ use codex_protocol::models::BaseInstructions;
+ use codex_protocol::openai_models::ModelPreset;
+@@ -39,6 +40,7 @@ pub(crate) struct SpawnConfigOptions<'a> {
+     pub(crate) version: SpawnConfigVersion,
+     pub(crate) full_history_fork: bool,
+     pub(crate) role_name: Option<&'a str>,
++    pub(crate) model_provider: Option<&'a str>,
+     pub(crate) model: Option<&'a str>,
+     pub(crate) reasoning_effort: Option<ReasoningEffort>,
+ }
+@@ -60,18 +62,30 @@ pub(crate) async fn prepare_agent_spawn_config(
+     if options.version == SpawnConfigVersion::V1 && options.full_history_fork {
+         reject_full_fork_agent_type_override(options.role_name)?;
+     }
++    let provider_changed = apply_spawn_agent_provider_override(
++        &mut config,
++        options.model_provider,
++        options.model,
++        options.full_history_fork,
++    )?;
++    let models_manager = if provider_changed {
++        crate::thread_manager::build_models_manager(&config, session.services.auth_manager.clone())
++    } else {
++        session.services.models_manager.clone()
++    };
+     apply_requested_spawn_agent_model_overrides(
+-        session,
++        &models_manager,
+         step_context,
+         &mut config,
+         options.model,
+         options.reasoning_effort,
++        provider_changed,
+     )
+     .await?;
+     if !options.full_history_fork
+         || (options.version == SpawnConfigVersion::V2 && options.role_name.is_some())
+     {
+-        apply_spawn_agent_role(session, &mut config, options.role_name).await?;
++        apply_spawn_agent_role(&models_manager, &mut config, options.role_name).await?;
+         if options.version == SpawnConfigVersion::V2
+             && options.full_history_fork
+             && config.developer_instructions.is_none()
+@@ -81,7 +95,19 @@ pub(crate) async fn prepare_agent_spawn_config(
+                 .clone_from(&turn.developer_instructions);
+         }
+     }
+-    apply_spawn_agent_service_tier(session, &mut config).await?;
++    if provider_changed {
++        // Roles retain their existing precedence, but cannot silently replace the
++        // requested target with a model from the parent's catalog.
++        let available = models_manager
++            .list_models(RefreshStrategy::Offline, config.http_client_factory())
++            .await;
++        find_spawn_agent_model_name(
++            &available,
++            config.model.as_deref().ok_or("child model is missing")?,
++            turn.multi_agent_version,
++        )?;
++    }
++    apply_spawn_agent_service_tier_with_manager(session, &models_manager, &mut config).await?;
+     apply_spawn_agent_runtime_overrides(&mut config, turn)?;
+ 
+     // Remember an applied configured default so cold reload reapplies its restrictions.
+@@ -100,6 +126,44 @@ pub(crate) async fn prepare_agent_spawn_config(
+     Ok(PreparedSpawnConfig { config, role_name })
+ }
+ 
++/// An explicit provider choice uses only the parent's configured provider map.
++/// Credentials, account selection, discovery and transport remain provider-owned.
++fn apply_spawn_agent_provider_override(
++    config: &mut Config,
++    requested_provider: Option<&str>,
++    requested_model: Option<&str>,
++    full_history_fork: bool,
++) -> Result<bool, String> {
++    let Some(provider_id) = requested_provider else {
++        return Ok(false);
++    };
++    let provider = config
++        .model_providers
++        .get(provider_id)
++        .cloned()
++        .ok_or_else(|| {
++            format!("Unknown configured model_provider `{provider_id}` for spawn_agent")
++        })?;
++    if provider_id == config.model_provider_id {
++        return Ok(false);
++    }
++    if full_history_fork {
++        return Err("Changing model_provider requires a fresh child: use fork_turns=none (V2) or fork_context=false (V1). Cross-provider history portability is not established.".into());
++    }
++    if requested_model.is_none_or(|model| model.trim().is_empty()) {
++        return Err("Changing model_provider requires an explicit model from that provider".into());
++    }
++    config.model_provider_id = provider_id.to_owned();
++    config.model_provider = provider;
++    // The parent catalog, context limits and subagent defaults describe its provider.
++    config.model_catalog = None;
++    config.model_context_window = None;
++    config.model_auto_compact_token_limit = None;
++    config.agent_default_subagent_model = None;
++    config.agent_default_subagent_reasoning_effort = None;
++    Ok(true)
++}
++
+ /// Builds the base config snapshot for a newly spawned sub-agent.
+ ///
+ /// The returned config starts from the parent's effective config and then refreshes the
+@@ -202,34 +266,38 @@ fn apply_spawn_agent_runtime_overrides(
+ }
+ 
+ async fn apply_requested_spawn_agent_model_overrides(
+-    session: &Session,
++    models_manager: &SharedModelsManager,
+     step_context: &StepContext,
+     config: &mut Config,
+     requested_model: Option<&str>,
+     requested_reasoning_effort: Option<ReasoningEffort>,
++    provider_changed: bool,
+ ) -> Result<(), String> {
+     let turn = step_context.turn.as_ref();
+-    let requested_model = requested_model.or(turn.config.agent_default_subagent_model.as_deref());
++    let requested_model = requested_model.or(config.agent_default_subagent_model.as_deref());
+     let requested_reasoning_effort = requested_reasoning_effort
+-        .or_else(|| turn.config.agent_default_subagent_reasoning_effort.clone());
++        .or_else(|| config.agent_default_subagent_reasoning_effort.clone());
+     if requested_model.is_none() && requested_reasoning_effort.is_none() {
+         return Ok(());
+     }
+ 
+     if let Some(requested_model) = requested_model {
+-        let available_models = session
+-            .services
+-            .models_manager
+-            .list_models(RefreshStrategy::Offline, config.http_client_factory())
++        let available_models = models_manager
++            .list_models(
++                if provider_changed {
++                    RefreshStrategy::OnlineIfUncached
++                } else {
++                    RefreshStrategy::Offline
++                },
++                config.http_client_factory(),
++            )
+             .await;
+         let selected_model_name = find_spawn_agent_model_name(
+             &available_models,
+             requested_model,
+             turn.multi_agent_version,
+         )?;
+-        let selected_model_info = session
+-            .services
+-            .models_manager
++        let selected_model_info = models_manager
+             .get_model_info(&selected_model_name, &config.to_models_manager_config())
+             .await;
+ 
+@@ -260,9 +328,23 @@ async fn apply_requested_spawn_agent_model_overrides(
+     Ok(())
+ }
+ 
++#[cfg(test)]
+ pub(crate) async fn apply_spawn_agent_service_tier(
+     session: &Session,
+     config: &mut Config,
++) -> Result<(), String> {
++    let models_manager = if config.model_provider != session.get_config().await.model_provider {
++        crate::thread_manager::build_models_manager(config, session.services.auth_manager.clone())
++    } else {
++        session.services.models_manager.clone()
++    };
++    apply_spawn_agent_service_tier_with_manager(session, &models_manager, config).await
++}
++
++async fn apply_spawn_agent_service_tier_with_manager(
++    session: &Session,
++    models_manager: &SharedModelsManager,
++    config: &mut Config,
+ ) -> Result<(), String> {
+     let Some(service_tier) = session.services.agent_control.service_tier() else {
+         config.service_tier = None;
+@@ -276,9 +358,7 @@ pub(crate) async fn apply_spawn_agent_service_tier(
+     let model = config.model.clone().ok_or_else(|| {
+         "spawn_agent could not resolve the child model for service tier validation".to_string()
+     })?;
+-    let model_info = session
+-        .services
+-        .models_manager
++    let model_info = models_manager
+         .get_model_info(model.as_str(), &config.to_models_manager_config())
+         .await;
+ 
+@@ -289,7 +369,7 @@ pub(crate) async fn apply_spawn_agent_service_tier(
+ }
+ 
+ async fn apply_spawn_agent_role(
+-    session: &Session,
++    models_manager: &SharedModelsManager,
+     config: &mut Config,
+     role_name: Option<&str>,
+ ) -> Result<(), String> {
+@@ -307,9 +387,7 @@ async fn apply_spawn_agent_role(
+     let model = config.model.clone().ok_or_else(|| {
+         "spawn_agent could not resolve the child model for reasoning effort validation".to_string()
+     })?;
+-    let model_info = session
+-        .services
+-        .models_manager
++    let model_info = models_manager
+         .get_model_info(&model, &config.to_models_manager_config())
+         .await;
+     if model_info.used_fallback_model_metadata {
+@@ -371,3 +449,109 @@ fn validate_spawn_agent_reasoning_effort(
+         "Reasoning effort `{requested_reasoning_effort}` is not supported for model `{model}`. Supported reasoning efforts: {supported}"
+     ))
+ }
++
++#[cfg(test)]
++mod tests {
++    use super::*;
++    use crate::session::tests::make_session_and_context;
++    use codex_model_provider_info::built_in_model_providers;
++    use pretty_assertions::assert_eq;
++    use std::sync::Arc;
++
++    #[tokio::test]
++    async fn provider_change_requires_known_provider_explicit_model_and_fresh_history() {
++        let (_session, turn) = make_session_and_context().await;
++        for (provider, model, fork, expected) in [
++            (
++                "unknown-provider",
++                Some("glm-5.3"),
++                false,
++                "Unknown configured",
++            ),
++            ("opencode-go", None, false, "explicit model"),
++            ("opencode-go", Some("glm-5.3"), true, "fresh child"),
++        ] {
++            let mut config = (*turn.config).clone();
++            let before = config.clone();
++            let error =
++                apply_spawn_agent_provider_override(&mut config, Some(provider), model, fork)
++                    .expect_err("invalid selection must fail before discovery");
++            assert!(error.contains(expected), "{error}");
++            assert_eq!(config, before);
++        }
++    }
++
++    #[test_case::test_case(SpawnConfigVersion::V1; "v1")]
++    #[test_case::test_case(SpawnConfigVersion::V2; "v2")]
++    #[tokio::test]
++    async fn cross_provider_child_uses_target_catalog_and_preserves_parent_policy(
++        version: SpawnConfigVersion,
++    ) {
++        let (session, mut turn) = make_session_and_context().await;
++        let mut config = (*turn.config).clone();
++        let mut provider = built_in_model_providers(None)["opencode-go"].clone();
++        // A configured alias exercises generic resolution without native-ID branches.
++        provider.experimental_bearer_token = Some("fixture-token".to_string().into());
++        config
++            .model_providers
++            .insert("target-alias".into(), provider.clone());
++        config.model_context_window = Some(123);
++        config.model_auto_compact_token_limit = Some(100);
++        config.agent_default_subagent_model = Some("parent-only-model".into());
++        config.agent_default_subagent_reasoning_effort = Some(ReasoningEffort::None);
++        turn.config = Arc::new(config.clone());
++        let step = StepContext::for_test(Arc::new(turn));
++        let prepared = prepare_agent_spawn_config(
++            &session,
++            &step,
++            SpawnConfigOptions {
++                version,
++                full_history_fork: false,
++                role_name: None,
++                model_provider: Some("target-alias"),
++                model: Some("glm-5.3"),
++                reasoning_effort: None,
++            },
++        )
++        .await
++        .expect("target catalog should resolve");
++        let child = prepared.config;
++        assert_eq!(child.model_provider_id, "target-alias");
++        assert_eq!(child.model_provider, provider);
++        assert_eq!(child.model.as_deref(), Some("glm-5.3"));
++        assert!(child.model_catalog.is_none());
++        assert_eq!(child.model_context_window, None);
++        assert_eq!(child.model_auto_compact_token_limit, None);
++        assert_eq!(child.permissions, config.permissions);
++        assert_eq!(child.codex_home, config.codex_home);
++        assert_eq!(child.model_providers, config.model_providers);
++        assert_eq!(step.turn.config.model_provider_id, config.model_provider_id);
++    }
++
++    #[tokio::test]
++    async fn cross_provider_child_rejects_a_model_only_known_to_parent() {
++        let (session, mut turn) = make_session_and_context().await;
++        let mut config = (*turn.config).clone();
++        config
++            .model_providers
++            .get_mut("opencode-go")
++            .expect("built-in")
++            .experimental_bearer_token = Some("fixture-token".to_string().into());
++        turn.config = Arc::new(config);
++        let step = StepContext::for_test(Arc::new(turn));
++        let result = prepare_agent_spawn_config(
++            &session,
++            &step,
++            SpawnConfigOptions {
++                version: SpawnConfigVersion::V2,
++                full_history_fork: false,
++                role_name: None,
++                model_provider: Some("opencode-go"),
++                model: Some("parent-only-model"),
++                reasoning_effort: None,
++            },
++        )
++        .await;
++        assert!(matches!(result, Err(error) if error.contains("Unknown model")));
++    }
++}
+diff --git a/codex-rs/core/src/agent/control/spawn.rs b/codex-rs/core/src/agent/control/spawn.rs
+index 04ae8ab63..a86e625fe 100644
+--- a/codex-rs/core/src/agent/control/spawn.rs
++++ b/codex-rs/core/src/agent/control/spawn.rs
+@@ -474,6 +474,13 @@ impl LocalAgentControl {
+                     ))
+                 })?;
+             config.model_provider_id = stored_model_provider;
++            // The live parent's catalog and model limits do not describe a
++            // child that was explicitly spawned on another provider.
++            config.model_catalog = None;
++            config.model_context_window = None;
++            config.model_auto_compact_token_limit = None;
++            config.agent_default_subagent_model = None;
++            config.agent_default_subagent_reasoning_effort = None;
+         }
+         let parent_thread_id = owner_thread_id
+             .or_else(|| initial_history.get_resumed_parent_thread_id())
+diff --git a/codex-rs/core/src/agent/control_tests.rs b/codex-rs/core/src/agent/control_tests.rs
+index ffc7e11f7..54d70b081 100644
+--- a/codex-rs/core/src/agent/control_tests.rs
++++ b/codex-rs/core/src/agent/control_tests.rs
+@@ -1371,6 +1371,9 @@ async fn check_v2_agent_reload(route: V2ReloadRoute) {
+         .get("ollama")
+         .cloned()
+         .expect("ollama provider should be configured");
++    sender_config.model_context_window = Some(123);
++    sender_config.model_auto_compact_token_limit = Some(100);
++    sender_config.agent_default_subagent_model = Some("sender-only-model".into());
+ 
+     let mut parent_turn = parent_thread.session.new_default_turn().await;
+     let residency_pin = match route {
+@@ -1422,6 +1425,10 @@ async fn check_v2_agent_reload(route: V2ReloadRoute) {
+         .await
+         .expect("reloaded child thread should exist");
+     if matches!(route, V2ReloadRoute::Sender) {
++        let config = reloaded_child.session.get_config().await;
++        assert_eq!(config.model_context_window, None);
++        assert_eq!(config.model_auto_compact_token_limit, None);
++        assert_eq!(config.agent_default_subagent_model, None);
+         assert_eq!(
+             harness
+                 .manager
+diff --git a/codex-rs/core/src/model_request_tests.rs b/codex-rs/core/src/model_request_tests.rs
+index 84ab5014d..0356bd1f6 100644
+--- a/codex-rs/core/src/model_request_tests.rs
++++ b/codex-rs/core/src/model_request_tests.rs
+@@ -30,6 +30,7 @@ async fn interceptors_forward_before_completion_in_order_and_cancel_upstream() {
+     let mut stream = intercept_stream(
+         Box::pin(
+             ResponseStream {
++                session_control: None,
+                 rx_event,
+                 interrupt: None,
+                 consumer_dropped,
+diff --git a/codex-rs/core/src/session/turn.rs b/codex-rs/core/src/session/turn.rs
+index 8925df02b..5a3874005 100644
+--- a/codex-rs/core/src/session/turn.rs
++++ b/codex-rs/core/src/session/turn.rs
+@@ -1805,6 +1805,16 @@ async fn run_sampling_request(
+             },
+         };
+ 
++        // A native session can have committed inference and tool execution before
++        // losing its stream. Resume is explicit; generic Responses retries cannot
++        // safely reconstruct that provider-owned state.
++        if turn_context
++            .provider
++            .backend()
++            .is_some_and(|backend| !backend.session_capabilities().automatic_inference_retry)
++        {
++            return Err(err);
++        }
+         let original_input = original_input.get_or_insert(prompt.input);
+ 
+         let retry = handle_response_stream_error(
+@@ -2280,7 +2290,8 @@ pub(super) fn realtime_text_for_event(msg: &EventMsg) -> Option<RealtimeEventTex
+         | EventMsg::CollabCloseEnd(_)
+         | EventMsg::CollabResumeBegin(_)
+         | EventMsg::CollabResumeEnd(_)
+-        | EventMsg::SubAgentActivity(_) => None,
++        | EventMsg::SubAgentActivity(_)
++        | EventMsg::ProviderAccountChanged(_) => None,
+     }
+ }
+ 
+@@ -2730,12 +2741,49 @@ async fn try_run_sampling_request(
+             codex.usage.total_tokens = field::Empty,
+         );
+ 
+-        let event = stream
+-            .next()
+-            .instrument(trace_span!(parent: &handle_responses, "receiving"))
+-            .or_cancel(&preempt)
+-            .or_cancel(&cancellation_token)
+-            .await;
++        let session_control = stream.session_control.clone();
++        let event = tokio::select! {
++            result = in_flight.next(), if session_control.is_some() && !in_flight.is_empty() => {
++                match result {
++                    Some(Ok(envelope)) => {
++                        let mut result = match crate::native_provider::tool_result(&envelope.item) {
++                            Ok(result) => result,
++                            Err(error) => break Err(error),
++                        };
++                        let execution = tool_runtime.take_execution_output(&result.call_id);
++                        mark_thread_memory_mode_polluted_if_external_context(sess.as_ref(), turn_context.as_ref(), &envelope.item).await;
++                        sess.record_annotated_conversation_items(&turn_context, &step_context.settings.model_info, vec![envelope]).await;
++                        // History applies tool-specific truncation before the next
++                        // prompt. Bind replay to those same model-visible bytes.
++                        let history = sess.clone_history().await;
++                        let recorded = history.raw_items().rev()
++                            .filter_map(|item| crate::native_provider::tool_result(item).ok())
++                            .find(|recorded| recorded.call_id == result.call_id);
++                        let Some(recorded) = recorded else {
++                            break Err(CodexErr::Stream("native tool output was not recorded in history".into()));
++                        };
++                        result.output = recorded.output;
++                        if execution.as_ref().is_some_and(|output| output.denied) {
++                            result.disposition = codex_provider_adapter::CompletionDisposition::Denied;
++                        }
++                        result.structured = execution.map(|output| output.structured);
++                        let Some(control) = session_control else {
++                            break Err(CodexErr::Stream("session tool result channel missing".into()));
++                        };
++                        if control.results.send(result).await.is_err() {
++                            break Err(CodexErr::Stream("native provider closed while a tool was running".into()));
++                        }
++                        continue;
++                    }
++                    Some(Err(error)) => break Err(error),
++                    None => continue,
++                }
++            }
++            event = stream.next()
++                .instrument(trace_span!(parent: &handle_responses, "receiving"))
++                .or_cancel(&preempt)
++                .or_cancel(&cancellation_token) => event,
++        };
+         // Account for an already-received terminal error even if cancellation raced it.
+         // Cancellation still stops ordinary stream events before they can run tools.
+         let event = match event {
+@@ -2794,6 +2842,36 @@ async fn try_run_sampling_request(
+         record_turn_ttft_metric(&turn_context, &event).await;
+ 
+         match event {
++            ResponseEvent::HistoryPersistenceRequested { reply } => {
++                let result = if sess.live_thread().is_none() {
++                    Ok(None)
++                } else {
++                    match sess.flush_rollout().await {
++                        Ok(()) => Ok(Some(
++                            sess.clone_history().await.raw_items().cloned().collect(),
++                        )),
++                        Err(error) => Err(error.to_string()),
++                    }
++                };
++                let _ = reply.send(result);
++            }
++            ResponseEvent::ProviderAccountChanged {
++                provider,
++                previous,
++                account,
++            } => {
++                sess.send_event(
++                    &turn_context,
++                    EventMsg::ProviderAccountChanged(
++                        codex_protocol::protocol::ProviderAccountChangedEvent {
++                            provider,
++                            previous_account: previous,
++                            account,
++                        },
++                    ),
++                )
++                .await;
++            }
+             ResponseEvent::Created { response_id } => {
+                 if let Some(response_id) = response_id {
+                     turn_context
+@@ -2914,6 +2992,10 @@ async fn try_run_sampling_request(
+                 // Hosts can keep the current response intact and deliver mail before the next
+                 // model request instead of cutting off its remaining tool calls.
+                 if preempt_for_mailbox_mail
++                    && !stream
++                        .session_control
++                        .as_ref()
++                        .is_some_and(|control| control.capabilities.defer_mailbox_preemption)
+                     && !turn_context
+                         .config
+                         .features
+@@ -3115,6 +3197,20 @@ async fn try_run_sampling_request(
+                 if let Some(false) = end_turn {
+                     needs_follow_up = true;
+                 }
++                if stream
++                    .session_control
++                    .as_ref()
++                    .is_some_and(|control| control.capabilities.terminal_completion)
++                    && end_turn == Some(true)
++                {
++                    // Mail received during a native session is delivered only after
++                    // its completion fence is durable, before starting another request.
++                    needs_follow_up = stream
++                        .session_control
++                        .as_ref()
++                        .is_some_and(|control| control.capabilities.defer_mailbox_preemption)
++                        && sess.input_queue.has_pending_mailbox_items().await;
++                }
+                 break Ok(SamplingRequestResult {
+                     needs_follow_up,
+                     last_agent_message,
+diff --git a/codex-rs/core/src/thread_manager.rs b/codex-rs/core/src/thread_manager.rs
+index 4910246f0..04298cbe5 100644
+--- a/codex-rs/core/src/thread_manager.rs
++++ b/codex-rs/core/src/thread_manager.rs
+@@ -2335,6 +2335,13 @@ impl ThreadManagerState {
+         };
+         let attachment_source =
+             forked_from_thread_id.filter(|_| matches!(&initial_history, InitialHistory::Forked(_)));
++        // Per-thread native selections must not inherit the global provider's
++        // model catalog (including OpenAI-only tool modes and capabilities).
++        let models_manager = if config.model_provider.native_provider_id().is_some() {
++            build_models_manager(&config, Arc::clone(&auth_manager))
++        } else {
++            Arc::clone(&self.models_manager)
++        };
+         let spawn_result = Session::spawn(SessionSpawnArgs {
+             startup,
+             config,
+@@ -2342,7 +2349,7 @@ impl ThreadManagerState {
+             instructions,
+             installation_id: self.installation_id.clone(),
+             auth_manager,
+-            models_manager: Arc::clone(&self.models_manager),
++            models_manager,
+             git_root_discovery: Arc::clone(&self.git_root_discovery),
+             environment_manager: Arc::clone(&self.environment_manager),
+             skills_service: Arc::clone(&self.skills_service),
+diff --git a/codex-rs/core/src/thread_manager_tests.rs b/codex-rs/core/src/thread_manager_tests.rs
+index 0800effb8..81a508c27 100644
+--- a/codex-rs/core/src/thread_manager_tests.rs
++++ b/codex-rs/core/src/thread_manager_tests.rs
+@@ -3514,3 +3514,88 @@ async fn interrupted_fork_snapshot_uses_persisted_mid_turn_history_without_live_
+         1,
+     );
+ }
++
++#[test]
++fn per_thread_native_provider_avoids_global_openai_metadata_and_honors_catalog() {
++    // Starting a full session exceeds libtest's default stack in debug builds.
++    std::thread::Builder::new()
++        .name("native_model_metadata".into())
++        .stack_size(16 * 1024 * 1024)
++        .spawn(|| {
++            tokio::runtime::Builder::new_current_thread()
++                .enable_all()
++                .build()
++                .expect("build test runtime")
++                .block_on(Box::pin(check_native_model_metadata()));
++        })
++        .expect("start test thread")
++        .join()
++        .expect("native model metadata test panicked");
++}
++
++async fn check_native_model_metadata() {
++    use codex_protocol::openai_models::ToolMode;
++
++    let model = "gpt-5.6-luna";
++    for explicit_catalog in [false, true] {
++        let temp_dir = tempdir().expect("tempdir");
++        let mut config = test_config().await;
++        config.codex_home = temp_dir.path().join("codex-home").abs();
++        config.cwd = config.codex_home.abs();
++        std::fs::create_dir_all(&config.codex_home).expect("create codex home");
++        config.model_catalog = None;
++        let manager = ThreadManager::with_models_provider_and_home_for_tests(
++            CodexAuth::from_api_key("dummy"),
++            config.model_provider.clone(),
++            config.codex_home.to_path_buf(),
++            Arc::new(codex_exec_server::EnvironmentManager::default_for_tests()),
++        );
++        let global_info = manager
++            .state
++            .models_manager
++            .get_model_info(model, &config.to_models_manager_config())
++            .await;
++        assert_eq!(global_info.tool_mode, Some(ToolMode::CodeModeOnly));
++
++        config.model = Some(model.into());
++        config.model_provider_id = "opencode-go".into();
++        config.model_provider = config
++            .model_providers
++            .get("opencode-go")
++            .expect("built-in native provider")
++            .clone();
++        config.model_provider.experimental_bearer_token = Some("fixture-key".into());
++        if explicit_catalog {
++            let mut native_info = global_info;
++            native_info.tool_mode = Some(ToolMode::Direct);
++            native_info.context_window = Some(12345);
++            native_info.max_context_window = Some(12345);
++            config.model_catalog = Some(ModelsResponse {
++                models: vec![native_info],
++            });
++        }
++        let started = manager
++            .start_thread(StartThreadOptions {
++                environments: Some(Vec::new()),
++                ..StartThreadOptions::new(config)
++            })
++            .await
++            .expect("start native thread under OpenAI-global manager");
++        let turn = started.thread.session.new_default_turn().await;
++        let info = turn.capture_current_model_info();
++        assert_eq!(info.slug, model);
++        assert_eq!(
++            info.tool_mode,
++            explicit_catalog.then_some(ToolMode::Direct),
++            "native thread must not inherit global OpenAI code-mode metadata"
++        );
++        if explicit_catalog {
++            assert_eq!(info.context_window, Some(12345));
++        }
++        started
++            .thread
++            .shutdown_and_wait()
++            .await
++            .expect("shutdown native thread");
++    }
++}
+diff --git a/codex-rs/core/src/thread_spawn.rs b/codex-rs/core/src/thread_spawn.rs
+index 29dc6c44a..d9b2fbc1f 100644
+--- a/codex-rs/core/src/thread_spawn.rs
++++ b/codex-rs/core/src/thread_spawn.rs
+@@ -37,6 +37,8 @@ pub(crate) struct ThreadSpawnRequest {
+     pub agent_type: Option<String>,
+     pub model: Option<String>,
+     pub reasoning_effort: Option<ReasoningEffort>,
++    /// Native provider override. `None` keeps the parent provider.
++    pub model_provider: Option<String>,
+ }
+ 
+ /// Accepted child and its effective configuration. Acceptance does not mean the turn completed.
+@@ -69,6 +71,7 @@ pub(crate) async fn spawn(
+         agent_type,
+         model,
+         reasoning_effort,
++        model_provider,
+     } = request;
+     let message_text = match &message {
+         AgentMessage::Plaintext(text) | AgentMessage::Encrypted(text) => text,
+@@ -89,6 +92,7 @@ pub(crate) async fn spawn(
+             version: SpawnConfigVersion::V2,
+             full_history_fork: matches!(fork_mode, Some(SpawnAgentForkMode::FullHistory)),
+             role_name,
++            model_provider: model_provider.as_deref(),
+             model: model.as_deref(),
+             reasoning_effort,
+         },
+diff --git a/codex-rs/core/src/turn_diff_tracker.rs b/codex-rs/core/src/turn_diff_tracker.rs
+index 06a2cd022..5bbe739f5 100644
+--- a/codex-rs/core/src/turn_diff_tracker.rs
++++ b/codex-rs/core/src/turn_diff_tracker.rs
+@@ -385,7 +385,7 @@ impl TurnDiffTracker {
+ }
+ 
+ fn git_blob_oid(data: &[u8]) -> String {
+-    format!("{:x}", git_blob_sha1_hex_bytes(data))
++    hex::encode(git_blob_sha1_hex_bytes(data))
+ }
+ 
+ /// Compute the Git SHA-1 blob object ID for the given content (bytes).
+diff --git a/codex-rs/core/src/turn_diff_tracker_tests.rs b/codex-rs/core/src/turn_diff_tracker_tests.rs
+index 27af3ff32..cd7d5eb8a 100644
+--- a/codex-rs/core/src/turn_diff_tracker_tests.rs
++++ b/codex-rs/core/src/turn_diff_tracker_tests.rs
+@@ -14,7 +14,7 @@ use std::time::Instant;
+ use tempfile::tempdir;
+ 
+ fn git_blob_sha1_hex(data: &str) -> String {
+-    format!("{:x}", git_blob_sha1_hex_bytes(data.as_bytes()))
++    hex::encode(git_blob_sha1_hex_bytes(data.as_bytes()))
+ }
+ 
+ async fn apply_verified_patch(root: &Path, patch: &str) -> AppliedPatchDelta {
+diff --git a/codex-rs/core/src/turn_timing.rs b/codex-rs/core/src/turn_timing.rs
+index 75a2bf9bf..e6ceeeb0e 100644
+--- a/codex-rs/core/src/turn_timing.rs
++++ b/codex-rs/core/src/turn_timing.rs
+@@ -394,7 +394,9 @@ fn response_event_records_turn_ttft(event: &ResponseEvent) -> bool {
+         | ResponseEvent::ReasoningSummaryDelta { .. }
+         | ResponseEvent::ReasoningSummaryDone { .. }
+         | ResponseEvent::ReasoningContentDelta { .. } => true,
+-        ResponseEvent::Created { .. }
++        ResponseEvent::HistoryPersistenceRequested { .. }
++        | ResponseEvent::ProviderAccountChanged { .. }
++        | ResponseEvent::Created { .. }
+         | ResponseEvent::ServerModel(_)
+         | ResponseEvent::ModelVerifications(_)
+         | ResponseEvent::TurnModerationMetadata(_)
+diff --git a/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__agent_eviction__idle_eviction_followup.snap b/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__agent_eviction__idle_eviction_followup.snap
+index 505620635..e75794bdd 100644
+--- a/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__agent_eviction__idle_eviction_followup.snap
++++ b/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__agent_eviction__idle_eviction_followup.snap
+@@ -7,12 +7,12 @@ Scenario: A parent delegates an API migration, queues a note while the worker is
+ 
+ ## Window 1
+ -- request 1 (turn) --
+-00:additional_tools/developer (2; hash=122dc70cb8c7e8f0):
++00:additional_tools/developer (2; hash=0d0391daf429f6aa):
+         - namespace/functions; hash=f859506569b16c70
+           - custom/exec
+           - function/wait
+           - function/request_user_input
+-        - namespace/collaboration: Tools for spawning and managing sub-agents.; hash=2c8d6295978dbe63
++        - namespace/collaboration: Tools for spawning and managing sub-agents.; hash=48f3c983ab019481
+           - function/followup_task
+           - function/interrupt_agent
+           - function/list_agents
+@@ -66,12 +66,12 @@ Scenario: A parent delegates an API migration, queues a note while the worker is
+ 
+ ## Window 2 (after request 6: input diverged at item 03)
+ -- request 7 (turn) --
+-00:additional_tools/developer (2; hash=122dc70cb8c7e8f0):
++00:additional_tools/developer (2; hash=0d0391daf429f6aa):
+         - namespace/functions; hash=f859506569b16c70
+           - custom/exec
+           - function/wait
+           - function/request_user_input
+-        - namespace/collaboration: Tools for spawning and managing sub-agents.; hash=2c8d6295978dbe63
++        - namespace/collaboration: Tools for spawning and managing sub-agents.; hash=48f3c983ab019481
+           - function/followup_task
+           - function/interrupt_agent
+           - function/list_agents
+diff --git a/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__agent_message_board__remote__remote_board_permissions_direct.snap b/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__agent_message_board__remote__remote_board_permissions_direct.snap
+index c0f63f83b..0e6e01227 100644
+--- a/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__agent_message_board__remote__remote_board_permissions_direct.snap
++++ b/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__agent_message_board__remote__remote_board_permissions_direct.snap
+@@ -6,7 +6,7 @@ Scenario: Permission discovery preserves legacy output, exposes reply-only acces
+ 
+ ## Window 1
+ -- request 1 (request) --
+-00:additional_tools/developer (3; hash=e49a28343a9fe4ed):
++00:additional_tools/developer (3; hash=a4f65252a4b38e2b):
+         - namespace/functions; hash=c8b8fa91706a7620
+           - function/exec_command
+           - function/write_stdin
+@@ -17,7 +17,7 @@ Scenario: Permission discovery preserves legacy output, exposes reply-only acces
+         - namespace/clock: Tools for reading and waiting on time.; hash=a80435c7a3a3943f
+           - function/curr_time
+           - function/sleep
+-        - namespace/collaboration: Tools for spawning and managing sub-agents.; hash=ba5664aaab81db64
++        - namespace/collaboration: Tools for spawning and managing sub-agents.; hash=b49e2728882f3876
+           - function/create_channel
+           - function/followup_task
+           - function/get_channels
+diff --git a/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__model_instructions__incremental_model_instructions.snap b/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__model_instructions__incremental_model_instructions.snap
+index 0a1d2ba5a..cdbeb3cef 100644
+--- a/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__model_instructions__incremental_model_instructions.snap
++++ b/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__model_instructions__incremental_model_instructions.snap
+@@ -15,13 +15,13 @@ Settings:
+   stream: true
+   tool_choice: "auto"
+ -- request 1 (turn) --
+-00:additional_tools/developer (2; hash=946019c94afdd69a):
++00:additional_tools/developer (2; hash=e6301440459536e8):
+         - namespace/functions; hash=ce01915b77cef9ee
+           - function/exec_command
+           - function/write_stdin
+           - function/request_user_input
+           - function/view_image
+-        - namespace/multi_agent_v1: Tools for spawning and managing sub-agents.; hash=d492855cc7064c73
++        - namespace/multi_agent_v1: Tools for spawning and managing sub-agents.; hash=d0d560e1ae870e15
+           - function/close_agent
+           - function/resume_agent
+           - function/send_input
+@@ -62,13 +62,13 @@ Settings:
+ ## Window 2 (after request 4: input diverged at item 01)
+ Settings: same as window 1
+ -- request 5 (turn) --
+-00:additional_tools/developer (2; hash=946019c94afdd69a):
++00:additional_tools/developer (2; hash=e6301440459536e8):
+         - namespace/functions; hash=ce01915b77cef9ee
+           - function/exec_command
+           - function/write_stdin
+           - function/request_user_input
+           - function/view_image
+-        - namespace/multi_agent_v1: Tools for spawning and managing sub-agents.; hash=d492855cc7064c73
++        - namespace/multi_agent_v1: Tools for spawning and managing sub-agents.; hash=d0d560e1ae870e15
+           - function/close_agent
+           - function/resume_agent
+           - function/send_input
+diff --git a/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__multi_agent_catalog_parameters.snap b/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__multi_agent_catalog_parameters.snap
+index 5fb3ec889..df3e8af2f 100644
+--- a/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__multi_agent_catalog_parameters.snap
++++ b/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__multi_agent_catalog_parameters.snap
+@@ -16,7 +16,7 @@ Settings:
+   text: {"verbosity":"low"}
+   tool_choice: "auto"
+ -- request 1 (turn) --
+-00:additional_tools/developer (3; hash=2b84850bc279e5ed):
++00:additional_tools/developer (3; hash=11c856111c755e1b):
+         - namespace/functions; hash=fada4a476a3754dd
+           - custom/exec
+           - function/wait
+@@ -24,7 +24,7 @@ Settings:
+           - function/request_user_input_async
+         - namespace/clock: Tools for reading and waiting on time.; hash=f402e8c5e9b5e317
+           - function/sleep
+-        - namespace/collaboration: Tools for spawning and managing sub-agents.; hash=7e156cf57f85af87
++        - namespace/collaboration: Tools for spawning and managing sub-agents.; hash=27629ca7251ef17d
+           - function/followup_task
+           - function/interrupt_agent
+           - function/list_agents
+diff --git a/codex-rs/core/tests/suite/stream_error_allows_next_turn.rs b/codex-rs/core/tests/suite/stream_error_allows_next_turn.rs
+index c381b78cd..fff792b71 100644
+--- a/codex-rs/core/tests/suite/stream_error_allows_next_turn.rs
++++ b/codex-rs/core/tests/suite/stream_error_allows_next_turn.rs
+@@ -74,6 +74,7 @@ async fn continue_after_stream_error() {
+         gateway_oauth: None,
+         aws: None,
+         wire_api: WireApi::Responses,
++        native_provider: None,
+         query_params: None,
+         http_headers: None,
+         env_http_headers: None,
+diff --git a/codex-rs/external-agent-migration/Cargo.toml b/codex-rs/external-agent-migration/Cargo.toml
+index 3f49a1ae0..48b274b40 100644
+--- a/codex-rs/external-agent-migration/Cargo.toml
++++ b/codex-rs/external-agent-migration/Cargo.toml
+@@ -13,6 +13,7 @@ path = "src/lib.rs"
+ workspace = true
+ 
+ [dependencies]
++hex = { workspace = true }
+ chrono = { workspace = true }
+ codex-analytics = { workspace = true }
+ codex-config = { workspace = true }
+diff --git a/codex-rs/external-agent-migration/src/sessions/ledger.rs b/codex-rs/external-agent-migration/src/sessions/ledger.rs
+index 9be9988ba..ca5129786 100644
+--- a/codex-rs/external-agent-migration/src/sessions/ledger.rs
++++ b/codex-rs/external-agent-migration/src/sessions/ledger.rs
+@@ -419,7 +419,7 @@ fn session_content_sha256(path: &Path) -> io::Result<String> {
+         hasher.update(&buffer[..read]);
+     }
+     let digest = hasher.finalize();
+-    Ok(format!("{digest:x}"))
++    Ok(hex::encode(digest))
+ }
+ 
+ fn session_modified_at(path: &Path) -> io::Result<Option<i64>> {
+diff --git a/codex-rs/external-agent-migration/src/sessions/ledger_tests.rs b/codex-rs/external-agent-migration/src/sessions/ledger_tests.rs
+index 5fa494c76..0f00dfd43 100644
+--- a/codex-rs/external-agent-migration/src/sessions/ledger_tests.rs
++++ b/codex-rs/external-agent-migration/src/sessions/ledger_tests.rs
+@@ -41,7 +41,7 @@ fn completed_imports_do_not_read_source_files() {
+         &codex_home,
+         vec![CompletedExternalAgentSessionImport {
+             source_path: source_path.clone(),
+-            source_content_sha256: format!("{:x}", Sha256::digest(contents)),
++            source_content_sha256: hex::encode(Sha256::digest(contents)),
+             imported_thread_id,
+             connector_names: Vec::new(),
+             title: Some("Imported session".to_string()),
+@@ -65,7 +65,7 @@ fn completed_import_refreshes_existing_record_metadata() {
+     let contents = b"session contents";
+     std::fs::write(&source_path, contents).expect("source");
+     let source_path = std::fs::canonicalize(source_path).expect("canonical source");
+-    let content_sha256 = format!("{:x}", Sha256::digest(contents));
++    let content_sha256 = hex::encode(Sha256::digest(contents));
+     let first_thread_id = ThreadId::new();
+     let second_thread_id = ThreadId::new();
+ 
+@@ -109,8 +109,8 @@ fn checkpoint_is_compare_and_swap_and_preserves_record_metadata() {
+     std::fs::write(&source_path, "old").expect("initial source");
+     let source_path = std::fs::canonicalize(source_path).expect("canonical source");
+     let thread_id = ThreadId::new();
+-    let old_hash = format!("{:x}", Sha256::digest("old"));
+-    let new_hash = format!("{:x}", Sha256::digest("new"));
++    let old_hash = hex::encode(Sha256::digest("old"));
++    let new_hash = hex::encode(Sha256::digest("new"));
+     record_completed_session_imports(
+         &codex_home,
+         vec![CompletedExternalAgentSessionImport {
+diff --git a/codex-rs/external-agent-migration/src/sessions/mod.rs b/codex-rs/external-agent-migration/src/sessions/mod.rs
+index 8b31556e8..87d34e76e 100644
+--- a/codex-rs/external-agent-migration/src/sessions/mod.rs
++++ b/codex-rs/external-agent-migration/src/sessions/mod.rs
+@@ -236,7 +236,7 @@ mod tests {
+         let codex_home = root.path().join("codex-home");
+         let source_path = root.path().join("session.jsonl");
+         let initial = session_record(root.path(), "first request");
+-        let expected_source_content_sha256 = format!("{:x}", Sha256::digest(&initial));
++        let expected_source_content_sha256 = hex::encode(Sha256::digest(&initial));
+         std::fs::write(&source_path, initial).expect("initial session");
+         let imported_thread_id = ThreadId::new();
+         ledger::record_imported_session(&codex_home, &source_path, imported_thread_id)
+@@ -317,7 +317,7 @@ mod tests {
+ 
+         assert_eq!(
+             pending.source_content_sha256,
+-            format!("{:x}", Sha256::digest(contents))
++            hex::encode(Sha256::digest(contents))
+         );
+         assert_eq!(pending.target, SessionImportTarget::New);
+     }
+diff --git a/codex-rs/external-agent-migration/src/sessions/records_cla.rs b/codex-rs/external-agent-migration/src/sessions/records_cla.rs
+index 13ff14cd7..9b5669d5b 100644
+--- a/codex-rs/external-agent-migration/src/sessions/records_cla.rs
++++ b/codex-rs/external-agent-migration/src/sessions/records_cla.rs
+@@ -146,7 +146,7 @@ pub(super) fn read_session_import(path: &Path) -> io::Result<ParsedSessionImport
+         custom_title,
+         ai_title,
+         messages,
+-        content_sha256: format!("{:x}", hasher.finalize()),
++        content_sha256: hex::encode(hasher.finalize()),
+         attributed_mcp_server_ids,
+     })
+ }
+diff --git a/codex-rs/external-agent-migration/src/sessions/records_cla_tests.rs b/codex-rs/external-agent-migration/src/sessions/records_cla_tests.rs
+index d0a7704df..b9266d7ad 100644
+--- a/codex-rs/external-agent-migration/src/sessions/records_cla_tests.rs
++++ b/codex-rs/external-agent-migration/src/sessions/records_cla_tests.rs
+@@ -36,8 +36,5 @@ fn reads_session_import_in_one_pass() {
+     assert_eq!(parsed.ai_title.as_deref(), Some("generated title"));
+     assert_eq!(parsed.messages.len(), 1);
+     assert_eq!(parsed.messages[0].text, "first request");
+-    assert_eq!(
+-        parsed.content_sha256,
+-        format!("{:x}", Sha256::digest(contents))
+-    );
++    assert_eq!(parsed.content_sha256, hex::encode(Sha256::digest(contents)));
+ }
+diff --git a/codex-rs/external-agent-migration/src/sessions/records_cur.rs b/codex-rs/external-agent-migration/src/sessions/records_cur.rs
+index 04ecf7363..2442fc967 100644
+--- a/codex-rs/external-agent-migration/src/sessions/records_cur.rs
++++ b/codex-rs/external-agent-migration/src/sessions/records_cur.rs
+@@ -132,7 +132,7 @@ pub(super) fn read_session_import(
+         custom_title: None,
+         ai_title: None,
+         messages,
+-        content_sha256: format!("{:x}", hasher.finalize()),
++        content_sha256: hex::encode(hasher.finalize()),
+         attributed_mcp_server_ids: BTreeSet::new(),
+     })
+ }
+diff --git a/codex-rs/hooks/schema/generated/subagent-stop.command.output.schema.json b/codex-rs/hooks/schema/generated/subagent-stop.command.output.schema.json
+index 0cb1dd2a5..07b23ac3c 100644
+--- a/codex-rs/hooks/schema/generated/subagent-stop.command.output.schema.json
++++ b/codex-rs/hooks/schema/generated/subagent-stop.command.output.schema.json
+@@ -24,7 +24,7 @@
+     },
+     "reason": {
+       "default": null,
+-      "description": "Claude requires `reason` when `decision` is `block`; we enforce that semantic rule during output parsing rather than in the JSON schema.",
++      "description": "Claude requires `reason` when `decision` is `block`; we enforce that\nsemantic rule during output parsing rather than in the JSON schema.",
+       "type": "string"
+     },
+     "stopReason": {
+diff --git a/codex-rs/model-provider-info/Cargo.toml b/codex-rs/model-provider-info/Cargo.toml
+index e6a740d25..cd525cc2d 100644
+--- a/codex-rs/model-provider-info/Cargo.toml
++++ b/codex-rs/model-provider-info/Cargo.toml
+@@ -13,6 +13,7 @@ path = "src/lib.rs"
+ workspace = true
+ 
+ [dependencies]
++codex-provider-registry = { workspace = true, default-features = false }
+ codex-client = { workspace = true }
+ codex-protocol = { workspace = true }
+ codex-utils-redacted-string = { workspace = true }
+@@ -25,5 +26,6 @@ url = { workspace = true }
+ codex-utils-absolute-path = { workspace = true }
+ maplit = { workspace = true }
+ pretty_assertions = { workspace = true }
++serde_json = { workspace = true }
+ tempfile = { workspace = true }
+ toml = { workspace = true }
+diff --git a/codex-rs/model-provider-info/src/lib.rs b/codex-rs/model-provider-info/src/lib.rs
+index f020d34c2..a8ccceffd 100644
+--- a/codex-rs/model-provider-info/src/lib.rs
++++ b/codex-rs/model-provider-info/src/lib.rs
+@@ -108,12 +108,36 @@ pub enum WireApi {
+     /// The Responses API exposed by OpenAI at `/v1/responses`.
+     #[default]
+     Responses,
++    /// A provider selected by the registered `native_provider` ID.
++    Native,
++    Cursor,
++    #[serde(rename = "opencode-go")]
++    OpenCodeGo,
++    Claude,
++    Antigravity,
++}
++
++impl WireApi {
++    pub fn native_provider_id(self) -> Option<&'static str> {
++        match self {
++            Self::Responses | Self::Native => None,
++            Self::Cursor => Some("cursor"),
++            Self::OpenCodeGo => Some("opencode-go"),
++            Self::Claude => Some("claude"),
++            Self::Antigravity => Some("antigravity"),
++        }
++    }
+ }
+ 
+ impl fmt::Display for WireApi {
+     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+         let value = match self {
+             Self::Responses => "responses",
++            Self::Native => "native",
++            Self::Cursor => "cursor",
++            Self::OpenCodeGo => "opencode-go",
++            Self::Claude => "claude",
++            Self::Antigravity => "antigravity",
+         };
+         f.write_str(value)
+     }
+@@ -127,8 +151,23 @@ impl<'de> Deserialize<'de> for WireApi {
+         let value = String::deserialize(deserializer)?;
+         match value.as_str() {
+             "responses" => Ok(Self::Responses),
++            "native" => Ok(Self::Native),
++            "cursor" => Ok(Self::Cursor),
++            "opencode-go" => Ok(Self::OpenCodeGo),
++            "claude" => Ok(Self::Claude),
++            "antigravity" => Ok(Self::Antigravity),
+             "chat" => Err(serde::de::Error::custom(CHAT_WIRE_API_REMOVED_ERROR)),
+-            _ => Err(serde::de::Error::unknown_variant(&value, &["responses"])),
++            _ => Err(serde::de::Error::unknown_variant(
++                &value,
++                &[
++                    "responses",
++                    "native",
++                    "cursor",
++                    "opencode-go",
++                    "claude",
++                    "antigravity",
++                ],
++            )),
+         }
+     }
+ }
+@@ -164,6 +203,9 @@ pub struct ModelProviderInfo {
+     /// Which wire protocol this provider expects.
+     #[serde(default)]
+     pub wire_api: WireApi,
++    /// Registered provider ID required by `wire_api = "native"`.
++    #[serde(skip_serializing_if = "Option::is_none")]
++    pub native_provider: Option<String>,
+     /// Optional API capability overrides for a custom Responses-compatible provider.
+     /// Unspecified capabilities retain their existing provider defaults.
+     pub capabilities: Option<ModelProviderCapabilities>,
+@@ -296,7 +338,71 @@ other non-default provider fields are not supported"
+         Ok(())
+     }
+ 
++    /// Resolves both generic native configuration and preserved legacy wire aliases.
++    pub fn native_provider_id(&self) -> Option<&str> {
++        if self.wire_api == WireApi::Native {
++            self.native_provider.as_deref()
++        } else {
++            self.wire_api.native_provider_id()
++        }
++    }
++
+     pub fn validate(&self) -> std::result::Result<(), String> {
++        self.validate_with_registry(codex_provider_registry::registry())
++    }
++
++    pub fn validate_with_registry(
++        &self,
++        registry: &codex_provider_registry::Registry,
++    ) -> std::result::Result<(), String> {
++        match (self.wire_api, self.native_provider.as_deref()) {
++            (WireApi::Native, None) => {
++                return Err("wire_api = native requires native_provider".into());
++            }
++            (WireApi::Responses, Some(_)) => {
++                return Err("native_provider cannot be combined with wire_api = responses".into());
++            }
++            (wire, Some(id))
++                if wire != WireApi::Native && wire.native_provider_id() != Some(id) =>
++            {
++                return Err("native_provider conflicts with the legacy wire_api provider".into());
++            }
++            _ => {}
++        }
++        if let Some(id) = self.native_provider_id() {
++            if id.trim().is_empty() || id.trim() != id {
++                return Err(
++                    "native_provider must be nonempty without surrounding whitespace".into(),
++                );
++            }
++            if registry.get(id).is_none() {
++                return Err(format!("unknown native provider: {id}"));
++            }
++            if self.requires_openai_auth
++                || self.aws.is_some()
++                || self.auth.is_some()
++                || self.gateway_oauth.is_some()
++                || self.supports_websockets
++                || self.supports_standalone_web_search
++                || self.capabilities.is_some()
++                || self.model_catalog_url.is_some()
++                || self.query_params.is_some()
++                || self.http_headers.is_some()
++                || self.env_http_headers.is_some()
++                || self.stream_idle_timeout_ms.is_some()
++                || self.websocket_connect_timeout_ms.is_some()
++            {
++                return Err("native providers use their own authentication, discovery, headers, and streaming transport".into());
++            }
++            if self.request_max_retries.is_some_and(|value| value != 0)
++                || self.stream_max_retries.is_some_and(|value| value != 0)
++            {
++                return Err(
++                    "native provider retries must be zero; resume after interruption is explicit"
++                        .into(),
++                );
++            }
++        }
+         if let Some(gateway) = &self.gateway_oauth {
+             gateway.validate(self)?;
+         }
+@@ -425,6 +531,11 @@ other non-default provider fields are not supported"
+ 
+     /// Builds an API provider with managed residency taking precedence over configured headers.
+     pub fn to_api_provider(&self, auth_mode: Option<AuthMode>) -> CodexResult<ApiProvider> {
++        if self.wire_api != WireApi::Responses {
++            return Err(CodexErr::InvalidRequest(
++                "native providers require their registered session transport".into(),
++            ));
++        }
+         let default_base_url = if matches!(
+             auth_mode,
+             Some(
+@@ -497,6 +608,9 @@ other non-default provider fields are not supported"
+ 
+     /// Effective maximum number of request retries for this provider.
+     pub fn request_max_retries(&self) -> u64 {
++        if self.wire_api != WireApi::Responses {
++            return 0;
++        }
+         self.request_max_retries
+             .unwrap_or(DEFAULT_REQUEST_MAX_RETRIES)
+             .min(MAX_REQUEST_MAX_RETRIES)
+@@ -504,6 +618,9 @@ other non-default provider fields are not supported"
+ 
+     /// Effective maximum number of stream reconnection attempts for this provider.
+     pub fn stream_max_retries(&self) -> u64 {
++        if self.wire_api != WireApi::Responses {
++            return 0;
++        }
+         self.stream_max_retries
+             .unwrap_or(DEFAULT_STREAM_MAX_RETRIES)
+             .min(MAX_STREAM_MAX_RETRIES)
+@@ -535,6 +652,7 @@ other non-default provider fields are not supported"
+             gateway_oauth: None,
+             aws: None,
+             wire_api: WireApi::Responses,
++            native_provider: None,
+             query_params: None,
+             http_headers: Some(
+                 [("version".to_string(), env!("CARGO_PKG_VERSION").into())]
+@@ -587,6 +705,7 @@ other non-default provider fields are not supported"
+                 auth_refresh: None,
+             })),
+             wire_api: WireApi::Responses,
++            native_provider: None,
+             query_params: None,
+             http_headers: Some(HashMap::from([(
+                 AMAZON_BEDROCK_MANTLE_CLIENT_AGENT_HEADER.to_string(),
+@@ -659,6 +778,13 @@ pub const OLLAMA_OSS_PROVIDER_ID: &str = "ollama";
+ /// Built-in default provider list.
+ pub fn built_in_model_providers(
+     openai_base_url: Option<String>,
++) -> HashMap<String, ModelProviderInfo> {
++    built_in_model_providers_with_registry(openai_base_url, codex_provider_registry::registry())
++}
++
++pub fn built_in_model_providers_with_registry(
++    openai_base_url: Option<String>,
++    registry: &codex_provider_registry::Registry,
+ ) -> HashMap<String, ModelProviderInfo> {
+     use ModelProviderInfo as P;
+     let openai_provider = P::create_openai_provider(openai_base_url);
+@@ -666,11 +792,7 @@ pub fn built_in_model_providers(
+     let amazon_bedrock_runtime_provider =
+         P::create_amazon_bedrock_runtime_provider(/*aws*/ None);
+ 
+-    // We do not want to be in the business of adjucating which third-party
+-    // providers are bundled with Codex CLI, so we only include the OpenAI and
+-    // open source ("oss") providers by default. Users are encouraged to add to
+-    // `model_providers` in config.toml to add their own providers.
+-    [
++    let mut providers: HashMap<String, ModelProviderInfo> = [
+         (OPENAI_PROVIDER_ID, openai_provider),
+         (AMAZON_BEDROCK_PROVIDER_ID, amazon_bedrock_provider),
+         (
+@@ -688,7 +810,33 @@ pub fn built_in_model_providers(
+     ]
+     .into_iter()
+     .map(|(k, v)| (k.to_string(), v))
+-    .collect()
++    .collect();
++    for descriptor in registry.iter() {
++        // Preserve existing builtin config and remote wire representations.
++        // Providers without a recognized legacy alias use the generic form.
++        let wire_api = descriptor
++            .legacy_wire_aliases
++            .iter()
++            .find_map(|alias| {
++                WireApi::deserialize(
++                    serde::de::value::StrDeserializer::<serde::de::value::Error>::new(alias),
++                )
++                .ok()
++                .filter(|wire| wire.native_provider_id() == Some(descriptor.id))
++            })
++            .unwrap_or(WireApi::Native);
++        providers.insert(
++            descriptor.id.to_owned(),
++            P {
++                name: descriptor.display_name.into(),
++                wire_api,
++                native_provider: (wire_api == WireApi::Native).then(|| descriptor.id.into()),
++                env_key: descriptor.env_key.map(str::to_owned),
++                ..P::default()
++            },
++        );
++    }
++    providers
+ }
+ 
+ /// Merge configured providers into the built-in provider catalog.
+@@ -764,6 +912,7 @@ pub fn create_oss_provider_with_base_url(base_url: &str, wire_api: WireApi) -> M
+         gateway_oauth: None,
+         aws: None,
+         wire_api,
++        native_provider: None,
+         query_params: None,
+         http_headers: None,
+         env_http_headers: None,
+diff --git a/codex-rs/model-provider-info/src/model_provider_info_tests.rs b/codex-rs/model-provider-info/src/model_provider_info_tests.rs
+index 9c15c54b7..e7c36806b 100644
+--- a/codex-rs/model-provider-info/src/model_provider_info_tests.rs
++++ b/codex-rs/model-provider-info/src/model_provider_info_tests.rs
+@@ -5,6 +5,56 @@ use pretty_assertions::assert_eq;
+ use std::num::NonZeroU64;
+ use tempfile::tempdir;
+ 
++#[test]
++fn native_provider_configuration_round_trips_without_responses_fallback() {
++    for id in ["cursor", "opencode-go", "claude", "antigravity"] {
++        let provider = built_in_model_providers(None).remove(id).unwrap();
++        provider.validate().unwrap();
++        assert_eq!(provider.native_provider_id(), Some(id));
++        let encoded = toml::to_string(&provider).unwrap();
++        assert_eq!(
++            toml::from_str::<ModelProviderInfo>(&encoded).unwrap(),
++            provider
++        );
++        assert!(provider.to_api_provider(None).is_err());
++        assert_eq!(provider.request_max_retries(), 0);
++        assert_eq!(provider.stream_max_retries(), 0);
++        let mut changed = provider.clone();
++        changed.requires_openai_auth = true;
++        assert!(changed.validate().is_err());
++        let mut changed = provider.clone();
++        changed.stream_max_retries = Some(1);
++        assert!(changed.validate().is_err());
++        let mut changed = provider.clone();
++        changed.stream_idle_timeout_ms = Some(1);
++        assert!(changed.validate().is_err());
++        let mut changed = provider;
++        changed.websocket_connect_timeout_ms = Some(1);
++        assert!(changed.validate().is_err());
++    }
++}
++
++#[test]
++fn native_builtin_metadata_preserves_legacy_serialized_forms() {
++    let providers = built_in_model_providers(None);
++    for (id, wire_api) in [
++        ("cursor", WireApi::Cursor),
++        ("opencode-go", WireApi::OpenCodeGo),
++        ("claude", WireApi::Claude),
++        ("antigravity", WireApi::Antigravity),
++    ] {
++        let provider = &providers[id];
++        assert_eq!(provider.wire_api, wire_api);
++        assert_eq!(provider.native_provider, None);
++        let encoded = serde_json::to_value(provider).unwrap();
++        assert_eq!(encoded["wire_api"], id);
++        assert!(encoded.get("native_provider").is_none());
++        let encoded = toml::to_string(provider).unwrap();
++        assert!(encoded.contains(&format!("wire_api = {id:?}")));
++        assert!(!encoded.contains("native_provider"));
++    }
++}
++
+ #[test]
+ fn runtime_internal_metadata_opt_in_is_not_serialized_or_configurable() {
+     let trusted = ModelProviderInfo {
+@@ -86,6 +136,7 @@ base_url = "http://localhost:11434/v1"
+         gateway_oauth: None,
+         aws: None,
+         wire_api: WireApi::Responses,
++        native_provider: None,
+         query_params: None,
+         http_headers: None,
+         env_http_headers: None,
+@@ -123,6 +174,7 @@ query_params = { api-version = "2025-04-01-preview" }
+         gateway_oauth: None,
+         aws: None,
+         wire_api: WireApi::Responses,
++        native_provider: None,
+         query_params: Some(maplit::hashmap! {
+             "api-version".to_string() => "2025-04-01-preview".into(),
+         }),
+@@ -164,6 +216,7 @@ supports_standalone_web_search = true
+         gateway_oauth: None,
+         aws: None,
+         wire_api: WireApi::Responses,
++        native_provider: None,
+         query_params: None,
+         http_headers: Some(maplit::hashmap! {
+             "X-Example-Header".to_string() => "example-value".into(),
+@@ -355,6 +408,7 @@ fn test_create_amazon_bedrock_provider() {
+                 auth_refresh: None,
+             }),
+             wire_api: WireApi::Responses,
++            native_provider: None,
+             query_params: None,
+             http_headers: Some(maplit::hashmap! {
+                 AMAZON_BEDROCK_MANTLE_CLIENT_AGENT_HEADER.to_string() =>
+@@ -882,3 +936,122 @@ model_catalog_url = "https://gateway.example/codex/catalog?token=catalog-secret"
+         "https://gateway.example/v1"
+     );
+ }
++
++#[test]
++fn fifth_registered_provider_uses_generic_configuration_and_builtin_metadata() {
++    static FIFTH: codex_provider_registry::Descriptor = codex_provider_registry::Descriptor {
++        id: "fifth-provider",
++        display_name: "Fifth provider",
++        env_key: Some("FIFTH_API_KEY"),
++        auxiliary_model: "fifth-model",
++        legacy_wire_aliases: &[],
++        ..codex_provider_registry::OPENCODE
++    };
++    let mut registry = codex_provider_registry::registry().clone();
++    registry.register(&FIFTH).unwrap();
++    let configured: ModelProviderInfo = toml::from_str(
++        r#"
++name = "Custom fifth"
++wire_api = "native"
++native_provider = "fifth-provider"
++"#,
++    )
++    .unwrap();
++    configured.validate_with_registry(&registry).unwrap();
++    assert_eq!(configured.native_provider_id(), Some("fifth-provider"));
++    assert!(
++        configured
++            .validate()
++            .unwrap_err()
++            .contains("unknown native provider")
++    );
++    let encoded = toml::to_string(&configured).unwrap();
++    assert_eq!(
++        toml::from_str::<ModelProviderInfo>(&encoded).unwrap(),
++        configured
++    );
++    let builtin = built_in_model_providers_with_registry(None, &registry)
++        .remove("fifth-provider")
++        .unwrap();
++    assert_eq!(builtin.name, "Fifth provider");
++    assert_eq!(builtin.env_key.as_deref(), Some("FIFTH_API_KEY"));
++    assert_eq!(builtin.wire_api, WireApi::Native);
++    assert_eq!(builtin.native_provider.as_deref(), Some("fifth-provider"));
++    let encoded = serde_json::to_value(&builtin).unwrap();
++    assert_eq!(encoded["wire_api"], "native");
++    assert_eq!(encoded["native_provider"], "fifth-provider");
++    let encoded = toml::to_string(&builtin).unwrap();
++    assert_eq!(
++        toml::from_str::<ModelProviderInfo>(&encoded).unwrap(),
++        builtin
++    );
++    builtin.validate_with_registry(&registry).unwrap();
++}
++
++#[test]
++fn builtin_metadata_uses_generic_form_without_a_matching_legacy_wire_alias() {
++    static FUTURE: codex_provider_registry::Descriptor = codex_provider_registry::Descriptor {
++        id: "future-provider",
++        legacy_wire_aliases: &["future-wire", "responses", "native", "claude"],
++        ..codex_provider_registry::OPENCODE
++    };
++    let mut registry = codex_provider_registry::Registry::new();
++    registry.register(&FUTURE).unwrap();
++    let provider = built_in_model_providers_with_registry(None, &registry)
++        .remove("future-provider")
++        .unwrap();
++    assert_eq!(provider.wire_api, WireApi::Native);
++    assert_eq!(provider.native_provider.as_deref(), Some("future-provider"));
++    provider.validate_with_registry(&registry).unwrap();
++}
++
++#[test]
++fn native_provider_configuration_rejects_missing_unknown_and_conflicting_ids() {
++    for (wire, id, expected) in [
++        (WireApi::Native, None, "requires native_provider"),
++        (WireApi::Native, Some(""), "nonempty"),
++        (WireApi::Native, Some("   "), "nonempty"),
++        (WireApi::Native, Some(" cursor"), "surrounding whitespace"),
++        (WireApi::Native, Some("unknown"), "unknown native provider"),
++        (WireApi::Responses, Some("cursor"), "cannot be combined"),
++        (WireApi::Claude, Some("cursor"), "conflicts"),
++    ] {
++        let info = ModelProviderInfo {
++            wire_api: wire,
++            native_provider: id.map(str::to_owned),
++            ..Default::default()
++        };
++        assert!(info.validate().unwrap_err().contains(expected));
++    }
++}
++
++#[test]
++fn legacy_native_wire_aliases_preserve_serialized_forms() {
++    for id in ["cursor", "opencode-go", "claude", "antigravity"] {
++        let provider: ModelProviderInfo = toml::from_str(&format!("wire_api = {id:?}")).unwrap();
++        provider.validate().unwrap();
++        assert_eq!(provider.native_provider_id(), Some(id));
++        assert!(
++            toml::to_string(&provider)
++                .unwrap()
++                .contains(&format!("wire_api = {id:?}"))
++        );
++        let same_id = ModelProviderInfo {
++            native_provider: Some(id.into()),
++            ..provider
++        };
++        same_id.validate().unwrap();
++    }
++}
++
++#[test]
++fn incomplete_native_configuration_never_uses_responses_transport_or_retries() {
++    let provider = ModelProviderInfo {
++        wire_api: WireApi::Native,
++        ..Default::default()
++    };
++    assert!(provider.validate().is_err());
++    assert!(provider.to_api_provider(None).is_err());
++    assert_eq!(provider.request_max_retries(), 0);
++    assert_eq!(provider.stream_max_retries(), 0);
++}
+diff --git a/codex-rs/model-provider/Cargo.toml b/codex-rs/model-provider/Cargo.toml
+index ffda92383..e3d0256b4 100644
+--- a/codex-rs/model-provider/Cargo.toml
++++ b/codex-rs/model-provider/Cargo.toml
+@@ -12,7 +12,18 @@ path = "src/lib.rs"
+ [lints]
+ workspace = true
+ 
++[features]
++default = ["provider-cursor", "provider-opencode", "provider-claude", "provider-antigravity"]
++provider-cursor = ["codex-provider-adapter/provider-cursor"]
++provider-opencode = ["codex-provider-adapter/provider-opencode"]
++provider-claude = ["codex-provider-adapter/provider-claude"]
++provider-antigravity = ["codex-provider-adapter/provider-antigravity"]
++
+ [dependencies]
++hex = { workspace = true }
++codex-provider-adapter = { workspace = true, default-features = false }
++reqwest = { workspace = true, features = ["json", "stream"] }
++tokio-util = { workspace = true }
+ codex-utils-process = { workspace = true }
+ chrono = { workspace = true }
+ codex-api = { workspace = true }
+diff --git a/codex-rs/model-provider/src/lib.rs b/codex-rs/model-provider/src/lib.rs
+index 9c818af7d..6aa489191 100644
+--- a/codex-rs/model-provider/src/lib.rs
++++ b/codex-rs/model-provider/src/lib.rs
+@@ -5,6 +5,7 @@ mod capabilities;
+ mod combined_auth;
+ mod models_endpoint;
+ mod models_identity;
++pub mod native;
+ mod provider;
+ mod shared_state;
+ pub mod test_support;
+diff --git a/codex-rs/model-provider/src/models_identity.rs b/codex-rs/model-provider/src/models_identity.rs
+index 409ff83a0..5bf512d87 100644
+--- a/codex-rs/model-provider/src/models_identity.rs
++++ b/codex-rs/model-provider/src/models_identity.rs
+@@ -86,7 +86,7 @@ pub(crate) fn identity(
+     if let Some(gateway_oauth) = &provider_info.gateway_oauth {
+         field(&serde_json::to_vec(gateway_oauth)?);
+     }
+-    Ok(format!("{:x}", digest.finalize()))
++    Ok(hex::encode(digest.finalize()))
+ }
+ 
+ #[cfg(test)]
+diff --git a/codex-rs/model-provider/src/provider.rs b/codex-rs/model-provider/src/provider.rs
+index f8f0790dd..e1cf842b1 100644
+--- a/codex-rs/model-provider/src/provider.rs
++++ b/codex-rs/model-provider/src/provider.rs
+@@ -64,11 +64,15 @@ pub struct ProviderAuthRecoveryMessages {
+ pub enum ProviderAccountError {
+     MissingChatgptAccountDetails,
+     UnsupportedBedrockApiKeyAuth,
++    NativeStateUnavailable,
+ }
+ 
+ impl fmt::Display for ProviderAccountError {
+     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+         match self {
++            Self::NativeStateUnavailable => {
++                write!(f, "native provider account state is unavailable")
++            }
+             Self::MissingChatgptAccountDetails => {
+                 write!(f, "plan type is required for chatgpt authentication")
+             }
+@@ -106,6 +110,9 @@ pub const DEFAULT_MEMORY_CONSOLIDATION_PREFERRED_MODEL: &str = "gpt-5.6-terra";
+ /// `ModelProviderInfo` returned by `info` is the serialized/configured provider
+ /// metadata used by the default OpenAI-compatible implementation.
+ pub trait ModelProvider: fmt::Debug + Send + Sync {
++    fn backend(&self) -> Option<Arc<codex_provider_adapter::backend::NativeBackend>> {
++        None
++    }
+     /// Returns the configured provider metadata.
+     fn info(&self) -> &ModelProviderInfo;
+ 
+@@ -337,6 +344,12 @@ pub fn create_model_provider(
+     provider_info: ModelProviderInfo,
+     auth_manager: Option<Arc<AuthManager>>,
+ ) -> SharedModelProvider {
++    if provider_info.wire_api != codex_model_provider_info::WireApi::Responses {
++        let home = auth_manager
++            .as_ref()
++            .map(|manager| manager.runtime_config().codex_home);
++        return Arc::new(crate::native::NativeModelProvider::new(provider_info, home));
++    }
+     if provider_info.is_amazon_bedrock() {
+         return Arc::new(AmazonBedrockModelProvider::new(provider_info, auth_manager));
+     }
+@@ -644,6 +657,7 @@ mod tests {
+             gateway_oauth: None,
+             aws: None,
+             wire_api: WireApi::Responses,
++            native_provider: None,
+             query_params: None,
+             http_headers: None,
+             env_http_headers: None,
+@@ -1403,4 +1417,21 @@ printf '%s\n' '{"AccessKeyId":"exported","SecretAccessKey":"secret"}'
+             }
+         }
+     }
++    #[test]
++    fn incomplete_native_configuration_keeps_native_backend_and_returns_error() {
++        let provider = create_model_provider(
++            ModelProviderInfo {
++                wire_api: WireApi::Native,
++                ..Default::default()
++            },
++            None,
++        );
++        let backend = provider.backend().unwrap();
++        assert!(backend.descriptor().is_err());
++        assert!(backend.provider().is_err());
++        assert_eq!(
++            provider.account_state(),
++            Err(ProviderAccountError::NativeStateUnavailable)
++        );
++    }
+ }
+diff --git a/codex-rs/model-provider/src/shared_state_test_support.rs b/codex-rs/model-provider/src/shared_state_test_support.rs
+index d86ab7960..d4aeef68b 100644
+--- a/codex-rs/model-provider/src/shared_state_test_support.rs
++++ b/codex-rs/model-provider/src/shared_state_test_support.rs
+@@ -106,8 +106,11 @@ pub fn seed_gateway_auth(
+         digest.update(scope.as_bytes());
+         digest.update([0]);
+     }
+-    let name = SecretName::new(&format!("PROVIDER_OAUTH_{:X}", digest.finalize()))
+-        .expect("gateway test credential name");
++    let name = SecretName::new(&format!(
++        "PROVIDER_OAUTH_{}",
++        hex::encode_upper(digest.finalize())
++    ))
++    .expect("gateway test credential name");
+     secrets
+         .set(&SecretScope::Global, &name, &token.to_string())
+         .expect("seed encrypted gateway credentials");
+diff --git a/codex-rs/models-manager/src/manager.rs b/codex-rs/models-manager/src/manager.rs
+index b1efc0fe7..69cbb9990 100644
+--- a/codex-rs/models-manager/src/manager.rs
++++ b/codex-rs/models-manager/src/manager.rs
+@@ -46,6 +46,9 @@ pub trait ModelsEndpointClient: fmt::Debug + Send + Sync {
+     /// Return `None` when identity is unavailable; cached catalog reuse is then disabled.
+     fn identity(&self) -> Option<String>;
+ 
++    /// Bind discovery to a conversation when credentials can vary by thread.
++    fn bind_thread(&self, _thread: &str) {}
++
+     /// Returns whether this provider can authenticate command-scoped requests.
+     fn has_command_auth(&self) -> bool;
+ 
+@@ -118,6 +121,8 @@ pub trait ModelsManager: fmt::Debug + Send + Sync {
+     /// Static catalogs ignore this setting.
+     fn set_api_key_model_discovery_enabled(&self, _enabled: bool) {}
+ 
++    fn bind_thread(&self, _thread: &str) {}
++
+     /// List all available models, refreshing according to the specified strategy.
+     ///
+     /// Returns model presets sorted by priority and filtered by auth mode and visibility.
+@@ -379,6 +384,9 @@ impl StaticModelsManager {
+ }
+ 
+ impl ModelsManager for OpenAiModelsManager {
++    fn bind_thread(&self, thread: &str) {
++        self.endpoint_client.bind_thread(thread);
++    }
+     fn set_api_key_model_discovery_enabled(&self, enabled: bool) {
+         self.api_key_model_discovery_enabled
+             .store(enabled, Ordering::SeqCst);
+diff --git a/codex-rs/network-proxy/src/credential_broker/providers.rs b/codex-rs/network-proxy/src/credential_broker/providers.rs
+index 36adc873d..6afbae340 100644
+--- a/codex-rs/network-proxy/src/credential_broker/providers.rs
++++ b/codex-rs/network-proxy/src/credential_broker/providers.rs
+@@ -4,7 +4,7 @@ mod openai;
+ use super::destination::CredentialDestination;
+ use rama_http::HeaderMap;
+ use rama_http::HeaderValue;
+-use rand::Rng as _;
++use rand::RngExt as _;
+ use std::collections::HashMap;
+ use url::Url;
+ 
+diff --git a/codex-rs/protocol/src/agent_path.rs b/codex-rs/protocol/src/agent_path.rs
+index c0ad8b734..605518ec1 100644
+--- a/codex-rs/protocol/src/agent_path.rs
++++ b/codex-rs/protocol/src/agent_path.rs
+@@ -6,14 +6,21 @@ use std::ops::Deref;
+ use std::str::FromStr;
+ use ts_rs::TS;
+ 
+-#[derive(
+-    Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Serialize, Deserialize, JsonSchema, TS,
+-)]
++#[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Serialize, Deserialize, TS)]
+ #[serde(try_from = "String", into = "String")]
+-#[schemars(with = "String")]
+ #[ts(type = "string")]
+ pub struct AgentPath(String);
+ 
++impl JsonSchema for AgentPath {
++    fn schema_name() -> std::borrow::Cow<'static, str> {
++        "AgentPath".into()
++    }
++
++    fn json_schema(generator: &mut schemars::SchemaGenerator) -> schemars::Schema {
++        String::json_schema(generator)
++    }
++}
++
+ impl AgentPath {
+     pub const ROOT: &str = "/root";
+     pub const MORPHEUS: &str = "/morpheus";
+diff --git a/codex-rs/protocol/src/openai_models.rs b/codex-rs/protocol/src/openai_models.rs
+index 45e3d5c09..715159232 100644
+--- a/codex-rs/protocol/src/openai_models.rs
++++ b/codex-rs/protocol/src/openai_models.rs
+@@ -9,12 +9,8 @@ use std::str::FromStr;
+ use chrono::DateTime;
+ use chrono::Utc;
+ use schemars::JsonSchema;
+-use schemars::r#gen::SchemaGenerator;
+-use schemars::schema::InstanceType;
+-use schemars::schema::Metadata;
+-use schemars::schema::Schema;
+-use schemars::schema::SchemaObject;
+-use schemars::schema::StringValidation;
++use schemars::Schema;
++use schemars::generate::SchemaGenerator;
+ use serde::Deserialize;
+ use serde::Deserializer;
+ use serde::Serialize;
+@@ -99,24 +95,15 @@ impl fmt::Display for ReasoningEffort {
+ }
+ 
+ impl JsonSchema for ReasoningEffort {
+-    fn schema_name() -> String {
+-        "ReasoningEffort".to_string()
++    fn schema_name() -> std::borrow::Cow<'static, str> {
++        "ReasoningEffort".into()
+     }
+ 
+     fn json_schema(_generator: &mut SchemaGenerator) -> Schema {
+-        Schema::Object(SchemaObject {
+-            instance_type: Some(InstanceType::String.into()),
+-            metadata: Some(Box::new(Metadata {
+-                description: Some(
+-                    "A non-empty reasoning effort value advertised by the model.".to_string(),
+-                ),
+-                ..Default::default()
+-            })),
+-            string: Some(Box::new(StringValidation {
+-                min_length: Some(1),
+-                ..Default::default()
+-            })),
+-            ..Default::default()
++        schemars::json_schema!({
++            "type": "string",
++            "description": "A non-empty reasoning effort value advertised by the model.",
++            "minLength": 1,
+         })
+     }
+ }
+@@ -1427,19 +1414,10 @@ mod tests {
+ 
+         assert_eq!(
+             ReasoningEffort::json_schema(&mut effort_generator),
+-            Schema::Object(SchemaObject {
+-                instance_type: Some(InstanceType::String.into()),
+-                metadata: Some(Box::new(Metadata {
+-                    description: Some(
+-                        "A non-empty reasoning effort value advertised by the model.".to_string(),
+-                    ),
+-                    ..Default::default()
+-                })),
+-                string: Some(Box::new(StringValidation {
+-                    min_length: Some(1),
+-                    ..Default::default()
+-                })),
+-                ..Default::default()
++            schemars::json_schema!({
++                "type": "string",
++                "description": "A non-empty reasoning effort value advertised by the model.",
++                "minLength": 1,
+             })
+         );
+     }
+diff --git a/codex-rs/protocol/src/thread_id.rs b/codex-rs/protocol/src/thread_id.rs
+index 2e0f21561..898fd4a5f 100644
+--- a/codex-rs/protocol/src/thread_id.rs
++++ b/codex-rs/protocol/src/thread_id.rs
+@@ -1,8 +1,8 @@
+ use std::fmt::Display;
+ 
+ use schemars::JsonSchema;
+-use schemars::r#gen::SchemaGenerator;
+-use schemars::schema::Schema;
++use schemars::Schema;
++use schemars::generate::SchemaGenerator;
+ use serde::Deserialize;
+ use serde::Serialize;
+ use ts_rs::TS;
+@@ -100,8 +100,8 @@ impl<'de> Deserialize<'de> for ThreadId {
+ }
+ 
+ impl JsonSchema for ThreadId {
+-    fn schema_name() -> String {
+-        "ThreadId".to_string()
++    fn schema_name() -> std::borrow::Cow<'static, str> {
++        "ThreadId".into()
+     }
+ 
+     fn json_schema(generator: &mut SchemaGenerator) -> Schema {
+diff --git a/codex-rs/tui/src/app/agents_overview.rs b/codex-rs/tui/src/app/agents_overview.rs
+index 13d06dc3e..00fb570d8 100644
+--- a/codex-rs/tui/src/app/agents_overview.rs
++++ b/codex-rs/tui/src/app/agents_overview.rs
+@@ -115,7 +115,7 @@ impl App {
+                     (!workload_identity_selected).then(|| SelectionItem {
+                         name: "Start background server".to_string(),
+                         description: Some(
+-                            "Open `codex agents` in another terminal afterward".to_string(),
++                            "Open `nyacode agents` in another terminal afterward".to_string(),
+                         ),
+                         actions: vec![Box::new(|tx| tx.send(AppEvent::StartAgentsDaemon))],
+                         dismiss_on_select: true,
+diff --git a/codex-rs/tui/src/app/agents_overview_new.rs b/codex-rs/tui/src/app/agents_overview_new.rs
+index 1b9601836..198125cc3 100644
+--- a/codex-rs/tui/src/app/agents_overview_new.rs
++++ b/codex-rs/tui/src/app/agents_overview_new.rs
+@@ -184,10 +184,13 @@ impl App {
+                     );
+                     if !matches!(self.app_server_target, AppServerTarget::Embedded) {
+                         message.push_str(
+-                            " If the server restarts, Codex will reconnect automatically.",
++                            " If the server restarts, Nyacode will reconnect automatically.",
+                         );
+                     }
+-                    (Some("Codex's background server is shutting down"), message)
++                    (
++                        Some("Nyacode's background server is shutting down"),
++                        message,
++                    )
+                 } else {
+                     (None, format!("Failed to start session: {error}"))
+                 };
+diff --git a/codex-rs/tui/src/app/agents_overview_tests.rs b/codex-rs/tui/src/app/agents_overview_tests.rs
+index 8603973f3..bff6723c6 100644
+--- a/codex-rs/tui/src/app/agents_overview_tests.rs
++++ b/codex-rs/tui/src/app/agents_overview_tests.rs
+@@ -99,7 +99,7 @@ async fn server_version_overview_notice_updates_and_clears() {
+     let view = app.agents_overview_view(Vec::new(), /*selected_thread_id*/ None);
+     app.chat_widget.show_bottom_pane_view(Box::new(view));
+     let rendered = render_bottom_popup(&app.chat_widget, /*width*/ 80);
+-    insta::assert_snapshot!(rendered.lines().last().unwrap(), @"  Service v0.151.0 < Codex CLI v0.153.0");
++    insta::assert_snapshot!(rendered.lines().last().unwrap(), @"  Service v0.151.0 < Nyacode CLI v0.153.0");
+ 
+     app.update_server_version_overview_notice("0.153.0", /*server_version*/ None);
+     let view = app.agents_overview_view(Vec::new(), /*selected_thread_id*/ None);
+diff --git a/codex-rs/tui/src/app/snapshots/codex_tui__app__agents_overview__tests__older_server_notice_is_visible_in_agents_overview.snap b/codex-rs/tui/src/app/snapshots/codex_tui__app__agents_overview__tests__older_server_notice_is_visible_in_agents_overview.snap
+index 4e581bcd3..5e469304f 100644
+--- a/codex-rs/tui/src/app/snapshots/codex_tui__app__agents_overview__tests__older_server_notice_is_visible_in_agents_overview.snap
++++ b/codex-rs/tui/src/app/snapshots/codex_tui__app__agents_overview__tests__older_server_notice_is_visible_in_agents_overview.snap
+@@ -1,5 +1,5 @@
+ ---
+ source: tui/src/app/agents_overview_tests.rs
+-expression: "rendered.lines().find(|line| line.contains(\"Service v0.153.0\") ||\nline.contains(\"Service v0.152.1\")).unwrap()"
++expression: rendered.lines().last().unwrap()
+ ---
+-  Service v0.152.1 < Codex CLI v0.153.0
++  Service v0.152.1 < Nyacode CLI v0.153.0
+diff --git a/codex-rs/tui/src/app/snapshots/codex_tui__app__owned_transcript__empty_state_animation_tests__fresh_thread_header.snap b/codex-rs/tui/src/app/snapshots/codex_tui__app__owned_transcript__empty_state_animation_tests__fresh_thread_header.snap
+index 789d6e4bd..3e180c7a1 100644
+--- a/codex-rs/tui/src/app/snapshots/codex_tui__app__owned_transcript__empty_state_animation_tests__fresh_thread_header.snap
++++ b/codex-rs/tui/src/app/snapshots/codex_tui__app__owned_transcript__empty_state_animation_tests__fresh_thread_header.snap
+@@ -4,7 +4,7 @@ expression: "format!(\"enabled:\\n{}\\n---\\ndisabled:\\n{}\", text(after), text
+ ---
+ enabled:
+ 
+-  >_ OpenAI Codex (v0.0.0)
++  >_ Nyacode (v0.0.0)
+      /tmp/project
+ 
+ 
+@@ -16,24 +16,22 @@ enabled:
+ 
+ 
+ 
+-                                                       ⣀⣤⣤⣤⣀⣀
+-                                                    ⣠⣶⣿⣿⣿⣿⣿⣿⣿⣿⣦⣤⣤⣤⣤⣤⣤⡀
+-                                                  ⢀⣾⣿⣿⠿⠋⠉⠉⢉⣭⣿⣿⣿⣿⣿⠿⣿⣿⣿⣿⣷⣄
+-                                                 ⣀⣾⣿⣿⠃ ⣀⣴⣾⣿⣿⡿⠟⠋ ⣀⡀ ⠈⠙⢿⣿⣿⣧
+-                                              ⣀⣶⣿⣿⣿⣿⡇ ⢸⣿⣿⡿⠛⠉⢀⣠⣴⣿⣿⣿⣷⣦⣀⠈⢻⣿⣿⡇
+-                                             ⣰⣿⣿⡿⢿⣿⣿⡇ ⢸⣿⣿⢀⣤⣶⣿⣿⣿⠟⠛⠻⣿⣿⣿⣿⣮⣿⣿⡷
+-                                            ⢰⣿⣿⡟⠁⢸⣿⣿⡇ ⢸⣿⣿⣿⣿⠿⠿⣿⣿⣿⣦⣄⡀⠈⠛⠿⣿⣿⣿⣧⡀
+-                                            ⣾⣿⣿⠃ ⢸⣿⣿⡇ ⢸⣿⣿⠋⠁  ⠈⠙⢻⣿⣿⣿⣶⣤⡀ ⠹⢿⣿⣷⡄
+-                                            ⢸⣿⣿⣇ ⠸⣿⣿⣷⣦⣼⣿⣿      ⢸⣿⣿⠻⢿⣿⣿⡇ ⠘⣿⣿⣿
+-                                            ⠈⢿⣿⣿⣦⡀⠈⠛⠿⣿⣿⣿⣿⣄⡀  ⢀⣠⣼⣿⣿  ⣿⣿⡇  ⣿⣿⣿⠇
+-                                              ⢻⣿⣿⣿⣷⣦⣀⠈⠙⠻⣿⣿⣿⣶⣶⣿⣿⣿⣿⣿  ⣿⣿⡇ ⣠⣿⣿⣿
+-                                              ⢸⣿⣿⡿⢿⣿⣿⣿⣦⣠⣴⣿⣿⣿⡿⠟⠋⢸⣿⣿  ⣿⣿⣷⣴⣿⣿⣿⠃
+-                                              ⠘⣿⣿⣷ ⠈⠛⢿⣿⣿⣿⠿⠋⠉ ⣠⣴⣿⣿⣿  ⣿⣿⣿⣿⣿⠟⠁
+-                                               ⠻⣿⣿⣿⣤⣀ ⠈⠉ ⢀⣤⣶⣿⣿⣿⠿⠟⠁ ⣰⣿⣿⡟⠋⠁
+-                                                ⠈⠿⣿⣿⣿⣿⣶⣾⣿⣿⣿⣿⠟⠋⠁  ⣠⣼⣿⣿⡟
+-                                                   ⠙⠛⠛⠛⠻⠛⢿⣿⣿⣿⣿⣷⣾⣿⣿⣿⡿⠏
+-                                                          ⠈⠙⠛⠿⠿⠿⠿⠛⠉
+ 
++                                            ⣤⣄                            ⣀⣴⡆
++                                            ⣿⣿⣷⣄⡀                      ⢀⣠⣾⣿⣿⠇
++                                            ⣿⣿⣿⣿⣿⣦⡀                  ⢀⣴⣿⣿⣿⣿⣿
++                                            ⣿⣿⣿⣿⣿⣿⣿⣶⣄              ⣠⣾⣿⣿⣿⣿⣿⣿⣿
++                                            ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣦⣤⣤⣤⣤⣶⣶⣶⣶⣶⣶⣶⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
++                                            ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
++                                            ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
++                                            ⣿⣿⣿⣿⣿⣿⣿⠿⠿⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠿⠿⢿⣿⣿⣿⣿⣿⣿⡄
++                                            ⣿⣿⣿⣿⣿⣿⣿   ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇  ⢸⣿⣿⣿⣿⣿⣿⡇
++                                            ⣿⣿⣿⣿⣿⣿⣿⣶⣶⣶⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣶⣶⣾⣿⣿⣿⣿⣿⣿⡇
++                                            ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇
++                                            ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇
++                                            ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇
++                                            ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇
++                                            ⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠻⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠇
+ 
+ 
+ 
+@@ -43,14 +41,16 @@ enabled:
+ 
+ 
+ 
+-› Ask Codex to do anything
++
++
++› Ask Nyacode to do anything
+ 
+   GPT-5.6-Sol default · /tmp/project
+   ? for shortcuts                                                                              ⚠ 1 warning · f2 to view
+ ---
+ disabled:
+ 
+-  >_ OpenAI Codex (v0.0.0)
++  >_ Nyacode (v0.0.0)
+      /tmp/project
+ 
+ 
+@@ -89,7 +89,7 @@ disabled:
+ 
+ 
+ 
+-› Ask Codex to do anything
++› Ask Nyacode to do anything
+ 
+   GPT-5.6-Sol default · /tmp/project
+   ? for shortcuts                                                                              ⚠ 1 warning · f2 to view
+diff --git a/codex-rs/tui/src/app/snapshots/codex_tui__app__tests__app_server_thread_replacement_clears_previous_transcript_before_replay-2.snap b/codex-rs/tui/src/app/snapshots/codex_tui__app__tests__app_server_thread_replacement_clears_previous_transcript_before_replay-2.snap
+index 8aa1bca71..f6318faf6 100644
+--- a/codex-rs/tui/src/app/snapshots/codex_tui__app__tests__app_server_thread_replacement_clears_previous_transcript_before_replay-2.snap
++++ b/codex-rs/tui/src/app/snapshots/codex_tui__app__tests__app_server_thread_replacement_clears_previous_transcript_before_replay-2.snap
+@@ -1,10 +1,9 @@
+ ---
+ source: tui/src/app/tests.rs
+-assertion_line: 6513
+ expression: rendered
+ ---
+ 
+-  >_ OpenAI Codex (v0.0.0)
++  >_ Nyacode (v0.0.0)
+      <thread cwd>
+ 
+ 
+diff --git a/codex-rs/tui/src/app/snapshots/codex_tui__app__thread_goal_actions__tests__thread_goal_ephemeral_error_message_renders_snapshot.snap b/codex-rs/tui/src/app/snapshots/codex_tui__app__thread_goal_actions__tests__thread_goal_ephemeral_error_message_renders_snapshot.snap
+index d2faad28d..3007ba600 100644
+--- a/codex-rs/tui/src/app/snapshots/codex_tui__app__thread_goal_actions__tests__thread_goal_ephemeral_error_message_renders_snapshot.snap
++++ b/codex-rs/tui/src/app/snapshots/codex_tui__app__thread_goal_actions__tests__thread_goal_ephemeral_error_message_renders_snapshot.snap
+@@ -5,5 +5,5 @@ expression: terminal.backend()
+ 
+ 
+ ■ Goals need a saved session. This session is temporary.
+-Run `codex` to start a saved session, or `codex resume` / `/resume` to
+-reopen one.
++Run `nyacode` to start a saved session, or `nyacode resume` / `/resume`
++to reopen one.
+diff --git a/codex-rs/tui/src/app/snapshots/codex_tui__app__thread_title__tests__manual_rename_cancels_thread_title.snap b/codex-rs/tui/src/app/snapshots/codex_tui__app__thread_title__tests__manual_rename_cancels_thread_title.snap
+index a37e03f7f..7cf3fb4dc 100644
+--- a/codex-rs/tui/src/app/snapshots/codex_tui__app__thread_title__tests__manual_rename_cancels_thread_title.snap
++++ b/codex-rs/tui/src/app/snapshots/codex_tui__app__thread_title__tests__manual_rename_cancels_thread_title.snap
+@@ -1,8 +1,7 @@
+ ---
+ source: tui/src/app/thread_title_tests.rs
+-assertion_line: 363
+ expression: normalize_snapshot_paths(popup)
+ ---
+-› Ask Codex to do anything
++› Ask Nyacode to do anything
+ 
+   gpt-5.2 default · /tmp/project · Keep this title
+diff --git a/codex-rs/tui/src/app/snapshots/codex_tui__app__turn_tips__tests__turn_tip_placements.snap b/codex-rs/tui/src/app/snapshots/codex_tui__app__turn_tips__tests__turn_tip_placements.snap
+index f6cfeee61..825593e39 100644
+--- a/codex-rs/tui/src/app/snapshots/codex_tui__app__turn_tips__tests__turn_tip_placements.snap
++++ b/codex-rs/tui/src/app/snapshots/codex_tui__app__turn_tips__tests__turn_tip_placements.snap
+@@ -12,7 +12,7 @@ Response row 0
+   └ Tip: Try /help.
+ 
+ 
+-› Ask Codex to do anything
++› Ask Nyacode to do anything
+ 
+   gpt-test default · /tmp/project
+   ? for shortcuts
+@@ -20,7 +20,7 @@ Response row 0
+ working=true, response rows=1, 80x6
+ • Working (0s • esc to interrupt)
+ 
+-› Ask Codex to do anything
++› Ask Nyacode to do anything
+ 
+   gpt-test default · /tmp/project
+   ? for shortcuts
+@@ -34,7 +34,7 @@ working=false, response rows=1, 80x12
+   Worked for [duration] • [completion time]
+ 
+ 
+-› Ask Codex to do anything
++› Ask Nyacode to do anything
+ 
+   gpt-test default · /tmp/project
+   ? for shortcuts
+@@ -60,7 +60,7 @@ Response row 0
+ 
+ 
+ 
+-› Ask Codex to do anything
++› Ask Nyacode to do anything
+ 
+   gpt-test default · /tmp/project
+   ? for shortcuts
+@@ -86,7 +86,7 @@ Response row 0
+ 
+                                                                Copying 5 chars…
+ 
+-› Ask Codex to do anything
++› Ask Nyacode to do anything
+ 
+   gpt-test default · /tmp/project
+   ? for shortcuts
+@@ -100,7 +100,7 @@ working=false, response rows=30, 80x12
+   Worked for [duration] • [completion time]
+ 
+ 
+-› Ask Codex to do anything
++› Ask Nyacode to do anything
+ 
+   gpt-test default · /tmp/project
+   ? for shortcuts
+@@ -111,7 +111,7 @@ working=false, response rows=1, 80x9
+   Worked for [duration] • [completion time]
+ 
+ 
+-› Ask Codex to do anything
++› Ask Nyacode to do anything
+ 
+   gpt-test default · /tmp/project
+   ? for shortcuts
+@@ -123,7 +123,7 @@ working=false, response rows=1, 80x10
+   Worked for [duration] • [completion time]
+ 
+ 
+-› Ask Codex to do anything
++› Ask Nyacode to do anything
+ 
+   gpt-test default · /tmp/project
+   ? for shortcuts
+@@ -136,7 +136,7 @@ working=false, response rows=1, 80x11
+   Worked for [duration] • [completion time]
+ 
+ 
+-› Ask Codex to do anything
++› Ask Nyacode to do anything
+ 
+   gpt-test default · /tmp/project
+   ? for shortcuts
+@@ -150,13 +150,13 @@ working=false, response rows=1, 12x12
+   [completion time]
+ 
+ 
+-› Ask Codex
++› Ask Nyaco
+ 
+   gpt-test …
+   ? for shor
+ 
+ working=false, response rows=1, 80x4
+ 
+-› Ask Codex to do anything
++› Ask Nyacode to do anything
+ 
+   ? for shortcuts
+diff --git a/codex-rs/tui/src/app/snapshots/codex_tui__app__turn_tips__tests__working_tip_mouse_down.snap b/codex-rs/tui/src/app/snapshots/codex_tui__app__turn_tips__tests__working_tip_mouse_down.snap
+index a39deb9a8..c48ab008c 100644
+--- a/codex-rs/tui/src/app/snapshots/codex_tui__app__turn_tips__tests__working_tip_mouse_down.snap
++++ b/codex-rs/tui/src/app/snapshots/codex_tui__app__turn_tips__tests__working_tip_mouse_down.snap
+@@ -1,7 +1,6 @@
+ ---
+ source: tui/src/app/turn_tips_tests.rs
+-assertion_line: 422
+-expression: screen
++expression: "crate::chatwidget::tests::helpers::normalize_snapshot_paths(screen)"
+ ---
+ Response row 0
+ Response row 1
+@@ -23,7 +22,7 @@ Response row 9
+   └ Tip: Try /help.
+ 
+ 
+-› Ask Codex to do anything
++› Ask Nyacode to do anything
+ 
+   gpt-test default · /tmp/project
+   ? for shortcuts
+diff --git a/codex-rs/tui/src/app/snapshots/codex_tui__app__turn_tips__tests__working_tip_selected.snap b/codex-rs/tui/src/app/snapshots/codex_tui__app__turn_tips__tests__working_tip_selected.snap
+index 870b86f61..4a577d2eb 100644
+--- a/codex-rs/tui/src/app/snapshots/codex_tui__app__turn_tips__tests__working_tip_selected.snap
++++ b/codex-rs/tui/src/app/snapshots/codex_tui__app__turn_tips__tests__working_tip_selected.snap
+@@ -23,7 +23,7 @@ Response row 9
+   └ Tip: Try /help.
+                                                                Copying 5 chars…
+ 
+-› Ask Codex to do anything
++› Ask Nyacode to do anything
+ 
+   gpt-test default · /tmp/project
+   ? for shortcuts
+diff --git a/codex-rs/tui/src/app/tests/model_catalog.rs b/codex-rs/tui/src/app/tests/model_catalog.rs
+index 273725c2f..15fa127ad 100644
+--- a/codex-rs/tui/src/app/tests/model_catalog.rs
++++ b/codex-rs/tui/src/app/tests/model_catalog.rs
+@@ -512,7 +512,7 @@ async fn accepted_model_migration_persists_target_default_reasoning_effort() ->
+ 
+     Our latest Sol is more intelligent and more efficient so your usage limits go further. This model is a great daily driver for complex tasks, especially coding.
+ 
+-    GPT-5.4 on Amazon Bedrock is no longer offered in Codex
++    GPT-5.4 on Amazon Bedrock is no longer offered in Nyacode
+ 
+     Codex now uses GPT-6 Sol on Amazon Bedrock in place of GPT-5.4 on Amazon Bedrock. Switch to GPT-6 Sol on Amazon Bedrock to continue.
+     ");
+diff --git a/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__background_task_defaults_tests__review_regression_agents_overview_creation_is_fresh_but_returning_is_not.snap b/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__background_task_defaults_tests__review_regression_agents_overview_creation_is_fresh_but_returning_is_not.snap
+index c249adfe8..5ee8e6f41 100644
+--- a/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__background_task_defaults_tests__review_regression_agents_overview_creation_is_fresh_but_returning_is_not.snap
++++ b/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__background_task_defaults_tests__review_regression_agents_overview_creation_is_fresh_but_returning_is_not.snap
+@@ -4,7 +4,7 @@ expression: "format!(\"created from the dashboard:\\n{}\\nreturned to the existi
+ ---
+ created from the dashboard:
+                             ⠈     ⢀     ⠁                 ⠂
+-›⠁Ask Codex to do anything         ⠈      ⠁
++›⠁Ask Nyacode to do anything       ⠈      ⠁
+        ⢀            ⠠     ⠄         ⠠          ⢀    ⠠     ⡀
+ returned to the existing task:
+-› Ask Codex to do anything
++› Ask Nyacode to do anything
+diff --git a/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__fresh_sparkle_tests__astra_picker_confirms_the_model_at_application_after_an_automatic_update.snap b/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__fresh_sparkle_tests__astra_picker_confirms_the_model_at_application_after_an_automatic_update.snap
+index 243ad7ae6..fdd703dfa 100644
+--- a/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__fresh_sparkle_tests__astra_picker_confirms_the_model_at_application_after_an_automatic_update.snap
++++ b/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__fresh_sparkle_tests__astra_picker_confirms_the_model_at_application_after_an_automatic_update.snap
+@@ -3,10 +3,10 @@ source: tui/src/app/tests/fresh_sparkle_tests.rs
+ expression: "snapshots.join(\"\\n\\n\")"
+ ---
+ default no-op:
+-› Ask Codex to do anything
++› Ask Nyacode to do anything
+ 
+ 
+ default changes model:
+                             ⠈     ⢀     ⠁                 ⠂
+-›⠁Ask Codex to do anything         ⠈      ⠁
++›⠁Ask Nyacode to do anything       ⠈      ⠁
+        ⢀            ⠠     ⠄         ⠠          ⢀    ⠠     ⡀
+diff --git a/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__model_catalog__model_migration_prompt_shows_for_hidden_model.snap b/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__model_catalog__model_migration_prompt_shows_for_hidden_model.snap
+index 856db38d0..c2c473bd5 100644
+--- a/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__model_catalog__model_migration_prompt_shows_for_hidden_model.snap
++++ b/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__model_catalog__model_migration_prompt_shows_for_hidden_model.snap
+@@ -2,7 +2,7 @@
+ source: tui/src/app/tests/model_catalog.rs
+ expression: model_migration_copy_to_plain_text(&copy)
+ ---
+-Codex just got an upgrade. Introducing GPT-5.5.
++Nyacode just got an upgrade. Introducing GPT-5.5.
+ 
+ We recommend switching from gpt-5.2 to gpt-5.5.
+ 
+diff --git a/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__realtime_requests__voice_completed_after_thread_switch.snap b/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__realtime_requests__voice_completed_after_thread_switch.snap
+index 2ecde209a..057dd6275 100644
+--- a/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__realtime_requests__voice_completed_after_thread_switch.snap
++++ b/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__realtime_requests__voice_completed_after_thread_switch.snap
+@@ -1,17 +1,16 @@
+ ---
+ source: tui/src/app/tests/realtime_requests.rs
+-assertion_line: 1093
+ expression: "normalize_voice_snapshot_directory(&rendered, &app.config.cwd)"
+ ---
+ 
+-  >_ OpenAI Codex (v0.0.0)
++  >_ Nyacode (v0.0.0)
+      /tmp/project
+ 
+   To get started, describe a task or try one of these commands:
+ 
+-  /init - create an AGENTS.md file with instructions for Codex
++  /init - create an AGENTS.md file with instructions for Nyacode
+   /status - show current session configuration
+-  /permissions - choose what Codex is allowed to do
++  /permissions - choose what Nyacode is allowed to do
+   /model - choose what model and reasoning effort to use
+   /review - review any changes and find issues
+ • Earlier answer
+diff --git a/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__realtime_requests__voice_partial_completed_after_thread_switch.snap b/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__realtime_requests__voice_partial_completed_after_thread_switch.snap
+index bfd8b46a6..0516b9eca 100644
+--- a/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__realtime_requests__voice_partial_completed_after_thread_switch.snap
++++ b/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__realtime_requests__voice_partial_completed_after_thread_switch.snap
+@@ -3,25 +3,25 @@ source: tui/src/app/tests/realtime_requests.rs
+ expression: "normalize_voice_snapshot_directory(&format!(\"Other task:\\n{other_ui}\\nRestored owner:\\n{}\\n{rendered}\",\nrender_bottom_popup(&app.chat_widget, 80)), &app.config.cwd,)"
+ ---
+ Other task:
+-› Ask Codex to do anything
++› Ask Nyacode to do anything
+ 
+   gpt-test default · /tmp/project
+ Restored owner:
+  voice ● listening                                      f9 mute     /voice stop
+    mic ▁▁▁▁▁▁  codex ▁▁▁▁▁▁
+ 
+-› Ask Codex to do anything
++› Ask Nyacode to do anything
+ 
+   gpt-test default · /tmp/project
+ 
+-  >_ OpenAI Codex (v0.0.0)
++  >_ Nyacode (v0.0.0)
+      /tmp/project
+ 
+   To get started, describe a task or try one of these commands:
+ 
+-  /init - create an AGENTS.md file with instructions for Codex
++  /init - create an AGENTS.md file with instructions for Nyacode
+   /status - show current session configuration
+-  /permissions - choose what Codex is allowed to do
++  /permissions - choose what Nyacode is allowed to do
+   /model - choose what model and reasoning effort to use
+   /review - review any changes and find issues
+ 
+diff --git a/codex-rs/tui/src/app/thread_goal_actions.rs b/codex-rs/tui/src/app/thread_goal_actions.rs
+index 166e09010..6a5b5f119 100644
+--- a/codex-rs/tui/src/app/thread_goal_actions.rs
++++ b/codex-rs/tui/src/app/thread_goal_actions.rs
+@@ -17,7 +17,7 @@ use codex_protocol::ThreadId;
+ 
+ const EPHEMERAL_THREAD_GOAL_ERROR_MESSAGE: &str = concat!(
+     "Goals need a saved session. This session is temporary.\n",
+-    "Run `codex` to start a saved session, or `codex resume` / `/resume` to reopen one.",
++    "Run `nyacode` to start a saved session, or `nyacode resume` / `/resume` to reopen one.",
+ );
+ 
+ impl App {
+diff --git a/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__approval_overlay__tests__approval_overlay_cross_thread_prompt.snap b/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__approval_overlay__tests__approval_overlay_cross_thread_prompt.snap
+index d38f759b4..8af90e208 100644
+--- a/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__approval_overlay__tests__approval_overlay_cross_thread_prompt.snap
++++ b/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__approval_overlay__tests__approval_overlay_cross_thread_prompt.snap
+@@ -11,6 +11,6 @@ expression: "render_overlay_lines(&view, 80)"
+ 
+ 
+ › 1. Yes, proceed (y)
+-  2. No, and tell Codex what to do differently (esc)
++  2. No, and tell Nyacode what to do differently (esc)
+ 
+   Press enter to confirm or esc to cancel or o to open thread
+diff --git a/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__list_selection_view__tests__list_selection_model_picker_width_80.snap b/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__list_selection_view__tests__list_selection_model_picker_width_80.snap
+index 0c0351d93..b65b2e76a 100644
+--- a/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__list_selection_view__tests__list_selection_model_picker_width_80.snap
++++ b/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__list_selection_view__tests__list_selection_model_picker_width_80.snap
+@@ -1,14 +1,13 @@
+ ---
+ source: tui/src/bottom_pane/list_selection_view.rs
+-assertion_line: 2825
+ expression: "render_lines_with_width(&view, 80)"
+ ---
+   Select Model and Effort                                                       
+                                                                                 
+                                                                                 
+-› 1. gpt-5.1-codex (current)  Optimized for Codex. Balance of reasoning quality 
+-                              and coding ability.                               
+-  2. gpt-5.1-codex-mini       Optimized for Codex. Cheaper, faster, but less    
++› 1. gpt-5.1-codex (current)  Optimized for Nyacode. Balance of reasoning       
++                              quality and coding ability.                       
++  2. gpt-5.1-codex-mini       Optimized for Nyacode. Cheaper, faster, but less  
+                               capable.                                          
+   3. gpt-4.1-codex            Legacy model. Use when you need compatibility with
+                               older automations.
+diff --git a/codex-rs/tui/src/external_agent_config_migration/model.rs b/codex-rs/tui/src/external_agent_config_migration/model.rs
+index b6760d3b7..e3f6d5955 100644
+--- a/codex-rs/tui/src/external_agent_config_migration/model.rs
++++ b/codex-rs/tui/src/external_agent_config_migration/model.rs
+@@ -56,7 +56,7 @@ pub(crate) fn external_agent_config_migration_groups(
+             } else {
+                 format!("Projects ({project_count})")
+             },
+-            description: "Add Codex files alongside your existing project files",
++            description: "Add Nyacode files alongside your existing project files",
+             item_indices: projects,
+         });
+     }
+diff --git a/codex-rs/tui/src/external_agent_config_migration/render.rs b/codex-rs/tui/src/external_agent_config_migration/render.rs
+index 4d6a736f0..76f530c44 100644
+--- a/codex-rs/tui/src/external_agent_config_migration/render.rs
++++ b/codex-rs/tui/src/external_agent_config_migration/render.rs
+@@ -84,12 +84,12 @@ impl WidgetRef for &ExternalAgentConfigMigrationScreen {
+         let intro_lines = match self.view {
+             MigrationView::Summary => vec![
+                 Line::from("Bring over supported setup from another coding agent."),
+-                Line::from("Codex may add files to your current project folder."),
++                Line::from("Nyacode may add files to your current project folder."),
+                 Line::from("Your existing setup will not be changed."),
+             ],
+             MigrationView::Customize => vec![
+                 Line::from("Choose items to import."),
+-                Line::from("Codex may add files to your current project folder."),
++                Line::from("Nyacode may add files to your current project folder."),
+                 Line::from("Your existing setup will not be changed."),
+             ],
+         };
+diff --git a/codex-rs/tui/src/external_agent_config_migration/snapshots/codex_tui__external_agent_config_migration__tests__external_agent_config_migration_customize.snap b/codex-rs/tui/src/external_agent_config_migration/snapshots/codex_tui__external_agent_config_migration__tests__external_agent_config_migration_customize.snap
+index 08ff99ff9..15e02b0e4 100644
+--- a/codex-rs/tui/src/external_agent_config_migration/snapshots/codex_tui__external_agent_config_migration__tests__external_agent_config_migration_customize.snap
++++ b/codex-rs/tui/src/external_agent_config_migration/snapshots/codex_tui__external_agent_config_migration__tests__external_agent_config_migration_customize.snap
+@@ -5,7 +5,7 @@ expression: rendered
+ 
+   > Choose what to import
+   Choose items to import.
+-  Codex may add files to your current project folder.
++  Nyacode may add files to your current project folder.
+   Your existing setup will not be changed.
+   Home
+   › [x] Settings
+diff --git a/codex-rs/tui/src/external_agent_config_migration/snapshots/codex_tui__external_agent_config_migration__tests__external_agent_config_migration_customize_action.snap b/codex-rs/tui/src/external_agent_config_migration/snapshots/codex_tui__external_agent_config_migration__tests__external_agent_config_migration_customize_action.snap
+index 74655a4db..8981360e9 100644
+--- a/codex-rs/tui/src/external_agent_config_migration/snapshots/codex_tui__external_agent_config_migration__tests__external_agent_config_migration_customize_action.snap
++++ b/codex-rs/tui/src/external_agent_config_migration/snapshots/codex_tui__external_agent_config_migration__tests__external_agent_config_migration_customize_action.snap
+@@ -5,7 +5,7 @@ expression: rendered
+ 
+   > Choose what to import
+   Choose items to import.
+-  Codex may add files to your current project folder.
++  Nyacode may add files to your current project folder.
+   Your existing setup will not be changed.
+   Home
+     [x] Settings
+diff --git a/codex-rs/tui/src/external_agent_config_migration/snapshots/codex_tui__external_agent_config_migration__tests__external_agent_config_migration_prompt.snap b/codex-rs/tui/src/external_agent_config_migration/snapshots/codex_tui__external_agent_config_migration__tests__external_agent_config_migration_prompt.snap
+index 8998de2ec..09db30f91 100644
+--- a/codex-rs/tui/src/external_agent_config_migration/snapshots/codex_tui__external_agent_config_migration__tests__external_agent_config_migration_prompt.snap
++++ b/codex-rs/tui/src/external_agent_config_migration/snapshots/codex_tui__external_agent_config_migration__tests__external_agent_config_migration_prompt.snap
+@@ -5,13 +5,13 @@ expression: rendered
+ 
+   > Import setup
+   Bring over supported setup from another coding agent.
+-  Codex may add files to your current project folder.
++  Nyacode may add files to your current project folder.
+   Your existing setup will not be changed.
+     [x] Tools & setup
+         Settings, instructions, integrations, agents, commands, and skills
+         Importing: Settings 1, Memory 1
+     [x] Current project
+-        Add Codex files alongside your existing project files
++        Add Nyacode files alongside your existing project files
+         Importing: Plugins 6, Instructions 1
+     [x] Chat sessions (1)
+         Last 30 days of chats
+diff --git a/codex-rs/tui/src/external_agent_config_migration/snapshots/codex_tui__external_agent_config_migration__tests__external_agent_config_migration_secondary_source_customize.snap b/codex-rs/tui/src/external_agent_config_migration/snapshots/codex_tui__external_agent_config_migration__tests__external_agent_config_migration_secondary_source_customize.snap
+index 47f673802..76f5cbe54 100644
+--- a/codex-rs/tui/src/external_agent_config_migration/snapshots/codex_tui__external_agent_config_migration__tests__external_agent_config_migration_secondary_source_customize.snap
++++ b/codex-rs/tui/src/external_agent_config_migration/snapshots/codex_tui__external_agent_config_migration__tests__external_agent_config_migration_secondary_source_customize.snap
+@@ -5,7 +5,7 @@ expression: rendered
+ 
+   > Choose what to import
+   Choose items to import.
+-  Codex may add files to your current project folder.
++  Nyacode may add files to your current project folder.
+   Your existing setup will not be changed.
+   Home
+   › [x] Settings
+diff --git a/codex-rs/tui/src/model_migration.rs b/codex-rs/tui/src/model_migration.rs
+index 47ed0fdb4..741362440 100644
+--- a/codex-rs/tui/src/model_migration.rs
++++ b/codex-rs/tui/src/model_migration.rs
+@@ -89,7 +89,7 @@ pub(crate) fn migration_copy_for_models(
+     }
+ 
+     let heading_text = Span::from(format!(
+-        "Codex just got an upgrade. Introducing {target_display_name}."
++        "Nyacode just got an upgrade. Introducing {target_display_name}."
+     ))
+     .bold();
+     let description_line: Line<'static>;
+@@ -442,7 +442,7 @@ mod tests {
+                 ),
+                 /*migration_markdown*/ None,
+                 "gpt-5.1-codex-max".to_string(),
+-                Some("Codex-optimized flagship for deep and fast reasoning.".to_string()),
++                Some("Nyacode-optimized flagship for deep and fast reasoning.".to_string()),
+                 /*can_opt_out*/ true,
+             ),
+         );
+diff --git a/codex-rs/tui/src/pets/model.rs b/codex-rs/tui/src/pets/model.rs
+index aa02731ab..e90c080ad 100644
+--- a/codex-rs/tui/src/pets/model.rs
++++ b/codex-rs/tui/src/pets/model.rs
+@@ -102,9 +102,9 @@ impl Pet {
+     pub(super) fn frame_cache_key(&self) -> Result<String> {
+         let bytes = fs::read(&self.spritesheet_path)
+             .with_context(|| format!("read {}", self.spritesheet_path.display()))?;
+-        let digest = Sha256::digest(&bytes);
++        let digest = hex::encode(Sha256::digest(&bytes));
+         Ok(format!(
+-            "sha256-{digest:x}-{}x{}-{}x{}",
++            "sha256-{digest}-{}x{}-{}x{}",
+             self.frame_width, self.frame_height, self.columns, self.rows
+         ))
+     }
+diff --git a/codex-rs/tui/src/snapshots/codex_tui__app__agents_overview__tests__agents_daemon_started.snap b/codex-rs/tui/src/snapshots/codex_tui__app__agents_overview__tests__agents_daemon_started.snap
+index db60e61eb..b35d2f4eb 100644
+--- a/codex-rs/tui/src/snapshots/codex_tui__app__agents_overview__tests__agents_daemon_started.snap
++++ b/codex-rs/tui/src/snapshots/codex_tui__app__agents_overview__tests__agents_daemon_started.snap
+@@ -1,6 +1,5 @@
+ ---
+ source: tui/src/app/agents_overview_tests.rs
+-assertion_line: 401
+ expression: rendered
+ ---
+-• Background server started. Run `codex agents` in another terminal; this session remains unchanged.
++• Background server started. Run `nyacode agents` in another terminal; this session remains unchanged.
+diff --git a/codex-rs/tui/src/snapshots/codex_tui__app__agents_overview__tests__agents_overview_embedded.snap b/codex-rs/tui/src/snapshots/codex_tui__app__agents_overview__tests__agents_overview_embedded.snap
+index 223ffd9ea..3c71d8551 100644
+--- a/codex-rs/tui/src/snapshots/codex_tui__app__agents_overview__tests__agents_overview_embedded.snap
++++ b/codex-rs/tui/src/snapshots/codex_tui__app__agents_overview__tests__agents_overview_embedded.snap
+@@ -6,7 +6,7 @@ expression: "render_bottom_popup(&app.chat_widget, 96)"
+   This session isn’t connected to a shared background server.
+ 
+ 
+-› 1. Start background server  Open `codex agents` in another terminal afterward
++› 1. Start background server  Open `nyacode agents` in another terminal afterward
+   2. Return to this session
+ 
+   Starting a background server will not interrupt or move this session.
+diff --git a/codex-rs/tui/src/snapshots/codex_tui__app__tests__selected_unloaded_subagent_V1.snap b/codex-rs/tui/src/snapshots/codex_tui__app__tests__selected_unloaded_subagent_V1.snap
+index 125204948..83efe3d0e 100644
+--- a/codex-rs/tui/src/snapshots/codex_tui__app__tests__selected_unloaded_subagent_V1.snap
++++ b/codex-rs/tui/src/snapshots/codex_tui__app__tests__selected_unloaded_subagent_V1.snap
+@@ -3,6 +3,6 @@ source: tui/src/app/tests.rs
+ assertion_line: 2769
+ expression: "render_bottom_popup(&app.chat_widget, 80)"
+ ---
+-› Ask Codex to do anything
++› Ask Nyacode to do anything
+ 
+   GPT-6.1-Sol default · /tmp/project · child-0 [worker]
+diff --git a/codex-rs/tui/src/snapshots/codex_tui__model_migration__tests__model_migration_prompt.snap b/codex-rs/tui/src/snapshots/codex_tui__model_migration__tests__model_migration_prompt.snap
+index e2eb20139..f22b1ec09 100644
+--- a/codex-rs/tui/src/snapshots/codex_tui__model_migration__tests__model_migration_prompt.snap
++++ b/codex-rs/tui/src/snapshots/codex_tui__model_migration__tests__model_migration_prompt.snap
+@@ -3,7 +3,7 @@ source: tui/src/model_migration.rs
+ expression: terminal.backend()
+ ---
+ 
+-  Codex just got an upgrade. Introducing
++  Nyacode just got an upgrade. Introducing
+   gpt-5.1-codex-max.
+ 
+   Upgrade to gpt-5.2-codex for the latest and greatest
+diff --git a/codex-rs/tui/src/snapshots/codex_tui__model_migration__tests__model_migration_prompt_gpt5_family.snap b/codex-rs/tui/src/snapshots/codex_tui__model_migration__tests__model_migration_prompt_gpt5_family.snap
+index 2cf7a2cc0..19f40b856 100644
+--- a/codex-rs/tui/src/snapshots/codex_tui__model_migration__tests__model_migration_prompt_gpt5_family.snap
++++ b/codex-rs/tui/src/snapshots/codex_tui__model_migration__tests__model_migration_prompt_gpt5_family.snap
+@@ -3,7 +3,7 @@ source: tui/src/model_migration.rs
+ expression: terminal.backend()
+ ---
+ 
+-  Codex just got an upgrade. Introducing gpt-5.1.
++  Nyacode just got an upgrade. Introducing gpt-5.1.
+ 
+   We recommend switching from gpt-5 to gpt-5.1.
+ 
+diff --git a/codex-rs/tui/src/thread_transcript.rs b/codex-rs/tui/src/thread_transcript.rs
+index babf331fa..1b147f3f4 100644
+--- a/codex-rs/tui/src/thread_transcript.rs
++++ b/codex-rs/tui/src/thread_transcript.rs
+@@ -290,7 +290,7 @@ fn item_to_cells(
+                 )
+             {
+                 cells.push(Arc::new(PrefixedWrappedHistoryCell::new(
+-                    format!("Sent by Codex from task {source_thread_id}\n{prompt}"),
++                    format!("Sent by Nyacode from task {source_thread_id}\n{prompt}"),
+                     "• ".dim(),
+                     "  ",
+                 )));

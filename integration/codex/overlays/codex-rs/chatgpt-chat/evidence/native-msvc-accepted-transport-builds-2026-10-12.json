@@ -1,0 +1,321 @@
+{
+  "version": 1,
+  "recorded_at_utc": "2026-10-12T21:49:42.697601+00:00",
+  "baseline_revision": "3a88aafe4632364ec30f6c402f68d9d09770a9fc",
+  "status": "Both MSVC transport cross-build and import checks passed; candidate regression checks and adoption remain pending.",
+  "production_toolchain_changed": false,
+  "microsoft_license_acceptance_asserted": true,
+  "acceptance_basis": "User explicitly accepted both Microsoft Visual Studio and Windows SDK licenses in the conversation before this run.",
+  "rust": "1.95.0",
+  "llvm": "0.8.24",
+  "builds": [
+    {
+      "target": "x86_64-pc-windows-msvc",
+      "command": [
+        "bazel",
+        "build",
+        "--lockfile_mode=update",
+        "--repo_env=BAZEL_MSVC_RUNTIME_VISUAL_STUDIO_EULA=1",
+        "--repo_env=BAZEL_WINDOWS_SDK_EULA=1",
+        "--extra_execution_platforms=//:local_linux,@rules_rs//rs/platforms:x86_64-unknown-linux-gnu,@rules_rs//rs/platforms:x86_64-unknown-linux-musl,@rules_rs//rs/platforms:aarch64-unknown-linux-gnu,@rules_rs//rs/platforms:aarch64-unknown-linux-musl,@rules_rs//rs/platforms:aarch64-apple-darwin,@rules_rs//rs/platforms:x86_64-apple-darwin,@rules_rs//rs/platforms:x86_64-pc-windows-gnullvm,@rules_rs//rs/platforms:x86_64-pc-windows-msvc,@rules_rs//rs/platforms:aarch64-pc-windows-msvc",
+        "--platforms=@rules_rs//rs/platforms:x86_64-pc-windows-msvc",
+        "//codex-rs/http-client:http-client-unit-tests-bin"
+      ],
+      "exit_code": 0,
+      "passed": true,
+      "source_sha256": {
+        "bazel/toolchains/browser_chat/toolchain.cmake": "404eb87bd886ee10aabc6aa30dc3badeb6d88648485bc5d020cc28276797ef5e",
+        ".bazelrc": "b4dd2bd74ec14e80ee211a53bdb1b8eebf0337462e624093fc5ea4a05eb34519",
+        "MODULE.bazel": "7ea181788097b06d3f4e6a572a7ac38645403d6da26a13843d99d7644c8b874e",
+        "MODULE.bazel.lock": "ea44fba0f791060c8049bffc219be2d08b86816e681f2f594af1936ba4070d21",
+        "patches/llvm-0.8.24.patch": "1c729c4e82194b3b07808249adb10050f454a156bf0ed3fa78ad1d5af71c2c61",
+        "patches/windows-support-0.4.1.patch": "dac7c792ee3ed7c6a46bb91bcdcf6f0fe361958548052a2826c6967f84c5c0f9",
+        "patches/rules_cc-0.2.25-grep-includes.patch": "fba33bddfc411d2265d291a0c06b7fd8a63ebf421633c4d629eb9bba0d9f5253",
+        "patches/btls-sys_native_tools.patch": "7d5ef3bb940ec18ebba186689e8179e1e70a59b6bff7a58fdc4a3a84a3383c57",
+        "patches/btls-sys_msvc_bindgen_driver.patch": "55b4bae5c363de2075056cd62629802df597633732e27c52e8e3823da8e87322",
+        "patches/btls-sys_msvc_compatibility_version.patch": "76933db5128494459a88a17775a3de83880bb5355baec829f94a079e04f9120d",
+        "patches/aws-lc-5.1.0-msvc-driver.patch": "ce37e38047ba4d4e1d3f95da7f9d6b28678cb0d5d1d6f10526e966eff25cb85d",
+        "patches/rules_rust_msvc_build_script_paths.patch": "df2adba4e98d41fb8b1ecbb5539bf3f54f35f5784c08e82a0eb2340c5bb731bf",
+        "patches/rules_rust_msvc_linker_paths.patch": "adfb8b786224e1b07c229c1cc4ce9fcce9c9941ef574fb14e73b766fe313a8d9",
+        "patches/ring_msvc_declared_clang.patch": "aadcd1e835d831e857507d4a957876c43ce07a11b1caffb4853acec138511d13",
+        "patches/llvm-0.8.24-relocatable-msvc-vfs.patch": "60790bbf78a53c18044288a8efa511bc1f740a89f9b0131a89c43dfe2117339e"
+      },
+      "log_sha256": "45d98c9c21ae4a828d528cf8aa60f518d8666928ca73f333e47377281020badd",
+      "native_windows_execution": false,
+      "executable_sha256": "8c87aa36950a3de762601314b4867c6f80539012d71c145f99682354bf1a89af",
+      "pe_machine": "0x8664",
+      "pe_architecture_verified": true
+    },
+    {
+      "target": "aarch64-pc-windows-msvc",
+      "command": [
+        "bazel",
+        "build",
+        "--lockfile_mode=update",
+        "--repo_env=BAZEL_MSVC_RUNTIME_VISUAL_STUDIO_EULA=1",
+        "--repo_env=BAZEL_WINDOWS_SDK_EULA=1",
+        "--extra_execution_platforms=//:local_linux,@rules_rs//rs/platforms:x86_64-unknown-linux-gnu,@rules_rs//rs/platforms:x86_64-unknown-linux-musl,@rules_rs//rs/platforms:aarch64-unknown-linux-gnu,@rules_rs//rs/platforms:aarch64-unknown-linux-musl,@rules_rs//rs/platforms:aarch64-apple-darwin,@rules_rs//rs/platforms:x86_64-apple-darwin,@rules_rs//rs/platforms:x86_64-pc-windows-gnullvm,@rules_rs//rs/platforms:x86_64-pc-windows-msvc,@rules_rs//rs/platforms:aarch64-pc-windows-msvc",
+        "--platforms=@rules_rs//rs/platforms:aarch64-pc-windows-msvc",
+        "//codex-rs/http-client:http-client-unit-tests-bin"
+      ],
+      "exit_code": 0,
+      "passed": true,
+      "source_sha256": {
+        "bazel/toolchains/browser_chat/toolchain.cmake": "404eb87bd886ee10aabc6aa30dc3badeb6d88648485bc5d020cc28276797ef5e",
+        ".bazelrc": "b4dd2bd74ec14e80ee211a53bdb1b8eebf0337462e624093fc5ea4a05eb34519",
+        "MODULE.bazel": "7ea181788097b06d3f4e6a572a7ac38645403d6da26a13843d99d7644c8b874e",
+        "MODULE.bazel.lock": "ea44fba0f791060c8049bffc219be2d08b86816e681f2f594af1936ba4070d21",
+        "patches/llvm-0.8.24.patch": "1c729c4e82194b3b07808249adb10050f454a156bf0ed3fa78ad1d5af71c2c61",
+        "patches/windows-support-0.4.1.patch": "dac7c792ee3ed7c6a46bb91bcdcf6f0fe361958548052a2826c6967f84c5c0f9",
+        "patches/rules_cc-0.2.25-grep-includes.patch": "fba33bddfc411d2265d291a0c06b7fd8a63ebf421633c4d629eb9bba0d9f5253",
+        "patches/btls-sys_native_tools.patch": "7d5ef3bb940ec18ebba186689e8179e1e70a59b6bff7a58fdc4a3a84a3383c57",
+        "patches/btls-sys_msvc_bindgen_driver.patch": "55b4bae5c363de2075056cd62629802df597633732e27c52e8e3823da8e87322",
+        "patches/btls-sys_msvc_compatibility_version.patch": "76933db5128494459a88a17775a3de83880bb5355baec829f94a079e04f9120d",
+        "patches/aws-lc-5.1.0-msvc-driver.patch": "ce37e38047ba4d4e1d3f95da7f9d6b28678cb0d5d1d6f10526e966eff25cb85d",
+        "patches/rules_rust_msvc_build_script_paths.patch": "df2adba4e98d41fb8b1ecbb5539bf3f54f35f5784c08e82a0eb2340c5bb731bf",
+        "patches/rules_rust_msvc_linker_paths.patch": "adfb8b786224e1b07c229c1cc4ce9fcce9c9941ef574fb14e73b766fe313a8d9",
+        "patches/ring_msvc_declared_clang.patch": "aadcd1e835d831e857507d4a957876c43ce07a11b1caffb4853acec138511d13",
+        "patches/llvm-0.8.24-relocatable-msvc-vfs.patch": "60790bbf78a53c18044288a8efa511bc1f740a89f9b0131a89c43dfe2117339e"
+      },
+      "log_sha256": "0909fd794b1652fdaf80b0bad483ffa8f397b698be35d744320f196bd8a50575",
+      "native_windows_execution": false,
+      "executable_sha256": "67a18ec1fedb4c70804f6305df2d9a8ca04630d6e592ebbd229f4790d8fd9dc1",
+      "pe_machine": "0xaa64",
+      "pe_architecture_verified": true
+    }
+  ],
+  "import_audit": {
+    "version": 1,
+    "recorded_at_utc": "2026-10-12T21:49:02.475176+00:00",
+    "results": [
+      {
+        "target": "x86_64-pc-windows-msvc",
+        "executable_sha256": "8c87aa36950a3de762601314b4867c6f80539012d71c145f99682354bf1a89af",
+        "dll_imports": [
+          "kernel32.dll",
+          "api-ms-win-core-synch-l1-2-0.dll",
+          "winhttp.dll",
+          "crypt32.dll",
+          "bcryptprimitives.dll",
+          "advapi32.dll",
+          "ws2_32.dll",
+          "ntdll.dll",
+          "userenv.dll",
+          "bcrypt.dll",
+          "secur32.dll"
+        ],
+        "unexpected_dynamic_crt": [],
+        "passed": true,
+        "readobj_output_sha256": "716ce1e470a690aa238e5e4f1ef2f5be59ea3d246a9f2d082396a79a406042a6"
+      },
+      {
+        "target": "aarch64-pc-windows-msvc",
+        "executable_sha256": "67a18ec1fedb4c70804f6305df2d9a8ca04630d6e592ebbd229f4790d8fd9dc1",
+        "dll_imports": [
+          "kernel32.dll",
+          "api-ms-win-core-synch-l1-2-0.dll",
+          "winhttp.dll",
+          "crypt32.dll",
+          "bcryptprimitives.dll",
+          "secur32.dll",
+          "advapi32.dll",
+          "ws2_32.dll",
+          "ntdll.dll",
+          "userenv.dll",
+          "bcrypt.dll"
+        ],
+        "unexpected_dynamic_crt": [],
+        "passed": true,
+        "readobj_output_sha256": "dd93c97fd87e68dad1681bb3e32a637e517e2c19dcce684bb6d1187b1c8fa127"
+      }
+    ],
+    "native_windows_execution": false,
+    "passed": true
+  },
+  "earlier_attempts": [
+    {
+      "version": 1,
+      "assessment": "AWS-LC passed GCC-only jitterentropy flags to clang-cl.",
+      "report_sha256": "b47287a700838e8b4ed1c0491cf07ca7ea887a366ce094ab954d194d918f7412",
+      "results": [
+        {
+          "target": "x86_64-pc-windows-msvc",
+          "passed": false,
+          "exit_code": 1,
+          "log_sha256": "5711fcdf394f09a1a4e96b97831365b40a4c3d7934c14977cc09a568a2b6ec22"
+        }
+      ]
+    },
+    {
+      "version": 2,
+      "assessment": "Cargo SDK and VFS paths were still execroot-relative after its working-directory change.",
+      "report_sha256": "93dda4660f69caca37c080dd0b32dd15e79d10f891810b38bd2dd886327f503b",
+      "results": [
+        {
+          "target": "x86_64-pc-windows-msvc",
+          "passed": false,
+          "exit_code": 1,
+          "log_sha256": "ed95c4edcf3ccc8af95f5b327399eb522c65add07e120acc8260d178d37a2af9"
+        }
+      ]
+    },
+    {
+      "version": 3,
+      "assessment": "The multi-file patch needed explicit file boundaries for the Bazel patch parser.",
+      "report_sha256": "4aeccce6ba9fffce8c3de6a7545e27f9393c2f1283df744d4a224efada7a144e",
+      "results": [
+        {
+          "target": "x86_64-pc-windows-msvc",
+          "passed": false,
+          "exit_code": 1,
+          "log_sha256": "62035d8f89092c581378eea9e0f4d5fb0895a41dc86b92d1e1f201235cd49374"
+        }
+      ]
+    },
+    {
+      "version": 4,
+      "assessment": "Intentionally interrupted to include the SDK VFS working-directory fix.",
+      "report_sha256": "516362fa6f61452664c696467f5125822533ea7371f26e6e59e7b50fabf49298",
+      "results": [
+        {
+          "target": "x86_64-pc-windows-msvc",
+          "passed": false,
+          "exit_code": 8,
+          "log_sha256": "6db1844ea063961fdc0485aa22939c8ac3145168126702660dca6e12ea9e8ef2"
+        }
+      ],
+      "stop_reason": "Owned build deliberately interrupted to include the newly verified relocatable SDK overlay fix. This attempt does not establish a compiler failure."
+    },
+    {
+      "version": 5,
+      "assessment": "A global relocatable overlay produced absolute dependency paths; native actions now retain their original overlay.",
+      "report_sha256": "d060c244ff56b2cb785ae6569148e1d49ce166aee73a1bf2ef330c208cae07c5",
+      "results": [
+        {
+          "target": "x86_64-pc-windows-msvc",
+          "passed": false,
+          "exit_code": 1,
+          "log_sha256": "7fd59e6563870356bf53720f18dae98f63826f9cba58b9b51921d8d3bd4fe813"
+        }
+      ]
+    },
+    {
+      "version": 6,
+      "assessment": "Intentionally interrupted after reproducing missing libclang MSVC driver selection.",
+      "report_sha256": "1318e06edbcc8474f5dd2d937961c2c80a62a32ebdec1fa1d8d3a040715cde00",
+      "results": [
+        {
+          "target": "x86_64-pc-windows-msvc",
+          "passed": false,
+          "exit_code": 8,
+          "log_sha256": "e8ecd7596910ca98c447d5645dd1caff8f7b35d4adc3c31a1586534ee23684ac"
+        }
+      ],
+      "stop_reason": "Intentionally interrupted after a separate libclang probe reproduced ignored MSVC compiler and CRT flags. Completed native compile actions remain cached. This was not a compiler failure."
+    },
+    {
+      "version": 7,
+      "assessment": "CMake passed MSVC archive flags to llvm-ar instead of llvm-lib.",
+      "report_sha256": "46c6da5d2ee5956fb4bdb048c176527a4a33f6620fb99495f797fbc153309e51",
+      "results": [
+        {
+          "target": "x86_64-pc-windows-msvc",
+          "passed": false,
+          "exit_code": 1,
+          "log_sha256": "f0a5aa68aa9379d7ad6d6083d57fc83aefca13ae7a975acc8bf66bb735722c77"
+        }
+      ]
+    },
+    {
+      "version": 8,
+      "assessment": "The bundled BoringSSL compatibility flag conflicted with the selected SDK compiler version.",
+      "report_sha256": "6f40278a408ff79a35de6e41cd3ba7dc876bfb8df8a7d02d2fe2fe78678c396c",
+      "results": [
+        {
+          "target": "x86_64-pc-windows-msvc",
+          "passed": false,
+          "exit_code": 1,
+          "log_sha256": "0ef25e986ded7161f63553772326267aacba7aa1eac43611bb37324ece092a17"
+        }
+      ]
+    },
+    {
+      "version": 9,
+      "assessment": "Intentionally interrupted to use the exact upstream compatibility fix.",
+      "report_sha256": "89256f71b3d4266010acfab17af3ac798a77c6de33c8f2dd84154458eb760bbe",
+      "results": [
+        {
+          "target": "x86_64-pc-windows-msvc",
+          "passed": false,
+          "exit_code": 8,
+          "log_sha256": "2c11281f10a2ca102af9a2d56408cf2ca675507db82b24d32491a76d148ee6fc"
+        }
+      ],
+      "stop_reason": "Deliberately interrupted to replace the provisional compatibility guard with the exact upstream one-line fix, BoringSSL commit 9342bed00500767b9eee5279a0c23b4ca7fc69cf. This was not a compiler failure."
+    },
+    {
+      "version": 10,
+      "assessment": "Native TLS libraries compiled; bindgen multi-header forced includes failed in MSVC driver mode.",
+      "report_sha256": "58b27652168026acfaa49b6fa3d2382f555b419c54a3aa570997185699774538",
+      "results": [
+        {
+          "target": "x86_64-pc-windows-msvc",
+          "passed": false,
+          "exit_code": 1,
+          "log_sha256": "6eb3bdead0569fc0b24e20a16f26b647428c4628eed10c1e0fe1a1cd41db9946"
+        }
+      ]
+    },
+    {
+      "version": 11,
+      "assessment": "The wrapper contents needed a borrowed string for the bindgen API.",
+      "report_sha256": "eb4343b8e2a94d1bd730afdc017f840d09e606e97242feb929525a0b4d975d1c",
+      "results": [
+        {
+          "target": "x86_64-pc-windows-msvc",
+          "passed": false,
+          "exit_code": 1,
+          "log_sha256": "8fb5d2cf6cc76188b0650d1a306bd3562b5bcf58bfc9ac40a6940d575b6d6a3f"
+        }
+      ]
+    },
+    {
+      "version": 12,
+      "assessment": "Native libraries, bindings and Rust crates compiled; the linker filter discarded SDK/CRT paths.",
+      "report_sha256": "c68f24fde862eb9786b85fc0c545bd1643d482581d436fc71ca60ae9e31747b4",
+      "results": [
+        {
+          "target": "x86_64-pc-windows-msvc",
+          "passed": false,
+          "exit_code": 1,
+          "log_sha256": "342e8ed2b549cd40ec1dfe44b277ea359e057593bd2e7df42985e1ae522b8169"
+        }
+      ]
+    },
+    {
+      "version": 13,
+      "assessment": "x86_64 passed; ARM64 ring replaced the declared clang-cl compiler with a PATH lookup.",
+      "report_sha256": "f557fee1286b930cf17cebdccb558ebcd879f448185bc31b0a509ad9ce7ed2c9",
+      "results": [
+        {
+          "target": "x86_64-pc-windows-msvc",
+          "passed": true,
+          "exit_code": 0,
+          "log_sha256": "0a5978763b602369003e174416fe4924b8e48a8701b44737eeda046e3d8bb8db"
+        },
+        {
+          "target": "aarch64-pc-windows-msvc",
+          "passed": false,
+          "exit_code": 1,
+          "log_sha256": "2fe26d0aa19e5fa5748b2e8fd117a29b4c20ebba28811dbd5343907338e8ebe9"
+        }
+      ]
+    }
+  ],
+  "candidate_manifest": "../research/msvc-toolchain-candidate/manifest.json",
+  "diagnostics": "native-msvc-sdk-path-research-2026-10-12.json",
+  "limitations": [
+    "Windows executables were cross-compiled and linked on Linux. Native Windows execution is not claimed.",
+    "Successful transport builds do not by themselves open the integrated release gate. The final non-MSVC regressions and candidate adoption are still required."
+  ]
+}

@@ -1,0 +1,175 @@
+{
+  "report_version": 5,
+  "stage": "under_development",
+  "live": true,
+  "transport": "browser-emulated",
+  "transport_explicit": true,
+  "preparation_protocol": "two-phase-v1",
+  "transport_version": "wreq=6.0.0-rc.29;wreq-util=3.0.0-rc.14",
+  "profile": "chrome_136_linux",
+  "release_gate_passed": false,
+  "capabilities": [
+    {
+      "capability": "models",
+      "status": "observed",
+      "item_count": 28,
+      "latency_ms": 507
+    },
+    {
+      "capability": "history_list",
+      "status": "observed",
+      "item_count": 20,
+      "latency_ms": 301
+    },
+    {
+      "capability": "history_read",
+      "status": "not_run"
+    },
+    {
+      "capability": "conversation_preparation",
+      "status": "unsupported",
+      "error": "unsupported_capability",
+      "latency_ms": 1781
+    },
+    {
+      "capability": "saved_text",
+      "status": "not_run"
+    },
+    {
+      "capability": "follow_up",
+      "status": "not_run"
+    },
+    {
+      "capability": "restart_resume",
+      "status": "not_run"
+    },
+    {
+      "capability": "temporary_chat",
+      "status": "not_run"
+    },
+    {
+      "capability": "png_upload",
+      "status": "not_run"
+    },
+    {
+      "capability": "jpeg_upload",
+      "status": "not_run"
+    },
+    {
+      "capability": "webp_upload",
+      "status": "not_run"
+    },
+    {
+      "capability": "pdf_upload",
+      "status": "not_run"
+    },
+    {
+      "capability": "utf8_upload",
+      "status": "not_run"
+    },
+    {
+      "capability": "server_cancellation",
+      "status": "not_run"
+    }
+  ],
+  "write_scenario": "preparation",
+  "preparation": [
+    {
+      "operation": "session_bootstrap",
+      "latency_ms": 727,
+      "http_status": 200,
+      "cloudflare_challenge": false
+    },
+    {
+      "operation": "conversation_init",
+      "latency_ms": 363,
+      "http_status": 200,
+      "cloudflare_challenge": false,
+      "response": {
+        "default_model_present": true,
+        "conduit_token_present": false,
+        "requirements_token_present": false,
+        "proof_of_work_required": null,
+        "turnstile_required": null,
+        "arkose_required": null,
+        "turnstile_payload_present": false,
+        "prepare_token_present": false,
+        "observer_required": null,
+        "observer_collector_present": false,
+        "observer_snapshot_present": false
+      }
+    },
+    {
+      "operation": "conversation_prepare",
+      "latency_ms": 161,
+      "http_status": 200,
+      "cloudflare_challenge": false,
+      "response": {
+        "default_model_present": false,
+        "conduit_token_present": true,
+        "requirements_token_present": false,
+        "proof_of_work_required": null,
+        "turnstile_required": null,
+        "arkose_required": null,
+        "turnstile_payload_present": false,
+        "prepare_token_present": false,
+        "observer_required": null,
+        "observer_collector_present": false,
+        "observer_snapshot_present": false
+      }
+    },
+    {
+      "operation": "sentinel_prepare",
+      "latency_ms": 176,
+      "http_status": 200,
+      "cloudflare_challenge": false,
+      "response": {
+        "default_model_present": false,
+        "conduit_token_present": false,
+        "requirements_token_present": false,
+        "proof_of_work_required": true,
+        "turnstile_required": true,
+        "arkose_required": null,
+        "turnstile_payload_present": true,
+        "prepare_token_present": true,
+        "observer_required": true,
+        "observer_collector_present": true,
+        "observer_snapshot_present": true
+      }
+    },
+    {
+      "operation": "sentinel_compute",
+      "latency_ms": 25,
+      "cloudflare_challenge": false
+    },
+    {
+      "operation": "session_observer",
+      "latency_ms": 13,
+      "cloudflare_challenge": false
+    },
+    {
+      "operation": "sentinel_finalize",
+      "latency_ms": 281,
+      "http_status": 200,
+      "cloudflare_challenge": false,
+      "response": {
+        "default_model_present": false,
+        "conduit_token_present": false,
+        "requirements_token_present": true,
+        "proof_of_work_required": null,
+        "turnstile_required": null,
+        "arkose_required": null,
+        "turnstile_payload_present": false,
+        "prepare_token_present": false,
+        "observer_required": null,
+        "observer_collector_present": false,
+        "observer_snapshot_present": false
+      }
+    },
+    {
+      "operation": "session_observer_snapshot",
+      "latency_ms": 35,
+      "cloudflare_challenge": false
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "version": 1,
+  "phase": "probe runtime initialization",
+  "result": "debug worker stack overflow",
+  "saved_submissions_after_crash": 0,
+  "fix": "Compatibility harness now explicitly builds an 8 MiB Tokio worker stack. Production Chat hosting is unchanged.",
+  "stderr_sha256": "64831ef8953ed51288b658092107e928f4df236df2213d5044f09ffe1abcecb8",
+  "gate_opened": false
+}

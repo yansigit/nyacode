@@ -1,0 +1,44 @@
+{
+  "version": 1,
+  "recorded_at_utc": "2026-10-12T08:32:09.989657+00:00",
+  "feature_stage": "under_development",
+  "enabled_by_default": false,
+  "integrated_gate_passed": false,
+  "source_sha256": {
+    "codex-rs/chatgpt-chat/src/sentinel/mod.rs": "12e76d3274e483d9266e1622a6fdeebba8864bef3e65d33538a12977c777ab77",
+    "codex-rs/chatgpt-chat/src/sentinel/vm.rs": "a201b1895e9289a692b9f7b304dea605c9f7e2e5e1a65fe9e60cf0bb648f6641",
+    "codex-rs/chatgpt-chat/src/native_preparation.rs": "41a7387b2371b5e6b2632ea19322c25a23e60eadc23b5f9f5fdcdf8a910ee697",
+    "codex-rs/tui/src/chatwidget/protocol.rs": "50b5f5fdede2d54b551ede9c8c092e13edaf39e4b11d9f7874ca435fdb27bb95",
+    "codex-rs/tui/src/chatwidget/tests/native_chat_isolation_tests.rs": "3213f713e9f7b077a667d8e0d4fcdd73367a8ce73fba293c81b1839c5d89fa18"
+  },
+  "daemon": {
+    "read": "passed",
+    "saved_text_and_authoritative_retrieval": "passed",
+    "concurrent_saved_conversations": 2,
+    "concurrently_accepted_active_submissions": 2,
+    "temporary_initial_completed_turns": 1,
+    "temporary_follow_up": "unsupported_challenge_before_acceptance",
+    "temporary_failure_native_detail": "not_recorded_by_original_service_binary",
+    "temporary_saved_chat_tables_changed": false,
+    "attachment_scenario_after_failure": "not_run",
+    "tui": "not_run"
+  },
+  "observer_fix": {
+    "problem": "The interpreter wall-clock budget incorrectly included the network wait between collector and snapshot.",
+    "change": "Pause the execution clock while retaining all consumed time, instruction, memory and cancellation state.",
+    "proof_of_original_live_failure_cause": false,
+    "tests": {
+      "native_library_passed": 182,
+      "native_clippy_warnings_denied": "passed",
+      "tui_content_isolation": "passed",
+      "rpc_socket_tests_passed": 10,
+      "service_protocol_state_clippy_warnings_denied": "passed_before_observer_change"
+    }
+  },
+  "constraints": {
+    "automatic_resend": false,
+    "browser_used": false,
+    "external_challenge_tokens": false,
+    "temporary_content_in_evidence": false
+  }
+}

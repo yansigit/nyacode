@@ -1,0 +1,126 @@
+diff --git a/cargo/private/cargo_build_script.bzl b/cargo/private/cargo_build_script.bzl
+--- a/cargo/private/cargo_build_script.bzl
++++ b/cargo/private/cargo_build_script.bzl
+@@ -304,7 +304,13 @@
+     return _prefix_pwd_to_paths(args)
+ 
+ def _pwd_flags(args):
+-    return _pwd_flags_direct_libs(_pwd_flags_imacros(_pwd_flags_fsanitize_ignorelist(_pwd_flags_isystem(_pwd_flags_L(_pwd_flags_B(_pwd_flags_resource_dir(_pwd_flags_sysroot(args))))))))
++    # clang-cl wraps both options and their operands in /clang:. Normalize
++    # those tokens together, then restore the driver syntax without reordering.
++    clang_prefix = "/clang:"
++    flags = [arg[len(clang_prefix):] if arg.startswith(clang_prefix) else arg for arg in args]
++    flags = _prefix_pwd_to_flag(flags, ["/imsvc", "/external:I", "-ivfsoverlay"])
++    flags = _pwd_flags_direct_libs(_pwd_flags_imacros(_pwd_flags_fsanitize_ignorelist(_pwd_flags_isystem(_pwd_flags_L(_pwd_flags_B(_pwd_flags_resource_dir(_pwd_flags_sysroot(flags))))))))
++    return [clang_prefix + flag if original.startswith(clang_prefix) else flag for original, flag in zip(args, flags)]
+ 
+ def _feature_enabled(ctx, feature_name, default = False):
+     """Check if a feature is enabled.
+diff --git a/cargo/tests/cargo_build_script/cc_args_and_env/cc_args_and_env_test.bzl b/cargo/tests/cargo_build_script/cc_args_and_env/cc_args_and_env_test.bzl
+--- a/cargo/tests/cargo_build_script/cc_args_and_env/cc_args_and_env_test.bzl
++++ b/cargo/tests/cargo_build_script/cc_args_and_env/cc_args_and_env_test.bzl
+@@ -346,7 +346,7 @@
+     )
+     with_extra_toolchains(
+         name = name,
+-        extra_toolchains = ["//%s:%s/test_cc_toolchain" % (native.package_name(), name)],
++        extra_toolchains = [str(Label("//%s:%s/test_cc_toolchain" % (native.package_name(), name)))],
+         target = "%s/cargo_build_script_impl" % name,
+         tags = ["manual"],
+     )
+@@ -679,3 +679,75 @@
+         target_under_test = "%s/cargo_build_script" % name,
+         expected_cflags = ["/test/absolute/libclang_rt.builtins.static.a", "/test/absolute/obj.o", "/test/absolute/libfoo.so", "/test/absolute/libbar.dylib", "some_unrelated_arg"],
+     )
++
++def msvc_paths_relative_test(name):
++    flags = [
++        "/imsvctest/sdk",
++        "/imsvc",
++        "test/runtime",
++        "/external:Itest/external",
++        "/clang:-ivfsoverlay",
++        "/clang:test/overlay.yaml",
++        "/clang:-internal-isystem",
++        "/clang:test/clang",
++        "/clang:-fms-compatibility-version=19.50.35717",
++        "/MT",
++    ]
++    expected = [
++        "/imsvc${pwd}/test/sdk",
++        "/imsvc",
++        "${pwd}/test/runtime",
++        "/external:I${pwd}/test/external",
++        "/clang:-ivfsoverlay",
++        "/clang:${pwd}/test/overlay.yaml",
++        "/clang:-internal-isystem",
++        "/clang:${pwd}/test/clang",
++        "/clang:-fms-compatibility-version=19.50.35717",
++        "/MT",
++    ]
++    cargo_build_script_with_extra_cc_compile_flags(
++        name = "%s/cargo_build_script" % name,
++        extra_cc_compile_flags = flags,
++        extra_cxx_compile_flags = ["/clang:-std=c++17"],
++    )
++    cc_args_and_env_analysis_test(
++        name = name,
++        target_under_test = "%s/cargo_build_script" % name,
++        expected_cflags = expected,
++        expected_cxxflags = expected + ["/clang:-std=c++17"],
++    )
++
++def msvc_paths_absolute_test(name):
++    flags = [
++        "/imsvc/test/sdk",
++        "/imsvcC:/test/runtime",
++        "/external:IC:/test/external",
++        "/clang:-ivfsoverlay",
++        "/clang:/test/overlay.yaml",
++        "/clang:-ivfsoverlay",
++        "/clang:C:/test/overlay.yaml",
++        "/clang:-fno-rtti",
++        "/MD",
++    ]
++    expected = [
++        "/imsvc/test/sdk",
++        "/imsvcC:/test/runtime",
++        "/external:IC:/test/external",
++        "/clang:-ivfsoverlay",
++        "/clang:/test/overlay.yaml",
++        "/clang:-ivfsoverlay",
++        "/clang:C:/test/overlay.yaml",
++        "/clang:-fno-rtti",
++        "/MD",
++    ]
++    cargo_build_script_with_extra_cc_compile_flags(
++        name = "%s/cargo_build_script" % name,
++        extra_cc_compile_flags = flags,
++        extra_cxx_compile_flags = ["/clang:-std=c++17"],
++    )
++    cc_args_and_env_analysis_test(
++        name = name,
++        target_under_test = "%s/cargo_build_script" % name,
++        expected_cflags = expected,
++        expected_cxxflags = expected + ["/clang:-std=c++17"],
++    )
+diff --git a/cargo/tests/cargo_build_script/cc_args_and_env/BUILD.bazel b/cargo/tests/cargo_build_script/cc_args_and_env/BUILD.bazel
+--- a/cargo/tests/cargo_build_script/cc_args_and_env/BUILD.bazel
++++ b/cargo/tests/cargo_build_script/cc_args_and_env/BUILD.bazel
+@@ -17,6 +17,8 @@
+     "libpath_absolute_test",
+     "libpath_relative_test",
+     "libtool_fallback_test",
++    "msvc_paths_absolute_test",
++    "msvc_paths_relative_test",
+     "resource_dir_absolute_test",
+     "resource_dir_relative_test",
+     "sysroot_absolute_test",
+@@ -76,3 +78,7 @@
+ direct_libs_relative_test(name = "direct_libs_relative_test")
+ 
+ direct_libs_absolute_test(name = "direct_libs_absolute_test")
++
++msvc_paths_absolute_test(name = "msvc_paths_absolute_test")
++
++msvc_paths_relative_test(name = "msvc_paths_relative_test")

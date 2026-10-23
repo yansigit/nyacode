@@ -1,0 +1,440 @@
+{
+  "manifest_version": 1,
+  "recorded_at_utc": "2026-10-12T01:12:19.896092+00:00",
+  "purpose": "Harmless synthetic native layout fidelity and resource investigation, not live challenge replay",
+  "production_browser_use": false,
+  "browser_measurements_imported_into_native_challenges": false,
+  "research_browser": "HeadlessChrome 153 Linux; unauthenticated about:blank",
+  "native_profile": "Chrome136/Linux transport; explicit DejaVu 2.37 font environment",
+  "blitz_published_probe": {
+    "version": "0.3.0-beta.2",
+    "vcs_revision": "67edf2061121382b3e43af19977fc3472aa7e069",
+    "features": [],
+    "rust_1_95_build": "passed",
+    "integrated": false,
+    "rect": [18, 28, 235, 19.200000762939453]
+  },
+  "blitz_pinned_main_probe": {
+    "revision": "45496d9288b063719ebeae4e0761273f7881b3d7",
+    "taffy_revision": "7d33901cc383489d9945ae796a1ceed0a935ef66",
+    "rust_1_95_build": "passed",
+    "integrated": false,
+    "reason": "Observed intrinsic-width, fractional-position and display-none differences; full DOM engine not selected",
+    "fixtures": [
+      {
+        "extra": [],
+        "label": "default",
+        "native": {
+          "elapsed_ms": 13,
+          "height": 19,
+          "width": 235,
+          "x": 10,
+          "y": 20
+        },
+        "text": "Native layout 0123456789 ffi",
+        "chromium": {
+          "x": 10,
+          "y": 20,
+          "width": 234.25,
+          "height": 19,
+          "top": 20,
+          "right": 244.25,
+          "bottom": 39,
+          "left": 10
+        }
+      },
+      {
+        "extra": [["font-size", "13.25px"]],
+        "label": "fractional-size",
+        "native": {
+          "elapsed_ms": 11,
+          "height": 15,
+          "width": 194,
+          "x": 10,
+          "y": 20
+        },
+        "text": "Native layout 0123456789 ffi",
+        "chromium": {
+          "x": 10,
+          "y": 20,
+          "width": 194,
+          "height": 15,
+          "top": 20,
+          "right": 204,
+          "bottom": 35,
+          "left": 10
+        }
+      },
+      {
+        "extra": [["font-size", "72px"]],
+        "label": "large-size",
+        "native": {
+          "elapsed_ms": 11,
+          "height": 84,
+          "width": 1055,
+          "x": 10,
+          "y": 20
+        },
+        "text": "Native layout 0123456789 ffi",
+        "chromium": {
+          "x": 10,
+          "y": 20,
+          "width": 1054.125,
+          "height": 84,
+          "top": 20,
+          "right": 1064.125,
+          "bottom": 104,
+          "left": 10
+        }
+      },
+      {
+        "extra": [
+          ["left", "10.2px"],
+          ["top", "20.3px"]
+        ],
+        "label": "fractional-insets",
+        "native": {
+          "elapsed_ms": 10,
+          "height": 19,
+          "width": 107,
+          "x": 10.203125,
+          "y": 20.296875
+        },
+        "text": "Native layout",
+        "chromium": {
+          "x": 10.1875,
+          "y": 20.296875,
+          "width": 106.8125,
+          "height": 19,
+          "top": 20.296875,
+          "right": 117,
+          "bottom": 39.296875,
+          "left": 10.1875
+        }
+      },
+      {
+        "extra": [
+          ["width", "100.25px"],
+          ["height", "50.25px"]
+        ],
+        "label": "explicit-size",
+        "native": {
+          "elapsed_ms": 9,
+          "height": 50.25,
+          "width": 100.25,
+          "x": 10,
+          "y": 20
+        },
+        "text": "Native layout",
+        "chromium": {
+          "x": 10,
+          "y": 20,
+          "width": 100.25,
+          "height": 50.25,
+          "top": 20,
+          "right": 110.25,
+          "bottom": 70.25,
+          "left": 10
+        }
+      },
+      {
+        "extra": [["position", "fixed"]],
+        "label": "fixed",
+        "native": {
+          "elapsed_ms": 10,
+          "height": 19,
+          "width": 107,
+          "x": 10,
+          "y": 20
+        },
+        "text": "Native layout",
+        "chromium": {
+          "x": 10,
+          "y": 20,
+          "width": 106.8125,
+          "height": 19,
+          "top": 20,
+          "right": 116.8125,
+          "bottom": 39,
+          "left": 10
+        }
+      },
+      {
+        "extra": [["visibility", "hidden"]],
+        "label": "hidden",
+        "native": {
+          "elapsed_ms": 9,
+          "height": 19,
+          "width": 107,
+          "x": 10,
+          "y": 20
+        },
+        "text": "Native layout",
+        "chromium": {
+          "x": 10,
+          "y": 20,
+          "width": 106.8125,
+          "height": 19,
+          "top": 20,
+          "right": 116.8125,
+          "bottom": 39,
+          "left": 10
+        }
+      },
+      {
+        "extra": [["display", "none"]],
+        "label": "display-none",
+        "native": {
+          "elapsed_ms": 9,
+          "height": 0,
+          "width": 0,
+          "x": 8,
+          "y": 8
+        },
+        "text": "Native layout",
+        "chromium": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      {
+        "extra": [["width", "80px"]],
+        "label": "wrapped",
+        "native": {
+          "elapsed_ms": 10,
+          "height": 76,
+          "width": 80,
+          "x": 10,
+          "y": 20
+        },
+        "text": "Native layout 0123456789 ffi",
+        "chromium": {
+          "x": 10,
+          "y": 20,
+          "width": 80,
+          "height": 76,
+          "top": 20,
+          "right": 90,
+          "bottom": 96,
+          "left": 10
+        }
+      },
+      {
+        "extra": [],
+        "label": "whitespace",
+        "native": {
+          "elapsed_ms": 11,
+          "height": 19,
+          "width": 235,
+          "x": 10,
+          "y": 20
+        },
+        "text": "Native    layout\n0123456789\tffi",
+        "chromium": {
+          "x": 10,
+          "y": 20,
+          "width": 234.25,
+          "height": 19,
+          "top": 20,
+          "right": 244.25,
+          "bottom": 39,
+          "left": 10
+        }
+      },
+      {
+        "extra": [],
+        "label": "empty",
+        "native": {
+          "elapsed_ms": 10,
+          "height": 0,
+          "width": 0,
+          "x": 10,
+          "y": 20
+        },
+        "text": "",
+        "chromium": {
+          "x": 10,
+          "y": 20,
+          "width": 0,
+          "height": 0,
+          "top": 20,
+          "right": 10,
+          "bottom": 20,
+          "left": 10
+        }
+      },
+      {
+        "extra": [],
+        "label": "spaces",
+        "native": {
+          "elapsed_ms": 10,
+          "height": 0,
+          "width": 0,
+          "x": 10,
+          "y": 20
+        },
+        "text": "     ",
+        "chromium": {
+          "x": 10,
+          "y": 20,
+          "width": 0,
+          "height": 0,
+          "top": 20,
+          "right": 10,
+          "bottom": 20,
+          "left": 10
+        }
+      },
+      {
+        "extra": [["font-size", "1px"]],
+        "label": "small",
+        "native": {
+          "elapsed_ms": 11,
+          "height": 1,
+          "width": 7,
+          "x": 10,
+          "y": 20
+        },
+        "text": "Native layout",
+        "chromium": {
+          "x": 10,
+          "y": 20,
+          "width": 6.6875,
+          "height": 1,
+          "top": 20,
+          "right": 16.6875,
+          "bottom": 21,
+          "left": 10
+        }
+      },
+      {
+        "extra": [["font-size", "0px"]],
+        "label": "zero",
+        "native": {
+          "elapsed_ms": 11,
+          "height": 0,
+          "width": 0,
+          "x": 10,
+          "y": 20
+        },
+        "text": "Native layout",
+        "chromium": {
+          "x": 10,
+          "y": 20,
+          "width": 0,
+          "height": 0,
+          "top": 20,
+          "right": 10,
+          "bottom": 20,
+          "left": 10
+        }
+      }
+    ]
+  },
+  "selected_implementation": {
+    "shaper": "parley=0.12.0",
+    "system_fonts": false,
+    "host_io": false,
+    "font_assets": "../fonts/profile.json",
+    "native_layout": "Original bounded single-line positioned text boxes; other contexts explicitly unsupported",
+    "font_allocation_probe": {
+      "method": "stats_alloc in isolated Rust research executable; finite 512-byte printable-ASCII fixture at font size 512; measured allocations do not establish a general allocator hard limit",
+      "initialization_allocated_bytes": 4424,
+      "maximum_text_allocated_bytes": {
+        "DejaVu Sans": 78850,
+        "DejaVu Serif": 71642,
+        "DejaVu Sans Mono": 62946
+      },
+      "reserved_font_bytes": 2097152,
+      "reserved_measurement_bytes": 2097152
+    },
+    "family_fixtures": [
+      {
+        "family": "NativeResearchSans",
+        "size": 16,
+        "width": 234.25,
+        "height": 19
+      },
+      {
+        "family": "NativeResearchSans",
+        "size": 72,
+        "width": 1054.125,
+        "height": 84
+      },
+      {
+        "family": "NativeResearchMono",
+        "size": 16,
+        "width": 269.71875,
+        "height": 19
+      },
+      {
+        "family": "NativeResearchMono",
+        "size": 72,
+        "width": 1213.734375,
+        "height": 84
+      },
+      {
+        "family": "NativeResearchSerif",
+        "size": 16,
+        "width": 237.203125,
+        "height": 19
+      },
+      {
+        "family": "NativeResearchSerif",
+        "size": 72,
+        "width": 1067.390625,
+        "height": 84
+      }
+    ],
+    "unicode_fixtures": [
+      {
+        "text": "éΩЖ",
+        "family": "DejaVu Sans",
+        "size": 16,
+        "width": 39.3125,
+        "height": 19
+      },
+      {
+        "text": "Á",
+        "family": "DejaVu Sans",
+        "size": 16,
+        "width": 10.953125,
+        "height": 19
+      },
+      {
+        "text": "مرحبا",
+        "family": "DejaVu Sans",
+        "size": 16,
+        "width": 37,
+        "height": 19
+      },
+      {
+        "text": "😀",
+        "family": "DejaVu Sans",
+        "size": 16,
+        "width": 16.6875,
+        "height": 19
+      }
+    ],
+    "missing_glyph_behavior": "Reject uncovered glyphs; U+10FFFF fixture returns unsupported native layout/font_coverage"
+  },
+  "research_sha256": {
+    "chromium136-layout-unit.h": "dd9d5a963eaeee665f60045c91cb1e41858e72d5a786d770721651c4e165e061",
+    "run.log": "2f33d082bfca11a2739710a0112afab6298ccdc6d63a408f4a3232f4e2bb748c",
+    "run-main.log": "fe7495c954942409f7527380423529bcd58469a2621675e6785273a764382296",
+    "font-allocation-probe.txt": "c72d803730989c08d647c3b99a87b61f6821277528f49b4e148bb3d23061b88e",
+    "font-family-oracle.json": "487a058bd8d810f1111b5d2595f37d3815fc38da4003964f86263e3fde73ed41"
+  },
+  "references": [
+    "https://github.com/DioxusLabs/blitz/issues/764",
+    "https://github.com/DioxusLabs/blitz/tree/45496d9288b063719ebeae4e0761273f7881b3d7",
+    "https://github.com/chromium/chromium/blob/76fa3c1782406c63308c70b54f228fd39c7aaa71/third_party/blink/renderer/platform/geometry/layout_unit.h",
+    "https://docs.rs/parley/0.12.0/parley/"
+  ]
+}

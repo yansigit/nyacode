@@ -1,0 +1,141 @@
+{
+  "manifest_version": 1,
+  "recorded_at_utc": "2026-10-11T22:24:31.871187+00:00",
+  "repository_base_revision": "3a88aafe4632364ec30f6c402f68d9d09770a9fc",
+  "working_tree_dirty": true,
+  "rustc": "rustc 1.95.0 (59807616e 2026-04-14)",
+  "cargo": "cargo 1.95.0 (f2d3ce0bd 2026-03-21)",
+  "native_build_platform": "x86_64-unknown-linux-gnu",
+  "live_report": "live-native-two-phase-probe-2026-10-11.json",
+  "live_source_manifest": "native-two-phase-source-2026-10-11.json",
+  "final_source_sha256": {
+    "MODULE.bazel": "c49de99f73ec5da4461d25f70df367228144eb14b38e49436a029353c20f3670",
+    "MODULE.bazel.lock": "1013c40a0ed2f6b94f1150bc8b555a94e335389a8591cd49c0e551f6f6ff8438",
+    "bazel/toolchains/browser_chat/BUILD.bazel": "7c82d65f4134e99977665aaf8ddf8362391b5500c8b9965e626af502a7e719f8",
+    "bazel/toolchains/browser_chat/toolchain.cmake": "06288d0c42f8db433a3b528596c12f6b422c5b4ab4897923b3958049032e5ceb",
+    "codex-rs/Cargo.lock": "93dca263acb35d96998c64641087391507e82d7b59036087f2e5d82e49f5e071",
+    "codex-rs/Cargo.toml": "761d5f0d7f74fc151d475a4e3016756894c495925a67a29a2fec721c711e3abd",
+    "codex-rs/app-server/Cargo.toml": "94d6b1d6ad3ddaeb710ccda9f8ecb0720a0f72ac22d208430385bf213b2591ff",
+    "codex-rs/app-server/examples/chatgpt_chat_probe.rs": "6fc86899a213e49e26a825e94eb7724abd401ba501dbb26bdd871f1d5f7dfa6f",
+    "codex-rs/chatgpt-chat/BUILD.bazel": "e2f7c59f34af2a505e9590dee0b0f647cc760ec117ccf32c98864446af8893b6",
+    "codex-rs/chatgpt-chat/Cargo.toml": "4520cf13c0e532b81597c82c7ead8778aabec2a37b948ad7ead65d7cc9af27f6",
+    "codex-rs/chatgpt-chat/NOTICE": "37fb3a484bd3f6b920bd4c7fcf7a7e05376e6cfe725cd13d436a359256a2976b",
+    "codex-rs/chatgpt-chat/README.md": "43c0847f3ed7864e08cb76c70875a572c7f844497a1bf8c02b47a62bc9b9903a",
+    "codex-rs/chatgpt-chat/src/history.rs": "c50d5ae04e3f1f4c651ae53fd072ad2c93e1ab4c89b9d0eed58de71e2264cb11",
+    "codex-rs/chatgpt-chat/src/lib.rs": "e3ae6275b941d34b264d1e98e28533b90091844ff2220826a874441ca57976da",
+    "codex-rs/chatgpt-chat/src/native_preparation.rs": "5b25c0f311543d24f23da73e500b695caf049c63c11d9f74e7d42208b61a8a9e",
+    "codex-rs/chatgpt-chat/src/preparation.rs": "2fd8b80e6c3c9cc4e0873b2072e1f53033e266d2d9ce589d15d95acd245ebbd9",
+    "codex-rs/chatgpt-chat/src/probe.rs": "f0abba672825ee9ec6d5dc9a9d04f6c1737ea4ad2c6467e8cb21ef8191524834",
+    "codex-rs/chatgpt-chat/src/probe_tests.rs": "8d1bdab9c2ec5390c2a57837e35ae5ad0397436054db7f1e87c85535cf10f133",
+    "codex-rs/chatgpt-chat/src/report.rs": "b20f37cb7f623c9ac52734fcd8ea1dc4530da53c74ee2c0a1549ab53d9a1d12b",
+    "codex-rs/chatgpt-chat/src/sentinel/mod.rs": "dd99112aeb61d6ec36ed74efdafc73fd4dd14a36d7601efe040394eee88b7279",
+    "codex-rs/chatgpt-chat/src/sentinel/pattern.rs": "f16fc4ac35981fb8f5c002657c0577b9987295b67d7ce5cbf88050379251c981",
+    "codex-rs/chatgpt-chat/src/sentinel/profile.rs": "1c6f8b9822555747555056466e9d7961d3fafb1917a2687c145c1aee93957adf",
+    "codex-rs/chatgpt-chat/src/sentinel/proof.rs": "f138962ccc9ad33e447c9a6d63992b9591f5a7234cb677f58209cfec200f75b4",
+    "codex-rs/chatgpt-chat/src/sentinel/storage.rs": "199fd6a169f02e372c1f03c059fdf8b86883056aff2d6433fe05844dca47f021",
+    "codex-rs/chatgpt-chat/src/sentinel/vm.rs": "dd637c125d973f10207d371991ee1d9c99749d1310b3b52a6fada43fc2951ed1",
+    "codex-rs/core/config.schema.json": "456ac2f2e1ddf5cec6c0982d398a9278b4398ee9f1fe2c21f625beeb59c8c84b",
+    "codex-rs/features/src/lib.rs": "3d53b3f1ac852f610844ef11e5ec374380d09b71ec78fa2345b8c1ce9706f138",
+    "codex-rs/features/src/tests.rs": "4fbf3db867c71026c2662341665f92b432a78fe0e745b15b8191c670614d621f",
+    "codex-rs/http-client/Cargo.toml": "e604b430ae3ec52859cb5c6937d30dbc8a16ee6e41bc3b5d188524a06f9b54be",
+    "codex-rs/http-client/src/browser_chat.rs": "81d75be37fadd7bb3f9634ec20b401bde9b2e9b9e4aaf39a2b1bea1a03ea5f57",
+    "codex-rs/http-client/src/browser_chat_tests.rs": "504818b2a7f068feb6e385756a793d71bc67eed599682ddd50cef029f9e00641",
+    "codex-rs/http-client/src/client.rs": "2fd2b962a96aa78e3025486f8a70c2fae03311e7fc875bc26817305aaa66cece",
+    "codex-rs/http-client/src/custom_ca.rs": "0858fabdc570c96f37fe98ee2d7420cf4972f2721dccf884e1a0dd5fc4addde3",
+    "codex-rs/http-client/src/lib.rs": "f8fd0bf70ce740fafc0e4180f179c555303497e5083c92385e49ee583c1ccfa4",
+    "codex-rs/http-client/src/outbound_proxy.rs": "0bb76f60b842075a8f54828fb90a1b67758ebf1b9446a9b0a1e810a3002f8734",
+    "codex-rs/http-client/src/request_builder.rs": "17c1067f1d6e4076fa85b8bd33525f1e778cfb017b61f41177fbecab4bdd919e",
+    "codex-rs/http-client/src/transport.rs": "53ca18caa59bb3bfede3d41e6444708759ea46b69f180899259b25a40876813a",
+    "docs/config.md": "de4cd601c247b838b667fb0b84ea93f0faac3573116fb5e96b615aa647c29bb8",
+    "patches/BUILD.bazel": "bf190399faa15f53a8ea0c622b3e25cba949cd893872a2b038b55f1ebc6671fc",
+    "patches/btls-sys_native_tools.patch": "30410d660b137e69051084da610721d5b1b61096fcbbaae29143fd3ac8bf5d16"
+  },
+  "live_implementation_hashes_still_match": true,
+  "validation": {
+    "cargo_crate_tests": {
+      "status": "passed",
+      "command": "cargo test -p codex-http-client -p codex-chatgpt-chat -p codex-features",
+      "chat": 67,
+      "http_unit": 125,
+      "http_custom_ca": 10,
+      "features": 44
+    },
+    "cargo_harness_tests": {
+      "status": "passed",
+      "command": "cargo test -p codex-app-server --example chatgpt_chat_probe",
+      "passed": 5
+    },
+    "cargo_crate_clippy": {
+      "status": "passed",
+      "command": "cargo clippy -p codex-chatgpt-chat -p codex-http-client -p codex-features --tests -- -D warnings"
+    },
+    "cargo_harness_clippy": {
+      "status": "passed",
+      "command": "cargo clippy -p codex-app-server --example chatgpt_chat_probe -- -D warnings"
+    },
+    "harness_build": {
+      "status": "passed",
+      "command": "cargo build -p codex-app-server --example chatgpt_chat_probe",
+      "binary_sha256": "589cd5485e0efd90002704bd53c41fe8930702ff116118cc448ffb6d25915c92"
+    },
+    "bazel_chat_tests": {
+      "status": "passed",
+      "command": "bazel test //codex-rs/chatgpt-chat:chatgpt-chat-unit-tests --lockfile_mode=error --test_output=errors",
+      "passed": 67
+    },
+    "bazel_dependency_lock": {
+      "status": "passed",
+      "command": "bazel mod deps --lockfile_mode=error"
+    },
+    "cli_build": {
+      "status": "passed",
+      "command": "cargo build -p codex-cli"
+    },
+    "rust_format": {
+      "status": "passed",
+      "command": "cargo fmt -p codex-http-client -p codex-chatgpt-chat -p codex-app-server -p codex-features -- --check"
+    },
+    "prettier": {
+      "status": "passed",
+      "command": "node_modules/.bin/prettier --check codex-rs/chatgpt-chat/README.md and the three native-two-phase evidence JSON files"
+    },
+    "diff_check": {
+      "status": "passed",
+      "command": "git diff --check"
+    }
+  },
+  "cargo_tests_passed": 251,
+  "bazel_tests_duplicate_cargo_coverage": true,
+  "test_environment": "Mock CA test subprocesses omit Cargo-discovered SSL_CERT_FILE/SSL_CERT_DIR overrides. Live probes preserve configured certificates and verify TLS.",
+  "transport_gate_passed": false,
+  "integrated_gate_passed": false,
+  "stage": "under-development",
+  "default_enabled": false,
+  "requested_model": null,
+  "resolved_model": null,
+  "sentinel_finalize_attempted": false,
+  "conversation_sends_attempted": 0,
+  "uploads_attempted": 0,
+  "remaining_prerequisites": [
+    "Provide verified native application/environment values requested by the challenge; latest run stopped with unsupported_router_context.",
+    "Implement and verify required Session Observer collector/snapshot state and token relationships.",
+    "Verify finalization, completed saved response with server IDs, authoritative retrieval, follow-ups, fresh-process resume, temporary behavior and all attachment categories.",
+    "Implement service, RPC, persistence and terminal surfaces after the transport gate; then run embedded and local-daemon integrated acceptance."
+  ],
+  "unverified_native_platforms": [
+    "macOS",
+    "Windows",
+    "Linux musl",
+    "non-x86_64 architectures"
+  ],
+  "validation_log_sha256": {
+    "crate-tests": "3942a065ea6ed38b3e6ca24317f079aba6866e3b7f3367d3cc227c25b1fbc6bc",
+    "harness-tests": "3cc022e10daa78b51d6bf279861aa36f24f44dc3308f2907e34a2c497b0bf6ab",
+    "harness-clippy": "d07570b01d68bffdeb2a996099348822b0d3a2bf85f16a644d97632099491342",
+    "clippy": "5980d0ad72affd6d248e05ad481dab592982606cfc1be928082a128b8e963b4d",
+    "cli-build": "d507feec5b9fda740fe21211142920ce2bc3c85516c62f7cea71e0e5f55ed3cd",
+    "rust-format": "9053c1f7331bad3ee26e640f3030342ba5e12f49f9e74177f742d862d05b309f",
+    "bazel": "e32cbe8ea5725db54f1a6c9e0fa50278262c941abcea82ff5887d9c5c9408d1e",
+    "bazel-lock": "b5746d7047abb96072d978257b9d8c4f5f005ea9f3e262e834cf46ebdeacd9de"
+  }
+}

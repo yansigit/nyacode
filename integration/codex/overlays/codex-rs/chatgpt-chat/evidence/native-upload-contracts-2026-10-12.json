@@ -1,0 +1,107 @@
+{
+  "observed_at_utc": "2026-10-12T03:20:21.286547+00:00",
+  "protocol": "native-single-put-process-stream-v1",
+  "status": "all_five_formats_observed_live_with_exact_content_and_authoritative_retrieval",
+  "primary_assets": [
+    {
+      "url": "https://chatgpt.com/cdn/assets/4813494d-fw16x7sd7iounac7.js",
+      "sha256": "37fe958daac58a1ab73037f7f01fed13a480ca1fb1f2634391965097a241425c"
+    },
+    {
+      "url": "https://chatgpt.com/cdn/assets/8b34dbc2-oy2s1bd3byon2h8k.js",
+      "sha256": "7d6d30831cd1b598f1f313c041a4b7b6437102cf33575379646f5d4b3bcff4ac"
+    },
+    {
+      "url": "https://chatgpt.com/cdn/assets/conversation-small-lvkutckbb0elz96z.js",
+      "sha256": "eebd1388ad1aa96590daea4da561f0720b0f1880e86ce590a15a7ed8b39f2c80"
+    }
+  ],
+  "contracts": {
+    "allocation": {
+      "method": "POST",
+      "path": "/backend-api/files",
+      "source_symbols": ["T4t", "m4t"],
+      "use_cases": {
+        "image": "multimodal",
+        "pdf_or_utf8": "ace_upload"
+      },
+      "store_in_library": false,
+      "supports_direct_azure_multipart": false
+    },
+    "storage": {
+      "method": "PUT",
+      "source_symbols": ["G4t", "u4t"],
+      "scheme": "https",
+      "redirects": false,
+      "chat_credentials": false,
+      "azure_headers": {
+        "x-ms-blob-type": "BlockBlob",
+        "x-ms-version": "2020-04-08"
+      },
+      "s3_detection": "case-insensitive x-amz-algorithm query key"
+    },
+    "processing": {
+      "method": "POST",
+      "path": "/backend-api/files/process_upload_stream",
+      "source_symbols": ["N4t", "P4t", "F4t", "r4t"],
+      "framing": "utf8_ndjson",
+      "required_events": [
+        "file.processing.file_ready",
+        "file.processing.completed"
+      ],
+      "matching_file_id_required": true,
+      "raw_file_indexing_fallback": false
+    },
+    "association": {
+      "source_symbol": "$Cr",
+      "ordinary_files": "message.metadata.attachments with id, name, size, mime_type, optional file_token_size",
+      "images": "multimodal_text parts containing image_asset_pointer, file-service URI, size_bytes, width and height"
+    }
+  },
+  "fixtures": [
+    {
+      "file": "fixture.png",
+      "code": "PNG-CEDAR-731",
+      "sha256": "0b81b1ad46a19b644fb4048be86577b6e88aaff406ee7bafc561e998b5469600"
+    },
+    {
+      "file": "fixture.jpg",
+      "code": "JPEG-MAPLE-482",
+      "sha256": "e991e3e7162eda49abc8ba3d8c41dda75eb075795e830c07e57ebbcb34dc1065"
+    },
+    {
+      "file": "fixture.webp",
+      "code": "WEBP-ASPEN-956",
+      "sha256": "afcefd8a251bf95a75924734ee7c283bc5571c0763407c444c64a206e86ecffc"
+    },
+    {
+      "file": "fixture.pdf",
+      "code": "PDF-WILLOW-364",
+      "sha256": "93a909cef29ee735cc7d835b07fa1c711df21d9206342805b9b79084024029b1"
+    },
+    {
+      "file": "fixture.txt",
+      "code": "UTF8-BIRCH-825",
+      "sha256": "d8a37a99a3b426f3da18cce67bb98cc6cc98b6c85d420b1046ea899c83a2d6cc"
+    }
+  ],
+  "limits": {
+    "aggregate_submission_bytes": 33554432,
+    "staging_bytes": 134217728,
+    "image_bytes": 20971520,
+    "processing_line_bytes": 65536,
+    "processing_total_bytes": 2097152,
+    "processing_events": 4096,
+    "processing_elapsed_seconds": 180
+  },
+  "deferred": [
+    "relative Estuary storage",
+    "direct multipart uploads",
+    "Library persistence",
+    "retrieval-index fallback",
+    "global PDF parser scratch/time bound"
+  ],
+  "no_browser_state_imported": true,
+  "no_application_javascript_vendored_or_executed_by_native_implementation": true,
+  "live_report": "native-attachments-2026-10-12-report.json"
+}

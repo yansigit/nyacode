@@ -1,0 +1,52 @@
+{
+  "cargo_chat": {
+    "tests": 139,
+    "status": "passed"
+  },
+  "cargo_http": {
+    "unit_tests": 126,
+    "custom_ca_tests": 10,
+    "status": "passed"
+  },
+  "cargo_harness": {
+    "tests": 5,
+    "status": "passed"
+  },
+  "clippy_chat_http_all_targets": "passed with -D warnings",
+  "clippy_harness": "passed with -D warnings",
+  "bazel_chat": {
+    "tests": 139,
+    "status": "passed",
+    "lockfile_mode": "error"
+  },
+  "bazel_http": {
+    "tests": 126,
+    "status": "passed",
+    "lockfile_mode": "error"
+  },
+  "cargo_format_affected": "passed",
+  "diff_check": "passed",
+  "live_attachments": "all five formats with exact code replies and authoritative retrieval",
+  "live_fresh_process_saved_resume": "passed",
+  "live_temporary_conduit": "passed; two turns, exact-ID refreshes, saved journal hashes unchanged",
+  "feature_stage": "under_development",
+  "feature_default": false,
+  "integrated_acceptance": "not_run",
+  "remaining": [
+    "global PDF parser scratch and elapsed-time bounds",
+    "additional lifecycle/stream/policy hardening",
+    "native cancellation and handoff capability evidence",
+    "service, persistence, experimental RPC and trusted local origins",
+    "independent full-screen TUI surfaces",
+    "embedded app-server and daemon integrated acceptance",
+    "supported-platform native transport builds"
+  ],
+  "recorded_at_utc": "2026-10-12T03:31:59.060286+00:00",
+  "source_manifest": "native-attachments-2026-10-12-source.json",
+  "required_native_live_scenarios": "passed",
+  "transport_gate_evidence": [
+    "native-attachments-2026-10-12-report.json",
+    "native-saved-resume-after-uploads-2026-10-12-report.json",
+    "native-temporary-after-uploads-2026-10-12-report.json"
+  ]
+}

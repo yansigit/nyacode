@@ -1,0 +1,72 @@
+name: Container verification
+
+on:
+  pull_request:
+    paths:
+      - "codex-rs/**"
+      - "third_party/v8/**"
+      - "Containerfile"
+      - "Dockerfile"
+      - ".dockerignore"
+      - "scripts/verify-container.sh"
+      - "scripts/verify_container.py"
+      - "scripts/tests/test_verify_container.py"
+      - ".github/workflows/container-verify.yml"
+  push:
+    branches: [main]
+    paths:
+      - "codex-rs/**"
+      - "third_party/v8/**"
+      - "Containerfile"
+      - "Dockerfile"
+      - ".dockerignore"
+      - "scripts/verify-container.sh"
+      - "scripts/verify_container.py"
+      - "scripts/tests/test_verify_container.py"
+      - ".github/workflows/container-verify.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: container-verify-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  full:
+    name: Complete Linux container verification
+    runs-on: ubuntu-24.04
+    timeout-minutes: 360
+    env:
+      CARGO_BUILD_JOBS: "2"
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Test verifier controls
+        run: |
+          python3 -m unittest discover -s scripts/tests -p test_verify_container.py
+          bash -n scripts/verify-container.sh
+      - name: Enable nested sandbox user namespaces
+        # Match setup-ci's Linux sandbox prerequisites on this disposable host.
+        run: |
+          sudo sysctl -w kernel.unprivileged_userns_clone=1
+          if sudo sysctl -n kernel.apparmor_restrict_unprivileged_userns >/dev/null 2>&1; then
+            sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
+          fi
+      - name: Verify every Rust workspace crate in the container
+        run: |
+          set -o pipefail
+          scripts/verify-container.sh --engine docker full 2>&1 | tee "$RUNNER_TEMP/container-verification.log"
+      - name: Check source and dependency pins remained unchanged
+        run: git diff --exit-code
+      - name: Retain verification output
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: container-verification-${{ github.run_id }}
+          path: ${{ runner.temp }}/container-verification.log
+          if-no-files-found: warn
+          retention-days: 7

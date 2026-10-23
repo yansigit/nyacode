@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "researched_at_utc": "2026-10-12T02:50:23.474848+00:00",
+  "status": "Native live acceptance passed: two temporary user submissions, each with an exact-ID conduit refresh; saved-history GET returned 404 and recent history omitted the conversation. Both feature release gates remain closed.",
+  "sources": [
+    {
+      "url": "https://chatgpt.com/cdn/assets/8b34dbc2-oy2s1bd3byon2h8k.js",
+      "function": "q8t"
+    },
+    {
+      "url": "https://chatgpt.com/cdn/assets/4813494d-fw16x7sd7iounac7.js",
+      "function": "Cue"
+    },
+    {
+      "url": "https://help.openai.com/en/articles/8914046-temporary-chat-in-chatgpt",
+      "contract": "Temporary chats remain outside history unless explicitly saved; backend retention is separate from local persistence."
+    }
+  ],
+  "request": {
+    "method": "POST",
+    "path": "/backend-api/f/conversation/resume",
+    "body": "conversation_id and offset=0; no messages, model selection or persistence-mode change",
+    "conduit": "Only the token from response header or resume_conversation_token event; never the preparation token",
+    "retry": "One explicit read attempt; no automatic replay, POST retry, tokenless fallback or conversion to saved"
+  },
+  "verification": "A fresh bounded decoder must replay the exact submitted user ID, same conversation ID and completed assistant ID. Matching text alone is insufficient. This candidate refreshes the sole in-memory temporary chain; it does not establish cross-client current-branch discovery.",
+  "privacy": "Resume tokens and decoded temporary content remain memory-only; the diagnostic retains only status, counts and booleans.",
+  "live_report": "native-temporary-conduit-2026-10-12-report.json",
+  "live_source": "native-temporary-conduit-2026-10-12-source.json"
+}

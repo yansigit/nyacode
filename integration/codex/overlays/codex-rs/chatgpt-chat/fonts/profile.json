@@ -1,0 +1,10 @@
+{
+  "profile": "dejavu_2_37_v1",
+  "source": "DejaVu 2.37, Debian fonts-dejavu-core; unmodified font files",
+  "license": "Bitstream Vera font license; DejaVu changes public domain",
+  "sha256": {
+    "DejaVuSans.ttf": "ae7b7855e115a5966d8b1b3f80f254ccc117ec86f9965e202ee2940453837280",
+    "DejaVuSansMono.ttf": "c805f9436dbc268644c1d9584f01a601a653e028e08fd74b9b949f6cf8304d88",
+    "DejaVuSerif.ttf": "8f2c103bfa3fd5de71f1b92b18f21906b5a26871fb7e19a9a4c9af539c3cc7ab"
+  }
+}

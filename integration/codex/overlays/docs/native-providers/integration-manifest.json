@@ -1,0 +1,335 @@
+{
+  "schema_version": 1,
+  "owned_root": "codex-rs/providers",
+  "subsystem_packages": [
+    "codex-provider-api",
+    "codex-provider-auth",
+    "codex-provider-codecs",
+    "codex-provider-cursor",
+    "codex-provider-opencode",
+    "codex-provider-claude",
+    "codex-provider-antigravity",
+    "codex-provider-registry",
+    "codex-provider-runtime"
+  ],
+  "adapter_package": "codex-provider-adapter",
+  "single_provider_features": [
+    "provider-cursor",
+    "provider-opencode",
+    "provider-claude",
+    "provider-antigravity"
+  ],
+  "focused_test_groups": [
+    {
+      "name": "provider-packages",
+      "packages": [
+        "codex-provider-api",
+        "codex-provider-auth",
+        "codex-provider-codecs",
+        "codex-provider-cursor",
+        "codex-provider-opencode",
+        "codex-provider-claude",
+        "codex-provider-antigravity",
+        "codex-provider-registry",
+        "codex-provider-runtime",
+        "codex-provider-adapter"
+      ],
+      "minimum_tests": 1
+    },
+    {
+      "name": "thread-config",
+      "packages": ["codex-config"],
+      "minimum_tests": 1
+    },
+    {
+      "name": "model-provider-facade",
+      "packages": ["codex-model-provider"],
+      "minimum_tests": 1
+    },
+    {
+      "name": "model-provider-metadata",
+      "packages": ["codex-model-provider-info"],
+      "minimum_tests": 1
+    },
+    {
+      "name": "core-native-provider",
+      "packages": ["codex-core"],
+      "filter": "native_provider",
+      "test_target": "lib",
+      "minimum_tests": 1
+    },
+    {
+      "name": "core-responses-retry",
+      "packages": ["codex-core"],
+      "filter": "client::tests::",
+      "test_target": "lib",
+      "test_threads": 1,
+      "minimum_tests": 33
+    },
+    {
+      "name": "core-child-provider-routing",
+      "packages": ["codex-core"],
+      "filter": "agent::child_config::tests",
+      "test_target": "lib",
+      "minimum_tests": 4
+    },
+    {
+      "name": "core-child-provider-reload",
+      "packages": ["codex-core"],
+      "test_target": "lib",
+      "filter": "ensure_v2_agent_loaded_reloads_registered_unloaded_agent",
+      "minimum_tests": 1
+    },
+    {
+      "name": "core-collaboration-tools",
+      "packages": ["codex-core"],
+      "filter": "multi_agents",
+      "test_target": "lib",
+      "minimum_tests": 1
+    },
+    {
+      "name": "core-collaboration-catalog",
+      "packages": ["codex-core"],
+      "filter": "tools::multi_agent_tool::tests",
+      "test_target": "lib",
+      "minimum_tests": 2
+    },
+    {
+      "name": "core-collaboration-descriptions",
+      "packages": ["codex-core"],
+      "test_target": "all",
+      "filter": "multi_agent_tool_descriptions",
+      "minimum_tests": 23
+    },
+    {
+      "name": "core-native-mailbox-boundary",
+      "packages": ["codex-core"],
+      "test_target": "all",
+      "filter": "scenarios::mailbox_preemption",
+      "minimum_tests": 7
+    },
+    {
+      "name": "core-background-terminal-lifetime",
+      "packages": ["codex-core"],
+      "test_target": "all",
+      "filter": "unified_exec_interrupt_preserves_long_running_session",
+      "minimum_tests": 1
+    },
+    {
+      "name": "app-server-account-and-fork",
+      "packages": ["codex-app-server"],
+      "test_target": "all",
+      "filter": "native_account",
+      "minimum_tests": 4
+    },
+    {
+      "name": "chat-saved-storage-recovery",
+      "packages": ["codex-state"],
+      "test_target": "lib",
+      "filter": "runtime::chat::tests",
+      "minimum_tests": 30
+    },
+    {
+      "name": "chat-saved-service-recovery",
+      "packages": ["codex-app-server"],
+      "test_target": "lib",
+      "filter": "chat::saved::tests",
+      "minimum_tests": 7
+    },
+    {
+      "name": "schema-fixtures",
+      "packages": ["codex-app-server-protocol"],
+      "filter": "schema_fixtures",
+      "minimum_tests": 1
+    },
+    {
+      "name": "cli-provider-choices",
+      "packages": ["codex-cli"],
+      "test_target": "bin:codex",
+      "filter": "provider_cli_parses_each_supported_provider_and_rejects_unknown_values",
+      "minimum_tests": 1
+    },
+    {
+      "name": "pool-selection-and-recovery",
+      "packages": ["codex-provider-runtime"],
+      "test_target": "pool",
+      "minimum_tests": 9
+    },
+    {
+      "name": "pool-fifth-provider-handoffs",
+      "packages": ["codex-provider-runtime"],
+      "test_target": "pooled_turn",
+      "minimum_tests": 6
+    },
+    {
+      "name": "pool-account-concurrency",
+      "packages": ["codex-provider-auth"],
+      "test_target": "accounts",
+      "minimum_tests": 5
+    },
+    {
+      "name": "pool-cli-management",
+      "packages": ["codex-cli"],
+      "test_target": "bin:codex",
+      "filter": "provider_pool_cli",
+      "minimum_tests": 1
+    },
+    {
+      "name": "pool-rpc-compatibility",
+      "packages": ["codex-app-server-protocol"],
+      "test_target": "lib",
+      "filter": "provider_pool",
+      "minimum_tests": 2
+    },
+    {
+      "name": "pool-tui-management",
+      "packages": ["codex-tui"],
+      "test_target": "lib",
+      "filter": "provider_manager",
+      "minimum_tests": 1
+    },
+    {
+      "name": "pool-tui-slash-commands",
+      "packages": ["codex-tui"],
+      "test_target": "lib",
+      "filter": "slash",
+      "minimum_tests": 1
+    }
+  ],
+  "provider_branch_scan": {
+    "scan_roots": [
+      "codex-rs/core/src",
+      "codex-rs/cli/src",
+      "codex-rs/app-server/src/request_processors",
+      "codex-rs/model-provider/src",
+      "codex-rs/tui/src"
+    ],
+    "paths": [
+      "codex-rs/config/src/thread_config/remote.rs",
+      "codex-rs/model-provider/src/native.rs",
+      "codex-rs/core/src/native_provider.rs",
+      "codex-rs/core/src/client.rs",
+      "codex-rs/core/src/client_common.rs",
+      "codex-rs/core/src/session/turn.rs",
+      "codex-rs/core/src/tools/parallel.rs",
+      "codex-rs/core/src/thread_manager.rs",
+      "codex-rs/app-server/src/request_processors/account_processor.rs",
+      "codex-rs/app-server/src/request_processors/thread_processor.rs",
+      "codex-rs/cli/src/provider_cmd.rs"
+    ],
+    "allowed_compatibility_paths": [
+      "codex-rs/config/src/thread_config/remote.rs",
+      "codex-rs/model-provider-info/src/lib.rs"
+    ],
+    "provider_ids": ["cursor", "opencode-go", "claude", "antigravity"],
+    "provider_symbols": [
+      "WireApi::Cursor",
+      "WireApi::OpenCodeGo",
+      "WireApi::Claude",
+      "WireApi::Antigravity",
+      "codex_provider_cursor",
+      "codex_provider_opencode",
+      "codex_provider_claude",
+      "codex_provider_antigravity"
+    ]
+  },
+  "integration_hooks": [
+    {
+      "id": "model-info-registry-and-legacy-enum",
+      "path": "codex-rs/model-provider-info/src/lib.rs",
+      "purpose": "Registry metadata supplies provider selection while the existing enum remains a wire compatibility alias.",
+      "regression_test_group": "model-provider-metadata"
+    },
+    {
+      "id": "remote-thread-config-proto",
+      "path": "codex-rs/config/src/thread_config/remote.rs",
+      "purpose": "Remote thread configuration carries generic provider identity and model selection.",
+      "regression_test_group": "thread-config"
+    },
+    {
+      "id": "optional-model-provider-facade",
+      "path": "codex-rs/model-provider/src/native.rs",
+      "purpose": "The existing model-provider surface exposes the optional native backend and facade.",
+      "regression_test_group": "model-provider-facade"
+    },
+    {
+      "id": "core-provider-bridge",
+      "path": "codex-rs/core/src/native_provider.rs",
+      "purpose": "A small bridge wires the adapter into core without provider protocol implementations.",
+      "regression_test_group": "core-native-provider"
+    },
+    {
+      "id": "client-stream-and-auth-routing",
+      "path": "codex-rs/core/src/client.rs",
+      "purpose": "Client construction and stream routing use the backend adapter.",
+      "regression_test_group": "core-native-provider"
+    },
+    {
+      "id": "client-session-control",
+      "path": "codex-rs/core/src/client_common.rs",
+      "purpose": "SessionControl owns turn lifecycle and cancellation at the backend boundary.",
+      "regression_test_group": "core-native-provider"
+    },
+    {
+      "id": "turn-recorded-completion-retry-terminal",
+      "path": "codex-rs/core/src/session/turn.rs",
+      "purpose": "Turn handling records typed completions, retry decisions, and terminal state.",
+      "regression_test_group": "core-native-provider"
+    },
+    {
+      "id": "parallel-structured-completion-capture",
+      "path": "codex-rs/core/src/tools/parallel.rs",
+      "purpose": "Parallel host calls capture structured completion results for adapter resubmission.",
+      "regression_test_group": "core-native-provider"
+    },
+    {
+      "id": "thread-scoped-model-metadata",
+      "path": "codex-rs/core/src/thread_manager.rs",
+      "purpose": "Model metadata and provider choices remain scoped to each thread.",
+      "regression_test_group": "core-native-provider"
+    },
+    {
+      "id": "generic-account-operations-and-ownership-lock",
+      "path": "codex-rs/app-server/src/request_processors/account_processor.rs",
+      "purpose": "App-server account operations use generic adapter dispatch and explicit ownership locking.",
+      "regression_test_group": "app-server-account-and-fork"
+    },
+    {
+      "id": "thread-provider-inheritance",
+      "path": "codex-rs/app-server/src/request_processors/thread_processor.rs",
+      "purpose": "Fork and cold-resume preserve inherited provider identity when no override is supplied.",
+      "regression_test_group": "app-server-account-and-fork"
+    },
+    {
+      "id": "generic-cli-metadata-choices",
+      "path": "codex-rs/cli/src/provider_cmd.rs",
+      "purpose": "CLI choices come from generic provider metadata rather than provider-specific branches.",
+      "regression_test_group": "cli-provider-choices"
+    },
+    {
+      "id": "account-pool-management-rpc",
+      "path": "codex-rs/app-server/src/request_processors/account_processor/provider_pool.rs",
+      "purpose": "Generic revision-checked account and pool management with durable change notifications.",
+      "regression_test_group": "pool-rpc-compatibility"
+    },
+    {
+      "id": "account-aware-model-discovery",
+      "path": "codex-rs/models-manager/src/manager.rs",
+      "purpose": "Thread binding forwards effective account identity to existing model cache isolation.",
+      "regression_test_group": "provider-packages"
+    },
+    {
+      "id": "durable-native-history-acknowledgement",
+      "path": "codex-rs/core/src/session/turn.rs",
+      "purpose": "Flush recorded history before authorizing provider continuation or releasing execution fences.",
+      "regression_test_group": "pool-fifth-provider-handoffs"
+    },
+    {
+      "id": "provider-account-manager",
+      "path": "codex-rs/tui/src/bottom_pane/provider_manager.rs",
+      "purpose": "Registry-driven account management via generic RPCs, including masked token entry and OAuth cancellation.",
+      "regression_test_group": "pool-rpc-compatibility"
+    }
+  ],
+  "registry_metadata_source": "codex-rs/providers/provider-registry/src/lib.rs"
+}

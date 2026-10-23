@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "properties": {
+    "account": {
+      "type": "string"
+    },
+    "previousAccount": {
+      "type": "string"
+    },
+    "provider": {
+      "type": "string"
+    },
+    "threadId": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "account",
+    "previousAccount",
+    "provider",
+    "threadId"
+  ],
+  "title": "ThreadProviderAccountChangedNotification",
+  "type": "object"
+}

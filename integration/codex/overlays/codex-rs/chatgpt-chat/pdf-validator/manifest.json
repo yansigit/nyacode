@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "toolchain": "1.95.0",
+  "target": "wasm32-unknown-unknown",
+  "artifact_sha256": "aad790fb295c9072897e252d6ef268190947e0c63c7bd8b0c28be885162b50ff",
+  "input_sha256": {
+    "Cargo.toml": "6e388816d69a666943cb71d9d18f8e5b657ce414c449df1f0a1c162341360d8c",
+    "Cargo.lock": "89ad39703f649a10cb4e4bf1a8557e48dc8fc34b85429adca05c6f1b5c47f4f5",
+    "src/lib.rs": "186fcf892a7b169a824574aa06e1f2b787c1fe8c5340d33a840ab9c0c333bb32",
+    "build.py": "fed8696002f8613696ca510d59aee748ce197bf28e4db9363edd3e2924ba8a10"
+  }
+}

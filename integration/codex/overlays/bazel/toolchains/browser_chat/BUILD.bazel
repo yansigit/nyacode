@@ -1,0 +1,15 @@
+load("@rules_cc//cc:cc_library.bzl", "cc_library")
+
+exports_files(["toolchain.cmake"])
+
+# Cargo's build script cannot carry Bazel's runtime CcInfo itself.
+# BoringSSL uses winpthreads under MinGW; static archives do not propagate
+# CMake's Threads::Threads dependency into a Rust executable's final link.
+cc_library(
+    name = "cxx_runtime",
+    srcs = ["@llvm//runtimes:static_runtime_lib"] + select({
+        "@llvm//constraints/windows/abi:gnullvm": ["@llvm//runtimes/mingw:pthread"],
+        "//conditions:default": [],
+    }),
+    visibility = ["//visibility:public"],
+)

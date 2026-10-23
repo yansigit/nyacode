@@ -1,0 +1,50 @@
+[package]
+name = "codex-chatgpt-chat"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+publish = false
+
+[lib]
+doctest = false
+
+[lints]
+workspace = true
+
+[dependencies]
+hex = { workspace = true }
+base64 = { workspace = true }
+bytes = { workspace = true }
+chrono = { workspace = true }
+codex-http-client = { workspace = true }
+codex-login = { workspace = true }
+http = { workspace = true }
+image = { workspace = true, features = ["jpeg", "png", "webp"] }
+parley = { workspace = true }
+rand = { workspace = true }
+regex = { workspace = true }
+regex-automata = { workspace = true, features = ["dfa-build", "dfa-search"] }
+serde = { workspace = true, features = ["derive"] }
+serde_json = { workspace = true, features = ["preserve_order"] }
+sha2 = { workspace = true }
+thiserror = { workspace = true }
+tokio = { workspace = true, features = ["macros", "sync", "time"] }
+tokio-util = { workspace = true }
+tracing = { workspace = true }
+url = { workspace = true }
+uuid = { workspace = true, features = ["v4"] }
+wasmi = { workspace = true }
+wasmi_core = { workspace = true }
+
+[target.'cfg(unix)'.dependencies]
+libc = { workspace = true }
+
+[dev-dependencies]
+codex-utils-rustls-provider = { workspace = true }
+rcgen = { workspace = true }
+rustls = { workspace = true }
+tokio = { workspace = true, features = ["test-util"] }
+pretty_assertions = { workspace = true }
+wiremock = { workspace = true }
+
+wasmi = { workspace = true, features = ["wat"] }

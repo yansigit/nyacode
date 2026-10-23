@@ -1,0 +1,75 @@
+{
+  "report_version": 7,
+  "stage": "under_development",
+  "live": true,
+  "transport": "browser-emulated",
+  "transport_explicit": true,
+  "preparation_protocol": "diagnostic",
+  "transport_version": "wreq=6.0.0-rc.29;wreq-util=3.0.0-rc.14",
+  "profile": "chrome_136_linux",
+  "release_gate_passed": false,
+  "capabilities": [
+    {
+      "capability": "models",
+      "status": "observed",
+      "item_count": 28,
+      "latency_ms": 824
+    },
+    {
+      "capability": "history_list",
+      "status": "observed",
+      "item_count": 20,
+      "latency_ms": 353
+    },
+    {
+      "capability": "history_read",
+      "status": "observed",
+      "item_count": 25,
+      "latency_ms": 408
+    },
+    {
+      "capability": "conversation_preparation",
+      "status": "not_run"
+    },
+    {
+      "capability": "saved_text",
+      "status": "not_run"
+    },
+    {
+      "capability": "follow_up",
+      "status": "not_run"
+    },
+    {
+      "capability": "restart_resume",
+      "status": "not_run"
+    },
+    {
+      "capability": "temporary_chat",
+      "status": "not_run"
+    },
+    {
+      "capability": "png_upload",
+      "status": "not_run"
+    },
+    {
+      "capability": "jpeg_upload",
+      "status": "not_run"
+    },
+    {
+      "capability": "webp_upload",
+      "status": "not_run"
+    },
+    {
+      "capability": "pdf_upload",
+      "status": "not_run"
+    },
+    {
+      "capability": "utf8_upload",
+      "status": "not_run"
+    },
+    {
+      "capability": "server_cancellation",
+      "status": "not_run"
+    }
+  ]
+}

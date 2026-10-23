@@ -1,0 +1,82 @@
+{
+  "version": 1,
+  "recorded_at_utc": "2026-10-12T04:12:11.905399+00:00",
+  "source_revision": "3a88aafe4632364ec30f6c402f68d9d09770a9fc",
+  "dirty_tree": true,
+  "rust_toolchain": "1.95.0",
+  "feature_stage": "under_development",
+  "feature_default": false,
+  "native_live_gate": "passed; see native-upload-validation-2026-10-12.json",
+  "integrated_acceptance": "not_run",
+  "cargo_state": {
+    "unit_tests": 246,
+    "documentation_tests": 1,
+    "status": "passed",
+    "rust_min_stack": 8388608
+  },
+  "bazel_state": {
+    "unit_tests": 246,
+    "status": "passed",
+    "lockfile_mode": "error"
+  },
+  "clippy_state_all_targets": "passed with -D warnings",
+  "cargo_transport": {
+    "tests": 161,
+    "status": "passed"
+  },
+  "bazel_transport": {
+    "tests": 161,
+    "status": "passed",
+    "lockfile_mode": "error"
+  },
+  "cargo_app_server_user_verification": {
+    "tests": 32,
+    "status": "passed",
+    "rust_min_stack": 8388608
+  },
+  "cargo_chat_after_metadata_and_file_staging_hardening": {
+    "tests": 142,
+    "status": "passed"
+  },
+  "bazel_chat_after_metadata_and_file_staging_hardening": {
+    "tests": 142,
+    "status": "passed",
+    "lockfile_mode": "error"
+  },
+  "scope": [
+    "Server-assigned protected LocalSocket origin; TCP remains WebSocket",
+    "Account/workspace-scoped saved profiles, revisioned drafts, file metadata and pending submissions",
+    "WAL FULL durability before transmission; one-time transmission permission",
+    "Fenced cross-process leases; takeover cannot resend",
+    "Exact-ID acceptance separate from local generation outcome",
+    "Real child-process crash tests and interrupted transaction recovery"
+  ],
+  "limitations": [
+    "Chat service and RPC processor not wired",
+    "Conversation/message cache tables not implemented",
+    "Temporary isolation is not yet verified through service or TUI",
+    "Independent Chat terminal surfaces and integrated acceptance remain outstanding",
+    "Supported-platform transport builds remain outstanding"
+  ],
+  "source_files_sha256": {
+    "MODULE.bazel.lock": "374ab2b350d0ae7057e2f43cd4318186b59ef2381dba7c9cc1ed90a1a66ad3bf",
+    "codex-rs/Cargo.lock": "aedddb9c7ccd9c5af2453bd80489ad447d3fd3c22bc4a2f546076721a5931c93",
+    "codex-rs/app-server/src/user_verification.rs": "2bfe6a79907c04c6945d98bdf5e4e7598ba120feba85fa698532aab1f555c647",
+    "codex-rs/app-server/src/user_verification_activation_tests.rs": "4dd4c9e823ef76033c722eb64b5b7bbf9ed5ea4ff7b256b7c6e41eec3b8286ce",
+    "codex-rs/app-server/src/user_verification_rpc_tests.rs": "be6d3c469e1a795e27f03891c2da7a8a1ee29c152e1a04232dea546da1792ccf",
+    "codex-rs/app-server/src/user_verification_test_support.rs": "839cdf2cc3ef39849eb8180464ce1d35ff65d19c411d2ff46f5e98e8af89e2f5",
+    "codex-rs/app-server-transport/src/transport/mod.rs": "e7330a872a1916fce4d816f8fcecc2ce6f117c812b29156233d5d74e6df84905",
+    "codex-rs/app-server-transport/src/transport/unix_socket.rs": "fb65a774d7e412013dba9917d2d3ea99c6d8a1aa58cba931ae1c4db9840d6eba",
+    "codex-rs/app-server-transport/src/transport/unix_socket_tests.rs": "821715c61fd5d8aa53d72fcbc836b0ff9c6a30b8d124ed31b2b1d6b36f43fd5c",
+    "codex-rs/app-server-transport/src/transport/websocket.rs": "50ed17252813f7a63798400af1a020d27a2e7dfada851c93e24e17728b4c3ff1",
+    "codex-rs/state/Cargo.toml": "03bdaf9ac28b70a521f1da1b25154062d817b8d2ff93814e7a3509e3edda1ae2",
+    "codex-rs/state/migrations/0062_saved_chat.sql": "45da65287bb7c1d3f50d23a49cfb3db4f1a645de077172f66c6d4161ce996dbe",
+    "codex-rs/state/src/lib.rs": "ecbff31083e992ee839f95764f6bdef49f1826fa928478e5e9db15f6dff988a4",
+    "codex-rs/state/src/runtime/chat/drafts.rs": "8c8983ed6968436eaef565a21d211a422535c77798db56f8308b78d51b9f0d8b",
+    "codex-rs/state/src/runtime/chat/submissions.rs": "6be526ec916a4bdf65db0d31725ce0b137dc7c7302e1e21d1e11a6208e6b1820",
+    "codex-rs/state/src/runtime/chat/tests.rs": "a8edbbb0362288b2ce4aad4eb1078b4eecdbfc5e973f6c13fdb58c91b264a56c",
+    "codex-rs/state/src/runtime/chat/types.rs": "1aec81bc2f133cf3366f69a4a04cf7fbb3132397c596a2216bfa3730cffdb233",
+    "codex-rs/state/src/runtime/chat.rs": "32de80986ed04baff06264b973cf9f517be73ac7303b2da4413d189aa6306b2e",
+    "codex-rs/state/src/runtime.rs": "55783392165838f5375b29164264d2e3e953b8c0d0204e8225917d71c682281f"
+  }
+}

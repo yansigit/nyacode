@@ -1,0 +1,85 @@
+{
+  "audit_version": 1,
+  "audited_at_utc": "2026-10-11T23:17:23.984227+00:00",
+  "previous_goal_turn_classification": "progress",
+  "same_blocking_condition_observed_across_goal_turns": 3,
+  "blocking_condition": "Required native Sentinel semantics and Session Observer token relationships remain unverified; no acceptable evidence found to implement the required values without guessing or relaxing the browserless constraints.",
+  "source_integrity": "All files in the latest deterministic validation manifest still match the working tree.",
+  "validation_manifest": "native-two-phase-validation-2026-10-11-v2.json",
+  "validation_manifest_sha256": "d653d375675f7047a34ffcf009965014e262856171c23657821c6eb3c8ec7547",
+  "live_report": "live-native-two-phase-probe-2026-10-11-v2.json",
+  "live_report_sha256": "3239468ffacd24fb2283dd4e3291e40799d28fb77838235e0b48e2623b700c7c",
+  "last_live_failure": {
+    "operation": "sentinel_compute",
+    "latency_ms": 30,
+    "cloudflare_challenge": false,
+    "error": "unsupported_challenge",
+    "native_failure": "required_script_match_unavailable"
+  },
+  "new_live_requests_in_this_audit": 0,
+  "upstream_revalidation": [
+    {
+      "repository": "aurora-develop/aurora",
+      "revision": "cbfbabc9c14c7278e4dd91cf8807b2bf500860b1",
+      "license": "MIT",
+      "revision_changed": false,
+      "remaining_issue": "Opcode 11 uses Go nil for no match and invalid regex; this does not establish the native protocol distinction between null and undefined. Observer run resets the registers that its stated collector/snapshot contract says must be shared."
+    },
+    {
+      "repository": "robotlearning123/gpt2agent",
+      "revision": "20669693dd608a94a5b5aba54c4c4a036f064375",
+      "license": "MIT",
+      "revision_changed": false,
+      "missing_paths": [
+        {
+          "path": "gpt2agent/sentinel_vm.py",
+          "http_status": 404
+        },
+        {
+          "path": "tests/fixtures/sentinel_vm/fixtures.json",
+          "http_status": 404
+        }
+      ]
+    },
+    {
+      "repository": "kymuco/chatgpt-web-adapter",
+      "revision": "52113a5d93795676f2c02a1a5e4c1d4154fb7f05",
+      "license": "MIT",
+      "revision_changed": false,
+      "remaining_issue": "Two-phase lifecycle documentation explicitly delegates Turnstile/Observer solving to a provider. Its working acquisition uses a browser and does not supply the required native implementation."
+    }
+  ],
+  "resumption_evidence_needed": [
+    "A compatible licensed contract/fixture or native observation establishing opcode 11 no-match semantics, or an observed native source for the required matching script metadata.",
+    "Native collector/snapshot evidence establishing retained state, completion/cancellation behavior, decryption inputs and token binding for the required Session Observer variant."
+  ],
+  "constraints_retained": [
+    "Rust 1.95.0",
+    "managed authentication",
+    "native Rust HTTP",
+    "bounded in-process interpreter",
+    "no browser automation or browser imports",
+    "no external challenge tokens",
+    "no inference fallback",
+    "no unlicensed/GPL bridge translation",
+    "no fabricated success tokens"
+  ],
+  "acceptance": {
+    "transport_gate_passed": false,
+    "integrated_gate_passed": false,
+    "sentinel_finalize_verified": false,
+    "conversation_sends_attempted": 0,
+    "uploads_attempted": 0,
+    "service_rpc_persistence_tui_integration": "gated by transport acceptance",
+    "stage": "under-development",
+    "default_enabled": false
+  },
+  "validated_existing_work": {
+    "cargo_tests_passed": 266,
+    "bazel_chat_tests_passed": 82,
+    "clippy": "passed",
+    "cli_build": "passed",
+    "formatting": "passed",
+    "bazel_dependency_lock": "passed"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "properties": {
+    "endpoint": {
+      "type": "string"
+    },
+    "provider": {
+      "type": "string"
+    },
+    "revision": {
+      "format": "uint64",
+      "minimum": 0,
+      "type": "integer"
+    }
+  },
+  "required": [
+    "endpoint",
+    "provider",
+    "revision"
+  ],
+  "title": "ProviderPoolChangedNotification",
+  "type": "object"
+}

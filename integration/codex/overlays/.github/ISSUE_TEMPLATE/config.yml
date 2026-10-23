@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Official OpenAI Codex desktop app and IDE extension
+    url: https://github.com/openai/codex/issues
+    about: Report issues with the upstream OpenAI products in their repository.

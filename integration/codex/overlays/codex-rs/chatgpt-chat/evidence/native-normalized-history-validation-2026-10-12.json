@@ -1,0 +1,39 @@
+{
+  "version": 1,
+  "recorded_at_utc": "2026-10-12T04:26:46.462419+00:00",
+  "cargo_chat": {
+    "tests": 153,
+    "status": "passed"
+  },
+  "bazel_chat": {
+    "tests": 153,
+    "status": "passed",
+    "lockfile_mode": "error"
+  },
+  "clippy_chat_all_targets": "passed with -D warnings",
+  "cargo_format_chat": "passed",
+  "harness_build": "passed",
+  "live_normalized_reads": {
+    "models": 28,
+    "history_summaries": 20,
+    "active_branch_messages": 25,
+    "fixture": "previously created five-format attachment conversation",
+    "private_saved_journals_unchanged": true,
+    "user_message_posts": 0,
+    "uploads": 0
+  },
+  "source_manifest": "native-normalized-history-2026-10-12-source.json",
+  "live_citation_metadata": "not separately exercised",
+  "integrated_acceptance": "not_run",
+  "feature_stage": "under_development",
+  "feature_default": false,
+  "research_sources": [
+    {
+      "repository": "https://github.com/robotlearning123/gpt2agent",
+      "revision": "20669693dd608a94a5b5aba54c4c4a036f064375",
+      "paths": ["gpt2agent/tools/conversations.py", "gpt2agent/citations.py"],
+      "license": "MIT",
+      "access": "gh api"
+    }
+  ]
+}

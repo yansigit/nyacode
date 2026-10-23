@@ -1,0 +1,118 @@
+{
+  "report_version": 12,
+  "stage": "under_development",
+  "live": true,
+  "transport": "browser-emulated",
+  "transport_explicit": true,
+  "preparation_protocol": "two-phase-v1",
+  "transport_version": "wreq=6.0.0-rc.29;wreq-util=3.0.0-rc.14",
+  "profile": "chrome_136_linux",
+  "release_gate_passed": false,
+  "capabilities": [
+    {
+      "capability": "models",
+      "status": "not_run"
+    },
+    {
+      "capability": "history_list",
+      "status": "not_run"
+    },
+    {
+      "capability": "history_read",
+      "status": "not_run"
+    },
+    {
+      "capability": "conversation_preparation",
+      "status": "not_run"
+    },
+    {
+      "capability": "saved_text",
+      "status": "not_run"
+    },
+    {
+      "capability": "follow_up",
+      "status": "not_run"
+    },
+    {
+      "capability": "restart_resume",
+      "status": "not_run"
+    },
+    {
+      "capability": "temporary_chat",
+      "status": "not_run"
+    },
+    {
+      "capability": "png_upload",
+      "status": "not_run"
+    },
+    {
+      "capability": "jpeg_upload",
+      "status": "not_run"
+    },
+    {
+      "capability": "webp_upload",
+      "status": "not_run"
+    },
+    {
+      "capability": "pdf_upload",
+      "status": "not_run"
+    },
+    {
+      "capability": "utf8_upload",
+      "status": "not_run"
+    },
+    {
+      "capability": "server_cancellation",
+      "status": "not_run"
+    }
+  ],
+  "write_scenario": "attachments",
+  "rpc": {
+    "local_socket": true,
+    "account_matched": true,
+    "status_available": true,
+    "model_count": 28,
+    "default_model": "gpt-6-thinking",
+    "history_count": 20,
+    "accepted": true,
+    "completed": false,
+    "streamed_updates": 33,
+    "sequence_ordered": true,
+    "authoritative_retrieval": true,
+    "fixture_response_matched": true,
+    "pending_cleared": true,
+    "requested_model": "gpt-6-thinking",
+    "resolved_model": "gpt-6-thinking",
+    "attachments": [
+      {
+        "kind": "png",
+        "upload_updates": 6,
+        "sequence_ordered": true,
+        "ready_metadata_matched": true,
+        "accepted": true,
+        "completed": true,
+        "fixture_response_matched": true,
+        "authoritative_retrieval": true,
+        "parent_matched": true,
+        "history_attachment_present": true,
+        "pending_cleared": true,
+        "error": null
+      },
+      {
+        "kind": "jpeg",
+        "upload_updates": 6,
+        "sequence_ordered": true,
+        "ready_metadata_matched": true,
+        "accepted": true,
+        "completed": false,
+        "fixture_response_matched": true,
+        "authoritative_retrieval": false,
+        "parent_matched": false,
+        "history_attachment_present": false,
+        "pending_cleared": false,
+        "error": "transport"
+      }
+    ],
+    "error": "transport"
+  }
+}

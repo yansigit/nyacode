@@ -1,0 +1,163 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "ProviderPoolUpdate": {
+      "oneOf": [
+        {
+          "properties": {
+            "action": {
+              "enum": [
+                "enable"
+              ],
+              "type": "string"
+            }
+          },
+          "required": [
+            "action"
+          ],
+          "title": "EnableProviderPoolUpdate",
+          "type": "object"
+        },
+        {
+          "properties": {
+            "action": {
+              "enum": [
+                "disable"
+              ],
+              "type": "string"
+            }
+          },
+          "required": [
+            "action"
+          ],
+          "title": "DisableProviderPoolUpdate",
+          "type": "object"
+        },
+        {
+          "properties": {
+            "action": {
+              "enum": [
+                "enroll"
+              ],
+              "type": "string"
+            },
+            "label": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "action",
+            "label"
+          ],
+          "type": "object"
+        },
+        {
+          "properties": {
+            "action": {
+              "enum": [
+                "remove"
+              ],
+              "type": "string"
+            },
+            "label": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "action",
+            "label"
+          ],
+          "type": "object"
+        },
+        {
+          "properties": {
+            "action": {
+              "enum": [
+                "setAccountEnabled"
+              ],
+              "type": "string"
+            },
+            "enabled": {
+              "type": "boolean"
+            },
+            "label": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "action",
+            "enabled",
+            "label"
+          ],
+          "type": "object"
+        },
+        {
+          "properties": {
+            "action": {
+              "enum": [
+                "order"
+              ],
+              "type": "string"
+            },
+            "labels": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          },
+          "required": [
+            "action",
+            "labels"
+          ],
+          "type": "object"
+        },
+        {
+          "properties": {
+            "action": {
+              "enum": [
+                "prefer"
+              ],
+              "type": "string"
+            },
+            "label": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "action",
+            "label"
+          ],
+          "type": "object"
+        }
+      ]
+    }
+  },
+  "properties": {
+    "provider": {
+      "type": "string"
+    },
+    "revision": {
+      "format": "uint64",
+      "minimum": 0,
+      "type": "integer"
+    },
+    "threadId": {
+      "default": null,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "update": {
+      "$ref": "#/definitions/ProviderPoolUpdate"
+    }
+  },
+  "required": [
+    "provider",
+    "revision",
+    "update"
+  ],
+  "title": "ProviderPoolUpdateParams",
+  "type": "object"
+}

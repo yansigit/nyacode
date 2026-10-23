@@ -1,0 +1,146 @@
+{
+  "version": 6,
+  "recorded_at_utc": "2026-10-12T10:55:14.516434+00:00",
+  "transport_gate_passed": true,
+  "integrated_release_gate_passed": true,
+  "feature_stage": "experimental",
+  "feature_default_enabled": false,
+  "scenario_assessment": [
+    {
+      "scenario": "saved_create_retrieve_followup_restart",
+      "status": "passed",
+      "evidence": [
+        "native-rpc-embedded-restart-2026-10-12-audit.json",
+        "native-rpc-daemon-restart-2026-10-12-audit.json"
+      ]
+    },
+    {
+      "scenario": "parallel_conversations",
+      "status": "passed",
+      "evidence": [
+        "native-tui-embedded-initial-2026-10-12-report.json",
+        "native-rpc-daemon-parallel-2026-10-12-audit.json"
+      ]
+    },
+    {
+      "scenario": "temporary_creation_continuation_without_saved_state",
+      "status": "passed",
+      "evidence": [
+        "native-embedded-rpc-temporary-2026-10-12-report.json",
+        "native-rpc-daemon-temporary-2026-10-12-report.json",
+        "native-tui-embedded-lifecycle-initial-2026-10-12-report.json",
+        "native-tui-daemon-lifecycle-initial-2026-10-12-report.json"
+      ]
+    },
+    {
+      "scenario": "all_five_attachment_formats",
+      "status": "passed",
+      "evidence": [
+        "native-embedded-rpc-attachments-2026-10-12-report.json",
+        "native-rpc-daemon-attachments-2026-10-12-report.json",
+        "native-tui-embedded-attachments-2026-10-12-report.json",
+        "native-tui-daemon-attachments-disable-2026-10-12-report.json"
+      ]
+    },
+    {
+      "scenario": "local_cancellation_distinct_from_server_cancellation",
+      "status": "passed",
+      "evidence": [
+        "native-rpc-embedded-lifecycle-2026-10-12-report.json",
+        "native-rpc-daemon-lifecycle-2026-10-12-report.json",
+        "native-tui-embedded-cancel-approval-2026-10-12-report.json"
+      ]
+    },
+    {
+      "scenario": "switching_during_streams_and_uploads",
+      "status": "passed",
+      "evidence": [
+        "native-tui-embedded-initial-2026-10-12-report.json",
+        "native-tui-embedded-attachments-2026-10-12-report.json",
+        "native-tui-daemon-attachments-disable-2026-10-12-report.json"
+      ]
+    },
+    {
+      "scenario": "codex_approval_from_chat",
+      "status": "passed_with_fixture_configuration",
+      "evidence": [
+        "native-tui-embedded-cancel-approval-2026-10-12-report.json",
+        "native-tui-daemon-approval-2026-10-12-report.json"
+      ]
+    },
+    {
+      "scenario": "active_disablement_preserves_saved_messages",
+      "status": "passed",
+      "evidence": [
+        "native-rpc-embedded-lifecycle-2026-10-12-report.json",
+        "native-rpc-daemon-lifecycle-2026-10-12-report.json",
+        "native-tui-daemon-attachments-disable-2026-10-12-report.json"
+      ]
+    },
+    {
+      "scenario": "socket_reconnection_without_resend",
+      "status": "passed",
+      "evidence": ["native-tui-daemon-reconnect-2026-10-12-report.json"]
+    },
+    {
+      "scenario": "screen_modes_and_feature_disabled_codex",
+      "status": "passed",
+      "evidence": [
+        "native-tui-inline-rejected-2026-10-12-report.json",
+        "native-tui-no-alt-rejected-2026-10-12-report.json",
+        "native-tui-feature-disabled-2026-10-12-report.json"
+      ]
+    }
+  ],
+  "evidence_sha256": {
+    "native-embedded-rpc-attachments-2026-10-12-report.json": "23fd238104ee3bdac5f789c376454f2b80d62fbe464216d7b4c0acc84c240770",
+    "native-embedded-rpc-temporary-2026-10-12-report.json": "ac85aedc9554f61b1f8fedcc6e076e09993def9b39f8ed7f8d6f9d930873c99d",
+    "native-rpc-daemon-attachments-2026-10-12-report.json": "576d928af9d3c6b3256bb282a30d894886cfeb9ff71cfc87e0fa7554e1debc30",
+    "native-rpc-daemon-lifecycle-2026-10-12-report.json": "2ef53cdf27d23713e021f86f859b03144646949f0511ebc801572472d584c290",
+    "native-rpc-daemon-parallel-2026-10-12-audit.json": "a5f7face2106eff8979cd59b7f143a5cdbbea715657e8d5d9184bd00442bf4be",
+    "native-rpc-daemon-restart-2026-10-12-audit.json": "022fd42f22a607a30da818d500b0d587fad14e1a9734794bfd4488ce1d0511c8",
+    "native-rpc-daemon-temporary-2026-10-12-report.json": "921e50baac4c3cba53824053f5ca359067487f0d1167645e3867fb9172bd89bb",
+    "native-rpc-embedded-lifecycle-2026-10-12-report.json": "e551eb3cdab2b386d7372f5e172d3fbdf800f7fb5af03caa61b5091e8a94981a",
+    "native-rpc-embedded-restart-2026-10-12-audit.json": "22d38ccdd3e272f6f4d8521f32bcaf4edbcd06a61781acd822a22154cfc13bc5",
+    "native-tui-daemon-approval-2026-10-12-report.json": "0eecbe1adc041847c9e9ba06ead768b49adaf1a7a3760ea162c99e49b317533c",
+    "native-tui-daemon-attachments-disable-2026-10-12-report.json": "847e95ea7c506ded665ca8512e8326c788349e32c3b3bbd6733b7b7fa4e51113",
+    "native-tui-daemon-lifecycle-initial-2026-10-12-report.json": "41c489a3e211a4ea588e1e53ab9246da4922be84cf1d0203e5c9f149b9e41021",
+    "native-tui-daemon-reconnect-2026-10-12-report.json": "05f6732204676753dad7967406806a1f87450869c5e60b68b72aaadc77e4acd8",
+    "native-tui-embedded-attachments-2026-10-12-report.json": "a90ee7dce049c51727977b5ca5132a853ec87b5ff7f913f2e5f9e0a7fe670ca4",
+    "native-tui-embedded-cancel-approval-2026-10-12-report.json": "a73f54122f32935d162795aaebe9d16e1a9458d677a64f5e4b597966c36ad82f",
+    "native-tui-embedded-initial-2026-10-12-report.json": "293f874bc5f15fc5d1b32b8557b9778e9488b15179e10227075d027790f2a8de",
+    "native-tui-embedded-lifecycle-initial-2026-10-12-report.json": "d7c86a97a97bc22d0bf1d4b03070dab2d53dd9b949a9ba8788d822c60ca35852",
+    "native-tui-feature-disabled-2026-10-12-report.json": "b7559b4cf7c021c8e60e8107641430dcabb9059c35b737d2d8da93787b22d369",
+    "native-tui-inline-rejected-2026-10-12-report.json": "1107aa85f147019ed54cb52e02ae46a344024568ebcd9769a5f93dea380d949c",
+    "native-tui-no-alt-rejected-2026-10-12-report.json": "c67db58c91ea7f1d5c33ecab7b237fea74bcefe435b84b3b85548e4936e7b35f",
+    "native-msvc-candidate-linux-cli-2026-10-12.json": "2acbe4c36b174168c4409ddf13f36ae80dd12240b6930232393fbbc066e09358",
+    "native-msvc-candidate-final-platform-matrix-2026-10-12.json": "0696bd3bb060af4bc7af5522e8760c290bb691ecc698d07eae1ef1ee53de727f",
+    "native-msvc-accepted-transport-builds-2026-10-12.json": "78a5fd24926f06817387e97f596aa6a7133d9a7ebf15c59c052af92d727c1e48",
+    "native-msvc-final-platform-regressions-2026-10-12.json": "f4e2e0293728b9dddc3147f0df7ac1c47a7f3745e5ba254f0a5b408efd383b8f",
+    "native-msvc-toolchain-adoption-2026-10-12.json": "39d87ad51211881f1f6256a44075e159b74a8c3fff61f5d530bd6ee9587a4662",
+    "native-msvc-sdk-path-research-2026-10-12.json": "9542ac3250845eeb76d88554c58140b15657139ef04c08c38e277e0b1353e60a",
+    "native-tui-lifecycle-validation-2026-10-12.json": "e6583c51786dd498fa0005ac1f7dc1ce68775cd3ed03aa259365903aa331318c",
+    "native-release-validation-2026-10-12.json": "c45952025b3ed92f6e60e89a62f09278acf5084ddcc15af29ad49d54d75f3156",
+    "native-publish-validation-2026-10-12.json": "d3a96a54f78ab591d62db17e1f50c72b45042eaa8605a8061c70dc54409a69b2"
+  },
+  "interpretation": [
+    "Scenario assessments combine versioned incremental runs, not a single all-green final invocation. Original failures remain in their reports.",
+    "Temporary transcript retention and cancellation notices were corrected and verified in subsequent runs; earlier scenario passes do not erase those failures.",
+    "Approval fixtures set agents.enabled=false and features.multi_agent_v2=false because the current Codex model rejected the reserved collaboration tool schema before reaching an approval. The unrelated schema rejection is not fixed.",
+    "No confirmed server cancellation is claimed. Local stopping and accepted-message preservation are the verified behavior.",
+    "Cross-link checks do not establish native Windows, macOS, or ARM runtime behavior."
+  ],
+  "remaining": [],
+  "candidate_manifest": "../research/msvc-toolchain-candidate/manifest.json",
+  "deterministic_validation": "native-tui-lifecycle-validation-2026-10-12.json",
+  "updated_at_utc": "2026-10-12T23:21:29.349532+00:00",
+  "platform_validation": {
+    "candidate_production_toolchain_changed": true,
+    "final_regressions": "native-msvc-final-platform-regressions-2026-10-12.json",
+    "msvc": "native-msvc-accepted-transport-builds-2026-10-12.json",
+    "adoption": "native-msvc-toolchain-adoption-2026-10-12.json",
+    "status": "All nine transport targets, Linux GNU/musl tests, MSVC static CRT import audits, and full Linux CLI checks passed. The tested toolchain was adopted and final application checks passed."
+  },
+  "final_validation": "native-release-validation-2026-10-12.json",
+  "publication_validation": "native-publish-validation-2026-10-12.json"
+}

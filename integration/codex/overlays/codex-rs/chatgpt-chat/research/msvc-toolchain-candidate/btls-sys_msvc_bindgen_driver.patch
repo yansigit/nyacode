@@ -1,0 +1,74 @@
+diff --git a/build/main.rs b/build/main.rs
+--- a/build/main.rs
++++ b/build/main.rs
+@@ -397,14 +397,21 @@
+     if std::env::var_os("CODEX_CHAT_BINDGEN_USE_CC").as_deref()
+         == Some(std::ffi::OsStr::new("1"))
+     {
+-        return cc::Build::new()
++        let compiler = cc::Build::new()
+             .cargo_metadata(false)
+             .warnings(false)
+-            .get_compiler()
++            .get_compiler();
++        let mut args: Vec<String> = compiler
+             .args()
+             .iter()
+             .map(|arg| arg.to_string_lossy().into_owned())
+             .collect();
++        // libclang does not see the compiler executable's clang-cl name.
++        // Select its matching parser so SDK paths and CRT flags are honored.
++        if compiler.is_like_msvc() {
++            args.insert(0, "--driver-mode=cl".to_owned());
++        }
++        return args;
+     }
+ 
+     let mut params = Vec::new();
+@@ -778,6 +785,8 @@
+     let target_rust_version = bindgen::RustTarget::stable(77, 0)
+         .map_err(|e| format!("bindgen does not recognize target rust version: {e}"))?;
+ 
++    let clang_args = get_extra_clang_args_for_bindgen(config);
++    let msvc_driver = clang_args.iter().any(|arg| arg == "--driver-mode=cl");
+     let mut builder = bindgen::Builder::default()
+         .rust_target(target_rust_version) // bindgen MSRV is 1.70, so this is enough
+         .derive_copy(true)
+@@ -797,7 +806,7 @@
+         .merge_extern_blocks(true)
+         .prepend_enum_name(true)
+         .blocklist_type("max_align_t") // Not supported by bindgen on all targets, not used by BoringSSL
+-        .clang_args(get_extra_clang_args_for_bindgen(config))
++        .clang_args(clang_args)
+         .clang_arg("-I")
+         .clang_arg(include_path.display().to_string());
+ 
+@@ -863,10 +872,17 @@
+         "srtp.h",
+         "trust_token.h",
+     ];
++    let mut msvc_header_contents = String::new();
+     for (i, header) in must_have_headers.into_iter().chain(headers).enumerate() {
+         let header_path = include_path.join("openssl").join(header);
+         if header_path.exists() {
+-            builder = builder.header(header_path.to_str().unwrap());
++            if msvc_driver {
++                // Bindgen joins multiple input headers with GCC's -include,
++                // which clang-cl rejects. Preserve their order in one C input.
++                msvc_header_contents.push_str(&format!("#include <openssl/{header}>\n"));
++            } else {
++                builder = builder.header(header_path.to_str().unwrap());
++            }
+         } else {
+             let err = format!("'openssl/{header}' is missing from '{}'. The include path may be incorrect or contain an outdated version of OpenSSL/BoringSSL", include_path.display());
+             if i < must_have_headers.len() {
+@@ -876,6 +892,9 @@
+         }
+     }
+ 
++    if msvc_driver {
++        builder = builder.header_contents("boringssl_bindings.c", &msvc_header_contents);
++    }
+     let bindings = builder.generate()?;
+     let mut source_code = Vec::new();
+     bindings

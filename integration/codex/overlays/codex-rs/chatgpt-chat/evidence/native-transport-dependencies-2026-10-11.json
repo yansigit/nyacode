@@ -1,0 +1,951 @@
+{
+  "metadata_command": "cargo metadata --locked --format-version 1",
+  "root_packages": ["wreq=6.0.0-rc.29", "wreq-util=3.0.0-rc.14"],
+  "package_count": 188,
+  "packages_declaring_rust_above_1_95": [],
+  "packages": [
+    {
+      "name": "adler2",
+      "version": "2.0.1",
+      "rust_version": null
+    },
+    {
+      "name": "aho-corasick",
+      "version": "1.1.4",
+      "rust_version": "1.60.0"
+    },
+    {
+      "name": "alloc-no-stdlib",
+      "version": "2.0.4",
+      "rust_version": null
+    },
+    {
+      "name": "alloc-stdlib",
+      "version": "0.2.4",
+      "rust_version": null
+    },
+    {
+      "name": "allocator-api2",
+      "version": "0.2.21",
+      "rust_version": "1.63"
+    },
+    {
+      "name": "anyhow",
+      "version": "1.0.103",
+      "rust_version": "1.68"
+    },
+    {
+      "name": "async-compression",
+      "version": "0.4.44",
+      "rust_version": "1.83"
+    },
+    {
+      "name": "atomic-waker",
+      "version": "1.1.2",
+      "rust_version": "1.36"
+    },
+    {
+      "name": "bindgen",
+      "version": "0.72.1",
+      "rust_version": "1.70.0"
+    },
+    {
+      "name": "bitflags",
+      "version": "2.13.1",
+      "rust_version": "1.56.0"
+    },
+    {
+      "name": "brotli",
+      "version": "8.0.4",
+      "rust_version": "1.59.0"
+    },
+    {
+      "name": "brotli-decompressor",
+      "version": "5.0.3",
+      "rust_version": null
+    },
+    {
+      "name": "btls",
+      "version": "0.5.6",
+      "rust_version": "1.85"
+    },
+    {
+      "name": "btls-sys",
+      "version": "0.5.6",
+      "rust_version": "1.85"
+    },
+    {
+      "name": "bumpalo",
+      "version": "3.19.1",
+      "rust_version": "1.71.1"
+    },
+    {
+      "name": "bytes",
+      "version": "1.12.1",
+      "rust_version": "1.57"
+    },
+    {
+      "name": "cc",
+      "version": "1.2.55",
+      "rust_version": "1.63"
+    },
+    {
+      "name": "cexpr",
+      "version": "0.6.0",
+      "rust_version": null
+    },
+    {
+      "name": "cfg-if",
+      "version": "1.0.4",
+      "rust_version": "1.32"
+    },
+    {
+      "name": "clang-sys",
+      "version": "1.8.1",
+      "rust_version": null
+    },
+    {
+      "name": "cmake",
+      "version": "0.1.58",
+      "rust_version": "1.65"
+    },
+    {
+      "name": "compression-codecs",
+      "version": "0.4.39",
+      "rust_version": "1.83"
+    },
+    {
+      "name": "compression-core",
+      "version": "0.4.33",
+      "rust_version": null
+    },
+    {
+      "name": "crc32fast",
+      "version": "1.5.0",
+      "rust_version": "1.63"
+    },
+    {
+      "name": "critical-section",
+      "version": "1.2.0",
+      "rust_version": null
+    },
+    {
+      "name": "displaydoc",
+      "version": "0.2.5",
+      "rust_version": "1.56.0"
+    },
+    {
+      "name": "either",
+      "version": "1.15.0",
+      "rust_version": "1.63.0"
+    },
+    {
+      "name": "equivalent",
+      "version": "1.0.2",
+      "rust_version": "1.6"
+    },
+    {
+      "name": "errno",
+      "version": "0.3.14",
+      "rust_version": "1.56"
+    },
+    {
+      "name": "find-msvc-tools",
+      "version": "0.1.9",
+      "rust_version": "1.63"
+    },
+    {
+      "name": "flate2",
+      "version": "1.1.10",
+      "rust_version": "1.67.0"
+    },
+    {
+      "name": "fnv",
+      "version": "1.0.7",
+      "rust_version": null
+    },
+    {
+      "name": "foldhash",
+      "version": "0.1.5",
+      "rust_version": "1.60"
+    },
+    {
+      "name": "foldhash",
+      "version": "0.2.0",
+      "rust_version": "1.60"
+    },
+    {
+      "name": "foreign-types",
+      "version": "0.5.0",
+      "rust_version": null
+    },
+    {
+      "name": "foreign-types-macros",
+      "version": "0.2.4",
+      "rust_version": null
+    },
+    {
+      "name": "foreign-types-shared",
+      "version": "0.3.1",
+      "rust_version": null
+    },
+    {
+      "name": "form_urlencoded",
+      "version": "1.2.2",
+      "rust_version": "1.51"
+    },
+    {
+      "name": "fs_extra",
+      "version": "1.3.0",
+      "rust_version": null
+    },
+    {
+      "name": "fslock",
+      "version": "0.2.1",
+      "rust_version": null
+    },
+    {
+      "name": "futures-channel",
+      "version": "0.3.34",
+      "rust_version": "1.71"
+    },
+    {
+      "name": "futures-core",
+      "version": "0.3.34",
+      "rust_version": "1.36"
+    },
+    {
+      "name": "futures-io",
+      "version": "0.3.34",
+      "rust_version": "1.36"
+    },
+    {
+      "name": "futures-macro",
+      "version": "0.3.34",
+      "rust_version": "1.71"
+    },
+    {
+      "name": "futures-sink",
+      "version": "0.3.34",
+      "rust_version": "1.36"
+    },
+    {
+      "name": "futures-task",
+      "version": "0.3.34",
+      "rust_version": "1.71"
+    },
+    {
+      "name": "futures-util",
+      "version": "0.3.34",
+      "rust_version": "1.71"
+    },
+    {
+      "name": "getrandom",
+      "version": "0.3.4",
+      "rust_version": "1.63"
+    },
+    {
+      "name": "glob",
+      "version": "0.3.3",
+      "rust_version": "1.63.0"
+    },
+    {
+      "name": "hashbrown",
+      "version": "0.15.5",
+      "rust_version": "1.65.0"
+    },
+    {
+      "name": "hashbrown",
+      "version": "0.17.1",
+      "rust_version": "1.85.0"
+    },
+    {
+      "name": "heck",
+      "version": "0.5.0",
+      "rust_version": "1.56"
+    },
+    {
+      "name": "http",
+      "version": "1.5.0",
+      "rust_version": "1.57.0"
+    },
+    {
+      "name": "http-body",
+      "version": "1.0.1",
+      "rust_version": "1.49"
+    },
+    {
+      "name": "http-body-util",
+      "version": "0.1.3",
+      "rust_version": "1.61"
+    },
+    {
+      "name": "http2",
+      "version": "0.5.20",
+      "rust_version": "1.68"
+    },
+    {
+      "name": "httparse",
+      "version": "1.10.1",
+      "rust_version": null
+    },
+    {
+      "name": "icu_collections",
+      "version": "2.2.0",
+      "rust_version": "1.86"
+    },
+    {
+      "name": "icu_locale_core",
+      "version": "2.2.0",
+      "rust_version": "1.86"
+    },
+    {
+      "name": "icu_normalizer",
+      "version": "2.2.0",
+      "rust_version": "1.86"
+    },
+    {
+      "name": "icu_normalizer_data",
+      "version": "2.2.0",
+      "rust_version": "1.86"
+    },
+    {
+      "name": "icu_properties",
+      "version": "2.2.0",
+      "rust_version": "1.86"
+    },
+    {
+      "name": "icu_properties_data",
+      "version": "2.2.0",
+      "rust_version": "1.86"
+    },
+    {
+      "name": "icu_provider",
+      "version": "2.2.0",
+      "rust_version": "1.86"
+    },
+    {
+      "name": "id-arena",
+      "version": "2.3.0",
+      "rust_version": null
+    },
+    {
+      "name": "idna",
+      "version": "1.1.0",
+      "rust_version": "1.57"
+    },
+    {
+      "name": "idna_adapter",
+      "version": "1.2.1",
+      "rust_version": "1.82"
+    },
+    {
+      "name": "indexmap",
+      "version": "2.14.0",
+      "rust_version": "1.85"
+    },
+    {
+      "name": "ipnet",
+      "version": "2.12.2",
+      "rust_version": null
+    },
+    {
+      "name": "iri-string",
+      "version": "0.7.10",
+      "rust_version": "1.60"
+    },
+    {
+      "name": "itertools",
+      "version": "0.13.0",
+      "rust_version": "1.43.1"
+    },
+    {
+      "name": "itoa",
+      "version": "1.0.17",
+      "rust_version": "1.68"
+    },
+    {
+      "name": "jobserver",
+      "version": "0.1.34",
+      "rust_version": "1.63"
+    },
+    {
+      "name": "js-sys",
+      "version": "0.3.85",
+      "rust_version": "1.71"
+    },
+    {
+      "name": "leb128fmt",
+      "version": "0.1.0",
+      "rust_version": "1.56.0"
+    },
+    {
+      "name": "libc",
+      "version": "0.2.186",
+      "rust_version": "1.65"
+    },
+    {
+      "name": "libloading",
+      "version": "0.8.9",
+      "rust_version": "1.71.0"
+    },
+    {
+      "name": "litemap",
+      "version": "0.8.1",
+      "rust_version": "1.82"
+    },
+    {
+      "name": "lock_api",
+      "version": "0.4.14",
+      "rust_version": "1.71.0"
+    },
+    {
+      "name": "log",
+      "version": "0.4.34",
+      "rust_version": "1.71.0"
+    },
+    {
+      "name": "lru",
+      "version": "0.18.2",
+      "rust_version": "1.85.0"
+    },
+    {
+      "name": "memchr",
+      "version": "2.8.1",
+      "rust_version": "1.61"
+    },
+    {
+      "name": "minimal-lexical",
+      "version": "0.2.1",
+      "rust_version": null
+    },
+    {
+      "name": "miniz_oxide",
+      "version": "0.9.1",
+      "rust_version": null
+    },
+    {
+      "name": "mio",
+      "version": "1.2.0",
+      "rust_version": "1.71"
+    },
+    {
+      "name": "nom",
+      "version": "7.1.3",
+      "rust_version": "1.48"
+    },
+    {
+      "name": "once_cell",
+      "version": "1.21.4",
+      "rust_version": "1.65"
+    },
+    {
+      "name": "openssl-macros",
+      "version": "0.1.1",
+      "rust_version": null
+    },
+    {
+      "name": "parking_lot",
+      "version": "0.12.5",
+      "rust_version": "1.71"
+    },
+    {
+      "name": "parking_lot_core",
+      "version": "0.9.12",
+      "rust_version": "1.71.0"
+    },
+    {
+      "name": "percent-encoding",
+      "version": "2.3.2",
+      "rust_version": "1.51"
+    },
+    {
+      "name": "pin-project-lite",
+      "version": "0.2.17",
+      "rust_version": "1.37"
+    },
+    {
+      "name": "pkg-config",
+      "version": "0.3.32",
+      "rust_version": "1.31"
+    },
+    {
+      "name": "portable-atomic",
+      "version": "1.13.1",
+      "rust_version": "1.34"
+    },
+    {
+      "name": "potential_utf",
+      "version": "0.1.4",
+      "rust_version": "1.82"
+    },
+    {
+      "name": "prettyplease",
+      "version": "0.2.37",
+      "rust_version": "1.62"
+    },
+    {
+      "name": "proc-macro2",
+      "version": "1.0.106",
+      "rust_version": "1.68"
+    },
+    {
+      "name": "quote",
+      "version": "1.0.45",
+      "rust_version": "1.71"
+    },
+    {
+      "name": "r-efi",
+      "version": "5.3.0",
+      "rust_version": "1.68"
+    },
+    {
+      "name": "redox_syscall",
+      "version": "0.5.18",
+      "rust_version": null
+    },
+    {
+      "name": "regex",
+      "version": "1.12.3",
+      "rust_version": "1.65"
+    },
+    {
+      "name": "regex-automata",
+      "version": "0.4.13",
+      "rust_version": "1.65"
+    },
+    {
+      "name": "regex-syntax",
+      "version": "0.8.8",
+      "rust_version": "1.65"
+    },
+    {
+      "name": "rustc-hash",
+      "version": "2.1.1",
+      "rust_version": null
+    },
+    {
+      "name": "rustls-pki-types",
+      "version": "1.14.0",
+      "rust_version": "1.60"
+    },
+    {
+      "name": "rustversion",
+      "version": "1.0.22",
+      "rust_version": "1.31"
+    },
+    {
+      "name": "scopeguard",
+      "version": "1.2.0",
+      "rust_version": null
+    },
+    {
+      "name": "semver",
+      "version": "1.0.27",
+      "rust_version": "1.61"
+    },
+    {
+      "name": "serde",
+      "version": "1.0.228",
+      "rust_version": "1.56"
+    },
+    {
+      "name": "serde_core",
+      "version": "1.0.228",
+      "rust_version": "1.56"
+    },
+    {
+      "name": "serde_derive",
+      "version": "1.0.228",
+      "rust_version": "1.61"
+    },
+    {
+      "name": "serde_json",
+      "version": "1.0.149",
+      "rust_version": "1.68"
+    },
+    {
+      "name": "shlex",
+      "version": "1.3.0",
+      "rust_version": "1.46.0"
+    },
+    {
+      "name": "signal-hook-registry",
+      "version": "1.4.8",
+      "rust_version": "1.26"
+    },
+    {
+      "name": "simd-adler32",
+      "version": "0.3.8",
+      "rust_version": null
+    },
+    {
+      "name": "slab",
+      "version": "0.4.12",
+      "rust_version": "1.51"
+    },
+    {
+      "name": "smallvec",
+      "version": "1.15.1",
+      "rust_version": null
+    },
+    {
+      "name": "socket2",
+      "version": "0.6.3",
+      "rust_version": "1.70"
+    },
+    {
+      "name": "stable_deref_trait",
+      "version": "1.2.1",
+      "rust_version": null
+    },
+    {
+      "name": "syn",
+      "version": "2.0.117",
+      "rust_version": "1.71"
+    },
+    {
+      "name": "syn",
+      "version": "3.0.3",
+      "rust_version": "1.71"
+    },
+    {
+      "name": "sync_wrapper",
+      "version": "1.0.2",
+      "rust_version": null
+    },
+    {
+      "name": "synstructure",
+      "version": "0.13.2",
+      "rust_version": null
+    },
+    {
+      "name": "thiserror",
+      "version": "1.0.69",
+      "rust_version": "1.61"
+    },
+    {
+      "name": "thiserror-impl",
+      "version": "1.0.69",
+      "rust_version": "1.61"
+    },
+    {
+      "name": "tinystr",
+      "version": "0.8.3",
+      "rust_version": "1.82"
+    },
+    {
+      "name": "tokio",
+      "version": "1.53.2",
+      "rust_version": "1.71"
+    },
+    {
+      "name": "tokio-btls",
+      "version": "0.5.6",
+      "rust_version": "1.85"
+    },
+    {
+      "name": "tokio-macros",
+      "version": "2.7.0",
+      "rust_version": "1.71"
+    },
+    {
+      "name": "tokio-socks",
+      "version": "0.5.3",
+      "rust_version": null
+    },
+    {
+      "name": "tokio-util",
+      "version": "0.7.18",
+      "rust_version": "1.71"
+    },
+    {
+      "name": "tower",
+      "version": "0.5.3",
+      "rust_version": "1.64.0"
+    },
+    {
+      "name": "tower-http",
+      "version": "0.6.8",
+      "rust_version": "1.64"
+    },
+    {
+      "name": "tower-layer",
+      "version": "0.3.3",
+      "rust_version": null
+    },
+    {
+      "name": "tower-service",
+      "version": "0.3.3",
+      "rust_version": null
+    },
+    {
+      "name": "tracing",
+      "version": "0.1.44",
+      "rust_version": "1.65.0"
+    },
+    {
+      "name": "tracing-attributes",
+      "version": "0.1.31",
+      "rust_version": "1.65.0"
+    },
+    {
+      "name": "tracing-core",
+      "version": "0.1.36",
+      "rust_version": "1.65.0"
+    },
+    {
+      "name": "try-lock",
+      "version": "0.2.5",
+      "rust_version": null
+    },
+    {
+      "name": "typed-builder",
+      "version": "0.23.2",
+      "rust_version": null
+    },
+    {
+      "name": "typed-builder-macro",
+      "version": "0.23.2",
+      "rust_version": null
+    },
+    {
+      "name": "unicode-ident",
+      "version": "1.0.22",
+      "rust_version": "1.31"
+    },
+    {
+      "name": "unicode-xid",
+      "version": "0.2.6",
+      "rust_version": "1.17"
+    },
+    {
+      "name": "url",
+      "version": "2.5.8",
+      "rust_version": "1.63"
+    },
+    {
+      "name": "utf8_iter",
+      "version": "1.0.4",
+      "rust_version": null
+    },
+    {
+      "name": "valuable",
+      "version": "0.1.1",
+      "rust_version": "1.56"
+    },
+    {
+      "name": "want",
+      "version": "0.3.1",
+      "rust_version": null
+    },
+    {
+      "name": "wasi",
+      "version": "0.11.1+wasi-snapshot-preview1",
+      "rust_version": null
+    },
+    {
+      "name": "wasip2",
+      "version": "1.0.2+wasi-0.2.9",
+      "rust_version": "1.87.0"
+    },
+    {
+      "name": "wasm-bindgen",
+      "version": "0.2.108",
+      "rust_version": "1.71"
+    },
+    {
+      "name": "wasm-bindgen-macro",
+      "version": "0.2.108",
+      "rust_version": "1.71"
+    },
+    {
+      "name": "wasm-bindgen-macro-support",
+      "version": "0.2.108",
+      "rust_version": "1.71"
+    },
+    {
+      "name": "wasm-bindgen-shared",
+      "version": "0.2.108",
+      "rust_version": "1.71"
+    },
+    {
+      "name": "wasm-encoder",
+      "version": "0.244.0",
+      "rust_version": "1.81.0"
+    },
+    {
+      "name": "wasm-metadata",
+      "version": "0.244.0",
+      "rust_version": "1.81.0"
+    },
+    {
+      "name": "wasmparser",
+      "version": "0.244.0",
+      "rust_version": "1.81.0"
+    },
+    {
+      "name": "web-time",
+      "version": "1.1.0",
+      "rust_version": "1.60"
+    },
+    {
+      "name": "webpki-root-certs",
+      "version": "1.0.9",
+      "rust_version": "1.70"
+    },
+    {
+      "name": "winapi",
+      "version": "0.3.9",
+      "rust_version": null
+    },
+    {
+      "name": "winapi-i686-pc-windows-gnu",
+      "version": "0.4.0",
+      "rust_version": null
+    },
+    {
+      "name": "winapi-x86_64-pc-windows-gnu",
+      "version": "0.4.0",
+      "rust_version": null
+    },
+    {
+      "name": "windows-link",
+      "version": "0.2.1",
+      "rust_version": "1.71"
+    },
+    {
+      "name": "windows-sys",
+      "version": "0.61.2",
+      "rust_version": "1.71"
+    },
+    {
+      "name": "wit-bindgen",
+      "version": "0.51.0",
+      "rust_version": "1.87.0"
+    },
+    {
+      "name": "wit-bindgen-core",
+      "version": "0.51.0",
+      "rust_version": "1.87.0"
+    },
+    {
+      "name": "wit-bindgen-rust",
+      "version": "0.51.0",
+      "rust_version": "1.87.0"
+    },
+    {
+      "name": "wit-bindgen-rust-macro",
+      "version": "0.51.0",
+      "rust_version": null
+    },
+    {
+      "name": "wit-component",
+      "version": "0.244.0",
+      "rust_version": "1.81.0"
+    },
+    {
+      "name": "wit-parser",
+      "version": "0.244.0",
+      "rust_version": "1.81.0"
+    },
+    {
+      "name": "wreq",
+      "version": "6.0.0-rc.29",
+      "rust_version": "1.85"
+    },
+    {
+      "name": "wreq-proto",
+      "version": "0.2.6",
+      "rust_version": "1.85"
+    },
+    {
+      "name": "wreq-rt",
+      "version": "0.2.2-rc.4",
+      "rust_version": "1.85"
+    },
+    {
+      "name": "wreq-util",
+      "version": "3.0.0-rc.14",
+      "rust_version": "1.85"
+    },
+    {
+      "name": "writeable",
+      "version": "0.6.2",
+      "rust_version": "1.82"
+    },
+    {
+      "name": "yoke",
+      "version": "0.8.2",
+      "rust_version": "1.82"
+    },
+    {
+      "name": "yoke-derive",
+      "version": "0.8.2",
+      "rust_version": null
+    },
+    {
+      "name": "zerofrom",
+      "version": "0.1.6",
+      "rust_version": "1.81"
+    },
+    {
+      "name": "zerofrom-derive",
+      "version": "0.1.6",
+      "rust_version": null
+    },
+    {
+      "name": "zeroize",
+      "version": "1.8.2",
+      "rust_version": "1.60"
+    },
+    {
+      "name": "zeroize_derive",
+      "version": "1.4.3",
+      "rust_version": "1.56"
+    },
+    {
+      "name": "zerotrie",
+      "version": "0.2.4",
+      "rust_version": "1.82"
+    },
+    {
+      "name": "zerovec",
+      "version": "0.11.6",
+      "rust_version": "1.83"
+    },
+    {
+      "name": "zerovec-derive",
+      "version": "0.11.3",
+      "rust_version": null
+    },
+    {
+      "name": "zlib-rs",
+      "version": "0.6.3",
+      "rust_version": "1.75"
+    },
+    {
+      "name": "zmij",
+      "version": "1.0.19",
+      "rust_version": "1.68"
+    },
+    {
+      "name": "zstd",
+      "version": "0.13.3",
+      "rust_version": "1.64"
+    },
+    {
+      "name": "zstd-safe",
+      "version": "7.2.4",
+      "rust_version": "1.64"
+    },
+    {
+      "name": "zstd-sys",
+      "version": "2.0.16+zstd.1.5.7",
+      "rust_version": "1.64"
+    }
+  ],
+  "report_version": 1,
+  "workspace_toolchain": "1.95.0",
+  "validation_scope": "Declared MSRVs across the resolved dependency closure; native compilation validated separately on Linux x86_64 GNU."
+}

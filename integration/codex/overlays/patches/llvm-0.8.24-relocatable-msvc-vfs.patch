@@ -1,0 +1,257 @@
+diff --git a/case_insensitive_vfs.bzl b/case_insensitive_vfs.bzl
+--- a/case_insensitive_vfs.bzl
++++ b/case_insensitive_vfs.bzl
+@@ -6,6 +6,11 @@
+     output = ctx.actions.declare_file(ctx.label.name + ".yaml")
+     args = ctx.actions.args()
+     args.add("-output", output)
++
++    # SDK consumers may run below the execroot (for example Cargo build scripts).
++    # Resolve both virtual roots and backing files relative to the overlay file.
++    if ctx.attr.relocatable:
++        args.add("-path-prefix", "/".join([".."] * len(output.dirname.split("/"))))
+     inputs = []
+     for directory_target in ctx.attr.roots:
+         directory = directory_target[DirectoryInfo]
+@@ -25,6 +30,7 @@
+ case_insensitive_vfs_overlay = rule(
+     implementation = _case_insensitive_vfs_overlay_impl,
+     attrs = {
++        "relocatable": attr.bool(default = False),
+         "roots": attr.label_list(providers = [DirectoryInfo]),
+         "_generator": attr.label(
+             allow_single_file = True,
+diff --git a/tools/case_insensitive_vfs/vfs.c b/tools/case_insensitive_vfs/vfs.c
+--- a/tools/case_insensitive_vfs/vfs.c
++++ b/tools/case_insensitive_vfs/vfs.c
+@@ -70,9 +70,21 @@
+   }
+ }
+ 
++static char *overlay_path(const char *path, const char *prefix) {
++  char *generic = ci_generic_path(path);
++  char *relative;
++  if (prefix == NULL || generic[0] == '/' ||
++      (strlen(generic) > 1 && generic[1] == ':')) {
++    return generic;
++  }
++  relative = ci_join_path(prefix, generic);
++  free(generic);
++  return relative;
++}
++
+ static int render_directory(const char *path, const char *virtual_name,
+                             struct text_buffer *output, size_t indentation,
+-                            char **error) {
++                            const char *path_prefix, char **error) {
+   struct ci_directory_entries entries;
+   size_t index;
+   char *json_type;
+@@ -118,13 +130,13 @@
+         return 0;
+       }
+       if (!render_directory(full_path, entry->name, output, indentation + 4,
+-                            error)) {
++                            path_prefix, error)) {
+         free(full_path);
+         ci_free_entries(&entries);
+         return 0;
+       }
+     } else if (type == CI_PATH_REGULAR) {
+-      char *generic = ci_generic_path(full_path);
++      char *generic = overlay_path(full_path, path_prefix);
+       char *file_type = ci_json_string("file");
+       char *name = ci_json_string(entry->name);
+       char *external = ci_json_string(generic);
+@@ -172,8 +184,9 @@
+   return strcmp(left_root->generic, right_root->generic);
+ }
+ 
+-int case_insensitive_vfs_generate(const char *const *roots, size_t root_count,
+-                                  char **overlay, char **error) {
++int case_insensitive_vfs_generate_with_prefix(
++    const char *const *roots, size_t root_count, const char *path_prefix,
++    char **overlay, char **error) {
+   struct text_buffer output = {NULL, 0, 0};
+   struct root_entry *sorted_roots;
+   size_t index;
+@@ -187,18 +200,22 @@
+   sorted_roots = ci_xmalloc(root_count * sizeof(*sorted_roots));
+   for (index = 0; index < root_count; ++index) {
+     sorted_roots[index].path = ci_xstrdup(roots[index]);
+-    sorted_roots[index].generic = ci_generic_path(roots[index]);
++    sorted_roots[index].generic = overlay_path(roots[index], path_prefix);
+   }
+   qsort(sorted_roots, root_count, sizeof(*sorted_roots), compare_roots);
+ 
+   buffer_append(&output, "{\n"
+                          "  \"version\": 0,\n"
+                          "  \"case-sensitive\": false,\n");
++  if (path_prefix != NULL) {
++    buffer_append(&output, "  \"root-relative\": \"overlay-dir\",\n"
++                           "  \"overlay-relative\": true,\n");
++  }
+   buffer_append(&output, "  \"roots\": [\n");
+   for (index = 0; index < root_count; ++index) {
+     buffer_indent(&output, 4);
+     if (!render_directory(sorted_roots[index].path, sorted_roots[index].generic,
+-                          &output, 4, error)) {
++                          &output, 4, path_prefix, error)) {
+       char *detail = ci_xstrdup(*error);
+       ci_set_error(error, "walk %s: %s", sorted_roots[index].generic, detail);
+       free(detail);
+@@ -225,3 +242,9 @@
+   *overlay = output.data;
+   return 1;
+ }
++
++int case_insensitive_vfs_generate(const char *const *roots, size_t root_count,
++                                  char **overlay, char **error) {
++  return case_insensitive_vfs_generate_with_prefix(roots, root_count, NULL,
++                                                  overlay, error);
++}
+diff --git a/tools/case_insensitive_vfs/vfs.h b/tools/case_insensitive_vfs/vfs.h
+--- a/tools/case_insensitive_vfs/vfs.h
++++ b/tools/case_insensitive_vfs/vfs.h
+@@ -7,6 +7,10 @@
+ extern "C" {
+ #endif
+ 
++int case_insensitive_vfs_generate_with_prefix(
++    const char *const *roots, size_t root_count, const char *path_prefix,
++    char **overlay, char **error);
++
+ int case_insensitive_vfs_generate(const char *const *roots, size_t root_count,
+                                   char **overlay, char **error);
+ 
+diff --git a/tools/case_insensitive_vfs/main.c b/tools/case_insensitive_vfs/main.c
+--- a/tools/case_insensitive_vfs/main.c
++++ b/tools/case_insensitive_vfs/main.c
+@@ -10,6 +10,7 @@
+   const char **roots = NULL;
+   size_t root_count = 0;
+   const char *output_path = NULL;
++  const char *path_prefix = NULL;
+   char *overlay = NULL;
+   char *error = NULL;
+   FILE *output;
+@@ -23,6 +24,13 @@
+       }
+       roots = ci_xrealloc(roots, (root_count + 1) * sizeof(*roots));
+       roots[root_count++] = argv[index];
++    } else if (strcmp(argv[index], "-path-prefix") == 0) {
++      if (++index == argc) {
++        fprintf(stderr, "-path-prefix requires a value\n");
++        free(roots);
++        return 2;
++      }
++      path_prefix = argv[index];
+     } else if (strcmp(argv[index], "-output") == 0) {
+       if (++index == argc) {
+         fprintf(stderr, "-output requires a value\n");
+@@ -40,7 +48,8 @@
+     free(roots);
+     return 2;
+   }
+-  if (!case_insensitive_vfs_generate(roots, root_count, &overlay, &error)) {
++  if (!case_insensitive_vfs_generate_with_prefix(roots, root_count, path_prefix,
++                                                 &overlay, &error)) {
+     fprintf(stderr, "%s\n", error);
+     free(error);
+     free(roots);
+diff --git a/tools/case_insensitive_vfs/cli_test.sh b/tools/case_insensitive_vfs/cli_test.sh
+--- a/tools/case_insensitive_vfs/cli_test.sh
++++ b/tools/case_insensitive_vfs/cli_test.sh
+@@ -63,3 +63,27 @@
+   echo "depfile contains nonexistent virtual-case header path" >&2
+   exit 1
+ fi
++
++# Relative SDK paths must survive a different compiler working directory and
++# relocation of the complete tree. Neither overlay embeds the generation cwd.
++case "${VFS_TOOL}" in /*) ;; *) VFS_TOOL="$(pwd)/${VFS_TOOL}" ;; esac
++case "${CLANG}" in /*) ;; *) CLANG="$(pwd)/${CLANG}" ;; esac
++expect_failure 2 "-path-prefix requires a value" "${VFS_TOOL}" -path-prefix
++mkdir -p "${test_tmp}/generated/sub" "${test_tmp}/consumer"
++(
++  cd "${test_tmp}"
++  "${VFS_TOOL}" -root sdk -path-prefix ../.. -output generated/sub/relative.yaml
++)
++(
++  cd "${test_tmp}/consumer"
++  "${CLANG}" -ivfsoverlay ../generated/sub/relative.yaml -I ../sdk \
++    -c ../source.c -o ../relative.o
++)
++mkdir "${test_tmp}/relocated"
++mv "${test_tmp}/sdk" "${test_tmp}/generated" "${test_tmp}/consumer" \
++  "${test_tmp}/source.c" "${test_tmp}/relocated/"
++(
++  cd "${test_tmp}/relocated/consumer"
++  "${CLANG}" -ivfsoverlay ../generated/sub/relative.yaml -I ../sdk \
++    -c ../source.c -o ../relocated.o
++)
+diff --git a/runtimes/msvc/BUILD.bazel b/runtimes/msvc/BUILD.bazel
+--- a/runtimes/msvc/BUILD.bazel
++++ b/runtimes/msvc/BUILD.bazel
+@@ -138,6 +138,19 @@
+ )
+ 
+ case_insensitive_vfs_overlay(
++    name = "msvc_sdk_header_case_overlay_relocatable",
++    relocatable = True,
++    roots = [
++        ":msvc_com_support_headers",
++        ":msvc_vcruntime_headers",
++        ":winsdk_shared_include",
++        ":winsdk_ucrt_include",
++        ":winsdk_um_include",
++        ":winsdk_winrt_include",
++    ],
++)
++
++case_insensitive_vfs_overlay(
+     name = "msvc_sdk_library_case_overlay",
+     roots = [
+         ":winsdk_ucrt_lib",
+diff --git a/toolchain/args/windows/msvc/BUILD.bazel b/toolchain/args/windows/msvc/BUILD.bazel
+--- a/toolchain/args/windows/msvc/BUILD.bazel
++++ b/toolchain/args/windows/msvc/BUILD.bazel
+@@ -97,6 +97,8 @@
+     ],
+ )
+ 
++# Native actions need execroot-relative depfiles for Bazel header validation.
++# Compiler-argument exports omit source_file and may run from another directory.
+ cc_args(
+     name = "sdk_header_case_overlay",
+     actions = _FRONTEND_ACTIONS,
+@@ -108,6 +110,21 @@
+     format = {
+         "sdk_header_case_overlay": "//runtimes/msvc:msvc_sdk_header_case_overlay",
+     },
++    requires_not_none = "@rules_cc//cc/toolchains/variables:source_file",
++)
++
++cc_args(
++    name = "relocatable_sdk_header_case_overlay",
++    actions = _FRONTEND_ACTIONS,
++    args = [
++        "/clang:-ivfsoverlay",
++        "/clang:{sdk_header_case_overlay}",
++    ],
++    data = ["//runtimes/msvc:msvc_sdk_header_case_overlay_relocatable"],
++    format = {
++        "sdk_header_case_overlay": "//runtimes/msvc:msvc_sdk_header_case_overlay_relocatable",
++    },
++    requires_none = "@rules_cc//cc/toolchains/variables:source_file",
+ )
+ 
+ cc_args(
+@@ -222,6 +239,7 @@
+     args = [
+         "windows_sdk_compile_defines",
+         "sdk_header_case_overlay",
++        "relocatable_sdk_header_case_overlay",
+         "sdk_includes",
+     ],
+     visibility = ["//visibility:public"],
