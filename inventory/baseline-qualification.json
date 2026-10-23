@@ -1,4 +1,10 @@
 {
+  "baseline_audit_failure": {
+    "advisory": "GHSA-rxp7-6hxx-x8q5",
+    "baseline_version": "10.7.3",
+    "explicit_qualification_fix": "10.7.4",
+    "package": "ip-address"
+  },
   "linked_binaries": [
     "nyacode",
     "codex",
@@ -6,6 +12,156 @@
   ],
   "product_baseline": "b8bbac5e2ad84168eee5a8b08564a910e8006564",
   "schema_version": 1,
+  "sdk_stages": [
+    {
+      "command": [
+        "pnpm",
+        "install",
+        "--frozen-lockfile",
+        "--store-dir",
+        "/tmp/nyacode-baseline-pnpm-store"
+      ],
+      "exit_code": 0,
+      "log_sha256": "be1460eda19ea81d4dc37b9155c60e28c7fecd753269ebb8397ea94d057c9207",
+      "name": "typescript-install",
+      "state": "passed"
+    },
+    {
+      "command": [
+        "pnpm",
+        "--dir",
+        "sdk/typescript",
+        "exec",
+        "tsc",
+        "--noEmit"
+      ],
+      "exit_code": 0,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "name": "typescript-typecheck",
+      "state": "passed"
+    },
+    {
+      "command": [
+        "pnpm",
+        "--dir",
+        "sdk/typescript",
+        "lint"
+      ],
+      "exit_code": 0,
+      "log_sha256": "0a0a8bf4a89900760d26a4b2ce9cc4f8fe3f85f927779ad80872084a4cb64618",
+      "name": "typescript-lint",
+      "state": "passed"
+    },
+    {
+      "command": [
+        "pnpm",
+        "--dir",
+        "sdk/typescript",
+        "test",
+        "--runInBand"
+      ],
+      "exit_code": 0,
+      "log_sha256": "9ba7ba3519d8f968f58a2819f67f3b233d1cc0e9ba8e9d2e31ad95734198c3f1",
+      "name": "typescript-tests",
+      "state": "passed"
+    },
+    {
+      "command": [
+        "pnpm",
+        "audit"
+      ],
+      "exit_code": 1,
+      "log_sha256": "f56c02a577c7be38333d42c3e952aca411745e4a3e91a76a950190105acdddbd",
+      "name": "typescript-audit",
+      "state": "failed"
+    },
+    {
+      "command": [
+        "uv",
+        "sync",
+        "--only-group",
+        "dev",
+        "--frozen"
+      ],
+      "exit_code": 0,
+      "log_sha256": "75ed8ef5017d6a7fee341008f7bf8d0238921deefc66ec2c0f1abefd6b290fdd",
+      "name": "python-sync",
+      "state": "passed"
+    },
+    {
+      "command": [
+        "uv",
+        "run",
+        "--only-group",
+        "dev",
+        "--frozen",
+        "--no-sync",
+        "ruff",
+        "check",
+        "."
+      ],
+      "exit_code": 0,
+      "log_sha256": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18",
+      "name": "python-lint",
+      "state": "passed"
+    },
+    {
+      "command": [
+        "uv",
+        "run",
+        "--only-group",
+        "dev",
+        "--frozen",
+        "--no-sync",
+        "ruff",
+        "format",
+        "--check",
+        "."
+      ],
+      "exit_code": 0,
+      "log_sha256": "a70f7dd4dea92217153fb5f41f49b47f586ab31ecae1d696942f53ccf1180f9e",
+      "name": "python-format",
+      "state": "passed"
+    },
+    {
+      "command": [
+        "uv",
+        "run",
+        "--only-group",
+        "dev",
+        "--frozen",
+        "--no-sync",
+        "pytest"
+      ],
+      "exit_code": 0,
+      "log_sha256": "9bba650aa7ec59377b9642ec21432bc6cc277f5584f843086bc6f858eff5db08",
+      "name": "python-tests",
+      "state": "passed"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--exit-code"
+      ],
+      "exit_code": 0,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "name": "source-diff",
+      "state": "passed"
+    }
+  ],
+  "sdk_test_counts": {
+    "mcp_new_failures": 0,
+    "python_live_skipped": 38,
+    "python_passed": 273,
+    "typescript_passed": 49
+  },
+  "sdk_tool_versions": {
+    "node": "26.11.1",
+    "pnpm": "12.11.2",
+    "python": "3.14.8",
+    "uv": "0.13.0"
+  },
   "source_changed_after_build_and_tests": false,
   "source_parity_files": 9712,
   "target": "x86_64-unknown-linux-gnu",

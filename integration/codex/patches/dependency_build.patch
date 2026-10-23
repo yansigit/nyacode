@@ -4875,7 +4875,7 @@ index 6b6537cb9cd7696a0e3402f644c9ef6404a1c08b..464e596ff87e679ac99ab54a2c426a85
   namespace {
   
 diff --git a/pnpm-workspace.yaml b/pnpm-workspace.yaml
-index 376f420d31d49b608b79238c66a694365d14a45b..2f1ce7d4982cebbc7fc7326f77c921c5ae172225 100644
+index 376f420d31d49b608b79238c66a694365d14a45b..74c4dbfa9c52a882c7b80136ea6b76bbd1cecc63 100644
 --- a/pnpm-workspace.yaml
 +++ b/pnpm-workspace.yaml
 @@ -3,9 +3,6 @@ packages:
@@ -4888,7 +4888,7 @@ index 376f420d31d49b608b79238c66a694365d14a45b..2f1ce7d4982cebbc7fc7326f77c921c5
  minimumReleaseAge: 10080
  minimumReleaseAgeExclude: []
  
-@@ -15,5 +12,24 @@ trustPolicy: no-downgrade
+@@ -15,5 +12,26 @@ trustPolicy: no-downgrade
  trustPolicyIgnoreAfter: 10080
  trustPolicyExclude: []
  allowBuilds:
@@ -4912,6 +4912,8 @@ index 376f420d31d49b608b79238c66a694365d14a45b..2f1ce7d4982cebbc7fc7326f77c921c5
 +overrides:
 +  "@modelcontextprotocol/sdk": "1.32.1"
 +  esbuild: "0.28.2"
++  # Reject quadratic zone-identifier parsing (GHSA-rxp7-6hxx-x8q5).
++  ip-address: "10.7.4"
 +  "@istanbuljs/load-nyc-config>js-yaml": "^4.1.1"
 diff --git a/scripts/codex_package/dotslash.py b/scripts/codex_package/dotslash.py
 index 8b2d6bcde3ee965cf12baf75e2ec5c486fbdb3d3..3c3f812b3f4ea6922656696497d4d5a436cbb8f0 100644
