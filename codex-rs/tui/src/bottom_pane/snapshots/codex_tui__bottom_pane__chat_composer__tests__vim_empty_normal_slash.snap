@@ -4,10 +4,10 @@ expression: terminal.backend()
 ---
 "› /model          choose what model and reasoning effort to "
 "                  use                                       "
+"  /presets        run or save reusable prompts and slash    "
+"                  commands                                  "
 "  /ide            include current selection, open files, and"
-"                  other context from your IDE               "
-"  /permissions    choose what Nyacode is allowed to do      "
 "                                                            "
-"› /                                                         "
+"/                                                           "
 "                                                            "
 "                           100% context left | Vim: Insert  "

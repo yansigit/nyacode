@@ -11,4 +11,7 @@ ignore = [
     "RUSTSEC-2026-0119", # hickory-proto via rama-dns/rama-tcp; remove when rama updates to hickory 0.26.1 or hickory-net
     "RUSTSEC-2026-0194", # quick-xml via plist/syntect and wayland-scanner; trusted inputs only; remove when rust-plist#191 and wayland-rs#938 are released
     "RUSTSEC-2026-0195", # quick-xml via plist/syntect and wayland-scanner; trusted inputs only; remove when rust-plist#191 and wayland-rs#938 are released
+    "RUSTSEC-2026-0370", # zvariant via zbus 5.19 used by codex-tui; unmaintained after the zbus 6 merge; remove when codex-tui moves to zbus 6
+    "RUSTSEC-2026-0371", # zbus_names via zbus 5.19 used by codex-tui; unmaintained after the zbus 6 merge; remove when codex-tui moves to zbus 6
+    "RUSTSEC-2026-0372", # zvariant_derive via zbus 5.19 used by codex-tui; unmaintained after the zbus 6 merge; remove when codex-tui moves to zbus 6
 ]

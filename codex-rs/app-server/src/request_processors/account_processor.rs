@@ -5,6 +5,7 @@ use super::bedrock_auth::ensure_user_model_provider_can_be_bedrock;
 use super::*;
 use crate::auth_mode::auth_mode_to_api;
 use crate::external_auth::ExternalAuthBridge;
+use crate::model_catalog::ModelCatalog;
 use crate::outgoing_message::AccountNotification;
 use chrono::DateTime;
 use codex_app_server_protocol::DesktopOnboardingEntrypoint;
@@ -108,6 +109,7 @@ pub(crate) struct AccountRequestProcessor {
     outgoing: Arc<OutgoingMessageSender>,
     config: Arc<Config>,
     config_manager: ConfigManager,
+    model_catalog: Arc<ModelCatalog>,
     active_login: Arc<Mutex<Option<ActiveLogin>>>,
     workspace_routing: Arc<Mutex<Option<workspace_routing::CachedWorkspaceRouting>>>,
     workspace_routing_fetches: Arc<Mutex<workspace_routing::WorkspaceRoutingFetches>>,
@@ -125,6 +127,7 @@ impl AccountRequestProcessor {
         outgoing: Arc<OutgoingMessageSender>,
         config: Arc<Config>,
         config_manager: ConfigManager,
+        model_catalog: Arc<ModelCatalog>,
     ) -> Arc<Self> {
         let gateway_notifications = crate::gateway_oauth_notifications::spawn(
             Arc::clone(&auth_manager),
@@ -143,6 +146,7 @@ impl AccountRequestProcessor {
             outgoing,
             config,
             config_manager,
+            model_catalog,
             active_login: Arc::new(Mutex::new(None)),
             gateway_login: Arc::new(std::sync::Mutex::new(/*t*/ None)),
             gateway_client: Arc::new(std::sync::Mutex::new(/*t*/ None)),
@@ -524,6 +528,9 @@ impl AccountRequestProcessor {
             .await
             .map(|()| LoginAccountResponse::ApiKey {});
         let logged_in = result.is_ok();
+        if logged_in {
+            self.model_catalog.invalidate().await;
+        }
         self.outgoing.send_result(request_id, result).await;
 
         if logged_in {
@@ -612,6 +619,9 @@ impl AccountRequestProcessor {
         }
         .await;
         let logged_in = result.is_ok();
+        if logged_in {
+            self.model_catalog.invalidate().await;
+        }
         self.outgoing.send_result(request_id, result).await;
 
         if logged_in {
@@ -981,6 +991,9 @@ impl AccountRequestProcessor {
             .login_chatgpt_auth_tokens_response(access_token, chatgpt_account_id, chatgpt_plan_type)
             .await;
         let logged_in = result.is_ok();
+        if logged_in {
+            self.model_catalog.invalidate().await;
+        }
         self.outgoing.send_result(request_id, result).await;
 
         if logged_in {
@@ -1122,6 +1135,9 @@ impl AccountRequestProcessor {
                 payload_v2.error = Some("account changed before sign-in completed".into());
             }
         }
+        if payload_v2.success {
+            self.model_catalog.invalidate().await;
+        }
         self.send_account_login_notifications(payload_v2).await;
     }
 
@@ -1213,6 +1229,7 @@ impl AccountRequestProcessor {
             clear_user_model_provider_if_bedrock(&self.config_manager, &config).await?;
         }
 
+        self.model_catalog.invalidate().await;
         *self.workspace_routing.lock().await = None;
 
         Self::maybe_refresh_plugin_caches_for_current_config(

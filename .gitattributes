@@ -1,6 +1,6 @@
 codex-rs/app-server-protocol/schema/** linguist-generated
 codex-rs/hooks/schema/generated/** linguist-generated
 third_party/voice/sources.json text eol=lf
-
 # Terminal snapshots deliberately preserve cell padding.
 codex-rs/tui/**/*.snap whitespace=-blank-at-eol
+patches/v8_array_sort_elements_kind.patch text eol=lf

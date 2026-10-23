@@ -145,6 +145,8 @@ impl ChatWidget {
                             &notification.item_id,
                         ))
                 {
+                    self.transcript.active_streamed_agent_message =
+                        Some((notification.turn_id, notification.item_id));
                     self.on_agent_message_delta(notification.delta);
                 }
             }

@@ -42,6 +42,7 @@ pub use runtime::MAX_GUARDIAN_REVIEW_RECORDS_PER_THREAD;
 pub use runtime::StateRuntime;
 pub use runtime::chat;
 pub use sqlite::SqliteConfig;
+pub use sqlite::SqlitePoolWriteExt;
 
 pub use audit::ThreadStateAuditRow;
 pub use audit::read_thread_state_audit_rows;

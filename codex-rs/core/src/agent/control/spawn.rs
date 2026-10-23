@@ -17,6 +17,7 @@ use crate::context::ContextualUserFragment;
 use crate::context::CurrentTimeReminder;
 use crate::context::CurrentTimeUnavailable;
 use crate::context::DeveloperInstructions;
+use crate::context::GuardianApprovedAction;
 use crate::context::ManagedDeveloperInstructions;
 use crate::context::ModelInstructions;
 use crate::context::MultiAgentModeInstructions;
@@ -141,7 +142,9 @@ fn retain_forked_developer_message(item: &mut ResponseItem, usage_hint_texts: &[
         // Persisted role hints can predate the current bundled wording and lack markers.
         if matches!(
             content_item.kind().as_str(),
-            "guardian.approved_action" | "multi_agent.role_instructions" | "multi_agent.usage_hint"
+            GuardianApprovedAction::KIND
+                | MultiAgentRoleInstructions::KIND
+                | MultiAgentUsageHint::KIND
         ) {
             return false;
         }
@@ -1110,7 +1113,7 @@ impl LocalAgentControl {
                 [parent_usage_hints.root, parent_usage_hints.subagent]
                     .into_iter()
                     .flatten()
-                    .map(|instructions| instructions.render())
+                    .map(|instructions| instructions.render().into_text().unwrap_or_default())
                     .collect()
             } else {
                 Vec::new()

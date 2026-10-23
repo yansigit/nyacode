@@ -40,7 +40,7 @@ fn winget_package_starts_and_reselects_daemon() -> Result<()> {
     });
     let manifest_bytes = serde_json::to_vec(&metadata)?;
     std::fs::write(package.join("codex-package.json"), &manifest_bytes)?;
-    let checksum = format!("{:x}", Sha256::digest(std::fs::read(&codex)?));
+    let checksum = hex::encode(Sha256::digest(std::fs::read(&codex)?));
     let voice_bytes = serde_json::to_vec(&serde_json::json!({
         "sha256": { &entrypoint: checksum, "codex-resources/voice/runtime": "untouched" }
     }))?;

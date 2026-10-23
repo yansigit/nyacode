@@ -2,7 +2,7 @@
 source: tui/src/tooltips.rs
 expression: rendered
 ---
-Line::from_iter([Span::from("Tip:").bold(), Span::from(" Use the official "), Span::from("OpenAI desktop").bold()]) []
-Line::from_iter([Span::from("app").bold(), Span::from(". Install it from")]) []
+Line::from_iter([Span::from("Tip:").fg(Color::Reset).bold(), Span::from(" Use the official "), Span::from("OpenAI desktop").fg(Color::Reset).bold()]) []
+Line::from_iter([Span::from("app").fg(Color::Reset).bold(), Span::from(". Install it from")]) []
 Line::from(Span::from("https://chatgpt.com/codex?app-landing-page=true").fg(Color::Reset).underlined()) [TerminalHyperlink { columns: 0..47, destination: "https://chatgpt.com/codex?app-landing-page=true", destination_kind: Web }]
 Line::from_iter([Span::from("and run "), Span::from("nyacode app").fg(Color::Rgb(166, 227, 161)), Span::from(".")]) []

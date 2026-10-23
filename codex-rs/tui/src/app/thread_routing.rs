@@ -1144,12 +1144,25 @@ impl App {
         {
             self.chat_widget
                 .on_thread_settings_updated(settings.clone());
+            if confirmed_profile.is_some()
+                || settings
+                    .thread_settings
+                    .active_permission_profile
+                    .as_ref()
+                    .is_some_and(|profile| {
+                        self.agents_overview
+                            .selected_permission_profiles
+                            .get(&thread_id)
+                            == Some(&profile.id)
+                    })
+            {
+                // Also adopt changed custom definitions and settings from another client
+                // after a no-op re-selection that needed no pending request.
+                self.adopt_server_permissions();
+            }
             notification = None;
         }
         if confirmed_profile.is_some() {
-            if self.chat_widget.thread_id() == Some(thread_id) {
-                self.adopt_server_permissions();
-            }
             self.app_event_tx.send(AppEvent::SettingsSelectionSettled);
         }
 

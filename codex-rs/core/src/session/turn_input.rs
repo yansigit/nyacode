@@ -957,7 +957,7 @@ async fn pending_turn_input(
                 let mut messages = SenderUserMessages {
                     receiver_turn_id: turn_id.to_owned(),
                     receiver_message_id: fragment.delivery.clone(),
-                    text: fragment.render(),
+                    text: fragment.render().into_text().unwrap_or_default(),
                 };
                 messages.bound();
                 Some(CodexHarnessMetadata {

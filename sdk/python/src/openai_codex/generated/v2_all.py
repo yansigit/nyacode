@@ -1996,17 +1996,67 @@ class ImageGenerationFailure(RootModel[UsageLimitExceededImageGenerationFailure]
     root: UsageLimitExceededImageGenerationFailure
 
 
-class ImageGenerationItem(BaseModel):
+class ImageGenerationInputImage(BaseModel):
+    model_config = ConfigDict(
+        populate_by_name=True,
+    )
+    path: AbsolutePathBuf
+    sha256: Annotated[
+        str,
+        Field(description="Lowercase SHA-256 of the file bytes read before image normalization."),
+    ]
+
+
+class FileIdImageGenerationItem(BaseModel):
     model_config = ConfigDict(
         populate_by_name=True,
     )
     failure: ImageGenerationFailure | None = None
     id: str
-    result: str
+    input_images: Annotated[
+        list[ImageGenerationInputImage] | None,
+        Field(
+            alias="inputImages",
+            description="Observed local inputs for a completed generation, absent on older items.",
+        ),
+    ] = None
     revised_prompt: Annotated[str | None, Field(alias="revisedPrompt")] = None
     saved_path: Annotated[AbsolutePathBuf | None, Field(alias="savedPath")] = None
     status: str
     transparent_background: Annotated[bool | None, Field(alias="transparentBackground")] = None
+    file_id: Annotated[str, Field(alias="fileId")]
+
+
+class ResultImageGenerationItem(BaseModel):
+    model_config = ConfigDict(
+        populate_by_name=True,
+    )
+    failure: ImageGenerationFailure | None = None
+    id: str
+    input_images: Annotated[
+        list[ImageGenerationInputImage] | None,
+        Field(
+            alias="inputImages",
+            description="Observed local inputs for a completed generation, absent on older items.",
+        ),
+    ] = None
+    revised_prompt: Annotated[str | None, Field(alias="revisedPrompt")] = None
+    saved_path: Annotated[AbsolutePathBuf | None, Field(alias="savedPath")] = None
+    status: str
+    transparent_background: Annotated[bool | None, Field(alias="transparentBackground")] = None
+    result: str
+
+
+ResultThreadItem = ResultImageGenerationItem
+
+
+class ImageGenerationItem(RootModel[FileIdImageGenerationItem | ResultImageGenerationItem]):
+    root: Annotated[
+        FileIdImageGenerationItem | ResultImageGenerationItem,
+        Field(
+            description="Either inline generated-image data or its durable attachment-store identity.\n\n`File` must remain first so rollouts written during the migration, which contain both an empty\n`result` and a `fileId`, retain the file reference when deserialized."
+        ),
+    ]
 
 
 class InAppBrowserRequirements(BaseModel):
@@ -5502,11 +5552,32 @@ class SleepThreadItem(SleepItem):
     type: Literal["sleep"]
 
 
-class ImageGenerationThreadItem(ImageGenerationItem):
+class ImageGenerationThreadItem1(BaseModel):
     model_config = ConfigDict(
         populate_by_name=True,
     )
     type: Literal["imageGeneration"]
+
+
+class ImageGenerationThreadItem2(FileIdImageGenerationItem, ImageGenerationThreadItem1):
+    model_config = ConfigDict(
+        populate_by_name=True,
+    )
+    type: Literal["imageGeneration"]
+
+
+class ImageGenerationThreadItem3(ResultImageGenerationItem, ImageGenerationThreadItem1):
+    model_config = ConfigDict(
+        populate_by_name=True,
+    )
+    type: Literal["imageGeneration"]
+
+
+class ImageGenerationThreadItem(RootModel[ImageGenerationThreadItem2 | ImageGenerationThreadItem3]):
+    root: Annotated[
+        ImageGenerationThreadItem2 | ImageGenerationThreadItem3,
+        Field(title="ImageGenerationThreadItem"),
+    ]
 
 
 class EnteredReviewModeThreadItem(BaseModel):
@@ -8657,6 +8728,13 @@ class McpServerStatus(BaseModel):
         ),
     ] = None
     server_info: Annotated[McpServerInfo | None, Field(alias="serverInfo")] = None
+    tool_list_meta: Annotated[
+        Any | None,
+        Field(
+            alias="toolListMeta",
+            description="Opaque `_meta` from the first page of the corresponding MCP tool catalog. Null when unavailable.",
+        ),
+    ] = None
     tools: dict[str, Tool]
     tools_error: Annotated[
         str | None,

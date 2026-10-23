@@ -1,14 +1,12 @@
 //! Bounded Decisions transport for the optional Guardian comparison classifier.
 //! Admission retains the newest requests and cancels the oldest unfinished request at capacity.
 //! Unsupported evidence is rejected intact; errors never contain credentials or wire bodies.
-//! Only host-annotated trusted-tool evidence is appended to the developer-level rubric.
+//! Evidence preserves message roles, content order, and boundaries.
 //! The caller records measurements after baseline publication; dropping its task aborts Decisions work.
 
 use super::sampler::LunaSampler;
 use super::sampler::LunaSamplingRequest;
 use codex_context_fragments::RenderedFragment;
-use codex_guardian_context::TrustedSkills;
-use codex_guardian_context::TrustedTool;
 use codex_history::ResponseItemEnvelope;
 use codex_http_client::HttpClient;
 use codex_protocol::models::ContentItem;
@@ -45,12 +43,6 @@ pub(super) enum DecisionsError {
     ClientSetup,
     #[error("Decisions cannot represent the complete classifier evidence")]
     UnsupportedEvidence,
-    #[error("Decisions cannot represent this developer message")]
-    UnsupportedDeveloperMessage,
-    #[error("Decisions cannot represent this non-user message")]
-    UnsupportedNonUserMessage,
-    #[error("Decisions cannot represent trusted skill evidence")]
-    UnsupportedTrustedSkills,
     #[error("Decisions cannot represent this image evidence")]
     UnsupportedImage,
     #[error("Decisions cannot represent audio evidence")]
@@ -231,49 +223,28 @@ fn request_body(
     let ContentItem::InputText { text: rubric } = instructions.annotated_content().content() else {
         return Err(DecisionsError::UnsupportedEvidence);
     };
-    let mut rubric = rubric.to_owned();
     let mut image_bytes = 0usize;
     let mut messages = Vec::new();
     for item in evidence {
         let ResponseItem::Message {
             role,
             content,
-            internal_chat_message_metadata_passthrough: metadata,
+            phase,
             ..
         } = item
         else {
             return Err(DecisionsError::UnsupportedEvidence);
         };
-        let kinds = metadata
-            .as_ref()
-            .and_then(|metadata| metadata.content_item_kinds.as_deref());
-        // Decisions only accepts user input, so keep Codex's trusted-tool note in the rubric.
-        // This preserves its developer role; other developer messages remain unsupported.
-        match (role.as_str(), content.as_slice(), kinds) {
-            ("developer", [ContentItem::InputText { text }], Some([kind]))
-                if kind.0 == TrustedTool::KIND =>
-            {
-                rubric.push_str("\n\n");
-                rubric.push_str(text);
-                continue;
-            }
-            ("user", _, _) => {}
-            ("developer", _, Some([kind])) if kind.0 == TrustedSkills::KIND => {
-                return Err(DecisionsError::UnsupportedTrustedSkills);
-            }
-            ("developer", _, _) => return Err(DecisionsError::UnsupportedDeveloperMessage),
-            _ => return Err(DecisionsError::UnsupportedNonUserMessage),
-        }
-        let mut parts = Vec::new();
+        let mut parts = Vec::with_capacity(content.len());
         for part in content {
             match part {
-                ContentItem::InputText { text } => {
-                    parts.push(json!({"type": "input_text", "text": text}));
+                ContentItem::InputText { .. } | ContentItem::OutputText { .. } => {
+                    parts.push(json!(part));
                 }
                 ContentItem::InputImage {
                     image: ImageReference::Inline { image_url },
                     ..
-                } if image_url.starts_with("data:") => {
+                } if role == "user" && image_url.starts_with("data:") => {
                     image_bytes = image_bytes.saturating_add(image_url.len());
                     if image_bytes > MAX_IMAGE_BYTES {
                         return Err(DecisionsError::InputTooLarge);
@@ -289,23 +260,22 @@ fn request_body(
                 ContentItem::InputAudio { .. } => {
                     return Err(DecisionsError::UnsupportedAudio);
                 }
-                ContentItem::OutputText { .. } => {
-                    return Err(DecisionsError::UnsupportedEvidence);
-                }
             }
         }
-        // Harness annotations/IDs are not part of the Decisions contract. Preserve every
-        // user content part and message boundary.
-        let mut message = json!({"role": "user"});
+        // Harness annotations/IDs are not part of the Decisions contract.
+        let mut message = json!({"role": role});
         message["content"] = Value::Array(parts);
+        if let Some(phase) = phase {
+            message["phase"] = json!(phase);
+        }
         messages.push(message);
     }
     let mut body = json!({
         "model": MODEL,
         "questions": [{"type": "choice", "name": "guardian_risk",
+                       "instructions": rubric,
                        "choices": [{"value": "low"}, {"value": "high"}]}]
     });
-    body["questions"][0]["instructions"] = Value::String(rubric);
     body["input"] = Value::Array(messages);
     Ok(body)
 }

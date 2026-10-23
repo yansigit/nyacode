@@ -187,9 +187,6 @@ pub(super) fn decisions_failure_reason(error: DecisionsError) -> &'static str {
         DecisionsError::Credentials => "credentials_unavailable",
         DecisionsError::ClientSetup => "request_build_error",
         DecisionsError::UnsupportedEvidence => "decisions_unsupported_evidence",
-        DecisionsError::UnsupportedDeveloperMessage => "developer_message",
-        DecisionsError::UnsupportedNonUserMessage => "non_user_message",
-        DecisionsError::UnsupportedTrustedSkills => "trusted_skills",
         DecisionsError::UnsupportedImage => "image",
         DecisionsError::UnsupportedAudio => "audio",
         DecisionsError::InputTooLarge => "input_too_large",
@@ -221,9 +218,6 @@ pub(super) fn record_decisions_comparison(
                 Ok(_) => "success",
                 Err(
                     DecisionsError::UnsupportedEvidence
-                    | DecisionsError::UnsupportedDeveloperMessage
-                    | DecisionsError::UnsupportedNonUserMessage
-                    | DecisionsError::UnsupportedTrustedSkills
                     | DecisionsError::UnsupportedImage
                     | DecisionsError::UnsupportedAudio
                     | DecisionsError::InputTooLarge,

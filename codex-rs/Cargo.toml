@@ -64,6 +64,7 @@ members = [
     "ext/agent-message-board",
     "ext/connectors",
     "ext/extension-api",
+    "ext/multi-env-copy-file",
     "ext/goal",
     "ext/git-attribution",
     "ext/guardian-reviewer",
@@ -106,6 +107,7 @@ members = [
     "realtime-webrtc",
     "voice-host",
     "protocol",
+    "protocol/tests/support",
     "prompts",
     "rollout",
     "rollout-trace",
@@ -236,6 +238,7 @@ codex-exec-server-test-support = { path = "exec-server/tests/support" }
 codex-execpolicy = { path = "execpolicy" }
 codex-extension-api = { path = "ext/extension-api" }
 codex-extension-items = { path = "ext/items" }
+codex-multi-env-copy-file = { path = "ext/multi-env-copy-file" }
 codex-goal-extension = { path = "ext/goal" }
 codex-git-attribution = { path = "ext/git-attribution" }
 codex-guardian-reviewer = { path = "ext/guardian-reviewer" }
@@ -285,6 +288,7 @@ codex-provider-antigravity = { path = "providers/provider-antigravity" }
 codex-provider-cursor = { path = "providers/provider-cursor" }
 codex-process-hardening = { path = "process-hardening" }
 codex-protocol = { path = "protocol" }
+codex-protocol-test-support = { path = "protocol/tests/support" }
 codex-prompts = { path = "prompts" }
 codex-queue-extension = { path = "ext/queue" }
 codex-responses-api-proxy = { path = "responses-api-proxy" }
@@ -471,7 +475,7 @@ regex-automata = { version = "0.4.18", default-features = false, features = ["st
 regex-lite = "0.1.9"
 regex-syntax = "0.8.11"
 reqwest = { version = "0.13", features = ["cookies", "form", "query"] }
-rmcp = { git = "https://github.com/modelcontextprotocol/rust-sdk", rev = "4048ac40e958fb1a7d614617a2ae8d26666ee2fa", version = "=3.5.1", default-features = false }
+rmcp = { git = "https://github.com/modelcontextprotocol/rust-sdk", rev = "98a54789b80110ad210495c4ad845c89e1980471", version = "=3.5.1", default-features = false }
 runfiles = { git = "https://github.com/dzbarsky/rules_rust", rev = "b56cbaa8465e74127f1ea216f813cd377295ad81" }
 rustix = { version = "1.1.5", features = ["net"] }
 rustls = { version = "0.23.46", default-features = false, features = [
@@ -575,7 +579,18 @@ whoami = "2.1.3"
 wildmatch = "2.6.1"
 winapi-util = "0.1.11"
 windows-sys = "0.61.2"
-zip = "9.0.2"
+# Keep the zip 2.x feature set. In zip 9, `bzip2-rs` selects the bzip2-sys
+# backend we already build; the default selects libbz2-rs-sys instead.
+zip = { version = "9.0.2", default-features = false, features = [
+    "aes-crypto",
+    "bzip2-rs",
+    "deflate",
+    "deflate64",
+    "lzma",
+    "time",
+    "xz",
+    "zstd",
+] }
 zstd = "0.14"
 
 wiremock = "0.6"

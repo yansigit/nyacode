@@ -1,3 +1,5 @@
+use std::io::BufRead;
+use std::io::BufReader;
 use std::io::Read;
 use std::io::Seek;
 use std::io::SeekFrom;
@@ -134,25 +136,30 @@ fn read_projection_steps_sync(
             .ok_or_else(|| ThreadStoreError::Internal {
                 message: "durable rollout shrank before projection".to_string(),
             })?;
-    let byte_count = usize::try_from(byte_count).map_err(|_| ThreadStoreError::Internal {
-        message: "durable rollout append exceeds addressable memory".to_string(),
-    })?;
-    let mut bytes = vec![0; byte_count];
     file.seek(SeekFrom::Start(start_offset))
         .map_err(thread_store_io_error)?;
-    file.read_exact(bytes.as_mut_slice())
-        .map_err(thread_store_io_error)?;
+    // Freeze this pass at the captured end, without retaining the entire durable suffix.
+    let mut reader = BufReader::new(file.take(byte_count));
+    let mut line_bytes = Vec::new();
     // Only project the newline-terminated prefix; leave a trailing partial record for the next
     // pass.
     let mut projections = Vec::new();
     let mut next_ordinal = expected_ordinal;
     let mut next_offset = start_offset;
     let mut line_start_offset = start_offset;
-    for line_bytes in bytes.split_inclusive(|byte| *byte == b'\n') {
+    loop {
         if is_cancelled() {
             return Err(thread_store_io_error(std::io::Error::other(
                 "rollout read cancelled",
             )));
+        }
+        line_bytes.clear();
+        if reader
+            .read_until(b'\n', &mut line_bytes)
+            .map_err(thread_store_io_error)?
+            == 0
+        {
+            break;
         }
         if !line_bytes.ends_with(b"\n") {
             break;
@@ -171,7 +178,7 @@ fn read_projection_steps_sync(
             line_start_offset = line_end_offset;
             continue;
         }
-        let value = match serde_json::from_slice::<serde_json::Value>(line_bytes) {
+        let value = match serde_json::from_slice::<serde_json::Value>(&line_bytes) {
             Ok(value) => value,
             Err(err) => {
                 warn!(
@@ -331,6 +338,12 @@ fn read_projection_steps_sync(
         next_ordinal = next_line_ordinal;
         next_offset = line_end_offset;
         line_start_offset = line_end_offset;
+    }
+    if reader.get_ref().limit() != 0 {
+        return Err(thread_store_io_error(std::io::Error::new(
+            std::io::ErrorKind::UnexpectedEof,
+            "durable rollout shrank during projection",
+        )));
     }
     Ok((projections, next_offset))
 }

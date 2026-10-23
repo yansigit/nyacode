@@ -464,7 +464,9 @@ async fn conpty_ctrl_c_interrupts_powershell_foreground_child() -> anyhow::Resul
     wait_for_output_contains(&mut output_rx, "127.0.0.1", /*timeout_ms*/ 10_000).await?;
 
     writer.send(vec![0x03]).await?;
-    tokio::time::sleep(tokio::time::Duration::from_millis(200)).await;
+    // Ctrl-C handling can discard keystrokes typed before the prompt returns.
+    // Wait for that prompt so the follow-up command is not lost on a busy runner.
+    wait_for_output_contains(&mut output_rx, "PS ", /*timeout_ms*/ 10_000).await?;
     writer.send(b"cmd.exe /D /C ver\n".to_vec()).await?;
     let mut output = wait_for_output_contains(
         &mut output_rx,

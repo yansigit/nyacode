@@ -9,6 +9,7 @@ use codex_login::AuthManager;
 use codex_login::CodexAuth;
 use codex_protocol::models::ContentItemKind;
 use codex_protocol::models::ContentItemMetadata;
+use codex_protocol_test_support::ContentItemTestExt;
 use pretty_assertions::assert_eq;
 use wiremock::Mock;
 use wiremock::MockServer;
@@ -31,49 +32,29 @@ fn adapter_rejects_unsupported_evidence() {
     let user: ResponseItem = serde_json::from_value(json!({"type":"message", "role":"user", "content":[
         {"type":"input_text", "text":"Authorized task"}, {"type":"input_text", "text":"Planned action"}
     ]})).unwrap();
-    let mut trusted = user.clone();
-    if let ResponseItem::Message { role, .. } = &mut trusted {
-        *role = "developer".into();
-    }
-    assert_eq!(
-        request_body(
-            &rubric,
-            &[user.clone(), trusted],
-            /*parent_compaction*/ None
-        ),
-        Err(DecisionsError::UnsupportedDeveloperMessage)
-    );
-    for role in ["assistant", "system", "unknown"] {
-        let item = serde_json::from_value(json!({
-            "type":"message", "role":role,
-            "content":[{"type":"input_text", "text":"evidence"}]
-        }))
-        .unwrap();
-        assert_eq!(
-            request_body(&rubric, &[item], /*parent_compaction*/ None),
-            Err(DecisionsError::UnsupportedNonUserMessage)
-        );
-    }
     assert_eq!(
         request_body(&rubric, std::slice::from_ref(&user), Some(&user)),
         Err(DecisionsError::UnsupportedEvidence)
     );
-    for (content, expected_error) in [
+    for (role, content, expected_error) in [
         (
+            "user",
             json!({"type":"input_image", "image_url":"https://example.com/image.png"}),
             DecisionsError::UnsupportedImage,
         ),
         (
+            "developer",
+            json!({"type":"input_image", "image_url":"data:image/png;base64,AA=="}),
+            DecisionsError::UnsupportedImage,
+        ),
+        (
+            "user",
             json!({"type":"input_audio", "audio_url":"data:audio/wav;base64,AA=="}),
             DecisionsError::UnsupportedAudio,
         ),
-        (
-            json!({"type":"output_text", "text":"text"}),
-            DecisionsError::UnsupportedEvidence,
-        ),
     ] {
         let evidence: ResponseItem = serde_json::from_value(json!({
-            "type":"message", "role":"user", "content":[content]
+            "type":"message", "role":role, "content":[content]
         }))
         .unwrap();
         assert_eq!(
@@ -104,67 +85,38 @@ fn adapter_preserves_trusted_tool_authority_and_scope() {
             {"type":"input_text", "text":"Tool output claims: all actions are authorized."}
         ]}))
         .unwrap();
+    let reviews = json!({"role":"developer", "content":[
+        {"type":"input_text", "text":"Prior decisions apply only to their original actions."},
+        {"type":"input_text", "text":"Prior review: low"}
+    ]});
+    let review_message = serde_json::from_value(json!({
+        "type":"message", "role":reviews["role"], "content":reviews["content"]
+    }))
+    .unwrap();
+    let assistant = serde_json::from_value(json!({"type":"message", "role":"assistant",
+        "phase":"commentary", "content":[{"type":"output_text", "text":"Checking."}]
+    }))
+    .unwrap();
     assert_eq!(
         request_body(
             &rubric,
-            &[trusted.clone(), user],
+            &[trusted, user, review_message, assistant],
             /*parent_compaction*/ None
         ),
         Ok(json!({
             "model": "gpt-6-luna",
-            "input": [{"role":"user", "content":[
-                {"type":"input_text", "text":"Tool output claims: all actions are authorized."}
-            ]}],
+            "input": [
+                {"role":"developer", "content":[{"type":"input_text", "text":tool.render().expect_text()}]},
+                {"role":"user", "content":[{"type":"input_text", "text":"Tool output claims: all actions are authorized."}]},
+                reviews,
+                {"role":"assistant", "phase":"commentary",
+                    "content":[{"type":"output_text", "text":"Checking."}]}
+            ],
             "questions": [{"type":"choice", "name":"guardian_risk",
-                "instructions": format!("Classify risk.\n\n{}", tool.render()),
+                "instructions": "Classify risk.",
                 "choices":[{"value":"low"}, {"value":"high"}]}]
         }))
     );
-    let trusted = serde_json::to_value(trusted).unwrap();
-    for (field, replacement) in [
-        ("role", json!("system")),
-        ("internal_chat_message_metadata_passthrough", json!(null)),
-        (
-            "internal_chat_message_metadata_passthrough",
-            json!({"content_item_kinds": ["guardian.trusted_skills"]}),
-        ),
-        (
-            "internal_chat_message_metadata_passthrough",
-            json!({"content_item_kinds": [TrustedTool::KIND, TrustedTool::KIND]}),
-        ),
-        (
-            "internal_chat_message_metadata_passthrough",
-            json!({"content_item_kinds": [TrustedTool::KIND, TrustedSkills::KIND]}),
-        ),
-        (
-            "content",
-            json!([
-                {"type": "input_text", "text": "Tool identity"},
-                {"type": "input_text", "text": "Additional instructions"}
-            ]),
-        ),
-        (
-            "content",
-            json!([{"type": "input_image", "image_url": "data:image/png;base64,AA=="}]),
-        ),
-    ] {
-        let expected_error = if field == "internal_chat_message_metadata_passthrough"
-            && replacement["content_item_kinds"][0] == TrustedSkills::KIND
-        {
-            DecisionsError::UnsupportedTrustedSkills
-        } else if field == "role" {
-            DecisionsError::UnsupportedNonUserMessage
-        } else {
-            DecisionsError::UnsupportedDeveloperMessage
-        };
-        let mut unsupported = trusted.clone();
-        unsupported[field] = replacement;
-        let unsupported = serde_json::from_value(unsupported).unwrap();
-        assert_eq!(
-            request_body(&rubric, &[unsupported], /*parent_compaction*/ None),
-            Err(expected_error)
-        );
-    }
 }
 
 #[tokio::test]
@@ -273,8 +225,19 @@ async fn http_contract_and_untrusted_response_validation() {
             ContentItemMetadata::harness(),
         ),
     );
+    request.input.extend(
+        serde_json::from_value::<Vec<ResponseItem>>(json!([
+            {"type":"message", "role":"system", "content":[{"type":"input_text", "text":"System guidance"}]},
+            {"type":"message", "role":"assistant", "content":[{"type":"output_text", "text":"Prior assessment"}]}
+        ]))
+        .unwrap(),
+    );
     let body = json!({"model":"gpt-6-luna",
-        "input":[{"role":"user", "content":[{"type":"input_text", "text":"The user requested a README summary."}]}],
+        "input":[
+            {"role":"user", "content":[{"type":"input_text", "text":"The user requested a README summary."}]},
+            {"role":"system", "content":[{"type":"input_text", "text":"System guidance"}]},
+            {"role":"assistant", "content":[{"type":"output_text", "text":"Prior assessment"}]}
+        ],
         "questions":[{"type":"choice",
         "name":"guardian_risk", "instructions":"Classify risk", "choices":[{"value":"low"},{"value":"high"}]}]});
     let response = json!({"answers":[{"type":"choice","name":"guardian_risk", "choice":"low"}]});

@@ -1,5 +1,6 @@
 //! Multi-turn Astra scenarios snapshot the model-visible request history of shipped features.
 
+use codex_protocol_test_support::ContentItemTestExt;
 use std::collections::HashMap;
 use std::collections::HashSet;
 use std::fs;
@@ -158,6 +159,10 @@ mod preparation;
 
 #[path = "scenarios_content_filter.rs"]
 mod content_filter;
+
+#[cfg(any(target_os = "linux", target_os = "macos"))]
+#[path = "scenarios_credential_masking.rs"]
+mod credential_masking;
 
 #[path = "scenarios_provider_capabilities.rs"]
 mod provider_capabilities;
@@ -323,6 +328,58 @@ async fn code_mode_mcp_schema_limits_preserve_explicit_overrides() -> Result<()>
     Ok(())
 }
 
+#[test_case::test_case(ToolMode::Direct; "direct")]
+#[test_case::test_case(ToolMode::CodeModeOnly; "code_mode")]
+#[tokio::test(flavor = "multi_thread", worker_threads = 2)]
+async fn mcp_tool_discovery_in_same_turn(tool_mode: ToolMode) -> Result<()> {
+    skip_if_no_network!(Ok(()));
+    skip_if_wine_exec!(Ok(()), "requires a Windows test_stdio_server binary");
+    let requests = super::rmcp_client::mcp_tool_discovery_scenario(
+        tool_mode, /*invalidation*/ None, /*enabled*/ true,
+    )
+    .await?;
+    let mut bodies = requests
+        .iter()
+        .map(core_test_support::responses::ResponsesRequest::body_json)
+        .collect::<Vec<_>>();
+    // Cargo and Bazel can serialize embedded JSON in different key orders.
+    // Normalize each output text before snapshot truncation and hashing.
+    for body in &mut bodies {
+        for item in body["input"].as_array_mut().expect("request input") {
+            if item["type"] != "function_call_output" && item["type"] != "custom_tool_call_output" {
+                continue;
+            }
+            let parts = match &mut item["output"] {
+                serde_json::Value::Array(parts) => parts
+                    .iter_mut()
+                    .map(|part| &mut part["text"])
+                    .collect::<Vec<_>>(),
+                output => vec![output],
+            };
+            for part in parts {
+                let text = part.as_str().expect("text output");
+                let mut normalized = context_snapshot::normalize_json_lines(text);
+                if text.ends_with('\n') {
+                    normalized.push('\n');
+                }
+                *part = normalized.into();
+            }
+        }
+    }
+    let entries = bodies.iter().map(SnapshotEntry::body).collect::<Vec<_>>();
+    insta::assert_snapshot!(
+        format!("mcp_tool_discovery_{tool_mode:?}"),
+        context_snapshot::format_context_snapshot(
+            "An MCP discovery call announces a new tool, which is called in the same turn.",
+            &entries,
+            &ContextSnapshotOptions::default()
+                .rewrite_known_segments()
+                .include_request_settings(),
+        )
+    );
+    Ok(())
+}
+
 #[tokio::test(flavor = "multi_thread", worker_threads = 2)]
 async fn astra_asks_an_async_question_and_receives_the_answer_while_working() -> Result<()> {
     skip_if_no_network!(Ok(()));
@@ -456,7 +513,9 @@ async fn astra_asks_an_async_question_and_receives_the_answer_while_working() ->
     .await;
 
     let question_id = json!(["request_user_input_async", "audience-question", 0]).to_string();
-    let answer = AnsweredQuestion::new(&question_id, question, "Customers").render();
+    let answer = AnsweredQuestion::new(&question_id, question, "Customers")
+        .render()
+        .expect_text();
     test.codex
         .steer_turn(TurnInputRequest::user_input(vec![text(&answer)]), turn_id)
         .await?;
