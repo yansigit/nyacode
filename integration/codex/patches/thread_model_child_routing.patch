@@ -1,5 +1,5 @@
 diff --git a/codex-rs/agent-identity/src/lib.rs b/codex-rs/agent-identity/src/lib.rs
-index 14a9e3519..9b4cbc3a6 100644
+index 14a9e35190118d3f62fe1197dd9735229f34e4cd..9b4cbc3a652d8b6f8ccd1daa2bcc33471bd4e017 100644
 --- a/codex-rs/agent-identity/src/lib.rs
 +++ b/codex-rs/agent-identity/src/lib.rs
 @@ -27,8 +27,8 @@ use jsonwebtoken::Validation;
@@ -23,7 +23,7 @@ index 14a9e3519..9b4cbc3a6 100644
          .context("failed to generate agent identity private key seed material")?;
      // Ed25519 stores a 32-byte seed, so derive it from all sampled seed material.
 diff --git a/codex-rs/app-server-protocol/src/protocol/v2/thread_data.rs b/codex-rs/app-server-protocol/src/protocol/v2/thread_data.rs
-index 015d81346..149888ed0 100644
+index 015d813462076fcdff6420f819e5270b53755195..149888ed0e9a46d163f57200261f5635072b8770 100644
 --- a/codex-rs/app-server-protocol/src/protocol/v2/thread_data.rs
 +++ b/codex-rs/app-server-protocol/src/protocol/v2/thread_data.rs
 @@ -15,9 +15,9 @@ use codex_protocol::protocol::ThreadHistoryMode as CoreThreadHistoryMode;
@@ -50,7 +50,7 @@ index 015d81346..149888ed0 100644
  
      fn json_schema(generator: &mut SchemaGenerator) -> Schema {
 diff --git a/codex-rs/app-server/src/request_processors/account_processor/workspace_routing.rs b/codex-rs/app-server/src/request_processors/account_processor/workspace_routing.rs
-index e5028e337..a854b8336 100644
+index e5028e3370e3f99408ce331a117d3b99901cdfc3..a854b83362eef71e829cb41ba48467cb268bf7fe 100644
 --- a/codex-rs/app-server/src/request_processors/account_processor/workspace_routing.rs
 +++ b/codex-rs/app-server/src/request_processors/account_processor/workspace_routing.rs
 @@ -231,7 +231,7 @@ impl AccountRequestProcessor {
@@ -63,7 +63,7 @@ index e5028e337..a854b8336 100644
                      .outgoing
                      .send_account_notification(
 diff --git a/codex-rs/app-server/src/request_processors/thread_processor.rs b/codex-rs/app-server/src/request_processors/thread_processor.rs
-index 9563a250c..6c3b63aa6 100644
+index 9563a250cc43bf5691537ed009199112265a5548..6c3b63aa6d98748bdacde8d4ba895510f5de2510 100644
 --- a/codex-rs/app-server/src/request_processors/thread_processor.rs
 +++ b/codex-rs/app-server/src/request_processors/thread_processor.rs
 @@ -1675,6 +1675,35 @@ impl ThreadRequestProcessor {
@@ -134,7 +134,7 @@ index 9563a250c..6c3b63aa6 100644
              model,
              model_provider,
 diff --git a/codex-rs/app-server/src/request_processors/thread_processor_tests.rs b/codex-rs/app-server/src/request_processors/thread_processor_tests.rs
-index a42e06dc9..a39472759 100644
+index a42e06dc9d0eff3e9ddc2888ae964f5d72103c72..a394727599146a754d569938574dc11c700b9cb3 100644
 --- a/codex-rs/app-server/src/request_processors/thread_processor_tests.rs
 +++ b/codex-rs/app-server/src/request_processors/thread_processor_tests.rs
 @@ -644,6 +644,7 @@ mod thread_processor_behavior_tests {
@@ -146,7 +146,7 @@ index a42e06dc9..a39472759 100644
              http_headers: None,
              env_http_headers: None,
 diff --git a/codex-rs/app-server/tests/suite/v2/turn_cost_otel.rs b/codex-rs/app-server/tests/suite/v2/turn_cost_otel.rs
-index f9a06f2e4..67664c1e0 100644
+index f9a06f2e47e3bcface5f4be91ef1ec8c21630281..67664c1e0bb9f1dff4724b44c0dd8e1424743d01 100644
 --- a/codex-rs/app-server/tests/suite/v2/turn_cost_otel.rs
 +++ b/codex-rs/app-server/tests/suite/v2/turn_cost_otel.rs
 @@ -268,7 +268,8 @@ metrics_exporter = {{ otlp-http = {{ endpoint = "{}/metrics", protocol = "json"
@@ -160,7 +160,7 @@ index f9a06f2e4..67664c1e0 100644
          .as_array()
          .expect("attributes")
 diff --git a/codex-rs/cli/src/doctor/thread_inventory.rs b/codex-rs/cli/src/doctor/thread_inventory.rs
-index 971c32f83..37f2f8cc6 100644
+index 971c32f8311c62d5ae96cf3bc8a539312b1e4e64..37f2f8cc6e03c0e08dfb28e0a8d5acb519e09e34 100644
 --- a/codex-rs/cli/src/doctor/thread_inventory.rs
 +++ b/codex-rs/cli/src/doctor/thread_inventory.rs
 @@ -192,10 +192,10 @@ fn missing_state_db_check(scan: RolloutScan, details: Vec<String>) -> DoctorChec
@@ -186,7 +186,7 @@ index 971c32f83..37f2f8cc6 100644
          let missing_sample = check
              .details
 diff --git a/codex-rs/config/src/thread_config.rs b/codex-rs/config/src/thread_config.rs
-index 0518ea887..194a1c5b1 100644
+index 0518ea887b30b950fc9b0bd2573b1e007da13e8b..194a1c5b14bb46d4f16de6f606d29a83eb8e5403 100644
 --- a/codex-rs/config/src/thread_config.rs
 +++ b/codex-rs/config/src/thread_config.rs
 @@ -306,6 +306,7 @@ mod tests {
@@ -198,7 +198,7 @@ index 0518ea887..194a1c5b1 100644
              http_headers: None,
              env_http_headers: None,
 diff --git a/codex-rs/config/src/thread_config/proto/codex.thread_config.v1.proto b/codex-rs/config/src/thread_config/proto/codex.thread_config.v1.proto
-index b9f89c95c..13a1c7df3 100644
+index b9f89c95c63527d5facd779a76a54119f64b8258..13a1c7df3bf5e5c3ab46bbccb1ec9c38c8714b6a 100644
 --- a/codex-rs/config/src/thread_config/proto/codex.thread_config.v1.proto
 +++ b/codex-rs/config/src/thread_config/proto/codex.thread_config.v1.proto
 @@ -50,6 +50,7 @@ message ModelProvider {
@@ -220,7 +220,7 @@ index b9f89c95c..13a1c7df3 100644
 +  WIRE_API_NATIVE = 6;
  }
 diff --git a/codex-rs/config/src/thread_config/proto/codex.thread_config.v1.rs b/codex-rs/config/src/thread_config/proto/codex.thread_config.v1.rs
-index 6ffc7bbdf..138d5a476 100644
+index 6ffc7bbdf6753f6a2acfccef3382fb23c9dd6367..138d5a476ee65f50242d8cef8f7d6a45d6e5b2a8 100644
 --- a/codex-rs/config/src/thread_config/proto/codex.thread_config.v1.rs
 +++ b/codex-rs/config/src/thread_config/proto/codex.thread_config.v1.rs
 @@ -1,6 +1,4 @@
@@ -276,7 +276,7 @@ index 6ffc7bbdf..138d5a476 100644
          }
      }
 diff --git a/codex-rs/config/src/thread_config/remote.rs b/codex-rs/config/src/thread_config/remote.rs
-index da0af3bca..e4191c67a 100644
+index da0af3bca082c5b811e4d4bc4d6bfdecbdca427b..e4191c67ab1d9aa87ce09de059d8fdf420b3c2e4 100644
 --- a/codex-rs/config/src/thread_config/remote.rs
 +++ b/codex-rs/config/src/thread_config/remote.rs
 @@ -20,6 +20,7 @@ use super::UserThreadConfig;
@@ -399,7 +399,7 @@ index da0af3bca..e4191c67a 100644
 +    }
  }
 diff --git a/codex-rs/core/src/agent/child_config.rs b/codex-rs/core/src/agent/child_config.rs
-index 3d56d7e64..d8f62b497 100644
+index 3d56d7e646e275b6d66b0501d5f7021e1d300bdf..d8f62b497150dc49abbf234cb1b15ece62672ed0 100644
 --- a/codex-rs/core/src/agent/child_config.rs
 +++ b/codex-rs/core/src/agent/child_config.rs
 @@ -11,6 +11,7 @@ use crate::session::step_context::StepContext;
@@ -732,7 +732,7 @@ index 3d56d7e64..d8f62b497 100644
 +    }
 +}
 diff --git a/codex-rs/core/src/agent/control/spawn.rs b/codex-rs/core/src/agent/control/spawn.rs
-index 04ae8ab63..a86e625fe 100644
+index 04ae8ab6376347a4bb1aadbd8529173e93d4d0f0..a86e625fe26a174abcd15b6a61720057ccb045af 100644
 --- a/codex-rs/core/src/agent/control/spawn.rs
 +++ b/codex-rs/core/src/agent/control/spawn.rs
 @@ -474,6 +474,13 @@ impl LocalAgentControl {
@@ -750,7 +750,7 @@ index 04ae8ab63..a86e625fe 100644
          let parent_thread_id = owner_thread_id
              .or_else(|| initial_history.get_resumed_parent_thread_id())
 diff --git a/codex-rs/core/src/agent/control_tests.rs b/codex-rs/core/src/agent/control_tests.rs
-index ffc7e11f7..54d70b081 100644
+index ffc7e11f7a5f23c378ae68023768c8a534347cc2..54d70b08124acb8218bf3f203284d4dcf612e55a 100644
 --- a/codex-rs/core/src/agent/control_tests.rs
 +++ b/codex-rs/core/src/agent/control_tests.rs
 @@ -1371,6 +1371,9 @@ async fn check_v2_agent_reload(route: V2ReloadRoute) {
@@ -775,7 +775,7 @@ index ffc7e11f7..54d70b081 100644
              harness
                  .manager
 diff --git a/codex-rs/core/src/model_request_tests.rs b/codex-rs/core/src/model_request_tests.rs
-index 84ab5014d..0356bd1f6 100644
+index 84ab5014d18ebc0232b3cdbb52730a38761420e8..0356bd1f68b32371afd2022a3971c4cc48e98537 100644
 --- a/codex-rs/core/src/model_request_tests.rs
 +++ b/codex-rs/core/src/model_request_tests.rs
 @@ -30,6 +30,7 @@ async fn interceptors_forward_before_completion_in_order_and_cancel_upstream() {
@@ -787,7 +787,7 @@ index 84ab5014d..0356bd1f6 100644
                  interrupt: None,
                  consumer_dropped,
 diff --git a/codex-rs/core/src/session/turn.rs b/codex-rs/core/src/session/turn.rs
-index 8925df02b..5a3874005 100644
+index 8925df02baa224bea27785b6e8c2653b4c80f334..5a3874005405c9270f0de2cd26a4d3de3c1654e6 100644
 --- a/codex-rs/core/src/session/turn.rs
 +++ b/codex-rs/core/src/session/turn.rs
 @@ -1805,6 +1805,16 @@ async fn run_sampling_request(
@@ -943,7 +943,7 @@ index 8925df02b..5a3874005 100644
                      needs_follow_up,
                      last_agent_message,
 diff --git a/codex-rs/core/src/thread_manager.rs b/codex-rs/core/src/thread_manager.rs
-index 4910246f0..04298cbe5 100644
+index 4910246f076b98029b112812a3184ab65296d1db..04298cbe5c62854152341e9d8a009b99c95a1b19 100644
 --- a/codex-rs/core/src/thread_manager.rs
 +++ b/codex-rs/core/src/thread_manager.rs
 @@ -2335,6 +2335,13 @@ impl ThreadManagerState {
@@ -970,7 +970,7 @@ index 4910246f0..04298cbe5 100644
              environment_manager: Arc::clone(&self.environment_manager),
              skills_service: Arc::clone(&self.skills_service),
 diff --git a/codex-rs/core/src/thread_manager_tests.rs b/codex-rs/core/src/thread_manager_tests.rs
-index 0800effb8..81a508c27 100644
+index 0800effb8a675dc7eb287981fcf4117ed3d22d34..81a508c278ed487f1fba67d0fc98d422ddede26e 100644
 --- a/codex-rs/core/src/thread_manager_tests.rs
 +++ b/codex-rs/core/src/thread_manager_tests.rs
 @@ -3514,3 +3514,88 @@ async fn interrupted_fork_snapshot_uses_persisted_mid_turn_history_without_live_
@@ -1063,7 +1063,7 @@ index 0800effb8..81a508c27 100644
 +    }
 +}
 diff --git a/codex-rs/core/src/thread_spawn.rs b/codex-rs/core/src/thread_spawn.rs
-index 29dc6c44a..d9b2fbc1f 100644
+index 29dc6c44ab21547bb2c9713aaf10effa83eb014a..d9b2fbc1f31990dd68d9de95fde5baafd96fb6fc 100644
 --- a/codex-rs/core/src/thread_spawn.rs
 +++ b/codex-rs/core/src/thread_spawn.rs
 @@ -37,6 +37,8 @@ pub(crate) struct ThreadSpawnRequest {
@@ -1092,7 +1092,7 @@ index 29dc6c44a..d9b2fbc1f 100644
              reasoning_effort,
          },
 diff --git a/codex-rs/core/src/turn_diff_tracker.rs b/codex-rs/core/src/turn_diff_tracker.rs
-index 06a2cd022..5bbe739f5 100644
+index 06a2cd022e9c71daad1e3d3973ac2fb538255a0f..5bbe739f5d9a8ba419f5c802a1fb9470cc8144a5 100644
 --- a/codex-rs/core/src/turn_diff_tracker.rs
 +++ b/codex-rs/core/src/turn_diff_tracker.rs
 @@ -385,7 +385,7 @@ impl TurnDiffTracker {
@@ -1105,7 +1105,7 @@ index 06a2cd022..5bbe739f5 100644
  
  /// Compute the Git SHA-1 blob object ID for the given content (bytes).
 diff --git a/codex-rs/core/src/turn_diff_tracker_tests.rs b/codex-rs/core/src/turn_diff_tracker_tests.rs
-index 27af3ff32..cd7d5eb8a 100644
+index 27af3ff32b9179a673fbf59151a09e5b84a04846..cd7d5eb8afc69e57ec0056d97a29d2d1a7633600 100644
 --- a/codex-rs/core/src/turn_diff_tracker_tests.rs
 +++ b/codex-rs/core/src/turn_diff_tracker_tests.rs
 @@ -14,7 +14,7 @@ use std::time::Instant;
@@ -1118,7 +1118,7 @@ index 27af3ff32..cd7d5eb8a 100644
  
  async fn apply_verified_patch(root: &Path, patch: &str) -> AppliedPatchDelta {
 diff --git a/codex-rs/core/src/turn_timing.rs b/codex-rs/core/src/turn_timing.rs
-index 75a2bf9bf..e6ceeeb0e 100644
+index 75a2bf9bf04b17bbf84b4e12b08f7608b9f85b2d..e6ceeeb0e80b5dad51b06024c47ddee65d0ef895 100644
 --- a/codex-rs/core/src/turn_timing.rs
 +++ b/codex-rs/core/src/turn_timing.rs
 @@ -394,7 +394,9 @@ fn response_event_records_turn_ttft(event: &ResponseEvent) -> bool {
@@ -1133,7 +1133,7 @@ index 75a2bf9bf..e6ceeeb0e 100644
          | ResponseEvent::ModelVerifications(_)
          | ResponseEvent::TurnModerationMetadata(_)
 diff --git a/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__agent_eviction__idle_eviction_followup.snap b/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__agent_eviction__idle_eviction_followup.snap
-index 505620635..e75794bdd 100644
+index 5056206357203b5ec76081784a2ca903109107b0..e75794bdd2f6ecaddd421357342770e259b65308 100644
 --- a/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__agent_eviction__idle_eviction_followup.snap
 +++ b/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__agent_eviction__idle_eviction_followup.snap
 @@ -7,12 +7,12 @@ Scenario: A parent delegates an API migration, queues a note while the worker is
@@ -1167,7 +1167,7 @@ index 505620635..e75794bdd 100644
            - function/interrupt_agent
            - function/list_agents
 diff --git a/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__agent_message_board__remote__remote_board_permissions_direct.snap b/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__agent_message_board__remote__remote_board_permissions_direct.snap
-index c0f63f83b..0e6e01227 100644
+index c0f63f83b6ec4d75537a1c6c38b37522a6a836c9..0e6e01227d207786765b1486bb3675b8bc9a493f 100644
 --- a/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__agent_message_board__remote__remote_board_permissions_direct.snap
 +++ b/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__agent_message_board__remote__remote_board_permissions_direct.snap
 @@ -6,7 +6,7 @@ Scenario: Permission discovery preserves legacy output, exposes reply-only acces
@@ -1189,7 +1189,7 @@ index c0f63f83b..0e6e01227 100644
            - function/followup_task
            - function/get_channels
 diff --git a/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__model_instructions__incremental_model_instructions.snap b/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__model_instructions__incremental_model_instructions.snap
-index 0a1d2ba5a..cdbeb3cef 100644
+index 0a1d2ba5a5f4a3724e448c705f9c857d3ae7fe31..cdbeb3cef75fefbb61071f83c0d8f4440ef04287 100644
 --- a/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__model_instructions__incremental_model_instructions.snap
 +++ b/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__model_instructions__incremental_model_instructions.snap
 @@ -15,13 +15,13 @@ Settings:
@@ -1225,7 +1225,7 @@ index 0a1d2ba5a..cdbeb3cef 100644
            - function/resume_agent
            - function/send_input
 diff --git a/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__multi_agent_catalog_parameters.snap b/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__multi_agent_catalog_parameters.snap
-index 5fb3ec889..df3e8af2f 100644
+index 5fb3ec889e962788945050c06fadcb42562fcca0..df3e8af2f6e266e84f24b9e66ae5765d394436e6 100644
 --- a/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__multi_agent_catalog_parameters.snap
 +++ b/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__multi_agent_catalog_parameters.snap
 @@ -16,7 +16,7 @@ Settings:
@@ -1247,7 +1247,7 @@ index 5fb3ec889..df3e8af2f 100644
            - function/interrupt_agent
            - function/list_agents
 diff --git a/codex-rs/core/tests/suite/stream_error_allows_next_turn.rs b/codex-rs/core/tests/suite/stream_error_allows_next_turn.rs
-index c381b78cd..fff792b71 100644
+index c381b78cda2ee1f0fdeea3b06e25b9fe1a502748..fff792b7117dec1e2a1e1d013f8558d1678e3a36 100644
 --- a/codex-rs/core/tests/suite/stream_error_allows_next_turn.rs
 +++ b/codex-rs/core/tests/suite/stream_error_allows_next_turn.rs
 @@ -74,6 +74,7 @@ async fn continue_after_stream_error() {
@@ -1259,7 +1259,7 @@ index c381b78cd..fff792b71 100644
          http_headers: None,
          env_http_headers: None,
 diff --git a/codex-rs/external-agent-migration/Cargo.toml b/codex-rs/external-agent-migration/Cargo.toml
-index 3f49a1ae0..48b274b40 100644
+index 3f49a1ae00cc48720b766d9e76bc050e954cf0fa..48b274b40929528166d3f95506e77b305ec16e19 100644
 --- a/codex-rs/external-agent-migration/Cargo.toml
 +++ b/codex-rs/external-agent-migration/Cargo.toml
 @@ -13,6 +13,7 @@ path = "src/lib.rs"
@@ -1271,7 +1271,7 @@ index 3f49a1ae0..48b274b40 100644
  codex-analytics = { workspace = true }
  codex-config = { workspace = true }
 diff --git a/codex-rs/external-agent-migration/src/sessions/ledger.rs b/codex-rs/external-agent-migration/src/sessions/ledger.rs
-index 9be9988ba..ca5129786 100644
+index 9be9988ba01ed80ea9a2802f00ecbb9d8d50f71e..ca512978627500e353f18d53dd887d12b66fee91 100644
 --- a/codex-rs/external-agent-migration/src/sessions/ledger.rs
 +++ b/codex-rs/external-agent-migration/src/sessions/ledger.rs
 @@ -419,7 +419,7 @@ fn session_content_sha256(path: &Path) -> io::Result<String> {
@@ -1284,7 +1284,7 @@ index 9be9988ba..ca5129786 100644
  
  fn session_modified_at(path: &Path) -> io::Result<Option<i64>> {
 diff --git a/codex-rs/external-agent-migration/src/sessions/ledger_tests.rs b/codex-rs/external-agent-migration/src/sessions/ledger_tests.rs
-index 5fa494c76..0f00dfd43 100644
+index 5fa494c76a7bf6fe8e14923954423e3f283ff9a1..0f00dfd436856382ac64d0b19713f1cc6047cdfb 100644
 --- a/codex-rs/external-agent-migration/src/sessions/ledger_tests.rs
 +++ b/codex-rs/external-agent-migration/src/sessions/ledger_tests.rs
 @@ -41,7 +41,7 @@ fn completed_imports_do_not_read_source_files() {
@@ -1317,7 +1317,7 @@ index 5fa494c76..0f00dfd43 100644
          &codex_home,
          vec![CompletedExternalAgentSessionImport {
 diff --git a/codex-rs/external-agent-migration/src/sessions/mod.rs b/codex-rs/external-agent-migration/src/sessions/mod.rs
-index 8b31556e8..87d34e76e 100644
+index 8b31556e8e1ec16765ea86c54755c00ce26346d1..87d34e76e3e3f5c6c1210cba50acf4fbc349e2ab 100644
 --- a/codex-rs/external-agent-migration/src/sessions/mod.rs
 +++ b/codex-rs/external-agent-migration/src/sessions/mod.rs
 @@ -236,7 +236,7 @@ mod tests {
@@ -1339,7 +1339,7 @@ index 8b31556e8..87d34e76e 100644
          assert_eq!(pending.target, SessionImportTarget::New);
      }
 diff --git a/codex-rs/external-agent-migration/src/sessions/records_cla.rs b/codex-rs/external-agent-migration/src/sessions/records_cla.rs
-index 13ff14cd7..9b5669d5b 100644
+index 13ff14cd70fb37c6e7d869c4a755cffa8402b994..9b5669d5b92c19d3465c384c02b3379ba0ae226b 100644
 --- a/codex-rs/external-agent-migration/src/sessions/records_cla.rs
 +++ b/codex-rs/external-agent-migration/src/sessions/records_cla.rs
 @@ -146,7 +146,7 @@ pub(super) fn read_session_import(path: &Path) -> io::Result<ParsedSessionImport
@@ -1352,7 +1352,7 @@ index 13ff14cd7..9b5669d5b 100644
      })
  }
 diff --git a/codex-rs/external-agent-migration/src/sessions/records_cla_tests.rs b/codex-rs/external-agent-migration/src/sessions/records_cla_tests.rs
-index d0a7704df..b9266d7ad 100644
+index d0a7704dfd450332f99fad82d638faca8d722a2d..b9266d7ad581aa4fa3a1c3792c6eb5bc48c685be 100644
 --- a/codex-rs/external-agent-migration/src/sessions/records_cla_tests.rs
 +++ b/codex-rs/external-agent-migration/src/sessions/records_cla_tests.rs
 @@ -36,8 +36,5 @@ fn reads_session_import_in_one_pass() {
@@ -1366,7 +1366,7 @@ index d0a7704df..b9266d7ad 100644
 +    assert_eq!(parsed.content_sha256, hex::encode(Sha256::digest(contents)));
  }
 diff --git a/codex-rs/external-agent-migration/src/sessions/records_cur.rs b/codex-rs/external-agent-migration/src/sessions/records_cur.rs
-index 04ecf7363..2442fc967 100644
+index 04ecf7363763d6755861703b47dfe61f088a5be0..2442fc967a5b502d643907d3e6b2365ea4beea96 100644
 --- a/codex-rs/external-agent-migration/src/sessions/records_cur.rs
 +++ b/codex-rs/external-agent-migration/src/sessions/records_cur.rs
 @@ -132,7 +132,7 @@ pub(super) fn read_session_import(
@@ -1379,7 +1379,7 @@ index 04ecf7363..2442fc967 100644
      })
  }
 diff --git a/codex-rs/hooks/schema/generated/subagent-stop.command.output.schema.json b/codex-rs/hooks/schema/generated/subagent-stop.command.output.schema.json
-index 0cb1dd2a5..07b23ac3c 100644
+index 0cb1dd2a5701ba07d9ab73464a9968279d2065d0..07b23ac3c2cea218a6dccb3851758df86d17ed32 100644
 --- a/codex-rs/hooks/schema/generated/subagent-stop.command.output.schema.json
 +++ b/codex-rs/hooks/schema/generated/subagent-stop.command.output.schema.json
 @@ -24,7 +24,7 @@
@@ -1392,7 +1392,7 @@ index 0cb1dd2a5..07b23ac3c 100644
      },
      "stopReason": {
 diff --git a/codex-rs/model-provider-info/Cargo.toml b/codex-rs/model-provider-info/Cargo.toml
-index e6a740d25..cd525cc2d 100644
+index e6a740d25ddfc26edffa23a32e6b8f9123eef982..cd525cc2dd568f9ee79255e7b85af34e5528efdd 100644
 --- a/codex-rs/model-provider-info/Cargo.toml
 +++ b/codex-rs/model-provider-info/Cargo.toml
 @@ -13,6 +13,7 @@ path = "src/lib.rs"
@@ -1411,7 +1411,7 @@ index e6a740d25..cd525cc2d 100644
  tempfile = { workspace = true }
  toml = { workspace = true }
 diff --git a/codex-rs/model-provider-info/src/lib.rs b/codex-rs/model-provider-info/src/lib.rs
-index f020d34c2..a8ccceffd 100644
+index f020d34c25413a7ac581dc5ed0a5187be17caa99..a8ccceffd7e3d86aa05a2081b8cd949a71c5f30f 100644
 --- a/codex-rs/model-provider-info/src/lib.rs
 +++ b/codex-rs/model-provider-info/src/lib.rs
 @@ -108,12 +108,36 @@ pub enum WireApi {
@@ -1677,7 +1677,7 @@ index f020d34c2..a8ccceffd 100644
          http_headers: None,
          env_http_headers: None,
 diff --git a/codex-rs/model-provider-info/src/model_provider_info_tests.rs b/codex-rs/model-provider-info/src/model_provider_info_tests.rs
-index 9c15c54b7..e7c36806b 100644
+index 9c15c54b70d1c500f07e2432aa1e7d9fada91740..e7c36806bcdd318c7035df8982588325b8e0d2aa 100644
 --- a/codex-rs/model-provider-info/src/model_provider_info_tests.rs
 +++ b/codex-rs/model-provider-info/src/model_provider_info_tests.rs
 @@ -5,6 +5,56 @@ use pretty_assertions::assert_eq;
@@ -1893,7 +1893,7 @@ index 9c15c54b7..e7c36806b 100644
 +    assert_eq!(provider.stream_max_retries(), 0);
 +}
 diff --git a/codex-rs/model-provider/Cargo.toml b/codex-rs/model-provider/Cargo.toml
-index ffda92383..e3d0256b4 100644
+index ffda92383e9db329c3d449a038d0d5496289af0e..e3d0256b445189828d492e2bb70cca3c98b82b83 100644
 --- a/codex-rs/model-provider/Cargo.toml
 +++ b/codex-rs/model-provider/Cargo.toml
 @@ -12,7 +12,18 @@ path = "src/lib.rs"
@@ -1916,7 +1916,7 @@ index ffda92383..e3d0256b4 100644
  chrono = { workspace = true }
  codex-api = { workspace = true }
 diff --git a/codex-rs/model-provider/src/lib.rs b/codex-rs/model-provider/src/lib.rs
-index 9c818af7d..6aa489191 100644
+index 9c818af7dd81bc6e6e6314148905eae5106f51a0..6aa4891914854e9a023c8cf8ea15a36799f17c90 100644
 --- a/codex-rs/model-provider/src/lib.rs
 +++ b/codex-rs/model-provider/src/lib.rs
 @@ -5,6 +5,7 @@ mod capabilities;
@@ -1928,7 +1928,7 @@ index 9c818af7d..6aa489191 100644
  mod shared_state;
  pub mod test_support;
 diff --git a/codex-rs/model-provider/src/models_identity.rs b/codex-rs/model-provider/src/models_identity.rs
-index 409ff83a0..5bf512d87 100644
+index 409ff83a07abde4f97a62195a62f4c87deeb185e..5bf512d87c4bcbd389af279e4d582ec7b0119a11 100644
 --- a/codex-rs/model-provider/src/models_identity.rs
 +++ b/codex-rs/model-provider/src/models_identity.rs
 @@ -86,7 +86,7 @@ pub(crate) fn identity(
@@ -1941,7 +1941,7 @@ index 409ff83a0..5bf512d87 100644
  
  #[cfg(test)]
 diff --git a/codex-rs/model-provider/src/provider.rs b/codex-rs/model-provider/src/provider.rs
-index f8f0790dd..e1cf842b1 100644
+index f8f0790dde816a26b9e10b38df5d3030d4fc2f95..e1cf842b1d06bd74476d62e57a60d47140b5e574 100644
 --- a/codex-rs/model-provider/src/provider.rs
 +++ b/codex-rs/model-provider/src/provider.rs
 @@ -64,11 +64,15 @@ pub struct ProviderAuthRecoveryMessages {
@@ -2014,7 +2014,7 @@ index f8f0790dd..e1cf842b1 100644
 +    }
  }
 diff --git a/codex-rs/model-provider/src/shared_state_test_support.rs b/codex-rs/model-provider/src/shared_state_test_support.rs
-index d86ab7960..d4aeef68b 100644
+index d86ab79605a122dd0a6f6c299deeae02d01d13e4..d4aeef68b31140df181240003d7f697627696270 100644
 --- a/codex-rs/model-provider/src/shared_state_test_support.rs
 +++ b/codex-rs/model-provider/src/shared_state_test_support.rs
 @@ -106,8 +106,11 @@ pub fn seed_gateway_auth(
@@ -2032,7 +2032,7 @@ index d86ab7960..d4aeef68b 100644
          .set(&SecretScope::Global, &name, &token.to_string())
          .expect("seed encrypted gateway credentials");
 diff --git a/codex-rs/models-manager/src/manager.rs b/codex-rs/models-manager/src/manager.rs
-index b1efc0fe7..69cbb9990 100644
+index b1efc0fe7c0303f68304f5c78b5626b1f77496cc..69cbb99904e676e270ea7b948a9fc5289cae34ae 100644
 --- a/codex-rs/models-manager/src/manager.rs
 +++ b/codex-rs/models-manager/src/manager.rs
 @@ -46,6 +46,9 @@ pub trait ModelsEndpointClient: fmt::Debug + Send + Sync {
@@ -2065,7 +2065,7 @@ index b1efc0fe7..69cbb9990 100644
          self.api_key_model_discovery_enabled
              .store(enabled, Ordering::SeqCst);
 diff --git a/codex-rs/network-proxy/src/credential_broker/providers.rs b/codex-rs/network-proxy/src/credential_broker/providers.rs
-index 36adc873d..6afbae340 100644
+index 36adc873d1b002250503c6a6c36066a6734a2ccb..6afbae34016f58ebabaef13ce3fa784c881ddd18 100644
 --- a/codex-rs/network-proxy/src/credential_broker/providers.rs
 +++ b/codex-rs/network-proxy/src/credential_broker/providers.rs
 @@ -4,7 +4,7 @@ mod openai;
@@ -2078,7 +2078,7 @@ index 36adc873d..6afbae340 100644
  use url::Url;
  
 diff --git a/codex-rs/protocol/src/agent_path.rs b/codex-rs/protocol/src/agent_path.rs
-index c0ad8b734..605518ec1 100644
+index c0ad8b734a94baedc96e93186ce6d8cc3d588ce3..605518ec15908d441e0b2973004c742368a7ba8a 100644
 --- a/codex-rs/protocol/src/agent_path.rs
 +++ b/codex-rs/protocol/src/agent_path.rs
 @@ -6,14 +6,21 @@ use std::ops::Deref;
@@ -2108,7 +2108,7 @@ index c0ad8b734..605518ec1 100644
      pub const ROOT: &str = "/root";
      pub const MORPHEUS: &str = "/morpheus";
 diff --git a/codex-rs/protocol/src/openai_models.rs b/codex-rs/protocol/src/openai_models.rs
-index 45e3d5c09..715159232 100644
+index 45e3d5c0963048f197afcc4e5cdff3770df54a9b..7151592325f1069e3563930d799cda3548cf8985 100644
 --- a/codex-rs/protocol/src/openai_models.rs
 +++ b/codex-rs/protocol/src/openai_models.rs
 @@ -9,12 +9,8 @@ use std::str::FromStr;
@@ -2182,7 +2182,7 @@ index 45e3d5c09..715159232 100644
          );
      }
 diff --git a/codex-rs/protocol/src/thread_id.rs b/codex-rs/protocol/src/thread_id.rs
-index 2e0f21561..898fd4a5f 100644
+index 2e0f21561b7bdc8f58f330e8a7132a3f70a95257..898fd4a5ffd97ba7a1f73dcc291de36c7ffccbc9 100644
 --- a/codex-rs/protocol/src/thread_id.rs
 +++ b/codex-rs/protocol/src/thread_id.rs
 @@ -1,8 +1,8 @@
@@ -2208,7 +2208,7 @@ index 2e0f21561..898fd4a5f 100644
  
      fn json_schema(generator: &mut SchemaGenerator) -> Schema {
 diff --git a/codex-rs/tui/src/app/agents_overview.rs b/codex-rs/tui/src/app/agents_overview.rs
-index 13d06dc3e..00fb570d8 100644
+index 13d06dc3e4571c12d5e4f1ba66c6b4770bd7397a..00fb570d8eafe6f5f6192da2ad2c5dce7cca6ee5 100644
 --- a/codex-rs/tui/src/app/agents_overview.rs
 +++ b/codex-rs/tui/src/app/agents_overview.rs
 @@ -115,7 +115,7 @@ impl App {
@@ -2221,7 +2221,7 @@ index 13d06dc3e..00fb570d8 100644
                          actions: vec![Box::new(|tx| tx.send(AppEvent::StartAgentsDaemon))],
                          dismiss_on_select: true,
 diff --git a/codex-rs/tui/src/app/agents_overview_new.rs b/codex-rs/tui/src/app/agents_overview_new.rs
-index 1b9601836..198125cc3 100644
+index 1b96018362cc109231de02a179ed49d51593386f..198125cc39642d68ce7da3dd6c719ca03be7995a 100644
 --- a/codex-rs/tui/src/app/agents_overview_new.rs
 +++ b/codex-rs/tui/src/app/agents_overview_new.rs
 @@ -184,10 +184,13 @@ impl App {
@@ -2241,7 +2241,7 @@ index 1b9601836..198125cc3 100644
                      (None, format!("Failed to start session: {error}"))
                  };
 diff --git a/codex-rs/tui/src/app/agents_overview_tests.rs b/codex-rs/tui/src/app/agents_overview_tests.rs
-index 8603973f3..bff6723c6 100644
+index 8603973f3e3815a336755a24910a6115145419fc..bff6723c60233266b843e8af533a0e4891fe1fc5 100644
 --- a/codex-rs/tui/src/app/agents_overview_tests.rs
 +++ b/codex-rs/tui/src/app/agents_overview_tests.rs
 @@ -99,7 +99,7 @@ async fn server_version_overview_notice_updates_and_clears() {
@@ -2254,7 +2254,7 @@ index 8603973f3..bff6723c6 100644
      app.update_server_version_overview_notice("0.153.0", /*server_version*/ None);
      let view = app.agents_overview_view(Vec::new(), /*selected_thread_id*/ None);
 diff --git a/codex-rs/tui/src/app/snapshots/codex_tui__app__agents_overview__tests__older_server_notice_is_visible_in_agents_overview.snap b/codex-rs/tui/src/app/snapshots/codex_tui__app__agents_overview__tests__older_server_notice_is_visible_in_agents_overview.snap
-index 4e581bcd3..5e469304f 100644
+index 4e581bcd3e6f2c821d3fd3a4832121359e57b0f4..5e469304f75bbc2255e70dbe79133041c3a4cdfe 100644
 --- a/codex-rs/tui/src/app/snapshots/codex_tui__app__agents_overview__tests__older_server_notice_is_visible_in_agents_overview.snap
 +++ b/codex-rs/tui/src/app/snapshots/codex_tui__app__agents_overview__tests__older_server_notice_is_visible_in_agents_overview.snap
 @@ -1,5 +1,5 @@
@@ -2266,7 +2266,7 @@ index 4e581bcd3..5e469304f 100644
 -  Service v0.152.1 < Codex CLI v0.153.0
 +  Service v0.152.1 < Nyacode CLI v0.153.0
 diff --git a/codex-rs/tui/src/app/snapshots/codex_tui__app__owned_transcript__empty_state_animation_tests__fresh_thread_header.snap b/codex-rs/tui/src/app/snapshots/codex_tui__app__owned_transcript__empty_state_animation_tests__fresh_thread_header.snap
-index 789d6e4bd..3e180c7a1 100644
+index 789d6e4bda5306a29a152bb46f1b450ca822fede..3e180c7a1340af67c7912b1306bb7ab48ab46a75 100644
 --- a/codex-rs/tui/src/app/snapshots/codex_tui__app__owned_transcript__empty_state_animation_tests__fresh_thread_header.snap
 +++ b/codex-rs/tui/src/app/snapshots/codex_tui__app__owned_transcript__empty_state_animation_tests__fresh_thread_header.snap
 @@ -4,7 +4,7 @@ expression: "format!(\"enabled:\\n{}\\n---\\ndisabled:\\n{}\", text(after), text
@@ -2347,7 +2347,7 @@ index 789d6e4bd..3e180c7a1 100644
    GPT-5.6-Sol default · /tmp/project
    ? for shortcuts                                                                              ⚠ 1 warning · f2 to view
 diff --git a/codex-rs/tui/src/app/snapshots/codex_tui__app__tests__app_server_thread_replacement_clears_previous_transcript_before_replay-2.snap b/codex-rs/tui/src/app/snapshots/codex_tui__app__tests__app_server_thread_replacement_clears_previous_transcript_before_replay-2.snap
-index 8aa1bca71..f6318faf6 100644
+index 8aa1bca71b37199ea5aa9956871c68de2b0c1dc5..f6318faf640a5898aff0006680e5982db4ab8274 100644
 --- a/codex-rs/tui/src/app/snapshots/codex_tui__app__tests__app_server_thread_replacement_clears_previous_transcript_before_replay-2.snap
 +++ b/codex-rs/tui/src/app/snapshots/codex_tui__app__tests__app_server_thread_replacement_clears_previous_transcript_before_replay-2.snap
 @@ -1,10 +1,9 @@
@@ -2363,7 +2363,7 @@ index 8aa1bca71..f6318faf6 100644
  
  
 diff --git a/codex-rs/tui/src/app/snapshots/codex_tui__app__thread_goal_actions__tests__thread_goal_ephemeral_error_message_renders_snapshot.snap b/codex-rs/tui/src/app/snapshots/codex_tui__app__thread_goal_actions__tests__thread_goal_ephemeral_error_message_renders_snapshot.snap
-index d2faad28d..3007ba600 100644
+index d2faad28d141c7c6eec6e06dac6d1415f8067f50..3007ba6009da1432710f5b335c62baee7955c5e9 100644
 --- a/codex-rs/tui/src/app/snapshots/codex_tui__app__thread_goal_actions__tests__thread_goal_ephemeral_error_message_renders_snapshot.snap
 +++ b/codex-rs/tui/src/app/snapshots/codex_tui__app__thread_goal_actions__tests__thread_goal_ephemeral_error_message_renders_snapshot.snap
 @@ -5,5 +5,5 @@ expression: terminal.backend()
@@ -2375,7 +2375,7 @@ index d2faad28d..3007ba600 100644
 +Run `nyacode` to start a saved session, or `nyacode resume` / `/resume`
 +to reopen one.
 diff --git a/codex-rs/tui/src/app/snapshots/codex_tui__app__thread_title__tests__manual_rename_cancels_thread_title.snap b/codex-rs/tui/src/app/snapshots/codex_tui__app__thread_title__tests__manual_rename_cancels_thread_title.snap
-index a37e03f7f..7cf3fb4dc 100644
+index a37e03f7fd37fae36cae4131651cf2e4df9f36dd..7cf3fb4dcffe0d4e4de99c6a453e35bf9e7c2455 100644
 --- a/codex-rs/tui/src/app/snapshots/codex_tui__app__thread_title__tests__manual_rename_cancels_thread_title.snap
 +++ b/codex-rs/tui/src/app/snapshots/codex_tui__app__thread_title__tests__manual_rename_cancels_thread_title.snap
 @@ -1,8 +1,7 @@
@@ -2389,7 +2389,7 @@ index a37e03f7f..7cf3fb4dc 100644
  
    gpt-5.2 default · /tmp/project · Keep this title
 diff --git a/codex-rs/tui/src/app/snapshots/codex_tui__app__turn_tips__tests__turn_tip_placements.snap b/codex-rs/tui/src/app/snapshots/codex_tui__app__turn_tips__tests__turn_tip_placements.snap
-index f6cfeee61..825593e39 100644
+index f6cfeee61553dfc1b5f5c48abefb4e03cfd37af0..825593e39f914b46ef960d4928ca4c1855dbe9c9 100644
 --- a/codex-rs/tui/src/app/snapshots/codex_tui__app__turn_tips__tests__turn_tip_placements.snap
 +++ b/codex-rs/tui/src/app/snapshots/codex_tui__app__turn_tips__tests__turn_tip_placements.snap
 @@ -12,7 +12,7 @@ Response row 0
@@ -2490,7 +2490,7 @@ index f6cfeee61..825593e39 100644
  
    ? for shortcuts
 diff --git a/codex-rs/tui/src/app/snapshots/codex_tui__app__turn_tips__tests__working_tip_mouse_down.snap b/codex-rs/tui/src/app/snapshots/codex_tui__app__turn_tips__tests__working_tip_mouse_down.snap
-index a39deb9a8..c48ab008c 100644
+index a39deb9a8960b704cb2af3803f1dbc600a5dc405..c48ab008c9735864212c9dba560b53f4930bd512 100644
 --- a/codex-rs/tui/src/app/snapshots/codex_tui__app__turn_tips__tests__working_tip_mouse_down.snap
 +++ b/codex-rs/tui/src/app/snapshots/codex_tui__app__turn_tips__tests__working_tip_mouse_down.snap
 @@ -1,7 +1,6 @@
@@ -2512,7 +2512,7 @@ index a39deb9a8..c48ab008c 100644
    gpt-test default · /tmp/project
    ? for shortcuts
 diff --git a/codex-rs/tui/src/app/snapshots/codex_tui__app__turn_tips__tests__working_tip_selected.snap b/codex-rs/tui/src/app/snapshots/codex_tui__app__turn_tips__tests__working_tip_selected.snap
-index 870b86f61..4a577d2eb 100644
+index 870b86f61cf4b6daa6a73074549ed7e558a0a3d0..4a577d2eb6bd216bb4f06da6e2378a32f7691163 100644
 --- a/codex-rs/tui/src/app/snapshots/codex_tui__app__turn_tips__tests__working_tip_selected.snap
 +++ b/codex-rs/tui/src/app/snapshots/codex_tui__app__turn_tips__tests__working_tip_selected.snap
 @@ -23,7 +23,7 @@ Response row 9
@@ -2525,7 +2525,7 @@ index 870b86f61..4a577d2eb 100644
    gpt-test default · /tmp/project
    ? for shortcuts
 diff --git a/codex-rs/tui/src/app/tests/model_catalog.rs b/codex-rs/tui/src/app/tests/model_catalog.rs
-index 273725c2f..15fa127ad 100644
+index 273725c2f2d3613eec36c618e38184576424be30..15fa127ad9d6639a5fe4c24b76276ee205bf40e0 100644
 --- a/codex-rs/tui/src/app/tests/model_catalog.rs
 +++ b/codex-rs/tui/src/app/tests/model_catalog.rs
 @@ -512,7 +512,7 @@ async fn accepted_model_migration_persists_target_default_reasoning_effort() ->
@@ -2538,7 +2538,7 @@ index 273725c2f..15fa127ad 100644
      Codex now uses GPT-6 Sol on Amazon Bedrock in place of GPT-5.4 on Amazon Bedrock. Switch to GPT-6 Sol on Amazon Bedrock to continue.
      ");
 diff --git a/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__background_task_defaults_tests__review_regression_agents_overview_creation_is_fresh_but_returning_is_not.snap b/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__background_task_defaults_tests__review_regression_agents_overview_creation_is_fresh_but_returning_is_not.snap
-index c249adfe8..5ee8e6f41 100644
+index c249adfe8ae224b47518ef674a07323e852cf770..5ee8e6f41acce55d0949bccabee5bd90351905a9 100644
 --- a/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__background_task_defaults_tests__review_regression_agents_overview_creation_is_fresh_but_returning_is_not.snap
 +++ b/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__background_task_defaults_tests__review_regression_agents_overview_creation_is_fresh_but_returning_is_not.snap
 @@ -4,7 +4,7 @@ expression: "format!(\"created from the dashboard:\\n{}\\nreturned to the existi
@@ -2552,7 +2552,7 @@ index c249adfe8..5ee8e6f41 100644
 -› Ask Codex to do anything
 +› Ask Nyacode to do anything
 diff --git a/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__fresh_sparkle_tests__astra_picker_confirms_the_model_at_application_after_an_automatic_update.snap b/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__fresh_sparkle_tests__astra_picker_confirms_the_model_at_application_after_an_automatic_update.snap
-index 243ad7ae6..fdd703dfa 100644
+index 243ad7ae65be838f78385789b66e60f387d9526b..fdd703dfa0820afceca442b72ed57aa067b8fd09 100644
 --- a/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__fresh_sparkle_tests__astra_picker_confirms_the_model_at_application_after_an_automatic_update.snap
 +++ b/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__fresh_sparkle_tests__astra_picker_confirms_the_model_at_application_after_an_automatic_update.snap
 @@ -3,10 +3,10 @@ source: tui/src/app/tests/fresh_sparkle_tests.rs
@@ -2569,7 +2569,7 @@ index 243ad7ae6..fdd703dfa 100644
 +›⠁Ask Nyacode to do anything       ⠈      ⠁
         ⢀            ⠠     ⠄         ⠠          ⢀    ⠠     ⡀
 diff --git a/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__model_catalog__model_migration_prompt_shows_for_hidden_model.snap b/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__model_catalog__model_migration_prompt_shows_for_hidden_model.snap
-index 856db38d0..c2c473bd5 100644
+index 856db38d0f880c1ff42a5cdc423c6f166a794cf8..c2c473bd53a357346a25b0f73112a95bc59eb243 100644
 --- a/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__model_catalog__model_migration_prompt_shows_for_hidden_model.snap
 +++ b/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__model_catalog__model_migration_prompt_shows_for_hidden_model.snap
 @@ -2,7 +2,7 @@
@@ -2582,7 +2582,7 @@ index 856db38d0..c2c473bd5 100644
  We recommend switching from gpt-5.2 to gpt-5.5.
  
 diff --git a/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__realtime_requests__voice_completed_after_thread_switch.snap b/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__realtime_requests__voice_completed_after_thread_switch.snap
-index 2ecde209a..057dd6275 100644
+index 2ecde209a27287959623a364d840c412cc3b3022..057dd6275c98c49741fd5b87b372a32010746b19 100644
 --- a/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__realtime_requests__voice_completed_after_thread_switch.snap
 +++ b/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__realtime_requests__voice_completed_after_thread_switch.snap
 @@ -1,17 +1,16 @@
@@ -2607,7 +2607,7 @@ index 2ecde209a..057dd6275 100644
    /review - review any changes and find issues
  • Earlier answer
 diff --git a/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__realtime_requests__voice_partial_completed_after_thread_switch.snap b/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__realtime_requests__voice_partial_completed_after_thread_switch.snap
-index bfd8b46a6..0516b9eca 100644
+index bfd8b46a632e628f017928a98d33e3f55df05b8a..0516b9ecaaec5313a63714f4bee3986da84f93b5 100644
 --- a/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__realtime_requests__voice_partial_completed_after_thread_switch.snap
 +++ b/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__realtime_requests__voice_partial_completed_after_thread_switch.snap
 @@ -3,25 +3,25 @@ source: tui/src/app/tests/realtime_requests.rs
@@ -2642,7 +2642,7 @@ index bfd8b46a6..0516b9eca 100644
    /review - review any changes and find issues
  
 diff --git a/codex-rs/tui/src/app/thread_goal_actions.rs b/codex-rs/tui/src/app/thread_goal_actions.rs
-index 166e09010..6a5b5f119 100644
+index 166e090109271b234fb719f87cdd33e8874fe8c3..6a5b5f119ce4fdcf21889a042915c92bc769c890 100644
 --- a/codex-rs/tui/src/app/thread_goal_actions.rs
 +++ b/codex-rs/tui/src/app/thread_goal_actions.rs
 @@ -17,7 +17,7 @@ use codex_protocol::ThreadId;
@@ -2655,7 +2655,7 @@ index 166e09010..6a5b5f119 100644
  
  impl App {
 diff --git a/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__approval_overlay__tests__approval_overlay_cross_thread_prompt.snap b/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__approval_overlay__tests__approval_overlay_cross_thread_prompt.snap
-index d38f759b4..8af90e208 100644
+index d38f759b411d52197f54acd8089620571da69f88..8af90e20868316e65a146a4aa6083ba01bbe453d 100644
 --- a/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__approval_overlay__tests__approval_overlay_cross_thread_prompt.snap
 +++ b/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__approval_overlay__tests__approval_overlay_cross_thread_prompt.snap
 @@ -11,6 +11,6 @@ expression: "render_overlay_lines(&view, 80)"
@@ -2667,7 +2667,7 @@ index d38f759b4..8af90e208 100644
  
    Press enter to confirm or esc to cancel or o to open thread
 diff --git a/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__list_selection_view__tests__list_selection_model_picker_width_80.snap b/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__list_selection_view__tests__list_selection_model_picker_width_80.snap
-index 0c0351d93..b65b2e76a 100644
+index 0c0351d93810d0faaae7d3838e32b3eb03a0edfa..b65b2e76a0b3f636797c6111890b46bfed3c6b87 100644
 --- a/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__list_selection_view__tests__list_selection_model_picker_width_80.snap
 +++ b/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__list_selection_view__tests__list_selection_model_picker_width_80.snap
 @@ -1,14 +1,13 @@
@@ -2689,7 +2689,7 @@ index 0c0351d93..b65b2e76a 100644
    3. gpt-4.1-codex            Legacy model. Use when you need compatibility with
                                older automations.
 diff --git a/codex-rs/tui/src/external_agent_config_migration/model.rs b/codex-rs/tui/src/external_agent_config_migration/model.rs
-index b6760d3b7..e3f6d5955 100644
+index b6760d3b7ae15f41196ca0ec7e8e3f2890536be8..e3f6d5955ba4f056dcec1ecf26f06382358e36ae 100644
 --- a/codex-rs/tui/src/external_agent_config_migration/model.rs
 +++ b/codex-rs/tui/src/external_agent_config_migration/model.rs
 @@ -56,7 +56,7 @@ pub(crate) fn external_agent_config_migration_groups(
@@ -2702,7 +2702,7 @@ index b6760d3b7..e3f6d5955 100644
          });
      }
 diff --git a/codex-rs/tui/src/external_agent_config_migration/render.rs b/codex-rs/tui/src/external_agent_config_migration/render.rs
-index 4d6a736f0..76f530c44 100644
+index 4d6a736f0e00b59f1459e3e6bd95c8d9a24af926..76f530c44a33578200aa896eccb8a32ca00a0ba2 100644
 --- a/codex-rs/tui/src/external_agent_config_migration/render.rs
 +++ b/codex-rs/tui/src/external_agent_config_migration/render.rs
 @@ -84,12 +84,12 @@ impl WidgetRef for &ExternalAgentConfigMigrationScreen {
@@ -2721,7 +2721,7 @@ index 4d6a736f0..76f530c44 100644
              ],
          };
 diff --git a/codex-rs/tui/src/external_agent_config_migration/snapshots/codex_tui__external_agent_config_migration__tests__external_agent_config_migration_customize.snap b/codex-rs/tui/src/external_agent_config_migration/snapshots/codex_tui__external_agent_config_migration__tests__external_agent_config_migration_customize.snap
-index 08ff99ff9..15e02b0e4 100644
+index 08ff99ff9fb2bf0b756605dfb26bd77d4bc8228d..15e02b0e4e06f1194abfc572f3e5d626364619e0 100644
 --- a/codex-rs/tui/src/external_agent_config_migration/snapshots/codex_tui__external_agent_config_migration__tests__external_agent_config_migration_customize.snap
 +++ b/codex-rs/tui/src/external_agent_config_migration/snapshots/codex_tui__external_agent_config_migration__tests__external_agent_config_migration_customize.snap
 @@ -5,7 +5,7 @@ expression: rendered
@@ -2734,7 +2734,7 @@ index 08ff99ff9..15e02b0e4 100644
    Home
    › [x] Settings
 diff --git a/codex-rs/tui/src/external_agent_config_migration/snapshots/codex_tui__external_agent_config_migration__tests__external_agent_config_migration_customize_action.snap b/codex-rs/tui/src/external_agent_config_migration/snapshots/codex_tui__external_agent_config_migration__tests__external_agent_config_migration_customize_action.snap
-index 74655a4db..8981360e9 100644
+index 74655a4db8973b3228f27f563fc3349e2e7100ce..8981360e9102db45d77d45ebd7a81e1cd0d3b177 100644
 --- a/codex-rs/tui/src/external_agent_config_migration/snapshots/codex_tui__external_agent_config_migration__tests__external_agent_config_migration_customize_action.snap
 +++ b/codex-rs/tui/src/external_agent_config_migration/snapshots/codex_tui__external_agent_config_migration__tests__external_agent_config_migration_customize_action.snap
 @@ -5,7 +5,7 @@ expression: rendered
@@ -2747,7 +2747,7 @@ index 74655a4db..8981360e9 100644
    Home
      [x] Settings
 diff --git a/codex-rs/tui/src/external_agent_config_migration/snapshots/codex_tui__external_agent_config_migration__tests__external_agent_config_migration_prompt.snap b/codex-rs/tui/src/external_agent_config_migration/snapshots/codex_tui__external_agent_config_migration__tests__external_agent_config_migration_prompt.snap
-index 8998de2ec..09db30f91 100644
+index 8998de2ecd7a2321348c128035ef310d2e7d3921..09db30f91b0d09ccfafe4dcd18fb515579503bfc 100644
 --- a/codex-rs/tui/src/external_agent_config_migration/snapshots/codex_tui__external_agent_config_migration__tests__external_agent_config_migration_prompt.snap
 +++ b/codex-rs/tui/src/external_agent_config_migration/snapshots/codex_tui__external_agent_config_migration__tests__external_agent_config_migration_prompt.snap
 @@ -5,13 +5,13 @@ expression: rendered
@@ -2767,7 +2767,7 @@ index 8998de2ec..09db30f91 100644
      [x] Chat sessions (1)
          Last 30 days of chats
 diff --git a/codex-rs/tui/src/external_agent_config_migration/snapshots/codex_tui__external_agent_config_migration__tests__external_agent_config_migration_secondary_source_customize.snap b/codex-rs/tui/src/external_agent_config_migration/snapshots/codex_tui__external_agent_config_migration__tests__external_agent_config_migration_secondary_source_customize.snap
-index 47f673802..76f5cbe54 100644
+index 47f673802fb0a2d621718abb7c509bf5653f921a..76f5cbe54a65346ba11ac2c50231e1d4f70a47df 100644
 --- a/codex-rs/tui/src/external_agent_config_migration/snapshots/codex_tui__external_agent_config_migration__tests__external_agent_config_migration_secondary_source_customize.snap
 +++ b/codex-rs/tui/src/external_agent_config_migration/snapshots/codex_tui__external_agent_config_migration__tests__external_agent_config_migration_secondary_source_customize.snap
 @@ -5,7 +5,7 @@ expression: rendered
@@ -2780,7 +2780,7 @@ index 47f673802..76f5cbe54 100644
    Home
    › [x] Settings
 diff --git a/codex-rs/tui/src/model_migration.rs b/codex-rs/tui/src/model_migration.rs
-index 47ed0fdb4..741362440 100644
+index 47ed0fdb4f6e7d4b2d37ff4c62722fa0a703e0b9..741362440f8fe3befd8ef8abddb113e4dae36dbb 100644
 --- a/codex-rs/tui/src/model_migration.rs
 +++ b/codex-rs/tui/src/model_migration.rs
 @@ -89,7 +89,7 @@ pub(crate) fn migration_copy_for_models(
@@ -2802,7 +2802,7 @@ index 47ed0fdb4..741362440 100644
              ),
          );
 diff --git a/codex-rs/tui/src/pets/model.rs b/codex-rs/tui/src/pets/model.rs
-index aa02731ab..e90c080ad 100644
+index aa02731ab7a8bb8c859e18131777bfb78c8240c2..e90c080ad6ca518c4b8f8a3303321ad7a66b87fb 100644
 --- a/codex-rs/tui/src/pets/model.rs
 +++ b/codex-rs/tui/src/pets/model.rs
 @@ -102,9 +102,9 @@ impl Pet {
@@ -2818,7 +2818,7 @@ index aa02731ab..e90c080ad 100644
          ))
      }
 diff --git a/codex-rs/tui/src/snapshots/codex_tui__app__agents_overview__tests__agents_daemon_started.snap b/codex-rs/tui/src/snapshots/codex_tui__app__agents_overview__tests__agents_daemon_started.snap
-index db60e61eb..b35d2f4eb 100644
+index db60e61ebddaeeac937dcb11837866c6d8c14f95..b35d2f4ebf083a4499e215fdae72c281cf64a422 100644
 --- a/codex-rs/tui/src/snapshots/codex_tui__app__agents_overview__tests__agents_daemon_started.snap
 +++ b/codex-rs/tui/src/snapshots/codex_tui__app__agents_overview__tests__agents_daemon_started.snap
 @@ -1,6 +1,5 @@
@@ -2830,7 +2830,7 @@ index db60e61eb..b35d2f4eb 100644
 -• Background server started. Run `codex agents` in another terminal; this session remains unchanged.
 +• Background server started. Run `nyacode agents` in another terminal; this session remains unchanged.
 diff --git a/codex-rs/tui/src/snapshots/codex_tui__app__agents_overview__tests__agents_overview_embedded.snap b/codex-rs/tui/src/snapshots/codex_tui__app__agents_overview__tests__agents_overview_embedded.snap
-index 223ffd9ea..3c71d8551 100644
+index 223ffd9eacae5b514f0420584f141104f516c45a..3c71d8551281bc5406fb99a18e41df38d045c251 100644
 --- a/codex-rs/tui/src/snapshots/codex_tui__app__agents_overview__tests__agents_overview_embedded.snap
 +++ b/codex-rs/tui/src/snapshots/codex_tui__app__agents_overview__tests__agents_overview_embedded.snap
 @@ -6,7 +6,7 @@ expression: "render_bottom_popup(&app.chat_widget, 96)"
@@ -2843,7 +2843,7 @@ index 223ffd9ea..3c71d8551 100644
  
    Starting a background server will not interrupt or move this session.
 diff --git a/codex-rs/tui/src/snapshots/codex_tui__app__tests__selected_unloaded_subagent_V1.snap b/codex-rs/tui/src/snapshots/codex_tui__app__tests__selected_unloaded_subagent_V1.snap
-index 125204948..83efe3d0e 100644
+index 125204948978ff2f86419f677634fefef0e31551..83efe3d0eb250568176c80b2b3559c6b7074f1bd 100644
 --- a/codex-rs/tui/src/snapshots/codex_tui__app__tests__selected_unloaded_subagent_V1.snap
 +++ b/codex-rs/tui/src/snapshots/codex_tui__app__tests__selected_unloaded_subagent_V1.snap
 @@ -3,6 +3,6 @@ source: tui/src/app/tests.rs
@@ -2855,7 +2855,7 @@ index 125204948..83efe3d0e 100644
  
    GPT-6.1-Sol default · /tmp/project · child-0 [worker]
 diff --git a/codex-rs/tui/src/snapshots/codex_tui__model_migration__tests__model_migration_prompt.snap b/codex-rs/tui/src/snapshots/codex_tui__model_migration__tests__model_migration_prompt.snap
-index e2eb20139..f22b1ec09 100644
+index e2eb201394f8e6d8bb4d1207a5e376e2b3b8bee9..f22b1ec0999f3b84616a22deb78c638933498c71 100644
 --- a/codex-rs/tui/src/snapshots/codex_tui__model_migration__tests__model_migration_prompt.snap
 +++ b/codex-rs/tui/src/snapshots/codex_tui__model_migration__tests__model_migration_prompt.snap
 @@ -3,7 +3,7 @@ source: tui/src/model_migration.rs
@@ -2868,7 +2868,7 @@ index e2eb20139..f22b1ec09 100644
  
    Upgrade to gpt-5.2-codex for the latest and greatest
 diff --git a/codex-rs/tui/src/snapshots/codex_tui__model_migration__tests__model_migration_prompt_gpt5_family.snap b/codex-rs/tui/src/snapshots/codex_tui__model_migration__tests__model_migration_prompt_gpt5_family.snap
-index 2cf7a2cc0..19f40b856 100644
+index 2cf7a2cc03d7181f2137b2c448163db61590a3a2..19f40b856b8ba5d4ebbe0f75ceca9f9a3677c825 100644
 --- a/codex-rs/tui/src/snapshots/codex_tui__model_migration__tests__model_migration_prompt_gpt5_family.snap
 +++ b/codex-rs/tui/src/snapshots/codex_tui__model_migration__tests__model_migration_prompt_gpt5_family.snap
 @@ -3,7 +3,7 @@ source: tui/src/model_migration.rs
@@ -2881,7 +2881,7 @@ index 2cf7a2cc0..19f40b856 100644
    We recommend switching from gpt-5 to gpt-5.1.
  
 diff --git a/codex-rs/tui/src/thread_transcript.rs b/codex-rs/tui/src/thread_transcript.rs
-index babf331fa..1b147f3f4 100644
+index babf331fa2bab5b24c3c12241680ce2445c85fb4..1b147f3f4daf7d0ea9b2c6b4cfbbbb4e7999be42 100644
 --- a/codex-rs/tui/src/thread_transcript.rs
 +++ b/codex-rs/tui/src/thread_transcript.rs
 @@ -290,7 +290,7 @@ fn item_to_cells(

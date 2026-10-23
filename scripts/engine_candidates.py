@@ -50,9 +50,12 @@ def select_mode(paths: list[str], candidate_branch: str = "") -> str:
         return "full"
     mode = "controls"
     for path in paths:
-        if path.startswith(
-            ("crates/providers/provider-", "integration/codex/adapter/")
-        ):
+        if path.startswith("crates/providers/provider-") and Path(path).name not in {
+            "Cargo.toml",
+            "Cargo.lock",
+            "BUILD.bazel",
+            "build.rs",
+        }:
             mode = "providers"
         elif (
             path.startswith("docs/")

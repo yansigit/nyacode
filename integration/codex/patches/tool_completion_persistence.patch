@@ -1,5 +1,5 @@
 diff --git a/codex-rs/codex-mcp/src/tools.rs b/codex-rs/codex-mcp/src/tools.rs
-index 4afc7561f..c8de6206a 100644
+index 4afc7561f88cc1a63317ecaaf1f37ee27383f680..c8de6206ae515eb5de4b0b9c7633ef9a88fe5a53 100644
 --- a/codex-rs/codex-mcp/src/tools.rs
 +++ b/codex-rs/codex-mcp/src/tools.rs
 @@ -237,7 +237,7 @@ fn sha1_hex(s: &str) -> String {
@@ -12,7 +12,7 @@ index 4afc7561f..c8de6206a 100644
  
  fn callable_name_hash_suffix(raw_identity: &str) -> String {
 diff --git a/codex-rs/connectors/src/connector_runtime/persistence.rs b/codex-rs/connectors/src/connector_runtime/persistence.rs
-index 111107921..b70005e49 100644
+index 1111079215248cd6922d2f3a5acee20880bfab24..b70005e493ae49e162f4e8f031e60edc398d12af 100644
 --- a/codex-rs/connectors/src/connector_runtime/persistence.rs
 +++ b/codex-rs/connectors/src/connector_runtime/persistence.rs
 @@ -228,7 +228,7 @@ pub(super) fn sha1_hex(s: &str) -> String {
@@ -25,7 +25,7 @@ index 111107921..b70005e49 100644
  
  #[cfg(test)]
 diff --git a/codex-rs/core/src/tools/events.rs b/codex-rs/core/src/tools/events.rs
-index 2d5262ee9..a685d0fb4 100644
+index 2d5262ee9b6a2955dad25bd090d27430962a8c4c..a685d0fb4ef78865a509c90f45bd58eafddc01a6 100644
 --- a/codex-rs/core/src/tools/events.rs
 +++ b/codex-rs/core/src/tools/events.rs
 @@ -464,7 +464,7 @@ impl ToolEmitter {
@@ -58,7 +58,7 @@ index 2d5262ee9..a685d0fb4 100644
          let completed = rx_event.recv().await.expect("item completed event");
          assert!(matches!(
 diff --git a/codex-rs/core/src/tools/handlers/multi_agents/spawn.rs b/codex-rs/core/src/tools/handlers/multi_agents/spawn.rs
-index 10c793f5b..84fac1c52 100644
+index 10c793f5b9e8293c3a0a05a089372619f6689c5e..84fac1c52a390a596a6e574b901ad309cf414b6c 100644
 --- a/codex-rs/core/src/tools/handlers/multi_agents/spawn.rs
 +++ b/codex-rs/core/src/tools/handlers/multi_agents/spawn.rs
 @@ -102,6 +102,7 @@ async fn handle_spawn_agent(
@@ -78,7 +78,7 @@ index 10c793f5b..84fac1c52 100644
      reasoning_effort: Option<ReasoningEffort>,
      #[serde(default)]
 diff --git a/codex-rs/core/src/tools/handlers/multi_agents_spec.rs b/codex-rs/core/src/tools/handlers/multi_agents_spec.rs
-index edc9467b4..525427e7e 100644
+index edc9467b4d02cc023d8961373637116cf8ba6f6f..525427e7e63324ffb91f9bc3340d67e81359047a 100644
 --- a/codex-rs/core/src/tools/handlers/multi_agents_spec.rs
 +++ b/codex-rs/core/src/tools/handlers/multi_agents_spec.rs
 @@ -21,6 +21,7 @@ const SPAWN_AGENT_MODEL_CATALOG_GUIDANCE: &str =
@@ -128,7 +128,7 @@ index edc9467b4..525427e7e 100644
  }
  
 diff --git a/codex-rs/core/src/tools/handlers/multi_agents_spec_tests.rs b/codex-rs/core/src/tools/handlers/multi_agents_spec_tests.rs
-index d74729ef2..7cd400cb9 100644
+index d74729ef218b40dd244f1497e34439c765bfcdae..7cd400cb99bd3e0ea238d00e194bb3fb34f94a20 100644
 --- a/codex-rs/core/src/tools/handlers/multi_agents_spec_tests.rs
 +++ b/codex-rs/core/src/tools/handlers/multi_agents_spec_tests.rs
 @@ -196,6 +196,7 @@ fn spawn_agent_tool_keeps_model_controls_when_spawn_metadata_is_hidden(
@@ -155,7 +155,7 @@ index d74729ef2..7cd400cb9 100644
      }
      assert!(!description.contains(SPAWN_AGENT_INHERITED_MODEL_GUIDANCE));
 diff --git a/codex-rs/core/src/tools/handlers/multi_agents_v2/spawn.rs b/codex-rs/core/src/tools/handlers/multi_agents_v2/spawn.rs
-index c23caa014..1740b7078 100644
+index c23caa014599fb37ab77738a82396a0cb81cb7c1..1740b707822c331f2d3a84046416628bfc131df5 100644
 --- a/codex-rs/core/src/tools/handlers/multi_agents_v2/spawn.rs
 +++ b/codex-rs/core/src/tools/handlers/multi_agents_v2/spawn.rs
 @@ -132,6 +132,7 @@ async fn handle_spawn_agent(
@@ -175,7 +175,7 @@ index c23caa014..1740b7078 100644
      reasoning_effort: Option<ReasoningEffort>,
      fork_turns: Option<String>,
 diff --git a/codex-rs/core/src/tools/handlers/unified_exec/exec_command.rs b/codex-rs/core/src/tools/handlers/unified_exec/exec_command.rs
-index ba75b1ed9..5fcdef126 100644
+index ba75b1ed9802ed1c620011df914794eeff682943..5fcdef1261626dbad692c19359b1c80dea4d4d53 100644
 --- a/codex-rs/core/src/tools/handlers/unified_exec/exec_command.rs
 +++ b/codex-rs/core/src/tools/handlers/unified_exec/exec_command.rs
 @@ -449,6 +449,18 @@ impl ExecCommandHandler {
@@ -198,7 +198,7 @@ index ba75b1ed9..5fcdef126 100644
                  let message = format!("exec_command failed: {err:?}");
                  Err(FunctionCallError::RespondToModel(truncate_middle_chars(
 diff --git a/codex-rs/core/src/tools/handlers/unified_exec/write_stdin.rs b/codex-rs/core/src/tools/handlers/unified_exec/write_stdin.rs
-index 1fecb98b0..b13d143ec 100644
+index 1fecb98b0442b3a45a6a3dc52a1c2d577c82a878..b13d143ecf8e0780a6b7592d507d7cb92d678127 100644
 --- a/codex-rs/core/src/tools/handlers/unified_exec/write_stdin.rs
 +++ b/codex-rs/core/src/tools/handlers/unified_exec/write_stdin.rs
 @@ -106,17 +106,14 @@ impl WriteStdinHandler {
@@ -228,7 +228,7 @@ index 1fecb98b0..b13d143ec 100644
  
          Ok(boxed_tool_output(response))
 diff --git a/codex-rs/core/src/tools/multi_agent_tool.rs b/codex-rs/core/src/tools/multi_agent_tool.rs
-index 0e44fd92b..a65c01a99 100644
+index 0e44fd92b243ff99a7dff2e0fd02bf0b77ab3c48..a65c01a99a42fc0fa1bbf4323b25fa271198fec8 100644
 --- a/codex-rs/core/src/tools/multi_agent_tool.rs
 +++ b/codex-rs/core/src/tools/multi_agent_tool.rs
 @@ -31,6 +31,17 @@ pub(super) fn multi_agent_v2_handler(
@@ -286,7 +286,7 @@ index 0e44fd92b..a65c01a99 100644
 +    }
 +}
 diff --git a/codex-rs/core/src/tools/parallel.rs b/codex-rs/core/src/tools/parallel.rs
-index e0b50c48d..f3b4737e5 100644
+index e0b50c48dd7ed4558b4423d25bae6e62d99ccea5..f3b4737e5b2810514b7ac1c8f76a4a71eedf6b11 100644
 --- a/codex-rs/core/src/tools/parallel.rs
 +++ b/codex-rs/core/src/tools/parallel.rs
 @@ -42,8 +42,16 @@ struct ToolCallTimingGuard {
@@ -382,7 +382,7 @@ index e0b50c48d..f3b4737e5 100644
                  }
              };
 diff --git a/codex-rs/core/src/tools/router.rs b/codex-rs/core/src/tools/router.rs
-index a7a192815..2505f7273 100644
+index a7a192815b6a2f45e96b6903f133e5564306a419..2505f7273683616673c4faf2d8ed63cb6e8fce68 100644
 --- a/codex-rs/core/src/tools/router.rs
 +++ b/codex-rs/core/src/tools/router.rs
 @@ -54,15 +54,15 @@ pub struct ToolCall {
@@ -411,7 +411,7 @@ index a7a192815..2505f7273 100644
              ToolCallSource::DirectPlaintextMessage
          } else {
 diff --git a/codex-rs/core/src/tools/router_tests.rs b/codex-rs/core/src/tools/router_tests.rs
-index aff6d4166..3aae9ae71 100644
+index aff6d416600a75ce43c72aa32c580db10d9d97de..3aae9ae7170ee2d419e2cf96c7ef8699c276ae60 100644
 --- a/codex-rs/core/src/tools/router_tests.rs
 +++ b/codex-rs/core/src/tools/router_tests.rs
 @@ -44,6 +44,27 @@ use super::tool_log_payload;
@@ -443,7 +443,7 @@ index aff6d4166..3aae9ae71 100644
  fn tool_log_payload_redacts_plaintext_multi_agent_messages() {
      let payload = ToolPayload::Function {
 diff --git a/codex-rs/core/tests/suite/guardian_history.rs b/codex-rs/core/tests/suite/guardian_history.rs
-index adc2c5bb5..44ab4181e 100644
+index adc2c5bb5674a5cf27b27e2af8cfbc2db46ccbf4..44ab4181e63a4e9321cbd1e2b95dd197cd1a4363 100644
 --- a/codex-rs/core/tests/suite/guardian_history.rs
 +++ b/codex-rs/core/tests/suite/guardian_history.rs
 @@ -42,7 +42,7 @@ use core_test_support::wait_for_event_match;
@@ -456,7 +456,7 @@ index adc2c5bb5..44ab4181e 100644
  use rand::rngs::StdRng;
  use serde_json::json;
 diff --git a/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__astra_async_compaction_with_live_suffix.snap b/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__astra_async_compaction_with_live_suffix.snap
-index fb8b1f915..e07aab494 100644
+index fb8b1f915c64711a8dbc70db9411497abb13f067..e07aab494fc15fccf213e51a873bc5f3f009f6e8 100644
 --- a/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__astra_async_compaction_with_live_suffix.snap
 +++ b/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__astra_async_compaction_with_live_suffix.snap
 @@ -6,7 +6,7 @@ Scenario: Astra compacts a completed launch-notes turn in the background. The us
@@ -514,7 +514,7 @@ index fb8b1f915..e07aab494 100644
            - function/interrupt_agent
            - function/list_agents
 diff --git a/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__astra_kickoff_remote_compaction_windows.snap b/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__astra_kickoff_remote_compaction_windows.snap
-index 29a6122a3..c4bd2af1c 100644
+index 29a6122a3924d58d4f6e39e7a1c6834bb1ae663d..c4bd2af1c00a0527502580150c4d8320a9c11945 100644
 --- a/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__astra_kickoff_remote_compaction_windows.snap
 +++ b/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__astra_kickoff_remote_compaction_windows.snap
 @@ -16,7 +16,7 @@ Settings:
@@ -554,7 +554,7 @@ index 29a6122a3..c4bd2af1c 100644
            - function/interrupt_agent
            - function/list_agents
 diff --git a/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__astra_settings_release_check_tool_shapes.snap b/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__astra_settings_release_check_tool_shapes.snap
-index ed6a215e2..47b09b438 100644
+index ed6a215e264bf1c907536feb6b2a6f61928e4465..47b09b438e79b6b41bb7c9d4e78cea77d4fd7b75 100644
 --- a/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__astra_settings_release_check_tool_shapes.snap
 +++ b/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__astra_settings_release_check_tool_shapes.snap
 @@ -16,7 +16,7 @@ Settings:
@@ -576,7 +576,7 @@ index ed6a215e2..47b09b438 100644
            - function/interrupt_agent
            - function/list_agents
 diff --git a/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__compaction__remote_slash_compact.snap b/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__compaction__remote_slash_compact.snap
-index 4e78cadff..22dd9e368 100644
+index 4e78cadff514c0965bc0dbcff7a447d850b1ba1d..22dd9e368cff8fda526155105ec77c87bc3ed602 100644
 --- a/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__compaction__remote_slash_compact.snap
 +++ b/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__compaction__remote_slash_compact.snap
 @@ -16,7 +16,7 @@ Settings:
@@ -616,7 +616,7 @@ index 4e78cadff..22dd9e368 100644
            - function/interrupt_agent
            - function/list_agents
 diff --git a/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__incremental_tools__incremental_tool_removals.snap b/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__incremental_tools__incremental_tool_removals.snap
-index 6353959e7..9dbd11268 100644
+index 6353959e7ef25bf2ead2893f5d23c9ba0619af19..9dbd11268eead3b572c44c8c955bb9257d63846b 100644
 --- a/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__incremental_tools__incremental_tool_removals.snap
 +++ b/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__incremental_tools__incremental_tool_removals.snap
 @@ -16,7 +16,7 @@ Settings:
@@ -638,7 +638,7 @@ index 6353959e7..9dbd11268 100644
            - function/resume_agent
            - function/send_input
 diff --git a/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__incremental_tools__incremental_tools_catalog_messages.snap b/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__incremental_tools__incremental_tools_catalog_messages.snap
-index 655768d1a..35b8e0e50 100644
+index 655768d1abd6eb03959c9d7b9aca4fb34bfb1fd5..35b8e0e50415cb3f5c95ce2080c5015587886bf2 100644
 --- a/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__incremental_tools__incremental_tools_catalog_messages.snap
 +++ b/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__incremental_tools__incremental_tools_catalog_messages.snap
 @@ -16,7 +16,7 @@ Settings:
@@ -660,7 +660,7 @@ index 655768d1a..35b8e0e50 100644
            - function/resume_agent
            - function/send_input
 diff --git a/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__mcp_tool_discovery_CodeModeOnly.snap b/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__mcp_tool_discovery_CodeModeOnly.snap
-index 33f69ec0b..a0a4560b3 100644
+index 33f69ec0bfa68fdb42b5bd3fc53e941158062378..a0a4560b330e0777665d665663228ce647f1c3f3 100644
 --- a/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__mcp_tool_discovery_CodeModeOnly.snap
 +++ b/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__mcp_tool_discovery_CodeModeOnly.snap
 @@ -15,8 +15,8 @@ Settings:
@@ -686,7 +686,7 @@ index 33f69ec0b..a0a4560b3 100644
  00:message/developer:
      <MODEL_INSTRUCTIONS>
 diff --git a/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__mcp_tool_discovery_Direct.snap b/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__mcp_tool_discovery_Direct.snap
-index e91e191f3..3a26bda03 100644
+index e91e191f32ea177d5c46fbcd4c7b250f8b8e9663..3a26bda0368b6a86d04d212276a9c29f9af40e14 100644
 --- a/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__mcp_tool_discovery_Direct.snap
 +++ b/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__mcp_tool_discovery_Direct.snap
 @@ -15,7 +15,7 @@ Settings:
@@ -717,7 +717,7 @@ index e91e191f3..3a26bda03 100644
        - function/echo
        - function/search_tools
 diff --git a/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__model_catalog_refresh_preserves_tools_and_history.snap b/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__model_catalog_refresh_preserves_tools_and_history.snap
-index e7d2ffa51..03cb187e4 100644
+index e7d2ffa51ee7e1a56e3f0173dedb452054d56a6f..03cb187e4753903c45d87a38f0b121fb55f886a5 100644
 --- a/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__model_catalog_refresh_preserves_tools_and_history.snap
 +++ b/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__model_catalog_refresh_preserves_tools_and_history.snap
 @@ -14,12 +14,12 @@ Settings:
@@ -736,7 +736,7 @@ index e7d2ffa51..03cb187e4 100644
        - function/resume_agent
        - function/send_input
 diff --git a/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__prediction_fork_preserves_context_above_compaction_threshold.snap b/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__prediction_fork_preserves_context_above_compaction_threshold.snap
-index a2343be9d..a9056eb4e 100644
+index a2343be9de809f0d110c5ce1d261a0a3b4e89903..a9056eb4e18a2264192bc5e127cf978542d81339 100644
 --- a/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__prediction_fork_preserves_context_above_compaction_threshold.snap
 +++ b/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__prediction_fork_preserves_context_above_compaction_threshold.snap
 @@ -16,7 +16,7 @@ Settings:
@@ -758,7 +758,7 @@ index a2343be9d..a9056eb4e 100644
            - function/interrupt_agent
            - function/list_agents
 diff --git a/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__retained_tool_outputs__retained_tool_output_retention_disabled.snap b/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__retained_tool_outputs__retained_tool_output_retention_disabled.snap
-index 502a05072..f24cfcca1 100644
+index 502a050722789d946ad8a3faaac34684dbbbfdbd..f24cfcca1c86ac7a1d0027e4f11a2965df733675 100644
 --- a/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__retained_tool_outputs__retained_tool_output_retention_disabled.snap
 +++ b/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__retained_tool_outputs__retained_tool_output_retention_disabled.snap
 @@ -6,7 +6,7 @@ Scenario: With retention disabled, the client can still send retain=true. Tool o
@@ -816,7 +816,7 @@ index 502a05072..f24cfcca1 100644
            - function/interrupt_agent
            - function/list_agents
 diff --git a/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__retained_tool_outputs__retained_tool_output_survives_compaction_and_resume.snap b/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__retained_tool_outputs__retained_tool_output_survives_compaction_and_resume.snap
-index af3d0a2d3..e2fc50b63 100644
+index af3d0a2d315d4029b64debef3bf29ecb1a40b001..e2fc50b638aefcc763785a8ec3a4b39e93b1e874 100644
 --- a/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__retained_tool_outputs__retained_tool_output_survives_compaction_and_resume.snap
 +++ b/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__retained_tool_outputs__retained_tool_output_survives_compaction_and_resume.snap
 @@ -6,7 +6,7 @@ Scenario: Retained thread instructions stop emergency tool-output trimming. Comp
@@ -856,7 +856,7 @@ index af3d0a2d3..e2fc50b63 100644
            - function/interrupt_agent
            - function/list_agents
 diff --git a/codex-rs/ext/image-generation/src/tool.rs b/codex-rs/ext/image-generation/src/tool.rs
-index fb154371f..adbaad42f 100644
+index fb154371f777a7d9d2d67c7c721b119c34db2a9d..adbaad42fbf8cee47ad46288e8c7fd8c5e0d16da 100644
 --- a/codex-rs/ext/image-generation/src/tool.rs
 +++ b/codex-rs/ext/image-generation/src/tool.rs
 @@ -49,7 +49,7 @@ use codex_utils_image::PromptImageMode;
@@ -878,7 +878,7 @@ index fb154371f..adbaad42f 100644
          |error| {
              FunctionCallError::RespondToModel(format!(
 diff --git a/codex-rs/ext/skills/src/tools/schema.rs b/codex-rs/ext/skills/src/tools/schema.rs
-index d0e9425e4..8803474fd 100644
+index d0e9425e470e613f582f1331024ecccb12bff46d..8803474fde14b24b443a4aeb6e0bafd123996779 100644
 --- a/codex-rs/ext/skills/src/tools/schema.rs
 +++ b/codex-rs/ext/skills/src/tools/schema.rs
 @@ -1,5 +1,5 @@
@@ -902,7 +902,7 @@ index d0e9425e4..8803474fd 100644
          .into_generator()
          .into_root_schema_for::<T>();
 diff --git a/codex-rs/history/src/guardian_history.rs b/codex-rs/history/src/guardian_history.rs
-index e0657a306..f2fa39a17 100644
+index e0657a30614affadcf0bf77b80d1f424776b482a..f2fa39a17064f5d17b0fcf55c51ed1f4026539d1 100644
 --- a/codex-rs/history/src/guardian_history.rs
 +++ b/codex-rs/history/src/guardian_history.rs
 @@ -56,11 +56,11 @@ impl<'de> Deserialize<'de> for GuardianHistoryCheckpoint {
@@ -921,7 +921,7 @@ index e0657a306..f2fa39a17 100644
      }
  }
 diff --git a/codex-rs/history/src/lib.rs b/codex-rs/history/src/lib.rs
-index 826669cc3..7952a682f 100644
+index 826669cc3335dc23102e6a5bdbf2d62c1cb22fa4..7952a682f56090e419ceee2550603dc0db6bc2fc 100644
 --- a/codex-rs/history/src/lib.rs
 +++ b/codex-rs/history/src/lib.rs
 @@ -249,15 +249,15 @@ impl<'de> Deserialize<'de> for RolloutItem {
@@ -963,7 +963,7 @@ index 826669cc3..7952a682f 100644
      }
  }
 diff --git a/codex-rs/history/src/retained_context.rs b/codex-rs/history/src/retained_context.rs
-index 6418bd690..07f932529 100644
+index 6418bd6907764fb5daac43b0da0acb7bfd587ad6..07f9325290f9d01f6bf2b7d989e9f9e4fb164359 100644
 --- a/codex-rs/history/src/retained_context.rs
 +++ b/codex-rs/history/src/retained_context.rs
 @@ -95,6 +95,7 @@ impl std::fmt::Debug for RetainedUserMessage {
@@ -975,7 +975,7 @@ index 6418bd690..07f932529 100644
      #[serde(default, skip_serializing_if = "Option::is_none")]
      revision: Option<codex_protocol::ResponseItemId>,
 diff --git a/codex-rs/history/src/tests.rs b/codex-rs/history/src/tests.rs
-index 32a6110d3..4304371f5 100644
+index 32a6110d3b53ee1dac0a7ac5ed12ede35a012812..4304371f5b0bb5d6a6af9edc13729ee71a5bb3e0 100644
 --- a/codex-rs/history/src/tests.rs
 +++ b/codex-rs/history/src/tests.rs
 @@ -858,22 +858,22 @@ fn rollout_item_schema_matches_tagged_payload_and_sibling_metadata() -> Result<(
@@ -1007,7 +1007,7 @@ index 32a6110d3..4304371f5 100644
      let required = compacted["required"].as_array().expect("required fields");
      assert!(!required.contains(&json!("replacement_history")));
 diff --git a/codex-rs/protocol/src/response_item_id.rs b/codex-rs/protocol/src/response_item_id.rs
-index 9aa66b78d..76e4a78d7 100644
+index 9aa66b78da899b7589bd2ecf914c063622f2da60..76e4a78d7891481ef311619eb88a7bd62eabd8f2 100644
 --- a/codex-rs/protocol/src/response_item_id.rs
 +++ b/codex-rs/protocol/src/response_item_id.rs
 @@ -12,7 +12,7 @@ use ts_rs::TS;
@@ -1020,7 +1020,7 @@ index 9aa66b78d..76e4a78d7 100644
  pub struct ResponseItemId(String);
  
 diff --git a/codex-rs/rollout-trace/src/protocol_event.rs b/codex-rs/rollout-trace/src/protocol_event.rs
-index f4d663203..0a0c5b879 100644
+index f4d66320352ca0266ca7f8c1cc823d4c054adcd3..0a0c5b879e81e60354a37ce110020fe29ca646b4 100644
 --- a/codex-rs/rollout-trace/src/protocol_event.rs
 +++ b/codex-rs/rollout-trace/src/protocol_event.rs
 @@ -354,6 +354,7 @@ pub(crate) fn tool_runtime_trace_event(event: &EventMsg) -> Option<ToolRuntimeTr
@@ -1040,7 +1040,7 @@ index f4d663203..0a0c5b879 100644
          EventMsg::AuthRecoveryStarted(_)
          | EventMsg::AuthRecoveryCompleted(_)
 diff --git a/codex-rs/rollout/src/policy.rs b/codex-rs/rollout/src/policy.rs
-index 51997cd91..d32fd0c91 100644
+index 51997cd91beb8338e9f36022166cc1ad67b67885..d32fd0c91acb6fad83989f2e54d0bb0b3b51001b 100644
 --- a/codex-rs/rollout/src/policy.rs
 +++ b/codex-rs/rollout/src/policy.rs
 @@ -171,6 +171,7 @@ fn persisted_event_msg(
@@ -1052,7 +1052,7 @@ index 51997cd91..d32fd0c91 100644
          | EventMsg::AuthRecoveryCompleted(_)
          | EventMsg::GuardianWarning(_)
 diff --git a/codex-rs/thread-store/src/local/thread_history/search.rs b/codex-rs/thread-store/src/local/thread_history/search.rs
-index 0fe9f4de4..e02e305e0 100644
+index 0fe9f4de4f5f56611c45f4cbcac6370887f662ef..e02e305e0bcba80f942811f81ff707575972c083 100644
 --- a/codex-rs/thread-store/src/local/thread_history/search.rs
 +++ b/codex-rs/thread-store/src/local/thread_history/search.rs
 @@ -365,26 +365,33 @@ fn markdown_to_search_text(markdown: &str) -> String {
@@ -1092,7 +1092,7 @@ index 0fe9f4de4..e02e305e0 100644
                  | TagEnd::HtmlBlock
                  | TagEnd::FootnoteDefinition
 diff --git a/codex-rs/tools/src/function_call_error.rs b/codex-rs/tools/src/function_call_error.rs
-index 1ab8335b2..ba433888b 100644
+index 1ab8335b259a9ba30caa1dc210913ca5dd9af1d3..ba433888b01e75a5cfbdc67e520d94d92836dce5 100644
 --- a/codex-rs/tools/src/function_call_error.rs
 +++ b/codex-rs/tools/src/function_call_error.rs
 @@ -5,6 +5,27 @@ use thiserror::Error;
@@ -1124,7 +1124,7 @@ index 1ab8335b2..ba433888b 100644
 +    }
 +}
 diff --git a/codex-rs/tui/assets/tooltips.txt b/codex-rs/tui/assets/tooltips.txt
-index 3475bde95..cbe2a0598 100644
+index 3475bde95f4dc90840e82eeb3facf7a7fc2cde69..cbe2a0598df49a6a6da020cb454b67f502f43a84 100644
 --- a/codex-rs/tui/assets/tooltips.txt
 +++ b/codex-rs/tui/assets/tooltips.txt
 @@ -2,11 +2,11 @@
@@ -1163,7 +1163,7 @@ index 3475bde95..cbe2a0598 100644
  Use **/vim** to toggle Vim editing in the composer.
  Moving from Claude Code? Use **/import** to bring over your setup, project, and recent chats.
 diff --git a/codex-rs/tui/src/app/config_persistence.rs b/codex-rs/tui/src/app/config_persistence.rs
-index 4b5d22f8f..8921d61c7 100644
+index 4b5d22f8f6ed8324169fa618cb9a0e0668e16720..8921d61c793cc7721d21c8ef826846239dc5f371 100644
 --- a/codex-rs/tui/src/app/config_persistence.rs
 +++ b/codex-rs/tui/src/app/config_persistence.rs
 @@ -519,7 +519,7 @@ impl App {
@@ -1176,7 +1176,7 @@ index 4b5d22f8f..8921d61c7 100644
                  None
              }
 diff --git a/codex-rs/tui/src/app/snapshots/codex_tui__app__tests__owned_prompt_revert_retained_history.snap b/codex-rs/tui/src/app/snapshots/codex_tui__app__tests__owned_prompt_revert_retained_history.snap
-index a9c65b5c3..b5fe3d950 100644
+index a9c65b5c3f7ae0b75d2caef6040375e72991bc9d..b5fe3d9503227844300879e583e947f2b2252f16 100644
 --- a/codex-rs/tui/src/app/snapshots/codex_tui__app__tests__owned_prompt_revert_retained_history.snap
 +++ b/codex-rs/tui/src/app/snapshots/codex_tui__app__tests__owned_prompt_revert_retained_history.snap
 @@ -1,9 +1,8 @@
@@ -1191,7 +1191,7 @@ index a9c65b5c3..b5fe3d950 100644
    /review - review any changes and find issues
  
 diff --git a/codex-rs/tui/src/app/snapshots/codex_tui__app__transcript_export__tests__persisted_web_and_image_activity_preserves_full_details.snap b/codex-rs/tui/src/app/snapshots/codex_tui__app__transcript_export__tests__persisted_web_and_image_activity_preserves_full_details.snap
-index e57701e75..ad0c97a2e 100644
+index e57701e750186bd6d822a09b41b81ee03ba9aa80..ad0c97a2e3b0397ed26e07a2f51d2d9f73248c50 100644
 --- a/codex-rs/tui/src/app/snapshots/codex_tui__app__transcript_export__tests__persisted_web_and_image_activity_preserves_full_details.snap
 +++ b/codex-rs/tui/src/app/snapshots/codex_tui__app__transcript_export__tests__persisted_web_and_image_activity_preserves_full_details.snap
 @@ -1,9 +1,8 @@
@@ -1206,7 +1206,7 @@ index e57701e75..ad0c97a2e 100644
  ## Reasoning
  
 diff --git a/codex-rs/tui/src/app_server_session/rollout_history_tests.rs b/codex-rs/tui/src/app_server_session/rollout_history_tests.rs
-index ecce710de..b8af775f1 100644
+index ecce710de8a66f4b0ff7695b8bf0692888d4fc27..b8af775f18237309a32d996d2d4e22ab8699aae5 100644
 --- a/codex-rs/tui/src/app_server_session/rollout_history_tests.rs
 +++ b/codex-rs/tui/src/app_server_session/rollout_history_tests.rs
 @@ -356,7 +356,13 @@ async fn cached_legacy_resume_revalidates_history_across_migration_settings() ->
@@ -1242,7 +1242,7 @@ index ecce710de..b8af775f1 100644
          app_server.shutdown().await?;
      }
 diff --git a/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__experimental_features_view__tests__experimental_features_analytics_plan_history.snap b/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__experimental_features_view__tests__experimental_features_analytics_plan_history.snap
-index 2ac57b83a..4628117a8 100644
+index 2ac57b83a88ab5b560a9e1cd2ff4874bf6ba09f6..4628117a8d23054e5a42bf266c9e3e04656074ee 100644
 --- a/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__experimental_features_view__tests__experimental_features_analytics_plan_history.snap
 +++ b/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__experimental_features_view__tests__experimental_features_analytics_plan_history.snap
 @@ -5,7 +5,7 @@ expression: buffer_text(&buffer)
@@ -1255,7 +1255,7 @@ index 2ac57b83a..4628117a8 100644
  
  › [ ] Analytics plan history  Preview five-hour and weekly allowance history for
 diff --git a/codex-rs/tui/src/bottom_pane/tests/snapshots/codex_tui__bottom_pane__tests__actionable_banner_tests__information_banner_persistent.snap b/codex-rs/tui/src/bottom_pane/tests/snapshots/codex_tui__bottom_pane__tests__actionable_banner_tests__information_banner_persistent.snap
-index f717e2426..f6c7ca5dc 100644
+index f717e24265162e65dce97f25b390a853ddbcf78c..f6c7ca5dcaf6ae753ec0a4f007e21b0b07b1341d 100644
 --- a/codex-rs/tui/src/bottom_pane/tests/snapshots/codex_tui__bottom_pane__tests__actionable_banner_tests__information_banner_persistent.snap
 +++ b/codex-rs/tui/src/bottom_pane/tests/snapshots/codex_tui__bottom_pane__tests__actionable_banner_tests__information_banner_persistent.snap
 @@ -1,6 +1,5 @@
@@ -1274,7 +1274,7 @@ index f717e2426..f6c7ca5dc 100644
                                                                        
    ? for shortcuts                                  100% context left
 diff --git a/codex-rs/tui/src/dynamic_tools.rs b/codex-rs/tui/src/dynamic_tools.rs
-index 48e677d31..445989587 100644
+index 48e677d3119556e887f44f20619c457bb49a44c8..4459895876047894bd8eef05e54d13bda48dc80e 100644
 --- a/codex-rs/tui/src/dynamic_tools.rs
 +++ b/codex-rs/tui/src/dynamic_tools.rs
 @@ -165,19 +165,19 @@ pub(crate) fn tool_specs() -> Vec<DynamicToolSpec> {
@@ -1367,7 +1367,7 @@ index 48e677d31..445989587 100644
      // Retain saved metadata while suppressing it for accounts that cannot use Daybreak.
      let enabled = enabled && eligible;
 diff --git a/codex-rs/tui/src/history_cell/approvals.rs b/codex-rs/tui/src/history_cell/approvals.rs
-index b6ba3acb6..ba1c9c442 100644
+index b6ba3acb6650a04a91f185b4dfdc76ea3ddf7a6a..ba1c9c442c24660733ed8d119e4c2c5f69a959c7 100644
 --- a/codex-rs/tui/src/history_cell/approvals.rs
 +++ b/codex-rs/tui/src/history_cell/approvals.rs
 @@ -141,7 +141,7 @@ pub fn new_approval_decision_cell(
@@ -1380,7 +1380,7 @@ index b6ba3acb6..ba1c9c442 100644
                      ],
                  ),
 diff --git a/codex-rs/tui/src/history_cell/hook_cell.rs b/codex-rs/tui/src/history_cell/hook_cell.rs
-index 222743553..775015b4b 100644
+index 222743553d1a7ed22db1e60991e781a9a1de3e7a..775015b4b6685f515f49bb8f9703ba6fc1d44e90 100644
 --- a/codex-rs/tui/src/history_cell/hook_cell.rs
 +++ b/codex-rs/tui/src/history_cell/hook_cell.rs
 @@ -597,7 +597,7 @@ mod tests {
@@ -1393,7 +1393,7 @@ index 222743553..775015b4b 100644
          );
  
 diff --git a/codex-rs/tui/src/history_cell/mod.rs b/codex-rs/tui/src/history_cell/mod.rs
-index 5b14559f6..546dcf30d 100644
+index 5b14559f6325d54aeee6a835287460631d4ca7bb..546dcf30d3f20a431d4a700995c871208509c14c 100644
 --- a/codex-rs/tui/src/history_cell/mod.rs
 +++ b/codex-rs/tui/src/history_cell/mod.rs
 @@ -1,4 +1,4 @@
@@ -1403,7 +1403,7 @@ index 5b14559f6..546dcf30d 100644
  //! A `HistoryCell` is the unit of display in the conversation UI, representing both committed
  //! transcript entries and, transiently, an in-flight active cell that can mutate in place while
 diff --git a/codex-rs/tui/src/history_cell/notices.rs b/codex-rs/tui/src/history_cell/notices.rs
-index 06d7b2f13..47dc108ae 100644
+index 06d7b2f13a544f3e4b7bc83f57ecdd103b060c3b..47dc108ae93282739098d7c2240d025392c8a92f 100644
 --- a/codex-rs/tui/src/history_cell/notices.rs
 +++ b/codex-rs/tui/src/history_cell/notices.rs
 @@ -56,7 +56,7 @@ impl HistoryCell for UpdateAvailableHistoryCell {
@@ -1425,7 +1425,7 @@ index 06d7b2f13..47dc108ae 100644
      }
  
 diff --git a/codex-rs/tui/src/history_cell/session.rs b/codex-rs/tui/src/history_cell/session.rs
-index 237ef9ec9..d714bfb61 100644
+index 237ef9ec9699bc895011750b749aa6edcc1dae11..d714bfb61851af36901335f56d656a4ea3f9f896 100644
 --- a/codex-rs/tui/src/history_cell/session.rs
 +++ b/codex-rs/tui/src/history_cell/session.rs
 @@ -44,7 +44,7 @@ pub(crate) fn with_border_with_inner_width(
@@ -1465,7 +1465,7 @@ index 237ef9ec9..d714bfb61 100644
                  "model: {}{}",
                  self.model,
 diff --git a/codex-rs/tui/src/history_cell/snapshots/codex_tui__history_cell__tests__connected_server_version_notice_snapshot.snap b/codex-rs/tui/src/history_cell/snapshots/codex_tui__history_cell__tests__connected_server_version_notice_snapshot.snap
-index fc38c4a8e..5d97c41ab 100644
+index fc38c4a8e139dd5fb11ea68ce538dcdfb0b22a78..5d97c41abf8de5953629cacf638f87ffbccbda40 100644
 --- a/codex-rs/tui/src/history_cell/snapshots/codex_tui__history_cell__tests__connected_server_version_notice_snapshot.snap
 +++ b/codex-rs/tui/src/history_cell/snapshots/codex_tui__history_cell__tests__connected_server_version_notice_snapshot.snap
 @@ -1,5 +1,5 @@
@@ -1477,7 +1477,7 @@ index fc38c4a8e..5d97c41ab 100644
 -⚠ A background Codex service is running v0.152.1, older than your Codex CLI v0.153.0.
 +⚠ A background Nyacode service is running v0.152.1, older than your Nyacode CLI v0.153.0.
 diff --git a/codex-rs/tui/src/history_cell/snapshots/codex_tui__history_cell__tests__error_event_bedrock_expired_signature_snapshot.snap b/codex-rs/tui/src/history_cell/snapshots/codex_tui__history_cell__tests__error_event_bedrock_expired_signature_snapshot.snap
-index 3652ad442..4f7bf2c8a 100644
+index 3652ad442821e15f98a27ccfc4f8ff11d5592b9b..4f7bf2c8a7d6d78bf8d6c35e10fb45631614fb6c 100644
 --- a/codex-rs/tui/src/history_cell/snapshots/codex_tui__history_cell__tests__error_event_bedrock_expired_signature_snapshot.snap
 +++ b/codex-rs/tui/src/history_cell/snapshots/codex_tui__history_cell__tests__error_event_bedrock_expired_signature_snapshot.snap
 @@ -2,4 +2,4 @@
@@ -1487,7 +1487,7 @@ index 3652ad442..4f7bf2c8a 100644
 -■ Amazon Bedrock rejected the request because its AWS signature has expired. Refresh your AWS credentials and retry. If `AWS_BEARER_TOKEN_BEDROCK` is set, update or unset it, then restart Codex, url: https://bedrock-mantle.us-east-2.api.aws/openai/v1/responses
 +■ Amazon Bedrock rejected the request because its AWS signature has expired. Refresh your AWS credentials and retry. If `AWS_BEARER_TOKEN_BEDROCK` is set, update or unset it, then restart Nyacode, url: https://bedrock-mantle.us-east-2.api.aws/openai/v1/responses
 diff --git a/codex-rs/tui/src/history_cell/snapshots/codex_tui__history_cell__tests__local_daemon_alpha_mismatch.snap b/codex-rs/tui/src/history_cell/snapshots/codex_tui__history_cell__tests__local_daemon_alpha_mismatch.snap
-index 33daccaec..2f5c076d4 100644
+index 33daccaececc65299de09c18fcf74385120998f3..2f5c076d4fd1125fe09e83b2300f907da3fc9a08 100644
 --- a/codex-rs/tui/src/history_cell/snapshots/codex_tui__history_cell__tests__local_daemon_alpha_mismatch.snap
 +++ b/codex-rs/tui/src/history_cell/snapshots/codex_tui__history_cell__tests__local_daemon_alpha_mismatch.snap
 @@ -1,7 +1,8 @@
@@ -1502,7 +1502,7 @@ index 33daccaec..2f5c076d4 100644
    Use /daemon to manage the local background server.
    Updating may interrupt active or queued work.
 diff --git a/codex-rs/tui/src/history_cell/snapshots/codex_tui__history_cell__tests__local_daemon_source_mismatch.snap b/codex-rs/tui/src/history_cell/snapshots/codex_tui__history_cell__tests__local_daemon_source_mismatch.snap
-index b27b69dc6..153d98a23 100644
+index b27b69dc6e904ad4eba41d23745e72939dcc4de4..153d98a23c2b55968a2792de25c0c0627162b818 100644
 --- a/codex-rs/tui/src/history_cell/snapshots/codex_tui__history_cell__tests__local_daemon_source_mismatch.snap
 +++ b/codex-rs/tui/src/history_cell/snapshots/codex_tui__history_cell__tests__local_daemon_source_mismatch.snap
 @@ -1,7 +1,7 @@
@@ -1516,7 +1516,7 @@ index b27b69dc6..153d98a23 100644
    Use /daemon to manage the local background server.
    Updating may interrupt active or queued work.
 diff --git a/codex-rs/tui/src/history_cell/snapshots/codex_tui__history_cell__tests__local_daemon_version_notice_snapshot.snap b/codex-rs/tui/src/history_cell/snapshots/codex_tui__history_cell__tests__local_daemon_version_notice_snapshot.snap
-index e3ade9c70..0e9005523 100644
+index e3ade9c703dc0dda221adf001f2cc99e3fe42d75..0e9005523e451465db6c7ec871e52aac741460f4 100644
 --- a/codex-rs/tui/src/history_cell/snapshots/codex_tui__history_cell__tests__local_daemon_version_notice_snapshot.snap
 +++ b/codex-rs/tui/src/history_cell/snapshots/codex_tui__history_cell__tests__local_daemon_version_notice_snapshot.snap
 @@ -1,7 +1,7 @@
@@ -1530,7 +1530,7 @@ index e3ade9c70..0e9005523 100644
    Use /daemon to manage the local background server.
    Updating may interrupt active or queued work.
 diff --git a/codex-rs/tui/src/history_cell/snapshots/codex_tui__history_cell__tests__pnpm_update_available_history_cell_snapshot.snap b/codex-rs/tui/src/history_cell/snapshots/codex_tui__history_cell__tests__pnpm_update_available_history_cell_snapshot.snap
-index a9dd9cac7..c6b14a1ce 100644
+index a9dd9cac784bd0993eb09bc518071a1e253f0ae2..c6b14a1ce772bced937ec0624a6ac54c91ff42ba 100644
 --- a/codex-rs/tui/src/history_cell/snapshots/codex_tui__history_cell__tests__pnpm_update_available_history_cell_snapshot.snap
 +++ b/codex-rs/tui/src/history_cell/snapshots/codex_tui__history_cell__tests__pnpm_update_available_history_cell_snapshot.snap
 @@ -2,10 +2,10 @@
@@ -1552,7 +1552,7 @@ index a9dd9cac7..c6b14a1ce 100644
 +│ https://github.com/yansigit/nyacode/releases/latest │
 +╰─────────────────────────────────────────────────────╯
 diff --git a/codex-rs/tui/src/history_cell/snapshots/codex_tui__history_cell__tests__proposed_plan_cell_renders_markdown_table.snap b/codex-rs/tui/src/history_cell/snapshots/codex_tui__history_cell__tests__proposed_plan_cell_renders_markdown_table.snap
-index e47ef0960..3fbfdfbfa 100644
+index e47ef0960566cba90791d00c5904a47545c77a8e..3fbfdfbfa3c3e647d01f7b3dacc9a3a98324aee1 100644
 --- a/codex-rs/tui/src/history_cell/snapshots/codex_tui__history_cell__tests__proposed_plan_cell_renders_markdown_table.snap
 +++ b/codex-rs/tui/src/history_cell/snapshots/codex_tui__history_cell__tests__proposed_plan_cell_renders_markdown_table.snap
 @@ -27,7 +27,7 @@ expression: lines
@@ -1574,7 +1574,7 @@ index e47ef0960..3fbfdfbfa 100644
      Line::from(" ").bg(Color::Rgb(244, 244, 244)),
  ]
 diff --git a/codex-rs/tui/src/history_cell/snapshots/codex_tui__history_cell__tests__session_header_clamps_to_narrow_width.snap b/codex-rs/tui/src/history_cell/snapshots/codex_tui__history_cell__tests__session_header_clamps_to_narrow_width.snap
-index 13e70b5d2..94d5a7d28 100644
+index 13e70b5d2dead047ac28496972d6c46860fca068..94d5a7d284985f9ea5d9c7c66eddadc597502d04 100644
 --- a/codex-rs/tui/src/history_cell/snapshots/codex_tui__history_cell__tests__session_header_clamps_to_narrow_width.snap
 +++ b/codex-rs/tui/src/history_cell/snapshots/codex_tui__history_cell__tests__session_header_clamps_to_narrow_width.snap
 @@ -1,9 +1,8 @@
@@ -1589,7 +1589,7 @@ index 13e70b5d2..94d5a7d28 100644
       project
    permissions: YOLO mode
 diff --git a/codex-rs/tui/src/history_cell/snapshots/codex_tui__history_cell__tests__session_header_halfwidth_directory.snap b/codex-rs/tui/src/history_cell/snapshots/codex_tui__history_cell__tests__session_header_halfwidth_directory.snap
-index fa464a0b7..39a73800d 100644
+index fa464a0b7d72ff16e4472e7b2aea6bd98d3b5558..39a73800df491f4f3cbf04816c55476868ce606c 100644
 --- a/codex-rs/tui/src/history_cell/snapshots/codex_tui__history_cell__tests__session_header_halfwidth_directory.snap
 +++ b/codex-rs/tui/src/history_cell/snapshots/codex_tui__history_cell__tests__session_header_halfwidth_directory.snap
 @@ -1,20 +1,19 @@
@@ -1617,7 +1617,7 @@ index fa464a0b7..39a73800d 100644
          x: 7, y: 2, fg: Reset, bg: Reset, underline: Reset, modifier: NONE,
          x: 8, y: 2, fg: Reset, bg: Reset, underline: Reset, modifier: DIM,
 diff --git a/codex-rs/tui/src/history_cell/snapshots/codex_tui__history_cell__tests__session_header_indicates_yolo_mode.snap b/codex-rs/tui/src/history_cell/snapshots/codex_tui__history_cell__tests__session_header_indicates_yolo_mode.snap
-index ab195e3d1..2d7c6de40 100644
+index ab195e3d1aea7bbd4b3bd68b2eab569a43c2f0cb..2d7c6de40b20180157c0143595f823e0c6249da0 100644
 --- a/codex-rs/tui/src/history_cell/snapshots/codex_tui__history_cell__tests__session_header_indicates_yolo_mode.snap
 +++ b/codex-rs/tui/src/history_cell/snapshots/codex_tui__history_cell__tests__session_header_indicates_yolo_mode.snap
 @@ -1,9 +1,8 @@
@@ -1632,7 +1632,7 @@ index ab195e3d1..2d7c6de40 100644
       /tmp/project
    permissions: YOLO mode
 diff --git a/codex-rs/tui/src/history_cell/snapshots/codex_tui__history_cell__tests__session_info_availability_nux_tooltip_snapshot.snap b/codex-rs/tui/src/history_cell/snapshots/codex_tui__history_cell__tests__session_info_availability_nux_tooltip_snapshot.snap
-index e5cc9a0ce..652da5053 100644
+index e5cc9a0cecf082a98967e33e8019e28a39af5f2a..652da50530a40623cb919a5cf5cd394a0a3b2694 100644
 --- a/codex-rs/tui/src/history_cell/snapshots/codex_tui__history_cell__tests__session_info_availability_nux_tooltip_snapshot.snap
 +++ b/codex-rs/tui/src/history_cell/snapshots/codex_tui__history_cell__tests__session_info_availability_nux_tooltip_snapshot.snap
 @@ -1,10 +1,9 @@
@@ -1648,7 +1648,7 @@ index e5cc9a0ce..652da5053 100644
  
    Tip: Model just became available
 diff --git a/codex-rs/tui/src/history_cell/snapshots/codex_tui__history_cell__tests__session_info_preserves_styled_tooltip_links.snap b/codex-rs/tui/src/history_cell/snapshots/codex_tui__history_cell__tests__session_info_preserves_styled_tooltip_links.snap
-index 562070e86..9a3e68c5c 100644
+index 562070e86d5eaa0b9e97397c04d87060d05bb395..9a3e68c5c50e37d20fd1dad3d6454908a933ce7c 100644
 --- a/codex-rs/tui/src/history_cell/snapshots/codex_tui__history_cell__tests__session_info_preserves_styled_tooltip_links.snap
 +++ b/codex-rs/tui/src/history_cell/snapshots/codex_tui__history_cell__tests__session_info_preserves_styled_tooltip_links.snap
 @@ -1,11 +1,10 @@
@@ -1666,7 +1666,7 @@ index 562070e86..9a3e68c5c 100644
      link 2..7: forum -> https://example.com
      link 9..28: https://example.com -> https://example.com
 diff --git a/codex-rs/tui/src/history_cell/snapshots/codex_tui__history_cell__tests__standalone_unix_update_available_history_cell_snapshot.snap b/codex-rs/tui/src/history_cell/snapshots/codex_tui__history_cell__tests__standalone_unix_update_available_history_cell_snapshot.snap
-index c8f352dbb..9c690557d 100644
+index c8f352dbb49ceafe78df86e841e95824c4e6f469..9c690557d51ade2bcb4841491894158613434ceb 100644
 --- a/codex-rs/tui/src/history_cell/snapshots/codex_tui__history_cell__tests__standalone_unix_update_available_history_cell_snapshot.snap
 +++ b/codex-rs/tui/src/history_cell/snapshots/codex_tui__history_cell__tests__standalone_unix_update_available_history_cell_snapshot.snap
 @@ -2,10 +2,11 @@
@@ -1689,7 +1689,7 @@ index c8f352dbb..9c690557d 100644
 +│ https://github.com/yansigit/nyacode/releases/latest                                                        │
 +╰────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 diff --git a/codex-rs/tui/src/history_cell/snapshots/codex_tui__history_cell__tests__standalone_windows_update_available_history_cell_snapshot.snap b/codex-rs/tui/src/history_cell/snapshots/codex_tui__history_cell__tests__standalone_windows_update_available_history_cell_snapshot.snap
-index fb15a0577..fdff5e141 100644
+index fb15a05775d4063e2780ba29d0ae15e9ad5297c8..fdff5e1417bd10412383e81beac4086a106b0ec2 100644
 --- a/codex-rs/tui/src/history_cell/snapshots/codex_tui__history_cell__tests__standalone_windows_update_available_history_cell_snapshot.snap
 +++ b/codex-rs/tui/src/history_cell/snapshots/codex_tui__history_cell__tests__standalone_windows_update_available_history_cell_snapshot.snap
 @@ -5,8 +5,8 @@ expression: rendered
@@ -1704,7 +1704,7 @@ index fb15a0577..fdff5e141 100644
 +│ https://github.com/yansigit/nyacode/releases/latest                                                        │
  ╰────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 diff --git a/codex-rs/tui/src/history_cell/tests.rs b/codex-rs/tui/src/history_cell/tests.rs
-index 8996d8e3a..cd75389ff 100644
+index 8996d8e3a10914da82df1204ef570f35b37b83c6..cd75389fff9561dfa1df38609490cb8f03d27c6d 100644
 --- a/codex-rs/tui/src/history_cell/tests.rs
 +++ b/codex-rs/tui/src/history_cell/tests.rs
 @@ -363,7 +363,7 @@ fn proposed_plan_cell_renders_markdown_table() {
@@ -1744,7 +1744,7 @@ index 8996d8e3a..cd75389ff 100644
          ),
          url: Some("https://bedrock-mantle.us-east-2.api.aws/openai/v1/responses".to_string()),
 diff --git a/codex-rs/tui/src/insert_history.rs b/codex-rs/tui/src/insert_history.rs
-index afa649f70..ac7ebcdc0 100644
+index afa649f70a5a187aec312c135139df5913eb7b6a..ac7ebcdc03eb214f6908d9ebad203325d33b9fc8 100644
 --- a/codex-rs/tui/src/insert_history.rs
 +++ b/codex-rs/tui/src/insert_history.rs
 @@ -1,6 +1,6 @@
@@ -1765,7 +1765,7 @@ index afa649f70..ac7ebcdc0 100644
      }
  
 diff --git a/codex-rs/tui/src/snapshots/codex_tui__tooltips__tests__desktop_app_tip_linux.snap b/codex-rs/tui/src/snapshots/codex_tui__tooltips__tests__desktop_app_tip_linux.snap
-index 506513a58..4cf795cb9 100644
+index 506513a58117b8778ec8bcade53d69a995dad91d..4cf795cb9510f33de55854d33dc0b0387fb006dd 100644
 --- a/codex-rs/tui/src/snapshots/codex_tui__tooltips__tests__desktop_app_tip_linux.snap
 +++ b/codex-rs/tui/src/snapshots/codex_tui__tooltips__tests__desktop_app_tip_linux.snap
 @@ -2,7 +2,7 @@
@@ -1779,7 +1779,7 @@ index 506513a58..4cf795cb9 100644
  Line::from(Span::from("https://learn.chatgpt.com/docs/linux/linux-app").fg(Color::Reset).underlined()) [TerminalHyperlink { columns: 0..46, destination: "https://learn.chatgpt.com/docs/linux/linux-app", destination_kind: Web }]
  Line::from_iter([Span::from("and run "), Span::from("chatgpt").fg(Color::Rgb(166, 227, 161)), Span::from(".")]) []
 diff --git a/codex-rs/tui/src/snapshots/codex_tui__tooltips__tests__desktop_app_tip_macos.snap b/codex-rs/tui/src/snapshots/codex_tui__tooltips__tests__desktop_app_tip_macos.snap
-index 401dbfeaf..ca353a513 100644
+index 401dbfeaf255dce3e74ed0db9687aa0b2f6439a9..ca353a51307d571531852a4a931feea4b0d74b07 100644
 --- a/codex-rs/tui/src/snapshots/codex_tui__tooltips__tests__desktop_app_tip_macos.snap
 +++ b/codex-rs/tui/src/snapshots/codex_tui__tooltips__tests__desktop_app_tip_macos.snap
 @@ -2,6 +2,6 @@
@@ -1793,7 +1793,7 @@ index 401dbfeaf..ca353a513 100644
 +Line::from_iter([Span::from("app").fg(Color::Reset).bold(), Span::from(". Run "), Span::from("nyacode app").fg(Color::Rgb(166, 227, 161)), Span::from(" to open it. It")]) []
 +Line::from("installs automatically if needed.") []
 diff --git a/codex-rs/tui/src/snapshots/codex_tui__tooltips__tests__desktop_app_tip_windows.snap b/codex-rs/tui/src/snapshots/codex_tui__tooltips__tests__desktop_app_tip_windows.snap
-index 5bd73ec2a..b726eca3f 100644
+index 5bd73ec2a7ce2808062aa349a5cade9a0861fd89..b726eca3fdbd54219e70d9d4f0e6ae6b1c634441 100644
 --- a/codex-rs/tui/src/snapshots/codex_tui__tooltips__tests__desktop_app_tip_windows.snap
 +++ b/codex-rs/tui/src/snapshots/codex_tui__tooltips__tests__desktop_app_tip_windows.snap
 @@ -2,7 +2,7 @@
@@ -1808,7 +1808,7 @@ index 5bd73ec2a..b726eca3f 100644
 -Line::from_iter([Span::from("and run "), Span::from("codex app").fg(Color::Rgb(166, 227, 161)), Span::from(".")]) []
 +Line::from_iter([Span::from("and run "), Span::from("nyacode app").fg(Color::Rgb(166, 227, 161)), Span::from(".")]) []
 diff --git a/codex-rs/tui/src/tooltips.rs b/codex-rs/tui/src/tooltips.rs
-index 4319a0988..b095fccf2 100644
+index 4319a0988c2a1c5db5abb2ec54218b96d3193b80..b095fccf2e13700fbf4cfdc7f78959b5336bff16 100644
 --- a/codex-rs/tui/src/tooltips.rs
 +++ b/codex-rs/tui/src/tooltips.rs
 @@ -6,6 +6,7 @@ use codex_features::FEATURES;
@@ -1876,7 +1876,7 @@ index 4319a0988..b095fccf2 100644
  to_date = "2024-10-15"
  target_app = "cli"
 diff --git a/codex-rs/tui/src/tui/history_tail_tests.rs b/codex-rs/tui/src/tui/history_tail_tests.rs
-index 9c1c3b07c..9a133a35d 100644
+index 9c1c3b07cc7e153e68ac3e80659ab3bbefbfb383..9a133a35d538d1ae7a647f63980ae3989dc38fe3 100644
 --- a/codex-rs/tui/src/tui/history_tail_tests.rs
 +++ b/codex-rs/tui/src/tui/history_tail_tests.rs
 @@ -17,7 +17,7 @@ fn replacing_visible_history_tail_preserves_existing_terminal_scrollback() {

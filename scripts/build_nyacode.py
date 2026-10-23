@@ -14,7 +14,9 @@ def main() -> int:
         "--release", action="store_true", help="Build optimized binaries"
     )
     parser.add_argument(
-        "--engine", action="store_true", help="Prepare and build the pinned engine workspace"
+        "--engine",
+        action="store_true",
+        help="Prepare and build the pinned engine workspace",
     )
     args = parser.parse_args()
     root = Path(__file__).resolve().parents[1]
@@ -41,6 +43,8 @@ def main() -> int:
     if target not in TARGET_SPECS:
         parser.error(f"No pinned V8 package configuration for {target}")
     env = os.environ.copy()
+    if args.engine:
+        env.setdefault("CARGO_TARGET_DIR", str(root / ".engine/target"))
     env.update(resolve_codex_v8_cargo_env(TARGET_SPECS[target]))
     command = [
         "cargo",

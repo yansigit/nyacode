@@ -44,7 +44,7 @@ jobs:
       - run: python3 scripts/engine.py check --mode controls
         env:
           GH_TOKEN: ${{ github.token }}
-      - run: python3 -m unittest discover -s scripts/tests -p test_engine_candidates.py
+      - run: python3 -m unittest discover -s scripts/tests -p 'test_engine*.py'
 
   providers:
     name: Standalone providers

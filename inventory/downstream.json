@@ -7501,6 +7501,33 @@
       "change": "modified",
       "destination": {
         "kind": "patch",
+        "patch": "integration/codex/patches/sdk_protocol.patch",
+        "path": "codex-rs/app-server-protocol/scripts/write_schema_fixtures.py"
+      },
+      "git_status": "M",
+      "mode_changed": false,
+      "owner": "downstream-sdk",
+      "path": "codex-rs/app-server-protocol/scripts/write_schema_fixtures.py",
+      "purpose": "Lock schema-generation dependencies in the assembled engine.",
+      "regression_groups": [
+        "sdk_protocol"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "codex-rs/app-server-protocol/scripts/write_schema_fixtures.py",
+        "sha256": "7f79780bd1e2cb97efa1e22fc80133b7220ef1cd46ce930a25f27f5a3196f881"
+      },
+      "upstream_source": {
+        "mode": "100644",
+        "path": "codex-rs/app-server-protocol/scripts/write_schema_fixtures.py",
+        "sha256": "6d610baa61ecf4317f52c95c08023fd84ace60bd531d5390754d39e0f39e5688"
+      }
+    },
+    {
+      "artifact": "source",
+      "change": "modified",
+      "destination": {
+        "kind": "patch",
         "patch": "integration/codex/patches/backend_dispatch.patch",
         "path": "codex-rs/app-server-protocol/src/export.rs"
       },

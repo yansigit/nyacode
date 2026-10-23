@@ -134,7 +134,7 @@ class SelectionTest(unittest.TestCase):
         )
         self.assertEqual(
             candidates.select_mode(["integration/codex/adapter/src/session.rs"]),
-            "providers",
+            "full",
         )
 
     def test_shared_dependencies_engine_changes_and_unknown_paths_require_full_matrix(
@@ -144,6 +144,8 @@ class SelectionTest(unittest.TestCase):
             "engine.lock",
             "crates/providers/Cargo.toml",
             "crates/providers/Cargo.lock",
+            "crates/providers/provider-runtime/Cargo.toml",
+            "crates/providers/provider-runtime/build.rs",
             "crates/providers/rust-toolchain.toml",
             "integration/codex/Cargo.lock",
             "integration/codex/patches/core.patch",

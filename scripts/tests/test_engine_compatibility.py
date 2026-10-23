@@ -48,9 +48,17 @@ class CompatibilityTests(unittest.TestCase):
         ):
             self.assertTrue(schema_changes(before, after))
 
-    def test_enum_extensions_are_allowed_but_removals_are_not(self):
-        self.assertEqual(schema_changes({"enum": ["a"]}, {"enum": ["a", "b"]}), [])
+    def test_enum_changes_require_review_for_existing_sdk_decoders(self):
+        self.assertTrue(schema_changes({"enum": ["a"]}, {"enum": ["a", "b"]}))
         self.assertTrue(schema_changes({"enum": ["a", "b"]}, {"enum": ["a"]}))
+
+    def test_new_overlapping_exclusive_alternative_is_incompatible(self):
+        before = {"oneOf": [{"type": "string"}]}
+        after = {"oneOf": [{"type": "string"}, {"const": "existing string"}]}
+        self.assertTrue(schema_changes(before, after))
+        self.assertEqual(
+            schema_changes({"anyOf": before["oneOf"]}, {"anyOf": after["oneOf"]}), []
+        )
 
     def test_regeneration_cannot_approve_changed_storage(self):
         with tempfile.TemporaryDirectory() as temp:

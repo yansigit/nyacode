@@ -26,11 +26,9 @@ def schema_changes(previous: Any, current: Any, path: str = "") -> list[str]:
         for key in previous.keys() & current.keys():
             errors.extend(schema_changes(previous[key], current[key], f"{path}/{key}"))
         return errors
-    if isinstance(previous, list) and path.rsplit("/", 1)[-1] in {
-        "enum",
-        "anyOf",
-        "oneOf",
-    }:
+    if isinstance(previous, list) and path.rsplit("/", 1)[-1] in {"anyOf", "oneOf"}:
+        if path.endswith("/oneOf") and len(previous) != len(current):
+            return [f"{path}: changed exclusive alternatives require review"]
         unmatched = list(current)
         for value in previous:
             match = next(

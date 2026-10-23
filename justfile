@@ -192,9 +192,15 @@ test-providers:
 engine-checks *args:
     {{ python }} {{ justfile_directory() }}/scripts/engine.py check --mode full {args}
 
+# Regenerate schemas and SDK bindings from the assembled engine, then check compatibility.
+[no-cd]
+engine-schema *args: prepare-engine
+    {{ python }} {{ justfile_directory() }}/.engine/workspace/codex-rs/app-server-protocol/scripts/write_schema_fixtures.py {args}
+    {{ python }} {{ justfile_directory() }}/scripts/engine_compatibility.py --workspace {{ justfile_directory() }}/.engine/workspace
+
 # Check pinned engine inputs, assembly schema, and engine control tests.
 [no-cd]
-engine-schema:
+engine-controls:
     {{ python }} {{ justfile_directory() }}/scripts/engine.py check --mode controls
 
 [no-cd]

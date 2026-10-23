@@ -23,7 +23,7 @@ def resolve_codex_exec_path(
     if explicit_path is not None:
         return explicit_path
     for binary in (
-        repo_root / ".engine/workspace/codex-rs/target/debug" / binary_name,
+        repo_root / ".engine/target/debug" / binary_name,
         repo_root / "codex-rs/target/debug" / binary_name,
     ):
         if binary.is_file():

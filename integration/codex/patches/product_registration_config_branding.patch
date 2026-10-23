@@ -1,5 +1,5 @@
 diff --git a/.codespellignore b/.codespellignore
-index 4f3c8c351..874494827 100644
+index 4f3c8c3513b5866da9e2e531a047cad245bbbbcd..87449482709f9a8879f7b3a0af4be36046edbf9d 100644
 --- a/.codespellignore
 +++ b/.codespellignore
 @@ -1,7 +1,11 @@
@@ -16,7 +16,7 @@ index 4f3c8c351..874494827 100644
 +oint
 diff --git a/.npmrc b/.npmrc
 deleted file mode 100644
-index 4153fe87b..000000000
+index 4153fe87bb5f08b63514128adf30f1643ef3f1fc..0000000000000000000000000000000000000000
 --- a/.npmrc
 +++ /dev/null
 @@ -1,4 +0,0 @@
@@ -25,7 +25,7 @@ index 4153fe87b..000000000
 -node-linker=hoisted
 -prefer-workspace-packages=true
 diff --git a/announcement_tip.toml b/announcement_tip.toml
-index 79c0daea7..f78710c19 100644
+index 79c0daea761e0f634960dd39e2dff6bdbfd02f63..f78710c1904c5a58f723798423311557f9b7fe67 100644
 --- a/announcement_tip.toml
 +++ b/announcement_tip.toml
 @@ -1,17 +1,2 @@
@@ -49,7 +49,7 @@ index 79c0daea7..f78710c19 100644
 +# Nyacode announcements. Add dated entries when a fork release is available.
 +announcements = []
 diff --git a/codex-cli/bin/codex.js b/codex-cli/bin/codex.js
-index 934600714..94d75b3e8 100755
+index 934600714b97f340cb5468e20e5fe560d751cbed..94d75b3e81f5c56c3edc724ae8e83a3cfb9233dc 100755
 --- a/codex-cli/bin/codex.js
 +++ b/codex-cli/bin/codex.js
 @@ -1,5 +1,5 @@
@@ -236,7 +236,7 @@ index 934600714..94d75b3e8 100755
  const child = spawn(binaryPath, process.argv.slice(2), {
    stdio: "inherit",
 diff --git a/codex-rs/app-server/src/config_manager.rs b/codex-rs/app-server/src/config_manager.rs
-index d2c2db748..15d2c2e8d 100644
+index d2c2db748177905ab46d9dd58faeef11efb1582d..15d2c2e8d34c193b9705450d8c72d8ac40f476b2 100644
 --- a/codex-rs/app-server/src/config_manager.rs
 +++ b/codex-rs/app-server/src/config_manager.rs
 @@ -45,6 +45,7 @@ pub(crate) struct ConfigManager {
@@ -309,7 +309,7 @@ index d2c2db748..15d2c2e8d 100644
      }
  
 diff --git a/codex-rs/app-server/src/request_processors/config_processor.rs b/codex-rs/app-server/src/request_processors/config_processor.rs
-index d903a6fce..9035335e0 100644
+index d903a6fce2da674d58040214068b96d8d184f71d..9035335e006eebbb0349626015cc676997ddb9e6 100644
 --- a/codex-rs/app-server/src/request_processors/config_processor.rs
 +++ b/codex-rs/app-server/src/request_processors/config_processor.rs
 @@ -69,6 +69,7 @@ const SUPPORTED_EXPERIMENTAL_FEATURE_ENABLEMENT: &[&str] = &[
@@ -337,7 +337,7 @@ index d903a6fce..9035335e0 100644
          tracing::warn!("failed to rebuild user config for runtime refresh: {err}");
          for thread_id in thread_manager.list_thread_ids().await {
 diff --git a/codex-rs/cli/tests/sandbox_cloud_config.rs b/codex-rs/cli/tests/sandbox_cloud_config.rs
-index 81fbf07cf..fbbe67375 100644
+index 81fbf07cf35c5016a3dc8542dbddee1c29f2b51b..fbbe673756a6aebc686519c6457e31838f4e1942 100644
 --- a/codex-rs/cli/tests/sandbox_cloud_config.rs
 +++ b/codex-rs/cli/tests/sandbox_cloud_config.rs
 @@ -140,7 +140,7 @@ async fn sandbox_fetches_and_enforces_cloud_managed_permission_profile() -> Resu
@@ -350,7 +350,7 @@ index 81fbf07cf..fbbe67375 100644
          );
      }
 diff --git a/codex-rs/cli/tests/snapshots/doctor_path_safety__doctor_config_error_location.snap b/codex-rs/cli/tests/snapshots/doctor_path_safety__doctor_config_error_location.snap
-index e8e35240f..995b31190 100644
+index e8e35240f08246d9f82e8bcef58c56e79933015a..995b3119012f2ac11cad9774d0db8c7c1c10f6a6 100644
 --- a/codex-rs/cli/tests/snapshots/doctor_path_safety__doctor_config_error_location.snap
 +++ b/codex-rs/cli/tests/snapshots/doctor_path_safety__doctor_config_error_location.snap
 @@ -11,7 +11,7 @@ expression: "serde_json::to_string_pretty(&check)?"
@@ -363,7 +363,7 @@ index e8e35240f..995b31190 100644
    "summary": "config could not be loaded"
  }
 diff --git a/codex-rs/cli/tests/snapshots/doctor_path_safety__doctor_config_invalid_data.snap b/codex-rs/cli/tests/snapshots/doctor_path_safety__doctor_config_invalid_data.snap
-index 3346b53af..92faceb20 100644
+index 3346b53afbf376cefc8d28be8373811aae1bb828..92faceb20db64954b87612dd73cc394589760242 100644
 --- a/codex-rs/cli/tests/snapshots/doctor_path_safety__doctor_config_invalid_data.snap
 +++ b/codex-rs/cli/tests/snapshots/doctor_path_safety__doctor_config_invalid_data.snap
 @@ -8,7 +8,7 @@ expression: "serde_json::to_string_pretty(&check)?"
@@ -376,7 +376,7 @@ index 3346b53af..92faceb20 100644
    "summary": "config could not be loaded"
  }
 diff --git a/codex-rs/cli/tests/snapshots/doctor_path_safety__doctor_config_not_found.snap b/codex-rs/cli/tests/snapshots/doctor_path_safety__doctor_config_not_found.snap
-index a34966d56..ade0d3d9f 100644
+index a34966d5659877a6709e4ed966e7a4389bf10434..ade0d3d9f1b64c8b8ed8b85cbb76480fcdeb8f8e 100644
 --- a/codex-rs/cli/tests/snapshots/doctor_path_safety__doctor_config_not_found.snap
 +++ b/codex-rs/cli/tests/snapshots/doctor_path_safety__doctor_config_not_found.snap
 @@ -8,7 +8,7 @@ expression: "serde_json::to_string_pretty(&check)?"
@@ -389,7 +389,7 @@ index a34966d56..ade0d3d9f 100644
    "summary": "config could not be loaded"
  }
 diff --git a/codex-rs/cloud-config/Cargo.toml b/codex-rs/cloud-config/Cargo.toml
-index 207750201..96a5f0867 100644
+index 2077502017d90fe5a229835d9aee64fdf78c8411..96a5f086780c3b640897e2ce32f6c2b091d84206 100644
 --- a/codex-rs/cloud-config/Cargo.toml
 +++ b/codex-rs/cloud-config/Cargo.toml
 @@ -17,7 +17,7 @@ codex-http-client = { workspace = true }
@@ -402,7 +402,7 @@ index 207750201..96a5f0867 100644
  serde_json = { workspace = true }
  sha2 = { workspace = true }
 diff --git a/codex-rs/cloud-config/src/cache.rs b/codex-rs/cloud-config/src/cache.rs
-index 94748ec05..a6b85c5ab 100644
+index 94748ec05206fbe95080f0b7c820b73ce0f6c23c..a6b85c5ab7d7db235af956be1f2c93f353aca24f 100644
 --- a/codex-rs/cloud-config/src/cache.rs
 +++ b/codex-rs/cloud-config/src/cache.rs
 @@ -12,6 +12,7 @@ use codex_config::AbsolutePathBuf;
@@ -414,7 +414,7 @@ index 94748ec05..a6b85c5ab 100644
  use serde::Deserialize;
  use serde::Serialize;
 diff --git a/codex-rs/config/Cargo.toml b/codex-rs/config/Cargo.toml
-index b4be94bb5..de156611b 100644
+index b4be94bb585c6757234299a78f8b42a02b3d2017..de156611b0d51917659d9116a54738581f8796c1 100644
 --- a/codex-rs/config/Cargo.toml
 +++ b/codex-rs/config/Cargo.toml
 @@ -22,6 +22,7 @@ codex-model-provider-info = { workspace = true }
@@ -453,7 +453,7 @@ index b4be94bb5..de156611b 100644
  [lib]
  doctest = false
 diff --git a/codex-rs/config/src/codex_home_symlink.rs b/codex-rs/config/src/codex_home_symlink.rs
-index bf544f492..36bb7f235 100644
+index bf544f49204b4aba5f2d7b4f64c42c5f23c45b5f..36bb7f235a61086acfca8727790fc84e1d54db80 100644
 --- a/codex-rs/config/src/codex_home_symlink.rs
 +++ b/codex-rs/config/src/codex_home_symlink.rs
 @@ -20,8 +20,8 @@ pub fn allowed_symlinked_codex_home(
@@ -468,7 +468,7 @@ index bf544f492..36bb7f235 100644
          .filter(|path| path.canonicalize().ok().as_ref() == Some(codex_home));
      Some(alias.unwrap_or_else(|| codex_home.clone()))
 diff --git a/codex-rs/config/src/config_toml.rs b/codex-rs/config/src/config_toml.rs
-index 8c8c66ea1..5e5eb761b 100644
+index 8c8c66ea1dc45669a3f52e3e0d3f10e633267167..5e5eb761bd3ce18548bb6e2881d7a3dfe1e2e830 100644
 --- a/codex-rs/config/src/config_toml.rs
 +++ b/codex-rs/config/src/config_toml.rs
 @@ -754,7 +754,7 @@ pub struct GoalsToml {
@@ -481,7 +481,7 @@ index 8c8c66ea1..5e5eb761b 100644
      /// Whether multi-agent tools are enabled. Defaults to true.
      /// An enabled `features.multi_agent_v2` setting takes precedence.
 diff --git a/codex-rs/config/src/permissions_toml.rs b/codex-rs/config/src/permissions_toml.rs
-index 8853f73db..98baad96b 100644
+index 8853f73db2d8091c2caa5570d736437e6001434e..98baad96b01f71016914831ee1129150f3196fa6 100644
 --- a/codex-rs/config/src/permissions_toml.rs
 +++ b/codex-rs/config/src/permissions_toml.rs
 @@ -403,6 +403,7 @@ pub struct NetworkMitmInjectedHeaderToml {
@@ -493,7 +493,7 @@ index 8853f73db..98baad96b 100644
  
  impl<'de> Deserialize<'de> for NetworkMitmToml {
 diff --git a/codex-rs/config/src/schema.rs b/codex-rs/config/src/schema.rs
-index 770e73ee5..794e113f4 100644
+index 770e73ee5cca4b51b73109a36045edc1bea65a61..794e113f4580999b0254aa8ce3a151fccf170d51 100644
 --- a/codex-rs/config/src/schema.rs
 +++ b/codex-rs/config/src/schema.rs
 @@ -4,14 +4,9 @@ use codex_features::FEATURES;
@@ -818,7 +818,7 @@ index 770e73ee5..794e113f4 100644
 +    }
 +}
 diff --git a/codex-rs/config/src/tui_keymap.rs b/codex-rs/config/src/tui_keymap.rs
-index 170dcf1b4..336dea49e 100644
+index 170dcf1b446d645140bb4c7d27a82d320a93f142..336dea49e608ba85d1f55d993c2112d5005d6b8e 100644
 --- a/codex-rs/config/src/tui_keymap.rs
 +++ b/codex-rs/config/src/tui_keymap.rs
 @@ -40,6 +40,7 @@ const MAX_KEY_CHORD_STROKES: usize = 2;
@@ -839,7 +839,7 @@ index 170dcf1b4..336dea49e 100644
      pub leader: Option<KeybindingsSpec>,
      /// Open the shared agent-session overview.
 diff --git a/codex-rs/config/src/tui_mouse_scroll.rs b/codex-rs/config/src/tui_mouse_scroll.rs
-index 345f99418..fdd205e4d 100644
+index 345f994183ac644fa27dba38778a251b5b2babab..fdd205e4d7ee4815276385cd0fb22de8fd66f32d 100644
 --- a/codex-rs/config/src/tui_mouse_scroll.rs
 +++ b/codex-rs/config/src/tui_mouse_scroll.rs
 @@ -1,15 +1,15 @@
@@ -864,7 +864,7 @@ index 345f99418..fdd205e4d 100644
  
  pub(crate) fn deserialize<'de, D>(deserializer: D) -> Result<Option<f64>, D::Error>
 diff --git a/codex-rs/config/src/types.rs b/codex-rs/config/src/types.rs
-index 8846fb3d9..9c35582af 100644
+index 8846fb3d95abe0da0526c77a7b06932dda3d14a4..9c35582af028eaf96d1ede0128b9211026754c0a 100644
 --- a/codex-rs/config/src/types.rs
 +++ b/codex-rs/config/src/types.rs
 @@ -488,7 +488,7 @@ pub struct AppToolConfig {
@@ -913,7 +913,7 @@ index 8846fb3d9..9c35582af 100644
      /// Defaults for installed plugin activation. Omission preserves source enablement.
      /// Explicit plugin enablement settings override this default, but cannot enable
 diff --git a/codex-rs/core/config.schema.json b/codex-rs/core/config.schema.json
-index 80c0539b5..5413220b6 100644
+index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd71101f73c72 100644
 --- a/codex-rs/core/config.schema.json
 +++ b/codex-rs/core/config.schema.json
 @@ -3,7 +3,7 @@
@@ -3079,7 +3079,7 @@ index 80c0539b5..5413220b6 100644
      },
      "tool_suggest": {
 diff --git a/codex-rs/network-proxy/src/credential_broker/configured.rs b/codex-rs/network-proxy/src/credential_broker/configured.rs
-index b4f0630d1..ddf921585 100644
+index b4f0630d1e435ff11800dadc42b5c8a9c8414019..ddf921585a1df1bc7bb75ab944321b3f1578a655 100644
 --- a/codex-rs/network-proxy/src/credential_broker/configured.rs
 +++ b/codex-rs/network-proxy/src/credential_broker/configured.rs
 @@ -12,7 +12,7 @@ use rama_http::HeaderMap;
@@ -3092,7 +3092,7 @@ index b4f0630d1..ddf921585 100644
  use regex::RegexBuilder;
  use regex_automata::Anchored;
 diff --git a/codex-rs/protocol/src/config_types.rs b/codex-rs/protocol/src/config_types.rs
-index 87ffe6dc8..784954cd0 100644
+index 87ffe6dc8bea4d093822a8c1e868df477490e669..784954cd0130319ab371e3fd9feaab26ac8648e7 100644
 --- a/codex-rs/protocol/src/config_types.rs
 +++ b/codex-rs/protocol/src/config_types.rs
 @@ -1,14 +1,10 @@
@@ -3160,7 +3160,7 @@ index 87ffe6dc8..784954cd0 100644
  #[strum(serialize_all = "camelCase")]
  pub enum MultiAgentMode {
 diff --git a/codex-rs/rmcp-client/src/enterprise_oauth_logout_tests.rs b/codex-rs/rmcp-client/src/enterprise_oauth_logout_tests.rs
-index 3916c01b4..a18fa7803 100644
+index 3916c01b418510969976527c3656e5c2974c8c09..a18fa78030fd241a6f88ba56fee3236b38110058 100644
 --- a/codex-rs/rmcp-client/src/enterprise_oauth_logout_tests.rs
 +++ b/codex-rs/rmcp-client/src/enterprise_oauth_logout_tests.rs
 @@ -375,7 +375,7 @@ impl CredentialBuilderApi for FileKeyring {
@@ -3173,7 +3173,7 @@ index 3916c01b4..a18fa7803 100644
      }
  
 diff --git a/codex-rs/tui/src/app/config_panel.rs b/codex-rs/tui/src/app/config_panel.rs
-index f1fb01ff1..61b28e5e7 100644
+index f1fb01ff12deb14fd99f402812839721fd1ef88b..61b28e5e7725f337ef30fe147332faa2a6eca50f 100644
 --- a/codex-rs/tui/src/app/config_panel.rs
 +++ b/codex-rs/tui/src/app/config_panel.rs
 @@ -141,7 +141,7 @@ impl App {
@@ -3186,7 +3186,7 @@ index f1fb01ff1..61b28e5e7 100644
          } else if codex_terminal_detection::terminal_info().name
              == codex_terminal_detection::TerminalName::Ghostty
 diff --git a/codex-rs/tui/src/app/server_version_notice.rs b/codex-rs/tui/src/app/server_version_notice.rs
-index bca03e34f..9351cae6b 100644
+index bca03e34f7cfa95bfeeb37779b75cf34f9476231..9351cae6bcec1ee9b54f783fb7d614243cd96048 100644
 --- a/codex-rs/tui/src/app/server_version_notice.rs
 +++ b/codex-rs/tui/src/app/server_version_notice.rs
 @@ -61,7 +61,7 @@ impl App {
@@ -3199,7 +3199,7 @@ index bca03e34f..9351cae6b 100644
          });
      }
 diff --git a/codex-rs/tui/src/onboarding/auth.rs b/codex-rs/tui/src/onboarding/auth.rs
-index 2cdc98ca6..af0f39074 100644
+index 2cdc98ca68e47667e84864cbefab3664bffa842f..af0f3907494b699240398ffc094601895c194446 100644
 --- a/codex-rs/tui/src/onboarding/auth.rs
 +++ b/codex-rs/tui/src/onboarding/auth.rs
 @@ -438,12 +438,12 @@ impl AuthModeWidget {
@@ -3275,7 +3275,7 @@ index 2cdc98ca6..af0f39074 100644
  
            Included with your ChatGPT plan
 diff --git a/codex-rs/tui/src/onboarding/bedrock.rs b/codex-rs/tui/src/onboarding/bedrock.rs
-index d1ea4d246..7e9454c1f 100644
+index d1ea4d24640c3d681efe1f2737bc525a85ab2616..7e9454c1faaf4b5ce9d1742e525188cad0fb3e03 100644
 --- a/codex-rs/tui/src/onboarding/bedrock.rs
 +++ b/codex-rs/tui/src/onboarding/bedrock.rs
 @@ -379,9 +379,9 @@ impl BedrockState {
@@ -3300,7 +3300,7 @@ index d1ea4d246..7e9454c1f 100644
                  lines.push("".into());
                  lines.push(Line::from(vec![
 diff --git a/codex-rs/tui/src/onboarding/bedrock_tests.rs b/codex-rs/tui/src/onboarding/bedrock_tests.rs
-index 8f9f24058..b66de9df5 100644
+index 8f9f240587ac2e3a840308041cf35d81aa94393e..b66de9df57f4574b1067e98685ce393e538f1413 100644
 --- a/codex-rs/tui/src/onboarding/bedrock_tests.rs
 +++ b/codex-rs/tui/src/onboarding/bedrock_tests.rs
 @@ -43,14 +43,14 @@ fn gov_cloud_guidance_scrolls_in_short_panes() {
@@ -3330,7 +3330,7 @@ index 8f9f24058..b66de9df5 100644
        Setup guide: https://learn.chatgpt.com/docs/amazon-bedrock
  
 diff --git a/codex-rs/tui/src/onboarding/keys.rs b/codex-rs/tui/src/onboarding/keys.rs
-index ff7eacac4..c68e7e5bc 100644
+index ff7eacac44d907d34df8dae279c1d8039fba4da1..c68e7e5bc003855b292db3a3c4b9752d190e1dc9 100644
 --- a/codex-rs/tui/src/onboarding/keys.rs
 +++ b/codex-rs/tui/src/onboarding/keys.rs
 @@ -1,4 +1,4 @@
@@ -3340,7 +3340,7 @@ index ff7eacac4..c68e7e5bc 100644
  use crossterm::event::KeyCode;
  use crossterm::event::KeyModifiers;
 diff --git a/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__bedrock__tests__gov_cloud_warning.snap b/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__bedrock__tests__gov_cloud_warning.snap
-index 9ac2ef79a..35e24c8b4 100644
+index 9ac2ef79a74fff1682e911be85211b9a71ae1f6b..35e24c8b4409206d1da091272204e06312dd589c 100644
 --- a/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__bedrock__tests__gov_cloud_warning.snap
 +++ b/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__bedrock__tests__gov_cloud_warning.snap
 @@ -2,9 +2,9 @@
@@ -3356,7 +3356,7 @@ index 9ac2ef79a..35e24c8b4 100644
  guidance before proceeding.
  
 diff --git a/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__bedrock__tests__gov_cloud_warning_short.snap b/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__bedrock__tests__gov_cloud_warning_short.snap
-index 43f5fab06..6c112ae7c 100644
+index 43f5fab067538243832e08a58eb1ab988d085d43..6c112ae7c2abbdc649c70d9cd657042c1816b524 100644
 --- a/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__bedrock__tests__gov_cloud_warning_short.snap
 +++ b/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__bedrock__tests__gov_cloud_warning_short.snap
 @@ -2,9 +2,9 @@
@@ -3372,7 +3372,7 @@ index 43f5fab06..6c112ae7c 100644
  > Acknowledge
  ↑/↓ scroll · enter
 diff --git a/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__trust_directory__tests__directory_change_consent_can_keep_current_directory.snap b/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__trust_directory__tests__directory_change_consent_can_keep_current_directory.snap
-index 802d9e87d..eb4577e1f 100644
+index 802d9e87d54d7aae34a7c8bc7e6bdd6f30037871..eb4577e1f6ca4eac7d7c382f36613fd6518f22d9 100644
 --- a/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__trust_directory__tests__directory_change_consent_can_keep_current_directory.snap
 +++ b/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__trust_directory__tests__directory_change_consent_can_keep_current_directory.snap
 @@ -1,13 +1,12 @@
@@ -3391,7 +3391,7 @@ index 802d9e87d..eb4577e1f 100644
    automatically, even without a model request. Continue only if you
    trust these files. Your trust decision will be saved.
 diff --git a/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__trust_directory__tests__long_checkout_40x13.snap b/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__trust_directory__tests__long_checkout_40x13.snap
-index 642ee186f..6d202a2cc 100644
+index 642ee186fcb1ca7075c538ffb863cfdfb5f4bbdf..6d202a2ccacce4fdb96017c747c13453cb224359 100644
 --- a/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__trust_directory__tests__long_checkout_40x13.snap
 +++ b/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__trust_directory__tests__long_checkout_40x13.snap
 @@ -4,7 +4,7 @@ expression: "terminal.backend().to_string().replace('\\\\', \"/\")"
@@ -3404,7 +3404,7 @@ index 642ee186f..6d202a2cc 100644
    your permission settings. Folder
    settings can run code automatically,
 diff --git a/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__trust_directory__tests__long_repository_root_40x17.snap b/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__trust_directory__tests__long_repository_root_40x17.snap
-index 38aa66c2a..0e5ac1566 100644
+index 38aa66c2a7f5bf6913d9ff80d0966c0897c30faf..0e5ac1566bb8ce5778af3e7c19b4c1bab803d982 100644
 --- a/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__trust_directory__tests__long_repository_root_40x17.snap
 +++ b/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__trust_directory__tests__long_repository_root_40x17.snap
 @@ -8,7 +8,7 @@ expression: "terminal.backend().to_string().replace('\\\\', \"/\")"
@@ -3417,7 +3417,7 @@ index 38aa66c2a..0e5ac1566 100644
    your permission settings. Folder
    settings can run code automatically,
 diff --git a/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__trust_directory__tests__only_repository_root_fits_40x16.snap b/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__trust_directory__tests__only_repository_root_fits_40x16.snap
-index 46067fa6e..cbeb39e95 100644
+index 46067fa6e02003dbf330abacafde56ea1a44fefd..cbeb39e9572ee4702d79c1489819a0838b0bc24f 100644
 --- a/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__trust_directory__tests__only_repository_root_fits_40x16.snap
 +++ b/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__trust_directory__tests__only_repository_root_fits_40x16.snap
 @@ -7,7 +7,7 @@ expression: "terminal.backend().to_string().replace('\\\\', \"/\")"
@@ -3430,7 +3430,7 @@ index 46067fa6e..cbeb39e95 100644
    your permission settings. Folder
    settings can run code automatically,
 diff --git a/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__trust_directory__tests__renders_snapshot_for_git_repo.snap b/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__trust_directory__tests__renders_snapshot_for_git_repo.snap
-index 1c94e842e..fdf6a01ce 100644
+index 1c94e842ed3be0b05757d22cddd394c5fd3f6b13..fdf6a01ce44db2b8e73f45ae237cfaeaa707e62e 100644
 --- a/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__trust_directory__tests__renders_snapshot_for_git_repo.snap
 +++ b/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__trust_directory__tests__renders_snapshot_for_git_repo.snap
 @@ -6,7 +6,7 @@ expression: terminal.backend()
@@ -3443,7 +3443,7 @@ index 1c94e842e..fdf6a01ce 100644
    automatically, even without a model request. Continue only if you
    trust these files. Your trust decision will be saved.
 diff --git a/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__trust_directory__tests__renders_snapshot_for_remote_git_subdirectory.snap b/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__trust_directory__tests__renders_snapshot_for_remote_git_subdirectory.snap
-index 09f1dd6fa..08c49a975 100644
+index 09f1dd6facdf8fb6b3936f6f6eeac7088d46a6b4..08c49a975eb5e9a0b5f94bb933453d799ae669fc 100644
 --- a/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__trust_directory__tests__renders_snapshot_for_remote_git_subdirectory.snap
 +++ b/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__trust_directory__tests__renders_snapshot_for_remote_git_subdirectory.snap
 @@ -10,7 +10,7 @@ expression: "terminal.backend().to_string().lines().map(str::trim_end).collect::
@@ -3456,7 +3456,7 @@ index 09f1dd6fa..08c49a975 100644
    automatically, even without a model request. Continue only if you
    trust these files. Your trust decision will be saved.
 diff --git a/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__trust_directory__tests__renders_snapshot_for_trust_error.snap b/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__trust_directory__tests__renders_snapshot_for_trust_error.snap
-index fc61829f8..b800ea2c1 100644
+index fc61829f80742b35d76631a75475037a1f16d672..b800ea2c1e2172946e4a616db74b8d51a108d6c8 100644
 --- a/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__trust_directory__tests__renders_snapshot_for_trust_error.snap
 +++ b/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__trust_directory__tests__renders_snapshot_for_trust_error.snap
 @@ -6,7 +6,7 @@ expression: terminal.backend()
@@ -3469,7 +3469,7 @@ index fc61829f8..b800ea2c1 100644
    automatically, even without a model request. Continue only if you
    trust these files. Your trust decision will be saved.
 diff --git a/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__welcome__tests__welcome_logo_160x48.snap b/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__welcome__tests__welcome_logo_160x48.snap
-index b4f744e2d..0c1237554 100644
+index b4f744e2d013e52a1e126790073ee0fb4ebd4477..0c1237554f371fa3ee071c54485b21c57047dfd2 100644
 --- a/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__welcome__tests__welcome_logo_160x48.snap
 +++ b/codex-rs/tui/src/onboarding/snapshots/codex_tui__onboarding__welcome__tests__welcome_logo_160x48.snap
 @@ -2,24 +2,26 @@
@@ -3518,7 +3518,7 @@ index b4f744e2d..0c1237554 100644
 +
 +  Welcome to Nyacode, your multi-provider coding agent
 diff --git a/codex-rs/tui/src/onboarding/trust_directory.rs b/codex-rs/tui/src/onboarding/trust_directory.rs
-index 64ea9ce98..3e1d10123 100644
+index 64ea9ce98e86356fc13aa6bb3d106d36687d189f..3e1d101238b1b8e440c7fee2e0f6590cb984284b 100644
 --- a/codex-rs/tui/src/onboarding/trust_directory.rs
 +++ b/codex-rs/tui/src/onboarding/trust_directory.rs
 @@ -67,7 +67,7 @@ impl WidgetRef for &TrustDirectoryWidget {
@@ -3531,7 +3531,7 @@ index 64ea9ce98..3e1d10123 100644
                   even without a model request. Continue only if you trust these files. \
                   Your trust decision will be saved."
 diff --git a/codex-rs/tui/src/onboarding/welcome.rs b/codex-rs/tui/src/onboarding/welcome.rs
-index 9c9e7b8f1..a0a5599fd 100644
+index 9c9e7b8f1df80f81bc5c3cf7b43e4d926b721ada..a0a5599fd813bce1bfc715a7edaee74ff13c8d73 100644
 --- a/codex-rs/tui/src/onboarding/welcome.rs
 +++ b/codex-rs/tui/src/onboarding/welcome.rs
 @@ -126,8 +126,8 @@ impl WidgetRef for &WelcomeWidget {
@@ -3546,7 +3546,7 @@ index 9c9e7b8f1..a0a5599fd 100644
  
          Paragraph::new(lines)
 diff --git a/codex-rs/tui/src/snapshots/codex_tui__empty_state_animation__tests__onboarding_settled_logo.snap b/codex-rs/tui/src/snapshots/codex_tui__empty_state_animation__tests__onboarding_settled_logo.snap
-index 3a68cdb2d..fb0a8c401 100644
+index 3a68cdb2db4373ff38c28cdf40b3f108e4e94938..fb0a8c40134dc1f595058407e395400a513f93c7 100644
 --- a/codex-rs/tui/src/snapshots/codex_tui__empty_state_animation__tests__onboarding_settled_logo.snap
 +++ b/codex-rs/tui/src/snapshots/codex_tui__empty_state_animation__tests__onboarding_settled_logo.snap
 @@ -1,18 +1,19 @@
@@ -3585,7 +3585,7 @@ index 3a68cdb2d..fb0a8c401 100644
 +           ⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
 +           ⠈⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠙⠛⠛⠛⠛⠛⠛⠛⠛⠋⠉⠉
 diff --git a/codex-rs/tui/src/snapshots/codex_tui__startup_draft__tests__startup_draft_onboarding_transition.snap b/codex-rs/tui/src/snapshots/codex_tui__startup_draft__tests__startup_draft_onboarding_transition.snap
-index 74e7b7d1f..e027d5c79 100644
+index 74e7b7d1f08c1ebaee26766e72b188d3c5551e7b..e027d5c79e859e2c8f25f56e2ecc5868f07ed6a9 100644
 --- a/codex-rs/tui/src/snapshots/codex_tui__startup_draft__tests__startup_draft_onboarding_transition.snap
 +++ b/codex-rs/tui/src/snapshots/codex_tui__startup_draft__tests__startup_draft_onboarding_transition.snap
 @@ -6,10 +6,10 @@ before onboarding: hidden (0x0 viewport)
@@ -3602,7 +3602,7 @@ index 74e7b7d1f..e027d5c79 100644
  
    ? for shortcuts
 diff --git a/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_uses_default_reasoning_when_config_empty.snap b/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_uses_default_reasoning_when_config_empty.snap
-index 8661643e2..4513658ba 100644
+index 8661643e2e94b91d6e69e3b05b4cc748e48fe380..4513658bac52e1db5e99baacebe5149782c9a747 100644
 --- a/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_uses_default_reasoning_when_config_empty.snap
 +++ b/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_uses_default_reasoning_when_config_empty.snap
 @@ -4,7 +4,7 @@ expression: sanitized
@@ -3615,7 +3615,7 @@ index 8661643e2..4513658ba 100644
    Visit https://chatgpt.com/settings/usage for up-to-date
    information on rate limits and credits
 diff --git a/codex-rs/tui/src/version.rs b/codex-rs/tui/src/version.rs
-index 8c8d108dc..64c422f52 100644
+index 8c8d108dc61314c01eeb31a987f48cf508f6fa9d..64c422f529319107ac7026bbb73a9441b907622d 100644
 --- a/codex-rs/tui/src/version.rs
 +++ b/codex-rs/tui/src/version.rs
 @@ -1,2 +1,2 @@
@@ -3623,7 +3623,7 @@ index 8c8d108dc..64c422f52 100644
 +/// The current Nyacode CLI version as embedded at compile time.
  pub const CODEX_CLI_VERSION: &str = env!("CARGO_PKG_VERSION");
 diff --git a/codex-rs/utils/cli/src/config_override.rs b/codex-rs/utils/cli/src/config_override.rs
-index 61177dd76..f57720f33 100644
+index 61177dd76567f347ee4509da27722c27a459b6bd..f57720f33a86664ea03f88a12af54fb6f102ae6a 100644
 --- a/codex-rs/utils/cli/src/config_override.rs
 +++ b/codex-rs/utils/cli/src/config_override.rs
 @@ -18,7 +18,7 @@ use toml::Value;

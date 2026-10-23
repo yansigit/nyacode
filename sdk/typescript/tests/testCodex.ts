@@ -8,11 +8,9 @@ const repoRoot = path.resolve(process.cwd(), "..", "..");
 const engineExecPath = path.join(
   repoRoot,
   ".engine",
-  "workspace",
-  "codex-rs",
   "target",
   "debug",
-  "codex",
+  process.platform === "win32" ? "codex.exe" : "codex",
 );
 const sourceExecPath = path.join(repoRoot, "codex-rs", "target", "debug", "codex");
 

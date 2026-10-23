@@ -37,7 +37,12 @@ class EnginePathTests(unittest.TestCase):
         )
         self.assertIn("--engine", result.stdout)
         justfile = (ROOT / "justfile").read_text()
-        for recipe in ("prepare-engine", "test-providers", "engine-checks", "engine-schema"):
+        for recipe in (
+            "prepare-engine",
+            "test-providers",
+            "engine-checks",
+            "engine-schema",
+        ):
             self.assertRegex(justfile, rf"(?m)^{recipe}(?:\s|:)", recipe)
 
     def run_builder(self, args, engine_root=None):
@@ -46,7 +51,9 @@ class EnginePathTests(unittest.TestCase):
         targets = types.ModuleType("codex_package.targets")
         targets.TARGET_SPECS = {"x86_64-unknown-linux-gnu": object()}
         v8 = types.ModuleType("codex_package.v8")
-        v8.resolve_codex_v8_cargo_env = Mock(return_value={"RUSTY_V8_ARCHIVE": "pinned"})
+        v8.resolve_codex_v8_cargo_env = Mock(
+            return_value={"RUSTY_V8_ARCHIVE": "pinned"}
+        )
         package = types.ModuleType("codex_package")
         package.__path__ = []
         modules = {
@@ -62,10 +69,14 @@ class EnginePathTests(unittest.TestCase):
             patch.object(sys, "argv", [str(ROOT / "scripts/build_nyacode.py"), *args]),
             patch.dict(os.environ, {}, clear=False),
             patch("subprocess.check_output", return_value=rustc),
-            patch("subprocess.run", return_value=types.SimpleNamespace(returncode=0)) as run,
+            patch(
+                "subprocess.run", return_value=types.SimpleNamespace(returncode=0)
+            ) as run,
         ):
             with self.assertRaises(SystemExit) as exit_code:
-                runpy.run_path(str(ROOT / "scripts/build_nyacode.py"), run_name="__main__")
+                runpy.run_path(
+                    str(ROOT / "scripts/build_nyacode.py"), run_name="__main__"
+                )
         self.assertEqual(exit_code.exception.code, 0)
         return engine.prepare, v8.resolve_codex_v8_cargo_env, run.call_args
 
@@ -74,7 +85,9 @@ class EnginePathTests(unittest.TestCase):
             engine_root = Path(temp)
             (engine_root / "codex-rs").mkdir()
             (engine_root / "scripts").mkdir()
-            prepare, resolve_v8, call = self.run_builder(["--engine", "--release"], engine_root)
+            prepare, resolve_v8, call = self.run_builder(
+                ["--engine", "--release"], engine_root
+            )
             prepare.assert_called_once_with(root=ROOT)
             resolve_v8.assert_called_once()
             command = call.args[0]
@@ -87,6 +100,9 @@ class EnginePathTests(unittest.TestCase):
             self.assertEqual(call.kwargs["cwd"], engine_root / "codex-rs")
             self.assertEqual(call.kwargs["env"]["CODEX_REPO_ROOT"], str(engine_root))
             self.assertEqual(call.kwargs["env"]["RUSTY_V8_ARCHIVE"], "pinned")
+            self.assertEqual(
+                call.kwargs["env"]["CARGO_TARGET_DIR"], str(ROOT / ".engine/target")
+            )
 
     def test_builder_default_stays_on_checked_in_workspace(self):
         prepare, _, call = self.run_builder([])
@@ -97,7 +113,7 @@ class EnginePathTests(unittest.TestCase):
         harness = load_python_harness()
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
-            assembled = root / ".engine/workspace/codex-rs/target/debug/codex"
+            assembled = root / ".engine/target/debug/codex"
             source = root / "codex-rs/target/debug/codex"
             assembled.parent.mkdir(parents=True)
             source.parent.mkdir(parents=True)
@@ -107,17 +123,23 @@ class EnginePathTests(unittest.TestCase):
                 harness.resolve_codex_exec_path(root, "/missing/explicit", "codex"),
                 "/missing/explicit",
             )
-            self.assertEqual(harness.resolve_codex_exec_path(root, None, "codex"), str(assembled))
+            self.assertEqual(
+                harness.resolve_codex_exec_path(root, None, "codex"), str(assembled)
+            )
             assembled.unlink()
-            self.assertEqual(harness.resolve_codex_exec_path(root, None, "codex"), str(source))
+            self.assertEqual(
+                harness.resolve_codex_exec_path(root, None, "codex"), str(source)
+            )
             source.unlink()
             self.assertIsNone(harness.resolve_codex_exec_path(root, None, "codex"))
 
     def test_typescript_sdk_prefers_explicit_then_assembled_binary(self):
         source = (ROOT / "sdk/typescript/tests/testCodex.ts").read_text()
         self.assertIn("process.env.CODEX_EXEC_PATH ??", source)
-        self.assertIn('".engine",\n  "workspace"', source)
-        self.assertIn("existsSync(engineExecPath) ? engineExecPath : sourceExecPath", source)
+        self.assertIn('".engine",\n  "target"', source)
+        self.assertIn(
+            "existsSync(engineExecPath) ? engineExecPath : sourceExecPath", source
+        )
 
     def test_container_engine_workspace_flag_is_explicit(self):
         result = subprocess.run(
@@ -131,7 +153,9 @@ class EnginePathTests(unittest.TestCase):
         self.assertIn("--engine docker|podman", result.stdout)
         self.assertIn("gh \\\n", (ROOT / "Containerfile").read_text())
         verify_script = (ROOT / "scripts/verify-container.sh").read_text()
-        self.assertIn('CODEX_EXEC_PATH="${CARGO_TARGET_DIR}/debug/codex"', verify_script)
+        self.assertIn(
+            'CODEX_EXEC_PATH="${CARGO_TARGET_DIR}/debug/codex"', verify_script
+        )
 
 
 if __name__ == "__main__":

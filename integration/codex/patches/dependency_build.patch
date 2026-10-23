@@ -1,5 +1,5 @@
 diff --git a/.bazelrc b/.bazelrc
-index 4e2195c6b..be34cf66f 100644
+index 4e2195c6b71743ce2d7ffc555486adc062461973..be34cf66f21d6a27f5ae663de8fbb50a15b42599 100644
 --- a/.bazelrc
 +++ b/.bazelrc
 @@ -16,7 +16,9 @@ common --experimental_platform_in_output_dir
@@ -13,10 +13,14 @@ index 4e2195c6b..be34cf66f 100644
  
  build --workspace_status_command=./scripts/workspace-status.sh
 diff --git a/.gitattributes b/.gitattributes
-index e1ba3d54e..fd414b5dc 100644
+index e1ba3d54e377c1f6e3d0e139c926030986873a64..d8b18a0a480266f77c01ba98c82d8855e94c7d91 100644
 --- a/.gitattributes
 +++ b/.gitattributes
-@@ -1,4 +1,6 @@
+@@ -1,4 +1,10 @@
++# Preserve identical assembly input bytes on every release platform.
++* -text
++integration/codex/patches/*.patch whitespace=-blank-at-eol
++
  codex-rs/app-server-protocol/schema/** linguist-generated
  codex-rs/hooks/schema/generated/** linguist-generated
  third_party/voice/sources.json text eol=lf
@@ -25,7 +29,7 @@ index e1ba3d54e..fd414b5dc 100644
  patches/v8_array_sort_elements_kind.patch text eol=lf
 diff --git a/.github/ISSUE_TEMPLATE/1-codex-app.yml b/.github/ISSUE_TEMPLATE/1-codex-app.yml
 deleted file mode 100644
-index 6e294ee27..000000000
+index 6e294ee27bc924fc2c68b743bad26260297d13f9..0000000000000000000000000000000000000000
 --- a/.github/ISSUE_TEMPLATE/1-codex-app.yml
 +++ /dev/null
 @@ -1,54 +0,0 @@
@@ -85,7 +89,7 @@ index 6e294ee27..000000000
 -      description: Is there anything else you think we should know?
 diff --git a/.github/ISSUE_TEMPLATE/2-extension.yml b/.github/ISSUE_TEMPLATE/2-extension.yml
 deleted file mode 100644
-index 599bc08b4..000000000
+index 599bc08b428d6328c712f526549350daf0aada79..0000000000000000000000000000000000000000
 --- a/.github/ISSUE_TEMPLATE/2-extension.yml
 +++ /dev/null
 @@ -1,61 +0,0 @@
@@ -151,7 +155,7 @@ index 599bc08b4..000000000
 -      label: Additional information
 -      description: Is there anything else you think we should know?
 diff --git a/.github/ISSUE_TEMPLATE/3-cli.yml b/.github/ISSUE_TEMPLATE/3-cli.yml
-index cfd368c0b..ab80d0187 100644
+index cfd368c0ba798d4f513edd5548fd185d761ed15d..ab80d018716102192bb67c4901ee295b63df2805 100644
 --- a/.github/ISSUE_TEMPLATE/3-cli.yml
 +++ b/.github/ISSUE_TEMPLATE/3-cli.yml
 @@ -1,5 +1,5 @@
@@ -199,7 +203,7 @@ index cfd368c0b..ab80d0187 100644
      id: actual
 diff --git a/.github/ISSUE_TEMPLATE/4-bug-report.yml b/.github/ISSUE_TEMPLATE/4-bug-report.yml
 deleted file mode 100644
-index 4de884146..000000000
+index 4de88414600e6100720fefa2a324ce41d759cd7f..0000000000000000000000000000000000000000
 --- a/.github/ISSUE_TEMPLATE/4-bug-report.yml
 +++ /dev/null
 @@ -1,37 +0,0 @@
@@ -241,7 +245,7 @@ index 4de884146..000000000
 -      label: Additional information
 -      description: Is there anything else you think we should know?
 diff --git a/.github/ISSUE_TEMPLATE/5-feature-request.yml b/.github/ISSUE_TEMPLATE/5-feature-request.yml
-index 745c34796..255ca0879 100644
+index 745c347965c2e58f8e8e4437009f2c8ae0059878..255ca087945ff87eac149757394954f941ab8edc 100644
 --- a/.github/ISSUE_TEMPLATE/5-feature-request.yml
 +++ b/.github/ISSUE_TEMPLATE/5-feature-request.yml
 @@ -1,21 +1,21 @@
@@ -271,7 +275,7 @@ index 745c34796..255ca0879 100644
      validations:
        required: true
 diff --git a/.github/ISSUE_TEMPLATE/6-docs-issue.yml b/.github/ISSUE_TEMPLATE/6-docs-issue.yml
-index 1957b6035..ac2bb9605 100644
+index 1957b6035a58950329d87d4c24e67faf98c00572..ac2bb9605b971e7f75055b744545417e8105e3a6 100644
 --- a/.github/ISSUE_TEMPLATE/6-docs-issue.yml
 +++ b/.github/ISSUE_TEMPLATE/6-docs-issue.yml
 @@ -5,7 +5,7 @@ body:
@@ -284,7 +288,7 @@ index 1957b6035..ac2bb9605 100644
      attributes:
        label: What is the type of issue?
 diff --git a/.github/actions/build-bazel-package-binaries/action.yml b/.github/actions/build-bazel-package-binaries/action.yml
-index dd918ba0b..ce7202248 100644
+index dd918ba0bc207af61a4a5f300436fce70337701c..ce7202248e9c448786a73be3dc07493945211f8f 100644
 --- a/.github/actions/build-bazel-package-binaries/action.yml
 +++ b/.github/actions/build-bazel-package-binaries/action.yml
 @@ -18,7 +18,9 @@ runs:
@@ -299,21 +303,44 @@ index dd918ba0b..ce7202248 100644
      - name: Configure MSVC environment
        if: ${{ runner.os == 'Windows' }}
 diff --git a/.github/actions/build-cargo-package-binaries/action.yml b/.github/actions/build-cargo-package-binaries/action.yml
-index 84a35f5ec..c1d25ab1d 100644
+index 84a35f5ec214ec3de423756a57c04db8d8f5de08..2098b25ed40fbc5158b6df6f5ef09e3e93f3e684 100644
 --- a/.github/actions/build-cargo-package-binaries/action.yml
 +++ b/.github/actions/build-cargo-package-binaries/action.yml
-@@ -39,8 +39,9 @@ runs:
+@@ -7,6 +7,9 @@ inputs:
+   binaries:
+     description: Space-separated binary target names.
+     required: true
++  working-directory:
++    description: Assembled Cargo workspace directory.
++    default: codex-rs
+   build-mode:
+     description: Release optimizations, or debug for faster package smoke builds.
+     default: release
+@@ -39,14 +42,21 @@ runs:
            *) echo "Unsupported build mode: $BUILD_MODE" >&2; exit 1 ;;
          esac
  
 -    - uses: dtolnay/rust-toolchain@e081816240890017053eacbb1bdf337761dc5582 # 1.95.0
++    - name: Read assembled Rust toolchain
++      id: rust
++      shell: bash
++      working-directory: ${{ inputs.working-directory }}
++      run: python3 -c 'import os, pathlib, tomllib; version = tomllib.loads(pathlib.Path("rust-toolchain.toml").read_text())["toolchain"]["channel"]; print("toolchain=" + version, file=open(os.environ["GITHUB_OUTPUT"], "a"))'
++
 +    - uses: dtolnay/rust-toolchain@e2a55d2ffb04f378e9626c28d38b36d230d1e12f # master, 2026-10-12
        with:
-+        toolchain: 1.95.0
++        toolchain: ${{ steps.rust.outputs.toolchain }}
          targets: ${{ inputs.target }}
  
      - name: Use hermetic Cargo home (musl)
-@@ -59,7 +60,7 @@ runs:
+       if: ${{ runner.os == 'Linux' }}
+       shell: bash
+-      working-directory: codex-rs
++      working-directory: ${{ inputs.working-directory }}
+       run: |
+         set -euo pipefail
+         cargo_home="${GITHUB_WORKSPACE}/.cargo-home"
+@@ -59,13 +69,13 @@ runs:
        if: ${{ runner.os == 'Linux' }}
        uses: mlugg/setup-zig@d1434d08867e3ee9daa34448df10607b98908d29 # v2.2.1
        with:
@@ -322,7 +349,23 @@ index 84a35f5ec..c1d25ab1d 100644
          use-cache: false
  
      - name: Install musl build tools
-@@ -96,6 +97,13 @@ runs:
+       if: ${{ runner.os == 'Linux' }}
+       shell: bash
+-      working-directory: codex-rs
++      working-directory: ${{ inputs.working-directory }}
+       env:
+         TARGET: ${{ inputs.target }}
+       run: bash "${GITHUB_WORKSPACE}/.github/scripts/install-musl-build-tools.sh"
+@@ -73,7 +83,7 @@ runs:
+     - name: Disable aws-lc jitter entropy (musl)
+       if: ${{ runner.os == 'Linux' }}
+       shell: bash
+-      working-directory: codex-rs
++      working-directory: ${{ inputs.working-directory }}
+       env:
+         TARGET: ${{ inputs.target }}
+       run: |
+@@ -96,15 +106,22 @@ runs:
        with:
          target: ${{ inputs.target }}
  
@@ -336,7 +379,9 @@ index 84a35f5ec..c1d25ab1d 100644
      - name: Build bwrap and export digest
        if: ${{ runner.os == 'Linux' }}
        shell: bash
-@@ -104,7 +112,7 @@ runs:
+-      working-directory: codex-rs
++      working-directory: ${{ inputs.working-directory }}
+       env:
          TARGET: ${{ inputs.target }}
        run: |
          set -euo pipefail
@@ -345,14 +390,26 @@ index 84a35f5ec..c1d25ab1d 100644
  
          bwrap_path="${CARGO_TARGET_DIR}/${TARGET}/release/bwrap"
          # Codex embeds this digest at build time and verifies the packaged
-@@ -132,4 +140,4 @@ runs:
+@@ -115,7 +132,7 @@ runs:
+ 
+     - name: Build Codex package binaries
+       shell: bash
+-      working-directory: codex-rs
++      working-directory: ${{ inputs.working-directory }}
+       env:
+         TARGET: ${{ inputs.target }}
+         BINARIES: ${{ inputs.binaries }}
+@@ -130,6 +147,6 @@ runs:
+         if [[ "${TARGET}" == "x86_64-pc-windows-msvc" ]]; then
+           export LIBSQLITE3_FLAGS=SQLITE_DISABLE_INTRINSIC
          fi
-         STABLE_GIT_COMMIT="$(git rev-parse HEAD)"
+-        STABLE_GIT_COMMIT="$(git rev-parse HEAD)"
++        STABLE_GIT_COMMIT="$(git -C "$GITHUB_WORKSPACE" rev-parse HEAD)"
          export STABLE_GIT_COMMIT
 -        cargo build --target "${TARGET}" --release --timings "${build_args[@]}"
 +        cargo build --locked --target "${TARGET}" --release --timings "${build_args[@]}"
 diff --git a/.github/actions/build-codex-packages/action.yml b/.github/actions/build-codex-packages/action.yml
-index dea7cb623..92010ad28 100644
+index dea7cb623fef5a7c2f980cf9108ced2a427d686e..92010ad28f98aa99271589d0840fd20579ba1d42 100644
 --- a/.github/actions/build-codex-packages/action.yml
 +++ b/.github/actions/build-codex-packages/action.yml
 @@ -47,14 +47,14 @@ runs:
@@ -374,7 +431,7 @@ index dea7cb623..92010ad28 100644
      - name: Install Linux build dependencies
        if: ${{ runner.os == 'Linux' }}
 diff --git a/.github/actions/prepare-bazel-ci/action.yml b/.github/actions/prepare-bazel-ci/action.yml
-index a1beece2d..499097e71 100644
+index a1beece2dfc0fd0cc2387c16a0d5030dc90769dd..499097e71c77f894da81aeca6e329aa8540a4561 100644
 --- a/.github/actions/prepare-bazel-ci/action.yml
 +++ b/.github/actions/prepare-bazel-ci/action.yml
 @@ -45,7 +45,7 @@ runs:
@@ -387,7 +444,7 @@ index a1beece2d..499097e71 100644
          path: ${{ steps.setup_bazel.outputs.repository-cache-path }}
          key: ${{ steps.cache_bazel_repository_key.outputs.repository-cache-key }}
 diff --git a/.github/actions/publish-dotslash/action.yml b/.github/actions/publish-dotslash/action.yml
-index 1ca3a1add..0b171f7e9 100644
+index 1ca3a1addc7618ae584666b811d428da0c2e17d2..0b171f7e92ff9b0b7c7b3eac1b6f10559ea78bfe 100644
 --- a/.github/actions/publish-dotslash/action.yml
 +++ b/.github/actions/publish-dotslash/action.yml
 @@ -13,7 +13,7 @@ runs:
@@ -409,7 +466,7 @@ index 1ca3a1add..0b171f7e9 100644
          version: "0.12.13"
          checksum: "745765a3b6e360ad76743599ae5c42e9278c7edf8bbff9fc76d05bf2623a04dd"
 diff --git a/.github/actions/setup-bazel-ci/action.yml b/.github/actions/setup-bazel-ci/action.yml
-index 7ae28498f..1c5f171be 100644
+index 7ae28498fbfebd5036d8e3c1fd3f6f29618cac4a..1c5f171be974d5e69d4c806246baf8906be0a030 100644
 --- a/.github/actions/setup-bazel-ci/action.yml
 +++ b/.github/actions/setup-bazel-ci/action.yml
 @@ -20,7 +20,7 @@ runs:
@@ -422,7 +479,7 @@ index 7ae28498f..1c5f171be 100644
          # BAZEL_OUTPUT_USER_ROOT and leaves Bazel's I/O-heavy trees on C:.
          output-base: ${{ steps.setup_ci.outputs.bazel-output-base }}
 diff --git a/.github/actions/setup-ci/action.yml b/.github/actions/setup-ci/action.yml
-index b9a42ac34..1b5606772 100644
+index b9a42ac3493ed7c884c06824a1d4cbdcf75dacbc..1b5606772d4907dc474ea72589d260a91b2984d3 100644
 --- a/.github/actions/setup-ci/action.yml
 +++ b/.github/actions/setup-ci/action.yml
 @@ -86,9 +86,9 @@ runs:
@@ -438,7 +495,7 @@ index b9a42ac34..1b5606772 100644
      # Some integration tests spawn DotSlash from a stable system path rather
      # than inheriting the action-local PATH entry.
 diff --git a/.github/blob-size-allowlist.txt b/.github/blob-size-allowlist.txt
-index 27d1c59e8..f2cac0d11 100644
+index 27d1c59e87bedc248d78672cd5b9ae0a7d70a577..f2cac0d110e377e095c2b5e45f8876c819d04181 100644
 --- a/.github/blob-size-allowlist.txt
 +++ b/.github/blob-size-allowlist.txt
 @@ -5,6 +5,9 @@
@@ -452,7 +509,7 @@ index 27d1c59e8..f2cac0d11 100644
  codex-rs/tui/tests/fixtures/oss-story.jsonl
  codex-rs/tui_app_server/tests/fixtures/oss-story.jsonl
 diff --git a/.github/scripts/install-musl-build-tools.sh b/.github/scripts/install-musl-build-tools.sh
-index a7d37b7ff..351bcd159 100644
+index a7d37b7ff907ff96a82eeca88124fed251ccae6a..351bcd1591d6077cf225657e857b32b65d5ab733 100644
 --- a/.github/scripts/install-musl-build-tools.sh
 +++ b/.github/scripts/install-musl-build-tools.sh
 @@ -32,8 +32,8 @@ case "${TARGET}" in
@@ -478,7 +535,7 @@ index a7d37b7ff..351bcd159 100644
  else
    cc="${musl_linker}"
 diff --git a/.github/scripts/install-musl-openssl.sh b/.github/scripts/install-musl-openssl.sh
-index 15c50c51e..0f77145d8 100644
+index 15c50c51e472f1fb21f6590b5eabfd276bc005f2..0f77145d8eca4af8ad78a18d28020795ec831f57 100644
 --- a/.github/scripts/install-musl-openssl.sh
 +++ b/.github/scripts/install-musl-openssl.sh
 @@ -11,10 +11,10 @@ case "${TARGET}" in
@@ -515,7 +572,7 @@ index 15c50c51e..0f77145d8 100644
      make install_dev
    )
 diff --git a/.github/scripts/test_v8_canary_changes.py b/.github/scripts/test_v8_canary_changes.py
-index fdde5d96c..dd09c608f 100644
+index fdde5d96c8ac51ff0fba3c7bc5643e9bbfaf21f1..dd09c608f39ecdd94fe42f0d65d113e06858771d 100644
 --- a/.github/scripts/test_v8_canary_changes.py
 +++ b/.github/scripts/test_v8_canary_changes.py
 @@ -75,6 +75,11 @@ version = "149.2.0"
@@ -531,7 +588,7 @@ index fdde5d96c..dd09c608f 100644
          with tempfile.TemporaryDirectory() as temp_dir:
              root = Path(temp_dir)
 diff --git a/.github/scripts/v8_canary_changes.py b/.github/scripts/v8_canary_changes.py
-index 08617e35f..4b2193514 100644
+index 08617e35fefc792f49cb293a6077a3842b9669b3..4b2193514655551682e5ce3653da5df185fc08fc 100644
 --- a/.github/scripts/v8_canary_changes.py
 +++ b/.github/scripts/v8_canary_changes.py
 @@ -24,6 +24,7 @@ CANARY_PATH_PATTERNS = {
@@ -543,7 +600,7 @@ index 08617e35f..4b2193514 100644
      ".github/scripts/rusty_v8_module_bazel.py",
      ".github/scripts/setup-dev-drive.ps1",
 diff --git a/.github/scripts/verify_cargo_workspace_manifests.py b/.github/scripts/verify_cargo_workspace_manifests.py
-index 645c6c59e..20ca6b801 100644
+index 645c6c59e5c965659fe73b130de465b9625ed63b..20ca6b801428a3fbb7049c746ec6a8d08a5177df 100644
 --- a/.github/scripts/verify_cargo_workspace_manifests.py
 +++ b/.github/scripts/verify_cargo_workspace_manifests.py
 @@ -15,7 +15,6 @@ import sys
@@ -748,7 +805,7 @@ index 645c6c59e..20ca6b801 100644
  
  
 diff --git a/.github/workflows/bazel.yml b/.github/workflows/bazel.yml
-index f90a7453b..236804ec9 100644
+index f90a7453b13072118058e155fa28bdd69714ccd7..236804ec999e759ce7ed555cc3d37bb90f43500b 100644
 --- a/.github/workflows/bazel.yml
 +++ b/.github/workflows/bazel.yml
 @@ -52,7 +52,7 @@ jobs:
@@ -888,7 +945,7 @@ index f90a7453b..236804ec9 100644
            path: ${{ steps.prepare_bazel.outputs.repository-cache-path }}
            key: ${{ steps.prepare_bazel.outputs.repository-cache-key }}
 diff --git a/.github/workflows/blob-size-policy.yml b/.github/workflows/blob-size-policy.yml
-index f80fb0e4b..368c62d7b 100644
+index f80fb0e4b30f8f946f48b803d12d81adf3e51dcf..368c62d7b763d0bb8a291b297ed78fa8e19224ef 100644
 --- a/.github/workflows/blob-size-policy.yml
 +++ b/.github/workflows/blob-size-policy.yml
 @@ -13,7 +13,7 @@ jobs:
@@ -901,7 +958,7 @@ index f80fb0e4b..368c62d7b 100644
            fetch-depth: 0
            persist-credentials: false
 diff --git a/.github/workflows/blocking-ci.yml b/.github/workflows/blocking-ci.yml
-index c6f00555a..a73b24c7e 100644
+index c6f00555a35559216e222e2ec129a9e927dd57c2..a73b24c7e5278b2451222d14b6e53f5686c8e294 100644
 --- a/.github/workflows/blocking-ci.yml
 +++ b/.github/workflows/blocking-ci.yml
 @@ -12,6 +12,7 @@ jobs:
@@ -945,7 +1002,7 @@ index c6f00555a..a73b24c7e 100644
            persist-credentials: false
  
 diff --git a/.github/workflows/cargo-deny.yml b/.github/workflows/cargo-deny.yml
-index 0f8ebae90..8ad4b0531 100644
+index 0f8ebae902bd4252fe2ce5cfab57d4ac526bd1e3..8ad4b053124d87082fd067980a674bd3ee5b4d09 100644
 --- a/.github/workflows/cargo-deny.yml
 +++ b/.github/workflows/cargo-deny.yml
 @@ -11,17 +11,19 @@ jobs:
@@ -972,7 +1029,7 @@ index 0f8ebae90..8ad4b0531 100644
            rust-version: 1.95.0
            manifest-path: ./codex-rs/Cargo.toml
 diff --git a/.github/workflows/codespell.yml b/.github/workflows/codespell.yml
-index 996b3dedd..cfd4445a3 100644
+index 996b3deddb58fb12791647aec1e390d2a0f01fdb..cfd4445a3300ca67de5aa004207b66bfe8537671 100644
 --- a/.github/workflows/codespell.yml
 +++ b/.github/workflows/codespell.yml
 @@ -15,7 +15,7 @@ jobs:
@@ -985,7 +1042,7 @@ index 996b3dedd..cfd4445a3 100644
            persist-credentials: false
        - name: Annotate locations with typos
 diff --git a/.github/workflows/postmerge-ci.yml b/.github/workflows/postmerge-ci.yml
-index ac2b46d1d..b361052c3 100644
+index ac2b46d1db4cffb80cd5ef047c7b98b99090e91d..b361052c38171355d19614005007e90d9d536bcc 100644
 --- a/.github/workflows/postmerge-ci.yml
 +++ b/.github/workflows/postmerge-ci.yml
 @@ -11,11 +11,17 @@ jobs:
@@ -1022,7 +1079,7 @@ index ac2b46d1d..b361052c3 100644
            ref: ${{ github.sha }}
            persist-credentials: false
 diff --git a/.github/workflows/python-runtime-build.yml b/.github/workflows/python-runtime-build.yml
-index 748ff2f11..15a4320ed 100644
+index 748ff2f1131b7b41cd63fea4343f92d6d0385dfa..15a4320ed8161d70be4b2b3a1147e0f17beecb57 100644
 --- a/.github/workflows/python-runtime-build.yml
 +++ b/.github/workflows/python-runtime-build.yml
 @@ -27,7 +27,7 @@ jobs:
@@ -1046,7 +1103,7 @@ index 748ff2f11..15a4320ed 100644
            path: dist/python-runtime/*
            if-no-files-found: error
 diff --git a/.github/workflows/python-runtime-release.yml b/.github/workflows/python-runtime-release.yml
-index f7f0b4af2..d627d2bf0 100644
+index f7f0b4af235ed0a7709b2d291f8533d27dbf7782..d627d2bf066e26e7d365a9d032d47ca3e86a816d 100644
 --- a/.github/workflows/python-runtime-release.yml
 +++ b/.github/workflows/python-runtime-release.yml
 @@ -34,12 +34,12 @@ jobs:
@@ -1082,7 +1139,7 @@ index f7f0b4af2..d627d2bf0 100644
 +          uv run --no-project --with packaging==26.3 python .github/scripts/verify_pypi_release.py \
              openai-codex-cli-bin "$PYTHON_RUNTIME_VERSION"
 diff --git a/.github/workflows/python-sdk-build.yml b/.github/workflows/python-sdk-build.yml
-index 66d89bc96..8600d6225 100644
+index 66d89bc96cdfe59492fe352c959815896abbe26b..8600d6225bda3a0cf77b0f36e3837f69544af83c 100644
 --- a/.github/workflows/python-sdk-build.yml
 +++ b/.github/workflows/python-sdk-build.yml
 @@ -26,13 +26,13 @@ jobs:
@@ -1122,7 +1179,7 @@ index 66d89bc96..8600d6225 100644
            path: dist/python-sdk/*
            if-no-files-found: error
 diff --git a/.github/workflows/python-sdk-cli-release.yml b/.github/workflows/python-sdk-cli-release.yml
-index 2f7f6a7f1..df0910a07 100644
+index 2f7f6a7f1985bdcdd5bb17347b85f27b1e113160..df0910a07adc66b3348fdbb74055b192b591cdfb 100644
 --- a/.github/workflows/python-sdk-cli-release.yml
 +++ b/.github/workflows/python-sdk-cli-release.yml
 @@ -30,7 +30,7 @@ jobs:
@@ -1201,7 +1258,7 @@ index 2f7f6a7f1..df0910a07 100644
 -        run: uv run --no-project --with packaging==26.2 python .github/scripts/verify_pypi_release.py openai-codex "$SDK_VERSION"
 +        run: uv run --no-project --with packaging==26.3 python .github/scripts/verify_pypi_release.py openai-codex "$SDK_VERSION"
 diff --git a/.github/workflows/python-sdk-release.yml b/.github/workflows/python-sdk-release.yml
-index 0e01f23a8..47d99ad2a 100644
+index 0e01f23a8458fdcc30fc8c679e46a1d5d86ede60..47d99ad2a2058899bd38a92effb2ecd2e8504758 100644
 --- a/.github/workflows/python-sdk-release.yml
 +++ b/.github/workflows/python-sdk-release.yml
 @@ -22,7 +22,7 @@ jobs:
@@ -1278,7 +1335,7 @@ index 0e01f23a8..47d99ad2a 100644
 -        run: uv run --no-project --with packaging==26.2 python .github/scripts/verify_pypi_release.py openai-codex "$SDK_VERSION"
 +        run: uv run --no-project --with packaging==26.3 python .github/scripts/verify_pypi_release.py openai-codex "$SDK_VERSION"
 diff --git a/.github/workflows/r2-release.yml b/.github/workflows/r2-release.yml
-index d1783bb2d..ccedb3bcc 100644
+index d1783bb2d39f2cde87be1c03076c026a9f035841..ccedb3bcc455d408ac6f051fd51855f1cb0607fa 100644
 --- a/.github/workflows/r2-release.yml
 +++ b/.github/workflows/r2-release.yml
 @@ -28,7 +28,7 @@ jobs:
@@ -1291,7 +1348,7 @@ index d1783bb2d..ccedb3bcc 100644
            persist-credentials: false
  
 diff --git a/.github/workflows/repo-checks.yml b/.github/workflows/repo-checks.yml
-index 4f05cd060..78c271db8 100644
+index 4f05cd06046ba95a0903cd807ff3b47d93ee1744..78c271db8187ea94f7b429f79c2f34d935066532 100644
 --- a/.github/workflows/repo-checks.yml
 +++ b/.github/workflows/repo-checks.yml
 @@ -11,7 +11,7 @@ jobs:
@@ -1359,7 +1416,7 @@ index 4f05cd060..78c271db8 100644
        - name: Install dependencies
          run: pnpm install --frozen-lockfile
 diff --git a/.github/workflows/rust-ci-full-nextest-platform.yml b/.github/workflows/rust-ci-full-nextest-platform.yml
-index 474535267..5c4abae8d 100644
+index 474535267aabc0143e5858754acda9679aca058f..5c4abae8d27d241b7cf6283260b39811a45f3680 100644
 --- a/.github/workflows/rust-ci-full-nextest-platform.yml
 +++ b/.github/workflows/rust-ci-full-nextest-platform.yml
 @@ -69,7 +69,7 @@ jobs:
@@ -1516,7 +1573,7 @@ index 474535267..5c4abae8d 100644
            path: ${{ env.CARGO_TARGET_DIR }}/nextest/default/junit.xml
            if-no-files-found: warn
 diff --git a/.github/workflows/rust-ci-full.yml b/.github/workflows/rust-ci-full.yml
-index 188f94ef4..dc6d5b2e3 100644
+index 188f94ef452f6354e25295e0f1ddda89cb0cdf9a..dc6d5b2e3abbe5e90ef5d67c45712725eff8d485 100644
 --- a/.github/workflows/rust-ci-full.yml
 +++ b/.github/workflows/rust-ci-full.yml
 @@ -17,12 +17,13 @@ jobs:
@@ -1687,7 +1744,7 @@ index 188f94ef4..dc6d5b2e3 100644
            path: |
              /var/cache/apt
 diff --git a/.github/workflows/rust-ci.yml b/.github/workflows/rust-ci.yml
-index 48bee976c..6cd456d13 100644
+index 48bee976c94209b2ccb9e65a33088e6ba80eada4..6cd456d13b39a60d272c4184586965d4ba474e5c 100644
 --- a/.github/workflows/rust-ci.yml
 +++ b/.github/workflows/rust-ci.yml
 @@ -14,7 +14,7 @@ jobs:
@@ -1768,7 +1825,7 @@ index 48bee976c..6cd456d13 100644
          with:
            persist-credentials: false
 diff --git a/.github/workflows/rust-release-argument-comment-lint.yml b/.github/workflows/rust-release-argument-comment-lint.yml
-index d49f89664..194bb82e5 100644
+index d49f8966488c85e04d1d7e3729d117b0932ac3f4..194bb82e5b28c71540067a775b0ef3161239f03c 100644
 --- a/.github/workflows/rust-release-argument-comment-lint.yml
 +++ b/.github/workflows/rust-release-argument-comment-lint.yml
 @@ -61,11 +61,11 @@ jobs:
@@ -1796,7 +1853,7 @@ index d49f89664..194bb82e5 100644
            name: argument-comment-lint-${{ matrix.target }}
            path: dist/argument-comment-lint/${{ matrix.target }}/*
 diff --git a/.github/workflows/rust-release-provisioned-macos.yml b/.github/workflows/rust-release-provisioned-macos.yml
-index bbed09018..bb962a685 100644
+index bbed09018768aeb20a59eef009db6683a538cc9f..bb962a68555c69ead91cf4bbba43f166b9d4dbe8 100644
 --- a/.github/workflows/rust-release-provisioned-macos.yml
 +++ b/.github/workflows/rust-release-provisioned-macos.yml
 @@ -40,10 +40,10 @@ jobs:
@@ -1898,7 +1955,7 @@ index bbed09018..bb962a685 100644
            path: signing-verification/
            if-no-files-found: warn
 diff --git a/.github/workflows/rust-release-windows.yml b/.github/workflows/rust-release-windows.yml
-index 8e167aa80..926d2a962 100644
+index 8e167aa805e9ebfc32fa7e63c3adb92d836f7479..926d2a96274f3099bf4b73879b6db2a364ad581c 100644
 --- a/.github/workflows/rust-release-windows.yml
 +++ b/.github/workflows/rust-release-windows.yml
 @@ -80,7 +80,7 @@ jobs:
@@ -2045,7 +2102,7 @@ index 8e167aa80..926d2a962 100644
            path: |
              codex-rs/dist/${{ matrix.target }}/*
 diff --git a/.github/workflows/rust-release.yml b/.github/workflows/rust-release.yml
-index abde060ea..4a4d217ef 100644
+index abde060ea39e46158409d2e369d5a6bb951ec11c..4a4d217efb25e796494521186cce7d69ec882cae 100644
 --- a/.github/workflows/rust-release.yml
 +++ b/.github/workflows/rust-release.yml
 @@ -25,12 +25,16 @@ concurrency:
@@ -2458,7 +2515,7 @@ index abde060ea..4a4d217ef 100644
            persist-credentials: false
        - name: Determine whether to update the GitHub canary branch
 diff --git a/.github/workflows/rusty-v8-release.yml b/.github/workflows/rusty-v8-release.yml
-index e45ec5b58..0d76a2f63 100644
+index e45ec5b58a2a080e60d941fd26217581b933553a..0d76a2f632d8edb2b41b94ad15d74e687c6984f4 100644
 --- a/.github/workflows/rusty-v8-release.yml
 +++ b/.github/workflows/rusty-v8-release.yml
 @@ -22,12 +22,12 @@ jobs:
@@ -2631,7 +2688,7 @@ index e45ec5b58..0d76a2f63 100644
            path: dist
  
 diff --git a/.github/workflows/sdk.yml b/.github/workflows/sdk.yml
-index 3f91dd18f..92614bc24 100644
+index 3f91dd18fa8efdfec28321d1b304550982b956bf..92614bc2499273addcc1f691bec592bd19460d32 100644
 --- a/.github/workflows/sdk.yml
 +++ b/.github/workflows/sdk.yml
 @@ -11,7 +11,7 @@ jobs:
@@ -2701,7 +2758,7 @@ index 3f91dd18f..92614bc24 100644
            path: ${{ steps.setup_bazel.outputs.repository-cache-path }}
            key: ${{ steps.setup_bazel.outputs.repository-cache-key }}
 diff --git a/.github/workflows/v8-canary.yml b/.github/workflows/v8-canary.yml
-index b79bb8370..5ec22d70f 100644
+index b79bb8370cb5caec4cb20daa622e69e62dbb879c..5ec22d70f2ff580cfeda8f7e85571714fd0cc142 100644
 --- a/.github/workflows/v8-canary.yml
 +++ b/.github/workflows/v8-canary.yml
 @@ -25,13 +25,13 @@ jobs:
@@ -2899,7 +2956,7 @@ index b79bb8370..5ec22d70f 100644
            path: dist/${{ matrix.target }}/*
  
 diff --git a/.gitignore b/.gitignore
-index dbcd86331..9aec8c875 100644
+index dbcd8633154a13966c231033a6c07ad8be169c73..9cddfc4431abee96c96e4e7d1e9a9179b0f74b3c 100644
 --- a/.gitignore
 +++ b/.gitignore
 @@ -30,6 +30,7 @@ result
@@ -2910,8 +2967,15 @@ index dbcd86331..9aec8c875 100644
  CLAUDE.md
  .claude/
  AGENTS.override.md
+@@ -94,3 +95,6 @@ CHANGELOG.ignore.md
+ # Python bytecode files
+ __pycache__/
+ *.pyc
++
++# Disposable pinned-engine assemblies and qualification evidence
++/.engine/
 diff --git a/MODULE.bazel b/MODULE.bazel
-index 10f68a19b..8af607328 100644
+index 10f68a19bd562e036df8ca54ac65d2ae148eaf51..8af607328762e54b158c422a7f87ba4745b10c9d 100644
 --- a/MODULE.bazel
 +++ b/MODULE.bazel
 @@ -1,13 +1,13 @@
@@ -3223,7 +3287,7 @@ index 10f68a19b..8af607328 100644
  rbe_platform_repository = use_repo_rule("//:rbe.bzl", "rbe_platform_repository")
  
 diff --git a/codex-cli/package.json b/codex-cli/package.json
-index 7d3a49405..bfbdd0c3b 100644
+index 7d3a49405d1f3be9af35d3ac2838dd35303a48b6..bfbdd0c3b991c06a1135f8db5ec79b64aba35b43 100644
 --- a/codex-cli/package.json
 +++ b/codex-cli/package.json
 @@ -1,9 +1,10 @@
@@ -3257,7 +3321,7 @@ index 7d3a49405..bfbdd0c3b 100644
 +  "packageManager": "pnpm@12.11.2+sha512.25a51652a196785af5f28bda6dfe8dc582ebefa4ac1d180221ce1390231c5fb76637822ea4b6e4633ce74acdcb0a77f725af11bad38177fdeddaee818a955cb9"
  }
 diff --git a/codex-rs/Cargo.toml b/codex-rs/Cargo.toml
-index 785f7add9..5d893389c 100644
+index 785f7add9e2b6e03064f94f35b382fbb26634d01..5d893389c3466b5c627f784ba20ff4b85505be38 100644
 --- a/codex-rs/Cargo.toml
 +++ b/codex-rs/Cargo.toml
 @@ -7,6 +7,7 @@ members = [
@@ -3640,7 +3704,7 @@ index 785f7add9..5d893389c 100644
  [workspace.lints]
  rust = {}
 diff --git a/justfile b/justfile
-index 3614939c7..391f19347 100644
+index 3614939c72498ec91690e6a01b30f21f76e9a0ab..69774722e8c8aae0c0466f240bf7a387fe475f5a 100644
 --- a/justfile
 +++ b/justfile
 @@ -12,14 +12,15 @@ python := if os_family() == "windows" { "python" } else { "python3" }
@@ -3664,8 +3728,40 @@ index 3614939c7..391f19347 100644
  
  # Start `codex exec-server` and run codex-tui.
  [no-cd]
+@@ -177,6 +178,31 @@ write-config-schema:
+ write-app-server-schema *args:
+     {{ python }} app-server-protocol/scripts/write_schema_fixtures.py {args}
+ 
++# Prepare the pinned upstream engine into the opt-in assembly workspace.
++[no-cd]
++prepare-engine *args:
++    {{ python }} {{ justfile_directory() }}/scripts/engine.py prepare {args}
++
++# Run the standalone provider workspace suite without changing the default build.
++test-providers:
++    cargo test --manifest-path ../crates/providers/Cargo.toml --locked --all-features
++
++# Run strict engine assembly and native-provider qualification checks.
++[no-cd]
++engine-checks *args:
++    {{ python }} {{ justfile_directory() }}/scripts/engine.py check --mode full {args}
++
++# Regenerate schemas and SDK bindings from the assembled engine, then check compatibility.
++[no-cd]
++engine-schema *args: prepare-engine
++    {{ python }} {{ justfile_directory() }}/.engine/workspace/codex-rs/app-server-protocol/scripts/write_schema_fixtures.py {args}
++    {{ python }} {{ justfile_directory() }}/scripts/engine_compatibility.py --workspace {{ justfile_directory() }}/.engine/workspace
++
++# Check pinned engine inputs, assembly schema, and engine control tests.
++[no-cd]
++engine-controls:
++    {{ python }} {{ justfile_directory() }}/scripts/engine.py check --mode controls
++
+ [no-cd]
+ write-hooks-schema:
+     cargo run --manifest-path {{ justfile_directory() }}/codex-rs/Cargo.toml -p codex-hooks --bin write_hooks_schema_fixtures
 diff --git a/package.json b/package.json
-index 393b34a72..c9cbfc66a 100644
+index 393b34a7200d893f67f48156eacbbbdef8bede23..c9cbfc66acd375164a45e248e297538f27667683 100644
 --- a/package.json
 +++ b/package.json
 @@ -1,5 +1,5 @@
@@ -3712,7 +3808,7 @@ index 393b34a72..c9cbfc66a 100644
 +  "packageManager": "pnpm@12.11.2+sha512.25a51652a196785af5f28bda6dfe8dc582ebefa4ac1d180221ce1390231c5fb76637822ea4b6e4633ce74acdcb0a77f725af11bad38177fdeddaee818a955cb9"
  }
 diff --git a/patches/BUILD.bazel b/patches/BUILD.bazel
-index 17410e8d4..6d4aa2fd4 100644
+index 17410e8d402d713226d1f881dbc135a97dd3caaa..6d4aa2fd4c87705158c74fae6a6e248fd89bbfb6 100644
 --- a/patches/BUILD.bazel
 +++ b/patches/BUILD.bazel
 @@ -1,17 +1,25 @@
@@ -3752,7 +3848,7 @@ index 17410e8d4..6d4aa2fd4 100644
      "ring_windows_msvc_include_dirs.patch",
      "tikv-jemalloc-sys_make_env.patch",
 diff --git a/patches/rules_rs_build_script_deps_annotation.patch b/patches/rules_rs_build_script_deps_annotation.patch
-index 2f38c2bfe..c35deaef3 100644
+index 2f38c2bfedd63184cea5d4842a4c14567e8c4226..c35deaef3b589cbc2ab610d0d9ffbc5a01d0e5de 100644
 --- a/patches/rules_rs_build_script_deps_annotation.patch
 +++ b/patches/rules_rs_build_script_deps_annotation.patch
 @@ -1,35 +1,32 @@
@@ -3821,7 +3917,7 @@ index 2f38c2bfe..c35deaef3 100644
       "gen_build_script": attr.string(),
  -    "build_script_deps": attr.label_list(),
 diff --git a/patches/rules_rs_rust_debug_modes.patch b/patches/rules_rs_rust_debug_modes.patch
-index e655ba7a5..3bc19d81c 100644
+index e655ba7a56a5bfa8097fc4271627aa34149e50d3..3bc19d81c5234f05e3a27a721603d8a840f5de0d 100644
 --- a/patches/rules_rs_rust_debug_modes.patch
 +++ b/patches/rules_rs_rust_debug_modes.patch
 @@ -1,23 +1,20 @@
@@ -3866,7 +3962,7 @@ index e655ba7a5..3bc19d81c 100644
  +                "dbg": "full",
  +                "fastbuild": "line-tables-only",
 diff --git a/patches/rules_rs_windows_msvc_linker.patch b/patches/rules_rs_windows_msvc_linker.patch
-index 5056ade96..39b5688e4 100644
+index 5056ade96bf0841c5517959aca30cb12897ea5bd..39b5688e4f47e9974ba875352b28610c0c6b0b51 100644
 --- a/patches/rules_rs_windows_msvc_linker.patch
 +++ b/patches/rules_rs_windows_msvc_linker.patch
 @@ -1,15 +1,12 @@
@@ -3892,7 +3988,7 @@ index 5056ade96..39b5688e4 100644
 +                 "@rules_rs//rs/platforms/config:riscv32imc-unknown-none-elf": lld_label,
 +                 "@platforms//cpu:wasm32": lld_label,
 diff --git a/patches/rules_rs_workspace_package_version.patch b/patches/rules_rs_workspace_package_version.patch
-index e55b838a8..24ec53968 100644
+index e55b838a8e97fa3785acf000e0ee0c91f1ee07a5..24ec53968ce9a6e85290a2ace54472940f88c3bc 100644
 --- a/patches/rules_rs_workspace_package_version.patch
 +++ b/patches/rules_rs_workspace_package_version.patch
 @@ -1,15 +1,13 @@
@@ -3917,7 +4013,7 @@ index e55b838a8..24ec53968 100644
 +         if lint_config:
 diff --git a/patches/rules_rs_zlib_snapshot_urls.patch b/patches/rules_rs_zlib_snapshot_urls.patch
 deleted file mode 100644
-index fffbca8fc..000000000
+index fffbca8fcd265a4c65f911a07f26434ca4f47188..0000000000000000000000000000000000000000
 --- a/patches/rules_rs_zlib_snapshot_urls.patch
 +++ /dev/null
 @@ -1,21 +0,0 @@
@@ -3944,7 +4040,7 @@ index fffbca8fc..000000000
 - }
 diff --git a/patches/rules_rust_build_script_tools_transition.patch b/patches/rules_rust_build_script_tools_transition.patch
 deleted file mode 100644
-index dcbc45699..000000000
+index dcbc45699274280169c1f9e15d3bc3c8de9dddbc..0000000000000000000000000000000000000000
 --- a/patches/rules_rust_build_script_tools_transition.patch
 +++ /dev/null
 @@ -1,19 +0,0 @@
@@ -3968,7 +4064,7 @@ index dcbc45699..000000000
 -+        transitive = script_data + script_tools + toolchain_tools,
 -     )
 diff --git a/patches/rules_rust_compiler_thp.patch b/patches/rules_rust_compiler_thp.patch
-index 0cf5222f1..1b1ab316b 100644
+index 0cf5222f1249460eaeb98bd387c0eeadd0496407..1b1ab316b188bc2fd7e51ab19938af686f5da883 100644
 --- a/patches/rules_rust_compiler_thp.patch
 +++ b/patches/rules_rust_compiler_thp.patch
 @@ -1,7 +1,7 @@
@@ -4017,7 +4113,7 @@ index 0cf5222f1..1b1ab316b 100644
           rustc_output_format,
       })
 diff --git a/patches/rules_rust_process_wrapper_param_file.patch b/patches/rules_rust_process_wrapper_param_file.patch
-index 969357eaf..3370edf8d 100644
+index 969357eaf1f707962bf9550eb639b6058369244d..3370edf8dbbf62cbc337c372bbaa7a36df3f7814 100644
 --- a/patches/rules_rust_process_wrapper_param_file.patch
 +++ b/patches/rules_rust_process_wrapper_param_file.patch
 @@ -1,7 +1,7 @@
@@ -4039,7 +4135,7 @@ index 969357eaf..3370edf8d 100644
       );
   
 diff --git a/patches/rules_rust_release_build_script_profile.patch b/patches/rules_rust_release_build_script_profile.patch
-index a849512e9..180cd18ce 100644
+index a849512e9a383d55eb44d11d8f646e0ff2ecf525..180cd18ce1c1b3769bb0713a5dae6d7c258d49c6 100644
 --- a/patches/rules_rust_release_build_script_profile.patch
 +++ b/patches/rules_rust_release_build_script_profile.patch
 @@ -1,3 +1,4 @@
@@ -4105,7 +4201,7 @@ index a849512e9..180cd18ce 100644
               default = Label("//cargo/settings:cargo_manifest_dir_filename_suffixes_to_retain"),
           ),
 diff --git a/patches/rules_rust_windows_execroot_separators.patch b/patches/rules_rust_windows_execroot_separators.patch
-index 187b37f48..ab5a4ca3d 100644
+index 187b37f48c651eea91d38fed008ad4c3c82c79b0..ab5a4ca3dc6f1ae57c175052accac4814d8d89af 100644
 --- a/patches/rules_rust_windows_execroot_separators.patch
 +++ b/patches/rules_rust_windows_execroot_separators.patch
 @@ -1,3 +1,4 @@
@@ -4114,7 +4210,7 @@ index 187b37f48..ab5a4ca3d 100644
  +++ b/cargo/private/cargo_build_script_runner/lib.rs
  @@ -337,9 +337,18 @@
 diff --git a/patches/rules_rust_windows_msvc_direct_link_args.patch b/patches/rules_rust_windows_msvc_direct_link_args.patch
-index a8eba2ba6..3d21d3a03 100644
+index a8eba2ba6e7b8e6e709693e1b7f6e2a91e6dd5f2..3d21d3a03131fd321cac17f78f8b1b5a4480c081 100644
 --- a/patches/rules_rust_windows_msvc_direct_link_args.patch
 +++ b/patches/rules_rust_windows_msvc_direct_link_args.patch
 @@ -1,8 +1,20 @@
@@ -4249,7 +4345,7 @@ index a8eba2ba6..3d21d3a03 100644
 +     """Return the path suitable for `--out-dir=<value>`.
 diff --git a/patches/rules_rust_windows_process_wrapper_skip_temp_outputs.patch b/patches/rules_rust_windows_process_wrapper_skip_temp_outputs.patch
 deleted file mode 100644
-index 52c5ae865..000000000
+index 52c5ae8652c7f19181928899941f9d35f750214f..0000000000000000000000000000000000000000
 --- a/patches/rules_rust_windows_process_wrapper_skip_temp_outputs.patch
 +++ /dev/null
 @@ -1,15 +0,0 @@
@@ -4269,7 +4365,7 @@ index 52c5ae865..000000000
 -                 continue;
 -             }
 diff --git a/patches/v8_bazel_rules.patch b/patches/v8_bazel_rules.patch
-index c2d557ad3..d7a1d7872 100644
+index c2d557ad3d4f6fe5f647fb4d75d38848fad67530..d7a1d78727aecfcf1222d66151154d025924f47e 100644
 --- a/patches/v8_bazel_rules.patch
 +++ b/patches/v8_bazel_rules.patch
 @@ -265,8 +265,7 @@ diff --git a/orig/v8-15.2.124.1/BUILD.bazel b/mod/v8-15.2.124.1/BUILD.bazel
@@ -4295,7 +4391,7 @@ index c2d557ad3..d7a1d7872 100644
   )
  
 diff --git a/patches/v8_module_deps.patch b/patches/v8_module_deps.patch
-index 3bd5008ab..88c44c7dd 100644
+index 3bd5008abdb5336c2d90dfbe392dee2e7e881892..88c44c7dd089a2edfc5fde7266fa9d20b4c6c418 100644
 --- a/patches/v8_module_deps.patch
 +++ b/patches/v8_module_deps.patch
 @@ -1,7 +1,7 @@
@@ -4554,7 +4650,7 @@ index 3bd5008ab..88c44c7dd 100644
 ++    --hash=sha256:fdb4ca07ab75ffadab4a8b135ad59cdbb3156b99310f3d565370da74a15d6bd3
 +     # via jinja2
 diff --git a/patches/v8_source_portability.patch b/patches/v8_source_portability.patch
-index 6b6537cb9..464e596ff 100644
+index 6b6537cb9cd7696a0e3402f644c9ef6404a1c08b..464e596ff87e679ac99ab54a2c426a85be7a478b 100644
 --- a/patches/v8_source_portability.patch
 +++ b/patches/v8_source_portability.patch
 @@ -2,11 +2,10 @@
@@ -4758,7 +4854,7 @@ index 6b6537cb9..464e596ff 100644
   namespace {
   
 diff --git a/pnpm-workspace.yaml b/pnpm-workspace.yaml
-index 376f420d3..2f1ce7d49 100644
+index 376f420d31d49b608b79238c66a694365d14a45b..2f1ce7d4982cebbc7fc7326f77c921c5ae172225 100644
 --- a/pnpm-workspace.yaml
 +++ b/pnpm-workspace.yaml
 @@ -3,9 +3,6 @@ packages:
@@ -4797,7 +4893,7 @@ index 376f420d3..2f1ce7d49 100644
 +  esbuild: "0.28.2"
 +  "@istanbuljs/load-nyc-config>js-yaml": "^4.1.1"
 diff --git a/scripts/codex_package/dotslash.py b/scripts/codex_package/dotslash.py
-index 8b2d6bcde..3c3f812b3 100644
+index 8b2d6bcde3ee965cf12baf75e2ec5c486fbdb3d3..3c3f812b3f4ea6922656696497d4d5a436cbb8f0 100644
 --- a/scripts/codex_package/dotslash.py
 +++ b/scripts/codex_package/dotslash.py
 @@ -2,21 +2,26 @@
@@ -4894,7 +4990,7 @@ index 8b2d6bcde..3c3f812b3 100644
                  raise RuntimeError(
                      f"{artifact_label} archive {archive_path} is missing "
 diff --git a/scripts/codex_package/rg b/scripts/codex_package/rg
-index 3b7c34843..04116e29d 100755
+index 3b7c34843aaafe4cf26a87b3daf5806195d4bb0e..04116e29d2281b8e10ab398b411da418ce46055b 100755
 --- a/scripts/codex_package/rg
 +++ b/scripts/codex_package/rg
 @@ -16,14 +16,14 @@
@@ -4917,7 +5013,7 @@ index 3b7c34843..04116e29d 100755
        ]
      },
 diff --git a/scripts/format.py b/scripts/format.py
-index 9b408e1c7..cd2ffcb6c 100644
+index 9b408e1c7c8ac0b9f5d25697775dc9a846adeaa4..cd2ffcb6c1bdaa871444c5d1e3902fee2b61985b 100644
 --- a/scripts/format.py
 +++ b/scripts/format.py
 @@ -41,9 +41,40 @@ def just_formatter_group(*, check: bool) -> FormatterGroup:
@@ -4963,7 +5059,7 @@ index 9b408e1c7..cd2ffcb6c 100644
      return FormatterGroup("Rust", (command,))
  
 diff --git a/scripts/install/install.ps1 b/scripts/install/install.ps1
-index e9d0bc805..61109f59a 100644
+index e9d0bc80574f8dd33174d883c0ec69fe2eefa50c..61109f59a15a87da3fc9bf58d3023677d88e4d41 100644
 --- a/scripts/install/install.ps1
 +++ b/scripts/install/install.ps1
 @@ -1,6 +1,6 @@
@@ -5483,7 +5579,7 @@ index e9d0bc805..61109f59a 100644
      & $codexCommand
  }
 diff --git a/scripts/install/install.sh b/scripts/install/install.sh
-index f27d1642b..965906dbe 100755
+index f27d1642be59405dd1a853e639b844e85bd39f47..965906dbeb65531773b2a381ff31c45e51a47e16 100755
 --- a/scripts/install/install.sh
 +++ b/scripts/install/install.sh
 @@ -2,28 +2,21 @@
@@ -5909,7 +6005,7 @@ index f27d1642b..965906dbe 100755
 +printf 'Nyacode CLI %s installed successfully.\n' "$resolved_version"
  maybe_launch_codex_now
 diff --git a/scripts/install/test_install_sh.py b/scripts/install/test_install_sh.py
-index 2d495cdda..ccec96509 100644
+index 2d495cddafb3726e0bec4bdc2a1ece7eea76e58c..ccec96509d783d8240c74ab6ddb65140d97f656f 100644
 --- a/scripts/install/test_install_sh.py
 +++ b/scripts/install/test_install_sh.py
 @@ -24,15 +24,15 @@ class InstallShTest(unittest.TestCase):
@@ -6402,7 +6498,7 @@ index 2d495cdda..ccec96509 100644
          {
              "CODEX_HOME": str(root / "codex-home"),
 diff --git a/scripts/mcp_conformance/README.md b/scripts/mcp_conformance/README.md
-index d75aa1f3b..63ee570a6 100644
+index d75aa1f3b89618aa57c698bdbaf50482d893c054..63ee570a61e5692349b927624690faa77c1a00a3 100644
 --- a/scripts/mcp_conformance/README.md
 +++ b/scripts/mcp_conformance/README.md
 @@ -116,6 +116,6 @@ Neither gate can be skipped. To reproduce the focused integration locally:
@@ -6414,7 +6510,7 @@ index d75aa1f3b..63ee570a6 100644
    --runInBand tests/mcpConformance.test.ts
  ```
 diff --git a/scripts/stage_npm_packages.py b/scripts/stage_npm_packages.py
-index b258b4c94..2c4960e93 100755
+index b258b4c94626562ef675302ceec1ee36ccdb6619..2c4960e937293afb36d8d0b1605aaf95be51550f 100755
 --- a/scripts/stage_npm_packages.py
 +++ b/scripts/stage_npm_packages.py
 @@ -19,7 +19,7 @@ from typing import Sequence
@@ -6427,7 +6523,7 @@ index b258b4c94..2c4960e93 100755
      "x86_64-unknown-linux-musl",
      "aarch64-unknown-linux-musl",
 diff --git a/tools/buildifier b/tools/buildifier
-index d18dd60ac..d4c03d59c 100755
+index d18dd60ac6b317d06c6ccf850654b2e06e29395d..d4c03d59c10b29cf3f10640c6bebebdfaff05561 100755
 --- a/tools/buildifier
 +++ b/tools/buildifier
 @@ -4,68 +4,68 @@

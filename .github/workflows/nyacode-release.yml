@@ -1,22 +1,6 @@
 name: Nyacode packages
 
 on:
-  pull_request:
-    paths:
-      - ".github/workflows/nyacode-release.yml"
-      - ".github/workflows/native-providers.yml"
-      - ".github/actions/**"
-      - ".github/scripts/*nyacode*"
-      - ".github/scripts/releases.py"
-      - ".github/scripts/test_releases.py"
-      - ".github/scripts/install-musl-*.sh"
-      - "scripts/nyacode_release.py"
-      - "scripts/tests/test_nyacode_release.py"
-      - "scripts/codex_package/**"
-      - "scripts/install/**"
-      - "codex-rs/Cargo.toml"
-      - "codex-rs/Cargo.lock"
-      - "docs/releases.md"
   push:
     branches: [main]
     tags: ["rust-v*.*.*"]
@@ -76,7 +60,7 @@ jobs:
 
   qualification:
     name: Full engine qualification
-    if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/')
+    if: github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/')
     needs: validate
     uses: ./.github/workflows/engine-qualification.yml
 

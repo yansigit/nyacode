@@ -1,5 +1,5 @@
 diff --git a/codex-rs/tui/src/bottom_pane/chat_composer.rs b/codex-rs/tui/src/bottom_pane/chat_composer.rs
-index 756c2d684..6c047cce5 100644
+index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed406187077d5dfff4 100644
 --- a/codex-rs/tui/src/bottom_pane/chat_composer.rs
 +++ b/codex-rs/tui/src/bottom_pane/chat_composer.rs
 @@ -9,6 +9,9 @@
@@ -1410,7 +1410,7 @@ index 756c2d684..6c047cce5 100644
          );
  
 diff --git a/codex-rs/tui/src/bottom_pane/chat_composer/footer_state_tests.rs b/codex-rs/tui/src/bottom_pane/chat_composer/footer_state_tests.rs
-index 558a38a65..8ba244520 100644
+index 558a38a652bb88d0f362dd5e0c738f80822bbac2..8ba2445206f6e62be5015dc93fbb2dc07ddbc0ef 100644
 --- a/codex-rs/tui/src/bottom_pane/chat_composer/footer_state_tests.rs
 +++ b/codex-rs/tui/src/bottom_pane/chat_composer/footer_state_tests.rs
 @@ -14,7 +14,7 @@ fn composer() -> ChatComposer {
@@ -1423,7 +1423,7 @@ index 558a38a65..8ba244520 100644
      );
      composer.set_status_line_enabled(/*enabled*/ true);
 diff --git a/codex-rs/tui/src/bottom_pane/chat_composer/history_search.rs b/codex-rs/tui/src/bottom_pane/chat_composer/history_search.rs
-index 1be819fbc..8fffbdc44 100644
+index 1be819fbc7e537d95bbce6e771531fe4ac334406..8fffbdc44d857525233132365cd118c947ae696e 100644
 --- a/codex-rs/tui/src/bottom_pane/chat_composer/history_search.rs
 +++ b/codex-rs/tui/src/bottom_pane/chat_composer/history_search.rs
 @@ -558,7 +558,7 @@ mod tests {
@@ -1580,7 +1580,7 @@ index 1be819fbc..8fffbdc44 100644
          );
          composer
 diff --git a/codex-rs/tui/src/bottom_pane/chat_composer/history_search_paste_tests.rs b/codex-rs/tui/src/bottom_pane/chat_composer/history_search_paste_tests.rs
-index bd0610df3..c6f0d9b4e 100644
+index bd0610df367753abaf0191ff891843c19f8cc73d..c6f0d9b4ed2e0b5b5ebe4aaed6d9a75de78a7d37 100644
 --- a/codex-rs/tui/src/bottom_pane/chat_composer/history_search_paste_tests.rs
 +++ b/codex-rs/tui/src/bottom_pane/chat_composer/history_search_paste_tests.rs
 @@ -22,7 +22,7 @@ fn composer_with_history() -> ChatComposer {
@@ -1593,7 +1593,7 @@ index bd0610df3..c6f0d9b4e 100644
      );
      for entry in ["git status", "git log"] {
 diff --git a/codex-rs/tui/src/bottom_pane/chat_composer/mentions_layout_tests.rs b/codex-rs/tui/src/bottom_pane/chat_composer/mentions_layout_tests.rs
-index 897f662f6..b5e31fae9 100644
+index 897f662f61ec1e7aff8ce77d418009b211ef3f31..b5e31fae9894368b52fa4a5cdb21b1d8546d3962 100644
 --- a/codex-rs/tui/src/bottom_pane/chat_composer/mentions_layout_tests.rs
 +++ b/codex-rs/tui/src/bottom_pane/chat_composer/mentions_layout_tests.rs
 @@ -11,7 +11,7 @@ fn composer() -> ChatComposer {
@@ -1606,7 +1606,7 @@ index 897f662f6..b5e31fae9 100644
      );
      composer.set_status_line_enabled(/*enabled*/ true);
 diff --git a/codex-rs/tui/src/bottom_pane/chat_composer/slash_input.rs b/codex-rs/tui/src/bottom_pane/chat_composer/slash_input.rs
-index 4ea71254c..8325719cf 100644
+index 4ea71254c1d26a826edaca132ec66a6782c72996..8325719cf8b7123ee823d8fac09e619598f39f8d 100644
 --- a/codex-rs/tui/src/bottom_pane/chat_composer/slash_input.rs
 +++ b/codex-rs/tui/src/bottom_pane/chat_composer/slash_input.rs
 @@ -180,6 +180,7 @@ impl<'a> SlashInput<'a> {
@@ -1635,7 +1635,7 @@ index 4ea71254c..8325719cf 100644
          )
      }
 diff --git a/codex-rs/tui/src/bottom_pane/chat_composer/snapshots/codex_tui__bottom_pane__chat_composer__footer_state__tests__transcript_find_copy_footer.snap b/codex-rs/tui/src/bottom_pane/chat_composer/snapshots/codex_tui__bottom_pane__chat_composer__footer_state__tests__transcript_find_copy_footer.snap
-index fc52d4617..886a9eb80 100644
+index fc52d4617d6b301ceb58b8f8f17712beeb41e1a0..886a9eb801a225b7bbe129e4e1b4b3010312dc6a 100644
 --- a/codex-rs/tui/src/bottom_pane/chat_composer/snapshots/codex_tui__bottom_pane__chat_composer__footer_state__tests__transcript_find_copy_footer.snap
 +++ b/codex-rs/tui/src/bottom_pane/chat_composer/snapshots/codex_tui__bottom_pane__chat_composer__footer_state__tests__transcript_find_copy_footer.snap
 @@ -3,7 +3,7 @@ source: tui/src/bottom_pane/chat_composer/footer_state_tests.rs
@@ -1648,7 +1648,7 @@ index fc52d4617..886a9eb80 100644
    Find: needle
    Copied selection to clipboard
 diff --git a/codex-rs/tui/src/bottom_pane/chat_composer/snapshots/codex_tui__bottom_pane__chat_composer__snapshot_tests__voice_composer.snap b/codex-rs/tui/src/bottom_pane/chat_composer/snapshots/codex_tui__bottom_pane__chat_composer__snapshot_tests__voice_composer.snap
-index 3b8930982..d5e9880f7 100644
+index 3b8930982028b5a3a179229e99f21bfebc83fda3..d5e9880f75fffdc765770763d99d8af0ce929385 100644
 --- a/codex-rs/tui/src/bottom_pane/chat_composer/snapshots/codex_tui__bottom_pane__chat_composer__snapshot_tests__voice_composer.snap
 +++ b/codex-rs/tui/src/bottom_pane/chat_composer/snapshots/codex_tui__bottom_pane__chat_composer__snapshot_tests__voice_composer.snap
 @@ -5,6 +5,6 @@ expression: rows
@@ -1660,7 +1660,7 @@ index 3b8930982..d5e9880f7 100644
                                                              
    ? for shortcuts                        100% context left
 diff --git a/codex-rs/tui/src/bottom_pane/chat_composer/snapshots/codex_tui__bottom_pane__chat_composer__sparkle__tests__a_fresh_astra_response_waits_for_the_pending_command_to_leave.snap b/codex-rs/tui/src/bottom_pane/chat_composer/snapshots/codex_tui__bottom_pane__chat_composer__sparkle__tests__a_fresh_astra_response_waits_for_the_pending_command_to_leave.snap
-index b60d0594b..1ba5974a0 100644
+index b60d0594be524e22c114fa713852d8c39162627e..1ba5974a099a6c32a332297fb9b1784ac25f0b29 100644
 --- a/codex-rs/tui/src/bottom_pane/chat_composer/snapshots/codex_tui__bottom_pane__chat_composer__sparkle__tests__a_fresh_astra_response_waits_for_the_pending_command_to_leave.snap
 +++ b/codex-rs/tui/src/bottom_pane/chat_composer/snapshots/codex_tui__bottom_pane__chat_composer__sparkle__tests__a_fresh_astra_response_waits_for_the_pending_command_to_leave.snap
 @@ -1,6 +1,5 @@
@@ -1679,7 +1679,7 @@ index b60d0594b..1ba5974a0 100644
         ⢀            ⠠     ⠄         ⠠          ⢀    ⠠     ⡀
    ? for shortcuts                                            100% context left
 diff --git a/codex-rs/tui/src/bottom_pane/chat_composer/snapshots/codex_tui__bottom_pane__chat_composer__sparkle__tests__canceled_history_search_restores_visible_stars_only_before_the_original_deadline.snap b/codex-rs/tui/src/bottom_pane/chat_composer/snapshots/codex_tui__bottom_pane__chat_composer__sparkle__tests__canceled_history_search_restores_visible_stars_only_before_the_original_deadline.snap
-index baa784f4f..9d95d0d48 100644
+index baa784f4f980dd3d6409e622b45b2bbbe2a3f670..9d95d0d48d7813e011a897ffe0a491f2d1bbebaa 100644
 --- a/codex-rs/tui/src/bottom_pane/chat_composer/snapshots/codex_tui__bottom_pane__chat_composer__sparkle__tests__canceled_history_search_restores_visible_stars_only_before_the_original_deadline.snap
 +++ b/codex-rs/tui/src/bottom_pane/chat_composer/snapshots/codex_tui__bottom_pane__chat_composer__sparkle__tests__canceled_history_search_restores_visible_stars_only_before_the_original_deadline.snap
 @@ -5,7 +5,7 @@ expression: "snapshots.join(\"\\n\\n\")"
@@ -1717,7 +1717,7 @@ index baa784f4f..9d95d0d48 100644
  
    ? for shortcuts                                            100% context left
 diff --git a/codex-rs/tui/src/bottom_pane/chat_composer/snapshots/codex_tui__bottom_pane__chat_composer__sparkle__tests__cleared_recovered_draft_keeps_sparkle_dismissed.snap b/codex-rs/tui/src/bottom_pane/chat_composer/snapshots/codex_tui__bottom_pane__chat_composer__sparkle__tests__cleared_recovered_draft_keeps_sparkle_dismissed.snap
-index 5cac07929..8370a0fc9 100644
+index 5cac079291f735bdd31de34920e2c91516d52b8c..8370a0fc9c79d463c00890795fa80dbbf85999b3 100644
 --- a/codex-rs/tui/src/bottom_pane/chat_composer/snapshots/codex_tui__bottom_pane__chat_composer__sparkle__tests__cleared_recovered_draft_keeps_sparkle_dismissed.snap
 +++ b/codex-rs/tui/src/bottom_pane/chat_composer/snapshots/codex_tui__bottom_pane__chat_composer__sparkle__tests__cleared_recovered_draft_keeps_sparkle_dismissed.snap
 @@ -1,9 +1,8 @@
@@ -1732,7 +1732,7 @@ index 5cac07929..8370a0fc9 100644
  
    ? for shortcuts                                            100% context left
 diff --git a/codex-rs/tui/src/bottom_pane/chat_composer/snapshots/codex_tui__bottom_pane__chat_composer__sparkle__tests__disconnected_sparkle_edits_are_tracked_between_renders.snap b/codex-rs/tui/src/bottom_pane/chat_composer/snapshots/codex_tui__bottom_pane__chat_composer__sparkle__tests__disconnected_sparkle_edits_are_tracked_between_renders.snap
-index 0c60de5e7..089e62a02 100644
+index 0c60de5e7ffbabcd95d0ea59999b5655d13e0d87..089e62a02c56f22fbb375f440c37c461351e58f0 100644
 --- a/codex-rs/tui/src/bottom_pane/chat_composer/snapshots/codex_tui__bottom_pane__chat_composer__sparkle__tests__disconnected_sparkle_edits_are_tracked_between_renders.snap
 +++ b/codex-rs/tui/src/bottom_pane/chat_composer/snapshots/codex_tui__bottom_pane__chat_composer__sparkle__tests__disconnected_sparkle_edits_are_tracked_between_renders.snap
 @@ -5,23 +5,23 @@ expression: "snapshots.join(\"\\n\\n\")"
@@ -1764,7 +1764,7 @@ index 0c60de5e7..089e62a02 100644
  
    ? for shortcuts                                            100% context left
 diff --git a/codex-rs/tui/src/bottom_pane/chat_composer/snapshots/codex_tui__bottom_pane__chat_composer__sparkle__tests__history_search_acceptance_and_cancellation_update_sparkles_before_rendering.snap b/codex-rs/tui/src/bottom_pane/chat_composer/snapshots/codex_tui__bottom_pane__chat_composer__sparkle__tests__history_search_acceptance_and_cancellation_update_sparkles_before_rendering.snap
-index a671d9f4a..d122e7e9c 100644
+index a671d9f4adcbb5095897d7a61c542c49c928989e..d122e7e9c4e045be450c783f85839de73b2953c8 100644
 --- a/codex-rs/tui/src/bottom_pane/chat_composer/snapshots/codex_tui__bottom_pane__chat_composer__sparkle__tests__history_search_acceptance_and_cancellation_update_sparkles_before_rendering.snap
 +++ b/codex-rs/tui/src/bottom_pane/chat_composer/snapshots/codex_tui__bottom_pane__chat_composer__sparkle__tests__history_search_acceptance_and_cancellation_update_sparkles_before_rendering.snap
 @@ -4,12 +4,12 @@ expression: "snapshots.join(\"\\n\\n\")"
@@ -1783,7 +1783,7 @@ index a671d9f4a..d122e7e9c 100644
         ⢀            ⠠     ⠄         ⠠          ⢀    ⠠     ⡀
    ? for shortcuts                                            100% context left
 diff --git a/codex-rs/tui/src/bottom_pane/chat_composer/snapshots/codex_tui__bottom_pane__chat_composer__sparkle__tests__history_search_preserves_a_held_sparkle_command_without_reclassifying_it.snap b/codex-rs/tui/src/bottom_pane/chat_composer/snapshots/codex_tui__bottom_pane__chat_composer__sparkle__tests__history_search_preserves_a_held_sparkle_command_without_reclassifying_it.snap
-index 80bcb14f7..fe9fc33b6 100644
+index 80bcb14f707bb2ae552c4e785cbcbcd0ef93777e..fe9fc33b6a47f2a86a4d80735a670f786d410307 100644
 --- a/codex-rs/tui/src/bottom_pane/chat_composer/snapshots/codex_tui__bottom_pane__chat_composer__sparkle__tests__history_search_preserves_a_held_sparkle_command_without_reclassifying_it.snap
 +++ b/codex-rs/tui/src/bottom_pane/chat_composer/snapshots/codex_tui__bottom_pane__chat_composer__sparkle__tests__history_search_preserves_a_held_sparkle_command_without_reclassifying_it.snap
 @@ -10,12 +10,12 @@ searching with an explicit pasted query:
@@ -1816,7 +1816,7 @@ index 80bcb14f7..fe9fc33b6 100644
         ⢀            ⠠     ⠄         ⠠          ⢀    ⠠     ⡀
    ? for shortcuts                                            100% context left
 diff --git a/codex-rs/tui/src/bottom_pane/chat_composer/snapshots/codex_tui__bottom_pane__chat_composer__sparkle__tests__review_regression_canceling_a_held_slash_restores_sparkle_command_tracking.snap b/codex-rs/tui/src/bottom_pane/chat_composer/snapshots/codex_tui__bottom_pane__chat_composer__sparkle__tests__review_regression_canceling_a_held_slash_restores_sparkle_command_tracking.snap
-index 030167639..92807f060 100644
+index 0301676391df06708dd85786a1463965bdaf566c..92807f06095ae53a693911d0849334a75a64e12d 100644
 --- a/codex-rs/tui/src/bottom_pane/chat_composer/snapshots/codex_tui__bottom_pane__chat_composer__sparkle__tests__review_regression_canceling_a_held_slash_restores_sparkle_command_tracking.snap
 +++ b/codex-rs/tui/src/bottom_pane/chat_composer/snapshots/codex_tui__bottom_pane__chat_composer__sparkle__tests__review_regression_canceling_a_held_slash_restores_sparkle_command_tracking.snap
 @@ -5,23 +5,23 @@ expression: "snapshots.join(\"\\n\\n\")"
@@ -1848,7 +1848,7 @@ index 030167639..92807f060 100644
         ⢀            ⠠     ⠄         ⠠          ⢀    ⠠     ⡀
    ? for shortcuts                                            100% context left
 diff --git a/codex-rs/tui/src/bottom_pane/chat_composer/snapshots/codex_tui__bottom_pane__chat_composer__sparkle__tests__shortcut_help_hides_visible_sparkles_without_restarting_their_deadline.snap b/codex-rs/tui/src/bottom_pane/chat_composer/snapshots/codex_tui__bottom_pane__chat_composer__sparkle__tests__shortcut_help_hides_visible_sparkles_without_restarting_their_deadline.snap
-index 8a719ad03..fc6bae6c2 100644
+index 8a719ad03c5264ade07600c6e45878f6406246ce..fc6bae6c26975c285a45890734822c3ef19f365c 100644
 --- a/codex-rs/tui/src/bottom_pane/chat_composer/snapshots/codex_tui__bottom_pane__chat_composer__sparkle__tests__shortcut_help_hides_visible_sparkles_without_restarting_their_deadline.snap
 +++ b/codex-rs/tui/src/bottom_pane/chat_composer/snapshots/codex_tui__bottom_pane__chat_composer__sparkle__tests__shortcut_help_hides_visible_sparkles_without_restarting_their_deadline.snap
 @@ -5,7 +5,7 @@ expression: "snapshots.join(\"\\n\\n\")"
@@ -1898,7 +1898,7 @@ index 8a719ad03..fc6bae6c2 100644
  
    ? for shortcuts                                            100% context left
 diff --git a/codex-rs/tui/src/bottom_pane/chat_composer/snapshots/codex_tui__bottom_pane__chat_composer__sparkle__tests__shortcut_help_preserves_an_unused_sparkle_but_literal_question_marks_do_not.snap b/codex-rs/tui/src/bottom_pane/chat_composer/snapshots/codex_tui__bottom_pane__chat_composer__sparkle__tests__shortcut_help_preserves_an_unused_sparkle_but_literal_question_marks_do_not.snap
-index d945b4320..82180fdc5 100644
+index d945b4320c37a7a69a843eb012d75b96cff4f629..82180fdc5cfa985ac29bd12d9f4afffb0959d148 100644
 --- a/codex-rs/tui/src/bottom_pane/chat_composer/snapshots/codex_tui__bottom_pane__chat_composer__sparkle__tests__shortcut_help_preserves_an_unused_sparkle_but_literal_question_marks_do_not.snap
 +++ b/codex-rs/tui/src/bottom_pane/chat_composer/snapshots/codex_tui__bottom_pane__chat_composer__sparkle__tests__shortcut_help_preserves_an_unused_sparkle_but_literal_question_marks_do_not.snap
 @@ -23,13 +23,13 @@ shortcut help:
@@ -1926,7 +1926,7 @@ index d945b4320..82180fdc5 100644
  
    ? for shortcuts                                            100% context left
 diff --git a/codex-rs/tui/src/bottom_pane/chat_composer/snapshots/codex_tui__bottom_pane__chat_composer__sparkle__tests__sparkle_fades_without_adding_dots_and_finishes_by_fifteen_seconds.snap b/codex-rs/tui/src/bottom_pane/chat_composer/snapshots/codex_tui__bottom_pane__chat_composer__sparkle__tests__sparkle_fades_without_adding_dots_and_finishes_by_fifteen_seconds.snap
-index 0cfba1ed1..3a7fa3878 100644
+index 0cfba1ed133a072176866c71939ec1967e48ab8c..3a7fa387836010388fd768b716e8f6c3a621a279 100644
 --- a/codex-rs/tui/src/bottom_pane/chat_composer/snapshots/codex_tui__bottom_pane__chat_composer__sparkle__tests__sparkle_fades_without_adding_dots_and_finishes_by_fifteen_seconds.snap
 +++ b/codex-rs/tui/src/bottom_pane/chat_composer/snapshots/codex_tui__bottom_pane__chat_composer__sparkle__tests__sparkle_fades_without_adding_dots_and_finishes_by_fifteen_seconds.snap
 @@ -4,16 +4,16 @@ expression: "format!(\"before fade:\\n{}\\nfading:\\n{}\\nfinished:\\n{}\", text
@@ -1950,7 +1950,7 @@ index 0cfba1ed1..3a7fa3878 100644
  
    ? for shortcuts                                            100% context left
 diff --git a/codex-rs/tui/src/bottom_pane/chat_composer/snapshots/codex_tui__bottom_pane__chat_composer__sparkle__tests__sparkle_matches_the_original_starfield_and_protects_the_placeholder_and_cursor.snap b/codex-rs/tui/src/bottom_pane/chat_composer/snapshots/codex_tui__bottom_pane__chat_composer__sparkle__tests__sparkle_matches_the_original_starfield_and_protects_the_placeholder_and_cursor.snap
-index 9edbf115e..e8ebfa648 100644
+index 9edbf115eeb1d05867191c0eea3c0feb288b8626..e8ebfa648c8df209760531e700f2c42c8d274ad6 100644
 --- a/codex-rs/tui/src/bottom_pane/chat_composer/snapshots/codex_tui__bottom_pane__chat_composer__sparkle__tests__sparkle_matches_the_original_starfield_and_protects_the_placeholder_and_cursor.snap
 +++ b/codex-rs/tui/src/bottom_pane/chat_composer/snapshots/codex_tui__bottom_pane__chat_composer__sparkle__tests__sparkle_matches_the_original_starfield_and_protects_the_placeholder_and_cursor.snap
 @@ -4,7 +4,7 @@ expression: "snapshots.join(\"\\n\\n\")"
@@ -1972,7 +1972,7 @@ index 9edbf115e..e8ebfa648 100644
    ? for shortcuts                                            100% context left
  first input:
 diff --git a/codex-rs/tui/src/bottom_pane/chat_composer/snapshots/codex_tui__bottom_pane__chat_composer__status_surface__tests__activity_shortcut_help_follows_runtime_binding.snap b/codex-rs/tui/src/bottom_pane/chat_composer/snapshots/codex_tui__bottom_pane__chat_composer__status_surface__tests__activity_shortcut_help_follows_runtime_binding.snap
-index 14aa0c1cc..339955271 100644
+index 14aa0c1cce5191524271d591daac73703085b3b3..339955271d770cb95cc5c3aa6e8b1087f4cd107f 100644
 --- a/codex-rs/tui/src/bottom_pane/chat_composer/snapshots/codex_tui__bottom_pane__chat_composer__status_surface__tests__activity_shortcut_help_follows_runtime_binding.snap
 +++ b/codex-rs/tui/src/bottom_pane/chat_composer/snapshots/codex_tui__bottom_pane__chat_composer__status_surface__tests__activity_shortcut_help_follows_runtime_binding.snap
 @@ -25,7 +25,7 @@ expression: "snapshots.join(\"\\n---\\n\")"
@@ -2003,7 +2003,7 @@ index 14aa0c1cc..339955271 100644
    MODEL · ~/project · Context 20% used
    ? / esc close
 diff --git a/codex-rs/tui/src/bottom_pane/chat_composer/snapshots/codex_tui__bottom_pane__chat_composer__status_surface__tests__fullscreen_plan_cycle_hint.snap b/codex-rs/tui/src/bottom_pane/chat_composer/snapshots/codex_tui__bottom_pane__chat_composer__status_surface__tests__fullscreen_plan_cycle_hint.snap
-index 833484264..ad1671b40 100644
+index 833484264f805d083ab0222557a8efc2da830e1f..ad1671b40a2411ea5a0b1dbcf31af5a0d9cee9a9 100644
 --- a/codex-rs/tui/src/bottom_pane/chat_composer/snapshots/codex_tui__bottom_pane__chat_composer__status_surface__tests__fullscreen_plan_cycle_hint.snap
 +++ b/codex-rs/tui/src/bottom_pane/chat_composer/snapshots/codex_tui__bottom_pane__chat_composer__status_surface__tests__fullscreen_plan_cycle_hint.snap
 @@ -11,7 +11,7 @@ expression: wide
@@ -2016,7 +2016,7 @@ index 833484264..ad1671b40 100644
    MODEL · ~/project · Context 20% used                                   Plan mode (⇧tab to cycle)
    ? for shortcuts
 diff --git a/codex-rs/tui/src/bottom_pane/chat_composer/snapshots/codex_tui__bottom_pane__chat_composer__status_surface__tests__persistent_status_and_messages.snap b/codex-rs/tui/src/bottom_pane/chat_composer/snapshots/codex_tui__bottom_pane__chat_composer__status_surface__tests__persistent_status_and_messages.snap
-index c35c2d93e..0ddeca976 100644
+index c35c2d93e56f040f6108e0defd2d676ae4fd955d..0ddeca97661123b1f6c3bb68842adf808a212875 100644
 --- a/codex-rs/tui/src/bottom_pane/chat_composer/snapshots/codex_tui__bottom_pane__chat_composer__status_surface__tests__persistent_status_and_messages.snap
 +++ b/codex-rs/tui/src/bottom_pane/chat_composer/snapshots/codex_tui__bottom_pane__chat_composer__status_surface__tests__persistent_status_and_messages.snap
 @@ -11,7 +11,7 @@ expression: "states.join(\"\\n---\\n\")"
@@ -2047,7 +2047,7 @@ index c35c2d93e..0ddeca976 100644
    MODEL · ~/project · Context 20% used               Plan mode
    Ctrl+X waiting for chord
 diff --git a/codex-rs/tui/src/bottom_pane/chat_composer/snapshots/codex_tui__bottom_pane__chat_composer__status_surface__tests__shortcut_help_above_narrow.snap b/codex-rs/tui/src/bottom_pane/chat_composer/snapshots/codex_tui__bottom_pane__chat_composer__status_surface__tests__shortcut_help_above_narrow.snap
-index 9b136be68..7292224a4 100644
+index 9b136be680d7fe7ffbc800e499066d60f02ff1d9..7292224a488fb17f0ba7bec87829f15fa9479033 100644
 --- a/codex-rs/tui/src/bottom_pane/chat_composer/snapshots/codex_tui__bottom_pane__chat_composer__status_surface__tests__shortcut_help_above_narrow.snap
 +++ b/codex-rs/tui/src/bottom_pane/chat_composer/snapshots/codex_tui__bottom_pane__chat_composer__status_surface__tests__shortcut_help_above_narrow.snap
 @@ -40,7 +40,7 @@ expression: text
@@ -2060,7 +2060,7 @@ index 9b136be68..7292224a4 100644
    MODEL · ~/project · Context 20% used
    ? / esc close
 diff --git a/codex-rs/tui/src/bottom_pane/chat_composer/snapshots/codex_tui__bottom_pane__chat_composer__status_surface__tests__shortcut_help_above_wide.snap b/codex-rs/tui/src/bottom_pane/chat_composer/snapshots/codex_tui__bottom_pane__chat_composer__status_surface__tests__shortcut_help_above_wide.snap
-index e83ad1755..b78245b28 100644
+index e83ad1755727d48e99cbdb4bee8e15b3e46dc650..b78245b282c357178bb52e1a8db7266dca6ed34b 100644
 --- a/codex-rs/tui/src/bottom_pane/chat_composer/snapshots/codex_tui__bottom_pane__chat_composer__status_surface__tests__shortcut_help_above_wide.snap
 +++ b/codex-rs/tui/src/bottom_pane/chat_composer/snapshots/codex_tui__bottom_pane__chat_composer__status_surface__tests__shortcut_help_above_wide.snap
 @@ -24,7 +24,7 @@ expression: text
@@ -2073,7 +2073,7 @@ index e83ad1755..b78245b28 100644
    MODEL · ~/project · Context 20% used
    ? / esc close
 diff --git a/codex-rs/tui/src/bottom_pane/chat_composer/sparkle_tests.rs b/codex-rs/tui/src/bottom_pane/chat_composer/sparkle_tests.rs
-index b39da3eda..1e58456d8 100644
+index b39da3eda7df3a23325eba623f9b552314efdc23..1e58456d8a1e3303cf08dc8222055fbe2959d6c7 100644
 --- a/codex-rs/tui/src/bottom_pane/chat_composer/sparkle_tests.rs
 +++ b/codex-rs/tui/src/bottom_pane/chat_composer/sparkle_tests.rs
 @@ -24,7 +24,7 @@ fn pane() -> BottomPane {
@@ -2086,7 +2086,7 @@ index b39da3eda..1e58456d8 100644
          animations_enabled: true,
          effects: Default::default(),
 diff --git a/codex-rs/tui/src/bottom_pane/chat_composer/status_surface_tests.rs b/codex-rs/tui/src/bottom_pane/chat_composer/status_surface_tests.rs
-index 8e650b767..3cd834565 100644
+index 8e650b767056931920d588134ba85bf3de38eb01..3cd834565a54bb861e114289aba21e3ee5ef7052 100644
 --- a/codex-rs/tui/src/bottom_pane/chat_composer/status_surface_tests.rs
 +++ b/codex-rs/tui/src/bottom_pane/chat_composer/status_surface_tests.rs
 @@ -10,7 +10,7 @@ fn composer() -> ChatComposer {
@@ -2117,7 +2117,7 @@ index 8e650b767..3cd834565 100644
      );
      composer.set_status_line_enabled(/*enabled*/ true);
 diff --git a/codex-rs/tui/src/bottom_pane/chat_composer/warning_notice_tests.rs b/codex-rs/tui/src/bottom_pane/chat_composer/warning_notice_tests.rs
-index 2e11e1723..ae61f0839 100644
+index 2e11e17236dc4233c655b112ff7fbe235fcb0871..ae61f0839989cccb108bf7be1fa32e24c89748b3 100644
 --- a/codex-rs/tui/src/bottom_pane/chat_composer/warning_notice_tests.rs
 +++ b/codex-rs/tui/src/bottom_pane/chat_composer/warning_notice_tests.rs
 @@ -10,7 +10,7 @@ fn composer() -> ChatComposer {
@@ -2130,7 +2130,7 @@ index 2e11e1723..ae61f0839 100644
      );
      // Keep layout fixtures independent of platform-specific default shortcuts.
 diff --git a/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__agents_navigation_enabled.snap b/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__agents_navigation_enabled.snap
-index 2924342dc..4da0ddb0e 100644
+index 2924342dce91f2ccbb156b21e38d447d49677afc..4da0ddb0e51e20f4bf1991063907fbab7505a524 100644
 --- a/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__agents_navigation_enabled.snap
 +++ b/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__agents_navigation_enabled.snap
 @@ -3,7 +3,7 @@ source: tui/src/bottom_pane/chat_composer.rs
@@ -2143,7 +2143,7 @@ index 2924342dc..4da0ddb0e 100644
  "                                                                                "
  "                                                                                "
 diff --git a/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__agents_navigation_help.snap b/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__agents_navigation_help.snap
-index 7ef48c38b..2b85a06ab 100644
+index 7ef48c38b08e33fa2983fe7824fff4f21ecbb466..2b85a06ab781e9758b4cd2a0cfd1fd434e1551ac 100644
 --- a/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__agents_navigation_help.snap
 +++ b/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__agents_navigation_help.snap
 @@ -23,7 +23,7 @@ expression: terminal.backend()
@@ -2156,7 +2156,7 @@ index 7ef48c38b..2b85a06ab 100644
  "                                                                                "
  "                                                                                "
 diff --git a/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__agents_navigation_status.snap b/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__agents_navigation_status.snap
-index eddb4ae50..fb8f033e6 100644
+index eddb4ae5014d25ae259eaf8bac537ac9c0b2d25d..fb8f033e62bef6f47baad6756330ecaf778b8153 100644
 --- a/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__agents_navigation_status.snap
 +++ b/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__agents_navigation_status.snap
 @@ -3,7 +3,7 @@ source: tui/src/bottom_pane/chat_composer.rs
@@ -2169,7 +2169,7 @@ index eddb4ae50..fb8f033e6 100644
  "                                                                                "
  "                                                                                "
 diff --git a/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__empty.snap b/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__empty.snap
-index 47c97c74d..ebf4b312d 100644
+index 47c97c74d22d4d78041d7b46a08a2490f545791f..ebf4b312d826098fd4a31193b9b80f56378c14f7 100644
 --- a/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__empty.snap
 +++ b/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__empty.snap
 @@ -3,7 +3,7 @@ source: tui/src/bottom_pane/chat_composer.rs
@@ -2182,7 +2182,7 @@ index 47c97c74d..ebf4b312d 100644
  "                                                                                                    "
  "                                                                                                    "
 diff --git a/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__footer_collapse_empty_full.snap b/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__footer_collapse_empty_full.snap
-index 4324d806e..16265f0cf 100644
+index 4324d806e2da6ec94b986b7d52d41430e37c2f72..16265f0cfe183ffc145bc2eceed454004c19364b 100644
 --- a/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__footer_collapse_empty_full.snap
 +++ b/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__footer_collapse_empty_full.snap
 @@ -3,7 +3,7 @@ source: tui/src/bottom_pane/chat_composer.rs
@@ -2195,7 +2195,7 @@ index 4324d806e..16265f0cf 100644
  "                                                                                                                        "
  "                                                                                                                        "
 diff --git a/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__footer_collapse_empty_mode_cycle_with_context.snap b/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__footer_collapse_empty_mode_cycle_with_context.snap
-index ecaeb5814..65bae7b53 100644
+index ecaeb5814938c3278d94ce71b910a93ffb258e48..65bae7b5346823a1eba93c82860afcde09b4bde1 100644
 --- a/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__footer_collapse_empty_mode_cycle_with_context.snap
 +++ b/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__footer_collapse_empty_mode_cycle_with_context.snap
 @@ -3,7 +3,7 @@ source: tui/src/bottom_pane/chat_composer.rs
@@ -2208,7 +2208,7 @@ index ecaeb5814..65bae7b53 100644
  "                                                            "
  "                                                            "
 diff --git a/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__footer_collapse_empty_mode_cycle_without_context.snap b/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__footer_collapse_empty_mode_cycle_without_context.snap
-index 118ac2529..beb6706b1 100644
+index 118ac252911c90be08d57772e5eedebf45d8b5fa..beb6706b1554b2e3f24c79b8d089299a950ffe91 100644
 --- a/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__footer_collapse_empty_mode_cycle_without_context.snap
 +++ b/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__footer_collapse_empty_mode_cycle_without_context.snap
 @@ -3,7 +3,7 @@ source: tui/src/bottom_pane/chat_composer.rs
@@ -2221,7 +2221,7 @@ index 118ac2529..beb6706b1 100644
  "                                            "
  "                                            "
 diff --git a/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__footer_collapse_empty_mode_only.snap b/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__footer_collapse_empty_mode_only.snap
-index 9c9500478..4ee8f177a 100644
+index 9c950047855ff59b6a9d8e7c41074bf6abaca506..4ee8f177a7c9ad2d0617a445808d1f99d6b77f86 100644
 --- a/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__footer_collapse_empty_mode_only.snap
 +++ b/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__footer_collapse_empty_mode_only.snap
 @@ -3,7 +3,7 @@ source: tui/src/bottom_pane/chat_composer.rs
@@ -2234,7 +2234,7 @@ index 9c9500478..4ee8f177a 100644
  "                          "
  "                          "
 diff --git a/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__footer_collapse_plan_empty_full.snap b/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__footer_collapse_plan_empty_full.snap
-index ca2a96b3c..e62164f09 100644
+index ca2a96b3c1ec708d292b83f01b4eb525ee74768a..e62164f09b3e7f6f6a85764a5fe6d458d48fea4d 100644
 --- a/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__footer_collapse_plan_empty_full.snap
 +++ b/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__footer_collapse_plan_empty_full.snap
 @@ -3,7 +3,7 @@ source: tui/src/bottom_pane/chat_composer.rs
@@ -2247,7 +2247,7 @@ index ca2a96b3c..e62164f09 100644
  "                                                                                                                        "
  "                                                                                                                        "
 diff --git a/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__footer_collapse_plan_empty_mode_cycle_with_context.snap b/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__footer_collapse_plan_empty_mode_cycle_with_context.snap
-index dae98d4ca..0a8fccb72 100644
+index dae98d4cabfab59cf0245e672748773a389c94bc..0a8fccb72efb1cffbabceab354846e973dc980ce 100644
 --- a/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__footer_collapse_plan_empty_mode_cycle_with_context.snap
 +++ b/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__footer_collapse_plan_empty_mode_cycle_with_context.snap
 @@ -3,7 +3,7 @@ source: tui/src/bottom_pane/chat_composer.rs
@@ -2260,7 +2260,7 @@ index dae98d4ca..0a8fccb72 100644
  "                                                            "
  "                                                            "
 diff --git a/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__footer_collapse_plan_empty_mode_cycle_without_context.snap b/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__footer_collapse_plan_empty_mode_cycle_without_context.snap
-index 0dcd2872a..1836d3788 100644
+index 0dcd2872a31813c62cfd64e5981edbf69a6247f1..1836d3788662de567225033ca845a8943e90e5de 100644
 --- a/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__footer_collapse_plan_empty_mode_cycle_without_context.snap
 +++ b/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__footer_collapse_plan_empty_mode_cycle_without_context.snap
 @@ -3,7 +3,7 @@ source: tui/src/bottom_pane/chat_composer.rs
@@ -2273,7 +2273,7 @@ index 0dcd2872a..1836d3788 100644
  "                                            "
  "                                            "
 diff --git a/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__footer_collapse_plan_empty_mode_only.snap b/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__footer_collapse_plan_empty_mode_only.snap
-index bea268c57..5af7f0dd1 100644
+index bea268c57eb6e5680811cc56600807cf6a884ce9..5af7f0dd1fe4e01998fa93467c55b4127ac54c52 100644
 --- a/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__footer_collapse_plan_empty_mode_only.snap
 +++ b/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__footer_collapse_plan_empty_mode_only.snap
 @@ -3,7 +3,7 @@ source: tui/src/bottom_pane/chat_composer.rs
@@ -2286,7 +2286,7 @@ index bea268c57..5af7f0dd1 100644
  "                          "
  "                          "
 diff --git a/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__footer_mode_configured_key_chords.snap b/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__footer_mode_configured_key_chords.snap
-index ee4c46774..85e09ba56 100644
+index ee4c46774e2e07377cc156449b612949311c3415..85e09ba5616faff21e668cd1b201bdd4aea30fa6 100644
 --- a/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__footer_mode_configured_key_chords.snap
 +++ b/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__footer_mode_configured_key_chords.snap
 @@ -16,7 +16,7 @@ expression: terminal.backend()
@@ -2299,7 +2299,7 @@ index ee4c46774..85e09ba56 100644
  "                                                                                                    "
  "                                                                                                    "
 diff --git a/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__footer_mode_ctrl_c_quit.snap b/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__footer_mode_ctrl_c_quit.snap
-index 20a62b41f..1b76cd7b7 100644
+index 20a62b41f8ebaf6779350a690d04f4791b95d462..1b76cd7b77241e9172b0cbc0db882c3625e12f23 100644
 --- a/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__footer_mode_ctrl_c_quit.snap
 +++ b/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__footer_mode_ctrl_c_quit.snap
 @@ -3,7 +3,7 @@ source: tui/src/bottom_pane/chat_composer.rs
@@ -2312,7 +2312,7 @@ index 20a62b41f..1b76cd7b7 100644
  "                                                                                                    "
  "                                                                                                    "
 diff --git a/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__footer_mode_ctrl_c_then_esc_hint.snap b/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__footer_mode_ctrl_c_then_esc_hint.snap
-index 9cad17b86..ef936dc48 100644
+index 9cad17b8648297a4e970a0f83a8766cc05e01118..ef936dc48f502928081c24661d9784a75336016e 100644
 --- a/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__footer_mode_ctrl_c_then_esc_hint.snap
 +++ b/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__footer_mode_ctrl_c_then_esc_hint.snap
 @@ -3,7 +3,7 @@ source: tui/src/bottom_pane/chat_composer.rs
@@ -2325,7 +2325,7 @@ index 9cad17b86..ef936dc48 100644
  "                                                                                                    "
  "                                                                                                    "
 diff --git a/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__footer_mode_esc_hint_backtrack.snap b/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__footer_mode_esc_hint_backtrack.snap
-index 2fce42cc2..74935505f 100644
+index 2fce42cc26b726d04286e3bf34ced8b916decc0b..74935505feed9dfa3ddf58ae5c6e66064387ff9e 100644
 --- a/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__footer_mode_esc_hint_backtrack.snap
 +++ b/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__footer_mode_esc_hint_backtrack.snap
 @@ -3,7 +3,7 @@ source: tui/src/bottom_pane/chat_composer.rs
@@ -2338,7 +2338,7 @@ index 2fce42cc2..74935505f 100644
  "                                                                                                    "
  "                                                                                                    "
 diff --git a/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__footer_mode_esc_hint_from_overlay.snap b/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__footer_mode_esc_hint_from_overlay.snap
-index 66bb11a81..c07fb795b 100644
+index 66bb11a8186dc6d17e6b659dab621676ce0eb4c9..c07fb795b8ec46a84f0537a773af5f3a8fb6f2e8 100644
 --- a/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__footer_mode_esc_hint_from_overlay.snap
 +++ b/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__footer_mode_esc_hint_from_overlay.snap
 @@ -1,10 +1,9 @@
@@ -2354,7 +2354,7 @@ index 66bb11a81..c07fb795b 100644
  "                                                                                                    "
  "                                                                                                    "
 diff --git a/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__footer_mode_overlay_then_external_esc_hint.snap b/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__footer_mode_overlay_then_external_esc_hint.snap
-index 2fce42cc2..74935505f 100644
+index 2fce42cc26b726d04286e3bf34ced8b916decc0b..74935505feed9dfa3ddf58ae5c6e66064387ff9e 100644
 --- a/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__footer_mode_overlay_then_external_esc_hint.snap
 +++ b/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__footer_mode_overlay_then_external_esc_hint.snap
 @@ -3,7 +3,7 @@ source: tui/src/bottom_pane/chat_composer.rs
@@ -2367,7 +2367,7 @@ index 2fce42cc2..74935505f 100644
  "                                                                                                    "
  "                                                                                                    "
 diff --git a/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__footer_mode_shell_command_escape_exits_empty_mode.snap b/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__footer_mode_shell_command_escape_exits_empty_mode.snap
-index dac77a38d..5556c2c89 100644
+index dac77a38da37840a2aa684c7a61d898fc0959426..5556c2c897c7e63ea7fc682090de5e54eb154da1 100644
 --- a/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__footer_mode_shell_command_escape_exits_empty_mode.snap
 +++ b/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__footer_mode_shell_command_escape_exits_empty_mode.snap
 @@ -1,10 +1,9 @@
@@ -2383,7 +2383,7 @@ index dac77a38d..5556c2c89 100644
  "                                                                                                    "
  "                                                                                                    "
 diff --git a/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__footer_mode_shortcut_overlay.snap b/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__footer_mode_shortcut_overlay.snap
-index b491f5ed0..9d915351f 100644
+index b491f5ed09b4e7b2d15f448ed456198a14a253ca..9d915351fa7a040fbe87fc6c901ec9b2c8eae5c6 100644
 --- a/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__footer_mode_shortcut_overlay.snap
 +++ b/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__footer_mode_shortcut_overlay.snap
 @@ -16,7 +16,7 @@ expression: terminal.backend()
@@ -2396,7 +2396,7 @@ index b491f5ed0..9d915351f 100644
  "                                                                                                    "
  "                                                                                                    "
 diff --git a/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__footer_mode_shortcut_overlay_queue_submissions.snap b/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__footer_mode_shortcut_overlay_queue_submissions.snap
-index ce18f02ce..9b3ae740d 100644
+index ce18f02ce4d3d3b372544d7c15532fcc035c1f80..9b3ae740dd02bd435f7016849df60d9a6ac73684 100644
 --- a/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__footer_mode_shortcut_overlay_queue_submissions.snap
 +++ b/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__footer_mode_shortcut_overlay_queue_submissions.snap
 @@ -16,7 +16,7 @@ expression: terminal.backend()
@@ -2409,7 +2409,7 @@ index ce18f02ce..9b3ae740d 100644
  "                                                                                                    "
  "                                                                                                    "
 diff --git a/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__light_terminal_palette_composer.snap b/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__light_terminal_palette_composer.snap
-index 8ef90ddc8..9e0d20361 100644
+index 8ef90ddc8ede3d5ec634a06baee57b074dfc42a4..9e0d203611044e6c3e1b402600b2097d0691019b 100644
 --- a/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__light_terminal_palette_composer.snap
 +++ b/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__light_terminal_palette_composer.snap
 @@ -6,7 +6,7 @@ Buffer {
@@ -2431,7 +2431,7 @@ index 8ef90ddc8..9e0d20361 100644
          x: 2, y: 5, fg: Rgb(110, 112, 108), bg: Reset, underline: Reset, modifier: BOLD,
          x: 3, y: 5, fg: Rgb(118, 119, 117), bg: Reset, underline: Reset, modifier: NONE,
 diff --git a/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__ultra_accent_upgrades_prompt_glyph.snap b/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__ultra_accent_upgrades_prompt_glyph.snap
-index 1ccc97b27..a3282107b 100644
+index 1ccc97b273c677540f16235beedc9b4423e46d48..a3282107be7c2eaa2fbf6ac12966781d19f4213d 100644
 --- a/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__ultra_accent_upgrades_prompt_glyph.snap
 +++ b/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__ultra_accent_upgrades_prompt_glyph.snap
 @@ -3,7 +3,7 @@ source: tui/src/bottom_pane/chat_composer.rs
@@ -2444,7 +2444,7 @@ index 1ccc97b27..a3282107b 100644
  "                                                            "
  "                                                            "
 diff --git a/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__vim_enter_after_expired_paste.snap b/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__vim_enter_after_expired_paste.snap
-index 607cc6464..713a98e53 100644
+index 607cc6464269e418a10d8db6aedd576f369346bb..713a98e53c3d3fe39efe03ddc52e4230d058bf5c 100644
 --- a/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__vim_enter_after_expired_paste.snap
 +++ b/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__vim_enter_after_expired_paste.snap
 @@ -3,7 +3,7 @@ source: tui/src/bottom_pane/chat_composer.rs
@@ -2457,7 +2457,7 @@ index 607cc6464..713a98e53 100644
  "                                                            "
  "                                                            "
 diff --git a/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__vim_fresh_draft.snap b/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__vim_fresh_draft.snap
-index 7a31d0b18..fcbe8d522 100644
+index 7a31d0b1820fc8423c9246c9b31c06afbbb48f8e..fcbe8d522da27b713dd27f24e8979c9f08942645 100644
 --- a/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__vim_fresh_draft.snap
 +++ b/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__chat_composer__tests__vim_fresh_draft.snap
 @@ -3,7 +3,7 @@ source: tui/src/bottom_pane/chat_composer.rs
@@ -2470,7 +2470,7 @@ index 7a31d0b18..fcbe8d522 100644
  "                                        "
  "                                        "
 diff --git a/codex-rs/tui/src/chatwidget.rs b/codex-rs/tui/src/chatwidget.rs
-index da3d310f2..803978888 100644
+index da3d310f271ee664621bc7ce9914665535326d04..803978888f606e2f4e4d9f817d2677f355ee5c84 100644
 --- a/codex-rs/tui/src/chatwidget.rs
 +++ b/codex-rs/tui/src/chatwidget.rs
 @@ -1,4 +1,4 @@
@@ -2508,7 +2508,7 @@ index da3d310f2..803978888 100644
  
  // Extract the first bold (Markdown) element in the form **...** from `s`.
 diff --git a/codex-rs/tui/src/chatwidget/connectors.rs b/codex-rs/tui/src/chatwidget/connectors.rs
-index eaa2c26a3..324d8b9e6 100644
+index eaa2c26a3a59a32c51e1b9f1ca7399dc0f097d14..324d8b9e68a03de669ceda495b4b1fe84cdde1b8 100644
 --- a/codex-rs/tui/src/chatwidget/connectors.rs
 +++ b/codex-rs/tui/src/chatwidget/connectors.rs
 @@ -304,7 +304,7 @@ impl ChatWidget {
@@ -2521,7 +2521,7 @@ index eaa2c26a3..324d8b9e6 100644
              if let Some(install_url) = connector.install_url.clone() {
                  let app_id = connector.id.clone();
 diff --git a/codex-rs/tui/src/chatwidget/keymap_picker.rs b/codex-rs/tui/src/chatwidget/keymap_picker.rs
-index 80c62f7e8..3fb1400be 100644
+index 80c62f7e8fcceec0cbc13bd29aa41e2c220a2d60..3fb1400be27bf4ed88cbf95c353046ba4a1a2b8e 100644
 --- a/codex-rs/tui/src/chatwidget/keymap_picker.rs
 +++ b/codex-rs/tui/src/chatwidget/keymap_picker.rs
 @@ -154,6 +154,10 @@ impl ChatWidget {
@@ -2536,7 +2536,7 @@ index 80c62f7e8..3fb1400be 100644
      }
  
 diff --git a/codex-rs/tui/src/chatwidget/notifications.rs b/codex-rs/tui/src/chatwidget/notifications.rs
-index 92ef60bad..76e7b5929 100644
+index 92ef60bada2767a6678d19f8b2f6588889c10d55..76e7b592901899d336927200db864560b535a248 100644
 --- a/codex-rs/tui/src/chatwidget/notifications.rs
 +++ b/codex-rs/tui/src/chatwidget/notifications.rs
 @@ -48,7 +48,7 @@ impl Notification {
@@ -2549,7 +2549,7 @@ index 92ef60bad..76e7b5929 100644
                          #[allow(clippy::unwrap_used)]
                          display_path_for(changes.first().unwrap(), cwd)
 diff --git a/codex-rs/tui/src/chatwidget/permission_popups.rs b/codex-rs/tui/src/chatwidget/permission_popups.rs
-index a91e85ce9..80f941917 100644
+index a91e85ce9ff848e6e930656b2af7d3d6e7bfff67..80f9419179f29f40b6c4a926736e7d4b318bb99b 100644
 --- a/codex-rs/tui/src/chatwidget/permission_popups.rs
 +++ b/codex-rs/tui/src/chatwidget/permission_popups.rs
 @@ -446,7 +446,7 @@ impl ChatWidget {
@@ -2571,7 +2571,7 @@ index a91e85ce9..80f941917 100644
                  "Exercise caution when enabling full access. This significantly increases the risk of data loss, leaks, or unexpected behavior."
                      .red(),
 diff --git a/codex-rs/tui/src/chatwidget/permissions_menu.rs b/codex-rs/tui/src/chatwidget/permissions_menu.rs
-index b6614dc81..4697fe4e5 100644
+index b6614dc81e0a59ca7a322f547bcf8fec0cf83a6f..4697fe4e5af071322ec04ff4a52f66c27a5dfaa7 100644
 --- a/codex-rs/tui/src/chatwidget/permissions_menu.rs
 +++ b/codex-rs/tui/src/chatwidget/permissions_menu.rs
 @@ -12,7 +12,7 @@ pub(super) fn permission_preset_description(preset: &ApprovalPreset) -> &'static
@@ -2584,7 +2584,7 @@ index b6614dc81..4697fe4e5 100644
          _ => preset.description,
      }
 diff --git a/codex-rs/tui/src/chatwidget/plugin_catalog.rs b/codex-rs/tui/src/chatwidget/plugin_catalog.rs
-index 79cec717e..78d1381c6 100644
+index 79cec717e72fef6e52b8ffed086019b88fccdab5..78d1381c6666c83a03051ceee96104663caff345 100644
 --- a/codex-rs/tui/src/chatwidget/plugin_catalog.rs
 +++ b/codex-rs/tui/src/chatwidget/plugin_catalog.rs
 @@ -388,7 +388,7 @@ impl ChatWidget {
@@ -2597,7 +2597,7 @@ index 79cec717e..78d1381c6 100644
          .wrap(Wrap { trim: false });
  
 diff --git a/codex-rs/tui/src/chatwidget/protocol.rs b/codex-rs/tui/src/chatwidget/protocol.rs
-index 5bd2254d8..163c3b645 100644
+index 5bd2254d86f114695ccf164612c5963bb70558af..163c3b6457372bad8b14f2b7df4f83984389bca3 100644
 --- a/codex-rs/tui/src/chatwidget/protocol.rs
 +++ b/codex-rs/tui/src/chatwidget/protocol.rs
 @@ -6,6 +6,16 @@ impl ChatWidget {
@@ -2653,7 +2653,7 @@ index 5bd2254d8..163c3b645 100644
              | ServerNotification::AccountRateLimitsUpdated(_)
              | ServerNotification::ThreadStarted(_)
 diff --git a/codex-rs/tui/src/chatwidget/realtime/snapshots/codex_tui__chatwidget__realtime__tests__recording_controls_tests__voice_footer_renders_the_main_conversation_states.snap b/codex-rs/tui/src/chatwidget/realtime/snapshots/codex_tui__chatwidget__realtime__tests__recording_controls_tests__voice_footer_renders_the_main_conversation_states.snap
-index 8e26d02c6..efe056340 100644
+index 8e26d02c697acfbdc44d08e3f95b1e2417064bf6..efe056340f9ffa21d6bde9adf9f1474cfb0c5025 100644
 --- a/codex-rs/tui/src/chatwidget/realtime/snapshots/codex_tui__chatwidget__realtime__tests__recording_controls_tests__voice_footer_renders_the_main_conversation_states.snap
 +++ b/codex-rs/tui/src/chatwidget/realtime/snapshots/codex_tui__chatwidget__realtime__tests__recording_controls_tests__voice_footer_renders_the_main_conversation_states.snap
 @@ -5,7 +5,7 @@ expression: "states.join(\"\\n\\n\")"
@@ -2710,7 +2710,7 @@ index 8e26d02c6..efe056340 100644
  
    status line stays visible
 diff --git a/codex-rs/tui/src/chatwidget/rendering_tests.rs b/codex-rs/tui/src/chatwidget/rendering_tests.rs
-index 4129eca7b..21216248e 100644
+index 4129eca7be4147961197913fbf30b46e2c93d726..21216248eb4fbd4d1f05aa21f7d7b3708d8a0bc3 100644
 --- a/codex-rs/tui/src/chatwidget/rendering_tests.rs
 +++ b/codex-rs/tui/src/chatwidget/rendering_tests.rs
 @@ -401,7 +401,7 @@ async fn initial_session_header_starts_at_the_top_of_the_viewport() {
@@ -2723,7 +2723,7 @@ index 4129eca7b..21216248e 100644
      ");
  }
 diff --git a/codex-rs/tui/src/chatwidget/replay.rs b/codex-rs/tui/src/chatwidget/replay.rs
-index 6c8a7fb7f..090c06342 100644
+index 6c8a7fb7fb59a9d66c1aad7893d2af86d054b69e..090c06342a2228307940f820382ac619b600b67d 100644
 --- a/codex-rs/tui/src/chatwidget/replay.rs
 +++ b/codex-rs/tui/src/chatwidget/replay.rs
 @@ -449,7 +449,7 @@ impl ChatWidget {
@@ -2736,7 +2736,7 @@ index 6c8a7fb7f..090c06342 100644
                          "  ",
                      ));
 diff --git a/codex-rs/tui/src/chatwidget/safety_buffering.rs b/codex-rs/tui/src/chatwidget/safety_buffering.rs
-index dc3fb0b80..8cee8bff0 100644
+index dc3fb0b805359dcc7e472f2ad1e5281dd2aea2a2..8cee8bff05c6df53e3b1c919a2cb2e8ca9db4180 100644
 --- a/codex-rs/tui/src/chatwidget/safety_buffering.rs
 +++ b/codex-rs/tui/src/chatwidget/safety_buffering.rs
 @@ -10,7 +10,7 @@ const SAFETY_BUFFERING_LEARN_MORE_URL: &str = "https://help.openai.com/en/articl
@@ -2749,7 +2749,7 @@ index dc3fb0b80..8cee8bff0 100644
  struct SafetyBufferingHeader(Vec<Line<'static>>);
  
 diff --git a/codex-rs/tui/src/chatwidget/settings.rs b/codex-rs/tui/src/chatwidget/settings.rs
-index 767548773..ad087af38 100644
+index 767548773f4b4cfbe5ed7c7bae76c7879b19b0f7..ad087af3863a7ba05424c80ec8de0f5cf3788e1d 100644
 --- a/codex-rs/tui/src/chatwidget/settings.rs
 +++ b/codex-rs/tui/src/chatwidget/settings.rs
 @@ -345,6 +345,8 @@ impl ChatWidget {
@@ -2762,7 +2762,7 @@ index 767548773..ad087af38 100644
              .set_goal_command_enabled(self.config.features.enabled(Feature::Goals));
      }
 diff --git a/codex-rs/tui/src/chatwidget/slash_dispatch.rs b/codex-rs/tui/src/chatwidget/slash_dispatch.rs
-index fd56394f6..26a83bf43 100644
+index fd56394f6b80f286c1e5bed0ad203d27f4126640..26a83bf432d0569a71e47b9b26551b1337057257 100644
 --- a/codex-rs/tui/src/chatwidget/slash_dispatch.rs
 +++ b/codex-rs/tui/src/chatwidget/slash_dispatch.rs
 @@ -545,6 +545,12 @@ impl ChatWidget {
@@ -2814,7 +2814,7 @@ index fd56394f6..26a83bf43 100644
              | SlashCommand::Tui
              | SlashCommand::Pets => QueueDrain::Stop,
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__app_server_guardian_review_denied_renders_denied_request.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__app_server_guardian_review_denied_renders_denied_request.snap
-index 832d39d9d..eb4e51972 100644
+index 832d39d9d7ba16ea6b9b3f56ac692ccf26b77129..eb4e51972cdfead6c78ffca81a4b4e0aa849264a 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__app_server_guardian_review_denied_renders_denied_request.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__app_server_guardian_review_denied_renders_denied_request.snap
 @@ -15,6 +15,6 @@ expression: normalize_snapshot_paths(term.backend().vt100().screen().contents())
@@ -2826,7 +2826,7 @@ index 832d39d9d..eb4e51972 100644
  
    GPT-5.6-Sol default · /tmp/project
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__app_server_guardian_review_timed_out_renders_timed_out_request.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__app_server_guardian_review_timed_out_renders_timed_out_request.snap
-index 740c9a6fb..8d9747ede 100644
+index 740c9a6fb8334a8b1df4abfc79573e167a562ead..8d9747ede22d534f2f6367fae8d96f937c70cf75 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__app_server_guardian_review_timed_out_renders_timed_out_request.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__app_server_guardian_review_timed_out_renders_timed_out_request.snap
 @@ -15,6 +15,6 @@ expression: normalize_snapshot_paths(term.backend().vt100().screen().contents())
@@ -2838,7 +2838,7 @@ index 740c9a6fb..8d9747ede 100644
  
    GPT-5.6-Sol default · /tmp/project
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__app_server_mcp_startup_failure_renders_warning_history.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__app_server_mcp_startup_failure_renders_warning_history.snap
-index 844a0415e..a3816b43b 100644
+index 844a0415eade6256f46b7cba682bb306f8cecf6b..a3816b43b4357c048363649f53a14ad2a57bed4b 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__app_server_mcp_startup_failure_renders_warning_history.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__app_server_mcp_startup_failure_renders_warning_history.snap
 @@ -9,6 +9,6 @@ expression: normalize_snapshot_paths(term.backend().vt100().screen().contents())
@@ -2850,7 +2850,7 @@ index 844a0415e..a3816b43b 100644
  
    GPT-5.6-Sol default · /tmp/project
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__approval_modal_exec.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__approval_modal_exec.snap
-index af95c22f8..4ba3cd29a 100644
+index af95c22f82a7e7b6172e85f4676262867ebd3813..4ba3cd29aad83b3d3e02b42a2ddc9529ef178b9b 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__approval_modal_exec.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__approval_modal_exec.snap
 @@ -13,6 +13,6 @@ expression: terminal.backend().vt100().screen().contents()
@@ -2862,7 +2862,7 @@ index af95c22f8..4ba3cd29a 100644
  
    Press enter to confirm or esc to cancel
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__approval_modal_exec_multiline_prefix_no_execpolicy.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__approval_modal_exec_multiline_prefix_no_execpolicy.snap
-index 894977419..f01b2ac60 100644
+index 894977419af6018f58ac55eb535491d913796455..f01b2ac606aa76223f773d155e5abe6bef29f03c 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__approval_modal_exec_multiline_prefix_no_execpolicy.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__approval_modal_exec_multiline_prefix_no_execpolicy.snap
 @@ -12,6 +12,6 @@ expression: contents
@@ -2874,7 +2874,7 @@ index 894977419..f01b2ac60 100644
  
    Press enter to confirm or esc to cancel
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__approval_modal_exec_no_reason.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__approval_modal_exec_no_reason.snap
-index 2d5297bf3..aef6566a3 100644
+index 2d5297bf327147f5c4ebcb82eb1f322143950724..aef6566a321528c8d50986d5f895166c4197e26c 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__approval_modal_exec_no_reason.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__approval_modal_exec_no_reason.snap
 @@ -11,6 +11,6 @@ expression: terminal.backend().vt100().screen().contents()
@@ -2886,7 +2886,7 @@ index 2d5297bf3..aef6566a3 100644
  
    Press enter to confirm or esc to cancel
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__approval_modal_patch.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__approval_modal_patch.snap
-index 81b90de75..c4e40adf6 100644
+index 81b90de75e1debfd828a910b3d5b790f4932c6ce..c4e40adf66ace6cbf7e787de4f6142d7e3eb4785 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__approval_modal_patch.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__approval_modal_patch.snap
 @@ -12,6 +12,6 @@ expression: normalize_snapshot_paths(contents)
@@ -2898,7 +2898,7 @@ index 81b90de75..c4e40adf6 100644
  
    Press enter to confirm or esc to cancel
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__approvals_selection_popup.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__approvals_selection_popup.snap
-index 8717f1d03..26a61b2a4 100644
+index 8717f1d03c350d1e667d4522f25e67609a7dfeff..26a61b2a4e25310a63bb83b03abc80f0ab1e70af 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__approvals_selection_popup.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__approvals_selection_popup.snap
 @@ -8,7 +8,7 @@ expression: popup
@@ -2911,7 +2911,7 @@ index 8717f1d03..26a61b2a4 100644
  
    enter select · esc back
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__catalog_model_session_header_resume.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__catalog_model_session_header_resume.snap
-index 915041d85..06d039acc 100644
+index 915041d85fa6112b9727d6ce497358398d49cdc0..06d039acc90ebe8ea2655c4c63376c4fa81cc057 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__catalog_model_session_header_resume.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__catalog_model_session_header_resume.snap
 @@ -1,8 +1,7 @@
@@ -2925,7 +2925,7 @@ index 915041d85..06d039acc 100644
  model: GPT-5.6 Luna high
  directory: /tmp/thread-settings
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__catalog_model_session_header_startup.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__catalog_model_session_header_startup.snap
-index 65f903508..eb3966e7c 100644
+index 65f90350893b96fd6ad73a61eb83da074d0ee0bc..eb3966e7c3e57c78f0cc28aab397cefd58630a02 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__catalog_model_session_header_startup.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__catalog_model_session_header_startup.snap
 @@ -1,16 +1,15 @@
@@ -2949,7 +2949,7 @@ index 65f903508..eb3966e7c 100644
    /model - choose what model and reasoning effort to use
    /review - review any changes and find issues
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__catalog_model_session_header_unknown_model.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__catalog_model_session_header_unknown_model.snap
-index 147a544c9..8f2e9131b 100644
+index 147a544c9485f429f0e9ac058ee0ebd0389b265c..8f2e9131b6a55661ce36c5c4d2520d33dd6c0454 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__catalog_model_session_header_unknown_model.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__catalog_model_session_header_unknown_model.snap
 @@ -1,8 +1,7 @@
@@ -2963,7 +2963,7 @@ index 147a544c9..8f2e9131b 100644
  model: us.openai.gpt-5.6-luna high
  directory: /tmp/thread-settings
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__chatwidget_tall.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__chatwidget_tall.snap
-index 8d0df9a9d..c900ffc62 100644
+index 8d0df9a9d29b9a5ac441b0b7479850773ba71b4d..c900ffc62d45a113d929ee41911b3f68e60d0e95 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__chatwidget_tall.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__chatwidget_tall.snap
 @@ -23,6 +23,6 @@ expression: normalize_snapshot_paths(term.backend().vt100().screen().contents())
@@ -2975,7 +2975,7 @@ index 8d0df9a9d..c900ffc62 100644
  
    GPT-5.6-Sol default · /tmp/project
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__clipped_full_access_confirmation.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__clipped_full_access_confirmation.snap
-index 8912eda3e..bb6855591 100644
+index 8912eda3e08e67b50a45c6cbea25dca74af8b5be..bb68555911935aadf4e0b71d0ac703e11e95114e 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__clipped_full_access_confirmation.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__clipped_full_access_confirmation.snap
 @@ -5,7 +5,7 @@ expression: "snapshots.join(\"\\n\\n\")"
@@ -2997,7 +2997,7 @@ index 8912eda3e..bb6855591 100644
      your computer and run commands
      with network, without your
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__compact_queues_user_messages_snapshot.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__compact_queues_user_messages_snapshot.snap
-index a4362beca..651bda04f 100644
+index a4362becaa037c537282e30eb6a24bc48aa9a752..651bda04f35c2bf3a0d4caf0a5cf6dea28599151 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__compact_queues_user_messages_snapshot.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__compact_queues_user_messages_snapshot.snap
 @@ -17,6 +17,6 @@ expression: normalize_snapshot_paths(term.backend().vt100().screen().contents())
@@ -3009,7 +3009,7 @@ index a4362beca..651bda04f 100644
  
    GPT-5.6-Sol default · /tmp/project
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__compaction_running.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__compaction_running.snap
-index fff40163a..d5c9b7b7b 100644
+index fff40163ad765dca7df245aeaa006e0a6bc99157..d5c9b7b7b9b084e2ac5696488dc9af7b05ebf29c 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__compaction_running.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__compaction_running.snap
 @@ -6,6 +6,6 @@ expression: "normalize_compaction_snapshot(render_bottom_popup(&chat, 80))"
@@ -3021,7 +3021,7 @@ index fff40163a..d5c9b7b7b 100644
  
    GPT-5.6-Sol default · /tmp/project
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__compaction_running_narrow.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__compaction_running_narrow.snap
-index 161bd517c..bea3ad796 100644
+index 161bd517c209a8aec5f12b82134592422ab9d1ff..bea3ad796033c927a7fb60e7458d4e54de6d3ff6 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__compaction_running_narrow.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__compaction_running_narrow.snap
 @@ -6,6 +6,6 @@ expression: "normalize_compaction_snapshot(render_bottom_popup(&chat, 40))"
@@ -3033,7 +3033,7 @@ index 161bd517c..bea3ad796 100644
  
    GPT-5.6-Sol default · /tmp/project
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__completed_hook_with_output_flushes_immediately_snapshot.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__completed_hook_with_output_flushes_immediately_snapshot.snap
-index 2658f7c17..22c399043 100644
+index 2658f7c17dd1d41a4069d99a7efd1fa71eec3c50..22c399043e84529257506ad728bcb35cd91ca945 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__completed_hook_with_output_flushes_immediately_snapshot.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__completed_hook_with_output_flushes_immediately_snapshot.snap
 @@ -8,7 +8,7 @@ activity:
@@ -3055,7 +3055,7 @@ index 2658f7c17..22c399043 100644
  "  GPT-5.6-Sol default · /tmp/project                                            "
  history:
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__completed_same_id_hook_output_survives_restart_snapshot.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__completed_same_id_hook_output_survives_restart_snapshot.snap
-index 9fe87abc0..73379ca50 100644
+index 9fe87abc0fdb818202137739da23fa6dd1512afe..73379ca500648cfc9a49300779f9574ab217c820 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__completed_same_id_hook_output_survives_restart_snapshot.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__completed_same_id_hook_output_survives_restart_snapshot.snap
 @@ -8,7 +8,7 @@ activity:
@@ -3068,7 +3068,7 @@ index 9fe87abc0..73379ca50 100644
  "  GPT-5.6-Sol default · /tmp/project                                            "
  history:
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__completed_turn_clears_visible_running_hook.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__completed_turn_clears_visible_running_hook.snap
-index 749ed94a5..476167ef1 100644
+index 749ed94a5156a5effde1a7a70cae0ceb766672ac..476167ef104ab6d830ab241653beff6287c4342b 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__completed_turn_clears_visible_running_hook.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__completed_turn_clears_visible_running_hook.snap
 @@ -7,12 +7,12 @@ before completion:
@@ -3087,7 +3087,7 @@ index 749ed94a5..476167ef1 100644
  "                                                                                "
  "  GPT-5.6-Sol default · /tmp/project                                            "
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__connector_scope_invalidation.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__connector_scope_invalidation.snap
-index 47a411cbf..c050e2362 100644
+index 47a411cbf96df2535f52a0959e96b5754adce33b..c050e2362caf6bf10afc1800a58d9f2b814d4316 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__connector_scope_invalidation.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__connector_scope_invalidation.snap
 @@ -14,6 +14,6 @@ Before account change:
@@ -3099,7 +3099,7 @@ index 47a411cbf..c050e2362 100644
  
    GPT-5.6-Sol default · /tmp/project
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__custom_model_display_name_status_line.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__custom_model_display_name_status_line.snap
-index cd133ee3c..9f6fb699d 100644
+index cd133ee3c59f5cc5b9b6b812b7f32abb95c2c555..9f6fb699d8e58c05266c0002a3fed5813c4481a2 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__custom_model_display_name_status_line.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__custom_model_display_name_status_line.snap
 @@ -4,6 +4,6 @@ expression: normalized_backend_snapshot(terminal.backend())
@@ -3111,7 +3111,7 @@ index cd133ee3c..9f6fb699d 100644
  "                                                                                "
  "  GPT-5.6 Luna · GPT-5.6 Luna high                                              "
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__declined_tool_suggestion.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__declined_tool_suggestion.snap
-index b3e42a748..2cacd1121 100644
+index b3e42a748622518316dba8391dbe546eab158f81..2cacd1121f1e73bb9beab7be45273169c79f2ee0 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__declined_tool_suggestion.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__declined_tool_suggestion.snap
 @@ -1,8 +1,7 @@
@@ -3126,7 +3126,7 @@ index b3e42a748..2cacd1121 100644
  
    GPT-5.6-Sol default · /tmp/project
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__default_footer_generating_thread_title.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__default_footer_generating_thread_title.snap
-index cc63d0d48..ff044d881 100644
+index cc63d0d4885429665d466a0d9fdc6444149b836d..ff044d8813eef01d35ea85ef1a521dc59d6ebfa6 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__default_footer_generating_thread_title.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__default_footer_generating_thread_title.snap
 @@ -1,7 +1,7 @@
@@ -3140,7 +3140,7 @@ index cc63d0d48..ff044d881 100644
  
    GPT-5.6-Sol default · /tmp/project · ⠋
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__esc_interrupt_goal_paused_footer.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__esc_interrupt_goal_paused_footer.snap
-index d9aaa4e57..007127213 100644
+index d9aaa4e578c9048c3e79a9786c6cc7419e351f22..00712721323f0cd26c7f8e50e31fa7fe408c5663 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__esc_interrupt_goal_paused_footer.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__esc_interrupt_goal_paused_footer.snap
 @@ -6,6 +6,6 @@ expression: snapshot
@@ -3152,7 +3152,7 @@ index d9aaa4e57..007127213 100644
  "                                                                                "
  "  GPT-5.6-Sol default · /tmp/project                Goal paused (/goal resume)  "
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__experimental_features_available_popup.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__experimental_features_available_popup.snap
-index 5c260d762..c1866d381 100644
+index 5c260d762e6cc60a05fe4f5a1a209fec93c14aac..c1866d38135bd3ca4091e29ab5ce179d1e31f3c0 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__experimental_features_available_popup.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__experimental_features_available_popup.snap
 @@ -1,16 +1,15 @@
@@ -3175,7 +3175,7 @@ index 5c260d762..c1866d381 100644
  
  
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__experimental_features_loading.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__experimental_features_loading.snap
-index 693ea0c7e..659c8b503 100644
+index 693ea0c7e5f7517420833a025ab703bba57dcece..659c8b50330455c450923b3b26191aaaade8095d 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__experimental_features_loading.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__experimental_features_loading.snap
 @@ -1,11 +1,10 @@
@@ -3192,7 +3192,7 @@ index 693ea0c7e..659c8b503 100644
  
  
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__experimental_features_popup.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__experimental_features_popup.snap
-index 2b435d757..51b2fe313 100644
+index 2b435d75701021af975d5c594038009d229a34f6..51b2fe3130c745d1864c56e4701a9feb0c7265fe 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__experimental_features_popup.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__experimental_features_popup.snap
 @@ -4,14 +4,14 @@ expression: popup
@@ -3213,7 +3213,7 @@ index 2b435d757..51b2fe313 100644
  
    space toggle · enter save · esc save/close
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__experimental_features_popup_configured_key_chords.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__experimental_features_popup_configured_key_chords.snap
-index 1ae34036a..c8e350e7b 100644
+index 1ae34036a2d5510ad63f81201a32b8a42e7dbc0b..c8e350e7b833bdb1e02765065320c4eabb0139ea 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__experimental_features_popup_configured_key_chords.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__experimental_features_popup_configured_key_chords.snap
 @@ -4,7 +4,7 @@ expression: popup
@@ -3226,7 +3226,7 @@ index 1ae34036a..c8e350e7b 100644
  
  › [x] Shell tool  Allow the model to run shell commands.
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__feedback_good_result_consent_popup.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__feedback_good_result_consent_popup.snap
-index ff69171a6..de0dbc8d3 100644
+index ff69171a615028d9c303b2eb85944b894341a694..de0dbc8d367a15ca11ef4dc6fbe317d81dd3e19a 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__feedback_good_result_consent_popup.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__feedback_good_result_consent_popup.snap
 @@ -14,8 +14,8 @@ expression: popup
@@ -3241,7 +3241,7 @@ index ff69171a6..de0dbc8d3 100644
  
        enter select · esc back
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__feedback_upload_consent_popup.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__feedback_upload_consent_popup.snap
-index 99a9916b3..21161a081 100644
+index 99a9916b3fb7f3df327483eb1170b900f972a486..21161a08193238717b9fda8862cf6a416fcfa90d 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__feedback_upload_consent_popup.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__feedback_upload_consent_popup.snap
 @@ -19,8 +19,8 @@ expression: popup
@@ -3256,7 +3256,7 @@ index 99a9916b3..21161a081 100644
  
        enter select · esc back
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__full_access_confirmation_popup.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__full_access_confirmation_popup.snap
-index 20835a2d6..fb7fddf47 100644
+index 20835a2d687711faa8270d2ac537b5fbf9194891..fb7fddf478abd746bcef364ff6d1e13cf52e16b8 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__full_access_confirmation_popup.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__full_access_confirmation_popup.snap
 @@ -3,7 +3,7 @@ source: tui/src/chatwidget/tests/permissions.rs
@@ -3269,7 +3269,7 @@ index 20835a2d6..fb7fddf47 100644
    GP  Exercise caution when enabling full access. This significantly
        increases the risk of data loss, leaks, or unexpected behavior.
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__guardian_approved_exec_is_hidden_from_history.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__guardian_approved_exec_is_hidden_from_history.snap
-index 489c81b4f..4a50c5351 100644
+index 489c81b4f49b175e0303ba51715beabb3449b681..4a50c5351852a01e7cd99b7be2fc53f4aca15fe3 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__guardian_approved_exec_is_hidden_from_history.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__guardian_approved_exec_is_hidden_from_history.snap
 @@ -10,6 +10,6 @@ expression: normalize_snapshot_paths(term.backend().vt100().screen().contents())
@@ -3281,7 +3281,7 @@ index 489c81b4f..4a50c5351 100644
  
    GPT-5.6-Sol default · /tmp/project
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__guardian_approved_request_permissions_clears_status_without_history.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__guardian_approved_request_permissions_clears_status_without_history.snap
-index 9e552010a..c0f0be7b9 100644
+index 9e552010ac73c6a3bae0ac3f20cdbd55c22b9aff..c0f0be7b9987447a81e61cb2e59a0e0e12f9bcaa 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__guardian_approved_request_permissions_clears_status_without_history.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__guardian_approved_request_permissions_clears_status_without_history.snap
 @@ -10,6 +10,6 @@ expression: normalize_snapshot_paths(term.backend().vt100().screen().contents())
@@ -3293,7 +3293,7 @@ index 9e552010a..c0f0be7b9 100644
  
    GPT-5.6-Sol default · /tmp/project
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__guardian_denied_exec_renders_warning_and_denied_request.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__guardian_denied_exec_renders_warning_and_denied_request.snap
-index c97ab12d2..16245772e 100644
+index c97ab12d2a1928c92cf0753a90374cce45ae5bc0..16245772e0c94109894522043d4f54390bd88b6b 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__guardian_denied_exec_renders_warning_and_denied_request.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__guardian_denied_exec_renders_warning_and_denied_request.snap
 @@ -19,6 +19,6 @@ expression: normalize_snapshot_paths(term.backend().vt100().screen().contents())
@@ -3305,7 +3305,7 @@ index c97ab12d2..16245772e 100644
  
    GPT-5.6-Sol default · /tmp/project
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__guardian_goal_continuation_drops_stale_reviews.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__guardian_goal_continuation_drops_stale_reviews.snap
-index f422c75d4..77db17999 100644
+index f422c75d4f69a7f3aab8f0595727f590b782f3ac..77db17999cfae0d1815c84a35b7d5995d4396465 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__guardian_goal_continuation_drops_stale_reviews.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__guardian_goal_continuation_drops_stale_reviews.snap
 @@ -6,6 +6,6 @@ expression: normalize_snapshot_paths(rendered)
@@ -3317,7 +3317,7 @@ index f422c75d4..77db17999 100644
  
    GPT-5.6-Sol default · /tmp/project
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__guardian_parallel_reviews_render_aggregate_status.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__guardian_parallel_reviews_render_aggregate_status.snap
-index cdadc018e..85f103600 100644
+index cdadc018e97b3cb3970244674c8a1e62c495c85a..85f103600b01e1142b6ab70e0d1a5c250c88910b 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__guardian_parallel_reviews_render_aggregate_status.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__guardian_parallel_reviews_render_aggregate_status.snap
 @@ -7,6 +7,6 @@ expression: normalize_snapshot_paths(rendered)
@@ -3329,7 +3329,7 @@ index cdadc018e..85f103600 100644
  
    GPT-5.6-Sol default · /tmp/project
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__guardian_timed_out_exec_renders_warning_and_timed_out_request.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__guardian_timed_out_exec_renders_warning_and_timed_out_request.snap
-index 0210b58f7..cc27abcb3 100644
+index 0210b58f7bfd86586110f6591d7cd129ac24fb8b..cc27abcb3bd4913a00aa4bb19d1c2b5409b55568 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__guardian_timed_out_exec_renders_warning_and_timed_out_request.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__guardian_timed_out_exec_renders_warning_and_timed_out_request.snap
 @@ -19,6 +19,6 @@ expression: normalize_snapshot_paths(term.backend().vt100().screen().contents())
@@ -3341,7 +3341,7 @@ index 0210b58f7..cc27abcb3 100644
  
    GPT-5.6-Sol default · /tmp/project
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__guardian_write_stdin_review_status.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__guardian_write_stdin_review_status.snap
-index 01b02b2c9..2ecac3c06 100644
+index 01b02b2c923c394f3bea0398574c2b3d6747757a..2ecac3c06d54b14d5d4496f4091097847d9dcc1c 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__guardian_write_stdin_review_status.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__guardian_write_stdin_review_status.snap
 @@ -6,6 +6,6 @@ expression: "normalize_snapshot_paths(render_bottom_popup(&chat, 80))"
@@ -3353,7 +3353,7 @@ index 01b02b2c9..2ecac3c06 100644
  
    GPT-5.6-Sol default · /tmp/project
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__hidden_shell_paste_queued_preview.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__hidden_shell_paste_queued_preview.snap
-index 22e76c24c..956377ca9 100644
+index 22e76c24c3cd9ccf615c5d1c3638fc5aa7005c87..956377ca93bab5c0b698068d97842a3d347a58c9 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__hidden_shell_paste_queued_preview.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__hidden_shell_paste_queued_preview.snap
 @@ -8,6 +8,6 @@ expression: "normalize_snapshot_paths(render_bottom_popup(&chat, 80))"
@@ -3365,7 +3365,7 @@ index 22e76c24c..956377ca9 100644
  
    GPT-5.6-Sol default · /tmp/project
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__hook_runs_while_exec_active_snapshot.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__hook_runs_while_exec_active_snapshot.snap
-index a54331724..3d7379afe 100644
+index a54331724c476a45b80a590f6249716ffdb427a6..3d7379afe2a870f5e2bb3805092b6910d46dce1f 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__hook_runs_while_exec_active_snapshot.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__hook_runs_while_exec_active_snapshot.snap
 @@ -12,7 +12,7 @@ exec and hook running:
@@ -3395,7 +3395,7 @@ index a54331724..3d7379afe 100644
  "                                                                                "
  "  GPT-5.6-Sol default · /tmp/project                                            "
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__interrupted_turn_clears_visible_running_hook.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__interrupted_turn_clears_visible_running_hook.snap
-index 9e65facfb..2af189140 100644
+index 9e65facfba012aaae257dc8c76a96cb6dec15460..2af189140113313ec1ee0a52a513cd6f4e0410c9 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__interrupted_turn_clears_visible_running_hook.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__interrupted_turn_clears_visible_running_hook.snap
 @@ -7,12 +7,12 @@ before interrupt:
@@ -3414,7 +3414,7 @@ index 9e65facfb..2af189140 100644
  "                                                                                "
  "  GPT-5.6-Sol default · /tmp/project                                            "
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__long_running_hook_below_background_activity_row.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__long_running_hook_below_background_activity_row.snap
-index 7c1ff48f5..c7d3515b2 100644
+index 7c1ff48f5ea1ff6ea5c7c54de86c156cc104540c..c7d3515b2126f066c40de10a02047f4aa03acb21 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__long_running_hook_below_background_activity_row.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__long_running_hook_below_background_activity_row.snap
 @@ -8,7 +8,7 @@ expression: "format!(\"80 columns:\\n{}\\n120 columns:\\n{}\", hook_status_frame
@@ -3435,7 +3435,7 @@ index 7c1ff48f5..c7d3515b2 100644
  "                                                                                                                        "
  "  GPT-5.6-Sol default · /tmp/project                                                                                    "
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__manual_thread_name_status_surfaces.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__manual_thread_name_status_surfaces.snap
-index bff7d27f4..94e4dfa04 100644
+index bff7d27f4fb9ca1529cfac3af41610032783e088..94e4dfa04320624fa79a96dd6662bdc06ab71965 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__manual_thread_name_status_surfaces.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__manual_thread_name_status_surfaces.snap
 @@ -1,11 +1,11 @@
@@ -3453,7 +3453,7 @@ index bff7d27f4..94e4dfa04 100644
    GPT-5.6-Sol default · /tmp/project · review-fix
  title: review-fix | project
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__mcp_startup_header_booting.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__mcp_startup_header_booting.snap
-index f7988ba63..bbf68068a 100644
+index f7988ba63908ea2e9884ded687b284e94c84c7c5..bbf68068a4f796295466f094609fa993a10ddc6e 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__mcp_startup_header_booting.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__mcp_startup_header_booting.snap
 @@ -4,6 +4,6 @@ expression: normalized_backend_snapshot(terminal.backend())
@@ -3465,7 +3465,7 @@ index f7988ba63..bbf68068a 100644
  "                                                                                "
  "  GPT-5.6-Sol default · /tmp/project                                            "
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__memories_reset_confirmation.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__memories_reset_confirmation.snap
-index e2cfc0f4d..d9b3dc0df 100644
+index e2cfc0f4dfd597c61c422413304c613daa1fa8ac..d9b3dc0df205e8a3995e41426fa9fc86828bc2de 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__memories_reset_confirmation.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__memories_reset_confirmation.snap
 @@ -3,7 +3,7 @@ source: tui/src/chatwidget/tests/popups_and_settings.rs
@@ -3478,7 +3478,7 @@ index e2cfc0f4d..d9b3dc0df 100644
  
  
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__memories_settings_popup.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__memories_settings_popup.snap
-index 9375acca2..f2aea3a0f 100644
+index 9375acca241a5a5ddd0cbaa102c8856a6447e8f2..f2aea3a0f73f1360df650701518ee391f6138b9f 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__memories_settings_popup.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__memories_settings_popup.snap
 @@ -3,7 +3,8 @@ source: tui/src/chatwidget/tests/popups_and_settings.rs
@@ -3492,7 +3492,7 @@ index 9375acca2..f2aea3a0f 100644
  
  › [x] Use memories       Use memories starting with the next thread
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__misalignment_turn_end_cleared_composer.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__misalignment_turn_end_cleared_composer.snap
-index 37aff5b7a..6c682b971 100644
+index 37aff5b7ac8d10392e4cc0ebb5cff0373eceb54e..6c682b97185a2198ce7ce18ed686129214decf0f 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__misalignment_turn_end_cleared_composer.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__misalignment_turn_end_cleared_composer.snap
 @@ -1,8 +1,7 @@
@@ -3506,7 +3506,7 @@ index 37aff5b7a..6c682b971 100644
  
    esc esc to edit previous message
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__mixed_running_hooks_share_background_activity_row.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__mixed_running_hooks_share_background_activity_row.snap
-index f8f8b45f2..ac121d9a4 100644
+index f8f8b45f20edd4d14c8880e1e435eb3434a17035..ac121d9a48ecb7f13f5bd78f63fe2b7108cb0365 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__mixed_running_hooks_share_background_activity_row.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__mixed_running_hooks_share_background_activity_row.snap
 @@ -8,7 +8,7 @@ expression: "format!(\"80 columns:\\n{}\\n120 columns:\\n{}\", hook_status_frame
@@ -3527,7 +3527,7 @@ index f8f8b45f2..ac121d9a4 100644
  "                                                                                                                        "
  "  GPT-5.6-Sol default · /tmp/project                                                                                    "
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__overlapping_hook_live_cell_snapshot.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__overlapping_hook_live_cell_snapshot.snap
-index 25e7c7a13..7a52cefba 100644
+index 25e7c7a13e4b2ffaa2ae7a2094396061e6dacc31..7a52cefbaf69f74249f7bffd1faedaa984c21eb3 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__overlapping_hook_live_cell_snapshot.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__overlapping_hook_live_cell_snapshot.snap
 @@ -8,7 +8,7 @@ activity:
@@ -3567,7 +3567,7 @@ index 25e7c7a13..7a52cefba 100644
  "  GPT-5.6-Sol default · /tmp/project                                            "
  history:
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__permission_discovery_remote.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__permission_discovery_remote.snap
-index 4d8f9d751..b06a0f28b 100644
+index 4d8f9d751364a04fe8ac95c0089a7745c8a0cf66..b06a0f28b2c5ceda33364791096186d0ea2aa94e 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__permission_discovery_remote.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__permission_discovery_remote.snap
 @@ -9,8 +9,8 @@ expression: "render_bottom_popup(&chat, 110)"
@@ -3582,7 +3582,7 @@ index 4d8f9d751..b06a0f28b 100644
                                   (disabled: Disabled by requirements)
    2. server-only                 Description from the connected server.
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__permissions_unnamed_server_profile.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__permissions_unnamed_server_profile.snap
-index 3d4667183..cb93226a9 100644
+index 3d4667183677ec7d7f0f600e1331d87b6725939f..cb93226a94e2692de0d2ba04deafa1056770836a 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__permissions_unnamed_server_profile.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__permissions_unnamed_server_profile.snap
 @@ -8,7 +8,7 @@ expression: popup
@@ -3595,7 +3595,7 @@ index 3d4667183..cb93226a9 100644
    4. Read Only                 Read workspace files, with approval required for edits or internet access
  
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__plugins_popup_marketplace_remove_confirmation.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__plugins_popup_marketplace_remove_confirmation.snap
-index f48a5f697..1c97c84ca 100644
+index f48a5f697179aba556e57e8057696ba94df83732..1c97c84ca7f0651fb946c872a54d48b54c22a11b 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__plugins_popup_marketplace_remove_confirmation.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__plugins_popup_marketplace_remove_confirmation.snap
 @@ -3,8 +3,8 @@ source: tui/src/chatwidget/tests/popups_and_settings.rs
@@ -3610,7 +3610,7 @@ index f48a5f697..1c97c84ca 100644
  
                › 1. Remove marketplace  Remove this marketplace from the available
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__profile_permissions_selection_popup.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__profile_permissions_selection_popup.snap
-index 7f5d0192d..1c4284a37 100644
+index 7f5d0192d0a9fc9f7e0a5e8dd6098813c26dd4f2..1c4284a37d75e8669836b3e058c5d8e55cd5e9c4 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__profile_permissions_selection_popup.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__profile_permissions_selection_popup.snap
 @@ -10,9 +10,9 @@ expression: "render_bottom_popup(&chat, 80)"
@@ -3627,7 +3627,7 @@ index 7f5d0192d..1c4284a37 100644
                                   for edits or internet access
  
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__profile_permissions_selection_popup_with_custom_profiles.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__profile_permissions_selection_popup_with_custom_profiles.snap
-index 502d123d2..5ca71a288 100644
+index 502d123d24fc27dd112653c83891080ac16bae39..5ca71a288ca044cdddfca1f5b4ae138b78ced618 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__profile_permissions_selection_popup_with_custom_profiles.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__profile_permissions_selection_popup_with_custom_profiles.snap
 @@ -9,8 +9,9 @@ expression: "render_bottom_popup(&chat, 80)"
@@ -3643,7 +3643,7 @@ index 502d123d2..5ca71a288 100644
                               edits or internet access
  › 5. locked-down (current)   Inspect and patch only approved workspace files.
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__profile_permissions_selection_popup_with_disallowed_full_access.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__profile_permissions_selection_popup_with_disallowed_full_access.snap
-index 0fde3e50f..2e73dafac 100644
+index 0fde3e50f6824b99793e0d975397722b41324c11..2e73dafac142be2f9769be1b76150c11b7388a22 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__profile_permissions_selection_popup_with_disallowed_full_access.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__profile_permissions_selection_popup_with_disallowed_full_access.snap
 @@ -9,9 +9,9 @@ expression: "render_bottom_popup(&chat, 80)"
@@ -3660,7 +3660,7 @@ index 0fde3e50f..2e73dafac 100644
                               edits or internet access
  
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__projectless_windows_sandbox_setup.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__projectless_windows_sandbox_setup.snap
-index 54f5d94a2..52b4280da 100644
+index 54f5d94a25b15d98f354ac9b242aa323ef522f56..52b4280dac994f8ff2f9d9f6965a487e87e4d37d 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__projectless_windows_sandbox_setup.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__projectless_windows_sandbox_setup.snap
 @@ -2,7 +2,7 @@
@@ -3673,7 +3673,7 @@ index 54f5d94a2..52b4280da 100644
  
  
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__quick_dial_shortcuts_empty.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__quick_dial_shortcuts_empty.snap
-index 72c889987..b8f6282ad 100644
+index 72c88998754960aef0ced5af8a6d10e71e8a896a..b8f6282ad82ebac3874dea011d56f4056f5ee424 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__quick_dial_shortcuts_empty.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__quick_dial_shortcuts_empty.snap
 @@ -9,4 +9,4 @@ expression: "render_bottom_popup(&chat, 100)"
@@ -3683,7 +3683,7 @@ index 72c889987..b8f6282ad 100644
 -› Ask Codex to do anything
 +› Ask Nyacode to do anything
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__reasoning_delta_restores_recreated_status_indicator.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__reasoning_delta_restores_recreated_status_indicator.snap
-index 6303a9dd2..1888cbe8d 100644
+index 6303a9dd2993da37e90f30dccfe3b2c68adf3683..1888cbe8dd827ce15f52c7fce8a6908500170d37 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__reasoning_delta_restores_recreated_status_indicator.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__reasoning_delta_restores_recreated_status_indicator.snap
 @@ -1,12 +1,11 @@
@@ -3701,7 +3701,7 @@ index 6303a9dd2..1888cbe8d 100644
  "                                                                                "
  "  GPT-5.6-Sol default · /tmp/project                                            "
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__reasoning_shortcut_max_footer.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__reasoning_shortcut_max_footer.snap
-index 34012bf8b..d5a7e6fd9 100644
+index 34012bf8b1ef81038aa3d96f19de47f318bd970e..d5a7e6fd90cb7f5be4ccf0b0e724ae5544f97d74 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__reasoning_shortcut_max_footer.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__reasoning_shortcut_max_footer.snap
 @@ -4,6 +4,6 @@ expression: snapshot
@@ -3713,7 +3713,7 @@ index 34012bf8b..d5a7e6fd9 100644
  "                                                                                "
  "  GPT-5.5 max                                                                   "
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__reasoning_shortcut_max_plan_footer.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__reasoning_shortcut_max_plan_footer.snap
-index fb661e522..35c2c7cf4 100644
+index fb661e522f1606867598926b189495895d3746e8..35c2c7cf48f82da5d1c9f6fbe3f8a35a9afd275a 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__reasoning_shortcut_max_plan_footer.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__reasoning_shortcut_max_plan_footer.snap
 @@ -4,6 +4,6 @@ expression: snapshot
@@ -3725,7 +3725,7 @@ index fb661e522..35c2c7cf4 100644
  "                                                                                "
  "  GPT-5.5 max                                        Plan mode (⇧tab to cycle)  "
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__renamed_thread_footer_title.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__renamed_thread_footer_title.snap
-index 536edffea..9b81aa357 100644
+index 536edffead9ae3a4e5a02a21c0da599f3712cfa4..9b81aa357d3b3618c486946073fa30ed851e9d6a 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__renamed_thread_footer_title.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__renamed_thread_footer_title.snap
 @@ -4,6 +4,6 @@ expression: normalized_backend_snapshot(terminal.backend())
@@ -3737,7 +3737,7 @@ index 536edffea..9b81aa357 100644
  "                                                                                "
  "  gpt-5.2 high · Roadmap cleanup                                                "
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__replayed_delegated_tool_output.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__replayed_delegated_tool_output.snap
-index ca5ded05d..ac49200cc 100644
+index ca5ded05d30bd3d96bd82b605b4ce92f33fd71f0..ac49200ccd2c720f3f34fc52e458a25e537694e8 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__replayed_delegated_tool_output.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__replayed_delegated_tool_output.snap
 @@ -2,5 +2,5 @@
@@ -3748,7 +3748,7 @@ index ca5ded05d..ac49200cc 100644
 +• Sent by Nyacode from task source-task
    Follow <up> & report
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__replayed_in_progress_turn.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__replayed_in_progress_turn.snap
-index 126e67cc0..66d4736aa 100644
+index 126e67cc097ed78455eaab3a78deabea847a58e5..66d4736aa15d9fdcc79f33d27b6a510f9e286893 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__replayed_in_progress_turn.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__replayed_in_progress_turn.snap
 @@ -5,6 +5,6 @@ expression: "timer.replace_all(&normalize_snapshot_paths(render_bottom_popup(&ch
@@ -3760,7 +3760,7 @@ index 126e67cc0..66d4736aa 100644
  
    GPT-5.6-Sol default · /tmp/project
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__resume_paused_goal_prompt.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__resume_paused_goal_prompt.snap
-index 148254060..f2b5be74a 100644
+index 14825406007f29de29640823cf508c367d115dec..f2b5be74a44cd6b6bf63286188cace019377531b 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__resume_paused_goal_prompt.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__resume_paused_goal_prompt.snap
 @@ -3,7 +3,7 @@ source: tui/src/chatwidget/tests/goal_menu.rs
@@ -3773,7 +3773,7 @@ index 148254060..f2b5be74a 100644
    GPT-5.6-Sol
  
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__review_queues_user_messages_snapshot.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__review_queues_user_messages_snapshot.snap
-index 7f11c14a0..c9348f756 100644
+index 7f11c14a0c9827469189572e7d1d1e9916ee0612..c9348f756eac9c39a9cb613272e19729c2dd4956 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__review_queues_user_messages_snapshot.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__review_queues_user_messages_snapshot.snap
 @@ -17,6 +17,6 @@ expression: normalize_snapshot_paths(term.backend().vt100().screen().contents())
@@ -3785,7 +3785,7 @@ index 7f11c14a0..c9348f756 100644
  
    GPT-5.6-Sol default · /tmp/project
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__running_hooks_share_background_activity_row.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__running_hooks_share_background_activity_row.snap
-index 57e161155..26458c308 100644
+index 57e161155a23066d525a73989381dc76806c9f7c..26458c308bcd732f80c2a0b1ea6851b187e27e2b 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__running_hooks_share_background_activity_row.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__running_hooks_share_background_activity_row.snap
 @@ -8,7 +8,7 @@ expression: "format!(\"80 columns:\\n{}\\n120 columns:\\n{}\", hook_status_frame
@@ -3806,7 +3806,7 @@ index 57e161155..26458c308 100644
  "                                                                                                                        "
  "  GPT-5.6-Sol default · /tmp/project                                                                                    "
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__safety_buffering_retry_prompt.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__safety_buffering_retry_prompt.snap
-index e5cbe33b6..3f640d6c5 100644
+index e5cbe33b65a9588071ad17a20fa956217b206add..3f640d6c54565eb6be3770b97e81c1fed9c8d1c7 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__safety_buffering_retry_prompt.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__safety_buffering_retry_prompt.snap
 @@ -11,5 +11,5 @@ expression: popup
@@ -3818,7 +3818,7 @@ index e5cbe33b6..3f640d6c5 100644
 +  No action is required. Nyacode will keep waiting, and this menu will close
 +  when the response is ready.
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__safety_buffering_side_conversation_without_retry.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__safety_buffering_side_conversation_without_retry.snap
-index eb482d535..be9940d48 100644
+index eb482d5356f95697a7983ef3ac8431503104ba65..be9940d4824aca42dbb8a8dd7287f6cc496e01ea 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__safety_buffering_side_conversation_without_retry.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__safety_buffering_side_conversation_without_retry.snap
 @@ -8,5 +8,5 @@ expression: popup
@@ -3830,7 +3830,7 @@ index eb482d535..be9940d48 100644
 +  No action is required. Nyacode will keep waiting, and this menu will close
 +  when the response is ready.
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__safety_buffering_status_without_retry.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__safety_buffering_status_without_retry.snap
-index eb482d535..be9940d48 100644
+index eb482d5356f95697a7983ef3ac8431503104ba65..be9940d4824aca42dbb8a8dd7287f6cc496e01ea 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__safety_buffering_status_without_retry.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__safety_buffering_status_without_retry.snap
 @@ -8,5 +8,5 @@ expression: popup
@@ -3842,7 +3842,7 @@ index eb482d535..be9940d48 100644
 +  No action is required. Nyacode will keep waiting, and this menu will close
 +  when the response is ready.
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__session_end_hook_activity.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__session_end_hook_activity.snap
-index ea69dee67..a9164f8bb 100644
+index ea69dee671812a9a94cefd9f5da0c204f90efe74..a9164f8bbd88cfd638367449ed60bb70f13abaef 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__session_end_hook_activity.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__session_end_hook_activity.snap
 @@ -5,7 +5,7 @@ expression: "format!(\"before reveal:\\n{hidden}\\nrunning:\\n{running}\\ncomple
@@ -3870,7 +3870,7 @@ index ea69dee67..a9164f8bb 100644
  "                                                                                "
  "  GPT-5.6-Sol default · /tmp/project                                            "
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__session_end_hook_activity_without_message.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__session_end_hook_activity_without_message.snap
-index 9a05181d3..32083dadd 100644
+index 9a05181d30b8240d702e9308ad671181cb9052c7..32083daddf0f38b67a8070748286ef00240be5ea 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__session_end_hook_activity_without_message.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__session_end_hook_activity_without_message.snap
 @@ -5,7 +5,7 @@ expression: "format!(\"before reveal:\\n{hidden}\\nrunning:\\n{running}\\ncomple
@@ -3898,7 +3898,7 @@ index 9a05181d3..32083dadd 100644
  "                                                                                "
  "  GPT-5.6-Sol default · /tmp/project                                            "
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__side_context_label_shows_hidden_side.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__side_context_label_shows_hidden_side.snap
-index 51133a16e..c652b7d26 100644
+index 51133a16e5eb22ec5e62b868f0643609ecde70c2..c652b7d26fa0150990ca10ee7df661ae0d0a6b47 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__side_context_label_shows_hidden_side.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__side_context_label_shows_hidden_side.snap
 @@ -4,6 +4,6 @@ expression: terminal.backend()
@@ -3910,7 +3910,7 @@ index 51133a16e..c652b7d26 100644
  "                                                                                "
  "  GPT-5.6-Sol                                                  ctrl+/ for side  "
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__single_line_final_answer_hides_working_status.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__single_line_final_answer_hides_working_status.snap
-index dfa6b7a09..71472a43c 100644
+index dfa6b7a09b1543c876afa85bac21a8bc0e35f297..71472a43c1354cf5ea3fcd2bf763799cd0e0f01c 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__single_line_final_answer_hides_working_status.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__single_line_final_answer_hides_working_status.snap
 @@ -9,6 +9,6 @@ expression: normalize_snapshot_paths(terminal.backend().vt100().screen().content
@@ -3922,7 +3922,7 @@ index dfa6b7a09..71472a43c 100644
  
    gpt-5 default · /tmp/project
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__single_line_partial_answer_keeps_working_status.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__single_line_partial_answer_keeps_working_status.snap
-index f5b6cdd6e..0a785f3b1 100644
+index f5b6cdd6e1043ad83c9f62cafaafd4ec1a733764..0a785f3b17e72e828b92572a0d6b848aea18baeb 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__single_line_partial_answer_keeps_working_status.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__single_line_partial_answer_keeps_working_status.snap
 @@ -9,6 +9,6 @@ expression: normalize_snapshot_paths(terminal.backend().vt100().screen().content
@@ -3934,7 +3934,7 @@ index f5b6cdd6e..0a785f3b1 100644
  
    gpt-5 default · /tmp/project
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__slash_copy_picker_status_fields.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__slash_copy_picker_status_fields.snap
-index b28012136..21eaf7bea 100644
+index b28012136e1fb5e155386c4fca77ae7283b282c6..21eaf7bea0f2500162b3bb59edd187d33e18ca3b 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__slash_copy_picker_status_fields.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__slash_copy_picker_status_fields.snap
 @@ -5,7 +5,7 @@ expression: "render_bottom_popup(&chat,\n100).replace(&directory,\n\"[[workspace
@@ -3947,7 +3947,7 @@ index b28012136..21eaf7bea 100644
    3. Directory     [[workspace]]
    4. Thread name   Clipboard example
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__slash_copy_whole_status.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__slash_copy_whole_status.snap
-index a8631ab1a..d162f697e 100644
+index a8631ab1a581454c29ba87a9c4c8980f42a3c3f4..d162f697e586c68782208833d6a538f1fef1ace7 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__slash_copy_whole_status.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__slash_copy_whole_status.snap
 @@ -2,7 +2,7 @@
@@ -3960,7 +3960,7 @@ index a8631ab1a..d162f697e 100644
    Visit https://chatgpt.com/settings/usage for up-to-date
    information on rate limits and credits
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__slash_pets_unavailable_tmux_40.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__slash_pets_unavailable_tmux_40.snap
-index 2d2c99ada..b77d870f5 100644
+index 2d2c99adac35de4ad11bc12e030aeda4cbc0f955..b77d870f51d8dc57bc48c6493ac82b52eaaa8d39 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__slash_pets_unavailable_tmux_40.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__slash_pets_unavailable_tmux_40.snap
 @@ -1,12 +1,12 @@
@@ -3979,7 +3979,7 @@ index 2d2c99ada..b77d870f5 100644
  
  
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__slash_side_requests_forked_side_question_while_task_running.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__slash_side_requests_forked_side_question_while_task_running.snap
-index 558a9e05b..a199ca1ad 100644
+index 558a9e05b27eb58d217f1fbc1c65b039afa114bf..a199ca1ad1519ead38b87a5ce55e45d9fb276268 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__slash_side_requests_forked_side_question_while_task_running.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__slash_side_requests_forked_side_question_while_task_running.snap
 @@ -6,6 +6,6 @@ expression: normalized_backend_snapshot(terminal.backend())
@@ -3991,7 +3991,7 @@ index 558a9e05b..a199ca1ad 100644
  "                                                                                "
  "  GPT-5.6-Sol default                                         Side starting...  "
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__status_line_estimated_thread_cost_footer.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__status_line_estimated_thread_cost_footer.snap
-index d0d6e6d87..6ea1b89e5 100644
+index d0d6e6d874d7ae2bac62bf899d26b108574fadf9..6ea1b89e5e43d01460bfd762f7311c06b94d31b5 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__status_line_estimated_thread_cost_footer.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__status_line_estimated_thread_cost_footer.snap
 @@ -4,6 +4,6 @@ expression: normalized_backend_snapshot(terminal.backend())
@@ -4003,7 +4003,7 @@ index d0d6e6d87..6ea1b89e5 100644
  "                                                                                "
  "  GPT-5.6-Sol default · 5.2 credits · ~$0.21                                    "
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__status_line_fast_mode_footer.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__status_line_fast_mode_footer.snap
-index 5848dac56..5453981fb 100644
+index 5848dac5632cbca256c5bd574dcd793a4cf624d1..5453981fb16c6ead61317d1df645f63bd7b07d15 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__status_line_fast_mode_footer.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__status_line_fast_mode_footer.snap
 @@ -4,6 +4,6 @@ expression: normalized_backend_snapshot(terminal.backend())
@@ -4015,7 +4015,7 @@ index 5848dac56..5453981fb 100644
  "                                                                                "
  "  gpt-5.2 high                                                                  "
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__status_line_goal_active_token_budget_footer.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__status_line_goal_active_token_budget_footer.snap
-index d7fddce12..307abce35 100644
+index d7fddce12340f6da43b26d40f46d987176272474..307abce35229f4a47942f8b4d172c704ced06ad3 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__status_line_goal_active_token_budget_footer.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__status_line_goal_active_token_budget_footer.snap
 @@ -4,6 +4,6 @@ expression: normalized_backend_snapshot(terminal.backend())
@@ -4027,7 +4027,7 @@ index d7fddce12..307abce35 100644
  "                                                                                "
  "  GPT-5.5                                            Pursuing goal (40K / 50K)  "
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__status_line_goal_complete_elapsed_footer.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__status_line_goal_complete_elapsed_footer.snap
-index 10e1d6409..1de366e65 100644
+index 10e1d6409b73cecd7b0eb469b7f3bf71ca2ab175..1de366e654c60654f606ebff6fe97662eb7df30b 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__status_line_goal_complete_elapsed_footer.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__status_line_goal_complete_elapsed_footer.snap
 @@ -4,6 +4,6 @@ expression: normalized_backend_snapshot(terminal.backend())
@@ -4039,7 +4039,7 @@ index 10e1d6409..1de366e65 100644
  "                                                                                "
  "  GPT-5.5                                           Goal achieved (2d 23h 42m)  "
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__status_line_model_with_reasoning_context_remaining_footer.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__status_line_model_with_reasoning_context_remaining_footer.snap
-index 6200fdf10..2e0105420 100644
+index 6200fdf1080c907b88460a9a3d3815c0558afc5b..2e0105420e29dedf77f37356962ed8cc3d98b0b8 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__status_line_model_with_reasoning_context_remaining_footer.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__status_line_model_with_reasoning_context_remaining_footer.snap
 @@ -4,6 +4,6 @@ expression: normalized_backend_snapshot(terminal.backend())
@@ -4051,7 +4051,7 @@ index 6200fdf10..2e0105420 100644
  "                                                                                "
  "  gpt-5.4 xhigh fast · Context 100% left · /tmp/project                         "
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__status_line_model_with_reasoning_fast_footer.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__status_line_model_with_reasoning_fast_footer.snap
-index 2ac794d2f..070314d64 100644
+index 2ac794d2f0a21d7d68314b6d71893e2c02dcb9cc..070314d64fea96cd066e9baacd490122de9d42c9 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__status_line_model_with_reasoning_fast_footer.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__status_line_model_with_reasoning_fast_footer.snap
 @@ -4,6 +4,6 @@ expression: normalized_backend_snapshot(terminal.backend())
@@ -4063,7 +4063,7 @@ index 2ac794d2f..070314d64 100644
  "                                                                                "
  "  gpt-5.4 xhigh fast · Context 0% used · /tmp/project                           "
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__status_line_model_with_reasoning_plan_mode_footer.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__status_line_model_with_reasoning_plan_mode_footer.snap
-index 2bbd73de7..85e5fb38f 100644
+index 2bbd73de7b532411a3143fc5ed03c34700611536..85e5fb38f76f9368d95f52d72e7248249c1836ee 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__status_line_model_with_reasoning_plan_mode_footer.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__status_line_model_with_reasoning_plan_mode_footer.snap
 @@ -4,6 +4,6 @@ expression: normalized_backend_snapshot(terminal.backend())
@@ -4075,7 +4075,7 @@ index 2bbd73de7..85e5fb38f 100644
  "                                                                                "
  "  gpt-5.2 medium                                     Plan mode (⇧tab to cycle)  "
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__status_widget_active.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__status_widget_active.snap
-index 0bbc05762..9ffcdca31 100644
+index 0bbc057620c64badf9b0a47360a990f03edcc393..9ffcdca31bcc67455c12c614ddb001eae9d84a00 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__status_widget_active.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__status_widget_active.snap
 @@ -6,6 +6,6 @@ expression: normalized_backend_snapshot(terminal.backend())
@@ -4087,7 +4087,7 @@ index 0bbc05762..9ffcdca31 100644
  "                                                                                "
  "  GPT-5.6-Sol default · /tmp/project                                            "
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__status_widget_and_approval_modal.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__status_widget_and_approval_modal.snap
-index baf76cd63..8d60cdd81 100644
+index baf76cd632d4050f5c7b0a0f5705708215f7375d..8d60cdd81fe65801b172e69e98d98f6c1ec8e2cc 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__status_widget_and_approval_modal.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__status_widget_and_approval_modal.snap
 @@ -13,6 +13,6 @@ expression: normalized_backend_snapshot(terminal.backend())
@@ -4099,7 +4099,7 @@ index baf76cd63..8d60cdd81 100644
  "                                                                                                    "
  "  Press enter to confirm or esc to cancel                                                           "
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__terminal_title_setup_popup_hardcoded_only.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__terminal_title_setup_popup_hardcoded_only.snap
-index d471ee603..06874de7e 100644
+index d471ee6030de93702bdda9a4e907cfc56b7f7622..06874de7e6288df061e957089dfe6ed73152edae 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__terminal_title_setup_popup_hardcoded_only.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__terminal_title_setup_popup_hardcoded_only.snap
 @@ -10,7 +10,7 @@ expression: terminal_title_popup_snapshot(&mut chat)
@@ -4112,7 +4112,7 @@ index d471ee603..06874de7e 100644
    [ ] current-dir    Current working directory
    [ ] activity       Spinner while working, action-required message while blocked
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__terminal_title_setup_popup_live_only.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__terminal_title_setup_popup_live_only.snap
-index 52339e9ae..b3a16ca6a 100644
+index 52339e9ae48ed27250f8d3cd0014b29cd7e5837c..b3a16ca6a532263a5f6a759bba8e632ea40868c0 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__terminal_title_setup_popup_live_only.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__terminal_title_setup_popup_live_only.snap
 @@ -11,7 +11,7 @@ expression: terminal_title_popup_snapshot(&mut chat)
@@ -4125,7 +4125,7 @@ index 52339e9ae..b3a16ca6a 100644
    [ ] activity       Spinner while working, action-required message while blocked
    [ ] run-state      Compact session run-state text (Ready, Working, Thinking)
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__terminal_title_setup_popup_mixed.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__terminal_title_setup_popup_mixed.snap
-index f746c4793..d2e4f639d 100644
+index f746c4793fbf914d099b43a589baef3318e02986..d2e4f639d9d02fa95e6a7307ffa395caf17d7877 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__terminal_title_setup_popup_mixed.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__terminal_title_setup_popup_mixed.snap
 @@ -11,7 +11,7 @@ expression: terminal_title_popup_snapshot(&mut chat)
@@ -4138,7 +4138,7 @@ index f746c4793..d2e4f639d 100644
    [ ] activity       Spinner while working, action-required message while blocked
    [ ] run-state      Compact session run-state text (Ready, Working, Thinking)
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__terminal_title_setup_popup_rate_limits.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__terminal_title_setup_popup_rate_limits.snap
-index 3eca27be4..47664c027 100644
+index 3eca27be4d10d59f3a288d19aeb24f01b6384db8..47664c027728f7ed47a1de7ab0e6a8b7de84fd20 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__terminal_title_setup_popup_rate_limits.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__terminal_title_setup_popup_rate_limits.snap
 @@ -9,7 +9,7 @@ expression: terminal_title_popup_snapshot(&mut chat)
@@ -4151,7 +4151,7 @@ index 3eca27be4..47664c027 100644
    [ ] current-dir    Current working directory
    [ ] activity       Spinner while working, action-required message while blocked
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__terminal_title_setup_popup_thread_usage.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__terminal_title_setup_popup_thread_usage.snap
-index 3b417f4cf..c1ef5630e 100644
+index 3b417f4cfac4efa61d92cd7772ebab04dee15adb..c1ef5630e9390608c022db1554eca20cfc7ad57c 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__terminal_title_setup_popup_thread_usage.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__terminal_title_setup_popup_thread_usage.snap
 @@ -9,7 +9,7 @@ expression: terminal_title_popup_snapshot(&mut chat)
@@ -4164,7 +4164,7 @@ index 3b417f4cf..c1ef5630e 100644
    [ ] current-dir            Current working directory
    [ ] activity               Spinner while working, action-required message while blocked
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__unified_exec_begin_restores_working_status.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__unified_exec_begin_restores_working_status.snap
-index 68835e4e7..1e72a21e3 100644
+index 68835e4e778527ae2c39e23f29a126d7e03de842..1e72a21e3eebbb43698674c86374778d9a90bba9 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__unified_exec_begin_restores_working_status.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__unified_exec_begin_restores_working_status.snap
 @@ -6,6 +6,6 @@ expression: normalized_backend_snapshot(terminal.backend())
@@ -4176,7 +4176,7 @@ index 68835e4e7..1e72a21e3 100644
  "                                                                                "
  "  GPT-5.6-Sol default · /tmp/project                                            "
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__unified_exec_wait_status_renders_command_in_single_details_row.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__unified_exec_wait_status_renders_command_in_single_details_row.snap
-index 980874d99..24605f466 100644
+index 980874d998f617491cb7061a4a15c7518437a7d1..24605f4662ff99b1ee90c8e91798d7602ef542e1 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__unified_exec_wait_status_renders_command_in_single_details_row.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__unified_exec_wait_status_renders_command_in_single_details_row.snap
 @@ -6,6 +6,6 @@ expression: normalize_snapshot_paths(rendered)
@@ -4188,7 +4188,7 @@ index 980874d99..24605f466 100644
  
    GPT-5.6-Sol default · /tmp/project
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__voice_live_transcript_and_stream.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__voice_live_transcript_and_stream.snap
-index bf09f278d..22812eb7e 100644
+index bf09f278dfa5f53de0d4bf223139dd0959f6fd5b..22812eb7e4aa85457a7c912ccfd4ef872cc53160 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__voice_live_transcript_and_stream.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__voice_live_transcript_and_stream.snap
 @@ -1,6 +1,6 @@
@@ -4208,7 +4208,7 @@ index bf09f278d..22812eb7e 100644
  "                                                            "
  "  GPT-5.6-Sol default · /tmp/project                        "
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__voice_partial_transcript_hidden.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__voice_partial_transcript_hidden.snap
-index bacf72efc..64afff434 100644
+index bacf72efc6d6847d02ca4f53705ab91191c5abef..64afff434e63d2c4ed1cabad7c97e6bfd1c04705 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__voice_partial_transcript_hidden.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__voice_partial_transcript_hidden.snap
 @@ -8,6 +8,6 @@ expression: normalized_backend_snapshot(terminal.backend())
@@ -4220,7 +4220,7 @@ index bacf72efc..64afff434 100644
  "                                                            "
  "  GPT-5.6-Sol default · /tmp/project                        "
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__windows_sandbox_required_enable_prompt.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__windows_sandbox_required_enable_prompt.snap
-index 184aa6b2c..0415f431f 100644
+index 184aa6b2c22795710cc9fb2cc102fa874e89198d..0415f431f30a6df37e19d4058036d7da2ff4d7a1 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__windows_sandbox_required_enable_prompt.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__windows_sandbox_required_enable_prompt.snap
 @@ -2,8 +2,8 @@
@@ -4235,7 +4235,7 @@ index 184aa6b2c..0415f431f 100644
  
  
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__windows_sandbox_required_fallback_prompt.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__windows_sandbox_required_fallback_prompt.snap
-index d6cf85095..df1d17fc8 100644
+index d6cf85095685685b4acaa57d597d7c3cc870bdf4..df1d17fc8028ef4b4855be09afeca0b0d35f6b27 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__windows_sandbox_required_fallback_prompt.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__windows_sandbox_required_fallback_prompt.snap
 @@ -4,7 +4,7 @@ expression: popup
@@ -4248,7 +4248,7 @@ index d6cf85095..df1d17fc8 100644
  
  
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__windows_sandbox_unelevated_policy.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__windows_sandbox_unelevated_policy.snap
-index 6463373ac..3ba7f0d4e 100644
+index 6463373ac3ab79e8d450bd839698db72f80cfa24..3ba7f0d4ef0b6079ea1de5b3858c09426a5096fd 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__windows_sandbox_unelevated_policy.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__windows_sandbox_unelevated_policy.snap
 @@ -2,7 +2,7 @@
@@ -4261,7 +4261,7 @@ index 6463373ac..3ba7f0d4e 100644
  
  
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__workspace_owner_limit_state_messages.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__workspace_owner_limit_state_messages.snap
-index b3c1022a0..5792e24f1 100644
+index b3c1022a076464bfa794e394c516bd0a775cc5f4..5792e24f1ac6c69fb411f83bc3cc77e4bd5b5d5a 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__workspace_owner_limit_state_messages.snap
 +++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__workspace_owner_limit_state_messages.snap
 @@ -2,7 +2,7 @@
@@ -4274,7 +4274,7 @@ index b3c1022a0..5792e24f1 100644
  ---
  ■ Usage limit reached. You've reached your usage limit. Increase your limits to continue using codex.
 diff --git a/codex-rs/tui/src/chatwidget/status_surfaces.rs b/codex-rs/tui/src/chatwidget/status_surfaces.rs
-index d7a5c3bb6..d113d3ca7 100644
+index d7a5c3bb64e616f12e53849350c3c50be8bfb01f..d113d3ca74926a6a60214bed31d92a5ce0e39783 100644
 --- a/codex-rs/tui/src/chatwidget/status_surfaces.rs
 +++ b/codex-rs/tui/src/chatwidget/status_surfaces.rs
 @@ -229,7 +229,7 @@ impl ChatWidget {
@@ -4305,7 +4305,7 @@ index d7a5c3bb6..d113d3ca7 100644
              TerminalTitleItem::CurrentDir => Some(Self::truncate_terminal_title_part(
                  format_directory_display(self.status_line_cwd(), /*max_width*/ None),
 diff --git a/codex-rs/tui/src/chatwidget/tests.rs b/codex-rs/tui/src/chatwidget/tests.rs
-index 1cc51a164..b9d41bd66 100644
+index 1cc51a16460fa849162bb5db99615b07fddfc95e..b9d41bd6645dec789c7db72aeaa1b082fb582047 100644
 --- a/codex-rs/tui/src/chatwidget/tests.rs
 +++ b/codex-rs/tui/src/chatwidget/tests.rs
 @@ -266,6 +266,8 @@ mod misalignment_policy;
@@ -4318,7 +4318,7 @@ index 1cc51a164..b9d41bd66 100644
  mod permission_picker_tests;
  #[path = "tests/permission_shortcuts_tests.rs"]
 diff --git a/codex-rs/tui/src/chatwidget/tests/app_server.rs b/codex-rs/tui/src/chatwidget/tests/app_server.rs
-index 7017aca6c..817d84236 100644
+index 7017aca6c14757840f69dfafed1a1edf816c5c4d..817d842363df491855cedacff110c991fda279bb 100644
 --- a/codex-rs/tui/src/chatwidget/tests/app_server.rs
 +++ b/codex-rs/tui/src/chatwidget/tests/app_server.rs
 @@ -1128,7 +1128,7 @@ async fn sqlite_recovery_warning_shows_backup_and_metadata_limitations() {
@@ -4349,7 +4349,7 @@ index 7017aca6c..817d84236 100644
          /*replay_kind*/ None,
      );
 diff --git a/codex-rs/tui/src/chatwidget/tests/home_cleanup_tests.rs b/codex-rs/tui/src/chatwidget/tests/home_cleanup_tests.rs
-index be9bbbea1..fd63a0b45 100644
+index be9bbbea1102fe3eb4f68d79601c33d1cd4c6034..fd63a0b452d746f69bc737f0a329baa5852fea4a 100644
 --- a/codex-rs/tui/src/chatwidget/tests/home_cleanup_tests.rs
 +++ b/codex-rs/tui/src/chatwidget/tests/home_cleanup_tests.rs
 @@ -1,4 +1,4 @@
@@ -4359,7 +4359,7 @@ index be9bbbea1..fd63a0b45 100644
  use super::*;
  use pretty_assertions::assert_eq;
 diff --git a/codex-rs/tui/src/chatwidget/tests/permissions.rs b/codex-rs/tui/src/chatwidget/tests/permissions.rs
-index edc656584..885c430e8 100644
+index edc6565840be5c67a58d347355bd59bcd52d067f..885c430e825fc9ce99612f6383edef081ab4ad6f 100644
 --- a/codex-rs/tui/src/chatwidget/tests/permissions.rs
 +++ b/codex-rs/tui/src/chatwidget/tests/permissions.rs
 @@ -980,7 +980,7 @@ async fn startup_windows_sandbox_prompt_blocks_disallowed_unelevated_fallback()
@@ -4372,7 +4372,7 @@ index edc656584..885c430e8 100644
      );
      assert!(
 diff --git a/codex-rs/tui/src/chatwidget/tests/popups_and_settings.rs b/codex-rs/tui/src/chatwidget/tests/popups_and_settings.rs
-index c7a0223ed..cab790bbe 100644
+index c7a0223ed70bbd481914b07aa098072dda4fd872..cab790bbecc9198be0a76722176a39d1cff45f62 100644
 --- a/codex-rs/tui/src/chatwidget/tests/popups_and_settings.rs
 +++ b/codex-rs/tui/src/chatwidget/tests/popups_and_settings.rs
 @@ -3109,7 +3109,7 @@ async fn experimental_features_popup_snapshot() {
@@ -4394,7 +4394,7 @@ index c7a0223ed..cab790bbe 100644
      .into_iter()
      .map(|(name, display_name, description)| codex_app_server_protocol::ExperimentalFeature {
 diff --git a/codex-rs/tui/src/chatwidget/tests/security_setup_tests.rs b/codex-rs/tui/src/chatwidget/tests/security_setup_tests.rs
-index b6fadbf14..a8a0ceb50 100644
+index b6fadbf14443ea067aedd9f53c069228bf35a345..a8a0ceb507ad245389d7d6effe7956b5b95ff767 100644
 --- a/codex-rs/tui/src/chatwidget/tests/security_setup_tests.rs
 +++ b/codex-rs/tui/src/chatwidget/tests/security_setup_tests.rs
 @@ -127,7 +127,7 @@ async fn security_setup_after_cutoff_wraps_in_narrow_terminal() {
@@ -4416,7 +4416,7 @@ index b6fadbf14..a8a0ceb50 100644
      insta::assert_snapshot!(
          "security_setup_after_persona_grace",
 diff --git a/codex-rs/tui/src/chatwidget/tests/snapshots/codex_tui__chatwidget__tests__app_server__sqlite_log_write_warning.snap b/codex-rs/tui/src/chatwidget/tests/snapshots/codex_tui__chatwidget__tests__app_server__sqlite_log_write_warning.snap
-index 33f747f6a..7f997848c 100644
+index 33f747f6aa0c9ab5fb09a7b705a87af66353092b..7f997848cbbd153f4759801d1109077ce914e9ef 100644
 --- a/codex-rs/tui/src/chatwidget/tests/snapshots/codex_tui__chatwidget__tests__app_server__sqlite_log_write_warning.snap
 +++ b/codex-rs/tui/src/chatwidget/tests/snapshots/codex_tui__chatwidget__tests__app_server__sqlite_log_write_warning.snap
 @@ -4,8 +4,8 @@ expression: "super::helpers::render_bottom_popup(&chat, 80)"
@@ -4431,7 +4431,7 @@ index 33f747f6a..7f997848c 100644
  
  
 diff --git a/codex-rs/tui/src/chatwidget/tests/snapshots/codex_tui__chatwidget__tests__app_server__sqlite_recovery_warning.snap b/codex-rs/tui/src/chatwidget/tests/snapshots/codex_tui__chatwidget__tests__app_server__sqlite_recovery_warning.snap
-index e63574344..772d336d8 100644
+index e63574344741c9a25a589a820f01378c69606c73..772d336d8b95a36f618af421768b685ba11df9aa 100644
 --- a/codex-rs/tui/src/chatwidget/tests/snapshots/codex_tui__chatwidget__tests__app_server__sqlite_recovery_warning.snap
 +++ b/codex-rs/tui/src/chatwidget/tests/snapshots/codex_tui__chatwidget__tests__app_server__sqlite_recovery_warning.snap
 @@ -2,9 +2,9 @@
@@ -4449,7 +4449,7 @@ index e63574344..772d336d8 100644
    Database path: /codex/state_5.sqlite
    Backup folder: /codex/db-backups/recovery
 diff --git a/codex-rs/tui/src/chatwidget/tests/snapshots/codex_tui__chatwidget__tests__app_server__startup_config_warning_panel.snap b/codex-rs/tui/src/chatwidget/tests/snapshots/codex_tui__chatwidget__tests__app_server__startup_config_warning_panel.snap
-index 8a49a97bd..32c64e6a3 100644
+index 8a49a97bd9a7c9361aea47f9ea924ee5af1dcb01..32c64e6a34596b99ed528855e76e23d33448b8b6 100644
 --- a/codex-rs/tui/src/chatwidget/tests/snapshots/codex_tui__chatwidget__tests__app_server__startup_config_warning_panel.snap
 +++ b/codex-rs/tui/src/chatwidget/tests/snapshots/codex_tui__chatwidget__tests__app_server__startup_config_warning_panel.snap
 @@ -5,7 +5,7 @@ expression: "warnings.join(\"\\n\\n\")"
@@ -4471,7 +4471,7 @@ index 8a49a97bd..32c64e6a3 100644
  
    These warnings may reflect settings from when the background server started.
 diff --git a/codex-rs/tui/src/chatwidget/tests/snapshots/codex_tui__chatwidget__tests__approval_requests__exec_approval_modal_exec.snap b/codex-rs/tui/src/chatwidget/tests/snapshots/codex_tui__chatwidget__tests__approval_requests__exec_approval_modal_exec.snap
-index 1f959a33b..4d3c2180f 100644
+index 1f959a33b805f4db730d3ec1149f1d4e5ad37b6b..4d3c2180f3161282748331dc27f93904cdcd0820 100644
 --- a/codex-rs/tui/src/chatwidget/tests/snapshots/codex_tui__chatwidget__tests__approval_requests__exec_approval_modal_exec.snap
 +++ b/codex-rs/tui/src/chatwidget/tests/snapshots/codex_tui__chatwidget__tests__approval_requests__exec_approval_modal_exec.snap
 @@ -18,7 +18,7 @@ Buffer {
@@ -4495,7 +4495,7 @@ index 1f959a33b..4d3c2180f 100644
          x: 8, y: 15, fg: Reset, bg: Reset, underline: Reset, modifier: BOLD,
          x: 13, y: 15, fg: Reset, bg: Reset, underline: Reset, modifier: DIM,
 diff --git a/codex-rs/tui/src/chatwidget/tests/snapshots/codex_tui__chatwidget__tests__approval_requests__write_stdin_approval_modal.snap b/codex-rs/tui/src/chatwidget/tests/snapshots/codex_tui__chatwidget__tests__approval_requests__write_stdin_approval_modal.snap
-index ba2d361d7..e999c15fe 100644
+index ba2d361d7b719ae7a2de41c31e5bf03b4b9bf64a..e999c15fe6b03f37e4835d46a6be76a1744f1d08 100644
 --- a/codex-rs/tui/src/chatwidget/tests/snapshots/codex_tui__chatwidget__tests__approval_requests__write_stdin_approval_modal.snap
 +++ b/codex-rs/tui/src/chatwidget/tests/snapshots/codex_tui__chatwidget__tests__approval_requests__write_stdin_approval_modal.snap
 @@ -13,7 +13,7 @@ Buffer {
@@ -4519,7 +4519,7 @@ index ba2d361d7..e999c15fe 100644
          x: 8, y: 10, fg: Reset, bg: Reset, underline: Reset, modifier: BOLD,
          x: 13, y: 10, fg: Reset, bg: Reset, underline: Reset, modifier: DIM,
 diff --git a/codex-rs/tui/src/chatwidget/tests/snapshots/codex_tui__chatwidget__tests__backend_banners_tests__backend_banner_information_dismissible.snap b/codex-rs/tui/src/chatwidget/tests/snapshots/codex_tui__chatwidget__tests__backend_banners_tests__backend_banner_information_dismissible.snap
-index dd73e1cfe..1752d29c9 100644
+index dd73e1cfe1ac343c3b5cd16c8030583d94296ce7..1752d29c9fcaa29d3fd8d9189ebc0e8d19495b48 100644
 --- a/codex-rs/tui/src/chatwidget/tests/snapshots/codex_tui__chatwidget__tests__backend_banners_tests__backend_banner_information_dismissible.snap
 +++ b/codex-rs/tui/src/chatwidget/tests/snapshots/codex_tui__chatwidget__tests__backend_banners_tests__backend_banner_information_dismissible.snap
 @@ -1,7 +1,6 @@
@@ -4540,7 +4540,7 @@ index dd73e1cfe..1752d29c9 100644
  
    test-model-a default · /tmp/project
 diff --git a/codex-rs/tui/src/chatwidget/tests/snapshots/codex_tui__chatwidget__tests__backend_banners_tests__backend_banner_information_only.snap b/codex-rs/tui/src/chatwidget/tests/snapshots/codex_tui__chatwidget__tests__backend_banners_tests__backend_banner_information_only.snap
-index af451575e..3896623c8 100644
+index af451575ef21610c9917782011c5fe2055cd13f1..3896623c80795ef67f0c117344b2dd70a8a24242 100644
 --- a/codex-rs/tui/src/chatwidget/tests/snapshots/codex_tui__chatwidget__tests__backend_banners_tests__backend_banner_information_only.snap
 +++ b/codex-rs/tui/src/chatwidget/tests/snapshots/codex_tui__chatwidget__tests__backend_banners_tests__backend_banner_information_only.snap
 @@ -1,12 +1,11 @@
@@ -4559,7 +4559,7 @@ index af451575e..3896623c8 100644
  
    test-model-a default · /tmp/project
 diff --git a/codex-rs/tui/src/chatwidget/tests/snapshots/codex_tui__chatwidget__tests__backend_banners_tests__backend_banner_notification.snap b/codex-rs/tui/src/chatwidget/tests/snapshots/codex_tui__chatwidget__tests__backend_banners_tests__backend_banner_notification.snap
-index eecda45a8..df33d74eb 100644
+index eecda45a89d60d43401b62d748d551593e7fdeb6..df33d74eb2523735e5752e1d79cd43d8d4a1ff9c 100644
 --- a/codex-rs/tui/src/chatwidget/tests/snapshots/codex_tui__chatwidget__tests__backend_banners_tests__backend_banner_notification.snap
 +++ b/codex-rs/tui/src/chatwidget/tests/snapshots/codex_tui__chatwidget__tests__backend_banners_tests__backend_banner_notification.snap
 @@ -9,6 +9,6 @@ expression: "normalize_snapshot_paths(render_bottom_popup(&chat, 70))"
@@ -4571,7 +4571,7 @@ index eecda45a8..df33d74eb 100644
  
    test-model-a default · /tmp/project
 diff --git a/codex-rs/tui/src/chatwidget/tests/snapshots/codex_tui__chatwidget__tests__history_replay__resumed_daybreak_banner.snap b/codex-rs/tui/src/chatwidget/tests/snapshots/codex_tui__chatwidget__tests__history_replay__resumed_daybreak_banner.snap
-index 5e78664e4..e969eeb99 100644
+index 5e78664e4a80d82ff90f15dc0608ee3a8ece15ea..e969eeb9978c960b719c79f161c604cc05f390a7 100644
 --- a/codex-rs/tui/src/chatwidget/tests/snapshots/codex_tui__chatwidget__tests__history_replay__resumed_daybreak_banner.snap
 +++ b/codex-rs/tui/src/chatwidget/tests/snapshots/codex_tui__chatwidget__tests__history_replay__resumed_daybreak_banner.snap
 @@ -4,7 +4,7 @@ assertion_line: 111
@@ -4584,7 +4584,7 @@ index 5e78664e4..e969eeb99 100644
  
  • Daybreak is on for new turns.
 diff --git a/codex-rs/tui/src/chatwidget/tests/snapshots/codex_tui__chatwidget__tests__luna_reserve_usage_tests__luna_reserve_usage_narrow.snap b/codex-rs/tui/src/chatwidget/tests/snapshots/codex_tui__chatwidget__tests__luna_reserve_usage_tests__luna_reserve_usage_narrow.snap
-index 0644d12b6..a75f273d2 100644
+index 0644d12b6f533ab6c69bebcfd695fe12279221a5..a75f273d25192a150b4258789f8e5714fd81e663 100644
 --- a/codex-rs/tui/src/chatwidget/tests/snapshots/codex_tui__chatwidget__tests__luna_reserve_usage_tests__luna_reserve_usage_narrow.snap
 +++ b/codex-rs/tui/src/chatwidget/tests/snapshots/codex_tui__chatwidget__tests__luna_reserve_usage_tests__luna_reserve_usage_narrow.snap
 @@ -1,8 +1,7 @@
@@ -4599,7 +4599,7 @@ index 0644d12b6..a75f273d2 100644
  
    Luna Reserve default · /tmp/pro…
 diff --git a/codex-rs/tui/src/chatwidget/tests/snapshots/codex_tui__chatwidget__tests__luna_reserve_usage_tests__luna_reserve_usage_wide.snap b/codex-rs/tui/src/chatwidget/tests/snapshots/codex_tui__chatwidget__tests__luna_reserve_usage_tests__luna_reserve_usage_wide.snap
-index d6537e354..26b9de1a5 100644
+index d6537e354d9344d7715d5f8332026be424338639..26b9de1a5dc3d283aa5a198002d4c6453d7d7f23 100644
 --- a/codex-rs/tui/src/chatwidget/tests/snapshots/codex_tui__chatwidget__tests__luna_reserve_usage_tests__luna_reserve_usage_wide.snap
 +++ b/codex-rs/tui/src/chatwidget/tests/snapshots/codex_tui__chatwidget__tests__luna_reserve_usage_tests__luna_reserve_usage_wide.snap
 @@ -2,7 +2,6 @@
@@ -4612,7 +4612,7 @@ index d6537e354..26b9de1a5 100644
  
    Luna Reserve default · /tmp/project
 diff --git a/codex-rs/tui/src/chatwidget/tests/snapshots/codex_tui__chatwidget__tests__permissions__windows_sandbox_wrapped_help_url.snap b/codex-rs/tui/src/chatwidget/tests/snapshots/codex_tui__chatwidget__tests__permissions__windows_sandbox_wrapped_help_url.snap
-index 24f0a8e0b..ebb27a4d1 100644
+index 24f0a8e0bd0850c262702b26ec9acc180f760592..ebb27a4d19d6a5194d3d87d14844ce722ed93b4a 100644
 --- a/codex-rs/tui/src/chatwidget/tests/snapshots/codex_tui__chatwidget__tests__permissions__windows_sandbox_wrapped_help_url.snap
 +++ b/codex-rs/tui/src/chatwidget/tests/snapshots/codex_tui__chatwidget__tests__permissions__windows_sandbox_wrapped_help_url.snap
 @@ -3,7 +3,7 @@ source: tui/src/chatwidget/tests/permissions.rs
@@ -4625,7 +4625,7 @@ index 24f0a8e0b..ebb27a4d1 100644
    network access. Learn more            
    <https://developers.openai.com/codex  
 diff --git a/codex-rs/tui/src/chatwidget/tests/snapshots/codex_tui__chatwidget__tests__questions_tests__questions_cleared_by_follow_up.snap b/codex-rs/tui/src/chatwidget/tests/snapshots/codex_tui__chatwidget__tests__questions_tests__questions_cleared_by_follow_up.snap
-index 5fc368856..d21d49f66 100644
+index 5fc368856d2a9ceb90b176fe2574a76c0b449077..d21d49f66962745082cdb786c4731fa47c231a80 100644
 --- a/codex-rs/tui/src/chatwidget/tests/snapshots/codex_tui__chatwidget__tests__questions_tests__questions_cleared_by_follow_up.snap
 +++ b/codex-rs/tui/src/chatwidget/tests/snapshots/codex_tui__chatwidget__tests__questions_tests__questions_cleared_by_follow_up.snap
 @@ -2,4 +2,4 @@
@@ -4635,7 +4635,7 @@ index 5fc368856..d21d49f66 100644
 -› Ask Codex to do anything
 +› Ask Nyacode to do anything
 diff --git a/codex-rs/tui/src/chatwidget/tests/snapshots/codex_tui__chatwidget__tests__security_setup_tests__security_setup_after_cutoff.snap b/codex-rs/tui/src/chatwidget/tests/snapshots/codex_tui__chatwidget__tests__security_setup_tests__security_setup_after_cutoff.snap
-index 00a639609..aca7bfef7 100644
+index 00a63960971fc8b1c42209aedee49f1571082ed9..aca7bfef70e8a75612547ded12dbc079181c347e 100644
 --- a/codex-rs/tui/src/chatwidget/tests/snapshots/codex_tui__chatwidget__tests__security_setup_tests__security_setup_after_cutoff.snap
 +++ b/codex-rs/tui/src/chatwidget/tests/snapshots/codex_tui__chatwidget__tests__security_setup_tests__security_setup_after_cutoff.snap
 @@ -1,6 +1,5 @@
@@ -4662,7 +4662,7 @@ index 00a639609..aca7bfef7 100644
  
    test-model-a default · /tmp/project
 diff --git a/codex-rs/tui/src/chatwidget/tests/snapshots/codex_tui__chatwidget__tests__security_setup_tests__security_setup_after_persona_grace.snap b/codex-rs/tui/src/chatwidget/tests/snapshots/codex_tui__chatwidget__tests__security_setup_tests__security_setup_after_persona_grace.snap
-index 849c8a09a..cb60bd716 100644
+index 849c8a09a31f4ee032549ed6850b79bd969230e4..cb60bd716a8a5da72d5cc4fd4315423087941c15 100644
 --- a/codex-rs/tui/src/chatwidget/tests/snapshots/codex_tui__chatwidget__tests__security_setup_tests__security_setup_after_persona_grace.snap
 +++ b/codex-rs/tui/src/chatwidget/tests/snapshots/codex_tui__chatwidget__tests__security_setup_tests__security_setup_after_persona_grace.snap
 @@ -1,19 +1,18 @@
@@ -4688,7 +4688,7 @@ index 849c8a09a..cb60bd716 100644
  
    test-model-a default · /tmp/project
 diff --git a/codex-rs/tui/src/chatwidget/tests/snapshots/codex_tui__chatwidget__tests__security_setup_tests__security_setup_banner.snap b/codex-rs/tui/src/chatwidget/tests/snapshots/codex_tui__chatwidget__tests__security_setup_tests__security_setup_banner.snap
-index bff2ed119..ec6611a22 100644
+index bff2ed11940d6b66332aa805c9c6ee766c0806e8..ec6611a22886d67491fa11478ddee8536d484d2d 100644
 --- a/codex-rs/tui/src/chatwidget/tests/snapshots/codex_tui__chatwidget__tests__security_setup_tests__security_setup_banner.snap
 +++ b/codex-rs/tui/src/chatwidget/tests/snapshots/codex_tui__chatwidget__tests__security_setup_tests__security_setup_banner.snap
 @@ -1,6 +1,5 @@
@@ -4707,7 +4707,7 @@ index bff2ed119..ec6611a22 100644
  
    test-model-a default · /tmp/project
 diff --git a/codex-rs/tui/src/chatwidget/tests/snapshots/codex_tui__chatwidget__tests__security_setup_tests__security_setup_dismissed_after_usage.snap b/codex-rs/tui/src/chatwidget/tests/snapshots/codex_tui__chatwidget__tests__security_setup_tests__security_setup_dismissed_after_usage.snap
-index 77b7fbd67..b8154d4c8 100644
+index 77b7fbd67fe01652843b0d86602db9f45013de56..b8154d4c89c5225954a979176f04a928a560e912 100644
 --- a/codex-rs/tui/src/chatwidget/tests/snapshots/codex_tui__chatwidget__tests__security_setup_tests__security_setup_dismissed_after_usage.snap
 +++ b/codex-rs/tui/src/chatwidget/tests/snapshots/codex_tui__chatwidget__tests__security_setup_tests__security_setup_dismissed_after_usage.snap
 @@ -2,6 +2,6 @@
@@ -4719,7 +4719,7 @@ index 77b7fbd67..b8154d4c8 100644
  
    test-model-a default · /tmp/project
 diff --git a/codex-rs/tui/src/chatwidget/tests/snapshots/codex_tui__chatwidget__tests__slash_commands__transcript_copy_success.snap b/codex-rs/tui/src/chatwidget/tests/snapshots/codex_tui__chatwidget__tests__slash_commands__transcript_copy_success.snap
-index 073cd11c1..25c4d959f 100644
+index 073cd11c1963c8edc940a8506b6808d8514b0ef5..25c4d959f9b4ac8f733a8dde60c0915bd0259ede 100644
 --- a/codex-rs/tui/src/chatwidget/tests/snapshots/codex_tui__chatwidget__tests__slash_commands__transcript_copy_success.snap
 +++ b/codex-rs/tui/src/chatwidget/tests/snapshots/codex_tui__chatwidget__tests__slash_commands__transcript_copy_success.snap
 @@ -2,6 +2,6 @@
@@ -4731,7 +4731,7 @@ index 073cd11c1..25c4d959f 100644
  
    Copied selection to clipboard
 diff --git a/codex-rs/tui/src/chatwidget/tests/snapshots/codex_tui__chatwidget__tests__slash_commands__transcript_copy_unconfirmed.snap b/codex-rs/tui/src/chatwidget/tests/snapshots/codex_tui__chatwidget__tests__slash_commands__transcript_copy_unconfirmed.snap
-index 51efc1d5e..ebc5c8e5d 100644
+index 51efc1d5e09c9b444a79ddc522a6ea92955275aa..ebc5c8e5df7fc607fd14f1e62052a66b741f320f 100644
 --- a/codex-rs/tui/src/chatwidget/tests/snapshots/codex_tui__chatwidget__tests__slash_commands__transcript_copy_unconfirmed.snap
 +++ b/codex-rs/tui/src/chatwidget/tests/snapshots/codex_tui__chatwidget__tests__slash_commands__transcript_copy_unconfirmed.snap
 @@ -2,6 +2,6 @@
@@ -4743,7 +4743,7 @@ index 51efc1d5e..ebc5c8e5d 100644
  
    Copy unconfirmed; /export saves chat
 diff --git a/codex-rs/tui/src/chatwidget/tests/status_and_layout.rs b/codex-rs/tui/src/chatwidget/tests/status_and_layout.rs
-index 760f72edc..7501b8498 100644
+index 760f72edc7c456c3c0d228a4112953f4e7f4f613..7501b849846ce84946fc84a7caa1090055edc360 100644
 --- a/codex-rs/tui/src/chatwidget/tests/status_and_layout.rs
 +++ b/codex-rs/tui/src/chatwidget/tests/status_and_layout.rs
 @@ -533,14 +533,14 @@ async fn completed_plan_table_tail_skips_provisional_history_insert() {
@@ -4773,7 +4773,7 @@ index 760f72edc..7501b8498 100644
          (
              RateLimitReachedType::WorkspaceOwnerUsageLimitReached,
 diff --git a/codex-rs/tui/src/chatwidget/tui_mode_picker.rs b/codex-rs/tui/src/chatwidget/tui_mode_picker.rs
-index dba9405fc..4f32308b7 100644
+index dba9405fcb569e21f0234201cfbc3679d33a2030..4f32308b763e13836435c4dca5e995833a615bcb 100644
 --- a/codex-rs/tui/src/chatwidget/tui_mode_picker.rs
 +++ b/codex-rs/tui/src/chatwidget/tui_mode_picker.rs
 @@ -15,7 +15,11 @@ impl ChatWidget {
@@ -4790,7 +4790,7 @@ index dba9405fc..4f32308b7 100644
          .into_iter()
          .map(|(enabled, name, description)| SelectionItem {
 diff --git a/codex-rs/tui/src/chatwidget/turn_runtime.rs b/codex-rs/tui/src/chatwidget/turn_runtime.rs
-index d9726d2fc..c4313118d 100644
+index d9726d2fc4f5271e281196410163de3ecb73c90c..c4313118d9df00610ac876af0225153760eec4a9 100644
 --- a/codex-rs/tui/src/chatwidget/turn_runtime.rs
 +++ b/codex-rs/tui/src/chatwidget/turn_runtime.rs
 @@ -382,7 +382,7 @@ impl ChatWidget {
@@ -4812,7 +4812,7 @@ index d9726d2fc..c4313118d 100644
                      None,
              ),
 diff --git a/codex-rs/tui/src/chatwidget/windows_sandbox_prompts.rs b/codex-rs/tui/src/chatwidget/windows_sandbox_prompts.rs
-index 39bbb795f..282088add 100644
+index 39bbb795f3bb4421b2283001ab99bb41fdbb192d..282088add3e8921824d0b9c9cd3c3c25155772e3 100644
 --- a/codex-rs/tui/src/chatwidget/windows_sandbox_prompts.rs
 +++ b/codex-rs/tui/src/chatwidget/windows_sandbox_prompts.rs
 @@ -35,11 +35,11 @@ impl ChatWidget {
@@ -4853,7 +4853,7 @@ index 39bbb795f..282088add 100644
                  actions: vec![Box::new({
                      let otel = self.session_telemetry.clone();
 diff --git a/codex-rs/tui/src/onboarding/auth/headless_chatgpt_login.rs b/codex-rs/tui/src/onboarding/auth/headless_chatgpt_login.rs
-index 2f7f2992d..039583ad7 100644
+index 2f7f2992d7f7412f40a7bb70d096b2b834800499..039583ad78ba56b72da2fb8763b5d1b1eb7fd2b1 100644
 --- a/codex-rs/tui/src/onboarding/auth/headless_chatgpt_login.rs
 +++ b/codex-rs/tui/src/onboarding/auth/headless_chatgpt_login.rs
 @@ -126,7 +126,7 @@ pub(super) fn render_device_code_login(
@@ -4866,7 +4866,7 @@ index 2f7f2992d..039583ad7 100644
                  .into(),
          );
 diff --git a/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_shows_chatgpt_plan_without_email.snap b/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_shows_chatgpt_plan_without_email.snap
-index 51b58ecde..0a65b1951 100644
+index 51b58ecdecc60720d2f2f3f3e7147700b5ab57ad..0a65b195117a7e603c65efd1e6edb82a1d289dd6 100644
 --- a/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_shows_chatgpt_plan_without_email.snap
 +++ b/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_shows_chatgpt_plan_without_email.snap
 @@ -4,7 +4,7 @@ expression: sanitized

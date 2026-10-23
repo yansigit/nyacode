@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "candidate_tag": "rust-v0.164.0",
+  "candidate_revision": "6aaac694803004a63c6f393d153c96d22521a6b9",
+  "archive_sha256": "a0a2e1f349139b712fd72f85193ca40b57611415093ead730de5f07308380d52",
+  "result": "failed",
+  "accepted_lock_changed": false,
+  "accepted_engine_lock_sha256": "9578c85b0574b918fabdb5d280ec29764a7ce07f16cadce5a43f5b58bbdf57ba",
+  "failure": "Strict patch application rejected changed upstream context; manual integration repair required.",
+  "patch_failures": [
+    "codex-rs/.cargo/audit.toml:12",
+    "codex-rs/app-server-transport/src/transport/unix_socket.rs:5",
+    "codex-rs/app-server-transport/src/transport/websocket.rs:120",
+    "codex-rs/app-server/Cargo.toml:131",
+    "codex-rs/app-server/src/user_verification_test_support.rs:153",
+    "codex-rs/cli/src/main.rs:73",
+    "codex-rs/deny.toml:73",
+    "codex-rs/http-client/Cargo.toml:26",
+    "codex-rs/http-client/src/client_builder.rs:37",
+    "codex-rs/http-client/src/lib.rs:77",
+    "codex-rs/mxc-sandbox/Cargo.toml:30",
+    "codex-rs/responses-api-proxy/Cargo.toml:22",
+    "codex-rs/tui/src/app.rs:1227",
+    "codex-rs/tui/src/daemon_recovery.rs:171",
+    "codex-rs/tui/tests/suite/worktree_stack.rs:109"
+  ],
+  "qualification_status": "Ineligible; no candidate merged or product published."
+}

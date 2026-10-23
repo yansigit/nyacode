@@ -4075,6 +4075,7 @@
         "codex-rs/app-server-protocol/schema/typescript/v2/ThreadShellCommandResponse.ts",
         "codex-rs/app-server-protocol/schema/typescript/v2/TurnInterruptResponse.ts",
         "codex-rs/app-server-protocol/schema/typescript/v2/index.ts",
+        "codex-rs/app-server-protocol/scripts/write_schema_fixtures.py",
         "sdk/python-runtime/README.md",
         "sdk/python-runtime/pyproject.toml",
         "sdk/python/README.md",

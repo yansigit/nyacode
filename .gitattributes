@@ -1,3 +1,7 @@
+# Preserve identical assembly input bytes on every release platform.
+* -text
+integration/codex/patches/*.patch whitespace=-blank-at-eol
+
 codex-rs/app-server-protocol/schema/** linguist-generated
 codex-rs/hooks/schema/generated/** linguist-generated
 third_party/voice/sources.json text eol=lf

@@ -1,5 +1,5 @@
 diff --git a/codex-rs/app-server-protocol/schema/json/ApplyPatchApprovalParams.json b/codex-rs/app-server-protocol/schema/json/ApplyPatchApprovalParams.json
-index d1174a05b..dca1f639b 100644
+index d1174a05b0d3fa4829e4c5b7d288efa3e480aeb5..dca1f639b765891013409f3c8b9172537792a5c4 100644
 --- a/codex-rs/app-server-protocol/schema/json/ApplyPatchApprovalParams.json
 +++ b/codex-rs/app-server-protocol/schema/json/ApplyPatchApprovalParams.json
 @@ -77,7 +77,7 @@
@@ -21,7 +21,7 @@ index d1174a05b..dca1f639b 100644
          "string",
          "null"
 diff --git a/codex-rs/app-server-protocol/schema/json/ApplyPatchApprovalResponse.json b/codex-rs/app-server-protocol/schema/json/ApplyPatchApprovalResponse.json
-index 6ad421473..6e3e1b86c 100644
+index 6ad421473be6446d966bf104d7489cb0aef785b9..6e3e1b86c28a6831dc8d62253c708026c0d487f1 100644
 --- a/codex-rs/app-server-protocol/schema/json/ApplyPatchApprovalResponse.json
 +++ b/codex-rs/app-server-protocol/schema/json/ApplyPatchApprovalResponse.json
 @@ -35,11 +35,12 @@
@@ -83,7 +83,7 @@ index 6ad421473..6e3e1b86c 100644
              "abort"
            ],
 diff --git a/codex-rs/app-server-protocol/schema/json/ChatgptAuthTokensRefreshParams.json b/codex-rs/app-server-protocol/schema/json/ChatgptAuthTokensRefreshParams.json
-index 8b320fd67..8eac4c1e9 100644
+index 8b320fd673d8bdc88e18334c77027518f1b0c31b..8eac4c1e9ae4a2f357adbafe3b4037e8cbdacc46 100644
 --- a/codex-rs/app-server-protocol/schema/json/ChatgptAuthTokensRefreshParams.json
 +++ b/codex-rs/app-server-protocol/schema/json/ChatgptAuthTokensRefreshParams.json
 @@ -15,7 +15,7 @@
@@ -96,7 +96,7 @@ index 8b320fd67..8eac4c1e9 100644
          "string",
          "null"
 diff --git a/codex-rs/app-server-protocol/schema/json/ClientRequest.json b/codex-rs/app-server-protocol/schema/json/ClientRequest.json
-index 4e9211b36..cc3cc47e1 100644
+index 4e9211b36a4128bce7c000a84679788e99e743cf..cc3cc47e1aff07948cf7387bd755904aa4034fc2 100644
 --- a/codex-rs/app-server-protocol/schema/json/ClientRequest.json
 +++ b/codex-rs/app-server-protocol/schema/json/ClientRequest.json
 @@ -2,7 +2,7 @@
@@ -1677,7 +1677,7 @@ index 4e9211b36..cc3cc47e1 100644
        "properties": {
          "id": {
 diff --git a/codex-rs/app-server-protocol/schema/json/CommandExecutionRequestApprovalParams.json b/codex-rs/app-server-protocol/schema/json/CommandExecutionRequestApprovalParams.json
-index 4240a7b97..b53258759 100644
+index 4240a7b972c4c268a5171c06a66f9e40b02a82b3..b532587599d4736e9c716501a0012707efa032fb 100644
 --- a/codex-rs/app-server-protocol/schema/json/CommandExecutionRequestApprovalParams.json
 +++ b/codex-rs/app-server-protocol/schema/json/CommandExecutionRequestApprovalParams.json
 @@ -14,7 +14,7 @@
@@ -1717,7 +1717,7 @@ index 4240a7b97..b53258759 100644
          "string",
          "null"
 diff --git a/codex-rs/app-server-protocol/schema/json/CommandExecutionRequestApprovalResponse.json b/codex-rs/app-server-protocol/schema/json/CommandExecutionRequestApprovalResponse.json
-index 0b7986fba..ef43a01e5 100644
+index 0b7986fba92365c35553aa19c5b8dc24926ba02f..ef43a01e56b04ddd95dd23df681d099e7ad78bbe 100644
 --- a/codex-rs/app-server-protocol/schema/json/CommandExecutionRequestApprovalResponse.json
 +++ b/codex-rs/app-server-protocol/schema/json/CommandExecutionRequestApprovalResponse.json
 @@ -11,7 +11,7 @@
@@ -1739,7 +1739,7 @@ index 0b7986fba..ef43a01e5 100644
              "acceptWithExecpolicyAmendment": {
                "properties": {
 diff --git a/codex-rs/app-server-protocol/schema/json/ExecCommandApprovalParams.json b/codex-rs/app-server-protocol/schema/json/ExecCommandApprovalParams.json
-index 43f85d21a..73b879032 100644
+index 43f85d21ae89620e8036b1f7db8c7d15fc174e8d..73b8790324dbb1f53a8c9dc462e759b739e4e3fc 100644
 --- a/codex-rs/app-server-protocol/schema/json/ExecCommandApprovalParams.json
 +++ b/codex-rs/app-server-protocol/schema/json/ExecCommandApprovalParams.json
 @@ -12,7 +12,7 @@
@@ -1761,7 +1761,7 @@ index 43f85d21a..73b879032 100644
      },
      "command": {
 diff --git a/codex-rs/app-server-protocol/schema/json/ExecCommandApprovalResponse.json b/codex-rs/app-server-protocol/schema/json/ExecCommandApprovalResponse.json
-index 22f37f3a1..b319775b3 100644
+index 22f37f3a1a7261028d5c106e8115bd880fda4f18..b319775b39b79bad64c49433d8f162650c1d20ee 100644
 --- a/codex-rs/app-server-protocol/schema/json/ExecCommandApprovalResponse.json
 +++ b/codex-rs/app-server-protocol/schema/json/ExecCommandApprovalResponse.json
 @@ -35,11 +35,12 @@
@@ -1823,7 +1823,7 @@ index 22f37f3a1..b319775b3 100644
              "abort"
            ],
 diff --git a/codex-rs/app-server-protocol/schema/json/FileChangeRequestApprovalParams.json b/codex-rs/app-server-protocol/schema/json/FileChangeRequestApprovalParams.json
-index f17388aa5..66cdb8c59 100644
+index f17388aa53a4b63d802c4475780246560f850196..66cdb8c59dc03a6328eeeed357b945b5d7244bc2 100644
 --- a/codex-rs/app-server-protocol/schema/json/FileChangeRequestApprovalParams.json
 +++ b/codex-rs/app-server-protocol/schema/json/FileChangeRequestApprovalParams.json
 @@ -2,7 +2,7 @@
@@ -1836,7 +1836,7 @@ index f17388aa5..66cdb8c59 100644
          "string",
          "null"
 diff --git a/codex-rs/app-server-protocol/schema/json/FuzzyFileSearchResponse.json b/codex-rs/app-server-protocol/schema/json/FuzzyFileSearchResponse.json
-index 3c91a79c6..b2b226285 100644
+index 3c91a79c69754256e51f76b302b587424b11b346..b2b226285f66e026ae69e0379e7b3e0bdc860def 100644
 --- a/codex-rs/app-server-protocol/schema/json/FuzzyFileSearchResponse.json
 +++ b/codex-rs/app-server-protocol/schema/json/FuzzyFileSearchResponse.json
 @@ -17,7 +17,7 @@
@@ -1858,7 +1858,7 @@ index 3c91a79c6..b2b226285 100644
          }
        },
 diff --git a/codex-rs/app-server-protocol/schema/json/FuzzyFileSearchSessionUpdatedNotification.json b/codex-rs/app-server-protocol/schema/json/FuzzyFileSearchSessionUpdatedNotification.json
-index b69ad9b28..302c2d97c 100644
+index b69ad9b288f6746c65b34108029f8ee879807d64..302c2d97c4ced28f4e86b9319ba56cc3ddd4db7e 100644
 --- a/codex-rs/app-server-protocol/schema/json/FuzzyFileSearchSessionUpdatedNotification.json
 +++ b/codex-rs/app-server-protocol/schema/json/FuzzyFileSearchSessionUpdatedNotification.json
 @@ -17,7 +17,7 @@
@@ -1880,7 +1880,7 @@ index b69ad9b28..302c2d97c 100644
          }
        },
 diff --git a/codex-rs/app-server-protocol/schema/json/McpServerElicitationRequestParams.json b/codex-rs/app-server-protocol/schema/json/McpServerElicitationRequestParams.json
-index 7fbc7e988..42b9e5968 100644
+index 7fbc7e988a5645d08217127a48fdb1e7cd003274..42b9e5968f30518c8114fb5e913eaf505adae997 100644
 --- a/codex-rs/app-server-protocol/schema/json/McpServerElicitationRequestParams.json
 +++ b/codex-rs/app-server-protocol/schema/json/McpServerElicitationRequestParams.json
 @@ -204,7 +204,7 @@
@@ -1956,7 +1956,7 @@ index 7fbc7e988..42b9e5968 100644
          "string",
          "null"
 diff --git a/codex-rs/app-server-protocol/schema/json/PermissionsRequestApprovalParams.json b/codex-rs/app-server-protocol/schema/json/PermissionsRequestApprovalParams.json
-index 8d5298d09..c92d13257 100644
+index 8d5298d096ae2d48f584902a0923d726a7eb9970..c92d1325777fe36ce173e5300168992edad6cda3 100644
 --- a/codex-rs/app-server-protocol/schema/json/PermissionsRequestApprovalParams.json
 +++ b/codex-rs/app-server-protocol/schema/json/PermissionsRequestApprovalParams.json
 @@ -14,7 +14,7 @@
@@ -1969,7 +1969,7 @@ index 8d5298d09..c92d13257 100644
              "integer",
              "null"
 diff --git a/codex-rs/app-server-protocol/schema/json/PermissionsRequestApprovalResponse.json b/codex-rs/app-server-protocol/schema/json/PermissionsRequestApprovalResponse.json
-index a21e00a19..50c312071 100644
+index a21e00a19aab4340f6175e4711d94e3e1975585d..50c31207192836056179f8da9d29496a189f2cbe 100644
 --- a/codex-rs/app-server-protocol/schema/json/PermissionsRequestApprovalResponse.json
 +++ b/codex-rs/app-server-protocol/schema/json/PermissionsRequestApprovalResponse.json
 @@ -14,7 +14,7 @@
@@ -1982,7 +1982,7 @@ index a21e00a19..50c312071 100644
              "integer",
              "null"
 diff --git a/codex-rs/app-server-protocol/schema/json/ServerNotification.json b/codex-rs/app-server-protocol/schema/json/ServerNotification.json
-index 122d6dc78..48d200801 100644
+index 122d6dc7811f0ff247cf51485c2017a354b8892d..48d200801fbd371ca8dc0f16f465e5fbe0b9ea15 100644
 --- a/codex-rs/app-server-protocol/schema/json/ServerNotification.json
 +++ b/codex-rs/app-server-protocol/schema/json/ServerNotification.json
 @@ -2,7 +2,7 @@
@@ -2932,7 +2932,7 @@ index 122d6dc78..48d200801 100644
        "properties": {
          "method": {
 diff --git a/codex-rs/app-server-protocol/schema/json/ServerRequest.json b/codex-rs/app-server-protocol/schema/json/ServerRequest.json
-index 3b849caba..f6603551b 100644
+index 3b849cabaaf2a4addd868afa106ff8ce5c34a99c..f6603551bee9c5c5b8511687549d26115807a619 100644
 --- a/codex-rs/app-server-protocol/schema/json/ServerRequest.json
 +++ b/codex-rs/app-server-protocol/schema/json/ServerRequest.json
 @@ -14,7 +14,7 @@
@@ -3143,7 +3143,7 @@ index 3b849caba..f6603551b 100644
          "id": {
            "$ref": "#/definitions/RequestId"
 diff --git a/codex-rs/app-server-protocol/schema/json/ToolRequestUserInputParams.json b/codex-rs/app-server-protocol/schema/json/ToolRequestUserInputParams.json
-index 04ee2de63..5a468a56c 100644
+index 04ee2de63581a6a1fc0655f32da9779cfb6c9998..5a468a56c143c329761619d7c14a964e5f881112 100644
 --- a/codex-rs/app-server-protocol/schema/json/ToolRequestUserInputParams.json
 +++ b/codex-rs/app-server-protocol/schema/json/ToolRequestUserInputParams.json
 @@ -61,7 +61,7 @@
@@ -3156,7 +3156,7 @@ index 04ee2de63..5a468a56c 100644
          "integer",
          "null"
 diff --git a/codex-rs/app-server-protocol/schema/json/codex_app_server_protocol.schemas.json b/codex-rs/app-server-protocol/schema/json/codex_app_server_protocol.schemas.json
-index 71959264b..59f1ebc94 100644
+index 71959264bae4680c1a5a166fddaaff5f03f7b726..59f1ebc94480005ef553a8ca5fd6267abcb2a9a2 100644
 --- a/codex-rs/app-server-protocol/schema/json/codex_app_server_protocol.schemas.json
 +++ b/codex-rs/app-server-protocol/schema/json/codex_app_server_protocol.schemas.json
 @@ -2,7 +2,7 @@
@@ -7058,7 +7058,7 @@ index 71959264b..59f1ebc94 100644
            },
            "failedScan": {
 diff --git a/codex-rs/app-server-protocol/schema/json/codex_app_server_protocol.v2.schemas.json b/codex-rs/app-server-protocol/schema/json/codex_app_server_protocol.v2.schemas.json
-index 14330ebf1..9c7cd05f7 100644
+index 14330ebf18d785388a89d14cfd947687064f99ee..9c7cd05f700857883d3d4be013649b3dac4d3e68 100644
 --- a/codex-rs/app-server-protocol/schema/json/codex_app_server_protocol.v2.schemas.json
 +++ b/codex-rs/app-server-protocol/schema/json/codex_app_server_protocol.v2.schemas.json
 @@ -2,11 +2,35 @@
@@ -10506,7 +10506,7 @@ index 14330ebf1..9c7cd05f7 100644
          },
          "failedScan": {
 diff --git a/codex-rs/app-server-protocol/schema/json/v1/InitializeParams.json b/codex-rs/app-server-protocol/schema/json/v1/InitializeParams.json
-index 750dddeaf..fc4314cbc 100644
+index 750dddeaf5f551257110120effed655141eab5bf..fc4314cbc5f9b862b8e6f09e2bda3876e0829d6a 100644
 --- a/codex-rs/app-server-protocol/schema/json/v1/InitializeParams.json
 +++ b/codex-rs/app-server-protocol/schema/json/v1/InitializeParams.json
 @@ -31,7 +31,7 @@
@@ -10528,7 +10528,7 @@ index 750dddeaf..fc4314cbc 100644
              "type": "string"
            },
 diff --git a/codex-rs/app-server-protocol/schema/json/v1/InitializeResponse.json b/codex-rs/app-server-protocol/schema/json/v1/InitializeResponse.json
-index 1de65f82f..3aadfc2d8 100644
+index 1de65f82f4df9fa810fbda3ff199eca49430a29f..3aadfc2d8802053228b5079a41a8f00ef24ebe35 100644
 --- a/codex-rs/app-server-protocol/schema/json/v1/InitializeResponse.json
 +++ b/codex-rs/app-server-protocol/schema/json/v1/InitializeResponse.json
 @@ -2,7 +2,7 @@
@@ -10555,7 +10555,7 @@ index 1de65f82f..3aadfc2d8 100644
      },
      "userAgent": {
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/AccountRateLimitsUpdatedNotification.json b/codex-rs/app-server-protocol/schema/json/v2/AccountRateLimitsUpdatedNotification.json
-index 9eae3d95c..213a041a7 100644
+index 9eae3d95cca20bd65a60ed37bf9d1c16374858b8..213a041a7d8a5d04b67aa7516821ba16fdf2f26f 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/AccountRateLimitsUpdatedNotification.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/AccountRateLimitsUpdatedNotification.json
 @@ -198,7 +198,7 @@
@@ -10568,7 +10568,7 @@ index 9eae3d95c..213a041a7 100644
      "rateLimits": {
        "$ref": "#/definitions/RateLimitSnapshot"
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/AccountUpdatedNotification.json b/codex-rs/app-server-protocol/schema/json/v2/AccountUpdatedNotification.json
-index 7ade554a7..438eda1ce 100644
+index 7ade554a7ab6c91b4011313d1fe4ca39f69bc5e9..438eda1ce67e273eb4e2262ef88fa99a34e0cc2b 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/AccountUpdatedNotification.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/AccountUpdatedNotification.json
 @@ -19,7 +19,7 @@
@@ -10581,7 +10581,7 @@ index 7ade554a7..438eda1ce 100644
              "chatgptAuthTokens"
            ],
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/AppListUpdatedNotification.json b/codex-rs/app-server-protocol/schema/json/v2/AppListUpdatedNotification.json
-index 46ca0f64d..7eb7f7184 100644
+index 46ca0f64d3a67c149993d5b39799fd8f2bc33e27..7eb7f7184b8e755729aa66e86563390d9a8dbeb6 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/AppListUpdatedNotification.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/AppListUpdatedNotification.json
 @@ -111,7 +111,7 @@
@@ -10594,7 +10594,7 @@ index 46ca0f64d..7eb7f7184 100644
          },
          "labels": {
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/AppsInstalledParams.json b/codex-rs/app-server-protocol/schema/json/v2/AppsInstalledParams.json
-index b5c53055b..bed964cc3 100644
+index b5c53055bdb6b8db1b638fcdcc84925bd35ab14d..bed964cc36f039c1d7bfebea2f98c60e9718747c 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/AppsInstalledParams.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/AppsInstalledParams.json
 @@ -3,7 +3,7 @@
@@ -10607,7 +10607,7 @@ index b5c53055b..bed964cc3 100644
      },
      "threadId": {
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/AppsInstalledResponse.json b/codex-rs/app-server-protocol/schema/json/v2/AppsInstalledResponse.json
-index b8c0855c7..cb103f5dd 100644
+index b8c0855c741754cab9a577d822f44c53aadc4b09..cb103f5dd272ff13a29dd2ddaa3f70db547f595a 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/AppsInstalledResponse.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/AppsInstalledResponse.json
 @@ -5,18 +5,18 @@
@@ -10633,7 +10633,7 @@ index b8c0855c7..cb103f5dd 100644
              "string",
              "null"
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/AppsListParams.json b/codex-rs/app-server-protocol/schema/json/v2/AppsListParams.json
-index 385e5ba29..5d53acebb 100644
+index 385e5ba2985a42fe8f77924a2f089fd9ab4a8d51..5d53acebb35eecee80ebfaeaec8a428cb40481b7 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/AppsListParams.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/AppsListParams.json
 @@ -16,7 +16,7 @@
@@ -10646,7 +10646,7 @@ index 385e5ba29..5d53acebb 100644
          "integer",
          "null"
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/AppsListResponse.json b/codex-rs/app-server-protocol/schema/json/v2/AppsListResponse.json
-index a6f220830..62c4eede0 100644
+index a6f220830c99e0dbcb3e1a47b4698adeabfb0b7e..62c4eede05b04ebd22994f26ffc3294917207ea1 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/AppsListResponse.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/AppsListResponse.json
 @@ -111,7 +111,7 @@
@@ -10668,7 +10668,7 @@ index a6f220830..62c4eede0 100644
          "string",
          "null"
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/AppsReadParams.json b/codex-rs/app-server-protocol/schema/json/v2/AppsReadParams.json
-index 95467a745..9bed16d11 100644
+index 95467a745b77897b33295470e15b981fabef7a1f..9bed16d11d86006a07bec301bdf7d839ddb5ebe9 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/AppsReadParams.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/AppsReadParams.json
 @@ -3,7 +3,7 @@
@@ -10681,7 +10681,7 @@ index 95467a745..9bed16d11 100644
          "type": "string"
        },
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/CommandExecOutputDeltaNotification.json b/codex-rs/app-server-protocol/schema/json/v2/CommandExecOutputDeltaNotification.json
-index fff7e57d5..daf0eefd5 100644
+index fff7e57d50dce64d657d9657b4819016d2119240..daf0eefd5c012af7a483034a11adff6c04428bcc 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/CommandExecOutputDeltaNotification.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/CommandExecOutputDeltaNotification.json
 @@ -21,10 +21,10 @@
@@ -10707,7 +10707,7 @@ index fff7e57d5..daf0eefd5 100644
      },
      "stream": {
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/CommandExecParams.json b/codex-rs/app-server-protocol/schema/json/v2/CommandExecParams.json
-index d00a0b60e..b0b1a64f2 100644
+index d00a0b60e50ac363239a2193594d95839406b977..b0b1a64f2f659e8796f937dfbf7a0921afbb1eea 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/CommandExecParams.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/CommandExecParams.json
 @@ -2,7 +2,7 @@
@@ -10806,7 +10806,7 @@ index d00a0b60e..b0b1a64f2 100644
        "type": [
          "integer",
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/CommandExecResizeParams.json b/codex-rs/app-server-protocol/schema/json/v2/CommandExecResizeParams.json
-index 57d3b6a30..6b19c8584 100644
+index 57d3b6a30c6082a2cfd8ab5bcacfc1d64cef7fdf..6b19c858487f1264f31dbbdc092bc6731349cbce 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/CommandExecResizeParams.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/CommandExecResizeParams.json
 @@ -7,13 +7,15 @@
@@ -10837,7 +10837,7 @@ index 57d3b6a30..6b19c8584 100644
      },
      "size": {
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/CommandExecTerminateParams.json b/codex-rs/app-server-protocol/schema/json/v2/CommandExecTerminateParams.json
-index 1f8487705..0b53e1151 100644
+index 1f848770517df40d96dddb515282ec3729a4a1c2..0b53e1151268797299e29f04ecff7e885612e94c 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/CommandExecTerminateParams.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/CommandExecTerminateParams.json
 @@ -3,7 +3,7 @@
@@ -10850,7 +10850,7 @@ index 1f8487705..0b53e1151 100644
      }
    },
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/CommandExecWriteParams.json b/codex-rs/app-server-protocol/schema/json/v2/CommandExecWriteParams.json
-index 440f2410b..53c55a0a1 100644
+index 440f2410bf1bcd2ea6a93cdc0b9f81e668453e89..53c55a0a1657b1a3cf17787ba4eb8a70631efe2b 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/CommandExecWriteParams.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/CommandExecWriteParams.json
 @@ -1,6 +1,6 @@
@@ -10871,7 +10871,7 @@ index 440f2410b..53c55a0a1 100644
      }
    },
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/ConfigBatchWriteParams.json b/codex-rs/app-server-protocol/schema/json/v2/ConfigBatchWriteParams.json
-index 6d45995ec..0c74655d9 100644
+index 6d45995ec99c6d7a65d188ea560a16324e4b562d..0c74655d9d8d9ad0dae8b01021cd29a708c6d96e 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/ConfigBatchWriteParams.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/ConfigBatchWriteParams.json
 @@ -47,7 +47,7 @@
@@ -10884,7 +10884,7 @@ index 6d45995ec..0c74655d9 100644
      }
    },
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/ConfigReadParams.json b/codex-rs/app-server-protocol/schema/json/v2/ConfigReadParams.json
-index db38089a5..f9702afc8 100644
+index db38089a5d2d1927b0dc0ea580ee009964ff45a1..f9702afc81ee72f7bd907fb6199e13765ef31964 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/ConfigReadParams.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/ConfigReadParams.json
 @@ -2,7 +2,7 @@
@@ -10897,7 +10897,7 @@ index db38089a5..f9702afc8 100644
          "string",
          "null"
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/ConfigReadResponse.json b/codex-rs/app-server-protocol/schema/json/v2/ConfigReadResponse.json
-index 66a190dfe..428ea3f10 100644
+index 66a190dfe6761eca2b3453262320db07f3f85ea4..428ea3f10ff49554f79538fd13ef508445a7d7b9 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/ConfigReadResponse.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/ConfigReadResponse.json
 @@ -2,7 +2,7 @@
@@ -11034,7 +11034,7 @@ index 66a190dfe..428ea3f10 100644
          "low",
          "medium",
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/ConfigRequirementsReadResponse.json b/codex-rs/app-server-protocol/schema/json/v2/ConfigRequirementsReadResponse.json
-index f2faa5349..e1bd63b78 100644
+index f2faa534962d2ec5e4310117bb889fee4e6b0c53..e1bd63b784f9c25ef5de9efdb74ba5590cc31747 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/ConfigRequirementsReadResponse.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/ConfigRequirementsReadResponse.json
 @@ -439,7 +439,7 @@
@@ -11114,7 +11114,7 @@ index f2faa5349..e1bd63b78 100644
          "boolean",
          "null"
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/ConfigWarningNotification.json b/codex-rs/app-server-protocol/schema/json/v2/ConfigWarningNotification.json
-index c89e42a2b..733acb659 100644
+index c89e42a2b45d90dd2de64baf3274ec001f9e0a0e..733acb6596a45c5a63c5661a652a64afd8a2cdd3 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/ConfigWarningNotification.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/ConfigWarningNotification.json
 @@ -6,13 +6,13 @@
@@ -11134,7 +11134,7 @@ index c89e42a2b..733acb659 100644
          }
        },
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/ConfigWriteResponse.json b/codex-rs/app-server-protocol/schema/json/v2/ConfigWriteResponse.json
-index 3ea3a5f81..b6a305ee5 100644
+index 3ea3a5f8180c877ca37ee7dc9943e62f55fab588..b6a305ee597995f36b893c326357c7f295a90941 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/ConfigWriteResponse.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/ConfigWriteResponse.json
 @@ -2,7 +2,7 @@
@@ -11205,7 +11205,7 @@ index 3ea3a5f81..b6a305ee5 100644
              "file": {
                "$ref": "#/definitions/AbsolutePathBuf"
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/ConsumeAccountRateLimitResetCreditParams.json b/codex-rs/app-server-protocol/schema/json/v2/ConsumeAccountRateLimitResetCreditParams.json
-index 3d9d2c1e9..10c964a3f 100644
+index 3d9d2c1e98170434fefd7182b4d1107827434fb4..10c964a3f4f3693f95d3411044cb77e940367d29 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/ConsumeAccountRateLimitResetCreditParams.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/ConsumeAccountRateLimitResetCreditParams.json
 @@ -2,14 +2,14 @@
@@ -11226,7 +11226,7 @@ index 3d9d2c1e9..10c964a3f 100644
      }
    },
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/ErrorNotification.json b/codex-rs/app-server-protocol/schema/json/v2/ErrorNotification.json
-index 108ebe232..1b708995d 100644
+index 108ebe232e070231a3d223cee7b6c1254bf5bd77..1b708995d313ecb775f30fc35b424f641e73cd4b 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/ErrorNotification.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/ErrorNotification.json
 @@ -30,7 +30,8 @@
@@ -11288,7 +11288,7 @@ index 108ebe232..1b708995d 100644
      "MisalignmentErrorDetails": {
        "properties": {
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/ExperimentalFeatureEnablementSetParams.json b/codex-rs/app-server-protocol/schema/json/v2/ExperimentalFeatureEnablementSetParams.json
-index 9d6bcec93..9b36f4985 100644
+index 9d6bcec932e68f2224ff9be6f0152198038613ec..9b36f4985495aee06cd9c9d5d770c282b821c28c 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/ExperimentalFeatureEnablementSetParams.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/ExperimentalFeatureEnablementSetParams.json
 @@ -5,7 +5,7 @@
@@ -11301,7 +11301,7 @@ index 9d6bcec93..9b36f4985 100644
      }
    },
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/ExperimentalFeatureListParams.json b/codex-rs/app-server-protocol/schema/json/v2/ExperimentalFeatureListParams.json
-index 13fa2efb9..089097e32 100644
+index 13fa2efb985c2c6c18827460dac9496e4a98abb1..089097e3286cd44d0656d2deff58b73156bafef9 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/ExperimentalFeatureListParams.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/ExperimentalFeatureListParams.json
 @@ -11,14 +11,14 @@
@@ -11322,7 +11322,7 @@ index 13fa2efb9..089097e32 100644
          "string",
          "null"
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/ExperimentalFeatureListResponse.json b/codex-rs/app-server-protocol/schema/json/v2/ExperimentalFeatureListResponse.json
-index 25398fc0e..e813ae647 100644
+index 25398fc0eac4766d4d19d8f2880717caf0e3020b..e813ae64740118544a032ba5a1159fef399b32d2 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/ExperimentalFeatureListResponse.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/ExperimentalFeatureListResponse.json
 @@ -4,7 +4,7 @@
@@ -11361,7 +11361,7 @@ index 25398fc0e..e813ae647 100644
          "string",
          "null"
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/ExternalAgentConfigDetectParams.json b/codex-rs/app-server-protocol/schema/json/v2/ExternalAgentConfigDetectParams.json
-index f226823ea..513e7995e 100644
+index f226823eada89fa5f59442203efa5db8d992313a..513e7995e5269d12824c63d21041e8037b12c168 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/ExternalAgentConfigDetectParams.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/ExternalAgentConfigDetectParams.json
 @@ -18,7 +18,7 @@
@@ -11392,7 +11392,7 @@ index f226823ea..513e7995e 100644
          "string",
          "null"
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/ExternalAgentConfigDetectResponse.json b/codex-rs/app-server-protocol/schema/json/v2/ExternalAgentConfigDetectResponse.json
-index b328531e9..f2e9d2f6f 100644
+index b328531e97c7031b9536b40c628c14fef36a890d..f2e9d2f6f3ff0601ffcf4d64dfab4750d826b779 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/ExternalAgentConfigDetectResponse.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/ExternalAgentConfigDetectResponse.json
 @@ -66,7 +66,7 @@
@@ -11405,7 +11405,7 @@ index b328531e9..f2e9d2f6f 100644
          },
          "source": {
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/ExternalAgentConfigImportHistoriesReadResponse.json b/codex-rs/app-server-protocol/schema/json/v2/ExternalAgentConfigImportHistoriesReadResponse.json
-index 16353fd71..251cd69e4 100644
+index 16353fd7169a665ef015a3f8ea1636bf05ca459c..251cd69e4c9fc637ae975c9bfc267bfa23c962f1 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/ExternalAgentConfigImportHistoriesReadResponse.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/ExternalAgentConfigImportHistoriesReadResponse.json
 @@ -139,7 +139,7 @@
@@ -11418,7 +11418,7 @@ index 16353fd71..251cd69e4 100644
          },
          "source": {
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/ExternalAgentConfigImportParams.json b/codex-rs/app-server-protocol/schema/json/v2/ExternalAgentConfigImportParams.json
-index 41c0d4214..ceda1c4fb 100644
+index 41c0d4214824b5b7e227864f4459cb0272fcd5c3..ceda1c4fb993593a18f224b06d1715f762e003b5 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/ExternalAgentConfigImportParams.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/ExternalAgentConfigImportParams.json
 @@ -211,14 +211,14 @@
@@ -11439,7 +11439,7 @@ index 41c0d4214..ceda1c4fb 100644
          "string",
          "null"
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/FeedbackUploadResponse.json b/codex-rs/app-server-protocol/schema/json/v2/FeedbackUploadResponse.json
-index 06af26787..2ba6b12f1 100644
+index 06af26787b8eb0629cc4af6a9a99028f1b7ee12a..2ba6b12f149af21ae990ca87b17fdfe886504c20 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/FeedbackUploadResponse.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/FeedbackUploadResponse.json
 @@ -3,7 +3,7 @@
@@ -11452,7 +11452,7 @@ index 06af26787..2ba6b12f1 100644
          "string",
          "null"
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/FsChangedNotification.json b/codex-rs/app-server-protocol/schema/json/v2/FsChangedNotification.json
-index cfb9f4e5b..d7bc0df6b 100644
+index cfb9f4e5ba4040894ecc324d21e3de45b6a8497d..d7bc0df6b86de63639b691691247373b466d4d65 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/FsChangedNotification.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/FsChangedNotification.json
 @@ -2,7 +2,7 @@
@@ -11465,7 +11465,7 @@ index cfb9f4e5b..d7bc0df6b 100644
      }
    },
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/FsCopyParams.json b/codex-rs/app-server-protocol/schema/json/v2/FsCopyParams.json
-index 2994fcac8..3fe0d7942 100644
+index 2994fcac812e05e6e274f28c6b80c310cd56b67d..3fe0d79422865240a92bdcb7f19e8b4b341fffc0 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/FsCopyParams.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/FsCopyParams.json
 @@ -2,7 +2,7 @@
@@ -11478,7 +11478,7 @@ index 2994fcac8..3fe0d7942 100644
      }
    },
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/FsCreateDirectoryParams.json b/codex-rs/app-server-protocol/schema/json/v2/FsCreateDirectoryParams.json
-index a1ac4a8dc..7da8cf857 100644
+index a1ac4a8dc515489a59de78050798469c98634d93..7da8cf8573e21110fddcf6312eea76a6d3ca786a 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/FsCreateDirectoryParams.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/FsCreateDirectoryParams.json
 @@ -2,7 +2,7 @@
@@ -11491,7 +11491,7 @@ index a1ac4a8dc..7da8cf857 100644
      }
    },
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/FsGetMetadataParams.json b/codex-rs/app-server-protocol/schema/json/v2/FsGetMetadataParams.json
-index c70287493..ebb4e9e44 100644
+index c70287493c1298c224a55fd0240c7e9927fa92a0..ebb4e9e4445726a328fe14a3054e48d58556e8c4 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/FsGetMetadataParams.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/FsGetMetadataParams.json
 @@ -2,7 +2,7 @@
@@ -11504,7 +11504,7 @@ index c70287493..ebb4e9e44 100644
      }
    },
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/FsReadDirectoryParams.json b/codex-rs/app-server-protocol/schema/json/v2/FsReadDirectoryParams.json
-index e531fe9f0..c78197a51 100644
+index e531fe9f0307709773056178b17e74d248dce75a..c78197a51e2f07f188a2fb417eaea2715054b639 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/FsReadDirectoryParams.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/FsReadDirectoryParams.json
 @@ -2,7 +2,7 @@
@@ -11517,7 +11517,7 @@ index e531fe9f0..c78197a51 100644
      }
    },
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/FsReadFileParams.json b/codex-rs/app-server-protocol/schema/json/v2/FsReadFileParams.json
-index e1df6018c..aa028bba1 100644
+index e1df6018c15be5277fe913aabaf662555cb5bb0d..aa028bba1bcf66aa48b154e8b7c45ff8076a9b53 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/FsReadFileParams.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/FsReadFileParams.json
 @@ -2,7 +2,7 @@
@@ -11530,7 +11530,7 @@ index e1df6018c..aa028bba1 100644
      }
    },
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/FsRemoveParams.json b/codex-rs/app-server-protocol/schema/json/v2/FsRemoveParams.json
-index d6289d46d..64d218261 100644
+index d6289d46d0886acf1f6dee2a5110cd87f575ce0c..64d2182611a635da441ea77f25b3f8fc7c3259a6 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/FsRemoveParams.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/FsRemoveParams.json
 @@ -2,7 +2,7 @@
@@ -11543,7 +11543,7 @@ index d6289d46d..64d218261 100644
      }
    },
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/FsWatchParams.json b/codex-rs/app-server-protocol/schema/json/v2/FsWatchParams.json
-index 29a1ceea1..f8a86ab22 100644
+index 29a1ceea148f5a5d12d5a5c436c767443b585d80..f8a86ab222cea5dfca73f3e8ce831b964c61c35f 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/FsWatchParams.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/FsWatchParams.json
 @@ -2,7 +2,7 @@
@@ -11556,7 +11556,7 @@ index 29a1ceea1..f8a86ab22 100644
      }
    },
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/FsWatchResponse.json b/codex-rs/app-server-protocol/schema/json/v2/FsWatchResponse.json
-index abc7d466b..15fffc85b 100644
+index abc7d466bb6fd30df0ed7ced97ab8539f1519aad..15fffc85b723f245b0f719b1743aa14be3f6460c 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/FsWatchResponse.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/FsWatchResponse.json
 @@ -2,7 +2,7 @@
@@ -11569,7 +11569,7 @@ index abc7d466b..15fffc85b 100644
      }
    },
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/FsWriteFileParams.json b/codex-rs/app-server-protocol/schema/json/v2/FsWriteFileParams.json
-index e1b5eabd9..c1983c1d8 100644
+index e1b5eabd98b72446b9ab3560ac889c0cbcdcd1c4..c1983c1d88a64cd2de68e030c0ae9c35f1319718 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/FsWriteFileParams.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/FsWriteFileParams.json
 @@ -2,7 +2,7 @@
@@ -11582,7 +11582,7 @@ index e1b5eabd9..c1983c1d8 100644
      }
    },
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/GetAccountParams.json b/codex-rs/app-server-protocol/schema/json/v2/GetAccountParams.json
-index 445e90c10..b1bd1cc5e 100644
+index 445e90c101fc1290c615cc2795a03b3e3317e656..b1bd1cc5e59404f35601b19d593db2b120ba9699 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/GetAccountParams.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/GetAccountParams.json
 @@ -2,7 +2,7 @@
@@ -11595,7 +11595,7 @@ index 445e90c10..b1bd1cc5e 100644
      }
    },
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/GetAccountRateLimitsResponse.json b/codex-rs/app-server-protocol/schema/json/v2/GetAccountRateLimitsResponse.json
-index 785596cc0..b5cf9c3d6 100644
+index 785596cc043d18c22c6e6ff90b12037ecde494fd..b5cf9c3d633ba16acf873a4897416b7ab2628311 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/GetAccountRateLimitsResponse.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/GetAccountRateLimitsResponse.json
 @@ -119,7 +119,7 @@
@@ -11626,7 +11626,7 @@ index 785596cc0..b5cf9c3d6 100644
      "rateLimits": {
        "allOf": [
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/GetAccountResponse.json b/codex-rs/app-server-protocol/schema/json/v2/GetAccountResponse.json
-index e21145ee7..6e60c5262 100644
+index e21145ee786d602fdc2509fb56a4645bccae3b4e..6e60c5262ec52a0761ecafbd7b353b6592ae7a50 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/GetAccountResponse.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/GetAccountResponse.json
 @@ -3,6 +3,30 @@
@@ -11661,7 +11661,7 @@ index e21145ee7..6e60c5262 100644
            "properties": {
              "type": {
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/HookCompletedNotification.json b/codex-rs/app-server-protocol/schema/json/v2/HookCompletedNotification.json
-index ad1681a6e..1c5619555 100644
+index ad1681a6e552ec88b34597ee735d07126081a1f6..1c5619555a77322580a4d27c5847e6c9a5e29ae0 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/HookCompletedNotification.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/HookCompletedNotification.json
 @@ -2,7 +2,7 @@
@@ -11674,7 +11674,7 @@ index ad1681a6e..1c5619555 100644
      },
      "HookEventName": {
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/HookStartedNotification.json b/codex-rs/app-server-protocol/schema/json/v2/HookStartedNotification.json
-index 0f11b12c0..c4c4bb42a 100644
+index 0f11b12c0c611d06917034f87d2f2e00bf184af0..c4c4bb42a111d902b5960f54e96481a5a5a71ceb 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/HookStartedNotification.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/HookStartedNotification.json
 @@ -2,7 +2,7 @@
@@ -11687,7 +11687,7 @@ index 0f11b12c0..c4c4bb42a 100644
      },
      "HookEventName": {
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/HooksListResponse.json b/codex-rs/app-server-protocol/schema/json/v2/HooksListResponse.json
-index 837e0b266..039ade993 100644
+index 837e0b2660d42ca782a045fbf96846923eddce05..039ade9939e6bcd1314897c8b398f8625cc6bc88 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/HooksListResponse.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/HooksListResponse.json
 @@ -2,7 +2,7 @@
@@ -11721,7 +11721,7 @@ index 837e0b266..039ade993 100644
          },
          "trustStatus": {
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/ItemCompletedNotification.json b/codex-rs/app-server-protocol/schema/json/v2/ItemCompletedNotification.json
-index f822591d7..219d235ee 100644
+index f822591d7db484ae59aa36daa617a75c52e506db..219d235ee37a141904bd6b63541aa7c2f74ec7e5 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/ItemCompletedNotification.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/ItemCompletedNotification.json
 @@ -2,7 +2,7 @@
@@ -12139,7 +12139,7 @@ index f822591d7..219d235ee 100644
    },
    "properties": {
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/ItemGuardianApprovalReviewCompletedNotification.json b/codex-rs/app-server-protocol/schema/json/v2/ItemGuardianApprovalReviewCompletedNotification.json
-index f5d82d12b..4263f9fda 100644
+index f5d82d12bae1485d25643af402d19112bbc168f0..4263f9fda89a75077a9783b9b8414020ea833132 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/ItemGuardianApprovalReviewCompletedNotification.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/ItemGuardianApprovalReviewCompletedNotification.json
 @@ -2,7 +2,7 @@
@@ -12198,7 +12198,7 @@ index f5d82d12b..4263f9fda 100644
          "string",
          "null"
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/ItemGuardianApprovalReviewStartedNotification.json b/codex-rs/app-server-protocol/schema/json/v2/ItemGuardianApprovalReviewStartedNotification.json
-index 869c6c899..bf8428652 100644
+index 869c6c899a09b63c51bf04b982b99239408928df..bf84286525bacdf05ad86990243d0bb0564592e4 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/ItemGuardianApprovalReviewStartedNotification.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/ItemGuardianApprovalReviewStartedNotification.json
 @@ -2,7 +2,7 @@
@@ -12257,7 +12257,7 @@ index 869c6c899..bf8428652 100644
          "string",
          "null"
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/ItemStartedNotification.json b/codex-rs/app-server-protocol/schema/json/v2/ItemStartedNotification.json
-index d766bf8d5..74f500390 100644
+index d766bf8d5554ff2b3eba67eb4d068bd0bf3450b6..74f50039002e6070aaee908ea4bee71676d5cf4f 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/ItemStartedNotification.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/ItemStartedNotification.json
 @@ -2,7 +2,7 @@
@@ -12675,7 +12675,7 @@ index d766bf8d5..74f500390 100644
    },
    "properties": {
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/ListMcpServerStatusParams.json b/codex-rs/app-server-protocol/schema/json/v2/ListMcpServerStatusParams.json
-index 437b60b64..50cadfec9 100644
+index 437b60b64cb68056668547f2ce1624fe525b3343..50cadfec95ef4fc898f1322f952b69948ea976ad 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/ListMcpServerStatusParams.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/ListMcpServerStatusParams.json
 @@ -26,12 +26,12 @@
@@ -12694,7 +12694,7 @@ index 437b60b64..50cadfec9 100644
          "integer",
          "null"
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/ListMcpServerStatusResponse.json b/codex-rs/app-server-protocol/schema/json/v2/ListMcpServerStatusResponse.json
-index f75a3f22a..499041cda 100644
+index f75a3f22ac87e3a6aa0353174a6db90a8759b99c..499041cdad5db1d6d7e96538f831f9ed728a19d5 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/ListMcpServerStatusResponse.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/ListMcpServerStatusResponse.json
 @@ -70,7 +70,7 @@
@@ -12725,7 +12725,7 @@ index f75a3f22a..499041cda 100644
          "string",
          "null"
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/LoginAccountParams.json b/codex-rs/app-server-protocol/schema/json/v2/LoginAccountParams.json
-index 80164cc56..f175314e9 100644
+index 80164cc562e969592ecac30e616354412a11d12e..f175314e920d707d3ac5cc156c29e5f0f3a5f33b 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/LoginAccountParams.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/LoginAccountParams.json
 @@ -10,6 +10,51 @@
@@ -12803,7 +12803,7 @@ index 80164cc56..f175314e9 100644
              "string",
              "null"
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/LoginAccountResponse.json b/codex-rs/app-server-protocol/schema/json/v2/LoginAccountResponse.json
-index 802440d63..819c18f6d 100644
+index 802440d637bf5b46c8678d3dfc7f02185cfd30f5..819c18f6dcdcc869194168b37caa78cf6875456f 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/LoginAccountResponse.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/LoginAccountResponse.json
 @@ -1,6 +1,38 @@
@@ -12846,7 +12846,7 @@ index 802440d63..819c18f6d 100644
        "properties": {
          "type": {
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/MarketplaceAddResponse.json b/codex-rs/app-server-protocol/schema/json/v2/MarketplaceAddResponse.json
-index d00db0d6b..233f0295c 100644
+index d00db0d6be2a72f4572986e7435a3f2ce597a2eb..233f0295c51bd8991899c61e19b33c58e6ca5c05 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/MarketplaceAddResponse.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/MarketplaceAddResponse.json
 @@ -2,7 +2,7 @@
@@ -12859,7 +12859,7 @@ index d00db0d6b..233f0295c 100644
      }
    },
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/MarketplaceRemoveResponse.json b/codex-rs/app-server-protocol/schema/json/v2/MarketplaceRemoveResponse.json
-index ae4945078..cafc88f27 100644
+index ae4945078a94ae83d27b26b9ee48dad2008bccd4..cafc88f271cf9309718e9af1aac361d1b8e88b27 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/MarketplaceRemoveResponse.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/MarketplaceRemoveResponse.json
 @@ -2,7 +2,7 @@
@@ -12872,7 +12872,7 @@ index ae4945078..cafc88f27 100644
      }
    },
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/MarketplaceUpgradeResponse.json b/codex-rs/app-server-protocol/schema/json/v2/MarketplaceUpgradeResponse.json
-index 678824163..4c170fd79 100644
+index 678824163229998b1f9389b1804e6a40ac73534d..4c170fd798aba5bfa2105b9a4cff24adf0c46f9c 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/MarketplaceUpgradeResponse.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/MarketplaceUpgradeResponse.json
 @@ -2,7 +2,7 @@
@@ -12885,7 +12885,7 @@ index 678824163..4c170fd79 100644
      },
      "MarketplaceUpgradeErrorInfo": {
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/McpServerOauthLoginResponse.json b/codex-rs/app-server-protocol/schema/json/v2/McpServerOauthLoginResponse.json
-index 7672a5373..3fb0cc6bd 100644
+index 7672a53739cd63c991cd5da47e38d8f0d1312844..3fb0cc6bd0cd8610f900ed1395d040d3ecd8127d 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/McpServerOauthLoginResponse.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/McpServerOauthLoginResponse.json
 @@ -6,7 +6,7 @@
@@ -12898,7 +12898,7 @@ index 7672a5373..3fb0cc6bd 100644
          "string",
          "null"
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/ModelListParams.json b/codex-rs/app-server-protocol/schema/json/v2/ModelListParams.json
-index 11a347624..ba5dd9df2 100644
+index 11a3476240ca9dc59a3478a2a87530764d903878..ba5dd9df241d1145b65f7061353d430ba9b76771 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/ModelListParams.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/ModelListParams.json
 @@ -18,7 +18,7 @@
@@ -12911,7 +12911,7 @@ index 11a347624..ba5dd9df2 100644
          "integer",
          "null"
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/ModelListResponse.json b/codex-rs/app-server-protocol/schema/json/v2/ModelListResponse.json
-index ee3ca9ae1..2c3b5fe09 100644
+index ee3ca9ae1449457d8338507274d587342780f891..2c3b5fe0958c7f1ab9d0f37360a5edc229fa4365 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/ModelListResponse.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/ModelListResponse.json
 @@ -2,7 +2,7 @@
@@ -12933,7 +12933,7 @@ index ee3ca9ae1..2c3b5fe09 100644
          "string",
          "null"
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/NullableGetAccountRateLimitsParams.json b/codex-rs/app-server-protocol/schema/json/v2/NullableGetAccountRateLimitsParams.json
-index a163934d6..b90bd4520 100644
+index a163934d642a5ae6fb95ecfc9c03eb29d1e330c1..b90bd4520245e00c5154307a13d7b55577c1b8ad 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/NullableGetAccountRateLimitsParams.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/NullableGetAccountRateLimitsParams.json
 @@ -13,11 +13,11 @@
@@ -12951,7 +12951,7 @@ index a163934d6..b90bd4520 100644
          }
        },
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/PermissionProfileListParams.json b/codex-rs/app-server-protocol/schema/json/v2/PermissionProfileListParams.json
-index 402dab622..9400b0f70 100644
+index 402dab622168c1b2451745e0dfd3483716545127..9400b0f70c12a8d601d76a3041345833def260d7 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/PermissionProfileListParams.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/PermissionProfileListParams.json
 @@ -18,7 +18,7 @@
@@ -12964,7 +12964,7 @@ index 402dab622..9400b0f70 100644
          "integer",
          "null"
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/PermissionProfileListResponse.json b/codex-rs/app-server-protocol/schema/json/v2/PermissionProfileListResponse.json
-index 1027b9c5a..4fd3794e5 100644
+index 1027b9c5a0d3720480dcaf1563c0f1e48a587f54..4fd3794e51e0a32620be8186275f214ab8cb9684 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/PermissionProfileListResponse.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/PermissionProfileListResponse.json
 @@ -34,7 +34,7 @@
@@ -12977,7 +12977,7 @@ index 1027b9c5a..4fd3794e5 100644
          "string",
          "null"
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/PlanDeltaNotification.json b/codex-rs/app-server-protocol/schema/json/v2/PlanDeltaNotification.json
-index 644639262..b10f479ee 100644
+index 6446392626da7db1577824313656f8da160b1303..b10f479ee5013e6c8484ce9e9d92779f2e99b485 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/PlanDeltaNotification.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/PlanDeltaNotification.json
 @@ -1,6 +1,6 @@
@@ -12989,7 +12989,7 @@ index 644639262..b10f479ee 100644
      "delta": {
        "type": "string"
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/PluginInstallParams.json b/codex-rs/app-server-protocol/schema/json/v2/PluginInstallParams.json
-index 9dae6eb1d..85ada2aa5 100644
+index 9dae6eb1db3233bd6bfb9c819d007db64eb3022b..85ada2aa5668f54b151f703feda61d705e68fe37 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/PluginInstallParams.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/PluginInstallParams.json
 @@ -2,7 +2,7 @@
@@ -13002,7 +13002,7 @@ index 9dae6eb1d..85ada2aa5 100644
      }
    },
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/PluginInstalledParams.json b/codex-rs/app-server-protocol/schema/json/v2/PluginInstalledParams.json
-index f3ec95a5d..f138f5ad8 100644
+index f3ec95a5dac092b2eb0113aeb76f1b8e6b301c52..f138f5ad80d9c5bab8ac1afa5e893e954e632848 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/PluginInstalledParams.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/PluginInstalledParams.json
 @@ -2,7 +2,7 @@
@@ -13024,7 +13024,7 @@ index f3ec95a5d..f138f5ad8 100644
          "type": "string"
        },
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/PluginInstalledResponse.json b/codex-rs/app-server-protocol/schema/json/v2/PluginInstalledResponse.json
-index e25854402..4291eb709 100644
+index e258544028213b3a65b2b7521edd3f10ba452e6b..4291eb70987d4296904b1c8aa73b9ef2d88c94c1 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/PluginInstalledResponse.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/PluginInstalledResponse.json
 @@ -2,7 +2,7 @@
@@ -13073,7 +13073,7 @@ index e25854402..4291eb709 100644
              "type": {
                "enum": [
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/PluginListParams.json b/codex-rs/app-server-protocol/schema/json/v2/PluginListParams.json
-index 0c47b9ac6..d9747de50 100644
+index 0c47b9ac65544e2afab9d398f5091a49ded1d246..d9747de5052c416df4526bfc311747852ff5238b 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/PluginListParams.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/PluginListParams.json
 @@ -2,7 +2,7 @@
@@ -13104,7 +13104,7 @@ index 0c47b9ac6..d9747de50 100644
          "$ref": "#/definitions/PluginListMarketplaceKind"
        },
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/PluginListResponse.json b/codex-rs/app-server-protocol/schema/json/v2/PluginListResponse.json
-index 38207ac28..6ab2fc2e6 100644
+index 38207ac28542e7518db1f31575371c6029af1460..6ab2fc2e6a0d083da10dd4b5f48c35285eb1abd0 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/PluginListResponse.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/PluginListResponse.json
 @@ -2,7 +2,7 @@
@@ -13153,7 +13153,7 @@ index 38207ac28..6ab2fc2e6 100644
              "type": {
                "enum": [
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/PluginReadParams.json b/codex-rs/app-server-protocol/schema/json/v2/PluginReadParams.json
-index 5cc3e5cab..ceb1d664a 100644
+index 5cc3e5cab5f7a7e02240f518a96cd5a98c630c7d..ceb1d664a08c9af465e190a4f583d27ed4a41638 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/PluginReadParams.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/PluginReadParams.json
 @@ -2,7 +2,7 @@
@@ -13166,7 +13166,7 @@ index 5cc3e5cab..ceb1d664a 100644
      }
    },
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/PluginReadResponse.json b/codex-rs/app-server-protocol/schema/json/v2/PluginReadResponse.json
-index f3832617f..25f69829d 100644
+index f3832617f1af9fae4f1db7b6586efdf3f648eb8e..25f69829d836db3d4cf8a5ba008618716de9daf3 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/PluginReadResponse.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/PluginReadResponse.json
 @@ -2,7 +2,7 @@
@@ -13215,7 +13215,7 @@ index f3832617f..25f69829d 100644
              },
              "type": {
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/PluginReconcileResponse.json b/codex-rs/app-server-protocol/schema/json/v2/PluginReconcileResponse.json
-index f0d069670..c5ea21ed4 100644
+index f0d069670740c523b5db1b47e09b141aa05bd9ed..c5ea21ed4cce28a0fc5cf8470a0f0711b741741a 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/PluginReconcileResponse.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/PluginReconcileResponse.json
 @@ -2,7 +2,7 @@
@@ -13249,7 +13249,7 @@ index f0d069670..c5ea21ed4 100644
          "type": "string"
        },
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/PluginShareCheckoutResponse.json b/codex-rs/app-server-protocol/schema/json/v2/PluginShareCheckoutResponse.json
-index ace02c59e..73bd04e77 100644
+index ace02c59eab97192d35528ffc5f55ffdcc59508d..73bd04e77d9330e37c5b7e46de86ff59acc4def1 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/PluginShareCheckoutResponse.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/PluginShareCheckoutResponse.json
 @@ -2,7 +2,7 @@
@@ -13262,7 +13262,7 @@ index ace02c59e..73bd04e77 100644
      }
    },
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/PluginShareListResponse.json b/codex-rs/app-server-protocol/schema/json/v2/PluginShareListResponse.json
-index bcae24d57..8fab79cb4 100644
+index bcae24d57c8bae4f97e66299ffc77039044bcbb9..8fab79cb40b79a02fcc139843691e613186e6bd3 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/PluginShareListResponse.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/PluginShareListResponse.json
 @@ -2,7 +2,7 @@
@@ -13302,7 +13302,7 @@ index bcae24d57..8fab79cb4 100644
              "type": {
                "enum": [
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/PluginShareSaveParams.json b/codex-rs/app-server-protocol/schema/json/v2/PluginShareSaveParams.json
-index 7ff4ac18e..c7598e4fc 100644
+index 7ff4ac18ef3d2abccb9bfeeaa7da74016d38990f..c7598e4fc53200b9f154d41527f012a1575c86a9 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/PluginShareSaveParams.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/PluginShareSaveParams.json
 @@ -2,7 +2,7 @@
@@ -13315,7 +13315,7 @@ index 7ff4ac18e..c7598e4fc 100644
      },
      "PluginShareDiscoverability": {
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/ProcessExitedNotification.json b/codex-rs/app-server-protocol/schema/json/v2/ProcessExitedNotification.json
-index 3a0a81d31..692f54b09 100644
+index 3a0a81d316e02e52a632bb3a7f3757cf1efbc71d..692f54b09fdedd41304a41571411322084e1edfe 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/ProcessExitedNotification.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/ProcessExitedNotification.json
 @@ -16,7 +16,7 @@
@@ -13337,7 +13337,7 @@ index 3a0a81d31..692f54b09 100644
      }
    },
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/ProcessOutputDeltaNotification.json b/codex-rs/app-server-protocol/schema/json/v2/ProcessOutputDeltaNotification.json
-index 1800833f2..42e1e8d17 100644
+index 1800833f2e08baed8e19de46d80482b11a7f3e16..42e1e8d17ccf744d087d8f7b33133a17ce326063 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/ProcessOutputDeltaNotification.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/ProcessOutputDeltaNotification.json
 @@ -24,7 +24,7 @@
@@ -13350,7 +13350,7 @@ index 1800833f2..42e1e8d17 100644
      },
      "deltaBase64": {
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/RawResponseCompletedNotification.json b/codex-rs/app-server-protocol/schema/json/v2/RawResponseCompletedNotification.json
-index 5b65b9dfc..0492e0c49 100644
+index 5b65b9dfc2107632909b6a3e05b7ba7ec97143d8..0492e0c494f4162f257e4eecc460609ec7467c19 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/RawResponseCompletedNotification.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/RawResponseCompletedNotification.json
 @@ -52,7 +52,7 @@
@@ -13363,7 +13363,7 @@ index 5b65b9dfc..0492e0c49 100644
      "responseId": {
        "type": "string"
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/RawResponseItemCompletedNotification.json b/codex-rs/app-server-protocol/schema/json/v2/RawResponseItemCompletedNotification.json
-index cddb26589..55859ea99 100644
+index cddb2658973509c2bccbfe94bb652719cadbe369..55859ea9956ad9d5adb1a9daa02e4badd5b6b468 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/RawResponseItemCompletedNotification.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/RawResponseItemCompletedNotification.json
 @@ -201,7 +201,7 @@
@@ -13618,7 +13618,7 @@ index cddb26589..55859ea99 100644
                  "string",
                  "null"
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/ReviewStartParams.json b/codex-rs/app-server-protocol/schema/json/v2/ReviewStartParams.json
-index 5dcb0e184..a662c4d82 100644
+index 5dcb0e184af181ee829a55a73c3289ea6ca29bb2..a662c4d82bbf6841efa22e234ad96c64a63237ff 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/ReviewStartParams.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/ReviewStartParams.json
 @@ -111,7 +111,7 @@
@@ -13631,7 +13631,7 @@ index 5dcb0e184..a662c4d82 100644
      "target": {
        "$ref": "#/definitions/ReviewTarget"
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/ReviewStartResponse.json b/codex-rs/app-server-protocol/schema/json/v2/ReviewStartResponse.json
-index eac1c0ab7..3c18e6bae 100644
+index eac1c0ab70fed1a421b29500cf8907134b9e2424..3c18e6bae021298be59486b193d71052bbedcea8 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/ReviewStartResponse.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/ReviewStartResponse.json
 @@ -2,7 +2,7 @@
@@ -14122,7 +14122,7 @@ index eac1c0ab7..3c18e6bae 100644
      },
      "turn": {
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/SkillsChangedNotification.json b/codex-rs/app-server-protocol/schema/json/v2/SkillsChangedNotification.json
-index cb67d8160..d4ce11218 100644
+index cb67d8160203ed44bd54253fc9293ee277353e25..d4ce112181a0ea755fb6d0805d6336274c52fe3e 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/SkillsChangedNotification.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/SkillsChangedNotification.json
 @@ -1,6 +1,6 @@
@@ -14135,7 +14135,7 @@ index cb67d8160..d4ce11218 100644
  }
 \ No newline at end of file
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/SkillsConfigWriteParams.json b/codex-rs/app-server-protocol/schema/json/v2/SkillsConfigWriteParams.json
-index 696226a50..a4aae6fb9 100644
+index 696226a50c66b6eb0b9c2c4a1696b528a7ab66f8..a4aae6fb9284996ee8825c03318a138308bce5f6 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/SkillsConfigWriteParams.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/SkillsConfigWriteParams.json
 @@ -2,7 +2,7 @@
@@ -14148,7 +14148,7 @@ index 696226a50..a4aae6fb9 100644
      }
    },
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/SkillsExtraRootsSetParams.json b/codex-rs/app-server-protocol/schema/json/v2/SkillsExtraRootsSetParams.json
-index 9992cdf8b..60429647c 100644
+index 9992cdf8b4a5fe6c10d1bcaa9168d6b8bfe5cb6d..60429647cf8ac6918676e5403ae7522633bb8a8f 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/SkillsExtraRootsSetParams.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/SkillsExtraRootsSetParams.json
 @@ -2,7 +2,7 @@
@@ -14161,7 +14161,7 @@ index 9992cdf8b..60429647c 100644
      }
    },
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/SkillsListResponse.json b/codex-rs/app-server-protocol/schema/json/v2/SkillsListResponse.json
-index e025eb7e3..03e14cc90 100644
+index e025eb7e34d99ff3888d8cd3d0d1627b4b786f96..03e14cc903fd24ef9018ca080ac612ffa0756692 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/SkillsListResponse.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/SkillsListResponse.json
 @@ -2,7 +2,7 @@
@@ -14174,7 +14174,7 @@ index e025eb7e3..03e14cc90 100644
      },
      "LegacyAppPathString": {
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/ThreadAttachmentListParams.json b/codex-rs/app-server-protocol/schema/json/v2/ThreadAttachmentListParams.json
-index 81ac3ee80..a84101a8d 100644
+index 81ac3ee8048da32d403e24bfad985e96e2e4e052..a84101a8d9d32a9607041d749092c39dc7af6b26 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/ThreadAttachmentListParams.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/ThreadAttachmentListParams.json
 @@ -10,7 +10,7 @@
@@ -14187,7 +14187,7 @@ index 81ac3ee80..a84101a8d 100644
          "integer",
          "null"
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/ThreadAttachmentOwnerListParams.json b/codex-rs/app-server-protocol/schema/json/v2/ThreadAttachmentOwnerListParams.json
-index bf3d15092..601d587a7 100644
+index bf3d15092694972bcd9742b9a0fc64ece718d9cc..601d587a7635dfc72874492e130f6401437b4ae2 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/ThreadAttachmentOwnerListParams.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/ThreadAttachmentOwnerListParams.json
 @@ -23,7 +23,7 @@
@@ -14200,7 +14200,7 @@ index bf3d15092..601d587a7 100644
          "integer",
          "null"
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/ThreadForkParams.json b/codex-rs/app-server-protocol/schema/json/v2/ThreadForkParams.json
-index 6908b54cb..38f23708d 100644
+index 6908b54cb8a969cf73cceb0b4ca48f338816141c..38f23708d075a520c0596a56bf84a6b89c1aa37b 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/ThreadForkParams.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/ThreadForkParams.json
 @@ -2,7 +2,7 @@
@@ -14245,7 +14245,7 @@ index 6908b54cb..38f23708d 100644
          "string",
          "null"
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/ThreadForkResponse.json b/codex-rs/app-server-protocol/schema/json/v2/ThreadForkResponse.json
-index 2b728204b..e5b7f2f8d 100644
+index 2b728204ba0c654e5edd4c67efd77360ac7c8d88..e5b7f2f8d45c218656c1ebfd5846c4d27d3040c9 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/ThreadForkResponse.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/ThreadForkResponse.json
 @@ -2,21 +2,21 @@
@@ -14800,7 +14800,7 @@ index 2b728204b..e5b7f2f8d 100644
      "serviceTier": {
        "type": [
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/ThreadItemsListParams.json b/codex-rs/app-server-protocol/schema/json/v2/ThreadItemsListParams.json
-index 6fb586ee0..c90e69c5b 100644
+index 6fb586ee02fba319e8a4f1d283648d87144e26ca..c90e69c5bb46698532033624e41d9f3319fbd858 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/ThreadItemsListParams.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/ThreadItemsListParams.json
 @@ -55,12 +55,12 @@
@@ -14819,7 +14819,7 @@ index 6fb586ee0..c90e69c5b 100644
          "integer",
          "null"
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/ThreadItemsListResponse.json b/codex-rs/app-server-protocol/schema/json/v2/ThreadItemsListResponse.json
-index 41a14aa33..cbc2bbd96 100644
+index 41a14aa3384159f841ff95f4e82fc8d78f8f1dcc..cbc2bbd96993747b1afb6f723a6f0fb7f5cc8b97 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/ThreadItemsListResponse.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/ThreadItemsListResponse.json
 @@ -2,7 +2,7 @@
@@ -15252,7 +15252,7 @@ index 41a14aa33..cbc2bbd96 100644
          "string",
          "null"
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/ThreadListParams.json b/codex-rs/app-server-protocol/schema/json/v2/ThreadListParams.json
-index 3f861cdd8..ac8d4865b 100644
+index 3f861cdd8d5bb59ed8a764b91e4a23c035866c6c..ac8d4865bee5f6496c20533aae403c34ac83c641 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/ThreadListParams.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/ThreadListParams.json
 @@ -48,7 +48,7 @@
@@ -15331,7 +15331,7 @@ index 3f861cdd8..ac8d4865b 100644
      }
    },
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/ThreadListResponse.json b/codex-rs/app-server-protocol/schema/json/v2/ThreadListResponse.json
-index 8f1b2483c..d773b7892 100644
+index 8f1b2483c796ac372b02ce99125aabddd7b70b53..d773b78929cec4297285eccb651d5d55ea8b046e 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/ThreadListResponse.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/ThreadListResponse.json
 @@ -2,7 +2,7 @@
@@ -15876,7 +15876,7 @@ index 8f1b2483c..d773b7892 100644
          "string",
          "null"
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/ThreadLoadedListParams.json b/codex-rs/app-server-protocol/schema/json/v2/ThreadLoadedListParams.json
-index d10ee7ed9..2b2868f65 100644
+index d10ee7ed96cbb8d2ec55843c51fa724571b6ec39..2b2868f65dc4dfa5f4d6743cfe425259e0192017 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/ThreadLoadedListParams.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/ThreadLoadedListParams.json
 @@ -11,7 +11,7 @@
@@ -15889,7 +15889,7 @@ index d10ee7ed9..2b2868f65 100644
          "integer",
          "null"
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/ThreadLoadedListResponse.json b/codex-rs/app-server-protocol/schema/json/v2/ThreadLoadedListResponse.json
-index cfd90fb81..006f6099e 100644
+index cfd90fb813fbd93246ab7bf68870b05baadcc498..006f6099e5d4232f8153b080de4da14e29f711c8 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/ThreadLoadedListResponse.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/ThreadLoadedListResponse.json
 @@ -9,7 +9,7 @@
@@ -15902,7 +15902,7 @@ index cfd90fb81..006f6099e 100644
          "string",
          "null"
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/ThreadMetadataUpdateParams.json b/codex-rs/app-server-protocol/schema/json/v2/ThreadMetadataUpdateParams.json
-index c6679568e..bb6d76755 100644
+index c6679568ea5eb3003d7cd8cbff9e6afb9e235d26..bb6d76755bef524e9533dbedbed24a97150e14fd 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/ThreadMetadataUpdateParams.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/ThreadMetadataUpdateParams.json
 @@ -4,21 +4,21 @@
@@ -15940,7 +15940,7 @@ index c6679568e..bb6d76755 100644
      "threadId": {
        "type": "string"
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/ThreadMetadataUpdateResponse.json b/codex-rs/app-server-protocol/schema/json/v2/ThreadMetadataUpdateResponse.json
-index e01baa846..56750ceaf 100644
+index e01baa846e884f63da1287c431951a5421540535..56750ceaf6742731bf7ae291f50009fbd72235fe 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/ThreadMetadataUpdateResponse.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/ThreadMetadataUpdateResponse.json
 @@ -2,7 +2,7 @@
@@ -16461,7 +16461,7 @@ index e01baa846..56750ceaf 100644
    },
    "properties": {
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/ThreadReadParams.json b/codex-rs/app-server-protocol/schema/json/v2/ThreadReadParams.json
-index 920e6c346..d969e0ced 100644
+index 920e6c346d6b6fca1773e7ea4b68c69dee46dec1..d969e0ceda5cf964da9714abd5daa435bd73f000 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/ThreadReadParams.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/ThreadReadParams.json
 @@ -2,7 +2,7 @@
@@ -16474,7 +16474,7 @@ index 920e6c346..d969e0ced 100644
      },
      "threadId": {
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/ThreadReadResponse.json b/codex-rs/app-server-protocol/schema/json/v2/ThreadReadResponse.json
-index a81e27a53..641dd6e8e 100644
+index a81e27a5362f707c15e06e10bed111ec314e6e7f..641dd6e8ecb469a6ed789f37b5a728b4bb0d631b 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/ThreadReadResponse.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/ThreadReadResponse.json
 @@ -2,7 +2,7 @@
@@ -17004,7 +17004,7 @@ index a81e27a53..641dd6e8e 100644
    },
    "properties": {
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/ThreadReadStateChangedNotification.json b/codex-rs/app-server-protocol/schema/json/v2/ThreadReadStateChangedNotification.json
-index 86ceedef1..3d50306c0 100644
+index 86ceedef1fbbd6e6bae518605dbdfbec44de8425..3d50306c0387a4df45175c1fd692508ad0a547aa 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/ThreadReadStateChangedNotification.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/ThreadReadStateChangedNotification.json
 @@ -2,7 +2,7 @@
@@ -17017,7 +17017,7 @@ index 86ceedef1..3d50306c0 100644
          "firstUnread": {
            "anyOf": [
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/ThreadRealtimeItemCompletedNotification.json b/codex-rs/app-server-protocol/schema/json/v2/ThreadRealtimeItemCompletedNotification.json
-index b24e3169e..97c6d3228 100644
+index b24e3169ef87f5c4ba01fe62245d0dfe04da2826..97c6d32280f32ccfbcb37da3ddd26cd96e800d9f 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/ThreadRealtimeItemCompletedNotification.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/ThreadRealtimeItemCompletedNotification.json
 @@ -40,7 +40,7 @@
@@ -17058,7 +17058,7 @@ index b24e3169e..97c6d3228 100644
            ],
            "title": "BemItemPromotedThreadRealtimeItem",
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/ThreadRealtimeItemStartedNotification.json b/codex-rs/app-server-protocol/schema/json/v2/ThreadRealtimeItemStartedNotification.json
-index 74971aa93..31f0411aa 100644
+index 74971aa9323830a50db8d0a2674a6e01af06adf8..31f0411aa8f6a92dea8194219ecef9d9bb0a05a7 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/ThreadRealtimeItemStartedNotification.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/ThreadRealtimeItemStartedNotification.json
 @@ -40,7 +40,7 @@
@@ -17099,7 +17099,7 @@ index 74971aa93..31f0411aa 100644
            ],
            "title": "BemItemPromotedThreadRealtimeItem",
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/ThreadRealtimeOutputAudioDeltaNotification.json b/codex-rs/app-server-protocol/schema/json/v2/ThreadRealtimeOutputAudioDeltaNotification.json
-index 6c75f6755..7f03cd21c 100644
+index 6c75f67553970c04ae565fc1dfc8242e0ef4283e..7f03cd21cc6680986265a6a6f0cf5e6599164751 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/ThreadRealtimeOutputAudioDeltaNotification.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/ThreadRealtimeOutputAudioDeltaNotification.json
 @@ -15,17 +15,18 @@
@@ -17125,7 +17125,7 @@ index 6c75f6755..7f03cd21c 100644
              "integer",
              "null"
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/ThreadRealtimeTranscriptDeltaNotification.json b/codex-rs/app-server-protocol/schema/json/v2/ThreadRealtimeTranscriptDeltaNotification.json
-index 22ad778eb..e33931a15 100644
+index 22ad778eb2ad93ee59c726de847217f939716111..e33931a152555c3cbb5d1279171a97683f752d82 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/ThreadRealtimeTranscriptDeltaNotification.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/ThreadRealtimeTranscriptDeltaNotification.json
 @@ -1,6 +1,6 @@
@@ -17137,7 +17137,7 @@ index 22ad778eb..e33931a15 100644
      "delta": {
        "description": "Live transcript delta from the realtime event.",
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/ThreadRealtimeTranscriptDoneNotification.json b/codex-rs/app-server-protocol/schema/json/v2/ThreadRealtimeTranscriptDoneNotification.json
-index 2f4199fdb..3c33ff97e 100644
+index 2f4199fdb9eb27ea7ed3c42eead26abfc1172b86..3c33ff97ed270228c0c8863366cfe55da85e2de0 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/ThreadRealtimeTranscriptDoneNotification.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/ThreadRealtimeTranscriptDoneNotification.json
 @@ -1,6 +1,6 @@
@@ -17149,7 +17149,7 @@ index 2f4199fdb..3c33ff97e 100644
      "role": {
        "type": "string"
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/ThreadResumeParams.json b/codex-rs/app-server-protocol/schema/json/v2/ThreadResumeParams.json
-index 65211ef5f..d10184f74 100644
+index 65211ef5fd5800791955d4e40bc124feed8d3941..d10184f7457fe839207e7a42d9fe1c9dec777c62 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/ThreadResumeParams.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/ThreadResumeParams.json
 @@ -2,7 +2,7 @@
@@ -17458,7 +17458,7 @@ index 65211ef5f..d10184f74 100644
      "sandbox": {
        "anyOf": [
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/ThreadResumeResponse.json b/codex-rs/app-server-protocol/schema/json/v2/ThreadResumeResponse.json
-index 4f4d57878..7260a03ce 100644
+index 4f4d578780ec4bb4baca4daa900dc2777d0bd292..7260a03ce92ebc19319871cd1c05bae5d9c3e7c2 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/ThreadResumeResponse.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/ThreadResumeResponse.json
 @@ -2,21 +2,21 @@
@@ -18031,7 +18031,7 @@ index 4f4d57878..7260a03ce 100644
          "string",
          "null"
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/ThreadRevertResponse.json b/codex-rs/app-server-protocol/schema/json/v2/ThreadRevertResponse.json
-index 56cf784b3..2f4d61dc3 100644
+index 56cf784b3479d425562419aff9224ca05258fc6b..2f4d61dc3e53fb84fd27b652ad96698c6bb1ae73 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/ThreadRevertResponse.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/ThreadRevertResponse.json
 @@ -2,7 +2,7 @@
@@ -18571,7 +18571,7 @@ index 56cf784b3..2f4d61dc3 100644
          "string",
          "null"
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/ThreadSectionListParams.json b/codex-rs/app-server-protocol/schema/json/v2/ThreadSectionListParams.json
-index 790aeacd4..9aab6281d 100644
+index 790aeacd450d37811fdf2140278dd57054f39e8c..9aab6281d28ae3f98e2904a789b2a82ebc3f9f03 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/ThreadSectionListParams.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/ThreadSectionListParams.json
 @@ -12,7 +12,7 @@
@@ -18584,7 +18584,7 @@ index 790aeacd4..9aab6281d 100644
          "integer",
          "null"
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/ThreadSettingsUpdatedNotification.json b/codex-rs/app-server-protocol/schema/json/v2/ThreadSettingsUpdatedNotification.json
-index df128d115..e95750b54 100644
+index df128d115ed30914c2e644a4a52b770303e994ca..e95750b54fd454feb1dddabf33b824c54146b042 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/ThreadSettingsUpdatedNotification.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/ThreadSettingsUpdatedNotification.json
 @@ -2,21 +2,21 @@
@@ -18631,7 +18631,7 @@ index df128d115..e95750b54 100644
          {
            "enum": [
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/ThreadShellCommandParams.json b/codex-rs/app-server-protocol/schema/json/v2/ThreadShellCommandParams.json
-index e733a1b70..33cc8dc14 100644
+index e733a1b709ad680a783d07ed0e18d36472f68d49..33cc8dc14d9a6945aa7f3c003e755d5b806b3967 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/ThreadShellCommandParams.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/ThreadShellCommandParams.json
 @@ -2,14 +2,14 @@
@@ -18652,7 +18652,7 @@ index e733a1b70..33cc8dc14 100644
        "type": [
          "integer",
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/ThreadStartParams.json b/codex-rs/app-server-protocol/schema/json/v2/ThreadStartParams.json
-index 5164caf6a..6daa70c2a 100644
+index 5164caf6a208e4e0aa1d21baff108df8430c9d54..6daa70c2abedbbc6add72c56d0efba89ef55683b 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/ThreadStartParams.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/ThreadStartParams.json
 @@ -2,7 +2,7 @@
@@ -18828,7 +18828,7 @@ index 5164caf6a..6daa70c2a 100644
      "baseInstructions": {
        "type": [
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/ThreadStartResponse.json b/codex-rs/app-server-protocol/schema/json/v2/ThreadStartResponse.json
-index 9597b7a90..627aaa010 100644
+index 9597b7a900ec90748ea28785a699b268efc606d5..627aaa01009d4ab2ea6577884d497007e0444845 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/ThreadStartResponse.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/ThreadStartResponse.json
 @@ -2,21 +2,21 @@
@@ -19383,7 +19383,7 @@ index 9597b7a90..627aaa010 100644
      "serviceTier": {
        "type": [
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/ThreadStartedNotification.json b/codex-rs/app-server-protocol/schema/json/v2/ThreadStartedNotification.json
-index d1f288b3e..324c37a74 100644
+index d1f288b3e4b7dcec5210aff44a5bfe74aeadb507..324c37a74e4884a96e8827e154e516505e7eb74a 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/ThreadStartedNotification.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/ThreadStartedNotification.json
 @@ -2,7 +2,7 @@
@@ -19904,7 +19904,7 @@ index d1f288b3e..324c37a74 100644
    },
    "properties": {
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/ThreadTurnsListParams.json b/codex-rs/app-server-protocol/schema/json/v2/ThreadTurnsListParams.json
-index 924b8a9a8..3c8fd3a41 100644
+index 924b8a9a8104ec7e579093ab983ca14f623a865b..3c8fd3a41067c13d56793f43938215bb15ebca38 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/ThreadTurnsListParams.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/ThreadTurnsListParams.json
 @@ -56,7 +56,7 @@
@@ -19917,7 +19917,7 @@ index 924b8a9a8..3c8fd3a41 100644
          "integer",
          "null"
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/ThreadTurnsListResponse.json b/codex-rs/app-server-protocol/schema/json/v2/ThreadTurnsListResponse.json
-index fdf532baf..fb98c60c9 100644
+index fdf532baf3783bad91349e7099903c5dcfc1fdf5..fb98c60c9d8fef39a6884a05001a1ebc6fcb61ba 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/ThreadTurnsListResponse.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/ThreadTurnsListResponse.json
 @@ -2,7 +2,7 @@
@@ -20417,7 +20417,7 @@ index fdf532baf..fb98c60c9 100644
          "string",
          "null"
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/ThreadUnarchiveResponse.json b/codex-rs/app-server-protocol/schema/json/v2/ThreadUnarchiveResponse.json
-index c4ba9a866..031c5ca2e 100644
+index c4ba9a866d05b6cad62ac7d0a5534d065a9b2e4a..031c5ca2ed641386c6413b4d1020954a417c4476 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/ThreadUnarchiveResponse.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/ThreadUnarchiveResponse.json
 @@ -2,7 +2,7 @@
@@ -20938,7 +20938,7 @@ index c4ba9a866..031c5ca2e 100644
    },
    "properties": {
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/TurnCompletedNotification.json b/codex-rs/app-server-protocol/schema/json/v2/TurnCompletedNotification.json
-index e718e1fa9..d2973af73 100644
+index e718e1fa97ba5b5309cbc63ae1b79b7749622623..d2973af7338347961055cc3a50e6b9d0f3ae2261 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/TurnCompletedNotification.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/TurnCompletedNotification.json
 @@ -2,7 +2,7 @@
@@ -21423,7 +21423,7 @@ index e718e1fa9..d2973af73 100644
    },
    "properties": {
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/TurnDiffUpdatedNotification.json b/codex-rs/app-server-protocol/schema/json/v2/TurnDiffUpdatedNotification.json
-index b694ce254..7282b12d3 100644
+index b694ce254ce4e47ad04579aefe7e6527142689a5..7282b12d38d6cb94690fd2c07dbd2d3ece4a05a6 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/TurnDiffUpdatedNotification.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/TurnDiffUpdatedNotification.json
 @@ -1,6 +1,6 @@
@@ -21435,7 +21435,7 @@ index b694ce254..7282b12d3 100644
      "diff": {
        "type": "string"
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/TurnStartParams.json b/codex-rs/app-server-protocol/schema/json/v2/TurnStartParams.json
-index ad4194a51..544df9d52 100644
+index ad4194a51160a4c1ca5c1d24114230720463f796..544df9d52917f85d0b5224b331b05933b0c3ff4b 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/TurnStartParams.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/TurnStartParams.json
 @@ -2,7 +2,7 @@
@@ -21561,7 +21561,7 @@ index ad4194a51..544df9d52 100644
          "string",
          "null"
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/TurnStartResponse.json b/codex-rs/app-server-protocol/schema/json/v2/TurnStartResponse.json
-index 3c47c0d87..6aa726208 100644
+index 3c47c0d872fa943f8d84b2464a740e06b046667f..6aa72620881ba5917273c108258d5f422e1774f4 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/TurnStartResponse.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/TurnStartResponse.json
 @@ -2,7 +2,7 @@
@@ -22046,7 +22046,7 @@ index 3c47c0d87..6aa726208 100644
    },
    "properties": {
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/TurnStartedNotification.json b/codex-rs/app-server-protocol/schema/json/v2/TurnStartedNotification.json
-index e395230a4..10e7ddc87 100644
+index e395230a4b746bdc0849e55fbfbceb141ba2a1bb..10e7ddc87d4e40416d0e1a27750d465a93d60096 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/TurnStartedNotification.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/TurnStartedNotification.json
 @@ -2,7 +2,7 @@
@@ -22531,7 +22531,7 @@ index e395230a4..10e7ddc87 100644
    },
    "properties": {
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/TurnSteerParams.json b/codex-rs/app-server-protocol/schema/json/v2/TurnSteerParams.json
-index 7dbdefa04..6562e584d 100644
+index 7dbdefa046aed1d29ec163f9c526e8e58c06e644..6562e584dd672a5cab7dcad48e8c895862f8333c 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/TurnSteerParams.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/TurnSteerParams.json
 @@ -27,12 +27,12 @@
@@ -22559,7 +22559,7 @@ index 7dbdefa04..6562e584d 100644
      },
      "input": {
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/WindowsSandboxSetupStartParams.json b/codex-rs/app-server-protocol/schema/json/v2/WindowsSandboxSetupStartParams.json
-index ed93913cb..2c3a9e1c0 100644
+index ed93913cb399337bb34ae6dd8fe920d78b95eb5e..2c3a9e1c04e378ea0b7d135f97d05674e7887916 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/WindowsSandboxSetupStartParams.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/WindowsSandboxSetupStartParams.json
 @@ -2,7 +2,7 @@
@@ -22572,7 +22572,7 @@ index ed93913cb..2c3a9e1c0 100644
      },
      "WindowsSandboxSetupMode": {
 diff --git a/codex-rs/app-server-protocol/schema/json/v2/WindowsWorldWritableWarningNotification.json b/codex-rs/app-server-protocol/schema/json/v2/WindowsWorldWritableWarningNotification.json
-index 893dbbaf1..71a173c55 100644
+index 893dbbaf107b23bb186e8fa51d582f504de851d6..71a173c557d03d33ef67fb46108d56ae4b58090f 100644
 --- a/codex-rs/app-server-protocol/schema/json/v2/WindowsWorldWritableWarningNotification.json
 +++ b/codex-rs/app-server-protocol/schema/json/v2/WindowsWorldWritableWarningNotification.json
 @@ -3,7 +3,7 @@
@@ -35475,7 +35475,7 @@ zC0c#kZRI7%gvkxsk>^4=r8#0zR3PA@bsLu;j=2p%g5}%`dP;TSo}$%71c6mxqO(L8
 m8D)6L<iqXo^R)k5`0fH{I^UBi$L3=;-8NzLM!K9}u?r@R1~V7{
 
 diff --git a/codex-rs/app-server-protocol/schema/typescript/ClientRequest.ts b/codex-rs/app-server-protocol/schema/typescript/ClientRequest.ts
-index 73a495e24..d0e1e3167 100644
+index 73a495e24045a0dbdcf92050ca94a1b2fa11099d..d0e1e31671c2ec6f99e3af56a7deb7adca1ceaa9 100644
 --- a/codex-rs/app-server-protocol/schema/typescript/ClientRequest.ts
 +++ b/codex-rs/app-server-protocol/schema/typescript/ClientRequest.ts
 @@ -61,6 +61,9 @@ import type { PluginShareSaveParams } from "./v2/PluginShareSaveParams";
@@ -35495,7 +35495,7 @@ index 73a495e24..d0e1e3167 100644
 -export type ClientRequest ={ "method": "initialize", id: RequestId, params: InitializeParams, } | { "method": "thread/start", id: RequestId, params: ThreadStartParams, } | { "method": "thread/resume", id: RequestId, params: ThreadResumeParams, } | { "method": "thread/fork", id: RequestId, params: ThreadForkParams, } | { "method": "thread/archive", id: RequestId, params: ThreadArchiveParams, } | { "method": "thread/delete", id: RequestId, params: ThreadDeleteParams, } | { "method": "thread/unsubscribe", id: RequestId, params: ThreadUnsubscribeParams, } | { "method": "thread/name/set", id: RequestId, params: ThreadSetNameParams, } | { "method": "thread/goal/set", id: RequestId, params: ThreadGoalSetParams, } | { "method": "thread/goal/get", id: RequestId, params: ThreadGoalGetParams, } | { "method": "thread/goal/clear", id: RequestId, params: ThreadGoalClearParams, } | { "method": "thread/metadata/update", id: RequestId, params: ThreadMetadataUpdateParams, } | { "method": "thread/attachment/add", id: RequestId, params: ThreadAttachmentAddParams, } | { "method": "thread/attachment/list", id: RequestId, params: ThreadAttachmentListParams, } | { "method": "thread/attachmentOwner/list", id: RequestId, params: ThreadAttachmentOwnerListParams, } | { "method": "thread/attachment/remove", id: RequestId, params: ThreadAttachmentRemoveParams, } | { "method": "thread/section/move", id: RequestId, params: ThreadSectionMoveParams, } | { "method": "thread/unarchive", id: RequestId, params: ThreadUnarchiveParams, } | { "method": "thread/compact/start", id: RequestId, params: ThreadCompactStartParams, } | { "method": "thread/shellCommand", id: RequestId, params: ThreadShellCommandParams, } | { "method": "thread/approveGuardianDeniedAction", id: RequestId, params: ThreadApproveGuardianDeniedActionParams, } | { "method": "thread/revert", id: RequestId, params: ThreadRevertParams, } | { "method": "thread/list", id: RequestId, params: ThreadListParams, } | { "method": "threadSection/list", id: RequestId, params: ThreadSectionListParams, } | { "method": "threadSection/create", id: RequestId, params: ThreadSectionCreateParams, } | { "method": "threadSection/update", id: RequestId, params: ThreadSectionUpdateParams, } | { "method": "threadSection/delete", id: RequestId, params: ThreadSectionDeleteParams, } | { "method": "thread/loaded/list", id: RequestId, params: ThreadLoadedListParams, } | { "method": "thread/read", id: RequestId, params: ThreadReadParams, } | { "method": "thread/turns/list", id: RequestId, params: ThreadTurnsListParams, } | { "method": "thread/items/list", id: RequestId, params: ThreadItemsListParams, } | { "method": "thread/inject_items", id: RequestId, params: ThreadInjectItemsParams, } | { "method": "skills/list", id: RequestId, params: SkillsListParams, } | { "method": "skills/extraRoots/set", id: RequestId, params: SkillsExtraRootsSetParams, } | { "method": "hooks/list", id: RequestId, params: HooksListParams, } | { "method": "marketplace/add", id: RequestId, params: MarketplaceAddParams, } | { "method": "marketplace/remove", id: RequestId, params: MarketplaceRemoveParams, } | { "method": "marketplace/upgrade", id: RequestId, params: MarketplaceUpgradeParams, } | { "method": "plugin/list", id: RequestId, params: PluginListParams, } | { "method": "plugin/installed", id: RequestId, params: PluginInstalledParams, } | { "method": "plugin/reconcile", id: RequestId, params: PluginReconcileParams, } | { "method": "plugin/read", id: RequestId, params: PluginReadParams, } | { "method": "plugin/skill/read", id: RequestId, params: PluginSkillReadParams, } | { "method": "plugin/share/save", id: RequestId, params: PluginShareSaveParams, } | { "method": "plugin/share/updateTargets", id: RequestId, params: PluginShareUpdateTargetsParams, } | { "method": "plugin/share/list", id: RequestId, params: PluginShareListParams, } | { "method": "plugin/share/checkout", id: RequestId, params: PluginShareCheckoutParams, } | { "method": "plugin/share/delete", id: RequestId, params: PluginShareDeleteParams, } | { "method": "app/read", id: RequestId, params: AppsReadParams, } | { "method": "app/list", id: RequestId, params: AppsListParams, } | { "method": "app/installed", id: RequestId, params: AppsInstalledParams, } | { "method": "fs/readFile", id: RequestId, params: FsReadFileParams, } | { "method": "fs/writeFile", id: RequestId, params: FsWriteFileParams, } | { "method": "fs/createDirectory", id: RequestId, params: FsCreateDirectoryParams, } | { "method": "fs/getMetadata", id: RequestId, params: FsGetMetadataParams, } | { "method": "fs/readDirectory", id: RequestId, params: FsReadDirectoryParams, } | { "method": "fs/remove", id: RequestId, params: FsRemoveParams, } | { "method": "fs/copy", id: RequestId, params: FsCopyParams, } | { "method": "fs/watch", id: RequestId, params: FsWatchParams, } | { "method": "fs/unwatch", id: RequestId, params: FsUnwatchParams, } | { "method": "skills/config/write", id: RequestId, params: SkillsConfigWriteParams, } | { "method": "plugin/install", id: RequestId, params: PluginInstallParams, } | { "method": "plugin/uninstall", id: RequestId, params: PluginUninstallParams, } | { "method": "turn/start", id: RequestId, params: TurnStartParams, } | { "method": "turn/steer", id: RequestId, params: TurnSteerParams, } | { "method": "turn/interrupt", id: RequestId, params: TurnInterruptParams, } | { "method": "review/start", id: RequestId, params: ReviewStartParams, } | { "method": "model/list", id: RequestId, params: ModelListParams, } | { "method": "account/gatewayOAuth/read", id: RequestId, params: undefined, } | { "method": "account/gatewayOAuth/login", id: RequestId, params: undefined, } | { "method": "account/gatewayOAuth/cancel", id: RequestId, params: undefined, } | { "method": "modelProvider/capabilities/read", id: RequestId, params: ModelProviderCapabilitiesReadParams, } | { "method": "experimentalFeature/list", id: RequestId, params: ExperimentalFeatureListParams, } | { "method": "permissionProfile/list", id: RequestId, params: PermissionProfileListParams, } | { "method": "experimentalFeature/enablement/set", id: RequestId, params: ExperimentalFeatureEnablementSetParams, } | { "method": "mcpServer/oauth/login", id: RequestId, params: McpServerOauthLoginParams, } | { "method": "config/mcpServer/reload", id: RequestId, params: undefined, } | { "method": "mcpServerStatus/list", id: RequestId, params: ListMcpServerStatusParams, } | { "method": "mcpServer/resource/read", id: RequestId, params: McpResourceReadParams, } | { "method": "mcpServer/tool/call", id: RequestId, params: McpServerToolCallParams, } | { "method": "windowsSandbox/setupStart", id: RequestId, params: WindowsSandboxSetupStartParams, } | { "method": "windowsSandbox/readiness", id: RequestId, params: undefined, } | { "method": "account/login/start", id: RequestId, params: LoginAccountParams, } | { "method": "account/login/cancel", id: RequestId, params: CancelLoginAccountParams, } | { "method": "account/logout", id: RequestId, params: undefined, } | { "method": "account/rateLimits/read", id: RequestId, params?: GetAccountRateLimitsParams | undefined, } | { "method": "account/rateLimitResetCredit/consume", id: RequestId, params: ConsumeAccountRateLimitResetCreditParams, } | { "method": "account/usage/read", id: RequestId, params?: GetAccountTokenUsageParams | undefined, } | { "method": "account/workspaceMessages/read", id: RequestId, params: undefined, } | { "method": "account/sendAddCreditsNudgeEmail", id: RequestId, params: SendAddCreditsNudgeEmailParams, } | { "method": "feedback/upload", id: RequestId, params: FeedbackUploadParams, } | { "method": "command/exec", id: RequestId, params: CommandExecParams, } | { "method": "command/exec/write", id: RequestId, params: CommandExecWriteParams, } | { "method": "command/exec/terminate", id: RequestId, params: CommandExecTerminateParams, } | { "method": "command/exec/resize", id: RequestId, params: CommandExecResizeParams, } | { "method": "config/read", id: RequestId, params: ConfigReadParams, } | { "method": "externalAgentConfig/detect", id: RequestId, params: ExternalAgentConfigDetectParams, } | { "method": "externalAgentConfig/import", id: RequestId, params: ExternalAgentConfigImportParams, } | { "method": "externalAgentConfig/import/recordHistory", id: RequestId, params: ExternalAgentConfigImportHistoryRecordParams, } | { "method": "externalAgentConfig/import/readHistories", id: RequestId, params: undefined, } | { "method": "config/value/write", id: RequestId, params: ConfigValueWriteParams, } | { "method": "config/batchWrite", id: RequestId, params: ConfigBatchWriteParams, } | { "method": "configRequirements/read", id: RequestId, params: undefined, } | { "method": "account/read", id: RequestId, params: GetAccountParams, } | { "method": "getConversationSummary", id: RequestId, params: GetConversationSummaryParams, } | { "method": "gitDiffToRemote", id: RequestId, params: GitDiffToRemoteParams, } | { "method": "getAuthStatus", id: RequestId, params: GetAuthStatusParams, } | { "method": "fuzzyFileSearch", id: RequestId, params: FuzzyFileSearchParams, };
 +export type ClientRequest ={ "method": "initialize", id: RequestId, params: InitializeParams, } | { "method": "thread/start", id: RequestId, params: ThreadStartParams, } | { "method": "thread/resume", id: RequestId, params: ThreadResumeParams, } | { "method": "thread/fork", id: RequestId, params: ThreadForkParams, } | { "method": "thread/archive", id: RequestId, params: ThreadArchiveParams, } | { "method": "thread/delete", id: RequestId, params: ThreadDeleteParams, } | { "method": "thread/unsubscribe", id: RequestId, params: ThreadUnsubscribeParams, } | { "method": "thread/name/set", id: RequestId, params: ThreadSetNameParams, } | { "method": "thread/goal/set", id: RequestId, params: ThreadGoalSetParams, } | { "method": "thread/goal/get", id: RequestId, params: ThreadGoalGetParams, } | { "method": "thread/goal/clear", id: RequestId, params: ThreadGoalClearParams, } | { "method": "thread/metadata/update", id: RequestId, params: ThreadMetadataUpdateParams, } | { "method": "thread/attachment/add", id: RequestId, params: ThreadAttachmentAddParams, } | { "method": "thread/attachment/list", id: RequestId, params: ThreadAttachmentListParams, } | { "method": "thread/attachmentOwner/list", id: RequestId, params: ThreadAttachmentOwnerListParams, } | { "method": "thread/attachment/remove", id: RequestId, params: ThreadAttachmentRemoveParams, } | { "method": "thread/section/move", id: RequestId, params: ThreadSectionMoveParams, } | { "method": "thread/unarchive", id: RequestId, params: ThreadUnarchiveParams, } | { "method": "thread/compact/start", id: RequestId, params: ThreadCompactStartParams, } | { "method": "thread/shellCommand", id: RequestId, params: ThreadShellCommandParams, } | { "method": "thread/approveGuardianDeniedAction", id: RequestId, params: ThreadApproveGuardianDeniedActionParams, } | { "method": "thread/revert", id: RequestId, params: ThreadRevertParams, } | { "method": "thread/list", id: RequestId, params: ThreadListParams, } | { "method": "threadSection/list", id: RequestId, params: ThreadSectionListParams, } | { "method": "threadSection/create", id: RequestId, params: ThreadSectionCreateParams, } | { "method": "threadSection/update", id: RequestId, params: ThreadSectionUpdateParams, } | { "method": "threadSection/delete", id: RequestId, params: ThreadSectionDeleteParams, } | { "method": "thread/loaded/list", id: RequestId, params: ThreadLoadedListParams, } | { "method": "thread/read", id: RequestId, params: ThreadReadParams, } | { "method": "thread/turns/list", id: RequestId, params: ThreadTurnsListParams, } | { "method": "thread/items/list", id: RequestId, params: ThreadItemsListParams, } | { "method": "thread/inject_items", id: RequestId, params: ThreadInjectItemsParams, } | { "method": "skills/list", id: RequestId, params: SkillsListParams, } | { "method": "skills/extraRoots/set", id: RequestId, params: SkillsExtraRootsSetParams, } | { "method": "hooks/list", id: RequestId, params: HooksListParams, } | { "method": "marketplace/add", id: RequestId, params: MarketplaceAddParams, } | { "method": "marketplace/remove", id: RequestId, params: MarketplaceRemoveParams, } | { "method": "marketplace/upgrade", id: RequestId, params: MarketplaceUpgradeParams, } | { "method": "plugin/list", id: RequestId, params: PluginListParams, } | { "method": "plugin/installed", id: RequestId, params: PluginInstalledParams, } | { "method": "plugin/reconcile", id: RequestId, params: PluginReconcileParams, } | { "method": "plugin/read", id: RequestId, params: PluginReadParams, } | { "method": "plugin/skill/read", id: RequestId, params: PluginSkillReadParams, } | { "method": "plugin/share/save", id: RequestId, params: PluginShareSaveParams, } | { "method": "plugin/share/updateTargets", id: RequestId, params: PluginShareUpdateTargetsParams, } | { "method": "plugin/share/list", id: RequestId, params: PluginShareListParams, } | { "method": "plugin/share/checkout", id: RequestId, params: PluginShareCheckoutParams, } | { "method": "plugin/share/delete", id: RequestId, params: PluginShareDeleteParams, } | { "method": "app/read", id: RequestId, params: AppsReadParams, } | { "method": "app/list", id: RequestId, params: AppsListParams, } | { "method": "app/installed", id: RequestId, params: AppsInstalledParams, } | { "method": "fs/readFile", id: RequestId, params: FsReadFileParams, } | { "method": "fs/writeFile", id: RequestId, params: FsWriteFileParams, } | { "method": "fs/createDirectory", id: RequestId, params: FsCreateDirectoryParams, } | { "method": "fs/getMetadata", id: RequestId, params: FsGetMetadataParams, } | { "method": "fs/readDirectory", id: RequestId, params: FsReadDirectoryParams, } | { "method": "fs/remove", id: RequestId, params: FsRemoveParams, } | { "method": "fs/copy", id: RequestId, params: FsCopyParams, } | { "method": "fs/watch", id: RequestId, params: FsWatchParams, } | { "method": "fs/unwatch", id: RequestId, params: FsUnwatchParams, } | { "method": "skills/config/write", id: RequestId, params: SkillsConfigWriteParams, } | { "method": "plugin/install", id: RequestId, params: PluginInstallParams, } | { "method": "plugin/uninstall", id: RequestId, params: PluginUninstallParams, } | { "method": "turn/start", id: RequestId, params: TurnStartParams, } | { "method": "turn/steer", id: RequestId, params: TurnSteerParams, } | { "method": "turn/interrupt", id: RequestId, params: TurnInterruptParams, } | { "method": "review/start", id: RequestId, params: ReviewStartParams, } | { "method": "model/list", id: RequestId, params: ModelListParams, } | { "method": "account/gatewayOAuth/read", id: RequestId, params: undefined, } | { "method": "account/gatewayOAuth/login", id: RequestId, params: undefined, } | { "method": "account/gatewayOAuth/cancel", id: RequestId, params: undefined, } | { "method": "modelProvider/capabilities/read", id: RequestId, params: ModelProviderCapabilitiesReadParams, } | { "method": "experimentalFeature/list", id: RequestId, params: ExperimentalFeatureListParams, } | { "method": "permissionProfile/list", id: RequestId, params: PermissionProfileListParams, } | { "method": "experimentalFeature/enablement/set", id: RequestId, params: ExperimentalFeatureEnablementSetParams, } | { "method": "mcpServer/oauth/login", id: RequestId, params: McpServerOauthLoginParams, } | { "method": "config/mcpServer/reload", id: RequestId, params: undefined, } | { "method": "mcpServerStatus/list", id: RequestId, params: ListMcpServerStatusParams, } | { "method": "mcpServer/resource/read", id: RequestId, params: McpResourceReadParams, } | { "method": "mcpServer/tool/call", id: RequestId, params: McpServerToolCallParams, } | { "method": "windowsSandbox/setupStart", id: RequestId, params: WindowsSandboxSetupStartParams, } | { "method": "windowsSandbox/readiness", id: RequestId, params: undefined, } | { "method": "provider/accounts/list", id: RequestId, params: ProviderAccountsParams, } | { "method": "provider/pool/update", id: RequestId, params: ProviderPoolUpdateParams, } | { "method": "provider/account/logout", id: RequestId, params: ProviderAccountLogoutParams, } | { "method": "account/login/start", id: RequestId, params: LoginAccountParams, } | { "method": "account/login/cancel", id: RequestId, params: CancelLoginAccountParams, } | { "method": "account/logout", id: RequestId, params: undefined, } | { "method": "account/rateLimits/read", id: RequestId, params?: GetAccountRateLimitsParams | undefined, } | { "method": "account/rateLimitResetCredit/consume", id: RequestId, params: ConsumeAccountRateLimitResetCreditParams, } | { "method": "account/usage/read", id: RequestId, params?: GetAccountTokenUsageParams | undefined, } | { "method": "account/workspaceMessages/read", id: RequestId, params: undefined, } | { "method": "account/sendAddCreditsNudgeEmail", id: RequestId, params: SendAddCreditsNudgeEmailParams, } | { "method": "feedback/upload", id: RequestId, params: FeedbackUploadParams, } | { "method": "command/exec", id: RequestId, params: CommandExecParams, } | { "method": "command/exec/write", id: RequestId, params: CommandExecWriteParams, } | { "method": "command/exec/terminate", id: RequestId, params: CommandExecTerminateParams, } | { "method": "command/exec/resize", id: RequestId, params: CommandExecResizeParams, } | { "method": "config/read", id: RequestId, params: ConfigReadParams, } | { "method": "externalAgentConfig/detect", id: RequestId, params: ExternalAgentConfigDetectParams, } | { "method": "externalAgentConfig/import", id: RequestId, params: ExternalAgentConfigImportParams, } | { "method": "externalAgentConfig/import/recordHistory", id: RequestId, params: ExternalAgentConfigImportHistoryRecordParams, } | { "method": "externalAgentConfig/import/readHistories", id: RequestId, params: undefined, } | { "method": "config/value/write", id: RequestId, params: ConfigValueWriteParams, } | { "method": "config/batchWrite", id: RequestId, params: ConfigBatchWriteParams, } | { "method": "configRequirements/read", id: RequestId, params: undefined, } | { "method": "account/read", id: RequestId, params: GetAccountParams, } | { "method": "getConversationSummary", id: RequestId, params: GetConversationSummaryParams, } | { "method": "gitDiffToRemote", id: RequestId, params: GitDiffToRemoteParams, } | { "method": "getAuthStatus", id: RequestId, params: GetAuthStatusParams, } | { "method": "fuzzyFileSearch", id: RequestId, params: FuzzyFileSearchParams, };
 diff --git a/codex-rs/app-server-protocol/schema/typescript/ServerNotification.ts b/codex-rs/app-server-protocol/schema/typescript/ServerNotification.ts
-index 4af7a4307..38dc3d329 100644
+index 4af7a4307ada139592b325f0aa1da2301deed861..38dc3d32990b0d1a5d3dd659ca0bba38a1668426 100644
 --- a/codex-rs/app-server-protocol/schema/typescript/ServerNotification.ts
 +++ b/codex-rs/app-server-protocol/schema/typescript/ServerNotification.ts
 @@ -40,6 +40,7 @@ import type { PlanDeltaNotification } from "./v2/PlanDeltaNotification";
@@ -35521,7 +35521,7 @@ index 4af7a4307..38dc3d329 100644
 -export type ServerNotification = { "method": "error", "params": ErrorNotification } | { "method": "thread/started", "params": ThreadStartedNotification } | { "method": "thread/status/changed", "params": ThreadStatusChangedNotification } | { "method": "thread/readState/changed", "params": ThreadReadStateChangedNotification } | { "method": "thread/archived", "params": ThreadArchivedNotification } | { "method": "thread/deleted", "params": ThreadDeletedNotification } | { "method": "thread/unarchived", "params": ThreadUnarchivedNotification } | { "method": "thread/closed", "params": ThreadClosedNotification } | { "method": "thread/reverted", "params": ThreadRevertedNotification } | { "method": "skills/changed", "params": SkillsChangedNotification } | { "method": "thread/name/updated", "params": ThreadNameUpdatedNotification } | { "method": "thread/attachment/updated", "params": ThreadAttachmentUpdatedNotification } | { "method": "thread/goal/updated", "params": ThreadGoalUpdatedNotification } | { "method": "thread/prediction/updated", "params": ThreadPredictionUpdatedNotification } | { "method": "thread/goal/cleared", "params": ThreadGoalClearedNotification } | { "method": "thread/queue/changed", "params": ThreadQueueChangedNotification } | { "method": "project/changed", "params": ProjectChangedNotification } | { "method": "thread/project/updated", "params": ThreadProjectUpdatedNotification } | { "method": "thread/environment/connected", "params": EnvironmentConnectionNotification } | { "method": "thread/environment/disconnected", "params": EnvironmentConnectionNotification } | { "method": "thread/settings/updated", "params": ThreadSettingsUpdatedNotification } | { "method": "thread/tokenUsage/updated", "params": ThreadTokenUsageUpdatedNotification } | { "method": "turn/started", "params": TurnStartedNotification } | { "method": "hook/started", "params": HookStartedNotification } | { "method": "turn/completed", "params": TurnCompletedNotification } | { "method": "hook/completed", "params": HookCompletedNotification } | { "method": "turn/diff/updated", "params": TurnDiffUpdatedNotification } | { "method": "turn/plan/updated", "params": TurnPlanUpdatedNotification } | { "method": "item/started", "params": ItemStartedNotification } | { "method": "item/autoApprovalReview/started", "params": ItemGuardianApprovalReviewStartedNotification } | { "method": "item/autoApprovalReview/completed", "params": ItemGuardianApprovalReviewCompletedNotification } | { "method": "autoApprovalReview/strictReviewRequired", "params": StrictReviewRequiredNotification } | { "method": "item/completed", "params": ItemCompletedNotification } | { "method": "rawResponseItem/completed", "params": RawResponseItemCompletedNotification } | { "method": "rawResponse/completed", "params": RawResponseCompletedNotification } | { "method": "item/agentMessage/delta", "params": AgentMessageDeltaNotification } | { "method": "item/plan/delta", "params": PlanDeltaNotification } | { "method": "command/exec/outputDelta", "params": CommandExecOutputDeltaNotification } | { "method": "process/outputDelta", "params": ProcessOutputDeltaNotification } | { "method": "process/exited", "params": ProcessExitedNotification } | { "method": "item/commandExecution/outputDelta", "params": CommandExecutionOutputDeltaNotification } | { "method": "item/commandExecution/terminalInteraction", "params": TerminalInteractionNotification } | { "method": "item/fileChange/outputDelta", "params": FileChangeOutputDeltaNotification } | { "method": "item/fileChange/patchUpdated", "params": FileChangePatchUpdatedNotification } | { "method": "serverRequest/resolved", "params": ServerRequestResolvedNotification } | { "method": "item/mcpToolCall/progress", "params": McpToolCallProgressNotification } | { "method": "mcpServer/oauthLogin/completed", "params": McpServerOauthLoginCompletedNotification } | { "method": "mcpServer/startupStatus/updated", "params": McpServerStatusUpdatedNotification } | { "method": "mcpServer/event/stream/notification", "params": McpServerEventStreamNotification } | { "method": "account/updated", "params": AccountUpdatedNotification } | { "method": "account/gatewayOAuth/changed", "params": GatewayOAuthChangedNotification } | { "method": "account/rateLimits/updated", "params": AccountRateLimitsUpdatedNotification } | { "method": "app/list/updated", "params": AppListUpdatedNotification } | { "method": "remoteControl/status/changed", "params": RemoteControlStatusChangedNotification } | { "method": "externalAgentConfig/import/progress", "params": ExternalAgentConfigImportProgressNotification } | { "method": "externalAgentConfig/import/completed", "params": ExternalAgentConfigImportCompletedNotification } | { "method": "fs/changed", "params": FsChangedNotification } | { "method": "item/reasoning/summaryTextDelta", "params": ReasoningSummaryTextDeltaNotification } | { "method": "item/reasoning/summaryPartAdded", "params": ReasoningSummaryPartAddedNotification } | { "method": "item/reasoning/textDelta", "params": ReasoningTextDeltaNotification } | { "method": "thread/compacted", "params": ContextCompactedNotification } | { "method": "model/rerouted", "params": ModelReroutedNotification } | { "method": "model/verification", "params": ModelVerificationNotification } | { "method": "modelProvider/authRecoveryStarted", "params": AuthRecoveryNotification } | { "method": "modelProvider/authRecoveryCompleted", "params": AuthRecoveryNotification } | { "method": "turn/moderationMetadata", "params": TurnModerationMetadataNotification } | { "method": "model/safetyBuffering/updated", "params": ModelSafetyBufferingUpdatedNotification } | { "method": "warning", "params": WarningNotification } | { "method": "guardianWarning", "params": GuardianWarningNotification } | { "method": "deprecationNotice", "params": DeprecationNoticeNotification } | { "method": "configWarning", "params": ConfigWarningNotification } | { "method": "fuzzyFileSearch/sessionUpdated", "params": FuzzyFileSearchSessionUpdatedNotification } | { "method": "fuzzyFileSearch/sessionCompleted", "params": FuzzyFileSearchSessionCompletedNotification } | { "method": "thread/realtime/started", "params": ThreadRealtimeStartedNotification } | { "method": "thread/realtime/itemAdded", "params": ThreadRealtimeItemAddedNotification } | { "method": "thread/realtime/item/started", "params": ThreadRealtimeItemStartedNotification } | { "method": "thread/realtime/item/transcript/delta", "params": ThreadRealtimeItemTranscriptDeltaNotification } | { "method": "thread/realtime/item/completed", "params": ThreadRealtimeItemCompletedNotification } | { "method": "thread/realtime/transcript/delta", "params": ThreadRealtimeTranscriptDeltaNotification } | { "method": "thread/realtime/transcript/done", "params": ThreadRealtimeTranscriptDoneNotification } | { "method": "thread/realtime/outputAudio/delta", "params": ThreadRealtimeOutputAudioDeltaNotification } | { "method": "thread/realtime/sdp", "params": ThreadRealtimeSdpNotification } | { "method": "thread/realtime/error", "params": ThreadRealtimeErrorNotification } | { "method": "thread/realtime/closed", "params": ThreadRealtimeClosedNotification } | { "method": "windows/worldWritableWarning", "params": WindowsWorldWritableWarningNotification } | { "method": "windowsSandbox/setupCompleted", "params": WindowsSandboxSetupCompletedNotification } | { "method": "account/login/completed", "params": AccountLoginCompletedNotification };
 +export type ServerNotification = { "method": "error", "params": ErrorNotification } | { "method": "thread/started", "params": ThreadStartedNotification } | { "method": "thread/status/changed", "params": ThreadStatusChangedNotification } | { "method": "thread/readState/changed", "params": ThreadReadStateChangedNotification } | { "method": "thread/archived", "params": ThreadArchivedNotification } | { "method": "thread/deleted", "params": ThreadDeletedNotification } | { "method": "thread/unarchived", "params": ThreadUnarchivedNotification } | { "method": "thread/closed", "params": ThreadClosedNotification } | { "method": "thread/reverted", "params": ThreadRevertedNotification } | { "method": "skills/changed", "params": SkillsChangedNotification } | { "method": "thread/name/updated", "params": ThreadNameUpdatedNotification } | { "method": "thread/attachment/updated", "params": ThreadAttachmentUpdatedNotification } | { "method": "thread/goal/updated", "params": ThreadGoalUpdatedNotification } | { "method": "thread/prediction/updated", "params": ThreadPredictionUpdatedNotification } | { "method": "thread/goal/cleared", "params": ThreadGoalClearedNotification } | { "method": "thread/queue/changed", "params": ThreadQueueChangedNotification } | { "method": "project/changed", "params": ProjectChangedNotification } | { "method": "thread/project/updated", "params": ThreadProjectUpdatedNotification } | { "method": "thread/environment/connected", "params": EnvironmentConnectionNotification } | { "method": "thread/environment/disconnected", "params": EnvironmentConnectionNotification } | { "method": "thread/settings/updated", "params": ThreadSettingsUpdatedNotification } | { "method": "thread/tokenUsage/updated", "params": ThreadTokenUsageUpdatedNotification } | { "method": "turn/started", "params": TurnStartedNotification } | { "method": "hook/started", "params": HookStartedNotification } | { "method": "turn/completed", "params": TurnCompletedNotification } | { "method": "hook/completed", "params": HookCompletedNotification } | { "method": "turn/diff/updated", "params": TurnDiffUpdatedNotification } | { "method": "turn/plan/updated", "params": TurnPlanUpdatedNotification } | { "method": "item/started", "params": ItemStartedNotification } | { "method": "item/autoApprovalReview/started", "params": ItemGuardianApprovalReviewStartedNotification } | { "method": "item/autoApprovalReview/completed", "params": ItemGuardianApprovalReviewCompletedNotification } | { "method": "autoApprovalReview/strictReviewRequired", "params": StrictReviewRequiredNotification } | { "method": "item/completed", "params": ItemCompletedNotification } | { "method": "rawResponseItem/completed", "params": RawResponseItemCompletedNotification } | { "method": "rawResponse/completed", "params": RawResponseCompletedNotification } | { "method": "item/agentMessage/delta", "params": AgentMessageDeltaNotification } | { "method": "item/plan/delta", "params": PlanDeltaNotification } | { "method": "command/exec/outputDelta", "params": CommandExecOutputDeltaNotification } | { "method": "process/outputDelta", "params": ProcessOutputDeltaNotification } | { "method": "process/exited", "params": ProcessExitedNotification } | { "method": "item/commandExecution/outputDelta", "params": CommandExecutionOutputDeltaNotification } | { "method": "item/commandExecution/terminalInteraction", "params": TerminalInteractionNotification } | { "method": "item/fileChange/outputDelta", "params": FileChangeOutputDeltaNotification } | { "method": "item/fileChange/patchUpdated", "params": FileChangePatchUpdatedNotification } | { "method": "serverRequest/resolved", "params": ServerRequestResolvedNotification } | { "method": "item/mcpToolCall/progress", "params": McpToolCallProgressNotification } | { "method": "mcpServer/oauthLogin/completed", "params": McpServerOauthLoginCompletedNotification } | { "method": "mcpServer/startupStatus/updated", "params": McpServerStatusUpdatedNotification } | { "method": "mcpServer/event/stream/notification", "params": McpServerEventStreamNotification } | { "method": "provider/pool/changed", "params": ProviderPoolChangedNotification } | { "method": "thread/providerAccount/changed", "params": ThreadProviderAccountChangedNotification } | { "method": "account/updated", "params": AccountUpdatedNotification } | { "method": "account/gatewayOAuth/changed", "params": GatewayOAuthChangedNotification } | { "method": "account/rateLimits/updated", "params": AccountRateLimitsUpdatedNotification } | { "method": "app/list/updated", "params": AppListUpdatedNotification } | { "method": "remoteControl/status/changed", "params": RemoteControlStatusChangedNotification } | { "method": "externalAgentConfig/import/progress", "params": ExternalAgentConfigImportProgressNotification } | { "method": "externalAgentConfig/import/completed", "params": ExternalAgentConfigImportCompletedNotification } | { "method": "fs/changed", "params": FsChangedNotification } | { "method": "item/reasoning/summaryTextDelta", "params": ReasoningSummaryTextDeltaNotification } | { "method": "item/reasoning/summaryPartAdded", "params": ReasoningSummaryPartAddedNotification } | { "method": "item/reasoning/textDelta", "params": ReasoningTextDeltaNotification } | { "method": "thread/compacted", "params": ContextCompactedNotification } | { "method": "model/rerouted", "params": ModelReroutedNotification } | { "method": "model/verification", "params": ModelVerificationNotification } | { "method": "modelProvider/authRecoveryStarted", "params": AuthRecoveryNotification } | { "method": "modelProvider/authRecoveryCompleted", "params": AuthRecoveryNotification } | { "method": "turn/moderationMetadata", "params": TurnModerationMetadataNotification } | { "method": "model/safetyBuffering/updated", "params": ModelSafetyBufferingUpdatedNotification } | { "method": "warning", "params": WarningNotification } | { "method": "guardianWarning", "params": GuardianWarningNotification } | { "method": "deprecationNotice", "params": DeprecationNoticeNotification } | { "method": "configWarning", "params": ConfigWarningNotification } | { "method": "fuzzyFileSearch/sessionUpdated", "params": FuzzyFileSearchSessionUpdatedNotification } | { "method": "fuzzyFileSearch/sessionCompleted", "params": FuzzyFileSearchSessionCompletedNotification } | { "method": "thread/realtime/started", "params": ThreadRealtimeStartedNotification } | { "method": "thread/realtime/itemAdded", "params": ThreadRealtimeItemAddedNotification } | { "method": "thread/realtime/item/started", "params": ThreadRealtimeItemStartedNotification } | { "method": "thread/realtime/item/transcript/delta", "params": ThreadRealtimeItemTranscriptDeltaNotification } | { "method": "thread/realtime/item/completed", "params": ThreadRealtimeItemCompletedNotification } | { "method": "thread/realtime/transcript/delta", "params": ThreadRealtimeTranscriptDeltaNotification } | { "method": "thread/realtime/transcript/done", "params": ThreadRealtimeTranscriptDoneNotification } | { "method": "thread/realtime/outputAudio/delta", "params": ThreadRealtimeOutputAudioDeltaNotification } | { "method": "thread/realtime/sdp", "params": ThreadRealtimeSdpNotification } | { "method": "thread/realtime/error", "params": ThreadRealtimeErrorNotification } | { "method": "thread/realtime/closed", "params": ThreadRealtimeClosedNotification } | { "method": "windows/worldWritableWarning", "params": WindowsWorldWritableWarningNotification } | { "method": "windowsSandbox/setupCompleted", "params": WindowsSandboxSetupCompletedNotification } | { "method": "account/login/completed", "params": AccountLoginCompletedNotification };
 diff --git a/codex-rs/app-server-protocol/schema/typescript/ServerNotificationEnvelope.ts b/codex-rs/app-server-protocol/schema/typescript/ServerNotificationEnvelope.ts
-index a5b07d304..60daabe35 100644
+index a5b07d304d2095bb69864400a1c83f255ed04f83..60daabe358de4f36552dafa189af1178c4a3b47f 100644
 --- a/codex-rs/app-server-protocol/schema/typescript/ServerNotificationEnvelope.ts
 +++ b/codex-rs/app-server-protocol/schema/typescript/ServerNotificationEnvelope.ts
 @@ -40,6 +40,7 @@ import type { PlanDeltaNotification } from "./v2/PlanDeltaNotification";
@@ -35547,7 +35547,7 @@ index a5b07d304..60daabe35 100644
 -emittedAtMs?: number, } & ({ "method": "error", "params": ErrorNotification } | { "method": "thread/started", "params": ThreadStartedNotification } | { "method": "thread/status/changed", "params": ThreadStatusChangedNotification } | { "method": "thread/readState/changed", "params": ThreadReadStateChangedNotification } | { "method": "thread/archived", "params": ThreadArchivedNotification } | { "method": "thread/deleted", "params": ThreadDeletedNotification } | { "method": "thread/unarchived", "params": ThreadUnarchivedNotification } | { "method": "thread/closed", "params": ThreadClosedNotification } | { "method": "thread/reverted", "params": ThreadRevertedNotification } | { "method": "skills/changed", "params": SkillsChangedNotification } | { "method": "thread/name/updated", "params": ThreadNameUpdatedNotification } | { "method": "thread/attachment/updated", "params": ThreadAttachmentUpdatedNotification } | { "method": "thread/goal/updated", "params": ThreadGoalUpdatedNotification } | { "method": "thread/prediction/updated", "params": ThreadPredictionUpdatedNotification } | { "method": "thread/goal/cleared", "params": ThreadGoalClearedNotification } | { "method": "thread/queue/changed", "params": ThreadQueueChangedNotification } | { "method": "project/changed", "params": ProjectChangedNotification } | { "method": "thread/project/updated", "params": ThreadProjectUpdatedNotification } | { "method": "thread/environment/connected", "params": EnvironmentConnectionNotification } | { "method": "thread/environment/disconnected", "params": EnvironmentConnectionNotification } | { "method": "thread/settings/updated", "params": ThreadSettingsUpdatedNotification } | { "method": "thread/tokenUsage/updated", "params": ThreadTokenUsageUpdatedNotification } | { "method": "turn/started", "params": TurnStartedNotification } | { "method": "hook/started", "params": HookStartedNotification } | { "method": "turn/completed", "params": TurnCompletedNotification } | { "method": "hook/completed", "params": HookCompletedNotification } | { "method": "turn/diff/updated", "params": TurnDiffUpdatedNotification } | { "method": "turn/plan/updated", "params": TurnPlanUpdatedNotification } | { "method": "item/started", "params": ItemStartedNotification } | { "method": "item/autoApprovalReview/started", "params": ItemGuardianApprovalReviewStartedNotification } | { "method": "item/autoApprovalReview/completed", "params": ItemGuardianApprovalReviewCompletedNotification } | { "method": "autoApprovalReview/strictReviewRequired", "params": StrictReviewRequiredNotification } | { "method": "item/completed", "params": ItemCompletedNotification } | { "method": "rawResponseItem/completed", "params": RawResponseItemCompletedNotification } | { "method": "rawResponse/completed", "params": RawResponseCompletedNotification } | { "method": "item/agentMessage/delta", "params": AgentMessageDeltaNotification } | { "method": "item/plan/delta", "params": PlanDeltaNotification } | { "method": "command/exec/outputDelta", "params": CommandExecOutputDeltaNotification } | { "method": "process/outputDelta", "params": ProcessOutputDeltaNotification } | { "method": "process/exited", "params": ProcessExitedNotification } | { "method": "item/commandExecution/outputDelta", "params": CommandExecutionOutputDeltaNotification } | { "method": "item/commandExecution/terminalInteraction", "params": TerminalInteractionNotification } | { "method": "item/fileChange/outputDelta", "params": FileChangeOutputDeltaNotification } | { "method": "item/fileChange/patchUpdated", "params": FileChangePatchUpdatedNotification } | { "method": "serverRequest/resolved", "params": ServerRequestResolvedNotification } | { "method": "item/mcpToolCall/progress", "params": McpToolCallProgressNotification } | { "method": "mcpServer/oauthLogin/completed", "params": McpServerOauthLoginCompletedNotification } | { "method": "mcpServer/startupStatus/updated", "params": McpServerStatusUpdatedNotification } | { "method": "mcpServer/event/stream/notification", "params": McpServerEventStreamNotification } | { "method": "account/updated", "params": AccountUpdatedNotification } | { "method": "account/gatewayOAuth/changed", "params": GatewayOAuthChangedNotification } | { "method": "account/rateLimits/updated", "params": AccountRateLimitsUpdatedNotification } | { "method": "app/list/updated", "params": AppListUpdatedNotification } | { "method": "remoteControl/status/changed", "params": RemoteControlStatusChangedNotification } | { "method": "externalAgentConfig/import/progress", "params": ExternalAgentConfigImportProgressNotification } | { "method": "externalAgentConfig/import/completed", "params": ExternalAgentConfigImportCompletedNotification } | { "method": "fs/changed", "params": FsChangedNotification } | { "method": "item/reasoning/summaryTextDelta", "params": ReasoningSummaryTextDeltaNotification } | { "method": "item/reasoning/summaryPartAdded", "params": ReasoningSummaryPartAddedNotification } | { "method": "item/reasoning/textDelta", "params": ReasoningTextDeltaNotification } | { "method": "thread/compacted", "params": ContextCompactedNotification } | { "method": "model/rerouted", "params": ModelReroutedNotification } | { "method": "model/verification", "params": ModelVerificationNotification } | { "method": "modelProvider/authRecoveryStarted", "params": AuthRecoveryNotification } | { "method": "modelProvider/authRecoveryCompleted", "params": AuthRecoveryNotification } | { "method": "turn/moderationMetadata", "params": TurnModerationMetadataNotification } | { "method": "model/safetyBuffering/updated", "params": ModelSafetyBufferingUpdatedNotification } | { "method": "warning", "params": WarningNotification } | { "method": "guardianWarning", "params": GuardianWarningNotification } | { "method": "deprecationNotice", "params": DeprecationNoticeNotification } | { "method": "configWarning", "params": ConfigWarningNotification } | { "method": "fuzzyFileSearch/sessionUpdated", "params": FuzzyFileSearchSessionUpdatedNotification } | { "method": "fuzzyFileSearch/sessionCompleted", "params": FuzzyFileSearchSessionCompletedNotification } | { "method": "thread/realtime/started", "params": ThreadRealtimeStartedNotification } | { "method": "thread/realtime/itemAdded", "params": ThreadRealtimeItemAddedNotification } | { "method": "thread/realtime/item/started", "params": ThreadRealtimeItemStartedNotification } | { "method": "thread/realtime/item/transcript/delta", "params": ThreadRealtimeItemTranscriptDeltaNotification } | { "method": "thread/realtime/item/completed", "params": ThreadRealtimeItemCompletedNotification } | { "method": "thread/realtime/transcript/delta", "params": ThreadRealtimeTranscriptDeltaNotification } | { "method": "thread/realtime/transcript/done", "params": ThreadRealtimeTranscriptDoneNotification } | { "method": "thread/realtime/outputAudio/delta", "params": ThreadRealtimeOutputAudioDeltaNotification } | { "method": "thread/realtime/sdp", "params": ThreadRealtimeSdpNotification } | { "method": "thread/realtime/error", "params": ThreadRealtimeErrorNotification } | { "method": "thread/realtime/closed", "params": ThreadRealtimeClosedNotification } | { "method": "windows/worldWritableWarning", "params": WindowsWorldWritableWarningNotification } | { "method": "windowsSandbox/setupCompleted", "params": WindowsSandboxSetupCompletedNotification } | { "method": "account/login/completed", "params": AccountLoginCompletedNotification });
 +emittedAtMs?: number, } & ({ "method": "error", "params": ErrorNotification } | { "method": "thread/started", "params": ThreadStartedNotification } | { "method": "thread/status/changed", "params": ThreadStatusChangedNotification } | { "method": "thread/readState/changed", "params": ThreadReadStateChangedNotification } | { "method": "thread/archived", "params": ThreadArchivedNotification } | { "method": "thread/deleted", "params": ThreadDeletedNotification } | { "method": "thread/unarchived", "params": ThreadUnarchivedNotification } | { "method": "thread/closed", "params": ThreadClosedNotification } | { "method": "thread/reverted", "params": ThreadRevertedNotification } | { "method": "skills/changed", "params": SkillsChangedNotification } | { "method": "thread/name/updated", "params": ThreadNameUpdatedNotification } | { "method": "thread/attachment/updated", "params": ThreadAttachmentUpdatedNotification } | { "method": "thread/goal/updated", "params": ThreadGoalUpdatedNotification } | { "method": "thread/prediction/updated", "params": ThreadPredictionUpdatedNotification } | { "method": "thread/goal/cleared", "params": ThreadGoalClearedNotification } | { "method": "thread/queue/changed", "params": ThreadQueueChangedNotification } | { "method": "project/changed", "params": ProjectChangedNotification } | { "method": "thread/project/updated", "params": ThreadProjectUpdatedNotification } | { "method": "thread/environment/connected", "params": EnvironmentConnectionNotification } | { "method": "thread/environment/disconnected", "params": EnvironmentConnectionNotification } | { "method": "thread/settings/updated", "params": ThreadSettingsUpdatedNotification } | { "method": "thread/tokenUsage/updated", "params": ThreadTokenUsageUpdatedNotification } | { "method": "turn/started", "params": TurnStartedNotification } | { "method": "hook/started", "params": HookStartedNotification } | { "method": "turn/completed", "params": TurnCompletedNotification } | { "method": "hook/completed", "params": HookCompletedNotification } | { "method": "turn/diff/updated", "params": TurnDiffUpdatedNotification } | { "method": "turn/plan/updated", "params": TurnPlanUpdatedNotification } | { "method": "item/started", "params": ItemStartedNotification } | { "method": "item/autoApprovalReview/started", "params": ItemGuardianApprovalReviewStartedNotification } | { "method": "item/autoApprovalReview/completed", "params": ItemGuardianApprovalReviewCompletedNotification } | { "method": "autoApprovalReview/strictReviewRequired", "params": StrictReviewRequiredNotification } | { "method": "item/completed", "params": ItemCompletedNotification } | { "method": "rawResponseItem/completed", "params": RawResponseItemCompletedNotification } | { "method": "rawResponse/completed", "params": RawResponseCompletedNotification } | { "method": "item/agentMessage/delta", "params": AgentMessageDeltaNotification } | { "method": "item/plan/delta", "params": PlanDeltaNotification } | { "method": "command/exec/outputDelta", "params": CommandExecOutputDeltaNotification } | { "method": "process/outputDelta", "params": ProcessOutputDeltaNotification } | { "method": "process/exited", "params": ProcessExitedNotification } | { "method": "item/commandExecution/outputDelta", "params": CommandExecutionOutputDeltaNotification } | { "method": "item/commandExecution/terminalInteraction", "params": TerminalInteractionNotification } | { "method": "item/fileChange/outputDelta", "params": FileChangeOutputDeltaNotification } | { "method": "item/fileChange/patchUpdated", "params": FileChangePatchUpdatedNotification } | { "method": "serverRequest/resolved", "params": ServerRequestResolvedNotification } | { "method": "item/mcpToolCall/progress", "params": McpToolCallProgressNotification } | { "method": "mcpServer/oauthLogin/completed", "params": McpServerOauthLoginCompletedNotification } | { "method": "mcpServer/startupStatus/updated", "params": McpServerStatusUpdatedNotification } | { "method": "mcpServer/event/stream/notification", "params": McpServerEventStreamNotification } | { "method": "provider/pool/changed", "params": ProviderPoolChangedNotification } | { "method": "thread/providerAccount/changed", "params": ThreadProviderAccountChangedNotification } | { "method": "account/updated", "params": AccountUpdatedNotification } | { "method": "account/gatewayOAuth/changed", "params": GatewayOAuthChangedNotification } | { "method": "account/rateLimits/updated", "params": AccountRateLimitsUpdatedNotification } | { "method": "app/list/updated", "params": AppListUpdatedNotification } | { "method": "remoteControl/status/changed", "params": RemoteControlStatusChangedNotification } | { "method": "externalAgentConfig/import/progress", "params": ExternalAgentConfigImportProgressNotification } | { "method": "externalAgentConfig/import/completed", "params": ExternalAgentConfigImportCompletedNotification } | { "method": "fs/changed", "params": FsChangedNotification } | { "method": "item/reasoning/summaryTextDelta", "params": ReasoningSummaryTextDeltaNotification } | { "method": "item/reasoning/summaryPartAdded", "params": ReasoningSummaryPartAddedNotification } | { "method": "item/reasoning/textDelta", "params": ReasoningTextDeltaNotification } | { "method": "thread/compacted", "params": ContextCompactedNotification } | { "method": "model/rerouted", "params": ModelReroutedNotification } | { "method": "model/verification", "params": ModelVerificationNotification } | { "method": "modelProvider/authRecoveryStarted", "params": AuthRecoveryNotification } | { "method": "modelProvider/authRecoveryCompleted", "params": AuthRecoveryNotification } | { "method": "turn/moderationMetadata", "params": TurnModerationMetadataNotification } | { "method": "model/safetyBuffering/updated", "params": ModelSafetyBufferingUpdatedNotification } | { "method": "warning", "params": WarningNotification } | { "method": "guardianWarning", "params": GuardianWarningNotification } | { "method": "deprecationNotice", "params": DeprecationNoticeNotification } | { "method": "configWarning", "params": ConfigWarningNotification } | { "method": "fuzzyFileSearch/sessionUpdated", "params": FuzzyFileSearchSessionUpdatedNotification } | { "method": "fuzzyFileSearch/sessionCompleted", "params": FuzzyFileSearchSessionCompletedNotification } | { "method": "thread/realtime/started", "params": ThreadRealtimeStartedNotification } | { "method": "thread/realtime/itemAdded", "params": ThreadRealtimeItemAddedNotification } | { "method": "thread/realtime/item/started", "params": ThreadRealtimeItemStartedNotification } | { "method": "thread/realtime/item/transcript/delta", "params": ThreadRealtimeItemTranscriptDeltaNotification } | { "method": "thread/realtime/item/completed", "params": ThreadRealtimeItemCompletedNotification } | { "method": "thread/realtime/transcript/delta", "params": ThreadRealtimeTranscriptDeltaNotification } | { "method": "thread/realtime/transcript/done", "params": ThreadRealtimeTranscriptDoneNotification } | { "method": "thread/realtime/outputAudio/delta", "params": ThreadRealtimeOutputAudioDeltaNotification } | { "method": "thread/realtime/sdp", "params": ThreadRealtimeSdpNotification } | { "method": "thread/realtime/error", "params": ThreadRealtimeErrorNotification } | { "method": "thread/realtime/closed", "params": ThreadRealtimeClosedNotification } | { "method": "windows/worldWritableWarning", "params": WindowsWorldWritableWarningNotification } | { "method": "windowsSandbox/setupCompleted", "params": WindowsSandboxSetupCompletedNotification } | { "method": "account/login/completed", "params": AccountLoginCompletedNotification });
 diff --git a/codex-rs/app-server-protocol/schema/typescript/v2/Account.ts b/codex-rs/app-server-protocol/schema/typescript/v2/Account.ts
-index 1f1ad851c..712108acd 100644
+index 1f1ad851c757eed0cc494c2a166ab7aa987bf33e..712108acd80a22d9d4d90730108169e31cff80e3 100644
 --- a/codex-rs/app-server-protocol/schema/typescript/v2/Account.ts
 +++ b/codex-rs/app-server-protocol/schema/typescript/v2/Account.ts
 @@ -3,4 +3,4 @@
@@ -35557,7 +35557,7 @@ index 1f1ad851c..712108acd 100644
 -export type Account = { "type": "apiKey", } | { "type": "chatgpt", email: string | null, planType: PlanType, } | { "type": "amazonBedrock", usesCodexManagedCredentials: boolean, };
 +export type Account = { "type": "native", provider: string, accountId: string, } | { "type": "apiKey", } | { "type": "chatgpt", email: string | null, planType: PlanType, } | { "type": "amazonBedrock", usesCodexManagedCredentials: boolean, };
 diff --git a/codex-rs/app-server-protocol/schema/typescript/v2/AttestationGenerateParams.ts b/codex-rs/app-server-protocol/schema/typescript/v2/AttestationGenerateParams.ts
-index 0e87e7d3e..7200a7452 100644
+index 0e87e7d3e4a45fe67e49178bad3aae617c4e4cdf..7200a745286715cc2fb0e6b3f4491de33d72e2b5 100644
 --- a/codex-rs/app-server-protocol/schema/typescript/v2/AttestationGenerateParams.ts
 +++ b/codex-rs/app-server-protocol/schema/typescript/v2/AttestationGenerateParams.ts
 @@ -2,4 +2,4 @@
@@ -35567,7 +35567,7 @@ index 0e87e7d3e..7200a7452 100644
 -export type AttestationGenerateParams = Record<string, never>;
 +export type AttestationGenerateParams = Record<symbol, never>;
 diff --git a/codex-rs/app-server-protocol/schema/typescript/v2/CommandExecResizeResponse.ts b/codex-rs/app-server-protocol/schema/typescript/v2/CommandExecResizeResponse.ts
-index 7b7f2be70..be99466b5 100644
+index 7b7f2be70064bf1c15f6affb26e44d384f2961a5..be99466b50912acdf1129e7d2777138cb6db5aca 100644
 --- a/codex-rs/app-server-protocol/schema/typescript/v2/CommandExecResizeResponse.ts
 +++ b/codex-rs/app-server-protocol/schema/typescript/v2/CommandExecResizeResponse.ts
 @@ -5,4 +5,4 @@
@@ -35577,7 +35577,7 @@ index 7b7f2be70..be99466b5 100644
 -export type CommandExecResizeResponse = Record<string, never>;
 +export type CommandExecResizeResponse = Record<symbol, never>;
 diff --git a/codex-rs/app-server-protocol/schema/typescript/v2/CommandExecTerminateResponse.ts b/codex-rs/app-server-protocol/schema/typescript/v2/CommandExecTerminateResponse.ts
-index dc6371fbd..434c64c6c 100644
+index dc6371fbdd6399e7b469c20e202eec7dbcad9ffe..434c64c6c3e35eff7bceda602a83e144d11f0b96 100644
 --- a/codex-rs/app-server-protocol/schema/typescript/v2/CommandExecTerminateResponse.ts
 +++ b/codex-rs/app-server-protocol/schema/typescript/v2/CommandExecTerminateResponse.ts
 @@ -5,4 +5,4 @@
@@ -35587,7 +35587,7 @@ index dc6371fbd..434c64c6c 100644
 -export type CommandExecTerminateResponse = Record<string, never>;
 +export type CommandExecTerminateResponse = Record<symbol, never>;
 diff --git a/codex-rs/app-server-protocol/schema/typescript/v2/CommandExecWriteResponse.ts b/codex-rs/app-server-protocol/schema/typescript/v2/CommandExecWriteResponse.ts
-index 6dbbddf4d..de0ff92cf 100644
+index 6dbbddf4dd25d9899f873d3df693d4d098a51409..de0ff92cf995a72a634f91d4d4f3c5b22c3baff0 100644
 --- a/codex-rs/app-server-protocol/schema/typescript/v2/CommandExecWriteResponse.ts
 +++ b/codex-rs/app-server-protocol/schema/typescript/v2/CommandExecWriteResponse.ts
 @@ -5,4 +5,4 @@
@@ -35597,7 +35597,7 @@ index 6dbbddf4d..de0ff92cf 100644
 -export type CommandExecWriteResponse = Record<string, never>;
 +export type CommandExecWriteResponse = Record<symbol, never>;
 diff --git a/codex-rs/app-server-protocol/schema/typescript/v2/FsCopyResponse.ts b/codex-rs/app-server-protocol/schema/typescript/v2/FsCopyResponse.ts
-index 3e3061a8a..ef777f5e8 100644
+index 3e3061a8ab59875c5313eb356b76020b0b9bec9f..ef777f5e8e8def0a9c2521bbca7c022c83f7d0de 100644
 --- a/codex-rs/app-server-protocol/schema/typescript/v2/FsCopyResponse.ts
 +++ b/codex-rs/app-server-protocol/schema/typescript/v2/FsCopyResponse.ts
 @@ -5,4 +5,4 @@
@@ -35607,7 +35607,7 @@ index 3e3061a8a..ef777f5e8 100644
 -export type FsCopyResponse = Record<string, never>;
 +export type FsCopyResponse = Record<symbol, never>;
 diff --git a/codex-rs/app-server-protocol/schema/typescript/v2/FsCreateDirectoryResponse.ts b/codex-rs/app-server-protocol/schema/typescript/v2/FsCreateDirectoryResponse.ts
-index 5d251b715..b76eea556 100644
+index 5d251b7156410198bfbb4e2ec378f72fe6bd0821..b76eea556fcbf417bd122c98dc7903799c64d8dc 100644
 --- a/codex-rs/app-server-protocol/schema/typescript/v2/FsCreateDirectoryResponse.ts
 +++ b/codex-rs/app-server-protocol/schema/typescript/v2/FsCreateDirectoryResponse.ts
 @@ -5,4 +5,4 @@
@@ -35617,7 +35617,7 @@ index 5d251b715..b76eea556 100644
 -export type FsCreateDirectoryResponse = Record<string, never>;
 +export type FsCreateDirectoryResponse = Record<symbol, never>;
 diff --git a/codex-rs/app-server-protocol/schema/typescript/v2/FsRemoveResponse.ts b/codex-rs/app-server-protocol/schema/typescript/v2/FsRemoveResponse.ts
-index 981c28fa1..8a2982473 100644
+index 981c28fa1e44a987266bb76f34bd944698c5c0fc..8a2982473799dfd7f000e7ea780c451ddaace74a 100644
 --- a/codex-rs/app-server-protocol/schema/typescript/v2/FsRemoveResponse.ts
 +++ b/codex-rs/app-server-protocol/schema/typescript/v2/FsRemoveResponse.ts
 @@ -5,4 +5,4 @@
@@ -35627,7 +35627,7 @@ index 981c28fa1..8a2982473 100644
 -export type FsRemoveResponse = Record<string, never>;
 +export type FsRemoveResponse = Record<symbol, never>;
 diff --git a/codex-rs/app-server-protocol/schema/typescript/v2/FsUnwatchResponse.ts b/codex-rs/app-server-protocol/schema/typescript/v2/FsUnwatchResponse.ts
-index 02507d2c0..bf27a4116 100644
+index 02507d2c00824ffc782444af05fbb5a96ad22059..bf27a4116bd36ca1a749d6ab78513e86b96314af 100644
 --- a/codex-rs/app-server-protocol/schema/typescript/v2/FsUnwatchResponse.ts
 +++ b/codex-rs/app-server-protocol/schema/typescript/v2/FsUnwatchResponse.ts
 @@ -5,4 +5,4 @@
@@ -35637,7 +35637,7 @@ index 02507d2c0..bf27a4116 100644
 -export type FsUnwatchResponse = Record<string, never>;
 +export type FsUnwatchResponse = Record<symbol, never>;
 diff --git a/codex-rs/app-server-protocol/schema/typescript/v2/FsWriteFileResponse.ts b/codex-rs/app-server-protocol/schema/typescript/v2/FsWriteFileResponse.ts
-index ad0ce2838..34310ff5f 100644
+index ad0ce283801066f7fd98473d47c4abeacb4dd9f4..34310ff5fde9acee3dd9c43da96c5cc9a43ef573 100644
 --- a/codex-rs/app-server-protocol/schema/typescript/v2/FsWriteFileResponse.ts
 +++ b/codex-rs/app-server-protocol/schema/typescript/v2/FsWriteFileResponse.ts
 @@ -5,4 +5,4 @@
@@ -35647,7 +35647,7 @@ index ad0ce2838..34310ff5f 100644
 -export type FsWriteFileResponse = Record<string, never>;
 +export type FsWriteFileResponse = Record<symbol, never>;
 diff --git a/codex-rs/app-server-protocol/schema/typescript/v2/GatewayOAuthCancelResponse.ts b/codex-rs/app-server-protocol/schema/typescript/v2/GatewayOAuthCancelResponse.ts
-index 957542bf5..d61a494cc 100644
+index 957542bf5637c7437e8903c769d2723b377e6cda..d61a494cca0721c4999048de9da0dca9de08e797 100644
 --- a/codex-rs/app-server-protocol/schema/typescript/v2/GatewayOAuthCancelResponse.ts
 +++ b/codex-rs/app-server-protocol/schema/typescript/v2/GatewayOAuthCancelResponse.ts
 @@ -2,4 +2,4 @@
@@ -35657,7 +35657,7 @@ index 957542bf5..d61a494cc 100644
 -export type GatewayOAuthCancelResponse = Record<string, never>;
 +export type GatewayOAuthCancelResponse = Record<symbol, never>;
 diff --git a/codex-rs/app-server-protocol/schema/typescript/v2/GatewayOAuthLoginResponse.ts b/codex-rs/app-server-protocol/schema/typescript/v2/GatewayOAuthLoginResponse.ts
-index a171d5830..52b8c253a 100644
+index a171d58303a4351034cffff61ebbadc1b532d3db..52b8c253a4361902f79d3a94156c509eb13da4f1 100644
 --- a/codex-rs/app-server-protocol/schema/typescript/v2/GatewayOAuthLoginResponse.ts
 +++ b/codex-rs/app-server-protocol/schema/typescript/v2/GatewayOAuthLoginResponse.ts
 @@ -2,4 +2,4 @@
@@ -35667,7 +35667,7 @@ index a171d5830..52b8c253a 100644
 -export type GatewayOAuthLoginResponse = Record<string, never>;
 +export type GatewayOAuthLoginResponse = Record<symbol, never>;
 diff --git a/codex-rs/app-server-protocol/schema/typescript/v2/LoginAccountParams.ts b/codex-rs/app-server-protocol/schema/typescript/v2/LoginAccountParams.ts
-index c316cac61..2e19f7de3 100644
+index c316cac614ff432f18569b3f239609e43b48bf55..2e19f7de307cbc64b289fd3582670a09e7c7a9f1 100644
 --- a/codex-rs/app-server-protocol/schema/typescript/v2/LoginAccountParams.ts
 +++ b/codex-rs/app-server-protocol/schema/typescript/v2/LoginAccountParams.ts
 @@ -3,7 +3,11 @@
@@ -35684,7 +35684,7 @@ index c316cac61..2e19f7de3 100644
   * Access token (JWT) supplied by the client.
   * This token is used for backend API requests and email extraction.
 diff --git a/codex-rs/app-server-protocol/schema/typescript/v2/LoginAccountResponse.ts b/codex-rs/app-server-protocol/schema/typescript/v2/LoginAccountResponse.ts
-index 5a9f34ead..5b50234d2 100644
+index 5a9f34ead3c1b6f4d25964c9c3e5a232718e193d..5b50234d26baaf3365dbeecbe3ee395da5bc3c69 100644
 --- a/codex-rs/app-server-protocol/schema/typescript/v2/LoginAccountResponse.ts
 +++ b/codex-rs/app-server-protocol/schema/typescript/v2/LoginAccountResponse.ts
 @@ -2,7 +2,7 @@
@@ -35697,7 +35697,7 @@ index 5a9f34ead..5b50234d2 100644
   * URL the client should open in a browser to initiate the OAuth flow.
   */
 diff --git a/codex-rs/app-server-protocol/schema/typescript/v2/LogoutAccountResponse.ts b/codex-rs/app-server-protocol/schema/typescript/v2/LogoutAccountResponse.ts
-index ec85cf0ff..294b61540 100644
+index ec85cf0ff77be1c581120af991b0453c0d51e09a..294b615407cf6b86ef8cd94b91821c21d180a733 100644
 --- a/codex-rs/app-server-protocol/schema/typescript/v2/LogoutAccountResponse.ts
 +++ b/codex-rs/app-server-protocol/schema/typescript/v2/LogoutAccountResponse.ts
 @@ -2,4 +2,4 @@
@@ -35707,7 +35707,7 @@ index ec85cf0ff..294b61540 100644
 -export type LogoutAccountResponse = Record<string, never>;
 +export type LogoutAccountResponse = Record<symbol, never>;
 diff --git a/codex-rs/app-server-protocol/schema/typescript/v2/McpServerRefreshResponse.ts b/codex-rs/app-server-protocol/schema/typescript/v2/McpServerRefreshResponse.ts
-index 48a25d2fe..74e78ae39 100644
+index 48a25d2fec0a1a5a4baccfa412b0fbe7c80dc040..74e78ae3959a097e1a4307b19995aae81771243e 100644
 --- a/codex-rs/app-server-protocol/schema/typescript/v2/McpServerRefreshResponse.ts
 +++ b/codex-rs/app-server-protocol/schema/typescript/v2/McpServerRefreshResponse.ts
 @@ -2,4 +2,4 @@
@@ -35717,7 +35717,7 @@ index 48a25d2fe..74e78ae39 100644
 -export type McpServerRefreshResponse = Record<string, never>;
 +export type McpServerRefreshResponse = Record<symbol, never>;
 diff --git a/codex-rs/app-server-protocol/schema/typescript/v2/ModelProviderCapabilitiesReadParams.ts b/codex-rs/app-server-protocol/schema/typescript/v2/ModelProviderCapabilitiesReadParams.ts
-index 00cbe470b..58f30ca28 100644
+index 00cbe470b3cd1a4117568f7ff66e368b0c097e91..58f30ca28f0f8261d1cc4fe1c1f787714bf9958e 100644
 --- a/codex-rs/app-server-protocol/schema/typescript/v2/ModelProviderCapabilitiesReadParams.ts
 +++ b/codex-rs/app-server-protocol/schema/typescript/v2/ModelProviderCapabilitiesReadParams.ts
 @@ -2,4 +2,4 @@
@@ -35727,7 +35727,7 @@ index 00cbe470b..58f30ca28 100644
 -export type ModelProviderCapabilitiesReadParams = Record<string, never>;
 +export type ModelProviderCapabilitiesReadParams = Record<symbol, never>;
 diff --git a/codex-rs/app-server-protocol/schema/typescript/v2/PluginShareDeleteResponse.ts b/codex-rs/app-server-protocol/schema/typescript/v2/PluginShareDeleteResponse.ts
-index 231026836..f9842944b 100644
+index 23102683645e156bd9a88b5f3be40ff7fd7127a9..f9842944bf14ae654e4ef2ccfd2a9708c7c95929 100644
 --- a/codex-rs/app-server-protocol/schema/typescript/v2/PluginShareDeleteResponse.ts
 +++ b/codex-rs/app-server-protocol/schema/typescript/v2/PluginShareDeleteResponse.ts
 @@ -2,4 +2,4 @@
@@ -35737,7 +35737,7 @@ index 231026836..f9842944b 100644
 -export type PluginShareDeleteResponse = Record<string, never>;
 +export type PluginShareDeleteResponse = Record<symbol, never>;
 diff --git a/codex-rs/app-server-protocol/schema/typescript/v2/PluginShareListParams.ts b/codex-rs/app-server-protocol/schema/typescript/v2/PluginShareListParams.ts
-index 167ace7ac..3e7db7483 100644
+index 167ace7ac2c6d703b58e6b1c24094172903beea1..3e7db74834b46e26cb4aca29b5f3ff0db74da1bc 100644
 --- a/codex-rs/app-server-protocol/schema/typescript/v2/PluginShareListParams.ts
 +++ b/codex-rs/app-server-protocol/schema/typescript/v2/PluginShareListParams.ts
 @@ -2,4 +2,4 @@
@@ -35747,7 +35747,7 @@ index 167ace7ac..3e7db7483 100644
 -export type PluginShareListParams = Record<string, never>;
 +export type PluginShareListParams = Record<symbol, never>;
 diff --git a/codex-rs/app-server-protocol/schema/typescript/v2/PluginUninstallResponse.ts b/codex-rs/app-server-protocol/schema/typescript/v2/PluginUninstallResponse.ts
-index 5d02c2f71..1ce280431 100644
+index 5d02c2f71679331190890ec2bce29ca86497813c..1ce2804318cb8f9c48ea1743df439cc5b30314ba 100644
 --- a/codex-rs/app-server-protocol/schema/typescript/v2/PluginUninstallResponse.ts
 +++ b/codex-rs/app-server-protocol/schema/typescript/v2/PluginUninstallResponse.ts
 @@ -2,4 +2,4 @@
@@ -35757,7 +35757,7 @@ index 5d02c2f71..1ce280431 100644
 -export type PluginUninstallResponse = Record<string, never>;
 +export type PluginUninstallResponse = Record<symbol, never>;
 diff --git a/codex-rs/app-server-protocol/schema/typescript/v2/SkillsChangedNotification.ts b/codex-rs/app-server-protocol/schema/typescript/v2/SkillsChangedNotification.ts
-index 23ed93a5e..0af506217 100644
+index 23ed93a5eced7aed00b705109cf4b409ccf70be7..0af506217247b95f888164bba497e48ce618a58a 100644
 --- a/codex-rs/app-server-protocol/schema/typescript/v2/SkillsChangedNotification.ts
 +++ b/codex-rs/app-server-protocol/schema/typescript/v2/SkillsChangedNotification.ts
 @@ -8,4 +8,4 @@
@@ -35767,7 +35767,7 @@ index 23ed93a5e..0af506217 100644
 -export type SkillsChangedNotification = Record<string, never>;
 +export type SkillsChangedNotification = Record<symbol, never>;
 diff --git a/codex-rs/app-server-protocol/schema/typescript/v2/SkillsExtraRootsSetResponse.ts b/codex-rs/app-server-protocol/schema/typescript/v2/SkillsExtraRootsSetResponse.ts
-index 63be08186..aec65fde7 100644
+index 63be08186d10a9833078b5fe74418d26eedc30e5..aec65fde711fdb4ffe1342d1ca88c088c7aa4ab2 100644
 --- a/codex-rs/app-server-protocol/schema/typescript/v2/SkillsExtraRootsSetResponse.ts
 +++ b/codex-rs/app-server-protocol/schema/typescript/v2/SkillsExtraRootsSetResponse.ts
 @@ -2,4 +2,4 @@
@@ -35777,7 +35777,7 @@ index 63be08186..aec65fde7 100644
 -export type SkillsExtraRootsSetResponse = Record<string, never>;
 +export type SkillsExtraRootsSetResponse = Record<symbol, never>;
 diff --git a/codex-rs/app-server-protocol/schema/typescript/v2/ThreadApproveGuardianDeniedActionResponse.ts b/codex-rs/app-server-protocol/schema/typescript/v2/ThreadApproveGuardianDeniedActionResponse.ts
-index 856bb28cf..13c42c9eb 100644
+index 856bb28cfb19b2efee66a6603c1964e4100fb116..13c42c9eb5526e9b4f28a22f5acb586ce32892da 100644
 --- a/codex-rs/app-server-protocol/schema/typescript/v2/ThreadApproveGuardianDeniedActionResponse.ts
 +++ b/codex-rs/app-server-protocol/schema/typescript/v2/ThreadApproveGuardianDeniedActionResponse.ts
 @@ -2,4 +2,4 @@
@@ -35787,7 +35787,7 @@ index 856bb28cf..13c42c9eb 100644
 -export type ThreadApproveGuardianDeniedActionResponse = Record<string, never>;
 +export type ThreadApproveGuardianDeniedActionResponse = Record<symbol, never>;
 diff --git a/codex-rs/app-server-protocol/schema/typescript/v2/ThreadArchiveResponse.ts b/codex-rs/app-server-protocol/schema/typescript/v2/ThreadArchiveResponse.ts
-index b5954268e..91aafb11b 100644
+index b5954268e3e6bdd35fb6cb88b1b5e1c87d1c1a95..91aafb11ba37ceb74a557e7608ca6e344176166e 100644
 --- a/codex-rs/app-server-protocol/schema/typescript/v2/ThreadArchiveResponse.ts
 +++ b/codex-rs/app-server-protocol/schema/typescript/v2/ThreadArchiveResponse.ts
 @@ -2,4 +2,4 @@
@@ -35797,7 +35797,7 @@ index b5954268e..91aafb11b 100644
 -export type ThreadArchiveResponse = Record<string, never>;
 +export type ThreadArchiveResponse = Record<symbol, never>;
 diff --git a/codex-rs/app-server-protocol/schema/typescript/v2/ThreadAttachmentRemoveResponse.ts b/codex-rs/app-server-protocol/schema/typescript/v2/ThreadAttachmentRemoveResponse.ts
-index d506e02c3..cc619342c 100644
+index d506e02c38e4f3dc458c42aea2aefc8988eedbae..cc619342c3154aaf3ed460fb72d90d6cc286e435 100644
 --- a/codex-rs/app-server-protocol/schema/typescript/v2/ThreadAttachmentRemoveResponse.ts
 +++ b/codex-rs/app-server-protocol/schema/typescript/v2/ThreadAttachmentRemoveResponse.ts
 @@ -5,4 +5,4 @@
@@ -35807,7 +35807,7 @@ index d506e02c3..cc619342c 100644
 -export type ThreadAttachmentRemoveResponse = Record<string, never>;
 +export type ThreadAttachmentRemoveResponse = Record<symbol, never>;
 diff --git a/codex-rs/app-server-protocol/schema/typescript/v2/ThreadCompactStartResponse.ts b/codex-rs/app-server-protocol/schema/typescript/v2/ThreadCompactStartResponse.ts
-index 3794feb27..6d84cae6e 100644
+index 3794feb270edd90ca58ba3e824dc9f469500a2d0..6d84cae6ead13ac4244deb29047c235282765772 100644
 --- a/codex-rs/app-server-protocol/schema/typescript/v2/ThreadCompactStartResponse.ts
 +++ b/codex-rs/app-server-protocol/schema/typescript/v2/ThreadCompactStartResponse.ts
 @@ -2,4 +2,4 @@
@@ -35817,7 +35817,7 @@ index 3794feb27..6d84cae6e 100644
 -export type ThreadCompactStartResponse = Record<string, never>;
 +export type ThreadCompactStartResponse = Record<symbol, never>;
 diff --git a/codex-rs/app-server-protocol/schema/typescript/v2/ThreadDeleteResponse.ts b/codex-rs/app-server-protocol/schema/typescript/v2/ThreadDeleteResponse.ts
-index 1af1c3077..ebf749852 100644
+index 1af1c3077f4e1c008425fb87a391c451a3eb76e5..ebf749852edeb4d23aeab59def3ba5920ff2de1c 100644
 --- a/codex-rs/app-server-protocol/schema/typescript/v2/ThreadDeleteResponse.ts
 +++ b/codex-rs/app-server-protocol/schema/typescript/v2/ThreadDeleteResponse.ts
 @@ -2,4 +2,4 @@
@@ -35827,7 +35827,7 @@ index 1af1c3077..ebf749852 100644
 -export type ThreadDeleteResponse = Record<string, never>;
 +export type ThreadDeleteResponse = Record<symbol, never>;
 diff --git a/codex-rs/app-server-protocol/schema/typescript/v2/ThreadExtra.ts b/codex-rs/app-server-protocol/schema/typescript/v2/ThreadExtra.ts
-index aa35e45f0..397c1f165 100644
+index aa35e45f074b32917ca23b5d6e34cd5d8624a369..397c1f165dfed726ca6d2b7c380def3125bda599 100644
 --- a/codex-rs/app-server-protocol/schema/typescript/v2/ThreadExtra.ts
 +++ b/codex-rs/app-server-protocol/schema/typescript/v2/ThreadExtra.ts
 @@ -5,4 +5,4 @@
@@ -35837,7 +35837,7 @@ index aa35e45f0..397c1f165 100644
 -export type ThreadExtra = Record<string, never>;
 +export type ThreadExtra = Record<symbol, never>;
 diff --git a/codex-rs/app-server-protocol/schema/typescript/v2/ThreadInjectItemsResponse.ts b/codex-rs/app-server-protocol/schema/typescript/v2/ThreadInjectItemsResponse.ts
-index 60dcf0d0b..6732601a1 100644
+index 60dcf0d0b3d8c37bbaea4d86337cf68b7345dcfb..6732601a1870b3a8fe61ac19716f3c853b72ebe5 100644
 --- a/codex-rs/app-server-protocol/schema/typescript/v2/ThreadInjectItemsResponse.ts
 +++ b/codex-rs/app-server-protocol/schema/typescript/v2/ThreadInjectItemsResponse.ts
 @@ -2,4 +2,4 @@
@@ -35847,7 +35847,7 @@ index 60dcf0d0b..6732601a1 100644
 -export type ThreadInjectItemsResponse = Record<string, never>;
 +export type ThreadInjectItemsResponse = Record<symbol, never>;
 diff --git a/codex-rs/app-server-protocol/schema/typescript/v2/ThreadSectionDeleteResponse.ts b/codex-rs/app-server-protocol/schema/typescript/v2/ThreadSectionDeleteResponse.ts
-index 0ad58d014..1a94f81d4 100644
+index 0ad58d014510a40813d4d57adcbd007cb620c620..1a94f81d4d28d0129742c5b9fdba918fa5efa777 100644
 --- a/codex-rs/app-server-protocol/schema/typescript/v2/ThreadSectionDeleteResponse.ts
 +++ b/codex-rs/app-server-protocol/schema/typescript/v2/ThreadSectionDeleteResponse.ts
 @@ -5,4 +5,4 @@
@@ -35857,7 +35857,7 @@ index 0ad58d014..1a94f81d4 100644
 -export type ThreadSectionDeleteResponse = Record<string, never>;
 +export type ThreadSectionDeleteResponse = Record<symbol, never>;
 diff --git a/codex-rs/app-server-protocol/schema/typescript/v2/ThreadSectionMoveResponse.ts b/codex-rs/app-server-protocol/schema/typescript/v2/ThreadSectionMoveResponse.ts
-index e9e0f4390..0bc759016 100644
+index e9e0f43900ba9bc7f30e92360b075753511a0958..0bc7590162593278e7671feeac4034e035483929 100644
 --- a/codex-rs/app-server-protocol/schema/typescript/v2/ThreadSectionMoveResponse.ts
 +++ b/codex-rs/app-server-protocol/schema/typescript/v2/ThreadSectionMoveResponse.ts
 @@ -2,4 +2,4 @@
@@ -35867,7 +35867,7 @@ index e9e0f4390..0bc759016 100644
 -export type ThreadSectionMoveResponse = Record<string, never>;
 +export type ThreadSectionMoveResponse = Record<symbol, never>;
 diff --git a/codex-rs/app-server-protocol/schema/typescript/v2/ThreadSetNameResponse.ts b/codex-rs/app-server-protocol/schema/typescript/v2/ThreadSetNameResponse.ts
-index 09143d251..284be4609 100644
+index 09143d251cfca7e9eb630cebf7fe8c8b4cdda3ba..284be460935f2e050805aac8486eb03203e85dad 100644
 --- a/codex-rs/app-server-protocol/schema/typescript/v2/ThreadSetNameResponse.ts
 +++ b/codex-rs/app-server-protocol/schema/typescript/v2/ThreadSetNameResponse.ts
 @@ -2,4 +2,4 @@
@@ -35877,7 +35877,7 @@ index 09143d251..284be4609 100644
 -export type ThreadSetNameResponse = Record<string, never>;
 +export type ThreadSetNameResponse = Record<symbol, never>;
 diff --git a/codex-rs/app-server-protocol/schema/typescript/v2/ThreadShellCommandResponse.ts b/codex-rs/app-server-protocol/schema/typescript/v2/ThreadShellCommandResponse.ts
-index 9c54b4583..6ec4bf9bc 100644
+index 9c54b45839d4145bff76ce49203d3cef82e677f3..6ec4bf9bcaea15bdda5ba6f48ef4c60d466a8a95 100644
 --- a/codex-rs/app-server-protocol/schema/typescript/v2/ThreadShellCommandResponse.ts
 +++ b/codex-rs/app-server-protocol/schema/typescript/v2/ThreadShellCommandResponse.ts
 @@ -2,4 +2,4 @@
@@ -35887,7 +35887,7 @@ index 9c54b4583..6ec4bf9bc 100644
 -export type ThreadShellCommandResponse = Record<string, never>;
 +export type ThreadShellCommandResponse = Record<symbol, never>;
 diff --git a/codex-rs/app-server-protocol/schema/typescript/v2/TurnInterruptResponse.ts b/codex-rs/app-server-protocol/schema/typescript/v2/TurnInterruptResponse.ts
-index 7ce6e35bd..f51c643f8 100644
+index 7ce6e35bd63fbe061251a83fddcd85c075c3a0f4..f51c643f8a9e93bec64a6087e3e96cfe06465eee 100644
 --- a/codex-rs/app-server-protocol/schema/typescript/v2/TurnInterruptResponse.ts
 +++ b/codex-rs/app-server-protocol/schema/typescript/v2/TurnInterruptResponse.ts
 @@ -2,4 +2,4 @@
@@ -35897,7 +35897,7 @@ index 7ce6e35bd..f51c643f8 100644
 -export type TurnInterruptResponse = Record<string, never>;
 +export type TurnInterruptResponse = Record<symbol, never>;
 diff --git a/codex-rs/app-server-protocol/schema/typescript/v2/index.ts b/codex-rs/app-server-protocol/schema/typescript/v2/index.ts
-index 407234534..b55fe486b 100644
+index 40723453437c27dd37397fde205ed5b2d4638418..b55fe486b1837816ffca0cd4e532b43f5c40e773 100644
 --- a/codex-rs/app-server-protocol/schema/typescript/v2/index.ts
 +++ b/codex-rs/app-server-protocol/schema/typescript/v2/index.ts
 @@ -410,6 +410,14 @@ export type { ProjectChangeType } from "./ProjectChangeType";
@@ -35923,8 +35923,20 @@ index 407234534..b55fe486b 100644
  export type { ThreadQueueChangedNotification } from "./ThreadQueueChangedNotification";
  export type { ThreadReadParams } from "./ThreadReadParams";
  export type { ThreadReadResponse } from "./ThreadReadResponse";
+diff --git a/codex-rs/app-server-protocol/scripts/write_schema_fixtures.py b/codex-rs/app-server-protocol/scripts/write_schema_fixtures.py
+index 65432a219e7a0902e5e17eac1a6f5e7f53e24bd5..0e13ae1e717ba30c80fb422afa988bc58da1cd9e 100644
+--- a/codex-rs/app-server-protocol/scripts/write_schema_fixtures.py
++++ b/codex-rs/app-server-protocol/scripts/write_schema_fixtures.py
+@@ -42,6 +42,7 @@ def main() -> None:
+         [
+             "cargo",
+             "test",
++            "--locked",
+             "-p",
+             "codex-app-server-protocol",
+             "--lib",
 diff --git a/sdk/python-runtime/README.md b/sdk/python-runtime/README.md
-index 12c94109d..eea4e3b3e 100644
+index 12c94109da2558ff02b238443cb0d996dab15ac9..eea4e3b3ea8f3a316eb479a3dd5a95c09c09867f 100644
 --- a/sdk/python-runtime/README.md
 +++ b/sdk/python-runtime/README.md
 @@ -1,3 +1,5 @@
@@ -35934,7 +35946,7 @@ index 12c94109d..eea4e3b3e 100644
  
  Platform-specific runtime package consumed by the published `openai-codex`.
 diff --git a/sdk/python-runtime/pyproject.toml b/sdk/python-runtime/pyproject.toml
-index 18967bab5..23ce94562 100644
+index 18967bab51e7e6557f26b820fd043f68c0de5ae9..23ce94562bfbd3f97b6f8667a3ed54a5359afe0f 100644
 --- a/sdk/python-runtime/pyproject.toml
 +++ b/sdk/python-runtime/pyproject.toml
 @@ -5,7 +5,7 @@ build-backend = "hatchling.build"
@@ -35960,7 +35972,7 @@ index 18967bab5..23ce94562 100644
  [tool.hatch.build]
  exclude = [
 diff --git a/sdk/python/README.md b/sdk/python/README.md
-index fccc92b01..ac11ea04b 100644
+index fccc92b011a23b3f9b9d0e09846f7e93d52dc996..ac11ea04be70b1632515d8e9f40d0d5e59f4e13e 100644
 --- a/sdk/python/README.md
 +++ b/sdk/python/README.md
 @@ -1,3 +1,5 @@
@@ -35984,7 +35996,7 @@ index fccc92b01..ac11ea04b 100644
  - [API reference](https://github.com/openai/codex/blob/main/sdk/python/docs/api-reference.md)
  - [Untrusted external messages](https://github.com/openai/codex/blob/main/sdk/python/docs/api-reference.md#externalmessage)
 diff --git a/sdk/python/docs/faq.md b/sdk/python/docs/faq.md
-index 36a2c519b..1d0a5bd0f 100644
+index 36a2c519b856d02ce360bee87be138a06edb5534..1d0a5bd0f0ee45a48249721efb74cc32f877b8a2 100644
 --- a/sdk/python/docs/faq.md
 +++ b/sdk/python/docs/faq.md
 @@ -44,11 +44,13 @@ Use `ExternalMessage` for messages from other agents, tools, or applications:
@@ -36007,7 +36019,7 @@ index 36a2c519b..1d0a5bd0f 100644
  
  The content has tool-level authority, below user and developer instructions.
 diff --git a/sdk/python/pyproject.toml b/sdk/python/pyproject.toml
-index 1e08cd3ce..3ef748d9d 100644
+index 1e08cd3ce6310389c18931263317ccfbb4bc1f9e..3ef748d9d9b3de4ae104b1c57669ef9e8eddffce 100644
 --- a/sdk/python/pyproject.toml
 +++ b/sdk/python/pyproject.toml
 @@ -1,11 +1,11 @@
@@ -36057,7 +36069,7 @@ index 1e08cd3ce..3ef748d9d 100644
  extend-exclude = [
    "notebooks/**",
 diff --git a/sdk/python/scripts/update_sdk_artifacts.py b/sdk/python/scripts/update_sdk_artifacts.py
-index bc32e7ce0..b8cf7a37f 100755
+index bc32e7ce04dcfd2fe99d07bfb3367790a30cc68d..b8cf7a37fc91e13ecffc559dd9840e75ed1c9fd8 100755
 --- a/sdk/python/scripts/update_sdk_artifacts.py
 +++ b/sdk/python/scripts/update_sdk_artifacts.py
 @@ -215,6 +215,15 @@ def stage_python_runtime_package(
@@ -36233,7 +36245,7 @@ index bc32e7ce0..b8cf7a37f 100755
      out_path.write_text(source[:class_start] + class_source + source[class_end:])
  
 diff --git a/sdk/python/src/openai_codex/generated/notification_registry.py b/sdk/python/src/openai_codex/generated/notification_registry.py
-index 2c1212bd8..dd303fa9b 100644
+index 2c1212bd8a8c67705105d3c0eb22b9b8c40343eb..dd303fa9b4d32b4009a0325a23187d1a62aedcc6 100644
 --- a/sdk/python/src/openai_codex/generated/notification_registry.py
 +++ b/sdk/python/src/openai_codex/generated/notification_registry.py
 @@ -46,6 +46,7 @@ from .v2_all import PlanDeltaNotification
@@ -36285,7 +36297,7 @@ index 2c1212bd8..dd303fa9b 100644
      "thread/readState/changed": ThreadReadStateChangedNotification,
      "thread/realtime/closed": ThreadRealtimeClosedNotification,
 diff --git a/sdk/python/src/openai_codex/generated/v2_all.py b/sdk/python/src/openai_codex/generated/v2_all.py
-index 9395f0e81..7b293c1ea 100644
+index 9395f0e817e07315f00f69f16e1f62a2878d39d9..7b293c1ea1654f240505fe1e339f2a4efe2d2b4f 100644
 --- a/sdk/python/src/openai_codex/generated/v2_all.py
 +++ b/sdk/python/src/openai_codex/generated/v2_all.py
 @@ -3,41 +3,46 @@
@@ -43122,7 +43134,7 @@ index 9395f0e81..7b293c1ea 100644
          | AccountGatewayOAuthChangedServerNotification
          | AccountRateLimitsUpdatedServerNotification
 diff --git a/sdk/python/tests/test_artifact_workflow_and_binaries.py b/sdk/python/tests/test_artifact_workflow_and_binaries.py
-index aa55324de..3515b46d1 100644
+index aa55324dec3a8eb091cc7401609117ce90193878..3515b46d13428a8fbe539990eca6a7bf4eaf1e98 100644
 --- a/sdk/python/tests/test_artifact_workflow_and_binaries.py
 +++ b/sdk/python/tests/test_artifact_workflow_and_binaries.py
 @@ -556,6 +556,39 @@ def test_generated_inline_image_class_names_remain_stable() -> None:
@@ -43199,7 +43211,7 @@ index aa55324de..3515b46d1 100644
          "local_license_file": False,
      }
 diff --git a/sdk/typescript/README.md b/sdk/typescript/README.md
-index 6ac29c3b4..63eef530c 100644
+index 6ac29c3b480f5e2ac347ab4defc46f0b5c5c0330..63eef530cea4d1767e96ba9f04c2321eabae390e 100644
 --- a/sdk/typescript/README.md
 +++ b/sdk/typescript/README.md
 @@ -1,21 +1,19 @@
@@ -43248,7 +43260,7 @@ index 6ac29c3b4..63eef530c 100644
  console.log(turn.finalResponse);
  ```
 diff --git a/sdk/typescript/package.json b/sdk/typescript/package.json
-index 8932fa70b..f7a5221f1 100644
+index 8932fa70b51c7efff710261b46e3ec54592fd5a4..f7a5221f10c41c7337a3a22f97ee5103315bdca4 100644
 --- a/sdk/typescript/package.json
 +++ b/sdk/typescript/package.json
 @@ -1,14 +1,14 @@
@@ -43314,7 +43326,7 @@ index 8932fa70b..f7a5221f1 100644
 +  "packageManager": "pnpm@12.11.2+sha512.25a51652a196785af5f28bda6dfe8dc582ebefa4ac1d180221ce1390231c5fb76637822ea4b6e4633ce74acdcb0a77f725af11bad38177fdeddaee818a955cb9"
  }
 diff --git a/sdk/typescript/samples/basic_streaming.ts b/sdk/typescript/samples/basic_streaming.ts
-index 09b58e965..fb8e662d3 100755
+index 09b58e965058c1d33c1e5aeb99d44727f1b29aba..fb8e662d337f65fcdb1652d3844b206af4a3e95f 100755
 --- a/sdk/typescript/samples/basic_streaming.ts
 +++ b/sdk/typescript/samples/basic_streaming.ts
 @@ -3,8 +3,8 @@
@@ -43329,7 +43341,7 @@ index 09b58e965..fb8e662d3 100755
  
  const codex = new Codex({ codexPathOverride: codexPathOverride() });
 diff --git a/sdk/typescript/samples/structured_output.ts b/sdk/typescript/samples/structured_output.ts
-index 60063c10f..2d8b44d08 100755
+index 60063c10fa3db85dd609b3715ec22d44324f16ac..2d8b44d080d6934baf2ff81c63f5d8010af0cdbb 100755
 --- a/sdk/typescript/samples/structured_output.ts
 +++ b/sdk/typescript/samples/structured_output.ts
 @@ -1,6 +1,6 @@
@@ -43341,7 +43353,7 @@ index 60063c10f..2d8b44d08 100755
  import { codexPathOverride } from "./helpers.ts";
  
 diff --git a/sdk/typescript/samples/structured_output_zod.ts b/sdk/typescript/samples/structured_output_zod.ts
-index 917bc3911..b0fd7635f 100755
+index 917bc39114feed46ccb7d64dade30bcfb8c1c9a2..b0fd7635f36d6cb0b7a13787453ad1f23d309d87 100755
 --- a/sdk/typescript/samples/structured_output_zod.ts
 +++ b/sdk/typescript/samples/structured_output_zod.ts
 @@ -1,9 +1,8 @@
@@ -43364,7 +43376,7 @@ index 917bc3911..b0fd7635f 100755
  });
  console.log(turn.finalResponse);
 diff --git a/sdk/typescript/src/events.ts b/sdk/typescript/src/events.ts
-index f6ad90277..33320a9b1 100644
+index f6ad902779bee05ab0fb9b9cc6a2bca59d52c136..33320a9b11cc15445e82cb10e6dfcb646f67dd77 100644
 --- a/sdk/typescript/src/events.ts
 +++ b/sdk/typescript/src/events.ts
 @@ -72,7 +72,7 @@ export type ThreadErrorEvent = {
@@ -43377,7 +43389,7 @@ index f6ad90277..33320a9b1 100644
    | ThreadStartedEvent
    | TurnStartedEvent
 diff --git a/sdk/typescript/src/exec.ts b/sdk/typescript/src/exec.ts
-index e1735d2c7..e8d479470 100644
+index e1735d2c764fdba636bc2ff3bc834c13119bce3c..e8d479470da058de422654364b4bb19d28682794 100644
 --- a/sdk/typescript/src/exec.ts
 +++ b/sdk/typescript/src/exec.ts
 @@ -47,15 +47,15 @@ export type CodexExecArgs = {
@@ -43422,7 +43434,7 @@ index e1735d2c7..e8d479470 100644
    }
  
 diff --git a/sdk/typescript/tests/runStreamed.test.ts b/sdk/typescript/tests/runStreamed.test.ts
-index 605dfce15..ce78d0e11 100644
+index 605dfce15975d9a5a9614eac3adb782985a0d7ae..ce78d0e11a71b1186e3c0fb0473d7fa694ff65c6 100644
 --- a/sdk/typescript/tests/runStreamed.test.ts
 +++ b/sdk/typescript/tests/runStreamed.test.ts
 @@ -202,7 +202,7 @@ describe("Codex", () => {
@@ -43435,7 +43447,7 @@ index 605dfce15..ce78d0e11 100644
      done = (await events.next()).done ?? false;
    } while (!done);
 diff --git a/sdk/typescript/tests/setupCodexHome.ts b/sdk/typescript/tests/setupCodexHome.ts
-index 83e49c6ac..1bd30a9c9 100644
+index 83e49c6acc631e1462522b4eafc5734d9d9defb9..1bd30a9c946504ec459d11c3c84bdba3588e3339 100644
 --- a/sdk/typescript/tests/setupCodexHome.ts
 +++ b/sdk/typescript/tests/setupCodexHome.ts
 @@ -4,18 +4,26 @@ import path from "node:path";
@@ -43466,7 +43478,7 @@ index 83e49c6ac..1bd30a9c9 100644
      delete process.env.CODEX_HOME;
    } else {
 diff --git a/sdk/typescript/tsconfig.json b/sdk/typescript/tsconfig.json
-index 8d62e0694..dd04f8028 100644
+index 8d62e0694168ec878262c04942b9fe17bafabebe..dd04f8028593360c1c4b5aa05af5eda8b833ec60 100644
 --- a/sdk/typescript/tsconfig.json
 +++ b/sdk/typescript/tsconfig.json
 @@ -17,7 +17,8 @@
@@ -43480,7 +43492,7 @@ index 8d62e0694..dd04f8028 100644
    "include": ["src", "tests", "tsup.config.ts", "samples"],
    "exclude": ["dist", "node_modules"]
 diff --git a/sdk/typescript/tsup.config.ts b/sdk/typescript/tsup.config.ts
-index 22bcd0393..25a48eae1 100644
+index 22bcd039388627d882524ba90dfa3a898ccbf010..25a48eae184469d2327f61245ebfdc2294ca1f33 100644
 --- a/sdk/typescript/tsup.config.ts
 +++ b/sdk/typescript/tsup.config.ts
 @@ -3,7 +3,9 @@ import { defineConfig } from "tsup";
