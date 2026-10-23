@@ -21,8 +21,8 @@ pub struct Cli {
     #[arg(long = "strict-config", default_value_t = false)]
     pub strict_config: bool,
 
-    // Internal controls set by the top-level `nyacode resume` subcommand.
-    // These are not exposed as user flags on the base `nyacode` command.
+    // Internal controls set by the top-level `codex resume` subcommand.
+    // These are not exposed as user flags on the base `codex` command.
     #[clap(skip)]
     pub resume_picker: bool,
 
@@ -50,8 +50,8 @@ pub struct Cli {
     #[clap(skip)]
     pub managed_daemon: bool,
 
-    // Internal controls set by the top-level `nyacode fork` subcommand.
-    // These are not exposed as user flags on the base `nyacode` command.
+    // Internal controls set by the top-level `codex fork` subcommand.
+    // These are not exposed as user flags on the base `codex` command.
     #[clap(skip)]
     pub fork_picker: bool,
 

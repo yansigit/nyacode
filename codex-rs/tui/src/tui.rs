@@ -942,7 +942,7 @@ impl Tui {
         self.pause_events();
 
         // Restore both screens' input modes before giving the terminal to an editor. Repaint the
-        // last frame on the alternate screen so separate-window editors leave Nyacode visible.
+        // last frame on the alternate screen so separate-window editors leave Codex visible.
         let was_alt_screen = self.is_alt_screen_active();
         let visible_frame = (was_alt_screen && matches!(handoff, TerminalHandoff::KeepScreen))
             .then(|| self.terminal.previous_buffer().clone());

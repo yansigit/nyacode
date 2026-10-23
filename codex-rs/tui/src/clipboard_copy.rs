@@ -229,7 +229,7 @@ fn copy_to_clipboard_with(
     };
     // Copy natively first: an X11 SelectionClear from a terminal write can otherwise
     // race with arboard reusing its ownership window and clear the new native data.
-    // Persistent multiplexer sessions may gain remote clients after Nyacode starts, so still
+    // Persistent multiplexer sessions may gain remote clients after Codex starts, so still
     // forward even when no SSH variables were inherited or native copying succeeded.
     let terminal_result =
         (environment.tmux_session || environment.herdr_session || environment.ssh_session)

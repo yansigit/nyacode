@@ -242,7 +242,7 @@ pub(crate) mod announcement {
             } else if cfg!(target_os = "windows") {
                 Self::Windows
             } else {
-                // Nyacode currently publishes CLI builds for macOS, Windows, and Linux.
+                // Codex currently publishes CLI builds for macOS, Windows, and Linux.
                 Self::Linux
             }
         }

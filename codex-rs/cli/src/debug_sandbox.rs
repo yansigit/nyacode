@@ -411,7 +411,7 @@ async fn run_command_under_sandbox(
             .map_err(|err| anyhow::anyhow!(err))?;
             // This CLI inherits the user's controlling terminal. Keep this deny
             // after every shared policy allowance so the child cannot queue input
-            // for the unsandboxed shell that resumes when Nyacode exits.
+            // for the unsandboxed shell that resumes when Codex exits.
             match args.as_mut_slice() {
                 [flag, policy, ..] if flag.as_str() == "-p" => {
                     // Older macOS policy compilers do not define the TIOCSTI symbol.
@@ -689,7 +689,7 @@ async fn load_debug_sandbox_config_with_codex_home(
         ));
     }
 
-    // For legacy configs, `nyacode sandbox` historically defaulted to read-only
+    // For legacy configs, `codex sandbox` historically defaulted to read-only
     // instead of inheriting ambient `sandbox_mode` settings from user/system
     // config. Keep that behavior unless this invocation explicitly passes a
     // legacy `sandbox_mode` CLI override for compatibility with older callers.

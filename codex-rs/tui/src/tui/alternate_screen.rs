@@ -45,7 +45,7 @@ pub(super) struct AlternateScreen {
     mouse_capture_disabled: AtomicBool,
     // A cleanup/setup error must not make the next identical request look already applied.
     input_configured: AtomicBool,
-    // An editor can take over the screen after Nyacode has popped its keyboard mode.
+    // An editor can take over the screen after Codex has popped its keyboard mode.
     keyboard_active: AtomicBool,
 }
 
