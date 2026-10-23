@@ -54,10 +54,15 @@ local Python tests do not establish successful foreign-platform builds.
 
 ## Publish a version
 
-1. Set `VERSION` to the intended version. If dependency pins need to change,
-   update `integration/codex/Cargo.lock` and review the diff; retain the pins
-   otherwise. Include the version and any lockfile change in the reviewed
-   change on `main`.
+1. Prepare the currently accepted workspace with `python3 scripts/engine.py prepare`.
+   In that disposable workspace, set `[workspace.package].version` in
+   `.engine/workspace/codex-rs/Cargo.toml` to the intended product version and run
+   `cargo metadata --offline --format-version 1 --manifest-path .engine/workspace/codex-rs/Cargo.toml`
+   to update local package version entries. Review the lockfile diff: dependency
+   source revisions, versions, and checksums must stay fixed unless separately
+   approved as dependency changes. Copy that lockfile to
+   `integration/codex/Cargo.lock`, set `VERSION`, and prepare again to validate
+   the pair. Commit both product inputs in the reviewed change on `main`.
 2. Run the dry run against that exact commit and inspect all platform results.
 3. Create a tag naming that commit. For example, after choosing a version:
 
@@ -66,7 +71,7 @@ local Python tests do not establish successful foreign-platform builds.
      -f ref=refs/tags/rust-v1.0.0 -f sha=FULL_REVIEWED_COMMIT_SHA
    ```
 
-The tag must be `rust-v` followed by the workspace version, and its commit must
+The tag must be `rust-v` followed by the Nyacode product version, and its commit must
 be an ancestor of `main`. Development version `0.0.0` cannot be published. Stable
 versions use `X.Y.Z`; installer-compatible prereleases use `X.Y.Z-alpha.N` or
 `X.Y.Z-beta.N`. No version is incremented automatically.
