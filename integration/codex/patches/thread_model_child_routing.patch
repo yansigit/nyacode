@@ -2600,7 +2600,7 @@ index 4e581bcd3e6f2c821d3fd3a4832121359e57b0f4..5e469304f75bbc2255e70dbe79133041
 -  Service v0.152.1 < Codex CLI v0.153.0
 +  Service v0.152.1 < Nyacode CLI v0.153.0
 diff --git a/codex-rs/tui/src/app/snapshots/codex_tui__app__owned_transcript__empty_state_animation_tests__fresh_thread_header.snap b/codex-rs/tui/src/app/snapshots/codex_tui__app__owned_transcript__empty_state_animation_tests__fresh_thread_header.snap
-index 789d6e4bda5306a29a152bb46f1b450ca822fede..3e180c7a1340af67c7912b1306bb7ab48ab46a75 100644
+index 789d6e4bda5306a29a152bb46f1b450ca822fede..2c21989f6eb4489fdc2cd661d57f10b02b1c2251 100644
 --- a/codex-rs/tui/src/app/snapshots/codex_tui__app__owned_transcript__empty_state_animation_tests__fresh_thread_header.snap
 +++ b/codex-rs/tui/src/app/snapshots/codex_tui__app__owned_transcript__empty_state_animation_tests__fresh_thread_header.snap
 @@ -4,7 +4,7 @@ expression: "format!(\"enabled:\\n{}\\n---\\ndisabled:\\n{}\", text(after), text
@@ -2608,7 +2608,7 @@ index 789d6e4bda5306a29a152bb46f1b450ca822fede..3e180c7a1340af67c7912b1306bb7ab4
  enabled:
  
 -  >_ OpenAI Codex (v0.0.0)
-+  >_ Nyacode (v0.0.0)
++  >_ Nyacode (v0.1.0)
       /tmp/project
  
  
@@ -2667,7 +2667,7 @@ index 789d6e4bda5306a29a152bb46f1b450ca822fede..3e180c7a1340af67c7912b1306bb7ab4
  disabled:
  
 -  >_ OpenAI Codex (v0.0.0)
-+  >_ Nyacode (v0.0.0)
++  >_ Nyacode (v0.1.0)
       /tmp/project
  
  
@@ -2681,7 +2681,7 @@ index 789d6e4bda5306a29a152bb46f1b450ca822fede..3e180c7a1340af67c7912b1306bb7ab4
    GPT-5.6-Sol default · /tmp/project
    ? for shortcuts                                                                              ⚠ 1 warning · f2 to view
 diff --git a/codex-rs/tui/src/app/snapshots/codex_tui__app__tests__app_server_thread_replacement_clears_previous_transcript_before_replay-2.snap b/codex-rs/tui/src/app/snapshots/codex_tui__app__tests__app_server_thread_replacement_clears_previous_transcript_before_replay-2.snap
-index 8aa1bca71b37199ea5aa9956871c68de2b0c1dc5..f6318faf640a5898aff0006680e5982db4ab8274 100644
+index 8aa1bca71b37199ea5aa9956871c68de2b0c1dc5..7a138dde36b3dfebedcb936fe7555d34a912c572 100644
 --- a/codex-rs/tui/src/app/snapshots/codex_tui__app__tests__app_server_thread_replacement_clears_previous_transcript_before_replay-2.snap
 +++ b/codex-rs/tui/src/app/snapshots/codex_tui__app__tests__app_server_thread_replacement_clears_previous_transcript_before_replay-2.snap
 @@ -1,10 +1,9 @@
@@ -2692,7 +2692,7 @@ index 8aa1bca71b37199ea5aa9956871c68de2b0c1dc5..f6318faf640a5898aff0006680e5982d
  ---
  
 -  >_ OpenAI Codex (v0.0.0)
-+  >_ Nyacode (v0.0.0)
++  >_ Nyacode (v0.1.0)
       <thread cwd>
  
  
@@ -2916,7 +2916,7 @@ index 856db38d0f880c1ff42a5cdc423c6f166a794cf8..c2c473bd53a357346a25b0f73112a95b
  We recommend switching from gpt-5.2 to gpt-5.5.
  
 diff --git a/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__realtime_requests__voice_completed_after_thread_switch.snap b/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__realtime_requests__voice_completed_after_thread_switch.snap
-index 2ecde209a27287959623a364d840c412cc3b3022..057dd6275c98c49741fd5b87b372a32010746b19 100644
+index 2ecde209a27287959623a364d840c412cc3b3022..0a9625a4b3e2a45efb824daabe55141e997a7309 100644
 --- a/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__realtime_requests__voice_completed_after_thread_switch.snap
 +++ b/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__realtime_requests__voice_completed_after_thread_switch.snap
 @@ -1,17 +1,16 @@
@@ -2927,7 +2927,7 @@ index 2ecde209a27287959623a364d840c412cc3b3022..057dd6275c98c49741fd5b87b372a320
  ---
  
 -  >_ OpenAI Codex (v0.0.0)
-+  >_ Nyacode (v0.0.0)
++  >_ Nyacode (v0.1.0)
       /tmp/project
  
    To get started, describe a task or try one of these commands:
@@ -2941,7 +2941,7 @@ index 2ecde209a27287959623a364d840c412cc3b3022..057dd6275c98c49741fd5b87b372a320
    /review - review any changes and find issues
  • Earlier answer
 diff --git a/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__realtime_requests__voice_partial_completed_after_thread_switch.snap b/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__realtime_requests__voice_partial_completed_after_thread_switch.snap
-index bfd8b46a632e628f017928a98d33e3f55df05b8a..0516b9ecaaec5313a63714f4bee3986da84f93b5 100644
+index bfd8b46a632e628f017928a98d33e3f55df05b8a..8962e2e7bae9972dff538b57811033d6182615b1 100644
 --- a/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__realtime_requests__voice_partial_completed_after_thread_switch.snap
 +++ b/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__realtime_requests__voice_partial_completed_after_thread_switch.snap
 @@ -3,25 +3,25 @@ source: tui/src/app/tests/realtime_requests.rs
@@ -2962,7 +2962,7 @@ index bfd8b46a632e628f017928a98d33e3f55df05b8a..0516b9ecaaec5313a63714f4bee3986d
    gpt-test default · /tmp/project
  
 -  >_ OpenAI Codex (v0.0.0)
-+  >_ Nyacode (v0.0.0)
++  >_ Nyacode (v0.1.0)
       /tmp/project
  
    To get started, describe a task or try one of these commands:

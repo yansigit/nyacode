@@ -4852,7 +4852,7 @@ index 2f7f2992d7f7412f40a7bb70d096b2b834800499..039583ad78ba56b72da2fb8763b5d1b1
                  .into(),
          );
 diff --git a/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_shows_chatgpt_plan_without_email.snap b/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_shows_chatgpt_plan_without_email.snap
-index 51b58ecdecc60720d2f2f3f3e7147700b5ab57ad..0a65b195117a7e603c65efd1e6edb82a1d289dd6 100644
+index 51b58ecdecc60720d2f2f3f3e7147700b5ab57ad..27732beb1b14a72253306e06a43bedd4c54b686b 100644
 --- a/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_shows_chatgpt_plan_without_email.snap
 +++ b/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_shows_chatgpt_plan_without_email.snap
 @@ -4,7 +4,7 @@ expression: sanitized
@@ -4860,7 +4860,7 @@ index 51b58ecdecc60720d2f2f3f3e7147700b5ab57ad..0a65b195117a7e603c65efd1e6edb82a
  /status
  
 -  >_ OpenAI Codex (v0.0.0)
-+  >_ Nyacode (v0.0.0)
++  >_ Nyacode (v0.1.0)
  
    Visit https://chatgpt.com/settings/usage for up-to-date
    information on rate limits and credits

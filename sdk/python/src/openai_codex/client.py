@@ -343,17 +343,17 @@ class CodexClient:
         ]
         if supplied_fields:
             try:
-                if self._runtime_version == "0.0.0":
-                    if self._checkout_capabilities is None:
-                        raise ValueError(
-                            "Cannot verify an unversioned CLI with a custom launch command"
-                        )
+                if self._checkout_capabilities is not None:
                     supported = self._checkout_capabilities.fields[method]
                     if missing := set(supplied_fields) - supported:
                         raise ValueError(
                             f"The checkout does not support {', '.join(sorted(missing))}"
                         )
                 else:
+                    if self._runtime_version == "0.0.0":
+                        raise ValueError(
+                            "Cannot verify an unversioned CLI with a custom launch command"
+                        )
                     require_runtime_version(self._runtime_version)
             except ValueError as exc:
                 raise CodexError(

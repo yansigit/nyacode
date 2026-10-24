@@ -3290,7 +3290,7 @@ index be3bc665c5f12e081b51ed03421ef6c9ae27b180..2680425c4cc1cf2b54674d5a6d2fecd2
  
    gpt-5.2 default · /tmp/project
 diff --git a/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__session_lifecycle_requests__new_session_tests__widget_replacement_preserves_mention_usage_with_history_disabled.snap b/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__session_lifecycle_requests__new_session_tests__widget_replacement_preserves_mention_usage_with_history_disabled.snap
-index 6a47bf2b72c15db36e55aa7f626b9ad94828bbbd..0a15c6e944211e40c5b518f031f33bfb71fb1f36 100644
+index 6a47bf2b72c15db36e55aa7f626b9ad94828bbbd..11bf0dffed909ae477e3bfa5407c3d173e6770c7 100644
 --- a/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__session_lifecycle_requests__new_session_tests__widget_replacement_preserves_mention_usage_with_history_disabled.snap
 +++ b/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__session_lifecycle_requests__new_session_tests__widget_replacement_preserves_mention_usage_with_history_disabled.snap
 @@ -2,7 +2,7 @@
@@ -3298,7 +3298,7 @@ index 6a47bf2b72c15db36e55aa7f626b9ad94828bbbd..0a15c6e944211e40c5b518f031f33bfb
  expression: "normalize_snapshot_paths(render_bottom_popup(&app.chat_widget, 80))"
  ---
 -  >_ OpenAI Codex (v0.0.0)
-+  >_ Nyacode (v0.0.0)
++  >_ Nyacode (v0.1.0)
       /tmp/project
  
  
@@ -3719,7 +3719,7 @@ index 74e7b7d1f08c1ebaee26766e72b188d3c5551e7b..e027d5c79e859e2c8f25f56e2ecc5868
  
    ? for shortcuts
 diff --git a/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_uses_default_reasoning_when_config_empty.snap b/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_uses_default_reasoning_when_config_empty.snap
-index 8661643e2e94b91d6e69e3b05b4cc748e48fe380..4513658bac52e1db5e99baacebe5149782c9a747 100644
+index 8661643e2e94b91d6e69e3b05b4cc748e48fe380..85ec242a3b3dd672c6ad03c4b3c0de33ee756c6e 100644
 --- a/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_uses_default_reasoning_when_config_empty.snap
 +++ b/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_uses_default_reasoning_when_config_empty.snap
 @@ -4,7 +4,7 @@ expression: sanitized
@@ -3727,7 +3727,7 @@ index 8661643e2e94b91d6e69e3b05b4cc748e48fe380..4513658bac52e1db5e99baacebe51497
  /status
  
 -  >_ OpenAI Codex (v0.0.0)
-+  >_ Nyacode (v0.0.0)
++  >_ Nyacode (v0.1.0)
  
    Visit https://chatgpt.com/settings/usage for up-to-date
    information on rate limits and credits
