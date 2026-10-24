@@ -54,6 +54,9 @@ agent-mail content: a later adjacent user message can change the saved history
 prefix and cause continuation to fail closed. The migration preserves this guard
 and the stored checkpoint format; it does not replay uncertain tool execution.
 The always-present `Engine acceptance` check fails on missing or cancelled results.
+Model-catalog requests and cache identity use the pinned upstream release version,
+or the pristine workspace version for an untagged baseline. Public package and CLI
+versions continue to come from `VERSION`.
 
 ```sh
 python3 scripts/engine.py upgrade rust-vX.Y.Z --mode controls

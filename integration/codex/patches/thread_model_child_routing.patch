@@ -2343,6 +2343,28 @@ index d7a60e063ecb1d47b540190e91748974328a7499..b6886208b1791b95903609b0dba933d2
      secrets
          .set(&SecretScope::Global, &name, &token.to_string())
          .expect("seed encrypted gateway credentials");
+diff --git a/codex-rs/models-manager/src/lib.rs b/codex-rs/models-manager/src/lib.rs
+index cd7b59a0530b6ead4c3852d0a3217aa7115a4d81..305e117da6695f8e3c6bf3453f0271e287f12871 100644
+--- a/codex-rs/models-manager/src/lib.rs
++++ b/codex-rs/models-manager/src/lib.rs
+@@ -15,12 +15,10 @@ pub fn bundled_models_response()
+     serde_json::from_str(include_str!("../models.json"))
+ }
+ 
+-/// Convert the client version string to a whole version string (e.g. "1.2.3-alpha.4" -> "1.2.3").
++// Bound to the accepted upstream engine during assembly, independently of the product version.
++const ENGINE_CLIENT_VERSION: &str = "@NYACODE_ENGINE_VERSION@";
++
++/// Return the upstream engine version used for model catalog requests and cache identity.
+ pub fn client_version_to_whole() -> String {
+-    format!(
+-        "{}.{}.{}",
+-        env!("CARGO_PKG_VERSION_MAJOR"),
+-        env!("CARGO_PKG_VERSION_MINOR"),
+-        env!("CARGO_PKG_VERSION_PATCH")
+-    )
++    ENGINE_CLIENT_VERSION.to_owned()
+ }
 diff --git a/codex-rs/models-manager/src/manager.rs b/codex-rs/models-manager/src/manager.rs
 index a78f51c69887e3e5bf1becd00441e5fca3efe782..66f52574d4fa07963c8d61d691df3471b444ced2 100644
 --- a/codex-rs/models-manager/src/manager.rs

@@ -4149,6 +4149,7 @@
         "codex-rs/model-provider/src/models_identity.rs",
         "codex-rs/model-provider/src/provider.rs",
         "codex-rs/model-provider/src/shared_state_test_support.rs",
+        "codex-rs/models-manager/src/lib.rs",
         "codex-rs/models-manager/src/manager.rs",
         "codex-rs/network-proxy/src/credential_broker/providers.rs",
         "codex-rs/protocol/src/agent_path.rs",
