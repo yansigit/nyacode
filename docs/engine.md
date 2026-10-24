@@ -44,7 +44,8 @@ qualification of later changes.
 
 Provider implementation changes run standalone and linked integration checks.
 Shared, product, adapter, and unclassified inputs take the broader acceptance path.
-Engine upgrades qualify native contracts, both SDKs, and all six platform packages.
+Engine upgrades qualify native contracts, every Rust workspace crate in the container,
+both SDKs, and all six platform packages.
 Native provider sessions do not expose individual inference completion boundaries.
 Synchronous `PostModelRequest` hooks therefore fail before native inference starts;
 Responses backends support the upstream request hook ordering.

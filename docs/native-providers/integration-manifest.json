@@ -394,7 +394,8 @@
       "checks": [
         "architecture",
         "dependency-consumers",
-        "six-platform-packages"
+        "six-platform-packages",
+        "full-workspace-container"
       ],
       "minimum_tests": 1
     },

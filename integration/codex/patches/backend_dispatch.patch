@@ -5488,7 +5488,7 @@ index 1823275ea4e8a690f6b233a934a044d839a5efb6..5fd20121de01ad695ca10c542ade554d
          http_headers: None,
          env_http_headers: None,
 diff --git a/codex-rs/deny.toml b/codex-rs/deny.toml
-index 1abe4ad02c77ff744ba63d1b41c58005a49d7c60..847c364de566d83b10ec4794c535edf4b4a6e187 100644
+index 1abe4ad02c77ff744ba63d1b41c58005a49d7c60..44fe80e840be9ce691370b602536536bfc9a7662 100644
 --- a/codex-rs/deny.toml
 +++ b/codex-rs/deny.toml
 @@ -73,22 +73,16 @@ ignore = [
@@ -5527,25 +5527,7 @@ index 1abe4ad02c77ff744ba63d1b41c58005a49d7c60..847c364de566d83b10ec4794c535edf4
      # Each entry is the crate and version constraint, and its specific allow
      # list
      #{ allow = ["Zlib"], crate = "adler32" },
-@@ -181,6 +178,17 @@ exceptions = [
- #{ path = "LICENSE", hash = 0xbd0eed23 }
- #]
- 
-+# These pinned MXC subcrates omit package metadata; the repository license applies.
-+[[licenses.clarify]]
-+crate = "plm@0.1.0"
-+expression = "MIT"
-+license-files = [{ path = "../../../LICENSE.md", hash = 0x45c4defe }]
-+
-+[[licenses.clarify]]
-+crate = "windows_sandbox_lifecycle@0.8.0"
-+expression = "MIT"
-+license-files = [{ path = "../../../../LICENSE.md", hash = 0x45c4defe }]
-+
- [licenses.private]
- # If true, ignores workspace crates that aren't published, or are only
- # published to private registries.
-@@ -251,6 +259,17 @@ deny = [
+@@ -251,6 +248,17 @@ deny = [
          "codex-responses-api-proxy",
          # Temporary migration exceptions.
          "codex-otel",
@@ -5563,7 +5545,7 @@ index 1abe4ad02c77ff744ba63d1b41c58005a49d7c60..847c364de566d83b10ec4794c535edf4
          # Third-party crates that own their reqwest integration. These are not part of the
          # first-party migration count above.
          "oauth2",
-@@ -321,6 +340,7 @@ allow-git = [
+@@ -321,6 +329,7 @@ allow-git = [
      # CONNECT request handling needs this pinned H3 revision until released.
      "https://github.com/hyperium/h3",
      "https://github.com/juberti-oai/rust-sdks.git",
@@ -7631,12 +7613,23 @@ index c62fa6135b76f8cacc52aa5da3ba8dbdafda48f2..319741b6f51a941587f1d37385ed9ee4
  
      async fn load_token_async(&self) -> io::Result<Option<StoredToken>> {
 diff --git a/codex-rs/mxc-sandbox/Cargo.toml b/codex-rs/mxc-sandbox/Cargo.toml
-index 2cd39d5d2eb892b4bebb52b6562648d1c397f00b..79999575d1ce0fb44dfbaca093e091ada873bf43 100644
+index 2cd39d5d2eb892b4bebb52b6562648d1c397f00b..477fa7983edd2388df51b90a18372c7dce33075c 100644
 --- a/codex-rs/mxc-sandbox/Cargo.toml
 +++ b/codex-rs/mxc-sandbox/Cargo.toml
-@@ -29,7 +29,7 @@ thiserror = { workspace = true }
+@@ -21,15 +21,16 @@ codex-protocol = { workspace = true }
+ codex-utils-absolute-path = { workspace = true }
+ codex-utils-path-uri = { workspace = true }
+ codex-windows-sandbox = { workspace = true }
+-mxc-sdk = { workspace = true }
++wxc_common = { workspace = true }
+ serde = { workspace = true, features = ["derive"] }
+ serde_json = { workspace = true }
+ thiserror = { workspace = true }
+ 
  [target.'cfg(windows)'.dependencies]
- flatbuffers = { workspace = true }
+-flatbuffers = { workspace = true }
++appcontainer_common = { workspace = true }
++learning_mode_windows = { workspace = true }
  # 1.2.4 imports OneCore_apiset, which the GNU Windows toolchain does not ship.
 -tracelogging = "=1.2.3"
 +tracelogging = "=1.2.4"

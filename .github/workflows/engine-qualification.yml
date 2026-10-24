@@ -38,6 +38,10 @@ jobs:
         run: python3 scripts/engine.py check --mode controls
       - run: python3 -m unittest discover -s scripts/tests -p 'test_engine*.py'
 
+  container:
+    name: Full workspace container
+    uses: ./.github/workflows/container-verify.yml
+
   providers:
     name: Standalone providers
     runs-on: ubuntu-24.04
@@ -85,7 +89,7 @@ jobs:
           echo '8aca8db96f1b94770f1b0d72b6dddcb1ebb8123cb3712530b08cc387b349a3d8  actionlint_1.7.12_linux_amd64.tar.gz' | sha256sum --check
           tar -xzf actionlint_1.7.12_linux_amd64.tar.gz actionlint
           cd "$GITHUB_WORKSPACE"
-          "$RUNNER_TEMP/actionlint/actionlint" .github/workflows/nyacode-release.yml .github/workflows/native-providers.yml .github/workflows/engine-*.yml
+          "$RUNNER_TEMP/actionlint/actionlint" .github/workflows/container-verify.yml .github/workflows/nyacode-release.yml .github/workflows/native-providers.yml .github/workflows/engine-*.yml
       - name: Validate source version and release ancestry
         id: metadata
         env:
@@ -184,7 +188,7 @@ jobs:
           binaries: nyacode codex-code-mode-host ${{ runner.os == 'Windows' && 'codex-command-runner codex-windows-sandbox-setup' || '' }}
           build-mode: release
           working-directory: ${{ steps.engine.outputs.root }}/codex-rs
-      - name: Test Windows terminal process handling
+      - name: Test Windows terminal and sandbox policies
         if: runner.os == 'Windows'
         # MSYS bash makes native descendants inherit disabled Ctrl-C handling.
         # Use a native parent shell to exercise ordinary ConPTY signal behavior.
@@ -192,7 +196,7 @@ jobs:
         working-directory: ${{ steps.engine.outputs.root }}/codex-rs
         env:
           TARGET: ${{ matrix.target }}
-        run: cargo test --locked --release --target "$env:TARGET" -p codex-utils-pty --lib
+        run: cargo test --locked --release --target "$env:TARGET" -p codex-utils-pty -p codex-mxc-sandbox --lib
       - name: Assemble archive and smoke-test its extracted bytes
         shell: bash
         env:
@@ -270,7 +274,7 @@ jobs:
 
   verify:
     name: Verify complete release set
-    needs: [validate, checks, build, sdk]
+    needs: [validate, checks, container, build, sdk]
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
@@ -308,6 +312,7 @@ jobs:
     needs:
       [
         dependency_policy,
+        container,
         controls,
         providers,
         validate,

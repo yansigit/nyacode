@@ -1499,7 +1499,7 @@ index dbcd8633154a13966c231033a6c07ad8be169c73..9cddfc4431abee96c96e4e7d1e9a9179
 +# Disposable pinned-engine assemblies and qualification evidence
 +/.engine/
 diff --git a/MODULE.bazel b/MODULE.bazel
-index 92c8e81cd9616ae98a48f178cf6bfa82805780a4..c26bf0ab90a0387876d0e108e9f93a9304bed890 100644
+index 92c8e81cd9616ae98a48f178cf6bfa82805780a4..7028aa6249b6878836201a7166bfbbc4cb621c30 100644
 --- a/MODULE.bazel
 +++ b/MODULE.bazel
 @@ -1,13 +1,13 @@
@@ -1712,7 +1712,7 @@ index 92c8e81cd9616ae98a48f178cf6bfa82805780a4..c26bf0ab90a0387876d0e108e9f93a93
      build_script_env = {
          "OPENSSL_DIR": "$(execpath @openssl//:gen_dir)",
          "OPENSSL_NO_VENDOR": "1",
-@@ -509,29 +512,81 @@ crate.annotation(
+@@ -509,29 +512,71 @@ crate.annotation(
  inject_repo(crate, "openssl")
  
  crate.annotation(
@@ -1787,22 +1787,12 @@ index 92c8e81cd9616ae98a48f178cf6bfa82805780a4..c26bf0ab90a0387876d0e108e9f93a93
 +    )
 +    for name in [
 +        "appcontainer_common",
-+        "bwrap_common",
 +        "learning_mode_core",
 +        "learning_mode_windows",
-+        "lxc_common",
-+        "mxc-sdk",
-+        "mxc_build_common",
 +        "mxc_config_contract",
-+        "mxc_engine",
-+        "mxc_pty",
 +        "mxc_telemetry",
-+        "plm",
 +        "process_security_environment_spec",
 +        "sandbox_spec",
-+        "seatbelt_common",
-+        "windows_sandbox_common",
-+        "windows_sandbox_lifecycle",
 +        "wxc_common",
 +    ]
 +]
@@ -1810,7 +1800,7 @@ index 92c8e81cd9616ae98a48f178cf6bfa82805780a4..c26bf0ab90a0387876d0e108e9f93a93
  http_archive = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
  
  codex_release_archive = use_repo_rule("//bazel/extensions:codex_release_archive.bzl", "codex_release_archive")
-@@ -595,19 +650,9 @@ crate.annotation(
+@@ -595,19 +640,9 @@ crate.annotation(
          "RUSTY_V8_SRC_BINDING_PATH": "$(execpath @v8_targets//:rusty_v8_binding_for_target)",
      },
      crate = "v8",
@@ -1833,7 +1823,7 @@ index 92c8e81cd9616ae98a48f178cf6bfa82805780a4..c26bf0ab90a0387876d0e108e9f93a93
      gen_build_script = "on",
      patch_args = ["-p1"],
      patches = [
-@@ -620,12 +665,11 @@ inject_repo(crate, "v8_targets")
+@@ -620,12 +655,11 @@ inject_repo(crate, "v8_targets")
  llvm = use_extension("@llvm//extensions:llvm.bzl", "llvm")
  use_repo(llvm, "llvm-project")
  
@@ -1849,7 +1839,7 @@ index 92c8e81cd9616ae98a48f178cf6bfa82805780a4..c26bf0ab90a0387876d0e108e9f93a93
  )
  crate.annotation(
      # Provide the hermetic SDK path so the build script doesn't try to invoke an unhermetic `xcrun --show-sdk-path`.
-@@ -1008,7 +1052,7 @@ http_file(
+@@ -1008,7 +1042,7 @@ http_file(
  
  use_repo(crate, "crates")
  
@@ -1893,7 +1883,7 @@ index 7d3a49405d1f3be9af35d3ac2838dd35303a48b6..bfbdd0c3b991c06a1135f8db5ec79b64
 +  "packageManager": "pnpm@12.11.2+sha512.25a51652a196785af5f28bda6dfe8dc582ebefa4ac1d180221ce1390231c5fb76637822ea4b6e4633ce74acdcb0a77f725af11bad38177fdeddaee818a955cb9"
  }
 diff --git a/codex-rs/Cargo.toml b/codex-rs/Cargo.toml
-index 520b9418ee45a4b86c07e0ac2ef317c5bc077c95..1682caecae5d0922e237e608dde332a3e7e078ae 100644
+index 520b9418ee45a4b86c07e0ac2ef317c5bc077c95..d5d8f469eb3a6612b57d074b9dabfb11b672ade0 100644
 --- a/codex-rs/Cargo.toml
 +++ b/codex-rs/Cargo.toml
 @@ -7,6 +7,7 @@ members = [
@@ -1982,7 +1972,7 @@ index 520b9418ee45a4b86c07e0ac2ef317c5bc077c95..1682caecae5d0922e237e608dde332a3
      "alloc",
      "getrandom",
      "use-25519",
-@@ -365,125 +386,128 @@ clatter = { version = "2.2.0", default-features = false, features = [
+@@ -365,125 +386,129 @@ clatter = { version = "2.2.0", default-features = false, features = [
      "use-rust-crypto-ml-kem",
      "use-sha",
  ] }
@@ -2014,7 +2004,7 @@ index 520b9418ee45a4b86c07e0ac2ef317c5bc077c95..1682caecae5d0922e237e608dde332a3
 +encoding_rs = "0.8.42"
  eventsource-stream = "0.2.3"
  file-id = "0.2.3"
- flatbuffers = "25"
+-flatbuffers = "25"
 -flate2 = "1.1.8"
 +flate2 = "1.1.10"
  futures = { version = "0.3", default-features = false }
@@ -2076,7 +2066,9 @@ index 520b9418ee45a4b86c07e0ac2ef317c5bc077c95..1682caecae5d0922e237e608dde332a3
 -multimap = "0.10.0"
 -mxc-sdk = { git = "https://github.com/microsoft/mxc", rev = "b21120168d70befe12356411423266bfef168446" }
 +multimap = "0.10.1"
-+mxc-sdk = { git = "https://github.com/microsoft/mxc", rev = "6cd3d58f05d3447e67109cfb75e042803b843ca4" }
++appcontainer_common = { git = "https://github.com/microsoft/mxc", rev = "6cd3d58f05d3447e67109cfb75e042803b843ca4" }
++learning_mode_windows = { git = "https://github.com/microsoft/mxc", rev = "6cd3d58f05d3447e67109cfb75e042803b843ca4" }
++wxc_common = { git = "https://github.com/microsoft/mxc", rev = "6cd3d58f05d3447e67109cfb75e042803b843ca4" }
  notify = "8.2.0"
  nucleo = { git = "https://github.com/helix-editor/nucleo.git", rev = "4253de9faabb4e5c6d81d946a5e35a90f87347ee" }
 -once_cell = "1.20.2"
@@ -2175,7 +2167,7 @@ index 520b9418ee45a4b86c07e0ac2ef317c5bc077c95..1682caecae5d0922e237e608dde332a3
      "isomp4",
      "mkv",
      "mp3",
-@@ -506,45 +530,45 @@ sqlx-macros = { version = "=0.9.0", default-features = false, features = ["deriv
+@@ -506,45 +531,45 @@ sqlx-macros = { version = "=0.9.0", default-features = false, features = ["deriv
  # Preserve the target driver's query-description support without building it on the host.
  sqlx-sqlite = { version = "=0.9.0", default-features = false, features = ["offline"] }
  starlark = { version = "0.14.2", default-features = false }
@@ -2244,7 +2236,7 @@ index 520b9418ee45a4b86c07e0ac2ef317c5bc077c95..1682caecae5d0922e237e608dde332a3
  unicode-width = "0.2"
  url = "2"
  urlencoding = "2.1"
-@@ -552,16 +576,18 @@ uuid = "1"
+@@ -552,16 +577,18 @@ uuid = "1"
  v8 = "=152.2.0"
  vt100 = "0.16.2"
  walkdir = "2.5.0"
@@ -2266,7 +2258,7 @@ index 520b9418ee45a4b86c07e0ac2ef317c5bc077c95..1682caecae5d0922e237e608dde332a3
      "aes-crypto",
      "bzip2-rs",
      "deflate",
-@@ -571,10 +597,10 @@ zip = { version = "9.0.0", default-features = false, features = [
+@@ -571,10 +598,10 @@ zip = { version = "9.0.0", default-features = false, features = [
      "xz",
      "zstd",
  ] }
@@ -2279,7 +2271,7 @@ index 520b9418ee45a4b86c07e0ac2ef317c5bc077c95..1682caecae5d0922e237e608dde332a3
  
  [workspace.lints]
  rust = {}
-@@ -660,6 +686,8 @@ inherits = "test"
+@@ -660,6 +687,8 @@ inherits = "test"
  opt-level = 0
  
  [patch.crates-io]
@@ -2355,6 +2347,263 @@ index 221f2b70cff433382057864fdce187e4beb73c50..c50d44236a6fa7ab91572e62b4e095fd
  }
  
  #[derive(Clone, Copy, Debug, Serialize, JsonSchema)]
+diff --git a/codex-rs/mxc-sandbox/src/availability.rs b/codex-rs/mxc-sandbox/src/availability.rs
+index 5e32aea948dcbcc3ce2069c371655ba9e1d8bb6b..0be30649e9e1263df6ac550463870d8991a0b069 100644
+--- a/codex-rs/mxc-sandbox/src/availability.rs
++++ b/codex-rs/mxc-sandbox/src/availability.rs
+@@ -1,55 +1,6 @@
+ //! Probe PSEC creation and startup attributes without launching a process.
+-//! Cache the result so automatic MXC selection requires a usable native API.
+-
+-use std::sync::OnceLock;
+-
+-use flatbuffers::FlatBufferBuilder;
+-use mxc_sdk::mxc_common::models::ContainerPolicy;
+-use mxc_sdk::mxc_common::ui_policy::resolve_ui_restrictions;
+-use mxc_sdk::process_container_common::PROCESS_SECURITY_ENVIRONMENT_FLAG_NONE;
+-use mxc_sdk::process_container_common::ProcessSecurityEnvironmentApi;
+-use mxc_sdk::process_container_common::SecurityEnvironmentStartupInfo;
+-use mxc_sdk::process_container_common::job_object::to_job_object_uilimit_mask;
+-use mxc_sdk::process_security_environment_spec::process_security_environment_layout::EndpointPolicyT;
+-use mxc_sdk::process_security_environment_spec::process_security_environment_layout::FilterAction;
+-use mxc_sdk::process_security_environment_spec::process_security_environment_layout::NetworkPolicyT;
+-use mxc_sdk::process_security_environment_spec::process_security_environment_layout::ProcessSecurityEnvironmentT;
+-use mxc_sdk::process_security_environment_spec::process_security_environment_layout::SchemaVersionT;
+-use mxc_sdk::process_security_environment_spec::process_security_environment_layout::finish_process_security_environment_buffer;
++//! The pinned backend caches this probe and grants no filesystem, network, or UI access.
+ 
+ pub(super) fn is_available() -> bool {
+-    static USABLE: OnceLock<bool> = OnceLock::new();
+-    *USABLE.get_or_init(|| {
+-        // Preserve the previous SDK's probe: no filesystem, network, or UI
+-        // grants, and no process launch. API-set presence alone is insufficient.
+-        let policy = ContainerPolicy::default();
+-        let mut egress = EndpointPolicyT::default();
+-        egress.default_action = FilterAction::deny;
+-        let mut network = NetworkPolicyT::default();
+-        network.egress = Some(Box::new(egress));
+-        let mut specification = ProcessSecurityEnvironmentT::default();
+-        specification.version = SchemaVersionT { major: 1, minor: 0 };
+-        specification.disallow_win32k_system_calls = policy.ui.disable;
+-        specification.ui_restrictions = u64::from(to_job_object_uilimit_mask(
+-            &resolve_ui_restrictions(&policy.ui, &policy.base_process_ui),
+-        ));
+-        specification.network_policy = Some(Box::new(network));
+-        let mut builder = FlatBufferBuilder::with_capacity(/* capacity */ 1024);
+-        let specification = specification.pack(&mut builder);
+-        finish_process_security_environment_buffer(&mut builder, specification);
+-        ProcessSecurityEnvironmentApi::load()
+-            .and_then(|api| {
+-                api.create(
+-                    builder.finished_data(),
+-                    PROCESS_SECURITY_ENVIRONMENT_FLAG_NONE,
+-                )
+-            })
+-            .and_then(|environment| {
+-                let startup_info =
+-                    SecurityEnvironmentStartupInfo::new(Default::default(), environment.raw(), &[]);
+-                environment.close();
+-                startup_info.map(drop)
+-            })
+-            .is_ok()
+-    })
++    appcontainer_common::base_container_runner::BaseContainerRunner::is_process_security_environment_usable()
+ }
+diff --git a/codex-rs/mxc-sandbox/src/native.rs b/codex-rs/mxc-sandbox/src/native.rs
+index 9c61518318d2e1a2757fdede889bfe7b3da6480e..2121711e4c8ecc90376566bd0f932d5c00e969d5 100644
+--- a/codex-rs/mxc-sandbox/src/native.rs
++++ b/codex-rs/mxc-sandbox/src/native.rs
+@@ -3,12 +3,13 @@
+ use anyhow::Context;
+ use anyhow::Result;
+ use anyhow::ensure;
+-use mxc_sdk::mxc_common::logger::Logger;
+-use mxc_sdk::mxc_common::logger::Mode;
+-use mxc_sdk::mxc_common::models::ExecutionRequest;
+-use mxc_sdk::mxc_common::sandbox_process::SandboxBackend;
+-use mxc_sdk::mxc_common::sandbox_process::StdioMode;
+-use mxc_sdk::process_container_common::base_container_runner::BaseContainerRunner;
++use appcontainer_common::base_container_runner::BaseContainerRunner;
++use learning_mode_windows::SecurityEnvironmentApi;
++use wxc_common::logger::Logger;
++use wxc_common::logger::Mode;
++use wxc_common::models::ExecutionRequest;
++use wxc_common::sandbox_process::SandboxBackend;
++use wxc_common::sandbox_process::StdioMode;
+ 
+ // The ETW functions used by tracelogging are documented Advapi32 exports on
+ // both Windows toolchains; 1.2.3 leaves their import library to the application.
+@@ -24,9 +25,11 @@ pub(super) fn launch(request: &ExecutionRequest) -> Result<i32> {
+             .any(|capability| capability.eq_ignore_ascii_case("permissiveLearningMode")),
+         "MXC native launch does not support permissiveLearningMode"
+     );
++    // With no least-privilege mode, legacy proxy, or capture enabled, this
++    // probe guarantees BaseContainerRunner chooses PSEC rather than SBOX.
+     if !request.policy.denied_paths.is_empty() {
+         ensure!(
+-            BaseContainerRunner::supports_native_denied_paths(),
++            SecurityEnvironmentApi::load()?.supports_deny_paths()?,
+             "this Windows build cannot enforce native MXC deny paths"
+         );
+     }
+diff --git a/codex-rs/mxc-sandbox/src/policy.rs b/codex-rs/mxc-sandbox/src/policy.rs
+index 3f98e961a14be37955250fd80409b2906e3cbfef..9425e1bb7ceb81772f4a319aaab5c4fe4de8a927 100644
+--- a/codex-rs/mxc-sandbox/src/policy.rs
++++ b/codex-rs/mxc-sandbox/src/policy.rs
+@@ -13,26 +13,27 @@ use codex_protocol::protocol::FileSystemSpecialPath;
+ use codex_utils_absolute_path::AbsolutePathBuf;
+ use codex_utils_path_uri::PathUri;
+ use codex_windows_sandbox::resolve_windows_deny_read_paths;
+-use mxc_sdk::mxc_common::cmdline::CommandLineContext;
+-use mxc_sdk::mxc_common::cmdline::CommandLineError;
+-use mxc_sdk::mxc_common::cmdline::cmdline_from_argv_for_context;
+-use mxc_sdk::mxc_common::filesystem_object::ExistingObjectComparison;
+-use mxc_sdk::mxc_common::filesystem_object::compare_existing_filesystem_objects;
+-use mxc_sdk::mxc_common::filesystem_object::normalize_object_conflicts;
+-use mxc_sdk::mxc_common::logger::Logger;
+-use mxc_sdk::mxc_common::logger::Mode;
+-use mxc_sdk::mxc_common::models::BaseProcessUiConfig;
+-use mxc_sdk::mxc_common::models::ContainerPolicy;
+-use mxc_sdk::mxc_common::models::ExecutionRequest;
+-use mxc_sdk::mxc_common::models::FallbackPolicy;
+-use mxc_sdk::mxc_common::models::NetworkAction;
+-use mxc_sdk::mxc_common::models::NetworkCidr;
+-use mxc_sdk::mxc_common::models::NetworkEgressPolicy;
+-use mxc_sdk::mxc_common::models::NetworkIngressPolicy;
+-use mxc_sdk::mxc_common::models::NetworkPeer;
+-use mxc_sdk::mxc_common::models::NetworkRule;
+-use mxc_sdk::mxc_common::models::UiPolicy;
+ use thiserror::Error;
++use wxc_common::cmdline::CommandLineContext;
++use wxc_common::cmdline::CommandLineError;
++use wxc_common::cmdline::cmdline_from_argv_for_context;
++use wxc_common::filesystem_object::ExistingObjectComparison;
++use wxc_common::filesystem_object::compare_existing_filesystem_objects;
++use wxc_common::filesystem_object::normalize_object_conflicts;
++use wxc_common::logger::Logger;
++use wxc_common::logger::Mode;
++use wxc_common::models::BaseProcessUiConfig;
++use wxc_common::models::ContainerPolicy;
++use wxc_common::models::ExecutionRequest;
++use wxc_common::models::FallbackPolicy;
++use wxc_common::models::NetworkAction;
++use wxc_common::models::NetworkCidr;
++use wxc_common::models::NetworkEgressPolicy;
++use wxc_common::models::NetworkIngressPolicy;
++use wxc_common::models::NetworkPeer;
++use wxc_common::models::NetworkPolicy;
++use wxc_common::models::NetworkRule;
++use wxc_common::models::UiPolicy;
+ 
+ use crate::MxcCommand;
+ 
+@@ -278,7 +279,7 @@ pub(super) fn build_request(
+             .to_str()
+             .ok_or(PolicyError::NonUnicodeCommandCwd)?
+             .to_owned(),
+-        env: (!env.is_empty()).then_some(env),
++        env,
+         policy: ContainerPolicy {
+             capabilities: vec!["registryRead".to_owned()],
+             readwrite_paths: unicode_paths(write)?,
+@@ -287,6 +288,12 @@ pub(super) fn build_request(
+             fallback: FallbackPolicy {
+                 allow_dacl_mutation: false,
+             },
++            default_network_policy: if egress_default == NetworkAction::Allow {
++                NetworkPolicy::Allow
++            } else {
++                NetworkPolicy::Block
++            },
++            allow_local_network: ingress_default == NetworkAction::Allow,
+             network_egress: Some(egress),
+             network_ingress: Some(NetworkIngressPolicy {
+                 default: ingress_default,
+diff --git a/codex-rs/mxc-sandbox/src/policy_tests.rs b/codex-rs/mxc-sandbox/src/policy_tests.rs
+index e91761c9f9c0357704ff1c21e29e39403bbb4191..b9de9f41c78381b6955cca3070b0d161e77eb884 100644
+--- a/codex-rs/mxc-sandbox/src/policy_tests.rs
++++ b/codex-rs/mxc-sandbox/src/policy_tests.rs
+@@ -16,13 +16,13 @@ use codex_protocol::protocol::FileSystemSpecialPath;
+ use codex_protocol::protocol::NetworkSandboxPolicy;
+ use codex_utils_absolute_path::AbsolutePathBuf;
+ use codex_utils_path_uri::PathUri;
+-use mxc_sdk::mxc_common::models::NetworkAction;
+-use mxc_sdk::mxc_common::models::NetworkCidr;
+-use mxc_sdk::mxc_common::models::NetworkEgressPolicy;
+-use mxc_sdk::mxc_common::models::NetworkIngressPolicy;
+-use mxc_sdk::mxc_common::models::NetworkPeer;
+-use mxc_sdk::mxc_common::models::NetworkRule;
+ use pretty_assertions::assert_eq;
++use wxc_common::models::NetworkAction;
++use wxc_common::models::NetworkCidr;
++use wxc_common::models::NetworkEgressPolicy;
++use wxc_common::models::NetworkIngressPolicy;
++use wxc_common::models::NetworkPeer;
++use wxc_common::models::NetworkRule;
+ 
+ use crate::CreateMxcCommandArgsParams;
+ use crate::MxcCommand;
+@@ -207,12 +207,12 @@ fn wrapper_preserves_exact_argv_and_separate_command_cwd() -> Result<()> {
+         (
+             r#""C:\Program Files\tool.exe" --permissions "" "quotes\" and slash\\""#.to_owned(),
+             cwd.to_str().unwrap().to_owned(),
+-            Some(vec!["CUSTOM=value".to_owned()]),
++            vec!["CUSTOM=value".to_owned()],
+         )
+     );
+     assert_eq!(
+         build_request(&parsed, &cwd, Vec::new(), &[], &[])?.env,
+-        None
++        Vec::<String>::new()
+     );
+     Ok(())
+ }
+diff --git a/codex-rs/mxc-sandbox/src/windows.rs b/codex-rs/mxc-sandbox/src/windows.rs
+index 99ef6179adf6b187968e9c44eeca25af6a46d4a0..70c38b6185df88c4a8c08f1671f162f276da46b2 100644
+--- a/codex-rs/mxc-sandbox/src/windows.rs
++++ b/codex-rs/mxc-sandbox/src/windows.rs
+@@ -8,8 +8,6 @@ use std::path::PathBuf;
+ use anyhow::Result;
+ use anyhow::ensure;
+ use codex_utils_path_uri::PathUri;
+-use mxc_sdk::mxc_common::filesystem_object::ExistingObjectComparison;
+-use mxc_sdk::mxc_common::filesystem_object::compare_existing_filesystem_objects;
+ use windows_sys::Win32::Foundation::RPC_E_CHANGED_MODE;
+ use windows_sys::Win32::Storage::FileSystem::GetDriveTypeW;
+ use windows_sys::Win32::Storage::FileSystem::GetLogicalDrives;
+@@ -23,6 +21,8 @@ use windows_sys::Win32::UI::Shell::FOLDERID_ProgramData;
+ use windows_sys::Win32::UI::Shell::FOLDERID_ProgramFiles;
+ use windows_sys::Win32::UI::Shell::FOLDERID_ProgramFilesX86;
+ use windows_sys::Win32::UI::Shell::SHGetKnownFolderPath;
++use wxc_common::filesystem_object::ExistingObjectComparison;
++use wxc_common::filesystem_object::compare_existing_filesystem_objects;
+ 
+ struct ComUninitializeGuard;
+ 
+diff --git a/codex-rs/runtime-agent-instance/src/runtime.rs b/codex-rs/runtime-agent-instance/src/runtime.rs
+index 0a1562cab18e8e1397dc6181f056f1b77e1b90e2..5ba332e48e354a614ce33560d94ad0f275e49f12 100644
+--- a/codex-rs/runtime-agent-instance/src/runtime.rs
++++ b/codex-rs/runtime-agent-instance/src/runtime.rs
+@@ -10,8 +10,8 @@ use codex_agent_identity::encode_ssh_ed25519_public_key;
+ use codex_utils_redacted_string::RedactedString;
+ use ed25519_dalek::Signer;
+ use ed25519_dalek::SigningKey;
+-use rand::TryRngCore;
+-use rand::rngs::OsRng;
++use rand::TryRng;
++use rand::rngs::SysRng;
+ use serde_json::json;
+ use std::fmt;
+ use std::io;
+@@ -35,7 +35,7 @@ impl RuntimeRegistration {
+         metadata: crate::RuntimeRegistrationMetadata,
+     ) -> io::Result<Self> {
+         let mut seed = Zeroizing::new([0u8; 32]);
+-        OsRng
++        SysRng
+             .try_fill_bytes(seed.as_mut())
+             .map_err(|_| io::Error::other("failed to generate runtime signing key"))?;
+         let signing_key = SigningKey::from_bytes(&seed);
 diff --git a/justfile b/justfile
 index 3614939c72498ec91690e6a01b30f21f76e9a0ab..69774722e8c8aae0c0466f240bf7a387fe475f5a 100644
 --- a/justfile

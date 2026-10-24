@@ -1606,22 +1606,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "72f5acc6cb2ba439de613abc23857ec3d78374d8ed5ac84e9d11336e87da8649"
 
 [[package]]
-name = "bwrap_common"
-version = "0.8.0"
-source = "git+https://github.com/microsoft/mxc?rev=6cd3d58f05d3447e67109cfb75e042803b843ca4#6cd3d58f05d3447e67109cfb75e042803b843ca4"
-dependencies = [
- "lxc_common",
- "nix 0.29.0",
- "semver",
- "serde",
- "serde_json",
- "tempfile",
- "thiserror 2.0.21",
- "url",
- "wxc_common",
-]
-
-[[package]]
 name = "by_address"
 version = "1.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4456,13 +4440,13 @@ name = "codex-mxc-sandbox"
 version = "0.0.0"
 dependencies = [
  "anyhow",
+ "appcontainer_common",
  "codex-network-proxy",
  "codex-protocol",
  "codex-utils-absolute-path",
  "codex-utils-path-uri",
  "codex-windows-sandbox",
- "flatbuffers",
- "mxc-sdk",
+ "learning_mode_windows",
  "pretty_assertions",
  "serde",
  "serde_json",
@@ -4470,6 +4454,7 @@ dependencies = [
  "thiserror 2.0.21",
  "tracelogging",
  "windows-sys 0.61.2",
+ "wxc_common",
 ]
 
 [[package]]
@@ -10714,21 +10699,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "lxc_common"
-version = "0.8.0"
-source = "git+https://github.com/microsoft/mxc?rev=6cd3d58f05d3447e67109cfb75e042803b843ca4#6cd3d58f05d3447e67109cfb75e042803b843ca4"
-dependencies = [
- "libc",
- "mxc_pty",
- "nix 0.29.0",
- "serde",
- "serde_json",
- "sha2 0.10.9",
- "thiserror 2.0.21",
- "wxc_common",
-]
-
-[[package]]
 name = "lzma-rust2"
 version = "0.21.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -10972,23 +10942,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "mxc-sdk"
-version = "0.8.0"
-source = "git+https://github.com/microsoft/mxc?rev=6cd3d58f05d3447e67109cfb75e042803b843ca4#6cd3d58f05d3447e67109cfb75e042803b843ca4"
-dependencies = [
- "mxc_engine",
- "wxc_common",
-]
-
-[[package]]
-name = "mxc_build_common"
-version = "0.8.0"
-source = "git+https://github.com/microsoft/mxc?rev=6cd3d58f05d3447e67109cfb75e042803b843ca4#6cd3d58f05d3447e67109cfb75e042803b843ca4"
-dependencies = [
- "winresource",
-]
-
-[[package]]
 name = "mxc_config_contract"
 version = "0.8.0"
 source = "git+https://github.com/microsoft/mxc?rev=6cd3d58f05d3447e67109cfb75e042803b843ca4#6cd3d58f05d3447e67109cfb75e042803b843ca4"
@@ -10996,33 +10949,6 @@ dependencies = [
  "serde",
  "serde_json",
  "thiserror 2.0.21",
-]
-
-[[package]]
-name = "mxc_engine"
-version = "0.8.0"
-source = "git+https://github.com/microsoft/mxc?rev=6cd3d58f05d3447e67109cfb75e042803b843ca4#6cd3d58f05d3447e67109cfb75e042803b843ca4"
-dependencies = [
- "appcontainer_common",
- "bwrap_common",
- "learning_mode_core",
- "lxc_common",
- "plm",
- "seatbelt_common",
- "serde",
- "serde_json",
- "windows",
- "windows_sandbox_lifecycle",
- "wxc_common",
-]
-
-[[package]]
-name = "mxc_pty"
-version = "0.8.0"
-source = "git+https://github.com/microsoft/mxc?rev=6cd3d58f05d3447e67109cfb75e042803b843ca4#6cd3d58f05d3447e67109cfb75e042803b843ca4"
-dependencies = [
- "libc",
- "nix 0.29.0",
 ]
 
 [[package]]
@@ -12407,25 +12333,6 @@ dependencies = [
  "quick-xml 0.42.0",
  "serde",
  "time",
-]
-
-[[package]]
-name = "plm"
-version = "0.1.0"
-source = "git+https://github.com/microsoft/mxc?rev=6cd3d58f05d3447e67109cfb75e042803b843ca4#6cd3d58f05d3447e67109cfb75e042803b843ca4"
-dependencies = [
- "anyhow",
- "chrono",
- "clap",
- "getrandom 0.2.17",
- "learning_mode_core",
- "learning_mode_windows",
- "mxc_build_common",
- "serde",
- "serde_json",
- "tempfile",
- "windows",
- "wxc_common",
 ]
 
 [[package]]
@@ -14592,15 +14499,6 @@ dependencies = [
  "pbkdf2 0.12.2",
  "salsa20",
  "sha2 0.10.9",
-]
-
-[[package]]
-name = "seatbelt_common"
-version = "0.8.0"
-source = "git+https://github.com/microsoft/mxc?rev=6cd3d58f05d3447e67109cfb75e042803b843ca4#6cd3d58f05d3447e67109cfb75e042803b843ca4"
-dependencies = [
- "libc",
- "wxc_common",
 ]
 
 [[package]]
@@ -18303,33 +18201,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1e7ac75179f18232fe9c285163565a57ef8d3c89254a30685b57d83a38d326c2"
 
 [[package]]
-name = "windows_sandbox_common"
-version = "0.8.0"
-source = "git+https://github.com/microsoft/mxc?rev=6cd3d58f05d3447e67109cfb75e042803b843ca4#6cd3d58f05d3447e67109cfb75e042803b843ca4"
-dependencies = [
- "getrandom 0.2.17",
- "serde",
- "serde_json",
- "tokio",
- "wxc_common",
-]
-
-[[package]]
-name = "windows_sandbox_lifecycle"
-version = "0.8.0"
-source = "git+https://github.com/microsoft/mxc?rev=6cd3d58f05d3447e67109cfb75e042803b843ca4#6cd3d58f05d3447e67109cfb75e042803b843ca4"
-dependencies = [
- "anyhow",
- "serde",
- "serde_json",
- "tokio",
- "uuid",
- "windows",
- "windows_sandbox_common",
- "wxc_common",
-]
-
-[[package]]
 name = "windows_x86_64_gnu"
 version = "0.52.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -18391,15 +18262,6 @@ checksum = "cb5a765337c50e9ec252c2069be9bf91c7df47afb103b642ba3a53bf8101be97"
 dependencies = [
  "cfg-if",
  "windows-sys 0.59.0",
-]
-
-[[package]]
-name = "winresource"
-version = "0.1.31"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0986a8b1d586b7d3e4fe3d9ea39fb451ae22869dcea4aa109d287a374d866087"
-dependencies = [
- "version_check",
 ]
 
 [[package]]

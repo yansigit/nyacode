@@ -576,7 +576,7 @@ index ed6a215e264bf1c907536feb6b2a6f61928e4465..47b09b438e79b6b41bb7c9d4e78cea77
            - function/interrupt_agent
            - function/list_agents
 diff --git a/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__compaction__remote_slash_compact.snap b/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__compaction__remote_slash_compact.snap
-index 610dcf20f041cef400ce25b6f8be9fdac8c7d1df..d58d9f6bfc3b125b6d4fcf14b03274941e7a6b81 100644
+index 610dcf20f041cef400ce25b6f8be9fdac8c7d1df..dda4de8671e173ee561102f28106e56119976920 100644
 --- a/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__compaction__remote_slash_compact.snap
 +++ b/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__compaction__remote_slash_compact.snap
 @@ -16,7 +16,7 @@ Settings:
@@ -589,6 +589,24 @@ index 610dcf20f041cef400ce25b6f8be9fdac8c7d1df..d58d9f6bfc3b125b6d4fcf14b0327494
            - custom/exec
            - function/wait
 @@ -24,7 +24,7 @@ Settings:
+           - function/request_user_input_async
+         - namespace/clock: Tools for reading and waiting on time.; hash=f402e8c5e9b5e317
+           - function/sleep
+-        - namespace/collaboration: Tools for spawning and managing sub-agents.; hash=2c8d6295978dbe63
++        - namespace/collaboration: Tools for spawning and managing sub-agents.; hash=48f3c983ab019481
+           - function/followup_task
+           - function/interrupt_agent
+           - function/list_agents
+@@ -108,7 +108,7 @@ Settings:
+ ## Window 2 (after request 2: input diverged at item 07)
+ Settings: unavailable (items only)
+ -- request 3 (items; Stored replacement before next turn) --
+-00:additional_tools/developer (3; hash=bf2e30605ff5dc17):
++00:additional_tools/developer (3; hash=4ee6c32cca6df7a5):
+         - namespace/functions; hash=fada4a476a3754dd
+           - custom/exec
+           - function/wait
+@@ -116,7 +116,7 @@ Settings: unavailable (items only)
            - function/request_user_input_async
          - namespace/clock: Tools for reading and waiting on time.; hash=f402e8c5e9b5e317
            - function/sleep

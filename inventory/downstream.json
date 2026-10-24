@@ -18047,6 +18047,33 @@
       "change": "modified",
       "destination": {
         "kind": "patch",
+        "patch": "integration/codex/patches/thread_model_child_routing.patch",
+        "path": "codex-rs/core/tests/suite/snapshots/all__suite__scenarios__child_completion_wakes_parent_after_final_answer.snap"
+      },
+      "git_status": "M",
+      "mode_changed": false,
+      "owner": "codex-rs",
+      "path": "codex-rs/core/tests/suite/snapshots/all__suite__scenarios__child_completion_wakes_parent_after_final_answer.snap",
+      "purpose": "thread_model_child_routing",
+      "regression_groups": [
+        "thread_model_child_routing"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "codex-rs/core/tests/suite/snapshots/all__suite__scenarios__child_completion_wakes_parent_after_final_answer.snap",
+        "sha256": "2b20823e7578662664e3a2bd26b48fbab123c0e9bc0de3f0d446d106ce84a7e9"
+      },
+      "upstream_source": {
+        "mode": "100644",
+        "path": "codex-rs/core/tests/suite/snapshots/all__suite__scenarios__child_completion_wakes_parent_after_final_answer.snap",
+        "sha256": "e1892f19ce47a26d90a40d7125c650c94960265b7d9ec34e94a2977a6e71f7d0"
+      }
+    },
+    {
+      "artifact": "generated",
+      "change": "modified",
+      "destination": {
+        "kind": "patch",
         "patch": "integration/codex/patches/backend_dispatch.patch",
         "path": "codex-rs/core/tests/suite/snapshots/all__suite__scenarios__code_mode_catalog_messages.snap"
       },
@@ -18164,7 +18191,8 @@
       "path": "codex-rs/core/tests/suite/snapshots/all__suite__scenarios__compaction__remote_slash_compact.snap",
       "purpose": "tool_completion_persistence",
       "regression_groups": [
-        "tool_completion_persistence"
+        "tool_completion_persistence",
+        "thread_model_child_routing"
       ],
       "source": {
         "mode": "100644",
@@ -18175,6 +18203,33 @@
         "mode": "100644",
         "path": "codex-rs/core/tests/suite/snapshots/all__suite__scenarios__compaction__remote_slash_compact.snap",
         "sha256": "763ec32a98b6733e3a90b27bb82d66559c7ed1683323712ca58054d21e72c7d8"
+      }
+    },
+    {
+      "artifact": "generated",
+      "change": "modified",
+      "destination": {
+        "kind": "patch",
+        "patch": "integration/codex/patches/thread_model_child_routing.patch",
+        "path": "codex-rs/core/tests/suite/snapshots/all__suite__scenarios__frozen_cloud_skills__frozen_cloud_skills_with_named_executor_request_history.snap"
+      },
+      "git_status": "M",
+      "mode_changed": false,
+      "owner": "codex-rs",
+      "path": "codex-rs/core/tests/suite/snapshots/all__suite__scenarios__frozen_cloud_skills__frozen_cloud_skills_with_named_executor_request_history.snap",
+      "purpose": "thread_model_child_routing",
+      "regression_groups": [
+        "thread_model_child_routing"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "codex-rs/core/tests/suite/snapshots/all__suite__scenarios__frozen_cloud_skills__frozen_cloud_skills_with_named_executor_request_history.snap",
+        "sha256": "3d3c9b6c655e05e3b81f98d5cf2998b4bd5a5953d6c21eaa4291f4f44b7c2a15"
+      },
+      "upstream_source": {
+        "mode": "100644",
+        "path": "codex-rs/core/tests/suite/snapshots/all__suite__scenarios__frozen_cloud_skills__frozen_cloud_skills_with_named_executor_request_history.snap",
+        "sha256": "6f8897636e5c9866060f8d825869ee0a4726e3f740e37463553cdc99a99e6f90"
       }
     },
     {
@@ -18236,6 +18291,33 @@
       "change": "modified",
       "destination": {
         "kind": "patch",
+        "patch": "integration/codex/patches/thread_model_child_routing.patch",
+        "path": "codex-rs/core/tests/suite/snapshots/all__suite__scenarios__incremental_tools__prediction_fork_mcp_removal.snap"
+      },
+      "git_status": "M",
+      "mode_changed": false,
+      "owner": "codex-rs",
+      "path": "codex-rs/core/tests/suite/snapshots/all__suite__scenarios__incremental_tools__prediction_fork_mcp_removal.snap",
+      "purpose": "thread_model_child_routing",
+      "regression_groups": [
+        "thread_model_child_routing"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "codex-rs/core/tests/suite/snapshots/all__suite__scenarios__incremental_tools__prediction_fork_mcp_removal.snap",
+        "sha256": "85e176a2aa09b7156b0e76f5937637581a1ab3012e3d610e9b7848cca8fa22e3"
+      },
+      "upstream_source": {
+        "mode": "100644",
+        "path": "codex-rs/core/tests/suite/snapshots/all__suite__scenarios__incremental_tools__prediction_fork_mcp_removal.snap",
+        "sha256": "5b0caeef076beb1059c97b073e17ad89c832d2917148c8fc4f312c21a507a76d"
+      }
+    },
+    {
+      "artifact": "generated",
+      "change": "modified",
+      "destination": {
+        "kind": "patch",
         "patch": "integration/codex/patches/backend_dispatch.patch",
         "path": "codex-rs/core/tests/suite/snapshots/all__suite__scenarios__indirect_namespace_prefixes__catalog_indirect_namespace_prefixes.snap"
       },
@@ -18256,6 +18338,60 @@
         "mode": "100644",
         "path": "codex-rs/core/tests/suite/snapshots/all__suite__scenarios__indirect_namespace_prefixes__catalog_indirect_namespace_prefixes.snap",
         "sha256": "4dc0a201000c52ef432e6a431b134c42944e574754fa0d30903cf39f1c3b8373"
+      }
+    },
+    {
+      "artifact": "generated",
+      "change": "modified",
+      "destination": {
+        "kind": "patch",
+        "patch": "integration/codex/patches/thread_model_child_routing.patch",
+        "path": "codex-rs/core/tests/suite/snapshots/all__suite__scenarios__mcp_ema__enterprise_failure_preserves_ordinary_mcp_history.snap"
+      },
+      "git_status": "M",
+      "mode_changed": false,
+      "owner": "codex-rs",
+      "path": "codex-rs/core/tests/suite/snapshots/all__suite__scenarios__mcp_ema__enterprise_failure_preserves_ordinary_mcp_history.snap",
+      "purpose": "thread_model_child_routing",
+      "regression_groups": [
+        "thread_model_child_routing"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "codex-rs/core/tests/suite/snapshots/all__suite__scenarios__mcp_ema__enterprise_failure_preserves_ordinary_mcp_history.snap",
+        "sha256": "68e304b20549c71222d1bd74587abf762e433b7d46535baed259452a78edfbe0"
+      },
+      "upstream_source": {
+        "mode": "100644",
+        "path": "codex-rs/core/tests/suite/snapshots/all__suite__scenarios__mcp_ema__enterprise_failure_preserves_ordinary_mcp_history.snap",
+        "sha256": "1e850ef171102d009ad19b3c9ae5eff8709cf7d0dd82f24a9167359abe9386aa"
+      }
+    },
+    {
+      "artifact": "generated",
+      "change": "modified",
+      "destination": {
+        "kind": "patch",
+        "patch": "integration/codex/patches/thread_model_child_routing.patch",
+        "path": "codex-rs/core/tests/suite/snapshots/all__suite__scenarios__mcp_ema__enterprise_revocation_preserves_history_and_ordinary_tools.snap"
+      },
+      "git_status": "M",
+      "mode_changed": false,
+      "owner": "codex-rs",
+      "path": "codex-rs/core/tests/suite/snapshots/all__suite__scenarios__mcp_ema__enterprise_revocation_preserves_history_and_ordinary_tools.snap",
+      "purpose": "thread_model_child_routing",
+      "regression_groups": [
+        "thread_model_child_routing"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "codex-rs/core/tests/suite/snapshots/all__suite__scenarios__mcp_ema__enterprise_revocation_preserves_history_and_ordinary_tools.snap",
+        "sha256": "23a525f57d2427212f3ac653eb7e0c6bc90788182c07ce50d3598c5145090090"
+      },
+      "upstream_source": {
+        "mode": "100644",
+        "path": "codex-rs/core/tests/suite/snapshots/all__suite__scenarios__mcp_ema__enterprise_revocation_preserves_history_and_ordinary_tools.snap",
+        "sha256": "3781323a0cc23f30bad15f9b7be2fff532ec2b4c7a31fbab3a504a0f1ce46f54"
       }
     },
     {
@@ -18553,6 +18689,33 @@
         "mode": "100644",
         "path": "codex-rs/core/tests/suite/snapshots/all__suite__scenarios__skill_catalog_dedup__dedup_before_budgeting.snap",
         "sha256": "f29c9d305451079d5ebedfdc797e02a662e921c3bec743572cdad73795fcb71d"
+      }
+    },
+    {
+      "artifact": "generated",
+      "change": "modified",
+      "destination": {
+        "kind": "patch",
+        "patch": "integration/codex/patches/thread_model_child_routing.patch",
+        "path": "codex-rs/core/tests/suite/snapshots/all__suite__scenarios__skill_read_installation_recovery_request_history.snap"
+      },
+      "git_status": "M",
+      "mode_changed": false,
+      "owner": "codex-rs",
+      "path": "codex-rs/core/tests/suite/snapshots/all__suite__scenarios__skill_read_installation_recovery_request_history.snap",
+      "purpose": "thread_model_child_routing",
+      "regression_groups": [
+        "thread_model_child_routing"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "codex-rs/core/tests/suite/snapshots/all__suite__scenarios__skill_read_installation_recovery_request_history.snap",
+        "sha256": "b2700fc00221a0f5708ac23046746645a056741124d58bf5ac64589ec1d99399"
+      },
+      "upstream_source": {
+        "mode": "100644",
+        "path": "codex-rs/core/tests/suite/snapshots/all__suite__scenarios__skill_read_installation_recovery_request_history.snap",
+        "sha256": "693e14ea89973eb08bfb8149152c870e8c9a2716ad521c4537577b2b8c23ebe9"
       }
     },
     {
@@ -21052,6 +21215,141 @@
         "mode": "100644",
         "path": "codex-rs/mxc-sandbox/Cargo.toml",
         "sha256": "9edcd0f2d5b8280cce7a40af28cb06b84008f2dde8e52003364f7083263d6613"
+      }
+    },
+    {
+      "artifact": "source",
+      "change": "modified",
+      "destination": {
+        "kind": "patch",
+        "patch": "integration/codex/patches/dependency_build.patch",
+        "path": "codex-rs/mxc-sandbox/src/availability.rs"
+      },
+      "git_status": "M",
+      "mode_changed": false,
+      "owner": "codex-rs",
+      "path": "codex-rs/mxc-sandbox/src/availability.rs",
+      "purpose": "dependency_build",
+      "regression_groups": [
+        "dependency_build"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "codex-rs/mxc-sandbox/src/availability.rs",
+        "sha256": "720af84aa226e9c0502b7971473a2d7a4e8cfa9051075d8107cc7031d5403aef"
+      },
+      "upstream_source": {
+        "mode": "100644",
+        "path": "codex-rs/mxc-sandbox/src/availability.rs",
+        "sha256": "7d115e5d3b4ae3c51be7dfeb34fd34258c28e4596e11835f3da4ab90dff86690"
+      }
+    },
+    {
+      "artifact": "source",
+      "change": "modified",
+      "destination": {
+        "kind": "patch",
+        "patch": "integration/codex/patches/dependency_build.patch",
+        "path": "codex-rs/mxc-sandbox/src/native.rs"
+      },
+      "git_status": "M",
+      "mode_changed": false,
+      "owner": "codex-rs",
+      "path": "codex-rs/mxc-sandbox/src/native.rs",
+      "purpose": "dependency_build",
+      "regression_groups": [
+        "dependency_build"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "codex-rs/mxc-sandbox/src/native.rs",
+        "sha256": "ec97c3bea1a360cc1e05e319a9408cc17fbab6a078a20987a85f8f4031d04e33"
+      },
+      "upstream_source": {
+        "mode": "100644",
+        "path": "codex-rs/mxc-sandbox/src/native.rs",
+        "sha256": "83448c95931cf00f6010638d2acba346e40844b4370f2257005ebc41268417e9"
+      }
+    },
+    {
+      "artifact": "source",
+      "change": "modified",
+      "destination": {
+        "kind": "patch",
+        "patch": "integration/codex/patches/dependency_build.patch",
+        "path": "codex-rs/mxc-sandbox/src/policy.rs"
+      },
+      "git_status": "M",
+      "mode_changed": false,
+      "owner": "codex-rs",
+      "path": "codex-rs/mxc-sandbox/src/policy.rs",
+      "purpose": "dependency_build",
+      "regression_groups": [
+        "dependency_build"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "codex-rs/mxc-sandbox/src/policy.rs",
+        "sha256": "aac154833b60e4ae6c4ae88c5747e0a4e80e85b9e167e2365875b6259c314fad"
+      },
+      "upstream_source": {
+        "mode": "100644",
+        "path": "codex-rs/mxc-sandbox/src/policy.rs",
+        "sha256": "db99365db23327fd992ebf62e673af40f908b55ff3049d7316329a7af9efeca1"
+      }
+    },
+    {
+      "artifact": "source",
+      "change": "modified",
+      "destination": {
+        "kind": "patch",
+        "patch": "integration/codex/patches/dependency_build.patch",
+        "path": "codex-rs/mxc-sandbox/src/policy_tests.rs"
+      },
+      "git_status": "M",
+      "mode_changed": false,
+      "owner": "codex-rs",
+      "path": "codex-rs/mxc-sandbox/src/policy_tests.rs",
+      "purpose": "dependency_build",
+      "regression_groups": [
+        "dependency_build"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "codex-rs/mxc-sandbox/src/policy_tests.rs",
+        "sha256": "c537f4c6420cdfe9c3eacd3cd3ca8083addd23fd3e4f7408579c6441205ef824"
+      },
+      "upstream_source": {
+        "mode": "100644",
+        "path": "codex-rs/mxc-sandbox/src/policy_tests.rs",
+        "sha256": "2321a7e180ef940e97f7b9b8a4f2ffae504df904b08d9262b317c0f8c5cd7bc2"
+      }
+    },
+    {
+      "artifact": "source",
+      "change": "modified",
+      "destination": {
+        "kind": "patch",
+        "patch": "integration/codex/patches/dependency_build.patch",
+        "path": "codex-rs/mxc-sandbox/src/windows.rs"
+      },
+      "git_status": "M",
+      "mode_changed": false,
+      "owner": "codex-rs",
+      "path": "codex-rs/mxc-sandbox/src/windows.rs",
+      "purpose": "dependency_build",
+      "regression_groups": [
+        "dependency_build"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "codex-rs/mxc-sandbox/src/windows.rs",
+        "sha256": "6fa89bf1639fd36e00dc32108092e528130e36117118e3c80ae192f247cbd93f"
+      },
+      "upstream_source": {
+        "mode": "100644",
+        "path": "codex-rs/mxc-sandbox/src/windows.rs",
+        "sha256": "7f67b89f0b68ede6716df95581d377d80c10daf16fea3861be106818797f8836"
       }
     },
     {
@@ -23917,6 +24215,33 @@
         "mode": "100644",
         "path": "codex-rs/rollout/src/policy.rs",
         "sha256": "eb2221af4eed77c25d400cf09d21c73a3a6a5f54ee3ed4ea9873bbbdcb714e81"
+      }
+    },
+    {
+      "artifact": "source",
+      "change": "modified",
+      "destination": {
+        "kind": "patch",
+        "patch": "integration/codex/patches/dependency_build.patch",
+        "path": "codex-rs/runtime-agent-instance/src/runtime.rs"
+      },
+      "git_status": "M",
+      "mode_changed": false,
+      "owner": "codex-rs",
+      "path": "codex-rs/runtime-agent-instance/src/runtime.rs",
+      "purpose": "dependency_build",
+      "regression_groups": [
+        "dependency_build"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "codex-rs/runtime-agent-instance/src/runtime.rs",
+        "sha256": "b11c61c28b0f90c82ea81727c5389b258dc988fea78d85ce96e50866eb049c00"
+      },
+      "upstream_source": {
+        "mode": "100644",
+        "path": "codex-rs/runtime-agent-instance/src/runtime.rs",
+        "sha256": "6f27d35844946d50f3bac9a4e14cd1c3133ef8435d992c0397b41a49e5889f93"
       }
     },
     {

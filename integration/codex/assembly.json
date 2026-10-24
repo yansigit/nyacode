@@ -77,21 +77,21 @@
       "destination": ".github/workflows/container-verify.yml",
       "mode": "100644",
       "replace": false,
-      "sha256": "74fd55ccf433198771bdf634ad579228036a7e60bea409a87aa6fd0906cbba9a",
+      "sha256": "fb39d0ecad65212f7645df47f842f86c36f4b9fe7ed4461162a9ff912d1d5e27",
       "source": ".github/workflows/container-verify.yml"
     },
     {
       "destination": ".github/workflows/native-providers.yml",
       "mode": "100644",
       "replace": false,
-      "sha256": "5a023c543a37d84f3ea1e750be4df4b7c188cb093a0183d294cde34ba9810c4d",
+      "sha256": "3b1274ba23878462e4f531d4ca400e9877d97f4ae1eaf34f4d94b137206e766b",
       "source": ".github/workflows/native-providers.yml"
     },
     {
       "destination": ".github/workflows/nyacode-release.yml",
       "mode": "100644",
       "replace": false,
-      "sha256": "e6571785b057105c1cfda203147991d9fcfbd22bd136692680e6213b6c3e1b15",
+      "sha256": "53f45d537844727cc3ca69319bea6d2637c4f1c39915c9b4efee13dcba1591cc",
       "source": ".github/workflows/nyacode-release.yml"
     },
     {
@@ -2723,7 +2723,7 @@
       "destination": "docs/container-verify.md",
       "mode": "100644",
       "replace": false,
-      "sha256": "9dacf24b921e69972785ab2782cee58177c265cc705c3ee2a4a0d20c8169180b",
+      "sha256": "6f334fa207761b7e865dd1ccc963cd30ff28525710cbea742ffe6d227027467c",
       "source": "docs/container-verify.md"
     },
     {
@@ -2772,7 +2772,7 @@
       "destination": "docs/native-providers/integration-manifest.json",
       "mode": "100644",
       "replace": false,
-      "sha256": "4467631c3815fb5fa5635629743c01c6a50cdb00adb2214a2535cc0a042b48d8",
+      "sha256": "b139cef7ad193e873d96456e80697cac11f7ffbaef676dc8bf1bac952a3ee512",
       "source": "docs/native-providers/integration-manifest.json"
     },
     {
@@ -3775,6 +3775,12 @@
         "codex-rs/Cargo.toml",
         "codex-rs/hooks/schema/generated/model-request.command.input.schema.json",
         "codex-rs/hooks/src/events/model_request.rs",
+        "codex-rs/mxc-sandbox/src/availability.rs",
+        "codex-rs/mxc-sandbox/src/native.rs",
+        "codex-rs/mxc-sandbox/src/policy.rs",
+        "codex-rs/mxc-sandbox/src/policy_tests.rs",
+        "codex-rs/mxc-sandbox/src/windows.rs",
+        "codex-rs/runtime-agent-instance/src/runtime.rs",
         "justfile",
         "package.json",
         "patches/BUILD.bazel",
@@ -4118,8 +4124,14 @@
         "codex-rs/core/tests/suite/hooks.rs",
         "codex-rs/core/tests/suite/snapshots/all__suite__scenarios__agent_eviction__idle_eviction_followup.snap",
         "codex-rs/core/tests/suite/snapshots/all__suite__scenarios__agent_message_board__remote__remote_board_permissions_direct.snap",
+        "codex-rs/core/tests/suite/snapshots/all__suite__scenarios__child_completion_wakes_parent_after_final_answer.snap",
+        "codex-rs/core/tests/suite/snapshots/all__suite__scenarios__frozen_cloud_skills__frozen_cloud_skills_with_named_executor_request_history.snap",
+        "codex-rs/core/tests/suite/snapshots/all__suite__scenarios__incremental_tools__prediction_fork_mcp_removal.snap",
+        "codex-rs/core/tests/suite/snapshots/all__suite__scenarios__mcp_ema__enterprise_failure_preserves_ordinary_mcp_history.snap",
+        "codex-rs/core/tests/suite/snapshots/all__suite__scenarios__mcp_ema__enterprise_revocation_preserves_history_and_ordinary_tools.snap",
         "codex-rs/core/tests/suite/snapshots/all__suite__scenarios__model_instructions__incremental_model_instructions.snap",
         "codex-rs/core/tests/suite/snapshots/all__suite__scenarios__multi_agent_catalog_parameters.snap",
+        "codex-rs/core/tests/suite/snapshots/all__suite__scenarios__skill_read_installation_recovery_request_history.snap",
         "codex-rs/core/tests/suite/stream_error_allows_next_turn.rs",
         "codex-rs/external-agent-migration/Cargo.toml",
         "codex-rs/external-agent-migration/src/sessions/ledger.rs",
