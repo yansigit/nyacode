@@ -23,7 +23,7 @@ usage() {
     cat <<'EOF'
 Usage: scripts/verify-container.sh [options] [full|fast|run -- command]
 
-  full    fmt, clippy, debug build, nextest, and nyacode --version/--help (default)
+  full    fmt, dependency suites, clippy, debug build, nextest, and CLI smoke checks (default)
   fast    fmt, then clippy and nextest for crates changed since origin/main
   run     run a command in the verification container
 
@@ -137,6 +137,18 @@ run_build() {
     cargo build --locked --workspace --features codex-v8-poc/sandbox --bins --tests --keep-going
 }
 
+run_dependency_tests() {
+    local package
+    for package in aws-config aws-sigv4; do
+        (
+            # Upstream fixtures are relative to the package, and one logging test expects ANSI.
+            cd "$WORKSPACE_ROOT/third_party/rust/$package"
+            env -u NO_COLOR cargo test --locked --all-features \
+                --manifest-path "$PWD/Cargo.toml" -- --test-threads=2
+        )
+    done
+}
+
 run_tests() {
     CODEX_EXEC_PATH="${CARGO_TARGET_DIR}/debug/codex" \
         cargo nextest run --locked --workspace --features codex-v8-poc/sandbox --no-fail-fast --test-threads "${CARGO_BUILD_JOBS}"
@@ -191,6 +203,7 @@ run_inner() {
             phase inputs prepare_v8
             phase sandbox run_sandbox_check
             phase fmt run_fmt
+            phase dependencies run_dependency_tests
             phase clippy run_clippy
             phase build run_build
             phase test run_tests

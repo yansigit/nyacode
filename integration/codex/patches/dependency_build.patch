@@ -374,10 +374,10 @@ index b9a42ac3493ed7c884c06824a1d4cbdcf75dacbc..1b5606772d4907dc474ea72589d260a9
      # Some integration tests spawn DotSlash from a stable system path rather
      # than inheriting the action-local PATH entry.
 diff --git a/.github/blob-size-allowlist.txt b/.github/blob-size-allowlist.txt
-index 27d1c59e87bedc248d78672cd5b9ae0a7d70a577..5e93053eba0ca2ce830bbe0846a7becfadf628e8 100644
+index 27d1c59e87bedc248d78672cd5b9ae0a7d70a577..c72e017848c5d57d89e1a818b333687675853212 100644
 --- a/.github/blob-size-allowlist.txt
 +++ b/.github/blob-size-allowlist.txt
-@@ -5,7 +5,21 @@
+@@ -5,7 +5,23 @@
  MODULE.bazel.lock
  codex-rs/app-server-protocol/schema/json/codex_app_server_protocol.schemas.json
  codex-rs/app-server-protocol/schema/json/codex_app_server_protocol.v2.schemas.json
@@ -395,6 +395,8 @@ index 27d1c59e87bedc248d78672cd5b9ae0a7d70a577..5e93053eba0ca2ce830bbe0846a7becf
 +integration/codex/compatibility/rpc.json
 +inventory/baseline-tree.json
 +inventory/downstream.json
++# Per-file assembly ownership includes the reviewed dependency sources.
++integration/codex/assembly.json
 +# Strict integration patches include generated schemas and vendored binary data.
 +integration/codex/patches/backend_dispatch.patch
 +integration/codex/patches/dependency_override.patch
@@ -1883,7 +1885,7 @@ index 7d3a49405d1f3be9af35d3ac2838dd35303a48b6..bfbdd0c3b991c06a1135f8db5ec79b64
 +  "packageManager": "pnpm@12.11.2+sha512.25a51652a196785af5f28bda6dfe8dc582ebefa4ac1d180221ce1390231c5fb76637822ea4b6e4633ce74acdcb0a77f725af11bad38177fdeddaee818a955cb9"
  }
 diff --git a/codex-rs/Cargo.toml b/codex-rs/Cargo.toml
-index 520b9418ee45a4b86c07e0ac2ef317c5bc077c95..d5d8f469eb3a6612b57d074b9dabfb11b672ade0 100644
+index 520b9418ee45a4b86c07e0ac2ef317c5bc077c95..586fd590f5f402195f0e08f7d01a89e56141e3e5 100644
 --- a/codex-rs/Cargo.toml
 +++ b/codex-rs/Cargo.toml
 @@ -7,6 +7,7 @@ members = [
@@ -1968,7 +1970,7 @@ index 520b9418ee45a4b86c07e0ac2ef317c5bc077c95..d5d8f469eb3a6612b57d074b9dabfb11
  clap = "4"
  clap_complete = "4"
 -clatter = { version = "2.2.0", default-features = false, features = [
-+clatter = { version = "2.3.0", default-features = false, features = [
++clatter = { git = "https://github.com/jmlepisto/clatter", rev = "9a8d15c4f80d5911ca0403aa22e0de99ea59df08", default-features = false, features = [
      "alloc",
      "getrandom",
      "use-25519",
@@ -2271,15 +2273,62 @@ index 520b9418ee45a4b86c07e0ac2ef317c5bc077c95..d5d8f469eb3a6612b57d074b9dabfb11
  
  [workspace.lints]
  rust = {}
-@@ -660,6 +687,8 @@ inherits = "test"
+@@ -660,6 +687,13 @@ inherits = "test"
  opt-level = 0
  
  [patch.crates-io]
++# RUSTSEC-2026-0387: retain until upstream releases adopt fixed dependencies.
++age = { git = "https://github.com/str4d/rage", rev = "b5b68c4f4f7ea5c368bc060f6fe0237549c3a13f" }
++age-core = { git = "https://github.com/str4d/rage", rev = "b5b68c4f4f7ea5c368bc060f6fe0237549c3a13f" }
++aws-config = { path = "../third_party/rust/aws-config" }
++aws-sigv4 = { path = "../third_party/rust/aws-sigv4" }
 +# Remove unmaintained basic-toml until i18n-config publishes its upstream fix.
 +i18n-config = { git = "https://github.com/kellpossible/cargo-i18n", rev = "2ce7b1dfe9a8cc224288bf50cbc2a67a6de863c4" }
  # Uncomment to debug local changes.
  # ratatui = { path = "../../ratatui" }
  crossterm = { git = "https://github.com/openai-oss-forks/crossterm", rev = "ed1cdab335221515706178d68495bba2aed1924f" }
+diff --git a/codex-rs/cli/tests/app_server_daemon/package.rs b/codex-rs/cli/tests/app_server_daemon/package.rs
+index 6c010c59d41e2820ffc3f4b2313679c52913520d..b75803e28cd00a216f373a5e563d0b811cd7520b 100644
+--- a/codex-rs/cli/tests/app_server_daemon/package.rs
++++ b/codex-rs/cli/tests/app_server_daemon/package.rs
+@@ -72,7 +72,10 @@ fn packaged_daemon_launch(action: &str, initial: InitialDaemon) -> Result<()> {
+     }
+     std::fs::write(
+         state.join("settings.json"),
+-        br#"{"shutdownGraceSeconds":0}"#,
++        serde_json::to_vec(&serde_json::json!({
++            "shutdownGraceSeconds": 0,
++            "updater": {"autoUpdateEnabled": action != "bootstrap"}
++        }))?,
+     )?;
+     let cli_before = daemon.codex.canonicalize()?;
+     let result = daemon
+diff --git a/codex-rs/default.nix b/codex-rs/default.nix
+index 6e15faf07d2edd4b04f36a00bb2b886a233f889c..fe4120777297dc884f0213cb83f9907cc7de590a 100644
+--- a/codex-rs/default.nix
++++ b/codex-rs/default.nix
+@@ -18,7 +18,10 @@ rustPlatform.buildRustPackage (_: {
+   inherit version;
+   cargoLock.lockFile = ./Cargo.lock;
+   doCheck = false;
+-  src = ./.;
++  src = lib.cleanSource ../.;
++  postUnpack = ''
++    sourceRoot="$sourceRoot/codex-rs"
++  '';
+ 
+   # Patch the workspace Cargo.toml so that cargo embeds the correct version in
+   # CARGO_PKG_VERSION (which the binary reads via env!("CARGO_PKG_VERSION")).
+@@ -38,6 +41,9 @@ rustPlatform.buildRustPackage (_: {
+   ];
+ 
+   cargoLock.outputHashes = {
++    "age-0.12.1" = "sha256-CNYGypRocOTPj454fLOr0xGA2zFj54PKPEC6opGE9f4=";
++    "age-core-0.12.0" = "sha256-CNYGypRocOTPj454fLOr0xGA2zFj54PKPEC6opGE9f4=";
++    "clatter-3.0.0" = "sha256-y/3o3xcMtdn8YFoYBLa6ac+FnoucSI5NLzdxL3wICf0=";
+     "crossterm-0.29.0" = "sha256-ewiWWQPEU1lSUHzmZTiO5yes5luIaQ9TrvCNnTWhxpE=";
+     "nucleo-0.5.0" = "sha256-Hm4SxtTSBrcWpXrtSqeO0TACbUxq3gizg1zD/6Yw/sI=";
+     "nucleo-matcher-0.3.1" = "sha256-Hm4SxtTSBrcWpXrtSqeO0TACbUxq3gizg1zD/6Yw/sI=";
 diff --git a/codex-rs/hooks/schema/generated/model-request.command.input.schema.json b/codex-rs/hooks/schema/generated/model-request.command.input.schema.json
 index 86bf69b39909e4f47f2771c5f0d7e0ca4f849ac0..66fe109aa7ffe29f40d6e11e04af859a89d1bec7 100644
 --- a/codex-rs/hooks/schema/generated/model-request.command.input.schema.json
@@ -3934,10 +3983,18 @@ index 3b7c34843aaafe4cf26a87b3daf5806195d4bb0e..04116e29d2281b8e10ab398b411da418
        ]
      },
 diff --git a/scripts/format.py b/scripts/format.py
-index 9b408e1c7c8ac0b9f5d25697775dc9a846adeaa4..cd2ffcb6c1bdaa871444c5d1e3902fee2b61985b 100644
+index 9b408e1c7c8ac0b9f5d25697775dc9a846adeaa4..5a538ad5815fb6eb19c9ae3519b45547707d4f2b 100644
 --- a/scripts/format.py
 +++ b/scripts/format.py
-@@ -41,9 +41,40 @@ def just_formatter_group(*, check: bool) -> FormatterGroup:
+@@ -2,6 +2,7 @@
+ """Format repository sources or check that they are already formatted."""
+ 
+ import argparse
++import json
+ import os
+ import shlex
+ import subprocess
+@@ -41,11 +42,77 @@ def just_formatter_group(*, check: bool) -> FormatterGroup:
  
  
  def rust_formatter_group(*, check: bool) -> FormatterGroup:
@@ -3959,25 +4016,107 @@ index 9b408e1c7c8ac0b9f5d25697775dc9a846adeaa4..cd2ffcb6c1bdaa871444c5d1e3902fee
 +    ).split(b"\0")
 +    rust_files = sorted(
 +        {
-+            os.path.relpath(REPO_ROOT / os.fsdecode(path), REPO_ROOT / "codex-rs")
++            str(REPO_ROOT / os.fsdecode(path))
 +            for path in paths
-+            if path and (REPO_ROOT / os.fsdecode(path)).is_file()
++            if path
++            and not os.fsdecode(path).startswith(
++                (
++                    ".engine/",
++                    "codex-rs/",
++                    "third_party/rust/aws-config/",
++                    "third_party/rust/aws-sigv4/",
++                )
++            )
++            and (REPO_ROOT / os.fsdecode(path)).is_file()
 +        }
 +    )
++    toolchain = json.loads((REPO_ROOT / "engine.lock").read_text())["toolchain"]
 +    args = [
++        "rustup",
++        "run",
++        toolchain,
 +        "rustfmt",
 +        "--edition",
 +        "2024",
-+        "--config-path",
-+        str(REPO_ROOT / "codex-rs/rustfmt.toml"),
 +        "--config",
 +        "imports_granularity=Item,skip_children=true",
 +    ]
      if check:
          args.append("--check")
+-    command = Command(tuple(args), REPO_ROOT / "codex-rs")
+-    return FormatterGroup("Rust", (command,))
 +    args.extend(rust_files)
-     command = Command(tuple(args), REPO_ROOT / "codex-rs")
-     return FormatterGroup("Rust", (command,))
++    commands = [Command(tuple(args), REPO_ROOT)]
++    # Preserve canonical upstream formatting; check only our two adapted files
++    # using the upstream edition and import style.
++    adapted_files = [
++        str(REPO_ROOT / path)
++        for path in (
++            "third_party/rust/aws-config/src/login/dpop.rs",
++            "third_party/rust/aws-sigv4/src/sign/v4a.rs",
++        )
++        if (REPO_ROOT / path).is_file()
++    ]
++    if adapted_files:
++        upstream_args = [
++            "rustup",
++            "run",
++            toolchain,
++            "rustfmt",
++            "--edition",
++            "2021",
++            "--config",
++            "skip_children=true",
++        ]
++        if check:
++            upstream_args.append("--check")
++        commands.append(Command(tuple(upstream_args + adapted_files), REPO_ROOT))
++    return FormatterGroup("Rust", tuple(commands))
+ 
+ 
+ def buildifier_formatter_group(*, check: bool) -> FormatterGroup:
+@@ -116,10 +183,40 @@ def python_sdk_formatter_group(*, check: bool) -> FormatterGroup:
+ 
+ 
+ def python_scripts_formatter_group(*, check: bool) -> FormatterGroup:
+-    args = ["uv", "run", "--frozen", "--project", "scripts", "ruff", "format"]
++    args = [
++        "uv",
++        "run",
++        "--frozen",
++        "--project",
++        "scripts",
++        "ruff",
++        "format",
++        "--force-exclude",
++    ]
+     if check:
+         args.append("--check")
+-    args.append(".")
++    paths = subprocess.check_output(
++        [
++            "git",
++            "ls-files",
++            "-z",
++            "--cached",
++            "--others",
++            "--exclude-standard",
++            "--",
++            "*.py",
++        ],
++        cwd=REPO_ROOT,
++    ).split(b"\0")
++    args.extend(
++        sorted(
++            {
++                os.fsdecode(path)
++                for path in paths
++                if path and (REPO_ROOT / os.fsdecode(path)).is_file()
++            }
++        )
++    )
+     return FormatterGroup("Python scripts", (Command(tuple(args)),))
+ 
  
 diff --git a/scripts/install/install.ps1 b/scripts/install/install.ps1
 index e9d0bc80574f8dd33174d883c0ec69fe2eefa50c..61109f59a15a87da3fc9bf58d3023677d88e4d41 100644
