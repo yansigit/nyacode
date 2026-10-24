@@ -9374,7 +9374,7 @@ index dccb70d5766e43e2d1418f42a9485eb75e117146..eb4255ab8e8858b42549b51bceb6c6d4
              transcript_view: Default::default(),
              last_rendered_history_tail: None,
 diff --git a/codex-rs/tui/src/app/tests/active_reconnect_tests.rs b/codex-rs/tui/src/app/tests/active_reconnect_tests.rs
-index f102e25b47ab99b4871792797e86da2a51e07cbb..fe54039a373eb91b078615e32876ebdce7d1a195 100644
+index f102e25b47ab99b4871792797e86da2a51e07cbb..de6e329fb62e971bf290f6f9ddc36466afebdb01 100644
 --- a/codex-rs/tui/src/app/tests/active_reconnect_tests.rs
 +++ b/codex-rs/tui/src/app/tests/active_reconnect_tests.rs
 @@ -416,13 +416,13 @@ async fn reconnect_restores_history_permissions_and_resumes_unsent_input() -> Re
@@ -9393,15 +9393,23 @@ index f102e25b47ab99b4871792797e86da2a51e07cbb..fe54039a373eb91b078615e32876ebdc
  "###);
          } else if edit_offline {
              assert!(notices.contains("unacknowledged prompt"));
-@@ -729,7 +729,7 @@ async fn reconnect_allows_slow_hydration_but_bounds_a_stalled_server() -> Result
-                 &mut session,
-                 &mut events,
-                 result?,
+@@ -724,14 +724,8 @@ async fn reconnect_allows_slow_hydration_but_bounds_a_stalled_server() -> Result
+             app.begin_reconnect();
+             let mut session = crate::start_embedded_app_server_for_picker(&app.config).await?;
+             let mut tui = crate::tui::test_support::make_test_tui()?;
+-            app.finish_reconnect(
+-                &mut tui,
+-                &mut session,
+-                &mut events,
+-                result?,
 -                CODEX_CLI_VERSION,
-+                "2.1.0",
-             )
-             .await?;
+-            )
+-            .await?;
++            app.finish_reconnect(&mut tui, &mut session, &mut events, result?, "2.1.0")
++                .await?;
              assert!(app.thread_unavailable(id));
+             app.handle_tui_event(
+                 &mut tui,
 diff --git a/codex-rs/tui/src/app/tests/background_exit_tests.rs b/codex-rs/tui/src/app/tests/background_exit_tests.rs
 index 3d2c8066de2ad2456b720930d74d741405d969a0..2a6dba626f661b892d4206c3bd80bf15e26a5f41 100644
 --- a/codex-rs/tui/src/app/tests/background_exit_tests.rs
@@ -9498,7 +9506,7 @@ index 7151dafd25bb7c4cb873e23c96bb4c1f64362e9f..09a7cbde7a38469fad11ca011c73914c
        ⌃x then · ⌃t open transcript · ⌃u interrupt turn · esc cancel
      "
 diff --git a/codex-rs/tui/src/app/tests/navigation_reconnect_tests.rs b/codex-rs/tui/src/app/tests/navigation_reconnect_tests.rs
-index d34ee7d38d38cb58a74ff5e19affcd404b642fa7..aa241d94e40f6c6dabdcd1cb49cd0dadf14874db 100644
+index d34ee7d38d38cb58a74ff5e19affcd404b642fa7..94ec709544a075901cf18a8d04cb500406945624 100644
 --- a/codex-rs/tui/src/app/tests/navigation_reconnect_tests.rs
 +++ b/codex-rs/tui/src/app/tests/navigation_reconnect_tests.rs
 @@ -268,7 +268,7 @@ async fn reconnect_daemon_command_center_after_socket_replacement_without_a_conv
@@ -9510,16 +9518,24 @@ index d34ee7d38d38cb58a74ff5e19affcd404b642fa7..aa241d94e40f6c6dabdcd1cb49cd0dad
                  "Waiting for active turns.".into(),
              );
          }
-@@ -329,7 +329,7 @@ async fn reconnect_daemon_command_center_after_socket_replacement_without_a_conv
-             &mut session,
-             &mut events,
-             connected,
--            CODEX_CLI_VERSION,
-+            "2.1.0",
+@@ -324,14 +324,8 @@ async fn reconnect_daemon_command_center_after_socket_replacement_without_a_conv
+             app.reconnect.presentation,
          )
          .await?;
+-        app.finish_reconnect(
+-            &mut tui,
+-            &mut session,
+-            &mut events,
+-            connected,
+-            CODEX_CLI_VERSION,
+-        )
+-        .await?;
++        app.finish_reconnect(&mut tui, &mut session, &mut events, connected, "2.1.0")
++            .await?;
          if interrupted_setup {
-@@ -341,7 +341,7 @@ async fn reconnect_daemon_command_center_after_socket_replacement_without_a_conv
+             assert!(app.windows_sandbox.pending_setup.is_none());
+             assert!(app.windows_sandbox.setup_started_at.is_none());
+@@ -341,7 +335,7 @@ async fn reconnect_daemon_command_center_after_socket_replacement_without_a_conv
                  if let AppEvent::InsertHistoryCell(cell) = &event {
                      let rendered = lines_to_single_string(&cell.display_lines(/*width*/ 100));
                      if rendered.contains("Windows sandbox setup was interrupted") {

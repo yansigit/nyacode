@@ -41390,6 +41390,33 @@
       "destination": {
         "kind": "patch",
         "patch": "integration/codex/patches/sdk_protocol.patch",
+        "path": "sdk/python/docs/api-reference.md"
+      },
+      "git_status": "M",
+      "mode_changed": false,
+      "owner": "downstream-sdk",
+      "path": "sdk/python/docs/api-reference.md",
+      "purpose": "sdk_protocol",
+      "regression_groups": [
+        "sdk_protocol"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "sdk/python/docs/api-reference.md",
+        "sha256": "230c901d1515f503cb1e7909e0df9337e0e251265c97d104b5892597c7323543"
+      },
+      "upstream_source": {
+        "mode": "100644",
+        "path": "sdk/python/docs/api-reference.md",
+        "sha256": "690676cdae341212cfe4232a2c50c3426ba13995c000c68e7dd0647874bafffc"
+      }
+    },
+    {
+      "artifact": "source",
+      "change": "modified",
+      "destination": {
+        "kind": "patch",
+        "patch": "integration/codex/patches/sdk_protocol.patch",
         "path": "sdk/python/docs/faq.md"
       },
       "git_status": "M",
@@ -41463,6 +41490,60 @@
         "mode": "100755",
         "path": "sdk/python/scripts/update_sdk_artifacts.py",
         "sha256": "40cf7bc13d027b133c4146cf5cef6ee1061f08d98b1a71d6359c8e3d77e754e5"
+      }
+    },
+    {
+      "artifact": "source",
+      "change": "modified",
+      "destination": {
+        "kind": "patch",
+        "patch": "integration/codex/patches/sdk_protocol.patch",
+        "path": "sdk/python/src/openai_codex/_runtime_requirements.py"
+      },
+      "git_status": "M",
+      "mode_changed": false,
+      "owner": "downstream-sdk",
+      "path": "sdk/python/src/openai_codex/_runtime_requirements.py",
+      "purpose": "sdk_protocol",
+      "regression_groups": [
+        "sdk_protocol"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "sdk/python/src/openai_codex/_runtime_requirements.py",
+        "sha256": "3cce043ef54061135b30e257ad79c3e4e33170c7172e47396bdb51473824d4b8"
+      },
+      "upstream_source": {
+        "mode": "100644",
+        "path": "sdk/python/src/openai_codex/_runtime_requirements.py",
+        "sha256": "dab856ff4ff4a02c567b3f362c5b1298b0cdeaed6d2a84384c5dc87765447d28"
+      }
+    },
+    {
+      "artifact": "source",
+      "change": "modified",
+      "destination": {
+        "kind": "patch",
+        "patch": "integration/codex/patches/sdk_protocol.patch",
+        "path": "sdk/python/src/openai_codex/client.py"
+      },
+      "git_status": "M",
+      "mode_changed": false,
+      "owner": "downstream-sdk",
+      "path": "sdk/python/src/openai_codex/client.py",
+      "purpose": "sdk_protocol",
+      "regression_groups": [
+        "sdk_protocol"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "sdk/python/src/openai_codex/client.py",
+        "sha256": "2c5df7f52fc4e04a52509047cb772c3d2bd8a6fa459ae57989af49f621e84fa0"
+      },
+      "upstream_source": {
+        "mode": "100644",
+        "path": "sdk/python/src/openai_codex/client.py",
+        "sha256": "8452afbd8148ea212c94e8a6727468054b175acb0daf95002c84b66b604d05a6"
       }
     },
     {
@@ -41544,6 +41625,33 @@
         "mode": "100644",
         "path": "sdk/python/tests/test_artifact_workflow_and_binaries.py",
         "sha256": "5e63ced0351587e7658d2e1c0cc9bac492d1e38d98dfbc20c32a8d1bcc2276f6"
+      }
+    },
+    {
+      "artifact": "source",
+      "change": "modified",
+      "destination": {
+        "kind": "patch",
+        "patch": "integration/codex/patches/sdk_protocol.patch",
+        "path": "sdk/python/tests/test_client_rpc_methods.py"
+      },
+      "git_status": "M",
+      "mode_changed": false,
+      "owner": "downstream-sdk",
+      "path": "sdk/python/tests/test_client_rpc_methods.py",
+      "purpose": "sdk_protocol",
+      "regression_groups": [
+        "sdk_protocol"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "sdk/python/tests/test_client_rpc_methods.py",
+        "sha256": "8ef9f5dce6113e69b0d3fc2f78e191e758133968c6077978fb5becc0f970aa89"
+      },
+      "upstream_source": {
+        "mode": "100644",
+        "path": "sdk/python/tests/test_client_rpc_methods.py",
+        "sha256": "5ffb5477b1afb871948bbe7cb8527f9d7faf1d23a32ab2860ac158a602432a2d"
       }
     },
     {
