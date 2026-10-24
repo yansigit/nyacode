@@ -25995,6 +25995,33 @@
       "change": "modified",
       "destination": {
         "kind": "patch",
+        "patch": "integration/codex/patches/product_registration_config_branding.patch",
+        "path": "codex-rs/tui/src/app/snapshots/codex_tui__app__thread_title__tests__automatic_thread_title_pending.snap"
+      },
+      "git_status": "M",
+      "mode_changed": false,
+      "owner": "codex-rs",
+      "path": "codex-rs/tui/src/app/snapshots/codex_tui__app__thread_title__tests__automatic_thread_title_pending.snap",
+      "purpose": "product_registration_config_branding",
+      "regression_groups": [
+        "product_registration_config_branding"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "codex-rs/tui/src/app/snapshots/codex_tui__app__thread_title__tests__automatic_thread_title_pending.snap",
+        "sha256": "f6194e40420ea3d917d6088e9999f66d0f8102a5d7cc7960d87eb8cafc8e8003"
+      },
+      "upstream_source": {
+        "mode": "100644",
+        "path": "codex-rs/tui/src/app/snapshots/codex_tui__app__thread_title__tests__automatic_thread_title_pending.snap",
+        "sha256": "d42a77526dee315adad233bb4ea80963319a8e2409c59e193a4330d4bb35795a"
+      }
+    },
+    {
+      "artifact": "generated",
+      "change": "modified",
+      "destination": {
+        "kind": "patch",
         "patch": "integration/codex/patches/thread_model_child_routing.patch",
         "path": "codex-rs/tui/src/app/snapshots/codex_tui__app__thread_title__tests__manual_rename_cancels_thread_title.snap"
       },
@@ -27095,6 +27122,33 @@
         "mode": "100644",
         "path": "codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__realtime_requests__voice_replay_reconciles_matching_captions.snap",
         "sha256": "fa1c467c950e5a2686a60a141e23cab120639188b0654f5141150329731511cf"
+      }
+    },
+    {
+      "artifact": "generated",
+      "change": "modified",
+      "destination": {
+        "kind": "patch",
+        "patch": "integration/codex/patches/product_registration_config_branding.patch",
+        "path": "codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__session_lifecycle_requests__new_session_tests__widget_replacement_preserves_mention_usage_with_history_disabled.snap"
+      },
+      "git_status": "M",
+      "mode_changed": false,
+      "owner": "codex-rs",
+      "path": "codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__session_lifecycle_requests__new_session_tests__widget_replacement_preserves_mention_usage_with_history_disabled.snap",
+      "purpose": "product_registration_config_branding",
+      "regression_groups": [
+        "product_registration_config_branding"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__session_lifecycle_requests__new_session_tests__widget_replacement_preserves_mention_usage_with_history_disabled.snap",
+        "sha256": "3a84e16d2d9409dd76d5ee97eb72477e052b667b75a3e5a5993316bd0d164e31"
+      },
+      "upstream_source": {
+        "mode": "100644",
+        "path": "codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__session_lifecycle_requests__new_session_tests__widget_replacement_preserves_mention_usage_with_history_disabled.snap",
+        "sha256": "b5127f37d3547b2bbc9233aa6d1f81de96d5ea686d4ad7654919f79c55b5b872"
       }
     },
     {
@@ -29602,6 +29656,33 @@
         "mode": "100644",
         "path": "codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__experimental_features_view__tests__experimental_features_unavailable.snap",
         "sha256": "e49036305f3b6a36e246d43d040ea057bc02cb268b3e5a9cad8d987ee1cf2a08"
+      }
+    },
+    {
+      "artifact": "generated",
+      "change": "modified",
+      "destination": {
+        "kind": "patch",
+        "patch": "integration/codex/patches/product_registration_config_branding.patch",
+        "path": "codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__hooks_browser_view__tests__hooks_browser_model_requests.snap"
+      },
+      "git_status": "M",
+      "mode_changed": false,
+      "owner": "codex-rs",
+      "path": "codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__hooks_browser_view__tests__hooks_browser_model_requests.snap",
+      "purpose": "product_registration_config_branding",
+      "regression_groups": [
+        "product_registration_config_branding"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__hooks_browser_view__tests__hooks_browser_model_requests.snap",
+        "sha256": "7ea059880f43d7628fd2ef45b5b6c31f94b99230126dcbb26d40ae936543e7b5"
+      },
+      "upstream_source": {
+        "mode": "100644",
+        "path": "codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__hooks_browser_view__tests__hooks_browser_model_requests.snap",
+        "sha256": "2f958c37f3322abdd4b34a20683199b3700ca53af0e1914ef3c3f5adab191bb1"
       }
     },
     {

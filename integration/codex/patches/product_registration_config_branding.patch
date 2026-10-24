@@ -3277,6 +3277,44 @@ index bca03e34f7cfa95bfeeb37779b75cf34f9476231..9351cae6bcec1ee9b54f783fb7d61424
              ))
          });
      }
+diff --git a/codex-rs/tui/src/app/snapshots/codex_tui__app__thread_title__tests__automatic_thread_title_pending.snap b/codex-rs/tui/src/app/snapshots/codex_tui__app__thread_title__tests__automatic_thread_title_pending.snap
+index be3bc665c5f12e081b51ed03421ef6c9ae27b180..2680425c4cc1cf2b54674d5a6d2fecd2613dbb96 100644
+--- a/codex-rs/tui/src/app/snapshots/codex_tui__app__thread_title__tests__automatic_thread_title_pending.snap
++++ b/codex-rs/tui/src/app/snapshots/codex_tui__app__thread_title__tests__automatic_thread_title_pending.snap
+@@ -5,6 +5,6 @@ expression: "normalize_snapshot_paths(format!(\"terminal title: {}\\nfooter:\\n{
+ ---
+ terminal title: project
+ footer:
+-› Ask Codex to do anything
++› Ask Nyacode to do anything
+ 
+   gpt-5.2 default · /tmp/project
+diff --git a/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__session_lifecycle_requests__new_session_tests__widget_replacement_preserves_mention_usage_with_history_disabled.snap b/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__session_lifecycle_requests__new_session_tests__widget_replacement_preserves_mention_usage_with_history_disabled.snap
+index 6a47bf2b72c15db36e55aa7f626b9ad94828bbbd..0a15c6e944211e40c5b518f031f33bfb71fb1f36 100644
+--- a/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__session_lifecycle_requests__new_session_tests__widget_replacement_preserves_mention_usage_with_history_disabled.snap
++++ b/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__session_lifecycle_requests__new_session_tests__widget_replacement_preserves_mention_usage_with_history_disabled.snap
+@@ -2,7 +2,7 @@
+ source: tui/src/app/tests/new_session_tests.rs
+ expression: "normalize_snapshot_paths(render_bottom_popup(&app.chat_widget, 80))"
+ ---
+-  >_ OpenAI Codex (v0.0.0)
++  >_ Nyacode (v0.0.0)
+      /tmp/project
+ 
+ 
+diff --git a/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__hooks_browser_view__tests__hooks_browser_model_requests.snap b/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__hooks_browser_view__tests__hooks_browser_model_requests.snap
+index ee8751bf865a291476c04ad40f5721deac0cd220..0a63c2c6a28009133c3981722df44ce9037b9645 100644
+--- a/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__hooks_browser_view__tests__hooks_browser_model_requests.snap
++++ b/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__hooks_browser_view__tests__hooks_browser_model_requests.snap
+@@ -12,7 +12,7 @@ expression: "render_lines(&view, 112)"
+   UserPromptSubmit      0           0           When the user submits a prompt                                  
+   SubagentStart         0           0           When a subagent is created                                      
+   SubagentStop          0           0           Right before a subagent ends its turn                           
+-  Stop                  0           0           Right before Codex ends its turn                                
++  Stop                  0           0           Right before Nyacode ends its turn                              
+   Interrupt             0           0           Right before an interrupted turn is aborted                     
+   PreModelRequest       0           0           Before a model request                                          
+ › PostModelRequest      0           0           After a model request, including failures                       
 diff --git a/codex-rs/tui/src/onboarding/auth.rs b/codex-rs/tui/src/onboarding/auth.rs
 index 2cdc98ca68e47667e84864cbefab3664bffa842f..af0f3907494b699240398ffc094601895c194446 100644
 --- a/codex-rs/tui/src/onboarding/auth.rs
