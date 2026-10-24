@@ -116,6 +116,13 @@
       "minimum_tests": 1
     },
     {
+      "name": "core-native-model-hook-boundary",
+      "packages": ["codex-core"],
+      "test_target": "all",
+      "filter": "native_sync_post_model_hook_fails_before_inference_or_tool_dispatch",
+      "minimum_tests": 1
+    },
+    {
       "name": "app-server-account-and-fork",
       "packages": ["codex-app-server"],
       "test_target": "all",
@@ -363,6 +370,7 @@
         "thread-config",
         "core-child-provider-routing",
         "core-child-provider-reload",
+        "core-native-model-hook-boundary",
         "app-server-account-and-fork"
       ],
       "minimum_tests": 1

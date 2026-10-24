@@ -8,3 +8,8 @@ allowed. Enum or exclusive-union changes, removed methods, changed fields or des
 new required fields, and edits to existing migrations or provider storage
 fixtures require a compatibility review. New migrations are allowed. Semantic
 behavior is also checked by the provider, Chat recovery, and SDK suites.
+
+The reviewed additions for upstream `rust-v0.164.0` are recorded in
+[`inventory/upstream-0.164-contract-review.json`](../../../inventory/upstream-0.164-contract-review.json).
+They add the `feedback/save` request, plan and hook enum values, and application
+storage types. Existing storage fixtures were not changed.

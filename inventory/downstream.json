@@ -283,60 +283,6 @@
       "destination": {
         "kind": "patch",
         "patch": "integration/codex/patches/dependency_build.patch",
-        "path": ".github/actions/build-bazel-package-binaries/action.yml"
-      },
-      "git_status": "M",
-      "mode_changed": false,
-      "owner": "downstream-build",
-      "path": ".github/actions/build-bazel-package-binaries/action.yml",
-      "purpose": "dependency_build",
-      "regression_groups": [
-        "dependency_build"
-      ],
-      "source": {
-        "mode": "100644",
-        "path": ".github/actions/build-bazel-package-binaries/action.yml",
-        "sha256": "375ca4d8c5e0a3fc864466667661feeb9b58db349166c0309bb82f113e3c2669"
-      },
-      "upstream_source": {
-        "mode": "100644",
-        "path": ".github/actions/build-bazel-package-binaries/action.yml",
-        "sha256": "5bac07a7d7b293f778eb8cd8311764b0af58382a0443dbe7418d47a88e05fb7e"
-      }
-    },
-    {
-      "artifact": "source",
-      "change": "modified",
-      "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/dependency_build.patch",
-        "path": ".github/actions/build-cargo-package-binaries/action.yml"
-      },
-      "git_status": "M",
-      "mode_changed": false,
-      "owner": "downstream-build",
-      "path": ".github/actions/build-cargo-package-binaries/action.yml",
-      "purpose": "dependency_build",
-      "regression_groups": [
-        "dependency_build"
-      ],
-      "source": {
-        "mode": "100644",
-        "path": ".github/actions/build-cargo-package-binaries/action.yml",
-        "sha256": "a6ec13f707199311d289ffe80b836179c25c9f648b837ef1722499f948d0df68"
-      },
-      "upstream_source": {
-        "mode": "100644",
-        "path": ".github/actions/build-cargo-package-binaries/action.yml",
-        "sha256": "74f18fd40804f4af42fbebdc5f529eeaeaae1ac7426d08b9f947c416f14dd1a7"
-      }
-    },
-    {
-      "artifact": "source",
-      "change": "modified",
-      "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/dependency_build.patch",
         "path": ".github/actions/build-codex-packages/action.yml"
       },
       "git_status": "M",
@@ -876,33 +822,6 @@
       "destination": {
         "kind": "patch",
         "patch": "integration/codex/patches/dependency_build.patch",
-        "path": ".github/workflows/cargo-deny.yml"
-      },
-      "git_status": "M",
-      "mode_changed": false,
-      "owner": "downstream-build",
-      "path": ".github/workflows/cargo-deny.yml",
-      "purpose": "dependency_build",
-      "regression_groups": [
-        "dependency_build"
-      ],
-      "source": {
-        "mode": "100644",
-        "path": ".github/workflows/cargo-deny.yml",
-        "sha256": "aaeb7399b1fe55a665b95e86497480546337909a1f26dfdec32a6a570556ee40"
-      },
-      "upstream_source": {
-        "mode": "100644",
-        "path": ".github/workflows/cargo-deny.yml",
-        "sha256": "9be4532baa0bc7a8f84506f073690ddd844434ab820b59b1eade686744811b4b"
-      }
-    },
-    {
-      "artifact": "source",
-      "change": "modified",
-      "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/dependency_build.patch",
         "path": ".github/workflows/codespell.yml"
       },
       "git_status": "M",
@@ -1215,87 +1134,6 @@
       "destination": {
         "kind": "patch",
         "patch": "integration/codex/patches/dependency_build.patch",
-        "path": ".github/workflows/rust-ci-full-nextest-platform.yml"
-      },
-      "git_status": "M",
-      "mode_changed": false,
-      "owner": "downstream-build",
-      "path": ".github/workflows/rust-ci-full-nextest-platform.yml",
-      "purpose": "dependency_build",
-      "regression_groups": [
-        "dependency_build"
-      ],
-      "source": {
-        "mode": "100644",
-        "path": ".github/workflows/rust-ci-full-nextest-platform.yml",
-        "sha256": "4362d6396b9b83e535c26d26d3a6069480dfc9dc286a8ddffc6a69d17bd2b619"
-      },
-      "upstream_source": {
-        "mode": "100644",
-        "path": ".github/workflows/rust-ci-full-nextest-platform.yml",
-        "sha256": "167d414cb6ec8655cf4013644273f60d29cd5a8baf1172b88d1c302ba4e89a3d"
-      }
-    },
-    {
-      "artifact": "source",
-      "change": "modified",
-      "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/dependency_build.patch",
-        "path": ".github/workflows/rust-ci-full.yml"
-      },
-      "git_status": "M",
-      "mode_changed": false,
-      "owner": "downstream-build",
-      "path": ".github/workflows/rust-ci-full.yml",
-      "purpose": "dependency_build",
-      "regression_groups": [
-        "dependency_build"
-      ],
-      "source": {
-        "mode": "100644",
-        "path": ".github/workflows/rust-ci-full.yml",
-        "sha256": "fc93a3b12b173a6b84a2ee3c8ccb85c4ee72850b39e43eefe534ed613777abc5"
-      },
-      "upstream_source": {
-        "mode": "100644",
-        "path": ".github/workflows/rust-ci-full.yml",
-        "sha256": "0b5516edda071b97451f193e637cf4bb2009b6a235e9d23ca652d449081dfac9"
-      }
-    },
-    {
-      "artifact": "source",
-      "change": "modified",
-      "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/dependency_build.patch",
-        "path": ".github/workflows/rust-ci.yml"
-      },
-      "git_status": "M",
-      "mode_changed": false,
-      "owner": "downstream-build",
-      "path": ".github/workflows/rust-ci.yml",
-      "purpose": "dependency_build",
-      "regression_groups": [
-        "dependency_build"
-      ],
-      "source": {
-        "mode": "100644",
-        "path": ".github/workflows/rust-ci.yml",
-        "sha256": "a0fca43d3b17d7f8aee111f0287025729bc0023bc48d2735add29f1ba5a80bb0"
-      },
-      "upstream_source": {
-        "mode": "100644",
-        "path": ".github/workflows/rust-ci.yml",
-        "sha256": "c05e33c262c930fb9c1ba0774741180147a2c550b8ab74cb187a008bd9dfb7dc"
-      }
-    },
-    {
-      "artifact": "source",
-      "change": "modified",
-      "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/dependency_build.patch",
         "path": ".github/workflows/rust-release-argument-comment-lint.yml"
       },
       "git_status": "M",
@@ -1350,87 +1188,6 @@
       "destination": {
         "kind": "patch",
         "patch": "integration/codex/patches/dependency_build.patch",
-        "path": ".github/workflows/rust-release-windows.yml"
-      },
-      "git_status": "M",
-      "mode_changed": false,
-      "owner": "downstream-build",
-      "path": ".github/workflows/rust-release-windows.yml",
-      "purpose": "dependency_build",
-      "regression_groups": [
-        "dependency_build"
-      ],
-      "source": {
-        "mode": "100644",
-        "path": ".github/workflows/rust-release-windows.yml",
-        "sha256": "e16558b4984894e939064d684110e87649e3255c470ab0341e3d5526c614eb46"
-      },
-      "upstream_source": {
-        "mode": "100644",
-        "path": ".github/workflows/rust-release-windows.yml",
-        "sha256": "26a4833a4a9b0eb31a8fe394f784e3a32b1e409f232781316eb876dbe396c7b9"
-      }
-    },
-    {
-      "artifact": "source",
-      "change": "modified",
-      "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/dependency_build.patch",
-        "path": ".github/workflows/rust-release.yml"
-      },
-      "git_status": "M",
-      "mode_changed": false,
-      "owner": "downstream-build",
-      "path": ".github/workflows/rust-release.yml",
-      "purpose": "dependency_build",
-      "regression_groups": [
-        "dependency_build"
-      ],
-      "source": {
-        "mode": "100644",
-        "path": ".github/workflows/rust-release.yml",
-        "sha256": "6beb22384caf3e8e05fc153827041d035aa24f18b344e062de3127d8780cbcfd"
-      },
-      "upstream_source": {
-        "mode": "100644",
-        "path": ".github/workflows/rust-release.yml",
-        "sha256": "f0ec1861688535015b2245f3ceb8c465481757e3cd63558538282fcd3a81d673"
-      }
-    },
-    {
-      "artifact": "source",
-      "change": "modified",
-      "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/dependency_build.patch",
-        "path": ".github/workflows/rusty-v8-release.yml"
-      },
-      "git_status": "M",
-      "mode_changed": false,
-      "owner": "downstream-build",
-      "path": ".github/workflows/rusty-v8-release.yml",
-      "purpose": "dependency_build",
-      "regression_groups": [
-        "dependency_build"
-      ],
-      "source": {
-        "mode": "100644",
-        "path": ".github/workflows/rusty-v8-release.yml",
-        "sha256": "12f38d7e88bee0c21d9ad4a66adc746c4106864a6078dc4b7017e8ef86746e98"
-      },
-      "upstream_source": {
-        "mode": "100644",
-        "path": ".github/workflows/rusty-v8-release.yml",
-        "sha256": "6587433841d1b50fb08f4135704a014b501f097b07e59b5bf3d5b8b19b2fc488"
-      }
-    },
-    {
-      "artifact": "source",
-      "change": "modified",
-      "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/dependency_build.patch",
         "path": ".github/workflows/sdk.yml"
       },
       "git_status": "M",
@@ -1450,33 +1207,6 @@
         "mode": "100644",
         "path": ".github/workflows/sdk.yml",
         "sha256": "dd7d2b266dc56cb8a7b7cbb69e2c80f8ff512f03aa5767e18049ed26b45ee9d0"
-      }
-    },
-    {
-      "artifact": "source",
-      "change": "modified",
-      "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/dependency_build.patch",
-        "path": ".github/workflows/v8-canary.yml"
-      },
-      "git_status": "M",
-      "mode_changed": false,
-      "owner": "downstream-build",
-      "path": ".github/workflows/v8-canary.yml",
-      "purpose": "dependency_build",
-      "regression_groups": [
-        "dependency_build"
-      ],
-      "source": {
-        "mode": "100644",
-        "path": ".github/workflows/v8-canary.yml",
-        "sha256": "342dfff2e021461e397be04f4b22144559bcdf1c0a013ed195dd935d11e21e23"
-      },
-      "upstream_source": {
-        "mode": "100644",
-        "path": ".github/workflows/v8-canary.yml",
-        "sha256": "3f67f8b5519b5a6d61294dbfa2f5ec9009dec8f9fa85c153a1d3ebc173994931"
       }
     },
     {
@@ -3477,6 +3207,33 @@
         "mode": "100644",
         "path": "codex-rs/app-server-protocol/schema/json/v2/ExternalAgentConfigImportParams.json",
         "sha256": "6b8d0a8fbd5a7ddd455ec0dea6d1b578f56841480c8a5fffbfcd045db79458ee"
+      }
+    },
+    {
+      "artifact": "generated",
+      "change": "modified",
+      "destination": {
+        "kind": "patch",
+        "patch": "integration/codex/patches/sdk_protocol.patch",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/FeedbackSaveParams.json"
+      },
+      "git_status": "M",
+      "mode_changed": false,
+      "owner": "downstream-sdk",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/FeedbackSaveParams.json",
+      "purpose": "sdk_protocol",
+      "regression_groups": [
+        "sdk_protocol"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/FeedbackSaveParams.json",
+        "sha256": "a62289184ed4c569249906d75b35a52e13bfa3ff3d884adc99243d1ba252c498"
+      },
+      "upstream_source": {
+        "mode": "100644",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/FeedbackSaveParams.json",
+        "sha256": "1c2cb8b988b832b50db4705af4d234da50a5d3f1377384dd638563da9275bfee"
       }
     },
     {
@@ -17723,6 +17480,33 @@
       "change": "modified",
       "destination": {
         "kind": "patch",
+        "patch": "integration/codex/patches/thread_model_child_routing.patch",
+        "path": "codex-rs/core/tests/suite/hooks.rs"
+      },
+      "git_status": "M",
+      "mode_changed": false,
+      "owner": "codex-rs",
+      "path": "codex-rs/core/tests/suite/hooks.rs",
+      "purpose": "thread_model_child_routing",
+      "regression_groups": [
+        "thread_model_child_routing"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "codex-rs/core/tests/suite/hooks.rs",
+        "sha256": "39fd7b2125ba1162aa3624bb5d2852df30a4f28cd2ae11db74507d83b6099971"
+      },
+      "upstream_source": {
+        "mode": "100644",
+        "path": "codex-rs/core/tests/suite/hooks.rs",
+        "sha256": "28509519e6d237712cb418c5893fec72e90d741e74cb9467a4c0d624185b5f07"
+      }
+    },
+    {
+      "artifact": "source",
+      "change": "modified",
+      "destination": {
+        "kind": "patch",
         "patch": "integration/codex/patches/backend_dispatch.patch",
         "path": "codex-rs/core/tests/suite/mod.rs"
       },
@@ -17797,33 +17581,6 @@
         "mode": "100644",
         "path": "codex-rs/core/tests/suite/realtime_conversation.rs",
         "sha256": "a5247fc39613f6fcf54c58a1da35655d35ed27187d8e7f5969ab71766637ca11"
-      }
-    },
-    {
-      "artifact": "source",
-      "change": "modified",
-      "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/backend_dispatch.patch",
-        "path": "codex-rs/core/tests/suite/scenarios.rs"
-      },
-      "git_status": "M",
-      "mode_changed": false,
-      "owner": "codex-rs",
-      "path": "codex-rs/core/tests/suite/scenarios.rs",
-      "purpose": "backend_dispatch",
-      "regression_groups": [
-        "backend_dispatch"
-      ],
-      "source": {
-        "mode": "100644",
-        "path": "codex-rs/core/tests/suite/scenarios.rs",
-        "sha256": "4e6ff9f880077c470a97bfaa3f57d750330ada24587d49e58ac9f4760e540cdc"
-      },
-      "upstream_source": {
-        "mode": "100644",
-        "path": "codex-rs/core/tests/suite/scenarios.rs",
-        "sha256": "a4739d5e08d4af712bd5c7a93fea3ce9e29cc92026df1937be04095d3d5ff47e"
       }
     },
     {
@@ -20072,6 +19829,33 @@
       "change": "modified",
       "destination": {
         "kind": "patch",
+        "patch": "integration/codex/patches/dependency_build.patch",
+        "path": "codex-rs/hooks/schema/generated/model-request.command.input.schema.json"
+      },
+      "git_status": "M",
+      "mode_changed": false,
+      "owner": "codex-rs",
+      "path": "codex-rs/hooks/schema/generated/model-request.command.input.schema.json",
+      "purpose": "dependency_build",
+      "regression_groups": [
+        "dependency_build"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "codex-rs/hooks/schema/generated/model-request.command.input.schema.json",
+        "sha256": "381a507c1d46294ee33a4f3405fed8f7c6c989a45280670d7257d81ad7234907"
+      },
+      "upstream_source": {
+        "mode": "100644",
+        "path": "codex-rs/hooks/schema/generated/model-request.command.input.schema.json",
+        "sha256": "f60683388becc6c50fd64999a83254f9f09b4c6e35548c4565004d9c54d44a38"
+      }
+    },
+    {
+      "artifact": "generated",
+      "change": "modified",
+      "destination": {
+        "kind": "patch",
         "patch": "integration/codex/patches/backend_dispatch.patch",
         "path": "codex-rs/hooks/schema/generated/stop.command.output.schema.json"
       },
@@ -20173,6 +19957,33 @@
         "mode": "100644",
         "path": "codex-rs/hooks/src/engine/plugin_trust.rs",
         "sha256": "75e15014d76f19da6d932ac297a6d9df79fe2c6320933f9cb00b176235e7facf"
+      }
+    },
+    {
+      "artifact": "source",
+      "change": "modified",
+      "destination": {
+        "kind": "patch",
+        "patch": "integration/codex/patches/dependency_build.patch",
+        "path": "codex-rs/hooks/src/events/model_request.rs"
+      },
+      "git_status": "M",
+      "mode_changed": false,
+      "owner": "codex-rs",
+      "path": "codex-rs/hooks/src/events/model_request.rs",
+      "purpose": "dependency_build",
+      "regression_groups": [
+        "dependency_build"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "codex-rs/hooks/src/events/model_request.rs",
+        "sha256": "5e176b1398b4d123e6eb775610829d07b668dd94ba9ceae1d70d26c074a1a84f"
+      },
+      "upstream_source": {
+        "mode": "100644",
+        "path": "codex-rs/hooks/src/events/model_request.rs",
+        "sha256": "7efe2c40235c22a0a939d451f0174391ae07c92e40e0f642054243c97203badf"
       }
     },
     {
@@ -31054,33 +30865,6 @@
         "mode": "100644",
         "path": "codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__declined_tool_suggestion.snap",
         "sha256": "72c9a019f4be90c1549d3154fb287dafa5504b5b95452e489ef5850747eca438"
-      }
-    },
-    {
-      "artifact": "generated",
-      "change": "modified",
-      "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/chat_integration.patch",
-        "path": "codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__default_footer_generating_thread_title.snap"
-      },
-      "git_status": "M",
-      "mode_changed": false,
-      "owner": "codex-rs",
-      "path": "codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__default_footer_generating_thread_title.snap",
-      "purpose": "chat_integration",
-      "regression_groups": [
-        "chat_integration"
-      ],
-      "source": {
-        "mode": "100644",
-        "path": "codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__default_footer_generating_thread_title.snap",
-        "sha256": "aed3831dbcf7a5725dceb7504fd7625e7b8fc1bce7fb35c089ccc6db40c0d444"
-      },
-      "upstream_source": {
-        "mode": "100644",
-        "path": "codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__default_footer_generating_thread_title.snap",
-        "sha256": "8856e4094b9c3047e0f02955608e1b476a6b539f6ec1fdb912519ae203407427"
       }
     },
     {
@@ -41982,6 +41766,342 @@
         "mode": "100644",
         "path": "codex-rs/tui/src/tui/alternate_screen.rs",
         "sha256": "13e839247994d73e3bcd579662eda671163df6fe157896da3791deb0966a7a3a"
+      }
+    },
+    {
+      "artifact": "source",
+      "change": "modified",
+      "destination": {
+        "kind": "patch",
+        "patch": "integration/codex/patches/dependency_build.patch",
+        "path": ".github/actions/build-bazel-package-binaries/action.yml"
+      },
+      "git_status": "M",
+      "mode_changed": false,
+      "owner": "downstream-build",
+      "path": ".github/actions/build-bazel-package-binaries/action.yml",
+      "purpose": "dependency_build",
+      "regression_groups": [
+        "dependency_build"
+      ],
+      "retirement_reason": "Assembled workflow copy has no execution consumers; product-owned root workflows retain qualified build policy.",
+      "source": {
+        "mode": "100644",
+        "path": ".github/actions/build-bazel-package-binaries/action.yml",
+        "sha256": "375ca4d8c5e0a3fc864466667661feeb9b58db349166c0309bb82f113e3c2669"
+      },
+      "upstream_source": {
+        "mode": "100644",
+        "path": ".github/actions/build-bazel-package-binaries/action.yml",
+        "sha256": "5bac07a7d7b293f778eb8cd8311764b0af58382a0443dbe7418d47a88e05fb7e"
+      }
+    },
+    {
+      "artifact": "source",
+      "change": "modified",
+      "destination": {
+        "kind": "patch",
+        "patch": "integration/codex/patches/dependency_build.patch",
+        "path": ".github/actions/build-cargo-package-binaries/action.yml"
+      },
+      "git_status": "M",
+      "mode_changed": false,
+      "owner": "downstream-build",
+      "path": ".github/actions/build-cargo-package-binaries/action.yml",
+      "purpose": "dependency_build",
+      "regression_groups": [
+        "dependency_build"
+      ],
+      "retirement_reason": "Assembled workflow copy has no execution consumers; product-owned root workflows retain qualified build policy.",
+      "source": {
+        "mode": "100644",
+        "path": ".github/actions/build-cargo-package-binaries/action.yml",
+        "sha256": "a6ec13f707199311d289ffe80b836179c25c9f648b837ef1722499f948d0df68"
+      },
+      "upstream_source": {
+        "mode": "100644",
+        "path": ".github/actions/build-cargo-package-binaries/action.yml",
+        "sha256": "74f18fd40804f4af42fbebdc5f529eeaeaae1ac7426d08b9f947c416f14dd1a7"
+      }
+    },
+    {
+      "artifact": "source",
+      "change": "modified",
+      "destination": {
+        "kind": "patch",
+        "patch": "integration/codex/patches/dependency_build.patch",
+        "path": ".github/workflows/cargo-deny.yml"
+      },
+      "git_status": "M",
+      "mode_changed": false,
+      "owner": "downstream-build",
+      "path": ".github/workflows/cargo-deny.yml",
+      "purpose": "dependency_build",
+      "regression_groups": [
+        "dependency_build"
+      ],
+      "retirement_reason": "Assembled workflow copy has no execution consumers; product-owned root workflows retain qualified build policy.",
+      "source": {
+        "mode": "100644",
+        "path": ".github/workflows/cargo-deny.yml",
+        "sha256": "aaeb7399b1fe55a665b95e86497480546337909a1f26dfdec32a6a570556ee40"
+      },
+      "upstream_source": {
+        "mode": "100644",
+        "path": ".github/workflows/cargo-deny.yml",
+        "sha256": "9be4532baa0bc7a8f84506f073690ddd844434ab820b59b1eade686744811b4b"
+      }
+    },
+    {
+      "artifact": "source",
+      "change": "modified",
+      "destination": {
+        "kind": "patch",
+        "patch": "integration/codex/patches/dependency_build.patch",
+        "path": ".github/workflows/rust-ci-full-nextest-platform.yml"
+      },
+      "git_status": "M",
+      "mode_changed": false,
+      "owner": "downstream-build",
+      "path": ".github/workflows/rust-ci-full-nextest-platform.yml",
+      "purpose": "dependency_build",
+      "regression_groups": [
+        "dependency_build"
+      ],
+      "retirement_reason": "Assembled workflow copy has no execution consumers; product-owned root workflows retain qualified build policy.",
+      "source": {
+        "mode": "100644",
+        "path": ".github/workflows/rust-ci-full-nextest-platform.yml",
+        "sha256": "4362d6396b9b83e535c26d26d3a6069480dfc9dc286a8ddffc6a69d17bd2b619"
+      },
+      "upstream_source": {
+        "mode": "100644",
+        "path": ".github/workflows/rust-ci-full-nextest-platform.yml",
+        "sha256": "167d414cb6ec8655cf4013644273f60d29cd5a8baf1172b88d1c302ba4e89a3d"
+      }
+    },
+    {
+      "artifact": "source",
+      "change": "modified",
+      "destination": {
+        "kind": "patch",
+        "patch": "integration/codex/patches/dependency_build.patch",
+        "path": ".github/workflows/rust-ci-full.yml"
+      },
+      "git_status": "M",
+      "mode_changed": false,
+      "owner": "downstream-build",
+      "path": ".github/workflows/rust-ci-full.yml",
+      "purpose": "dependency_build",
+      "regression_groups": [
+        "dependency_build"
+      ],
+      "retirement_reason": "Assembled workflow copy has no execution consumers; product-owned root workflows retain qualified build policy.",
+      "source": {
+        "mode": "100644",
+        "path": ".github/workflows/rust-ci-full.yml",
+        "sha256": "fc93a3b12b173a6b84a2ee3c8ccb85c4ee72850b39e43eefe534ed613777abc5"
+      },
+      "upstream_source": {
+        "mode": "100644",
+        "path": ".github/workflows/rust-ci-full.yml",
+        "sha256": "0b5516edda071b97451f193e637cf4bb2009b6a235e9d23ca652d449081dfac9"
+      }
+    },
+    {
+      "artifact": "source",
+      "change": "modified",
+      "destination": {
+        "kind": "patch",
+        "patch": "integration/codex/patches/dependency_build.patch",
+        "path": ".github/workflows/rust-ci.yml"
+      },
+      "git_status": "M",
+      "mode_changed": false,
+      "owner": "downstream-build",
+      "path": ".github/workflows/rust-ci.yml",
+      "purpose": "dependency_build",
+      "regression_groups": [
+        "dependency_build"
+      ],
+      "retirement_reason": "Assembled workflow copy has no execution consumers; product-owned root workflows retain qualified build policy.",
+      "source": {
+        "mode": "100644",
+        "path": ".github/workflows/rust-ci.yml",
+        "sha256": "a0fca43d3b17d7f8aee111f0287025729bc0023bc48d2735add29f1ba5a80bb0"
+      },
+      "upstream_source": {
+        "mode": "100644",
+        "path": ".github/workflows/rust-ci.yml",
+        "sha256": "c05e33c262c930fb9c1ba0774741180147a2c550b8ab74cb187a008bd9dfb7dc"
+      }
+    },
+    {
+      "artifact": "source",
+      "change": "modified",
+      "destination": {
+        "kind": "patch",
+        "patch": "integration/codex/patches/dependency_build.patch",
+        "path": ".github/workflows/rust-release-windows.yml"
+      },
+      "git_status": "M",
+      "mode_changed": false,
+      "owner": "downstream-build",
+      "path": ".github/workflows/rust-release-windows.yml",
+      "purpose": "dependency_build",
+      "regression_groups": [
+        "dependency_build"
+      ],
+      "retirement_reason": "Assembled workflow copy has no execution consumers; product-owned root workflows retain qualified build policy.",
+      "source": {
+        "mode": "100644",
+        "path": ".github/workflows/rust-release-windows.yml",
+        "sha256": "e16558b4984894e939064d684110e87649e3255c470ab0341e3d5526c614eb46"
+      },
+      "upstream_source": {
+        "mode": "100644",
+        "path": ".github/workflows/rust-release-windows.yml",
+        "sha256": "26a4833a4a9b0eb31a8fe394f784e3a32b1e409f232781316eb876dbe396c7b9"
+      }
+    },
+    {
+      "artifact": "source",
+      "change": "modified",
+      "destination": {
+        "kind": "patch",
+        "patch": "integration/codex/patches/dependency_build.patch",
+        "path": ".github/workflows/rust-release.yml"
+      },
+      "git_status": "M",
+      "mode_changed": false,
+      "owner": "downstream-build",
+      "path": ".github/workflows/rust-release.yml",
+      "purpose": "dependency_build",
+      "regression_groups": [
+        "dependency_build"
+      ],
+      "retirement_reason": "Assembled workflow copy has no execution consumers; product-owned root workflows retain qualified build policy.",
+      "source": {
+        "mode": "100644",
+        "path": ".github/workflows/rust-release.yml",
+        "sha256": "6beb22384caf3e8e05fc153827041d035aa24f18b344e062de3127d8780cbcfd"
+      },
+      "upstream_source": {
+        "mode": "100644",
+        "path": ".github/workflows/rust-release.yml",
+        "sha256": "f0ec1861688535015b2245f3ceb8c465481757e3cd63558538282fcd3a81d673"
+      }
+    },
+    {
+      "artifact": "source",
+      "change": "modified",
+      "destination": {
+        "kind": "patch",
+        "patch": "integration/codex/patches/dependency_build.patch",
+        "path": ".github/workflows/rusty-v8-release.yml"
+      },
+      "git_status": "M",
+      "mode_changed": false,
+      "owner": "downstream-build",
+      "path": ".github/workflows/rusty-v8-release.yml",
+      "purpose": "dependency_build",
+      "regression_groups": [
+        "dependency_build"
+      ],
+      "retirement_reason": "Assembled workflow copy has no execution consumers; product-owned root workflows retain qualified build policy.",
+      "source": {
+        "mode": "100644",
+        "path": ".github/workflows/rusty-v8-release.yml",
+        "sha256": "12f38d7e88bee0c21d9ad4a66adc746c4106864a6078dc4b7017e8ef86746e98"
+      },
+      "upstream_source": {
+        "mode": "100644",
+        "path": ".github/workflows/rusty-v8-release.yml",
+        "sha256": "6587433841d1b50fb08f4135704a014b501f097b07e59b5bf3d5b8b19b2fc488"
+      }
+    },
+    {
+      "artifact": "source",
+      "change": "modified",
+      "destination": {
+        "kind": "patch",
+        "patch": "integration/codex/patches/dependency_build.patch",
+        "path": ".github/workflows/v8-canary.yml"
+      },
+      "git_status": "M",
+      "mode_changed": false,
+      "owner": "downstream-build",
+      "path": ".github/workflows/v8-canary.yml",
+      "purpose": "dependency_build",
+      "regression_groups": [
+        "dependency_build"
+      ],
+      "retirement_reason": "Assembled workflow copy has no execution consumers; product-owned root workflows retain qualified build policy.",
+      "source": {
+        "mode": "100644",
+        "path": ".github/workflows/v8-canary.yml",
+        "sha256": "342dfff2e021461e397be04f4b22144559bcdf1c0a013ed195dd935d11e21e23"
+      },
+      "upstream_source": {
+        "mode": "100644",
+        "path": ".github/workflows/v8-canary.yml",
+        "sha256": "3f67f8b5519b5a6d61294dbfa2f5ec9009dec8f9fa85c153a1d3ebc173994931"
+      }
+    },
+    {
+      "artifact": "generated",
+      "change": "modified",
+      "destination": {
+        "kind": "patch",
+        "patch": "integration/codex/patches/chat_integration.patch",
+        "path": "codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__default_footer_generating_thread_title.snap"
+      },
+      "git_status": "M",
+      "mode_changed": false,
+      "owner": "codex-rs",
+      "path": "codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__default_footer_generating_thread_title.snap",
+      "purpose": "chat_integration",
+      "regression_groups": [
+        "chat_integration"
+      ],
+      "retirement_reason": "Upstream removed obsolete title-progress snapshot.",
+      "source": {
+        "mode": "100644",
+        "path": "codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__default_footer_generating_thread_title.snap",
+        "sha256": "aed3831dbcf7a5725dceb7504fd7625e7b8fc1bce7fb35c089ccc6db40c0d444"
+      },
+      "upstream_source": {
+        "mode": "100644",
+        "path": "codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__default_footer_generating_thread_title.snap",
+        "sha256": "8856e4094b9c3047e0f02955608e1b476a6b539f6ec1fdb912519ae203407427"
+      }
+    },
+    {
+      "artifact": "source",
+      "change": "modified",
+      "destination": {
+        "kind": "patch",
+        "patch": "integration/codex/patches/backend_dispatch.patch",
+        "path": "codex-rs/core/tests/suite/scenarios.rs"
+      },
+      "git_status": "M",
+      "mode_changed": false,
+      "owner": "codex-rs",
+      "path": "codex-rs/core/tests/suite/scenarios.rs",
+      "purpose": "backend_dispatch",
+      "regression_groups": [
+        "backend_dispatch"
+      ],
+      "retirement_reason": "New upstream child-completion coverage uses ReasoningEffort; retire the obsolete unused-import cleanup.",
+      "source": {
+        "mode": "100644",
+        "path": "codex-rs/core/tests/suite/scenarios.rs",
+        "sha256": "4e6ff9f880077c470a97bfaa3f57d750330ada24587d49e58ac9f4760e540cdc"
+      },
+      "upstream_source": {
+        "mode": "100644",
+        "path": "codex-rs/core/tests/suite/scenarios.rs",
+        "sha256": "a4739d5e08d4af712bd5c7a93fea3ce9e29cc92026df1937be04095d3d5ff47e"
       }
     }
   ],

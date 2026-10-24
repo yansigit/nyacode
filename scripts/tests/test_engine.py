@@ -552,6 +552,70 @@ class EngineTest(unittest.TestCase):
                     )
                 download.assert_not_called()
 
+    def test_upgrade_uses_exact_pristine_toolchain_and_rejects_nonexact(self):
+        accepted = (self.root / "engine.lock").read_bytes()
+        for index, channel in enumerate(("1.99.1", "stable", "1.99", "1.99.1-beta.1")):
+            with self.subTest(channel=channel):
+                archive = self.base / f"upstream-{index}.tar.gz"
+                self.make_archive(
+                    archive,
+                    {
+                        **self.files,
+                        "codex-rs/rust-toolchain.toml": (
+                            f'[toolchain]\nchannel = "{channel}"\n'.encode()
+                        ),
+                    },
+                )
+                output = self.base / f"toolchain-{index}"
+                responses = [
+                    {"tag_name": "rust-v1.2.3", "draft": False, "prerelease": False},
+                    {"sha": "b" * 40},
+                    {
+                        "status": "ahead",
+                        "merge_base_commit": {"sha": self.lock["revision"]},
+                    },
+                ]
+                with (
+                    patch.object(engine, "github_json", side_effect=responses),
+                    patch.object(
+                        engine,
+                        "download",
+                        side_effect=lambda repo, revision, destination: shutil.copyfile(
+                            archive, destination
+                        ),
+                    ),
+                    patch.object(
+                        engine, "check", return_value=output / "workspace"
+                    ) as check,
+                ):
+                    if channel == "1.99.1":
+                        engine.upgrade(
+                            root=self.root,
+                            tag="rust-v1.2.3",
+                            output=output,
+                            cache_dir=self.cache,
+                        )
+                        check.assert_called_once()
+                        self.assertEqual(
+                            engine.load_lock(output / "product")["toolchain"], channel
+                        )
+                    else:
+                        with self.assertRaisesRegex(
+                            engine.EngineError, "exact Rust toolchain"
+                        ):
+                            engine.upgrade(
+                                root=self.root,
+                                tag="rust-v1.2.3",
+                                output=output,
+                                cache_dir=self.cache,
+                            )
+                        check.assert_not_called()
+                        self.assertFalse((output / "product").exists())
+                self.assertEqual(
+                    json.loads((output / "engine.lock").read_text())["toolchain"], channel
+                )
+                self.assertEqual((self.root / "engine.lock").read_bytes(), accepted)
+
     def test_failed_upgrade_retains_candidate_and_never_edits_accepted_inputs(self):
         before = {
             path.relative_to(self.root): path.read_bytes()

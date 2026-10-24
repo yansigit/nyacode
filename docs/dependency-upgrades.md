@@ -1,8 +1,9 @@
 # CI dependency baseline
 
 The October 2026 release-pipeline update includes major dependency migrations,
-not just lockfile refreshes. Rust remains pinned to **1.95.0**. Cargo resolves
-versions compatible with that toolchain; pnpm and uv retain the repository's
+not just lockfile refreshes. The engine Rust version is pinned in `engine.lock`;
+the standalone provider workspace retains its own toolchain. Cargo resolves
+versions compatible with the selected toolchain; pnpm and uv retain the repository's
 seven-day release-age policy. Builds use the committed lockfiles and immutable
 GitHub Action revisions.
 
@@ -19,7 +20,7 @@ Some dependencies deliberately remain below their newest published version:
 
 | Dependency                      | Retained version                 | Constraint                                                                                                                                  |
 | ------------------------------- | -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| Rust                            | 1.95.0                           | Project toolchain requirement. Dependencies requiring 1.96 are excluded.                                                                    |
+| Rust                            | Exact `engine.lock` pin          | Engine dependencies must support the pinned compiler; standalone providers use `crates/providers/rust-toolchain.toml`.                                                                    |
 | TypeScript                      | 6.0.3                            | The current typescript-eslint and ts-jest peers do not support TypeScript 7.                                                                |
 | Keyring                         | 3.6.3                            | The 4.x facade changes Linux persistent keyutils/Secret Service storage. Moving existing credentials requires a separate backend migration. |
 | Tokio Tungstenite / Tungstenite | Pinned maintained fork revisions | The application uses fork-specific proxy and compression support absent from the upstream replacement.                                      |

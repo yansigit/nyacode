@@ -45,6 +45,13 @@ qualification of later changes.
 Provider implementation changes run standalone and linked integration checks.
 Shared, product, adapter, and unclassified inputs take the broader acceptance path.
 Engine upgrades qualify native contracts, both SDKs, and all six platform packages.
+Native provider sessions do not expose individual inference completion boundaries.
+Synchronous `PostModelRequest` hooks therefore fail before native inference starts;
+Responses backends support the upstream request hook ordering.
+An existing native checkpoint limitation affects textless turns ending in user or
+agent-mail content: a later adjacent user message can change the saved history
+prefix and cause continuation to fail closed. The migration preserves this guard
+and the stored checkpoint format; it does not replay uncertain tool execution.
 The always-present `Engine acceptance` check fails on missing or cancelled results.
 
 ```sh
