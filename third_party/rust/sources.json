@@ -1,0 +1,42 @@
+{
+  "advisory": "RUSTSEC-2026-0387",
+  "packages": [
+    {
+      "name": "aws-config",
+      "version": "1.12.0",
+      "archive": "https://static.crates.io/crates/aws-config/aws-config-1.12.0.crate",
+      "archive_sha256": "b8d7b388a9fc3a6db15a5ec778c38b354eff1364882c94d08e0252f7a47dcaa4",
+      "source_revision": "653085fbbc4a50138cf955445b65431bea3599d4",
+      "patch": "patches/aws-config.patch",
+      "patch_sha256": "44cee4718659021c216ba1b8141fb58fbaba1c04691c6c203e4ea0c9356e10b8",
+      "test_lock_sha256": "886d152b9d15ffc73c050ec4e78787749e06e606abc1827c92ab70d9022d627d",
+      "test_data_tree": "18fa0bb7dc5b351935e1aae330874c51ab8665e8",
+      "test_data_repository": "awslabs/aws-sdk-rust",
+      "test_data_path": "sdk/aws-config/test-data"
+    },
+    {
+      "name": "aws-sigv4",
+      "version": "1.6.0",
+      "archive": "https://static.crates.io/crates/aws-sigv4/aws-sigv4-1.6.0.crate",
+      "archive_sha256": "2312577f088c9fbf4206dfdb884cf1de9407b43e1a923cbed5237775116fc24b",
+      "source_revision": "dd4d62780ee72db9adae16134e5dac47a9b6393e",
+      "patch": "patches/aws-sigv4.patch",
+      "patch_sha256": "534837418f11b9111417f5300ec172a5bf672bcc1e9eacb8c9358ef4dd0a5cc5",
+      "test_lock_sha256": "4c80d168e5c4e7964c2f0feebcf536ae0f9278bc47037f88d1def0e9c969180b"
+    }
+  ],
+  "upstream_git": [
+    {
+      "packages": ["age", "age-core"],
+      "repository": "str4d/rage",
+      "revision": "b5b68c4f4f7ea5c368bc060f6fe0237549c3a13f",
+      "archive_sha256": "aa629f4cccf0117fb2a42d1bd55ff31cc4c4ffbc6baa3eeb0d7854b36486e60d"
+    },
+    {
+      "packages": ["clatter"],
+      "repository": "jmlepisto/clatter",
+      "revision": "9a8d15c4f80d5911ca0403aa22e0de99ea59df08",
+      "archive_sha256": "863b735528038f11a3b9b909887566a61b64caf11aea6eadf96adb4b91b66ee2"
+    }
+  ]
+}

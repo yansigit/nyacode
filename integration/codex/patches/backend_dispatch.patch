@@ -5502,7 +5502,7 @@ index 1823275ea4e8a690f6b233a934a044d839a5efb6..5fd20121de01ad695ca10c542ade554d
          http_headers: None,
          env_http_headers: None,
 diff --git a/codex-rs/deny.toml b/codex-rs/deny.toml
-index 31c5517af07dbbfa196c874d3fcf32032bfd575b..44fe80e840be9ce691370b602536536bfc9a7662 100644
+index 31c5517af07dbbfa196c874d3fcf32032bfd575b..7bd5a07f9bf8a0688f73615387a75c3822b62491 100644
 --- a/codex-rs/deny.toml
 +++ b/codex-rs/deny.toml
 @@ -73,17 +73,16 @@ ignore = [
@@ -5554,14 +5554,22 @@ index 31c5517af07dbbfa196c874d3fcf32032bfd575b..44fe80e840be9ce691370b602536536b
          # Third-party crates that own their reqwest integration. These are not part of the
          # first-party migration count above.
          "oauth2",
-@@ -316,6 +329,7 @@ allow-git = [
+@@ -315,12 +328,15 @@ allow-git = [
+     "https://github.com/helix-editor/nucleo.git",
      # CONNECT request handling needs this pinned H3 revision until released.
      "https://github.com/hyperium/h3",
++    "https://github.com/jmlepisto/clatter",
      "https://github.com/juberti-oai/rust-sdks.git",
 +    "https://github.com/kellpossible/cargo-i18n",
      "https://github.com/microsoft/mxc",
      "https://github.com/modelcontextprotocol/rust-sdk",
      "https://github.com/openai-oss-forks/crossterm",
+     "https://github.com/openai-oss-forks/tokio-tungstenite",
+     "https://github.com/openai-oss-forks/tungstenite-rs",
++    "https://github.com/str4d/rage",
+ ]
+ 
+ [sources.allow-org]
 diff --git a/codex-rs/exec-server/Cargo.toml b/codex-rs/exec-server/Cargo.toml
 index 0d1f1f5209ca66c6efdd9f6bb54058e89bc7a542..86eed960308a0152d694225eff6ff3e8d11f10c6 100644
 --- a/codex-rs/exec-server/Cargo.toml

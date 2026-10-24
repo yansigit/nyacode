@@ -229,6 +229,92 @@ class MountTests(unittest.TestCase):
                 )
 
 
+class DependencyOverrideTests(unittest.TestCase):
+    def test_upstream_suites_use_engine_environment_and_propagate_failures(self):
+        script = (verifier.ROOT / "scripts/verify-container.sh").read_text()
+        functions = "\n".join(
+            re.search(
+                rf"^{name}\(\) \{{\n.*?^\}}",
+                script,
+                re.MULTILINE | re.DOTALL,
+            ).group()
+            for name in ("phase", "run_dependency_tests")
+        )
+        for failed_package in ("", "aws-config", "aws-sigv4"):
+            with (
+                self.subTest(failed_package=failed_package),
+                tempfile.TemporaryDirectory(prefix="dependency checks ") as temporary,
+            ):
+                root = Path(temporary)
+                workspace = root / "assembled engine"
+                for package in ("aws-config", "aws-sigv4"):
+                    directory = workspace / "third_party/rust" / package
+                    directory.mkdir(parents=True)
+                    (directory / "Cargo.toml").touch()
+                log = root / "calls.jsonl"
+                cargo = root / "cargo"
+                cargo.write_text(
+                    f"#!{sys.executable}\n"
+                    "import json, os, pathlib, sys\n"
+                    "cwd = pathlib.Path.cwd()\n"
+                    f"with open({str(log)!r}, 'a') as stream:\n"
+                    "    stream.write(json.dumps({'args': sys.argv[1:], 'cwd': str(cwd), "
+                    "'no_color': os.environ.get('NO_COLOR'), "
+                    "'toolchain': os.environ.get('RUSTUP_TOOLCHAIN')}) + '\\n')\n"
+                    "sys.exit(23 if cwd.name == os.environ['FAIL_PACKAGE'] else 0)\n"
+                )
+                cargo.chmod(0o755)
+                toolchain = json.loads((verifier.ROOT / "engine.lock").read_text())[
+                    "toolchain"
+                ]
+                result = subprocess.run(
+                    [
+                        "bash",
+                        "-c",
+                        "set -euo pipefail\n"
+                        + functions
+                        + "\nphase dependencies run_dependency_tests\n"
+                        + '[[ "$NO_COLOR" == 1 ]]\nprintf "phase completed\\n"',
+                    ],
+                    env={
+                        **os.environ,
+                        "PATH": str(root) + os.pathsep + os.environ["PATH"],
+                        "WORKSPACE_ROOT": str(workspace),
+                        "TIMING_LOG": str(root / "timings"),
+                        "NO_COLOR": "1",
+                        "RUSTUP_TOOLCHAIN": toolchain,
+                        "FAIL_PACKAGE": failed_package,
+                    },
+                    capture_output=True,
+                    check=False,
+                    text=True,
+                )
+                calls = [json.loads(line) for line in log.read_text().splitlines()]
+                expected = (
+                    ["aws-config"]
+                    if failed_package == "aws-config"
+                    else ["aws-config", "aws-sigv4"]
+                )
+                self.assertEqual([Path(call["cwd"]).name for call in calls], expected)
+                for call in calls:
+                    self.assertEqual(
+                        call["args"],
+                        [
+                            "test",
+                            "--locked",
+                            "--all-features",
+                            "--manifest-path",
+                            str(Path(call["cwd"]) / "Cargo.toml"),
+                            "--",
+                            "--test-threads=2",
+                        ],
+                    )
+                    self.assertIsNone(call["no_color"])
+                    self.assertEqual(call["toolchain"], toolchain)
+                self.assertEqual(result.returncode, 23 if failed_package else 0)
+                self.assertEqual("phase completed" in result.stdout, not failed_package)
+
+
 class ArtifactTests(unittest.TestCase):
     def test_checksum_manifest_accepts_release_crlf(self):
         digest = "a" * 64
