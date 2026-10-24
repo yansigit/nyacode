@@ -1,37 +1,7 @@
 name: Container verification
 
 on:
-  pull_request:
-    paths:
-      - "engine.lock"
-      - "VERSION"
-      - "integration/codex/**"
-      - "crates/**"
-      - "scripts/engine*.py"
-      - "third_party/v8/**"
-      - "Containerfile"
-      - "Dockerfile"
-      - ".dockerignore"
-      - "scripts/verify-container.sh"
-      - "scripts/verify_container.py"
-      - "scripts/tests/test_verify_container.py"
-      - ".github/workflows/container-verify.yml"
-  push:
-    branches: [main]
-    paths:
-      - "engine.lock"
-      - "VERSION"
-      - "integration/codex/**"
-      - "crates/**"
-      - "scripts/engine*.py"
-      - "third_party/v8/**"
-      - "Containerfile"
-      - "Dockerfile"
-      - ".dockerignore"
-      - "scripts/verify-container.sh"
-      - "scripts/verify_container.py"
-      - "scripts/tests/test_verify_container.py"
-      - ".github/workflows/container-verify.yml"
+  workflow_call:
   workflow_dispatch:
 
 permissions:

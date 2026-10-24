@@ -1,3 +1,5 @@
+#![recursion_limit = "256"]
+
 //! Explicitly invoked native ChatGPT compatibility research; never starts the agent loop.
 use clap::ArgGroup;
 use clap::Parser;

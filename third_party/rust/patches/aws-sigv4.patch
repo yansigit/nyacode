@@ -1,0 +1,41 @@
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -100,7 +100,8 @@
+ version = "1.11.1"
+ 
+ [dependencies.crypto-bigint]
+-version = "0.5.4"
++version = "0.7.6"
++features = ["zeroize"]
+ optional = true
+ 
+ [dependencies.form_urlencoded]
+@@ -123,7 +124,7 @@
+ package = "http"
+ 
+ [dependencies.p256]
+-version = "0.13.2"
++version = "0.14.0"
+ features = ["ecdsa"]
+ optional = true
+ 
+--- a/src/sign/v4a.rs
++++ b/src/sign/v4a.rs
+@@ -5,7 +5,7 @@
+ 
+ use aws_smithy_runtime_api::client::identity::Identity;
+ use bytes::{BufMut, BytesMut};
+-use crypto_bigint::{CheckedAdd, CheckedSub, Encoding, U256};
++use crypto_bigint::{CheckedAdd, CheckedSub, U256};
+ use hmac::{digest::FixedOutput, Hmac, KeyInit, Mac};
+ use p256::ecdsa::signature::Signer;
+ use p256::ecdsa::{DerSignature, SigningKey};
+@@ -57,7 +57,7 @@
+         buf.put_i32(1);
+         buf.put_slice(&fis);
+         mac.update(&buf);
+-        let k0 = U256::from_be_bytes(mac.finalize_fixed().into());
++        let k0 = U256::from_be_slice(&mac.finalize_fixed());
+ 
+         // It would be more secure for this to be a constant time comparison, but because this
+         // is for client usage, that's not as big a deal.

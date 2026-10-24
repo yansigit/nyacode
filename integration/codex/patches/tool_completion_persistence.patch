@@ -58,7 +58,7 @@ index 2d5262ee9b6a2955dad25bd090d27430962a8c4c..a685d0fb4ef78865a509c90f45bd58ea
          let completed = rx_event.recv().await.expect("item completed event");
          assert!(matches!(
 diff --git a/codex-rs/core/src/tools/handlers/multi_agents/spawn.rs b/codex-rs/core/src/tools/handlers/multi_agents/spawn.rs
-index 10c793f5b9e8293c3a0a05a089372619f6689c5e..84fac1c52a390a596a6e574b901ad309cf414b6c 100644
+index 839874dbbfa8e971a2f16d010c51d7ead3bc6821..407018a93702ef63fe7165561360367de5664011 100644
 --- a/codex-rs/core/src/tools/handlers/multi_agents/spawn.rs
 +++ b/codex-rs/core/src/tools/handlers/multi_agents/spawn.rs
 @@ -102,6 +102,7 @@ async fn handle_spawn_agent(
@@ -175,7 +175,7 @@ index c23caa014599fb37ab77738a82396a0cb81cb7c1..1740b707822c331f2d3a84046416628b
      reasoning_effort: Option<ReasoningEffort>,
      fork_turns: Option<String>,
 diff --git a/codex-rs/core/src/tools/handlers/unified_exec/exec_command.rs b/codex-rs/core/src/tools/handlers/unified_exec/exec_command.rs
-index ba75b1ed9802ed1c620011df914794eeff682943..5fcdef1261626dbad692c19359b1c80dea4d4d53 100644
+index ce0a5024534ab728b92578863506a5506bbdd970..6a21bf5a7330392669ce4724f50cc472b673d79f 100644
 --- a/codex-rs/core/src/tools/handlers/unified_exec/exec_command.rs
 +++ b/codex-rs/core/src/tools/handlers/unified_exec/exec_command.rs
 @@ -449,6 +449,18 @@ impl ExecCommandHandler {
@@ -286,7 +286,7 @@ index 0e44fd92b243ff99a7dff2e0fd02bf0b77ab3c48..a65c01a99a42fc0fa1bbf4323b25fa27
 +    }
 +}
 diff --git a/codex-rs/core/src/tools/parallel.rs b/codex-rs/core/src/tools/parallel.rs
-index e0b50c48dd7ed4558b4423d25bae6e62d99ccea5..f3b4737e5b2810514b7ac1c8f76a4a71eedf6b11 100644
+index cc8beb4e3091eaaa0460eead9b05186af71f5513..dde5be7e093449a7e42c7acc5be49bf2154d20ed 100644
 --- a/codex-rs/core/src/tools/parallel.rs
 +++ b/codex-rs/core/src/tools/parallel.rs
 @@ -42,8 +42,16 @@ struct ToolCallTimingGuard {
@@ -382,7 +382,7 @@ index e0b50c48dd7ed4558b4423d25bae6e62d99ccea5..f3b4737e5b2810514b7ac1c8f76a4a71
                  }
              };
 diff --git a/codex-rs/core/src/tools/router.rs b/codex-rs/core/src/tools/router.rs
-index a7a192815b6a2f45e96b6903f133e5564306a419..2505f7273683616673c4faf2d8ed63cb6e8fce68 100644
+index 3c01ab98187227561c3a4220ed8277b7317f21ce..9bfd437822cc1605b5f3ae44d21293517db2574c 100644
 --- a/codex-rs/core/src/tools/router.rs
 +++ b/codex-rs/core/src/tools/router.rs
 @@ -54,15 +54,15 @@ pub struct ToolCall {
@@ -443,10 +443,10 @@ index aff6d416600a75ce43c72aa32c580db10d9d97de..3aae9ae7170ee2d419e2cf96c7ef8699
  fn tool_log_payload_redacts_plaintext_multi_agent_messages() {
      let payload = ToolPayload::Function {
 diff --git a/codex-rs/core/tests/suite/guardian_history.rs b/codex-rs/core/tests/suite/guardian_history.rs
-index adc2c5bb5674a5cf27b27e2af8cfbc2db46ccbf4..44ab4181e63a4e9321cbd1e2b95dd197cd1a4363 100644
+index fdb2f0a85808500d43456774d51dcd03d680cc9f..b816cb5bbfb60d7877b1e473f38d7caafcd84d03 100644
 --- a/codex-rs/core/tests/suite/guardian_history.rs
 +++ b/codex-rs/core/tests/suite/guardian_history.rs
-@@ -42,7 +42,7 @@ use core_test_support::wait_for_event_match;
+@@ -44,7 +44,7 @@ use core_test_support::wait_for_event_match;
  use image::DynamicImage;
  use image::RgbImage;
  use pretty_assertions::assert_eq;
@@ -576,7 +576,7 @@ index ed6a215e264bf1c907536feb6b2a6f61928e4465..47b09b438e79b6b41bb7c9d4e78cea77
            - function/interrupt_agent
            - function/list_agents
 diff --git a/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__compaction__remote_slash_compact.snap b/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__compaction__remote_slash_compact.snap
-index 4e78cadff514c0965bc0dbcff7a447d850b1ba1d..22dd9e368cff8fda526155105ec77c87bc3ed602 100644
+index 610dcf20f041cef400ce25b6f8be9fdac8c7d1df..dda4de8671e173ee561102f28106e56119976920 100644
 --- a/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__compaction__remote_slash_compact.snap
 +++ b/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__compaction__remote_slash_compact.snap
 @@ -16,7 +16,7 @@ Settings:
@@ -597,8 +597,26 @@ index 4e78cadff514c0965bc0dbcff7a447d850b1ba1d..22dd9e368cff8fda526155105ec77c87
            - function/followup_task
            - function/interrupt_agent
            - function/list_agents
-@@ -164,7 +164,7 @@ Settings: unavailable (items only)
- ## Window 3 (after request 3: input diverged at item 00)
+@@ -108,7 +108,7 @@ Settings:
+ ## Window 2 (after request 2: input diverged at item 07)
+ Settings: unavailable (items only)
+ -- request 3 (items; Stored replacement before next turn) --
+-00:additional_tools/developer (3; hash=bf2e30605ff5dc17):
++00:additional_tools/developer (3; hash=4ee6c32cca6df7a5):
+         - namespace/functions; hash=fada4a476a3754dd
+           - custom/exec
+           - function/wait
+@@ -116,7 +116,7 @@ Settings: unavailable (items only)
+           - function/request_user_input_async
+         - namespace/clock: Tools for reading and waiting on time.; hash=f402e8c5e9b5e317
+           - function/sleep
+-        - namespace/collaboration: Tools for spawning and managing sub-agents.; hash=2c8d6295978dbe63
++        - namespace/collaboration: Tools for spawning and managing sub-agents.; hash=48f3c983ab019481
+           - function/followup_task
+           - function/interrupt_agent
+           - function/list_agents
+@@ -197,7 +197,7 @@ Settings: unavailable (items only)
+ ## Window 3 (after request 3)
  Settings: same as window 1
  -- request 4 (turn; First turn after /compact) --
 -00:additional_tools/developer (3; hash=bf2e30605ff5dc17):
@@ -606,7 +624,7 @@ index 4e78cadff514c0965bc0dbcff7a447d850b1ba1d..22dd9e368cff8fda526155105ec77c87
          - namespace/functions; hash=fada4a476a3754dd
            - custom/exec
            - function/wait
-@@ -172,7 +172,7 @@ Settings: same as window 1
+@@ -205,7 +205,7 @@ Settings: same as window 1
            - function/request_user_input_async
          - namespace/clock: Tools for reading and waiting on time.; hash=f402e8c5e9b5e317
            - function/sleep
@@ -921,7 +939,7 @@ index e0657a30614affadcf0bf77b80d1f424776b482a..f2fa39a17064f5d17b0fcf55c51ed1f4
      }
  }
 diff --git a/codex-rs/history/src/lib.rs b/codex-rs/history/src/lib.rs
-index 826669cc3335dc23102e6a5bdbf2d62c1cb22fa4..7952a682f56090e419ceee2550603dc0db6bc2fc 100644
+index 7262a4b1b848d3fd1fbfafb909fea8c8cd371050..334bd43b6b5febb93252996af6d81a6272a93cb7 100644
 --- a/codex-rs/history/src/lib.rs
 +++ b/codex-rs/history/src/lib.rs
 @@ -249,15 +249,15 @@ impl<'de> Deserialize<'de> for RolloutItem {
@@ -975,7 +993,7 @@ index 6418bd6907764fb5daac43b0da0acb7bfd587ad6..07f9325290f9d01f6bf2b7d989e9f9e4
      #[serde(default, skip_serializing_if = "Option::is_none")]
      revision: Option<codex_protocol::ResponseItemId>,
 diff --git a/codex-rs/history/src/tests.rs b/codex-rs/history/src/tests.rs
-index 32a6110d3b53ee1dac0a7ac5ed12ede35a012812..4304371f5b0bb5d6a6af9edc13729ee71a5bb3e0 100644
+index 2f6424b6b010585d6716a6a267fe08bd9df2f849..0220b26f98c6e0816cdbe851aea30275fb4f546a 100644
 --- a/codex-rs/history/src/tests.rs
 +++ b/codex-rs/history/src/tests.rs
 @@ -858,22 +858,22 @@ fn rollout_item_schema_matches_tagged_payload_and_sibling_metadata() -> Result<(
@@ -1163,10 +1181,10 @@ index 3475bde95f4dc90840e82eeb3facf7a7fc2cde69..cbe2a0598df49a6a6da020cb454b67f5
  Use **/vim** to toggle Vim editing in the composer.
  Moving from Claude Code? Use **/import** to bring over your setup, project, and recent chats.
 diff --git a/codex-rs/tui/src/app/config_persistence.rs b/codex-rs/tui/src/app/config_persistence.rs
-index 4b5d22f8f6ed8324169fa618cb9a0e0668e16720..8921d61c793cc7721d21c8ef826846239dc5f371 100644
+index ef5b9127853b37cd9f46fb14ba5cd7c283a7fc0e..8f3c6d51e6d44a31275344f636813bc92f73fe72 100644
 --- a/codex-rs/tui/src/app/config_persistence.rs
 +++ b/codex-rs/tui/src/app/config_persistence.rs
-@@ -519,7 +519,7 @@ impl App {
+@@ -517,7 +517,7 @@ impl App {
                      "failed to refresh effective config after an overridden write"
                  );
                  self.chat_widget.add_error_message(format!(
@@ -1206,7 +1224,7 @@ index e57701e750186bd6d822a09b41b81ee03ba9aa80..ad0c97a2e3b0397ed26e07a2f51d2d9f
  ## Reasoning
  
 diff --git a/codex-rs/tui/src/app_server_session/rollout_history_tests.rs b/codex-rs/tui/src/app_server_session/rollout_history_tests.rs
-index ecce710de8a66f4b0ff7695b8bf0692888d4fc27..b8af775f18237309a32d996d2d4e22ab8699aae5 100644
+index fb315da585ab5caed592cc5234bdba70fb34a781..e8ae604df599d38febad6f7409fb49a1e7161767 100644
 --- a/codex-rs/tui/src/app_server_session/rollout_history_tests.rs
 +++ b/codex-rs/tui/src/app_server_session/rollout_history_tests.rs
 @@ -356,7 +356,13 @@ async fn cached_legacy_resume_revalidates_history_across_migration_settings() ->

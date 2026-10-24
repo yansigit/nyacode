@@ -173,7 +173,7 @@ jobs:
       - name: Set up Rust toolchain for Cargo smoke
         uses: dtolnay/rust-toolchain@e2a55d2ffb04f378e9626c28d38b36d230d1e12f # master, 2026-10-12
         with:
-          toolchain: "1.95.0"
+          toolchain: ${{ env.RUSTUP_TOOLCHAIN }}
 
       - name: Build Bazel V8 release pair
         working-directory: ${{ steps.engine.outputs.root }}
@@ -350,7 +350,7 @@ jobs:
       - name: Set up Codex Rust toolchain for Cargo smoke
         uses: dtolnay/rust-toolchain@e2a55d2ffb04f378e9626c28d38b36d230d1e12f # master, 2026-10-12
         with:
-          toolchain: "1.95.0"
+          toolchain: ${{ env.RUSTUP_TOOLCHAIN }}
           targets: ${{ matrix.target }}
 
       - name: Install rusty_v8 Rust toolchain
@@ -440,7 +440,7 @@ jobs:
             cd "${NYACODE_ENGINE_ROOT}/codex-rs"
             RUSTY_V8_ARCHIVE="${GITHUB_WORKSPACE}/${archive}" \
             RUSTY_V8_SRC_BINDING_PATH="${GITHUB_WORKSPACE}/${binding}" \
-            cargo +1.95.0 test -p codex-v8-poc --target "${TARGET}" --features sandbox --no-run
+            cargo +"${RUSTUP_TOOLCHAIN}" test -p codex-v8-poc --target "${TARGET}" --features sandbox --no-run
           )
 
       - name: Upload staged artifacts

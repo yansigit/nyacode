@@ -14,10 +14,14 @@ jobs:
 
       - uses: ./.github/actions/setup-ci
 
+      - name: Read pinned Rust toolchain
+        id: rust
+        run: python3 -c 'import os, sys; sys.path.insert(0, "scripts"); from pathlib import Path; from engine import load_lock; print("toolchain=" + load_lock(Path("."))["toolchain"], file=open(os.environ["GITHUB_OUTPUT"], "a"))'
+
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@e2a55d2ffb04f378e9626c28d38b36d230d1e12f # master, 2026-10-12
         with:
-          toolchain: 1.95.0
+          toolchain: ${{ steps.rust.outputs.toolchain }}
 
       - name: Prepare pinned engine
         working-directory: .
@@ -28,7 +32,7 @@ jobs:
       - name: Run cargo-deny
         uses: EmbarkStudios/cargo-deny-action@3c6349835b2b7b196a839186cb8b78e02f7b5f25 # v2.1.1
         with:
-          rust-version: 1.95.0
+          rust-version: ${{ steps.rust.outputs.toolchain }}
           manifest-path: ./.engine/workspace/codex-rs/Cargo.toml
 
       - name: Check for a clean worktree

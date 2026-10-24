@@ -286,6 +286,53 @@ class EngineTest(unittest.TestCase):
             self.prepare()
         self.assertEqual(engine.assembly_report(output)["product_version"], "0.1.0")
 
+    def test_catalog_version_uses_pristine_engine_identity_and_exact_binding(self):
+        destination = "codex-rs/models-manager/src/lib.rs"
+        marker = 'const ENGINE_CLIENT_VERSION: &str = "@NYACODE_ENGINE_VERSION@";\n'
+        self.write("owned/catalog.rs", marker)
+        self.overlay("owned/catalog.rs", destination, False)
+        for tag, product, patched in (
+            (None, "0.1.0", True),
+            ("rust-v0.164.0", "0.1.0", True),
+            ("rust-v0.164.0", "0.0.0", False),
+        ):
+            with self.subTest(tag=tag, product=product, patched=patched):
+                self.lock["release_tag"] = tag
+                self.manifest["patches"] = []
+                self.write("VERSION", product + "\n")
+                self.write(
+                    self.lock["assembled_lock"],
+                    self.files["codex-rs/Cargo.lock"].replace(
+                        b"0.0.0", product.encode()
+                    ),
+                )
+                self.save_inputs()
+                if patched:
+                    self.add_patch(
+                        "diff --git a/codex-rs/Cargo.toml b/codex-rs/Cargo.toml\n"
+                        "--- a/codex-rs/Cargo.toml\n+++ b/codex-rs/Cargo.toml\n"
+                        '@@ -4 +4 @@\n-version = "0.0.0"\n+version = "9.9.9"\n',
+                        ["codex-rs/Cargo.toml"],
+                    )
+                output = self.prepare()
+                expected = "0.164.0" if tag else "0.0.0"
+                self.assertEqual(
+                    (output / destination).read_bytes(),
+                    f'const ENGINE_CLIENT_VERSION: &str = "{expected}";\n'.encode(),
+                )
+                self.assertEqual(
+                    engine.assembly_report(output)["product_version"], product
+                )
+        accepted = engine.assembly_report(output)
+        for source in ("// missing binding\n", marker * 2):
+            with self.subTest(source=source):
+                self.write("owned/catalog.rs", source)
+                with self.assertRaisesRegex(
+                    engine.EngineError, "exactly one engine catalog"
+                ):
+                    self.prepare()
+                self.assertEqual(engine.assembly_report(output), accepted)
+
     def test_unsafe_archive_paths_links_and_special_entries_are_rejected(self):
         cases = [
             ("codex-sha/../../escape", tarfile.REGTYPE, ""),
@@ -551,6 +598,71 @@ class EngineTest(unittest.TestCase):
                         cache_dir=self.cache,
                     )
                 download.assert_not_called()
+
+    def test_upgrade_uses_exact_pristine_toolchain_and_rejects_nonexact(self):
+        accepted = (self.root / "engine.lock").read_bytes()
+        for index, channel in enumerate(("1.99.1", "stable", "1.99", "1.99.1-beta.1")):
+            with self.subTest(channel=channel):
+                archive = self.base / f"upstream-{index}.tar.gz"
+                self.make_archive(
+                    archive,
+                    {
+                        **self.files,
+                        "codex-rs/rust-toolchain.toml": (
+                            f'[toolchain]\nchannel = "{channel}"\n'.encode()
+                        ),
+                    },
+                )
+                output = self.base / f"toolchain-{index}"
+                responses = [
+                    {"tag_name": "rust-v1.2.3", "draft": False, "prerelease": False},
+                    {"sha": "b" * 40},
+                    {
+                        "status": "ahead",
+                        "merge_base_commit": {"sha": self.lock["revision"]},
+                    },
+                ]
+                with (
+                    patch.object(engine, "github_json", side_effect=responses),
+                    patch.object(
+                        engine,
+                        "download",
+                        side_effect=lambda repo, revision, destination: shutil.copyfile(
+                            archive, destination
+                        ),
+                    ),
+                    patch.object(
+                        engine, "check", return_value=output / "workspace"
+                    ) as check,
+                ):
+                    if channel == "1.99.1":
+                        engine.upgrade(
+                            root=self.root,
+                            tag="rust-v1.2.3",
+                            output=output,
+                            cache_dir=self.cache,
+                        )
+                        check.assert_called_once()
+                        self.assertEqual(
+                            engine.load_lock(output / "product")["toolchain"], channel
+                        )
+                    else:
+                        with self.assertRaisesRegex(
+                            engine.EngineError, "exact Rust toolchain"
+                        ):
+                            engine.upgrade(
+                                root=self.root,
+                                tag="rust-v1.2.3",
+                                output=output,
+                                cache_dir=self.cache,
+                            )
+                        check.assert_not_called()
+                        self.assertFalse((output / "product").exists())
+                self.assertEqual(
+                    json.loads((output / "engine.lock").read_text())["toolchain"],
+                    channel,
+                )
+                self.assertEqual((self.root / "engine.lock").read_bytes(), accepted)
 
     def test_failed_upgrade_retains_candidate_and_never_edits_accepted_inputs(self):
         before = {

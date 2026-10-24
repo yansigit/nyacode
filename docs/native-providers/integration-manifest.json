@@ -116,6 +116,13 @@
       "minimum_tests": 1
     },
     {
+      "name": "core-native-model-hook-boundary",
+      "packages": ["codex-core"],
+      "test_target": "all",
+      "filter": "native_sync_post_model_hook_fails_before_inference_or_tool_dispatch",
+      "minimum_tests": 1
+    },
+    {
       "name": "app-server-account-and-fork",
       "packages": ["codex-app-server"],
       "test_target": "all",
@@ -334,10 +341,7 @@
   "registry_metadata_source": "codex-rs/providers/provider-registry/src/lib.rs",
   "product_test_groups": {
     "backend_dispatch": {
-      "checks": [
-        "core-native-provider",
-        "provider-packages"
-      ],
+      "checks": ["core-native-provider", "provider-packages"],
       "minimum_tests": 1
     },
     "native_provider": {
@@ -363,6 +367,7 @@
         "thread-config",
         "core-child-provider-routing",
         "core-child-provider-reload",
+        "core-native-model-hook-boundary",
         "app-server-account-and-fork"
       ],
       "minimum_tests": 1
@@ -389,7 +394,8 @@
       "checks": [
         "architecture",
         "dependency-consumers",
-        "six-platform-packages"
+        "six-platform-packages",
+        "full-workspace-container"
       ],
       "minimum_tests": 1
     },
@@ -403,10 +409,7 @@
       "minimum_tests": 1
     },
     "documentation": {
-      "checks": [
-        "python-controls",
-        "installer-tests"
-      ],
+      "checks": ["python-controls", "installer-tests"],
       "minimum_tests": 1
     }
   },

@@ -287,127 +287,6 @@ index 1957b6035a58950329d87d4c24e67faf98c00572..ac2bb9605b971e7f75055b744545417e
    - type: dropdown
      attributes:
        label: What is the type of issue?
-diff --git a/.github/actions/build-bazel-package-binaries/action.yml b/.github/actions/build-bazel-package-binaries/action.yml
-index dd918ba0bc207af61a4a5f300436fce70337701c..ce7202248e9c448786a73be3dc07493945211f8f 100644
---- a/.github/actions/build-bazel-package-binaries/action.yml
-+++ b/.github/actions/build-bazel-package-binaries/action.yml
-@@ -18,7 +18,9 @@ runs:
-         cache-scope: bazel-release
- 
-     - name: Install Cargo for workspace metadata
--      uses: dtolnay/rust-toolchain@e081816240890017053eacbb1bdf337761dc5582 # 1.95.0
-+      uses: dtolnay/rust-toolchain@e2a55d2ffb04f378e9626c28d38b36d230d1e12f # master, 2026-10-12
-+      with:
-+        toolchain: 1.95.0
- 
-     - name: Configure MSVC environment
-       if: ${{ runner.os == 'Windows' }}
-diff --git a/.github/actions/build-cargo-package-binaries/action.yml b/.github/actions/build-cargo-package-binaries/action.yml
-index 84a35f5ec214ec3de423756a57c04db8d8f5de08..2098b25ed40fbc5158b6df6f5ef09e3e93f3e684 100644
---- a/.github/actions/build-cargo-package-binaries/action.yml
-+++ b/.github/actions/build-cargo-package-binaries/action.yml
-@@ -7,6 +7,9 @@ inputs:
-   binaries:
-     description: Space-separated binary target names.
-     required: true
-+  working-directory:
-+    description: Assembled Cargo workspace directory.
-+    default: codex-rs
-   build-mode:
-     description: Release optimizations, or debug for faster package smoke builds.
-     default: release
-@@ -39,14 +42,21 @@ runs:
-           *) echo "Unsupported build mode: $BUILD_MODE" >&2; exit 1 ;;
-         esac
- 
--    - uses: dtolnay/rust-toolchain@e081816240890017053eacbb1bdf337761dc5582 # 1.95.0
-+    - name: Read assembled Rust toolchain
-+      id: rust
-+      shell: bash
-+      working-directory: ${{ inputs.working-directory }}
-+      run: python3 -c 'import os, pathlib, tomllib; version = tomllib.loads(pathlib.Path("rust-toolchain.toml").read_text())["toolchain"]["channel"]; print("toolchain=" + version, file=open(os.environ["GITHUB_OUTPUT"], "a"))'
-+
-+    - uses: dtolnay/rust-toolchain@e2a55d2ffb04f378e9626c28d38b36d230d1e12f # master, 2026-10-12
-       with:
-+        toolchain: ${{ steps.rust.outputs.toolchain }}
-         targets: ${{ inputs.target }}
- 
-     - name: Use hermetic Cargo home (musl)
-       if: ${{ runner.os == 'Linux' }}
-       shell: bash
--      working-directory: codex-rs
-+      working-directory: ${{ inputs.working-directory }}
-       run: |
-         set -euo pipefail
-         cargo_home="${GITHUB_WORKSPACE}/.cargo-home"
-@@ -59,13 +69,13 @@ runs:
-       if: ${{ runner.os == 'Linux' }}
-       uses: mlugg/setup-zig@d1434d08867e3ee9daa34448df10607b98908d29 # v2.2.1
-       with:
--        version: 0.14.0
-+        version: 0.17.0
-         use-cache: false
- 
-     - name: Install musl build tools
-       if: ${{ runner.os == 'Linux' }}
-       shell: bash
--      working-directory: codex-rs
-+      working-directory: ${{ inputs.working-directory }}
-       env:
-         TARGET: ${{ inputs.target }}
-       run: bash "${GITHUB_WORKSPACE}/.github/scripts/install-musl-build-tools.sh"
-@@ -73,7 +83,7 @@ runs:
-     - name: Disable aws-lc jitter entropy (musl)
-       if: ${{ runner.os == 'Linux' }}
-       shell: bash
--      working-directory: codex-rs
-+      working-directory: ${{ inputs.working-directory }}
-       env:
-         TARGET: ${{ inputs.target }}
-       run: |
-@@ -96,15 +106,22 @@ runs:
-       with:
-         target: ${{ inputs.target }}
- 
-+    - name: Configure native ARM64 CMake builds
-+      if: ${{ inputs.target == 'aarch64-pc-windows-msvc' }}
-+      shell: pwsh
-+      run: |
-+        $toolchain = Join-Path $env:GITHUB_WORKSPACE '.github/scripts/windows-arm64-cmake.cmake'
-+        "CMAKE_TOOLCHAIN_FILE_aarch64_pc_windows_msvc=$toolchain" >> $env:GITHUB_ENV
-+
-     - name: Build bwrap and export digest
-       if: ${{ runner.os == 'Linux' }}
-       shell: bash
--      working-directory: codex-rs
-+      working-directory: ${{ inputs.working-directory }}
-       env:
-         TARGET: ${{ inputs.target }}
-       run: |
-         set -euo pipefail
--        cargo build --target "${TARGET}" --release --timings --bin bwrap
-+        cargo build --locked --target "${TARGET}" --release --timings --bin bwrap
- 
-         bwrap_path="${CARGO_TARGET_DIR}/${TARGET}/release/bwrap"
-         # Codex embeds this digest at build time and verifies the packaged
-@@ -115,7 +132,7 @@ runs:
- 
-     - name: Build Codex package binaries
-       shell: bash
--      working-directory: codex-rs
-+      working-directory: ${{ inputs.working-directory }}
-       env:
-         TARGET: ${{ inputs.target }}
-         BINARIES: ${{ inputs.binaries }}
-@@ -130,6 +147,6 @@ runs:
-         if [[ "${TARGET}" == "x86_64-pc-windows-msvc" ]]; then
-           export LIBSQLITE3_FLAGS=SQLITE_DISABLE_INTRINSIC
-         fi
--        STABLE_GIT_COMMIT="$(git rev-parse HEAD)"
-+        STABLE_GIT_COMMIT="$(git -C "$GITHUB_WORKSPACE" rev-parse HEAD)"
-         export STABLE_GIT_COMMIT
--        cargo build --target "${TARGET}" --release --timings "${build_args[@]}"
-+        cargo build --locked --target "${TARGET}" --release --timings "${build_args[@]}"
 diff --git a/.github/actions/build-codex-packages/action.yml b/.github/actions/build-codex-packages/action.yml
 index dea7cb623fef5a7c2f980cf9108ced2a427d686e..92010ad28f98aa99271589d0840fd20579ba1d42 100644
 --- a/.github/actions/build-codex-packages/action.yml
@@ -495,10 +374,10 @@ index b9a42ac3493ed7c884c06824a1d4cbdcf75dacbc..1b5606772d4907dc474ea72589d260a9
      # Some integration tests spawn DotSlash from a stable system path rather
      # than inheriting the action-local PATH entry.
 diff --git a/.github/blob-size-allowlist.txt b/.github/blob-size-allowlist.txt
-index 27d1c59e87bedc248d78672cd5b9ae0a7d70a577..5e93053eba0ca2ce830bbe0846a7becfadf628e8 100644
+index 27d1c59e87bedc248d78672cd5b9ae0a7d70a577..c72e017848c5d57d89e1a818b333687675853212 100644
 --- a/.github/blob-size-allowlist.txt
 +++ b/.github/blob-size-allowlist.txt
-@@ -5,7 +5,21 @@
+@@ -5,7 +5,23 @@
  MODULE.bazel.lock
  codex-rs/app-server-protocol/schema/json/codex_app_server_protocol.schemas.json
  codex-rs/app-server-protocol/schema/json/codex_app_server_protocol.v2.schemas.json
@@ -516,6 +395,8 @@ index 27d1c59e87bedc248d78672cd5b9ae0a7d70a577..5e93053eba0ca2ce830bbe0846a7becf
 +integration/codex/compatibility/rpc.json
 +inventory/baseline-tree.json
 +inventory/downstream.json
++# Per-file assembly ownership includes the reviewed dependency sources.
++integration/codex/assembly.json
 +# Strict integration patches include generated schemas and vendored binary data.
 +integration/codex/patches/backend_dispatch.patch
 +integration/codex/patches/dependency_override.patch
@@ -1013,33 +894,6 @@ index c6f00555a35559216e222e2ec129a9e927dd57c2..a73b24c7e5278b2451222d14b6e53f56
          with:
            persist-credentials: false
  
-diff --git a/.github/workflows/cargo-deny.yml b/.github/workflows/cargo-deny.yml
-index 0f8ebae902bd4252fe2ce5cfab57d4ac526bd1e3..8ad4b053124d87082fd067980a674bd3ee5b4d09 100644
---- a/.github/workflows/cargo-deny.yml
-+++ b/.github/workflows/cargo-deny.yml
-@@ -11,17 +11,19 @@ jobs:
-         working-directory: ./codex-rs
-     steps:
-       - name: Checkout
--        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-         with:
-           persist-credentials: false
- 
-       - uses: ./.github/actions/setup-ci
- 
-       - name: Install Rust toolchain
--        uses: dtolnay/rust-toolchain@e081816240890017053eacbb1bdf337761dc5582 # 1.95.0
-+        uses: dtolnay/rust-toolchain@e2a55d2ffb04f378e9626c28d38b36d230d1e12f # master, 2026-10-12
-+        with:
-+          toolchain: 1.95.0
- 
-       - name: Run cargo-deny
--        uses: EmbarkStudios/cargo-deny-action@82eb9f621fbc699dd0918f3ea06864c14cc84246 # v2
-+        uses: EmbarkStudios/cargo-deny-action@3c6349835b2b7b196a839186cb8b78e02f7b5f25 # v2.1.1
-         with:
-           rust-version: 1.95.0
-           manifest-path: ./codex-rs/Cargo.toml
 diff --git a/.github/workflows/codespell.yml b/.github/workflows/codespell.yml
 index 996b3deddb58fb12791647aec1e390d2a0f01fdb..cfd4445a3300ca67de5aa004207b66bfe8537671 100644
 --- a/.github/workflows/codespell.yml
@@ -1427,415 +1281,6 @@ index 4f05cd06046ba95a0903cd807ff3b47d93ee1744..78c271db8187ea94f7b429f79c2f34d9
  
        - name: Install dependencies
          run: pnpm install --frozen-lockfile
-diff --git a/.github/workflows/rust-ci-full-nextest-platform.yml b/.github/workflows/rust-ci-full-nextest-platform.yml
-index 474535267aabc0143e5858754acda9679aca058f..5c4abae8d27d241b7cf6283260b39811a45f3680 100644
---- a/.github/workflows/rust-ci-full-nextest-platform.yml
-+++ b/.github/workflows/rust-ci-full-nextest-platform.yml
-@@ -69,7 +69,7 @@ jobs:
-       NEXTEST_ARCHIVE_FILE: nextest-${{ inputs.artifact_id }}.tar.zst
-       TEST_HELPERS_ARTIFACT: nextest-test-helpers-${{ inputs.artifact_id }}
-     steps:
--      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-         with:
-           persist-credentials: false
- 
-@@ -85,8 +85,9 @@ jobs:
-             sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends build-essential pkg-config libcap-dev libasound2-dev bubblewrap
-           fi
- 
--      - uses: dtolnay/rust-toolchain@e081816240890017053eacbb1bdf337761dc5582 # 1.95.0
-+      - uses: dtolnay/rust-toolchain@e2a55d2ffb04f378e9626c28d38b36d230d1e12f # master, 2026-10-12
-         with:
-+          toolchain: 1.95.0
-           targets: ${{ inputs.target }}
- 
-       - name: Expose MSVC SDK environment (Windows)
-@@ -105,7 +106,7 @@ jobs:
- 
-       - name: Restore cargo home cache
-         id: cache_cargo_home_restore
--        uses: actions/cache/restore@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5.0.4
-+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-         with:
-           path: |
-             ~/.cargo/bin/
-@@ -118,7 +119,7 @@ jobs:
- 
-       - name: Install sccache
-         if: ${{ env.USE_SCCACHE == 'true' }}
--        uses: taiki-e/install-action@44c6d64aa62cd779e873306675c7a58e86d6d532 # v2.62.49
-+        uses: taiki-e/install-action@1168f6810a3cb30a3514bf5756a3b7f0422c6df8 # v2.87.28
-         with:
-           tool: sccache
-           version: 0.7.5
-@@ -152,7 +153,7 @@ jobs:
-       - name: Restore sccache cache (fallback)
-         if: ${{ env.USE_SCCACHE == 'true' && env.SCCACHE_GHA_ENABLED != 'true' }}
-         id: cache_sccache_restore
--        uses: actions/cache/restore@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5.0.4
-+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-         with:
-           path: ${{ env.SCCACHE_DIR }}
-           key: sccache-${{ env.ARCHIVE_CACHE_RUNNER }}-${{ inputs.target }}-${{ inputs.profile }}-${{ steps.lockhash.outputs.hash }}-${{ github.run_id }}
-@@ -160,7 +161,7 @@ jobs:
-             sccache-${{ env.ARCHIVE_CACHE_RUNNER }}-${{ inputs.target }}-${{ inputs.profile }}-${{ steps.lockhash.outputs.hash }}-
-             sccache-${{ env.ARCHIVE_CACHE_RUNNER }}-${{ inputs.target }}-${{ inputs.profile }}-
- 
--      - uses: taiki-e/install-action@44c6d64aa62cd779e873306675c7a58e86d6d532 # v2.62.49
-+      - uses: taiki-e/install-action@1168f6810a3cb30a3514bf5756a3b7f0422c6df8 # v2.87.28
-         with:
-           tool: nextest
-           version: 0.9.103
-@@ -205,14 +206,15 @@ jobs:
- 
-       - name: Upload Cargo timings (nextest)
-         if: always()
--        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
-+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-         with:
-+          retention-days: 7
-           name: cargo-timings-rust-ci-nextest-${{ inputs.target }}-${{ inputs.profile }}
-           path: ${{ env.CARGO_TARGET_DIR }}/**/cargo-timings/cargo-timing.html
-           if-no-files-found: warn
- 
-       - name: Upload nextest archive
--        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
-+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-         with:
-           name: nextest-archive-${{ inputs.artifact_id }}
-           path: ${{ runner.temp }}/nextest-archive/${{ env.NEXTEST_ARCHIVE_FILE }}
-@@ -221,7 +223,7 @@ jobs:
- 
-       - name: Upload runtime test helpers
-         if: ${{ runner.os == 'Linux' || runner.os == 'Windows' }}
--        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
-+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-         with:
-           name: ${{ env.TEST_HELPERS_ARTIFACT }}
-           path: ${{ runner.temp }}/${{ env.TEST_HELPERS_ARTIFACT }}/*
-@@ -231,7 +233,7 @@ jobs:
-       - name: Save cargo home cache
-         if: always() && !cancelled() && steps.cache_cargo_home_restore.outputs.cache-hit != 'true'
-         continue-on-error: true
--        uses: actions/cache/save@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5.0.4
-+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-         with:
-           path: |
-             ~/.cargo/bin/
-@@ -243,7 +245,7 @@ jobs:
-       - name: Save sccache cache (fallback)
-         if: always() && !cancelled() && env.USE_SCCACHE == 'true' && env.SCCACHE_GHA_ENABLED != 'true'
-         continue-on-error: true
--        uses: actions/cache/save@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5.0.4
-+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-         with:
-           path: ${{ env.SCCACHE_DIR }}
-           key: sccache-${{ env.ARCHIVE_CACHE_RUNNER }}-${{ inputs.target }}-${{ inputs.profile }}-${{ steps.lockhash.outputs.hash }}-${{ github.run_id }}
-@@ -284,7 +286,7 @@ jobs:
-       matrix:
-         shard: [1, 2, 3, 4]
-     steps:
--      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-         with:
-           persist-credentials: false
- 
-@@ -300,11 +302,12 @@ jobs:
-             sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends pkg-config libcap-dev libasound2-dev bubblewrap
-           fi
- 
--      - uses: dtolnay/rust-toolchain@e081816240890017053eacbb1bdf337761dc5582 # 1.95.0
-+      - uses: dtolnay/rust-toolchain@e2a55d2ffb04f378e9626c28d38b36d230d1e12f # master, 2026-10-12
-         with:
-+          toolchain: 1.95.0
-           targets: ${{ inputs.target }}
- 
--      - uses: taiki-e/install-action@44c6d64aa62cd779e873306675c7a58e86d6d532 # v2.62.49
-+      - uses: taiki-e/install-action@1168f6810a3cb30a3514bf5756a3b7f0422c6df8 # v2.87.28
-         with:
-           tool: nextest
-           version: 0.9.103
-@@ -322,14 +325,14 @@ jobs:
-           echo "CODEX_TEST_REMOTE_EXEC_SERVER_URL=${CODEX_TEST_REMOTE_EXEC_SERVER_URL}" >> "$GITHUB_ENV"
- 
-       - name: Download nextest archive
--        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
-+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
-         with:
-           name: nextest-archive-${{ inputs.artifact_id }}
-           path: ${{ runner.temp }}/nextest-archive
- 
-       - name: Download runtime test helpers
-         if: ${{ runner.os == 'Linux' || runner.os == 'Windows' }}
--        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
-+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
-         with:
-           name: ${{ env.TEST_HELPERS_ARTIFACT }}
-           path: ${{ runner.temp }}/${{ env.TEST_HELPERS_ARTIFACT }}
-@@ -400,8 +403,9 @@ jobs:
- 
-       - name: Upload nextest JUnit report
-         if: always()
--        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
-+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-         with:
-+          retention-days: 7
-           name: nextest-junit-rust-ci-${{ inputs.artifact_id }}-shard-${{ matrix.shard }}
-           path: ${{ env.CARGO_TARGET_DIR }}/nextest/default/junit.xml
-           if-no-files-found: warn
-diff --git a/.github/workflows/rust-ci-full.yml b/.github/workflows/rust-ci-full.yml
-index 188f94ef452f6354e25295e0f1ddda89cb0cdf9a..dc6d5b2e3abbe5e90ef5d67c45712725eff8d485 100644
---- a/.github/workflows/rust-ci-full.yml
-+++ b/.github/workflows/rust-ci-full.yml
-@@ -17,12 +17,13 @@ jobs:
-       run:
-         working-directory: codex-rs
-     steps:
--      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-         with:
-           persist-credentials: false
-       - uses: ./.github/actions/setup-ci
--      - uses: dtolnay/rust-toolchain@e081816240890017053eacbb1bdf337761dc5582 # 1.95.0
-+      - uses: dtolnay/rust-toolchain@e2a55d2ffb04f378e9626c28d38b36d230d1e12f # master, 2026-10-12
-         with:
-+          toolchain: 1.95.0
-           components: rustfmt
-       - name: cargo fmt
-         run: cargo fmt -- --config imports_granularity=Item --check
-@@ -36,12 +37,14 @@ jobs:
-       run:
-         working-directory: codex-rs
-     steps:
--      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-         with:
-           persist-credentials: false
-       - uses: ./.github/actions/setup-ci
--      - uses: dtolnay/rust-toolchain@e081816240890017053eacbb1bdf337761dc5582 # 1.95.0
--      - uses: taiki-e/install-action@44c6d64aa62cd779e873306675c7a58e86d6d532 # v2.62.49
-+      - uses: dtolnay/rust-toolchain@e2a55d2ffb04f378e9626c28d38b36d230d1e12f # master, 2026-10-12
-+        with:
-+          toolchain: 1.95.0
-+      - uses: taiki-e/install-action@1168f6810a3cb30a3514bf5756a3b7f0422c6df8 # v2.87.28
-         with:
-           tool: cargo-shear@1.11.2
-       - name: cargo shear
-@@ -54,17 +57,17 @@ jobs:
-       CARGO_DYLINT_VERSION: 6.1.0
-       DYLINT_LINK_VERSION: 6.1.0
-     steps:
--      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-         with:
-           persist-credentials: false
-       - uses: ./.github/actions/setup-ci
--      - uses: dtolnay/rust-toolchain@3c5f7ea28cd621ae0bf5283f0e981fb97b8a7af9 # master
-+      - uses: dtolnay/rust-toolchain@e2a55d2ffb04f378e9626c28d38b36d230d1e12f # master, 2026-10-12
-         with:
-           toolchain: nightly-2026-08-20
-           components: llvm-tools-preview, rustc-dev, rust-src
-       - name: Cache cargo-dylint tooling
-         id: cargo_dylint_cache
--        uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5.0.4
-+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-         with:
-           path: |
-             ~/.cargo/bin/cargo-dylint
-@@ -110,7 +113,7 @@ jobs:
-               group: ${{ github.event.repository.name }}-runners
-               labels: ${{ github.event.repository.name }}-windows-x64
-     steps:
--      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-         with:
-           persist-credentials: false
-       - name: Run argument comment lint on codex-rs via Bazel
-@@ -215,7 +218,7 @@ jobs:
-               labels: ${{ github.event.repository.name }}-windows-arm64
- 
-     steps:
--      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-         with:
-           persist-credentials: false
-       - uses: ./.github/actions/setup-ci
-@@ -228,8 +231,9 @@ jobs:
-             sudo apt-get update -y
-             sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends build-essential pkg-config libcap-dev libasound2-dev
-           fi
--      - uses: dtolnay/rust-toolchain@e081816240890017053eacbb1bdf337761dc5582 # 1.95.0
-+      - uses: dtolnay/rust-toolchain@e2a55d2ffb04f378e9626c28d38b36d230d1e12f # master, 2026-10-12
-         with:
-+          toolchain: 1.95.0
-           targets: ${{ matrix.target }}
-           components: clippy
- 
-@@ -257,7 +261,7 @@ jobs:
-       # avoid caching the large target dir on the gnu-dev job.
-       - name: Restore cargo home cache
-         id: cache_cargo_home_restore
--        uses: actions/cache/restore@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5.0.4
-+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-         with:
-           path: |
-             ~/.cargo/bin/
-@@ -275,7 +279,7 @@ jobs:
-       # Install and restore sccache cache
-       - name: Install sccache
-         if: ${{ env.USE_SCCACHE == 'true' }}
--        uses: taiki-e/install-action@44c6d64aa62cd779e873306675c7a58e86d6d532 # v2.62.49
-+        uses: taiki-e/install-action@1168f6810a3cb30a3514bf5756a3b7f0422c6df8 # v2.87.28
-         with:
-           tool: sccache
-           version: 0.7.5
-@@ -302,7 +306,7 @@ jobs:
-       - name: Restore sccache cache (fallback)
-         if: ${{ env.USE_SCCACHE == 'true' && env.SCCACHE_GHA_ENABLED != 'true' }}
-         id: cache_sccache_restore
--        uses: actions/cache/restore@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5.0.4
-+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-         with:
-           path: ${{ github.workspace }}/.sccache/
-           key: sccache-${{ matrix.runner }}-${{ matrix.target }}-${{ matrix.profile }}-${{ steps.lockhash.outputs.hash }}-${{ github.run_id }}
-@@ -321,7 +325,7 @@ jobs:
-       - if: ${{ matrix.target == 'x86_64-unknown-linux-musl' || matrix.target == 'aarch64-unknown-linux-musl'}}
-         name: Restore APT cache (musl)
-         id: cache_apt_restore
--        uses: actions/cache/restore@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5.0.4
-+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-         with:
-           path: |
-             /var/cache/apt
-@@ -350,7 +354,7 @@ jobs:
- 
-       - name: Install cargo-chef
-         if: ${{ matrix.profile == 'release' }}
--        uses: taiki-e/install-action@44c6d64aa62cd779e873306675c7a58e86d6d532 # v2.62.49
-+        uses: taiki-e/install-action@1168f6810a3cb30a3514bf5756a3b7f0422c6df8 # v2.87.28
-         with:
-           tool: cargo-chef
-           version: 0.1.71
-@@ -369,8 +373,9 @@ jobs:
- 
-       - name: Upload Cargo timings (clippy)
-         if: always()
--        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
-+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-         with:
-+          retention-days: 7
-           name: cargo-timings-rust-ci-clippy-${{ matrix.target }}-${{ matrix.profile }}
-           path: ${{ env.CARGO_TARGET_DIR }}/**/cargo-timings/cargo-timing.html
-           if-no-files-found: warn
-@@ -380,7 +385,7 @@ jobs:
-       - name: Save cargo home cache
-         if: always() && !cancelled() && steps.cache_cargo_home_restore.outputs.cache-hit != 'true'
-         continue-on-error: true
--        uses: actions/cache/save@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5.0.4
-+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-         with:
-           path: |
-             ~/.cargo/bin/
-@@ -396,7 +401,7 @@ jobs:
-       - name: Save sccache cache (fallback)
-         if: always() && !cancelled() && env.USE_SCCACHE == 'true' && env.SCCACHE_GHA_ENABLED != 'true'
-         continue-on-error: true
--        uses: actions/cache/save@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5.0.4
-+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-         with:
-           path: ${{ github.workspace }}/.sccache/
-           key: sccache-${{ matrix.runner }}-${{ matrix.target }}-${{ matrix.profile }}-${{ steps.lockhash.outputs.hash }}-${{ github.run_id }}
-@@ -421,7 +426,7 @@ jobs:
-       - name: Save APT cache (musl)
-         if: always() && !cancelled() && (matrix.target == 'x86_64-unknown-linux-musl' || matrix.target == 'aarch64-unknown-linux-musl') && steps.cache_apt_restore.outputs.cache-hit != 'true'
-         continue-on-error: true
--        uses: actions/cache/save@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5.0.4
-+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-         with:
-           path: |
-             /var/cache/apt
-diff --git a/.github/workflows/rust-ci.yml b/.github/workflows/rust-ci.yml
-index 48bee976c94209b2ccb9e65a33088e6ba80eada4..6cd456d13b39a60d272c4184586965d4ba474e5c 100644
---- a/.github/workflows/rust-ci.yml
-+++ b/.github/workflows/rust-ci.yml
-@@ -14,7 +14,7 @@ jobs:
-       codex: ${{ steps.detect.outputs.codex }}
-       workflows: ${{ steps.detect.outputs.workflows }}
-     steps:
--      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-         with:
-           fetch-depth: 0
-           persist-credentials: false
-@@ -66,12 +66,13 @@ jobs:
-       run:
-         working-directory: codex-rs
-     steps:
--      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-         with:
-           persist-credentials: false
-       - uses: ./.github/actions/setup-ci
--      - uses: dtolnay/rust-toolchain@e081816240890017053eacbb1bdf337761dc5582 # 1.95.0
-+      - uses: dtolnay/rust-toolchain@e2a55d2ffb04f378e9626c28d38b36d230d1e12f # master, 2026-10-12
-         with:
-+          toolchain: 1.95.0
-           components: rustfmt
-       - name: cargo fmt
-         run: cargo fmt -- --config imports_granularity=Item --check
-@@ -91,12 +92,14 @@ jobs:
-       run:
-         working-directory: codex-rs
-     steps:
--      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-         with:
-           persist-credentials: false
-       - uses: ./.github/actions/setup-ci
--      - uses: dtolnay/rust-toolchain@e081816240890017053eacbb1bdf337761dc5582 # 1.95.0
--      - uses: taiki-e/install-action@44c6d64aa62cd779e873306675c7a58e86d6d532 # v2.62.49
-+      - uses: dtolnay/rust-toolchain@e2a55d2ffb04f378e9626c28d38b36d230d1e12f # master, 2026-10-12
-+        with:
-+          toolchain: 1.95.0
-+      - uses: taiki-e/install-action@1168f6810a3cb30a3514bf5756a3b7f0422c6df8 # v2.87.28
-         with:
-           tool: cargo-shear@1.11.2
-       - name: cargo shear
-@@ -115,11 +118,13 @@ jobs:
-       CARGO_DYLINT_VERSION: 6.1.0
-       DYLINT_LINK_VERSION: 6.1.0
-     steps:
--      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-         with:
-           persist-credentials: false
-       - uses: ./.github/actions/setup-ci
--      - uses: dtolnay/rust-toolchain@e081816240890017053eacbb1bdf337761dc5582 # 1.95.0
-+      - uses: dtolnay/rust-toolchain@e2a55d2ffb04f378e9626c28d38b36d230d1e12f # master, 2026-10-12
-+        with:
-+          toolchain: 1.95.0
-       - name: Install nightly argument-comment-lint toolchain
-         shell: bash
-         run: |
-@@ -132,7 +137,7 @@ jobs:
-           rustup default nightly-2026-08-20
-       - name: Cache cargo-dylint tooling
-         id: cargo_dylint_cache
--        uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5.0.4
-+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-         with:
-           path: |
-             ~/.cargo/bin/cargo-dylint
-@@ -200,7 +205,7 @@ jobs:
- 
-           echo "No argument-comment-lint relevant changes."
-           echo "run=false" >> "$GITHUB_OUTPUT"
--      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-         if: ${{ steps.argument_comment_lint_gate.outputs.run == 'true' }}
-         with:
-           persist-credentials: false
 diff --git a/.github/workflows/rust-release-argument-comment-lint.yml b/.github/workflows/rust-release-argument-comment-lint.yml
 index d49f8966488c85e04d1d7e3729d117b0932ac3f4..194bb82e5b28c71540067a775b0ef3161239f03c 100644
 --- a/.github/workflows/rust-release-argument-comment-lint.yml
@@ -1966,739 +1411,6 @@ index bbed09018768aeb20a59eef009db6683a538cc9f..bb962a68555c69ead91cf4bbba43f166
            name: provisioned-macos-verification-reports-${{ matrix.target }}
            path: signing-verification/
            if-no-files-found: warn
-diff --git a/.github/workflows/rust-release-windows.yml b/.github/workflows/rust-release-windows.yml
-index 8e167aa805e9ebfc32fa7e63c3adb92d836f7479..926d2a96274f3099bf4b73879b6db2a364ad581c 100644
---- a/.github/workflows/rust-release-windows.yml
-+++ b/.github/workflows/rust-release-windows.yml
-@@ -80,7 +80,7 @@ jobs:
-               labels: ${{ github.event.repository.name }}-windows-arm64
- 
-     steps:
--      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-         with:
-           persist-credentials: false
-       - uses: ./.github/actions/setup-ci
-@@ -100,8 +100,9 @@ jobs:
-           Write-Host "Disk usage:"
-           Get-PSDrive -PSProvider FileSystem | Format-Table -AutoSize Name, @{Name='Size(GB)';Expression={[math]::Round(($_.Used + $_.Free) / 1GB, 1)}}, @{Name='Free(GB)';Expression={[math]::Round($_.Free / 1GB, 1)}}
-       - name: Set up Rust toolchain
--        uses: dtolnay/rust-toolchain@e081816240890017053eacbb1bdf337761dc5582 # 1.95.0
-+        uses: dtolnay/rust-toolchain@e2a55d2ffb04f378e9626c28d38b36d230d1e12f # master, 2026-10-12
-         with:
-+          toolchain: 1.95.0
-           targets: ${{ matrix.build-system == 'cargo' && matrix.target || '' }}
- 
-       - name: Prepare Bazel release build
-@@ -170,8 +171,9 @@ jobs:
-           done
- 
-       - name: Upload Windows binaries
--        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
-+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-         with:
-+          retention-days: 7
-           name: windows-binaries-${{ matrix.target }}-${{ matrix.bundle }}${{ env.ARTIFACT_SUFFIX }}
-           path: |
-             ${{ env.CARGO_TARGET_DIR }}/${{ matrix.target }}/release/staged-${{ matrix.bundle }}/*
-@@ -202,10 +204,10 @@ jobs:
-               group: ${{ github.event.repository.name }}-runners
-               labels: ${{ github.event.repository.name }}-windows-arm64
-     steps:
--      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-         with:
-           persist-credentials: false
--      - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
-+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
-         with:
-           python-version: "3.12"
-           architecture: ${{ matrix.python_arch }}
-@@ -299,8 +301,9 @@ jobs:
-           cp bazel-bin/codex-rs/voice-host/codex-voice-host.exe "$output/codex-voice-host.exe"
-           chmod -R u+w "$output"
-           tar -C "$output" -czf "voice-unsigned-${TARGET}.tar.gz" runtime codex-voice-host.exe
--      - uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
-+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-         with:
-+          retention-days: 7
-           name: voice-${{ matrix.target }}-unsigned
-           path: voice-unsigned-${{ matrix.target }}.tar.gz
-           if-no-files-found: error
-@@ -328,12 +331,12 @@ jobs:
-           - aarch64-pc-windows-msvc
-           - x86_64-pc-windows-msvc
-     steps:
--      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-         with:
-           persist-credentials: false
-       - uses: ./.github/actions/setup-ci
-       - name: Download prebuilt Windows binaries
--        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
-+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
-         with:
-           pattern: windows-binaries-${{ matrix.target }}-{primary,helpers,app-server}${{ env.ARTIFACT_SUFFIX }}
-           merge-multiple: true
-@@ -359,8 +362,9 @@ jobs:
-           done
- 
-       - name: Upload symbols archive
--        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
-+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-         with:
-+          retention-days: 7
-           name: ${{ matrix.target }}-symbols${{ env.ARTIFACT_SUFFIX }}
-           path: codex-rs/symbols-dist/${{ matrix.target }}/*
-           if-no-files-found: error
-@@ -405,26 +409,26 @@ jobs:
-               labels: ${{ github.event.repository.name }}-windows-x64
- 
-     steps:
--      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-         with:
-           persist-credentials: false
- 
-       - uses: ./.github/actions/setup-ci
- 
-       - name: Download prebuilt Windows primary binaries
--        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
-+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
-         with:
-           name: windows-binaries-${{ matrix.target }}-primary${{ env.ARTIFACT_SUFFIX }}
-           path: ${{ env.CARGO_TARGET_DIR }}/${{ matrix.target }}/release
- 
-       - name: Download prebuilt Windows helper binaries
--        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
-+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
-         with:
-           name: windows-binaries-${{ matrix.target }}-helpers${{ env.ARTIFACT_SUFFIX }}
-           path: ${{ env.CARGO_TARGET_DIR }}/${{ matrix.target }}/release
- 
-       - name: Download prebuilt Windows app-server binary
--        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
-+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
-         with:
-           name: windows-binaries-${{ matrix.target }}-app-server${{ env.ARTIFACT_SUFFIX }}
-           path: ${{ env.CARGO_TARGET_DIR }}/${{ matrix.target }}/release
-@@ -452,7 +456,7 @@ jobs:
-           certificate-profile-name: ${{ secrets.AZURE_ARTIFACT_SIGNING_CERTIFICATE_PROFILE_NAME }}
- 
-       - name: Download matching native voice build
--        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
-+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
-         with:
-           name: voice-${{ matrix.target }}-unsigned
-           path: ${{ runner.temp }}/unsigned-voice
-@@ -609,8 +613,9 @@ jobs:
- 
-       - name: Upload Python runtime wheel
-         if: ${{ matrix.build-system == 'cargo' }}
--        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
-+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-         with:
-+          retention-days: 7
-           name: python-runtime-wheel-${{ matrix.target }}
-           path: python-runtime-dist/${{ matrix.target }}/*.whl
-           if-no-files-found: error
-@@ -697,8 +702,9 @@ jobs:
-             mv "$artifact" "${artifact%/*}/${stem}-bazel${name#"$stem"}"
-           done
- 
--      - uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
-+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-         with:
-+          retention-days: 7
-           name: ${{ matrix.target }}${{ env.ARTIFACT_SUFFIX }}
-           path: |
-             codex-rs/dist/${{ matrix.target }}/*
-diff --git a/.github/workflows/rust-release.yml b/.github/workflows/rust-release.yml
-index abde060ea39e46158409d2e369d5a6bb951ec11c..4a4d217efb25e796494521186cce7d69ec882cae 100644
---- a/.github/workflows/rust-release.yml
-+++ b/.github/workflows/rust-release.yml
-@@ -25,12 +25,16 @@ concurrency:
- 
- jobs:
-   tag-check:
-+    # The upstream signing and publication infrastructure is not used by Nyacode.
-+    if: github.repository == 'openai/codex'
-     runs-on: ubuntu-latest
-     steps:
--      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-         with:
-           persist-credentials: false
--      - uses: dtolnay/rust-toolchain@e081816240890017053eacbb1bdf337761dc5582 # 1.95.0
-+      - uses: dtolnay/rust-toolchain@e2a55d2ffb04f378e9626c28d38b36d230d1e12f # master, 2026-10-12
-+        with:
-+          toolchain: 1.95.0
-       - name: Validate tag matches Cargo.toml version
-         shell: bash
-         run: |
-@@ -143,7 +147,7 @@ jobs:
-             build_dmg: "false"
- 
-     steps:
--      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-         with:
-           persist-credentials: false
-       - name: Print runner specs (Linux)
-@@ -183,8 +187,9 @@ jobs:
-           sudo apt-get update -y
-           sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends binutils pkg-config libcap-dev
-       - name: Set up Rust toolchain
--        uses: dtolnay/rust-toolchain@e081816240890017053eacbb1bdf337761dc5582 # 1.95.0
-+        uses: dtolnay/rust-toolchain@e2a55d2ffb04f378e9626c28d38b36d230d1e12f # master, 2026-10-12
-         with:
-+          toolchain: 1.95.0
-           targets: ${{ matrix.build-system == 'cargo' && matrix.target || '' }}
- 
-       - if: ${{ matrix.build-system == 'cargo' && contains(matrix.target, 'linux') }}
-@@ -316,8 +321,9 @@ jobs:
-           done
- 
-       - name: Upload symbols archive
--        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
-+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-         with:
-+          retention-days: 7
-           name: ${{ matrix.artifact_name }}-symbols${{ env.ARTIFACT_SUFFIX }}
-           path: codex-rs/symbols-dist/${{ matrix.artifact_name }}/*
-           if-no-files-found: error
-@@ -376,8 +382,9 @@ jobs:
- 
-       - if: ${{ runner.os == 'macOS' }}
-         name: Upload unsigned macOS artifacts
--        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
-+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-         with:
-+          retention-days: 7
-           name: ${{ matrix.artifact_name }}-unsigned${{ env.ARTIFACT_SUFFIX }}
-           path: codex-rs/unsigned-dist/${{ matrix.target }}/*
-           if-no-files-found: error
-@@ -504,8 +511,9 @@ jobs:
- 
-       - name: Upload Python runtime wheel
-         if: ${{ matrix.build-system == 'cargo' && matrix.bundle == 'primary' && runner.os != 'macOS' }}
--        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
-+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-         with:
-+          retention-days: 7
-           name: python-runtime-wheel-${{ matrix.target }}
-           path: python-runtime-dist/${{ matrix.target }}/*.whl
-           if-no-files-found: error
-@@ -558,9 +566,10 @@ jobs:
-             mv "$artifact" "${artifact%/*}/${stem}-bazel${name#"$stem"}"
-           done
- 
--      - uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
-+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-         if: ${{ runner.os != 'macOS' }}
-         with:
-+          retention-days: 7
-           name: ${{ matrix.artifact_name }}${{ env.ARTIFACT_SUFFIX }}
-           # Upload the per-binary .zst files, .tar.gz equivalents, and any
-           # prebuilt archives staged above.
-@@ -588,10 +597,10 @@ jobs:
-             runner: macos-15-intel
-             prefix: macos_x86_64
-     steps:
--      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-         with:
-           persist-credentials: false
--      - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
-+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
-         with:
-           python-version: "3.12"
-       - name: Prepare Bazel CI
-@@ -625,8 +634,9 @@ jobs:
-           chmod -R u+w "voice-unsigned/${TARGET}/runtime"
-           cp bazel-bin/codex-rs/voice-host/codex-voice-host "voice-unsigned/${TARGET}/codex-voice-host"
-           tar -C "voice-unsigned/${TARGET}" -czf "voice-unsigned-${TARGET}.tar.gz" runtime codex-voice-host
--      - uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
-+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-         with:
-+          retention-days: 7
-           name: voice-${{ matrix.target }}-unsigned
-           path: voice-unsigned-${{ matrix.target }}.tar.gz
-           if-no-files-found: error
-@@ -675,19 +685,19 @@ jobs:
-             binaries: "codex-app-server codex-code-mode-host"
- 
-     steps:
--      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-         with:
-           persist-credentials: false
- 
-       - name: Download unsigned macOS binaries
--        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
-+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
-         with:
-           name: ${{ matrix.artifact_name }}-unsigned${{ env.ARTIFACT_SUFFIX }}
-           path: ${{ runner.temp }}/unsigned-macos
- 
-       - name: Download unsigned voice runtime
-         if: ${{ matrix.bundle == 'primary' }}
--        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
-+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
-         with:
-           name: voice-${{ matrix.target }}-unsigned
-           path: ${{ runner.temp }}/unsigned-voice
-@@ -849,31 +859,35 @@ jobs:
- 
-       - name: Upload signed voice runtime
-         if: ${{ matrix.bundle == 'primary' }}
--        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
-+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-         with:
-+          retention-days: 7
-           name: voice-${{ matrix.target }}-signed${{ env.ARTIFACT_SUFFIX }}
-           path: signed-voice-${{ matrix.target }}.tar.gz
-           if-no-files-found: error
- 
-       - name: Upload signed macOS binaries
--        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
-+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-         with:
-+          retention-days: 7
-           name: ${{ matrix.artifact_name }}-signed-binaries${{ env.ARTIFACT_SUFFIX }}
-           path: signed-macos/${{ matrix.target }}/*
-           if-no-files-found: error
- 
-       - name: Upload signed macOS helpers
-         if: ${{ matrix.bundle == 'primary' }}
--        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
-+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-         with:
-+          retention-days: 7
-           name: ${{ matrix.target }}-signed-resources${{ env.ARTIFACT_SUFFIX }}
-           path: signed-resources/${{ matrix.target }}/*
-           if-no-files-found: error
- 
-       - name: Upload binary signing verification
-         if: ${{ always() }}
--        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
-+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-         with:
-+          retention-days: 7
-           name: ${{ matrix.artifact_name }}-binary-signing-verification${{ env.ARTIFACT_SUFFIX }}
-           path: macos-binary-signing-verification/${{ matrix.target }}/
-           if-no-files-found: warn
-@@ -924,25 +938,25 @@ jobs:
-             build_dmg: "false"
- 
-     steps:
--      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-         with:
-           persist-credentials: false
- 
-       - name: Download signed macOS binaries
--        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
-+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
-         with:
-           name: ${{ matrix.artifact_name }}-signed-binaries${{ env.ARTIFACT_SUFFIX }}
-           path: codex-rs/target/${{ matrix.target }}/release
- 
-       - name: Download signed macOS helpers
--        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
-+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
-         with:
-           name: ${{ matrix.target }}-signed-resources${{ env.ARTIFACT_SUFFIX }}
-           path: codex-rs/signed-resources/${{ matrix.target }}
- 
-       - name: Download signed voice runtime
-         if: ${{ matrix.bundle == 'primary' }}
--        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
-+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
-         with:
-           name: voice-${{ matrix.target }}-signed${{ env.ARTIFACT_SUFFIX }}
-           path: ${{ runner.temp }}/signed-voice
-@@ -1075,8 +1089,9 @@ jobs:
- 
-       - name: Upload unsigned macOS DMG
-         if: ${{ matrix.build_dmg == 'true' }}
--        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
-+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-         with:
-+          retention-days: 7
-           name: ${{ matrix.artifact_name }}-unsigned-dmg${{ env.ARTIFACT_SUFFIX }}
-           path: codex-rs/target/${{ matrix.target }}/release/codex-${{ matrix.target }}.dmg
-           if-no-files-found: error
-@@ -1134,8 +1149,9 @@ jobs:
- 
-       - name: Upload Python runtime wheel
-         if: ${{ matrix.build-system == 'cargo' && matrix.bundle == 'primary' }}
--        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
-+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-         with:
-+          retention-days: 7
-           name: python-runtime-wheel-${{ matrix.target }}
-           path: python-runtime-dist/${{ matrix.target }}/*.whl
-           if-no-files-found: error
-@@ -1156,8 +1172,9 @@ jobs:
-           done
- 
-       - name: Upload packaged macOS artifacts
--        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
-+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-         with:
-+          retention-days: 7
-           name: ${{ matrix.artifact_name }}-packaged${{ env.ARTIFACT_SUFFIX }}
-           path: codex-rs/dist/${{ matrix.target }}/*
-           if-no-files-found: error
-@@ -1192,12 +1209,12 @@ jobs:
-             artifact_name: x86_64-apple-darwin
- 
-     steps:
--      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-         with:
-           persist-credentials: false
- 
-       - name: Download unsigned macOS DMG
--        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
-+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
-         with:
-           name: ${{ matrix.artifact_name }}-unsigned-dmg${{ env.ARTIFACT_SUFFIX }}
-           path: ${{ runner.temp }}/unsigned-dmg
-@@ -1251,16 +1268,18 @@ jobs:
-             >"${report_dir}/signature-info.yaml"
- 
-       - name: Upload signed macOS DMG
--        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
-+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-         with:
-+          retention-days: 7
-           name: ${{ matrix.artifact_name }}-signed-dmg${{ env.ARTIFACT_SUFFIX }}
-           path: ${{ runner.temp }}/unsigned-dmg/codex-${{ matrix.target }}.dmg
-           if-no-files-found: error
- 
-       - name: Upload DMG signing verification
-         if: ${{ always() }}
--        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
-+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-         with:
-+          retention-days: 7
-           name: ${{ matrix.artifact_name }}-dmg-signing-verification${{ env.ARTIFACT_SUFFIX }}
-           path: macos-dmg-signing-verification/${{ matrix.target }}/
-           if-no-files-found: warn
-@@ -1313,25 +1332,25 @@ jobs:
-             verify_dmg: "false"
- 
-     steps:
--      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-         with:
-           persist-credentials: false
- 
-       - name: Download packaged macOS artifacts
--        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
-+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
-         with:
-           name: ${{ matrix.artifact_name }}-packaged${{ env.ARTIFACT_SUFFIX }}
-           path: codex-rs/dist/${{ matrix.target }}
- 
-       - name: Download signed macOS binaries
--        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
-+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
-         with:
-           name: ${{ matrix.artifact_name }}-signed-binaries${{ env.ARTIFACT_SUFFIX }}
-           path: ${{ runner.temp }}/signed-binaries
- 
-       - name: Download signed macOS DMG
-         if: ${{ matrix.verify_dmg == 'true' }}
--        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
-+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
-         with:
-           name: ${{ matrix.artifact_name }}-signed-dmg${{ env.ARTIFACT_SUFFIX }}
-           path: ${{ runner.temp }}/signed-dmg
-@@ -1514,8 +1533,9 @@ jobs:
-           done
- 
-       - name: Upload verified macOS artifacts
--        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
-+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-         with:
-+          retention-days: 7
-           name: ${{ matrix.artifact_name }}${{ env.ARTIFACT_SUFFIX }}
-           path: codex-rs/dist/${{ matrix.target }}/*
-           if-no-files-found: error
-@@ -1555,23 +1575,23 @@ jobs:
- 
-     steps:
-       - name: Checkout repository
--        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-         with:
-           persist-credentials: false
- 
-       - name: Download target artifacts
--        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
-+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
-         with:
-           path: dist
-           pattern: "{aarch64,x86_64}-{apple-darwin{,-app-server},unknown-linux-musl{,-app-server},pc-windows-msvc}"
- 
-       - name: Setup pnpm
--        uses: pnpm/action-setup@a8198c4bff370c8506180b035930dea56dbd5288 # v5
-+        uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
-         with:
-           run_install: false
- 
-       - name: Setup Node.js for npm packaging
--        uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
-+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
-         with:
-           node-version: 22
- 
-@@ -1589,8 +1609,9 @@ jobs:
-             --package codex-sdk
- 
-       - name: Upload staged npm packages
--        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
-+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-         with:
-+          retention-days: 7
-           name: npm-packages
-           path: dist/npm/*.tgz
-           if-no-files-found: error
-@@ -1637,7 +1658,7 @@ jobs:
- 
-     steps:
-       - name: Checkout repository
--        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-         with:
-           persist-credentials: false
- 
-@@ -1662,14 +1683,14 @@ jobs:
-           echo "path=${notes_path}" >> "${GITHUB_OUTPUT}"
- 
-       - name: Download release artifacts
--        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
-+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
-         with:
-           path: dist
-           pattern: "{{aarch64,x86_64}-{apple-darwin{,-app-server},unknown-linux-musl{,-app-server},pc-windows-msvc}{,-bazel},*-symbols{,-bazel},argument-comment-lint-*,python-runtime-wheel-*,npm-packages}"
- 
-       - name: Download verified provisioned macOS packages
-         if: vars.CODEX_PROVISIONED_MACOS_CANDIDATE == 'true'
--        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
-+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
-         with:
-           path: dist
-           pattern: "provisioned-macos-verified-candidate-*"
-@@ -1837,7 +1858,7 @@ jobs:
-       contents: write
- 
-     steps:
--      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-         with:
-           persist-credentials: false
- 
-@@ -1880,12 +1901,12 @@ jobs:
- 
-     steps:
-       - name: Checkout repository
--        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-         with:
-           persist-credentials: false
- 
-       - name: Setup Node.js
--        uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
-+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
-         with:
-           # Node 24 bundles npm >= 11.5.1, which trusted publishing requires.
-           node-version: 24
-@@ -2164,7 +2185,7 @@ jobs:
-     runs-on: ubuntu-latest
- 
-     steps:
--      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-         with:
-           persist-credentials: false
-       - name: Determine whether to update the GitHub canary branch
-diff --git a/.github/workflows/rusty-v8-release.yml b/.github/workflows/rusty-v8-release.yml
-index e45ec5b58a2a080e60d941fd26217581b933553a..0d76a2f632d8edb2b41b94ad15d74e687c6984f4 100644
---- a/.github/workflows/rusty-v8-release.yml
-+++ b/.github/workflows/rusty-v8-release.yml
-@@ -22,12 +22,12 @@ jobs:
-       v8_version: ${{ steps.v8_version.outputs.version }}
- 
-     steps:
--      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-         with:
-           persist-credentials: false
- 
-       - name: Set up Python
--        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
-+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
-         with:
-           python-version: "3.12"
- 
-@@ -157,7 +157,7 @@ jobs:
-             variant: ptrcomp-sandbox
- 
-     steps:
--      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-         with:
-           persist-credentials: false
- 
-@@ -168,12 +168,12 @@ jobs:
-           cache-scope: bazel-v8
- 
-       - name: Set up Python
--        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
-+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
-         with:
-           python-version: "3.12"
- 
-       - name: Set up Rust toolchain for Cargo smoke
--        uses: dtolnay/rust-toolchain@e081816240890017053eacbb1bdf337761dc5582 # 1.95.0
-+        uses: dtolnay/rust-toolchain@e2a55d2ffb04f378e9626c28d38b36d230d1e12f # master, 2026-10-12
-         with:
-           toolchain: "1.95.0"
- 
-@@ -203,13 +203,13 @@ jobs:
-             --config=rusty-v8-upstream-libcxx
-             "--config=v8-target-${V8_CPU}"
-             "${pair_target}"
--            --build_metadata=COMMIT_SHA=$(git rev-parse HEAD)
-+            "--build_metadata=COMMIT_SHA=$(git rev-parse HEAD)"
-           )
-           if [[ "${SANDBOX}" != "true" ]]; then
-             bazel_args+=(--config=v8-release-compat)
-           fi
- 
--          ./.github/scripts/run_bazel_with_buildbuddy.py \
-+          python3 .github/scripts/run_v8_bazel_build.py \
-             --noexperimental_remote_repo_contents_cache \
-             "${bazel_args[@]}" \
-             "--config=${{ matrix.bazel_config }}"
-@@ -281,8 +281,9 @@ jobs:
-           )
- 
-       - name: Upload staged artifacts
--        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
-+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-         with:
-+          retention-days: 7
-           name: rusty-v8-${{ needs.metadata.outputs.v8_version }}-${{ matrix.variant }}-${{ matrix.target }}
-           path: dist/${{ matrix.target }}/*
- 
-@@ -302,7 +303,7 @@ jobs:
-             target: aarch64-pc-windows-msvc
- 
-     steps:
--      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-         with:
-           persist-credentials: false
- 
-@@ -311,7 +312,7 @@ jobs:
-         run: git config --global core.symlinks true
- 
-       - name: Check out upstream rusty_v8
--        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-         with:
-           repository: denoland/rusty_v8
-           ref: v${{ needs.metadata.outputs.v8_version }}
-@@ -319,24 +320,36 @@ jobs:
-           submodules: recursive
-           persist-credentials: false
- 
--      - name: Download upstream Windows build tools
-+      - name: Download pinned Windows debugger visualizers
-         shell: bash
-         working-directory: upstream-rusty-v8
-         run: |
--          set -euo pipefail
--          # Upstream skips this submodule and downloads the pinned archive in CI.
-+          # Upstream marks tools/win as update=none: its standalone Git mirror
-+          # can advertise commits before their objects are available.
-+          archive="$RUNNER_TEMP/rusty-v8-tools-win.tar.gz"
-+          curl -fsSL --retry 3 \
-+            https://chromium.googlesource.com/chromium/src/tools/win/+archive/faefd1b6fa9eeb033ad6fe60368ccb9bf908cbd0.tar.gz \
-+            -o "$archive"
-+          # Gitiles archives use request-time tar timestamps. Verify the four
-+          # required file contents instead of the nondeterministic archive bytes.
-           mkdir -p tools/win
--          curl -fL https://chromium.googlesource.com/chromium/src/tools/win/+archive/faefd1b6fa9eeb033ad6fe60368ccb9bf908cbd0.tar.gz |
--            tar -xz -C tools/win
-+          # Read stdin so GNU tar does not parse a Windows drive as a remote host.
-+          tar -xzf - -C tools/win \
-+            DebugVisualizers/BUILD.gn DebugVisualizers/absl.natvis \
-+            DebugVisualizers/blink.natvis DebugVisualizers/chrome.natvis < "$archive"
-+          echo "55ebb8be249935e5ae9a1dc9a3d8c488cbb8f2d7007259f1190ca964fb2e5ebf  tools/win/DebugVisualizers/BUILD.gn" | sha256sum --check
-+          echo "af13198b912ed22a3abe0c41e77af032cff56ee72b1f6f4a37535257c87be5c1  tools/win/DebugVisualizers/absl.natvis" | sha256sum --check
-+          echo "fbe28d541ecc20d2e5d67f3ad859b1b35b60e4b069b0795a3d4766aa0828da2c  tools/win/DebugVisualizers/blink.natvis" | sha256sum --check
-+          echo "56fe0993b70365e1d2d848ad67739aed5fd70284910665b559fc3c9369b24593  tools/win/DebugVisualizers/chrome.natvis" | sha256sum --check
- 
-       - name: Set up Python
--        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
-+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
-         with:
-           python-version: "3.11"
-           architecture: x64
- 
-       - name: Set up Codex Rust toolchain for Cargo smoke
--        uses: dtolnay/rust-toolchain@e081816240890017053eacbb1bdf337761dc5582 # 1.95.0
-+        uses: dtolnay/rust-toolchain@e2a55d2ffb04f378e9626c28d38b36d230d1e12f # master, 2026-10-12
-         with:
-           toolchain: "1.95.0"
-           targets: ${{ matrix.target }}
-@@ -356,7 +369,7 @@ jobs:
-         run: git submodule status --recursive > git_submodule_status.txt
- 
-       - name: Restore upstream source-build cache
--        uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5.0.4
-+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-         with:
-           path: |
-             upstream-rusty-v8/target/sccache
-@@ -371,9 +384,9 @@ jobs:
-         run: git apply -p3 "${GITHUB_WORKSPACE}/patches/v8_array_sort_elements_kind.patch"
- 
-       - name: Install sccache
--        uses: taiki-e/install-action@44c6d64aa62cd779e873306675c7a58e86d6d532 # v2.62.49
-+        uses: taiki-e/install-action@1168f6810a3cb30a3514bf5756a3b7f0422c6df8 # v2.87.28
-         with:
--          tool: sccache@0.8.2
-+          tool: sccache@0.18.0
- 
-       - name: Start sccache
-         shell: pwsh
-@@ -432,8 +445,9 @@ jobs:
-           )
- 
-       - name: Upload staged artifacts
--        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
-+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-         with:
-+          retention-days: 7
-           name: rusty-v8-${{ needs.metadata.outputs.v8_version }}-ptrcomp-sandbox-${{ matrix.target }}
-           path: dist/${{ matrix.target }}/*
- 
-@@ -466,7 +480,7 @@ jobs:
-             gh release delete "${RELEASE_TAG}" --repo "${GITHUB_REPOSITORY}" --yes
-           fi
- 
--      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
-+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
-         with:
-           path: dist
- 
 diff --git a/.github/workflows/sdk.yml b/.github/workflows/sdk.yml
 index 3f91dd18fa8efdfec28321d1b304550982b956bf..92614bc2499273addcc1f691bec592bd19460d32 100644
 --- a/.github/workflows/sdk.yml
@@ -2769,204 +1481,6 @@ index 3f91dd18fa8efdfec28321d1b304550982b956bf..92614bc2499273addcc1f691bec592bd
          with:
            path: ${{ steps.setup_bazel.outputs.repository-cache-path }}
            key: ${{ steps.setup_bazel.outputs.repository-cache-key }}
-diff --git a/.github/workflows/v8-canary.yml b/.github/workflows/v8-canary.yml
-index b79bb8370cb5caec4cb20daa622e69e62dbb879c..5ec22d70f2ff580cfeda8f7e85571714fd0cc142 100644
---- a/.github/workflows/v8-canary.yml
-+++ b/.github/workflows/v8-canary.yml
-@@ -25,13 +25,13 @@ jobs:
-       windows_source_required: ${{ steps.changes.outputs.windows_source_required }}
- 
-     steps:
--      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-         with:
-           fetch-depth: 0
-           persist-credentials: false
- 
-       - name: Set up Python
--        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
-+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
-         with:
-           python-version: "3.12"
- 
-@@ -113,28 +113,28 @@ jobs:
-             target: aarch64-unknown-linux-gnu
-             v8_cpu: arm64
-             variant: ptrcomp-sandbox
--          - runner: macos-15-xlarge
-+          - runner: macos-15-intel
-             bazel_config: ci-macos
-             platform: macos_amd64
-             sandbox: false
-             target: x86_64-apple-darwin
-             v8_cpu: x64
-             variant: release
--          - runner: macos-15-xlarge
-+          - runner: macos-15-intel
-             bazel_config: ci-macos
-             platform: macos_amd64
-             sandbox: true
-             target: x86_64-apple-darwin
-             v8_cpu: x64
-             variant: ptrcomp-sandbox
--          - runner: macos-15-xlarge
-+          - runner: macos-15
-             bazel_config: ci-macos
-             platform: macos_arm64
-             sandbox: false
-             target: aarch64-apple-darwin
-             v8_cpu: arm64
-             variant: release
--          - runner: macos-15-xlarge
-+          - runner: macos-15
-             bazel_config: ci-macos
-             platform: macos_arm64
-             sandbox: true
-@@ -170,7 +170,7 @@ jobs:
-             v8_cpu: arm64
-             variant: ptrcomp-sandbox
-     steps:
--      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-         with:
-           persist-credentials: false
- 
-@@ -181,12 +181,12 @@ jobs:
-           cache-scope: bazel-v8
- 
-       - name: Set up Python
--        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
-+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
-         with:
-           python-version: "3.12"
- 
-       - name: Set up Rust toolchain for Cargo smoke
--        uses: dtolnay/rust-toolchain@e081816240890017053eacbb1bdf337761dc5582 # 1.95.0
-+        uses: dtolnay/rust-toolchain@e2a55d2ffb04f378e9626c28d38b36d230d1e12f # master, 2026-10-12
-         with:
-           toolchain: "1.95.0"
- 
-@@ -214,13 +214,13 @@ jobs:
-             --config=rusty-v8-upstream-libcxx
-             "--config=v8-target-${V8_CPU}"
-             "${pair_target}"
--            --build_metadata=COMMIT_SHA=$(git rev-parse HEAD)
-+            "--build_metadata=COMMIT_SHA=$(git rev-parse HEAD)"
-           )
-           if [[ "${SANDBOX}" != "true" ]]; then
-             bazel_args+=(--config=v8-release-compat)
-           fi
- 
--          ./.github/scripts/run_bazel_with_buildbuddy.py \
-+          python3 .github/scripts/run_v8_bazel_build.py \
-             --noexperimental_remote_repo_contents_cache \
-             "${bazel_args[@]}" \
-             "--config=${{ matrix.bazel_config }}"
-@@ -291,8 +291,9 @@ jobs:
-           )
- 
-       - name: Upload staged artifacts
--        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
-+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-         with:
-+          retention-days: 7
-           name: v8-canary-${{ needs.metadata.outputs.v8_version }}-${{ matrix.variant }}-${{ matrix.target }}
-           path: dist/${{ matrix.target }}/*
- 
-@@ -317,7 +318,7 @@ jobs:
-             target: aarch64-pc-windows-msvc
- 
-     steps:
--      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
-+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-         with:
-           persist-credentials: false
- 
-@@ -329,7 +330,7 @@ jobs:
-         run: git config --global core.symlinks true
- 
-       - name: Check out upstream rusty_v8
--        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
-+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-         with:
-           repository: denoland/rusty_v8
-           ref: v${{ needs.metadata.outputs.v8_version }}
-@@ -337,24 +338,36 @@ jobs:
-           submodules: recursive
-           persist-credentials: false
- 
--      - name: Download upstream Windows build tools
-+      - name: Download pinned Windows debugger visualizers
-         shell: bash
-         working-directory: upstream-rusty-v8
-         run: |
--          set -euo pipefail
--          # Upstream skips this submodule and downloads the pinned archive in CI.
-+          # Upstream marks tools/win as update=none: its standalone Git mirror
-+          # can advertise commits before their objects are available.
-+          archive="$RUNNER_TEMP/rusty-v8-tools-win.tar.gz"
-+          curl -fsSL --retry 3 \
-+            https://chromium.googlesource.com/chromium/src/tools/win/+archive/faefd1b6fa9eeb033ad6fe60368ccb9bf908cbd0.tar.gz \
-+            -o "$archive"
-+          # Gitiles archives use request-time tar timestamps. Verify the four
-+          # required file contents instead of the nondeterministic archive bytes.
-           mkdir -p tools/win
--          curl -fL https://chromium.googlesource.com/chromium/src/tools/win/+archive/faefd1b6fa9eeb033ad6fe60368ccb9bf908cbd0.tar.gz |
--            tar -xz -C tools/win
-+          # Read stdin so GNU tar does not parse a Windows drive as a remote host.
-+          tar -xzf - -C tools/win \
-+            DebugVisualizers/BUILD.gn DebugVisualizers/absl.natvis \
-+            DebugVisualizers/blink.natvis DebugVisualizers/chrome.natvis < "$archive"
-+          echo "55ebb8be249935e5ae9a1dc9a3d8c488cbb8f2d7007259f1190ca964fb2e5ebf  tools/win/DebugVisualizers/BUILD.gn" | sha256sum --check
-+          echo "af13198b912ed22a3abe0c41e77af032cff56ee72b1f6f4a37535257c87be5c1  tools/win/DebugVisualizers/absl.natvis" | sha256sum --check
-+          echo "fbe28d541ecc20d2e5d67f3ad859b1b35b60e4b069b0795a3d4766aa0828da2c  tools/win/DebugVisualizers/blink.natvis" | sha256sum --check
-+          echo "56fe0993b70365e1d2d848ad67739aed5fd70284910665b559fc3c9369b24593  tools/win/DebugVisualizers/chrome.natvis" | sha256sum --check
- 
-       - name: Set up Python
--        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6
-+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
-         with:
-           python-version: "3.11"
-           architecture: x64
- 
-       - name: Set up Codex Rust toolchain for Cargo smoke
--        uses: dtolnay/rust-toolchain@e081816240890017053eacbb1bdf337761dc5582 # 1.95.0
-+        uses: dtolnay/rust-toolchain@e2a55d2ffb04f378e9626c28d38b36d230d1e12f # master, 2026-10-12
-         with:
-           toolchain: "1.95.0"
-           targets: ${{ matrix.target }}
-@@ -374,7 +387,7 @@ jobs:
-         run: git submodule status --recursive > git_submodule_status.txt
- 
-       - name: Restore upstream source-build cache
--        uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5
-+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-         with:
-           path: |
-             ${{ steps.setup_ci.outputs.cargo-target-dir }}/sccache
-@@ -389,9 +402,9 @@ jobs:
-         run: git apply -p3 "${GITHUB_WORKSPACE}/patches/v8_array_sort_elements_kind.patch"
- 
-       - name: Install sccache
--        uses: taiki-e/install-action@44c6d64aa62cd779e873306675c7a58e86d6d532 # v2.62.49
-+        uses: taiki-e/install-action@1168f6810a3cb30a3514bf5756a3b7f0422c6df8 # v2.87.28
-         with:
--          tool: sccache@0.8.2
-+          tool: sccache@0.18.0
- 
-       - name: Start sccache
-         shell: pwsh
-@@ -450,8 +463,9 @@ jobs:
-           )
- 
-       - name: Upload staged artifacts
--        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
-+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-         with:
-+          retention-days: 7
-           name: v8-canary-${{ needs.metadata.outputs.v8_version }}-ptrcomp-sandbox-${{ matrix.target }}
-           path: dist/${{ matrix.target }}/*
- 
 diff --git a/.gitignore b/.gitignore
 index dbcd8633154a13966c231033a6c07ad8be169c73..9cddfc4431abee96c96e4e7d1e9a9179b0f74b3c 100644
 --- a/.gitignore
@@ -2987,7 +1501,7 @@ index dbcd8633154a13966c231033a6c07ad8be169c73..9cddfc4431abee96c96e4e7d1e9a9179
 +# Disposable pinned-engine assemblies and qualification evidence
 +/.engine/
 diff --git a/MODULE.bazel b/MODULE.bazel
-index 10f68a19bd562e036df8ca54ac65d2ae148eaf51..8af607328762e54b158c422a7f87ba4745b10c9d 100644
+index 92c8e81cd9616ae98a48f178cf6bfa82805780a4..7028aa6249b6878836201a7166bfbbc4cb621c30 100644
 --- a/MODULE.bazel
 +++ b/MODULE.bazel
 @@ -1,13 +1,13 @@
@@ -3125,8 +1639,8 @@ index 10f68a19bd562e036df8ca54ac65d2ae148eaf51..8af607328762e54b158c422a7f87ba47
 +bazel_dep(name = "zstd", version = "1.5.7.bcr.3")
  
  crate.annotation(
-     # Daemon tests repeatedly hash large CLI binaries, even in fastbuild mode.
-@@ -391,11 +393,13 @@ crate.annotation(
+     # Keep Windows proxy authentication aligned with codex-rs/.cargo/config.toml.
+@@ -396,11 +398,13 @@ crate.annotation(
      build_script_env = {"OPT_LEVEL": "3"},
      # The Windows lint toolchain cannot reliably materialize blake3's native x86 assembly archives.
      crate = "blake3",
@@ -3143,7 +1657,7 @@ index 10f68a19bd562e036df8ca54ac65d2ae148eaf51..8af607328762e54b158c422a7f87ba47
  crate.annotation(
      crate = "zstd-sys",
      gen_build_script = "on",
-@@ -409,6 +413,7 @@ crate.annotation(
+@@ -414,6 +418,7 @@ crate.annotation(
      patch_args = ["-p1"],
      patches = [
          "//patches:ring_windows_msvc_include_dirs.patch",
@@ -3151,7 +1665,7 @@ index 10f68a19bd562e036df8ca54ac65d2ae148eaf51..8af607328762e54b158c422a7f87ba47
      ],
  )
  crate.annotation(
-@@ -437,6 +442,7 @@ inject_repo(crate, "zstd")
+@@ -442,6 +447,7 @@ inject_repo(crate, "zstd")
  
  use_repo(crate, "argument_comment_lint_crates")
  
@@ -3159,7 +1673,7 @@ index 10f68a19bd562e036df8ca54ac65d2ae148eaf51..8af607328762e54b158c422a7f87ba47
  bazel_dep(name = "bzip2", version = "1.0.8.bcr.3")
  single_version_override(
      module_name = "bzip2",
-@@ -454,7 +460,7 @@ crate.annotation(
+@@ -459,7 +465,7 @@ crate.annotation(
  
  inject_repo(crate, "bzip2")
  
@@ -3168,7 +1682,7 @@ index 10f68a19bd562e036df8ca54ac65d2ae148eaf51..8af607328762e54b158c422a7f87ba47
  
  crate.annotation(
      crate = "libz-sys",
-@@ -463,7 +469,7 @@ crate.annotation(
+@@ -468,7 +474,7 @@ crate.annotation(
  
  inject_repo(crate, "zlib")
  
@@ -3177,7 +1691,7 @@ index 10f68a19bd562e036df8ca54ac65d2ae148eaf51..8af607328762e54b158c422a7f87ba47
  single_version_override(
      module_name = "xz",
      patch_strip = 1,
-@@ -478,7 +484,7 @@ crate.annotation(
+@@ -483,7 +489,7 @@ crate.annotation(
      deps = ["@xz//:lzma"],
  )
  
@@ -3186,7 +1700,7 @@ index 10f68a19bd562e036df8ca54ac65d2ae148eaf51..8af607328762e54b158c422a7f87ba47
  
  inject_repo(crate, "xz")
  
-@@ -486,11 +492,8 @@ crate.annotation(
+@@ -491,11 +497,8 @@ crate.annotation(
      build_script_data = [
          "@openssl//:gen_dir",
      ],
@@ -3200,14 +1714,24 @@ index 10f68a19bd562e036df8ca54ac65d2ae148eaf51..8af607328762e54b158c422a7f87ba47
      build_script_env = {
          "OPENSSL_DIR": "$(execpath @openssl//:gen_dir)",
          "OPENSSL_NO_VENDOR": "1",
-@@ -503,6 +506,49 @@ crate.annotation(
- 
+@@ -509,29 +512,71 @@ crate.annotation(
  inject_repo(crate, "openssl")
  
-+crate.annotation(
+ crate.annotation(
+-    crate = "runfiles",
+-    workspace_cargo_toml = "rust/runfiles/Cargo.toml",
+-)
+-
+-# MXC's resource compiler lookup needs an explicit path for Windows GNU targets.
+-crate.annotation(
+-    build_script_deps = [
+-        "@crates//:cc-1.2.55",
+-        "@crates//:winresource-0.1.34",
+-    ],
 +    build_script_data = ["//bazel/toolchains/browser_chat:toolchain.cmake"],
 +    build_script_deps = ["@crates//:cc"],
-+    build_script_env = {
+     build_script_env = {
+-        "RC_PATH": "$(execpath @llvm//tools:llvm-rc)",
 +        "BINDGEN_EXTRA_CLANG_ARGS": "-Xclang -internal-isystem -Xclang $(location @llvm//:builtin_resource_dir)/include",
 +        "CMAKE": "$${pwd}/$(CMAKE)",
 +        "CMAKE_GENERATOR": "Ninja",
@@ -3221,12 +1745,14 @@ index 10f68a19bd562e036df8ca54ac65d2ae148eaf51..8af607328762e54b158c422a7f87ba47
 +        "NM": "$(execpath @llvm//tools:llvm-nm)",
 +        "OBJCOPY": "$(execpath @llvm//tools:llvm-objcopy)",
 +        "RANLIB": "$(execpath @llvm//tools:llvm-ranlib)",
-+    },
+     },
 +    build_script_toolchains = [
 +        "@rules_foreign_cc//toolchains:current_cmake_toolchain",
 +        "@rules_foreign_cc//toolchains:current_ninja_toolchain",
 +    ],
-+    build_script_tools = [
+     build_script_tools = [
+-        "@llvm//tools:clang",
+-        "@llvm//tools:llvm-rc",
 +        "@llvm-project//clang:libclang_interface_output",
 +        "@llvm//:builtin_resource_dir",
 +        "@llvm//tools:llvm-install-name-tool",
@@ -3236,10 +1762,13 @@ index 10f68a19bd562e036df8ca54ac65d2ae148eaf51..8af607328762e54b158c422a7f87ba47
 +        "@llvm//tools:llvm-ranlib",
 +        "@rules_foreign_cc//toolchains:current_cmake_toolchain",
 +        "@rules_foreign_cc//toolchains:current_ninja_toolchain",
-+    ],
+     ],
+-    crate = "mxc-sdk",
 +    crate = "btls-sys",
 +    gen_build_script = "on",
-+    patch_args = ["-p1"],
+     patch_args = ["-p1"],
+-    patches = ["//patches:mxc-sdk_utf8_resources.patch"],
+-    workspace_cargo_toml = "src/Cargo.toml",
 +    patches = [
 +        "//patches:btls-sys_native_tools.patch",
 +        "//patches:btls-sys_msvc_bindgen_driver.patch",
@@ -3247,10 +1776,33 @@ index 10f68a19bd562e036df8ca54ac65d2ae148eaf51..8af607328762e54b158c422a7f87ba47
 +    ],
 +    deps = ["//bazel/toolchains/browser_chat:cxx_runtime"],
 +)
- crate.annotation(
-     crate = "runfiles",
-     workspace_cargo_toml = "rust/runfiles/Cargo.toml",
-@@ -589,19 +635,9 @@ crate.annotation(
++crate.annotation(
++    crate = "runfiles",
++    workspace_cargo_toml = "rust/runfiles/Cargo.toml",
+ )
+ 
++# MXC keeps its packages in a nested Cargo workspace.
++[
++    crate.annotation(
++        crate = name,
++        workspace_cargo_toml = "src/Cargo.toml",
++    )
++    for name in [
++        "appcontainer_common",
++        "learning_mode_core",
++        "learning_mode_windows",
++        "mxc_config_contract",
++        "mxc_telemetry",
++        "process_security_environment_spec",
++        "sandbox_spec",
++        "wxc_common",
++    ]
++]
++
+ http_archive = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+ 
+ codex_release_archive = use_repo_rule("//bazel/extensions:codex_release_archive.bzl", "codex_release_archive")
+@@ -595,19 +640,9 @@ crate.annotation(
          "RUSTY_V8_SRC_BINDING_PATH": "$(execpath @v8_targets//:rusty_v8_binding_for_target)",
      },
      crate = "v8",
@@ -3273,7 +1825,7 @@ index 10f68a19bd562e036df8ca54ac65d2ae148eaf51..8af607328762e54b158c422a7f87ba47
      gen_build_script = "on",
      patch_args = ["-p1"],
      patches = [
-@@ -614,12 +650,11 @@ inject_repo(crate, "v8_targets")
+@@ -620,12 +655,11 @@ inject_repo(crate, "v8_targets")
  llvm = use_extension("@llvm//extensions:llvm.bzl", "llvm")
  use_repo(llvm, "llvm-project")
  
@@ -3289,7 +1841,7 @@ index 10f68a19bd562e036df8ca54ac65d2ae148eaf51..8af607328762e54b158c422a7f87ba47
  )
  crate.annotation(
      # Provide the hermetic SDK path so the build script doesn't try to invoke an unhermetic `xcrun --show-sdk-path`.
-@@ -1002,7 +1037,7 @@ http_file(
+@@ -1008,7 +1042,7 @@ http_file(
  
  use_repo(crate, "crates")
  
@@ -3333,7 +1885,7 @@ index 7d3a49405d1f3be9af35d3ac2838dd35303a48b6..bfbdd0c3b991c06a1135f8db5ec79b64
 +  "packageManager": "pnpm@12.11.2+sha512.25a51652a196785af5f28bda6dfe8dc582ebefa4ac1d180221ce1390231c5fb76637822ea4b6e4633ce74acdcb0a77f725af11bad38177fdeddaee818a955cb9"
  }
 diff --git a/codex-rs/Cargo.toml b/codex-rs/Cargo.toml
-index 785f7add9e2b6e03064f94f35b382fbb26634d01..0c1a42b4af38ec59ecb82c997a92354d158c8011 100644
+index 520b9418ee45a4b86c07e0ac2ef317c5bc077c95..586fd590f5f402195f0e08f7d01a89e56141e3e5 100644
 --- a/codex-rs/Cargo.toml
 +++ b/codex-rs/Cargo.toml
 @@ -7,6 +7,7 @@ members = [
@@ -3344,9 +1896,9 @@ index 785f7add9e2b6e03064f94f35b382fbb26634d01..0c1a42b4af38ec59ecb82c997a92354d
      "cloud-client",
      "bwrap",
      "build-info",
-@@ -88,6 +89,16 @@ members = [
-     "memories/write",
+@@ -90,6 +91,16 @@ members = [
      "mermaid",
+     "message-board",
      "model-provider-info",
 +    "providers/provider-api",
 +    "providers/provider-registry",
@@ -3361,7 +1913,7 @@ index 785f7add9e2b6e03064f94f35b382fbb26634d01..0c1a42b4af38ec59ecb82c997a92354d
      "mxc-sandbox",
      "models-manager",
      "network-proxy",
-@@ -194,6 +205,7 @@ codex-async-utils = { path = "async-utils" }
+@@ -198,6 +209,7 @@ codex-async-utils = { path = "async-utils" }
  codex-backend-client = { path = "backend-client" }
  codex-build-info = { path = "build-info" }
  codex-chatgpt = { path = "chatgpt" }
@@ -3369,7 +1921,7 @@ index 785f7add9e2b6e03064f94f35b382fbb26634d01..0c1a42b4af38ec59ecb82c997a92354d
  codex-client = { path = "codex-client" }
  codex-collaboration-mode-templates = { path = "collaboration-mode-templates" }
  codex-cloud-config = { path = "cloud-config" }
-@@ -265,6 +277,15 @@ codex-otel = { path = "otel" }
+@@ -270,6 +282,15 @@ codex-otel = { path = "otel" }
  codex-otel-trace-websocket = { path = "otel-trace-websocket" }
  codex-plugin = { path = "plugin" }
  codex-model-provider = { path = "model-provider" }
@@ -3385,9 +1937,9 @@ index 785f7add9e2b6e03064f94f35b382fbb26634d01..0c1a42b4af38ec59ecb82c997a92354d
  codex-process-hardening = { path = "process-hardening" }
  codex-protocol = { path = "protocol" }
  codex-protocol-test-support = { path = "protocol/tests/support" }
-@@ -331,10 +352,10 @@ ansi-to-tui = "8.0.1"
+@@ -334,10 +355,10 @@ age = "0.12.1"
+ ansi-to-tui = "8.0.1"
  anyhow = "1"
- appcontainer_common = { git = "https://github.com/microsoft/mxc", rev = "6cd3d58f05d3447e67109cfb75e042803b843ca4" }
  arboard = { version = "3", features = ["wayland-data-control"] }
 -arc-swap = "1.9.0"
 +arc-swap = "1.9.2"
@@ -3398,7 +1950,7 @@ index 785f7add9e2b6e03064f94f35b382fbb26634d01..0c1a42b4af38ec59ecb82c997a92354d
  async-io = "2.6.0"
  async-stream = "0.3.6"
  aws-config = "1"
-@@ -344,17 +365,17 @@ aws-smithy-runtime-api = { version = "1", features = ["client", "http-1x"] }
+@@ -347,17 +368,17 @@ aws-smithy-runtime-api = { version = "1", features = ["client", "http-1x"] }
  aws-smithy-types = { version = "1", features = ["http-body-1-x"] }
  aws-types = "1"
  axum = { version = "0.8", default-features = false }
@@ -3418,11 +1970,11 @@ index 785f7add9e2b6e03064f94f35b382fbb26634d01..0c1a42b4af38ec59ecb82c997a92354d
  clap = "4"
  clap_complete = "4"
 -clatter = { version = "2.2.0", default-features = false, features = [
-+clatter = { version = "2.3.0", default-features = false, features = [
++clatter = { git = "https://github.com/jmlepisto/clatter", rev = "9a8d15c4f80d5911ca0403aa22e0de99ea59df08", default-features = false, features = [
      "alloc",
      "getrandom",
      "use-25519",
-@@ -362,123 +383,126 @@ clatter = { version = "2.2.0", default-features = false, features = [
+@@ -365,125 +386,129 @@ clatter = { version = "2.2.0", default-features = false, features = [
      "use-rust-crypto-ml-kem",
      "use-sha",
  ] }
@@ -3454,6 +2006,7 @@ index 785f7add9e2b6e03064f94f35b382fbb26634d01..0c1a42b4af38ec59ecb82c997a92354d
 +encoding_rs = "0.8.42"
  eventsource-stream = "0.2.3"
  file-id = "0.2.3"
+-flatbuffers = "25"
 -flate2 = "1.1.8"
 +flate2 = "1.1.10"
  futures = { version = "0.3", default-features = false }
@@ -3513,7 +2066,11 @@ index 785f7add9e2b6e03064f94f35b382fbb26634d01..0c1a42b4af38ec59ecb82c997a92354d
 +memchr = "2.8.3"
  mime_guess = "2.0.5"
 -multimap = "0.10.0"
+-mxc-sdk = { git = "https://github.com/microsoft/mxc", rev = "b21120168d70befe12356411423266bfef168446" }
 +multimap = "0.10.1"
++appcontainer_common = { git = "https://github.com/microsoft/mxc", rev = "6cd3d58f05d3447e67109cfb75e042803b843ca4" }
++learning_mode_windows = { git = "https://github.com/microsoft/mxc", rev = "6cd3d58f05d3447e67109cfb75e042803b843ca4" }
++wxc_common = { git = "https://github.com/microsoft/mxc", rev = "6cd3d58f05d3447e67109cfb75e042803b843ca4" }
  notify = "8.2.0"
  nucleo = { git = "https://github.com/helix-editor/nucleo.git", rev = "4253de9faabb4e5c6d81d946a5e35a90f87347ee" }
 -once_cell = "1.20.2"
@@ -3612,7 +2169,7 @@ index 785f7add9e2b6e03064f94f35b382fbb26634d01..0c1a42b4af38ec59ecb82c997a92354d
      "isomp4",
      "mkv",
      "mp3",
-@@ -501,45 +525,45 @@ sqlx-macros = { version = "=0.9.0", default-features = false, features = ["deriv
+@@ -506,45 +531,45 @@ sqlx-macros = { version = "=0.9.0", default-features = false, features = ["deriv
  # Preserve the target driver's query-description support without building it on the host.
  sqlx-sqlite = { version = "=0.9.0", default-features = false, features = ["offline"] }
  starlark = { version = "0.14.2", default-features = false }
@@ -3681,7 +2238,7 @@ index 785f7add9e2b6e03064f94f35b382fbb26634d01..0c1a42b4af38ec59ecb82c997a92354d
  unicode-width = "0.2"
  url = "2"
  urlencoding = "2.1"
-@@ -547,15 +571,17 @@ uuid = "1"
+@@ -552,16 +577,18 @@ uuid = "1"
  v8 = "=152.2.0"
  vt100 = "0.16.2"
  walkdir = "2.5.0"
@@ -3695,6 +2252,7 @@ index 785f7add9e2b6e03064f94f35b382fbb26634d01..0c1a42b4af38ec59ecb82c997a92354d
  wildmatch = "2.6.1"
  winapi-util = "0.1.11"
  windows-sys = "0.61.2"
+ winreg = "0.55.0"
  # Keep the zip 2.x feature set. In zip 9, `bzip2-rs` selects the bzip2-sys
  # backend we already build; the default selects libbz2-rs-sys instead.
 -zip = { version = "9.0.0", default-features = false, features = [
@@ -3702,7 +2260,7 @@ index 785f7add9e2b6e03064f94f35b382fbb26634d01..0c1a42b4af38ec59ecb82c997a92354d
      "aes-crypto",
      "bzip2-rs",
      "deflate",
-@@ -565,10 +591,10 @@ zip = { version = "9.0.0", default-features = false, features = [
+@@ -571,10 +598,10 @@ zip = { version = "9.0.0", default-features = false, features = [
      "xz",
      "zstd",
  ] }
@@ -3715,15 +2273,386 @@ index 785f7add9e2b6e03064f94f35b382fbb26634d01..0c1a42b4af38ec59ecb82c997a92354d
  
  [workspace.lints]
  rust = {}
-@@ -654,6 +680,8 @@ inherits = "test"
+@@ -660,6 +687,13 @@ inherits = "test"
  opt-level = 0
  
  [patch.crates-io]
++# RUSTSEC-2026-0387: retain until upstream releases adopt fixed dependencies.
++age = { git = "https://github.com/str4d/rage", rev = "b5b68c4f4f7ea5c368bc060f6fe0237549c3a13f" }
++age-core = { git = "https://github.com/str4d/rage", rev = "b5b68c4f4f7ea5c368bc060f6fe0237549c3a13f" }
++aws-config = { path = "../third_party/rust/aws-config" }
++aws-sigv4 = { path = "../third_party/rust/aws-sigv4" }
 +# Remove unmaintained basic-toml until i18n-config publishes its upstream fix.
 +i18n-config = { git = "https://github.com/kellpossible/cargo-i18n", rev = "2ce7b1dfe9a8cc224288bf50cbc2a67a6de863c4" }
  # Uncomment to debug local changes.
  # ratatui = { path = "../../ratatui" }
  crossterm = { git = "https://github.com/openai-oss-forks/crossterm", rev = "ed1cdab335221515706178d68495bba2aed1924f" }
+diff --git a/codex-rs/cli/tests/app_server_daemon/package.rs b/codex-rs/cli/tests/app_server_daemon/package.rs
+index 6c010c59d41e2820ffc3f4b2313679c52913520d..b75803e28cd00a216f373a5e563d0b811cd7520b 100644
+--- a/codex-rs/cli/tests/app_server_daemon/package.rs
++++ b/codex-rs/cli/tests/app_server_daemon/package.rs
+@@ -72,7 +72,10 @@ fn packaged_daemon_launch(action: &str, initial: InitialDaemon) -> Result<()> {
+     }
+     std::fs::write(
+         state.join("settings.json"),
+-        br#"{"shutdownGraceSeconds":0}"#,
++        serde_json::to_vec(&serde_json::json!({
++            "shutdownGraceSeconds": 0,
++            "updater": {"autoUpdateEnabled": action != "bootstrap"}
++        }))?,
+     )?;
+     let cli_before = daemon.codex.canonicalize()?;
+     let result = daemon
+diff --git a/codex-rs/default.nix b/codex-rs/default.nix
+index 6e15faf07d2edd4b04f36a00bb2b886a233f889c..fe4120777297dc884f0213cb83f9907cc7de590a 100644
+--- a/codex-rs/default.nix
++++ b/codex-rs/default.nix
+@@ -18,7 +18,10 @@ rustPlatform.buildRustPackage (_: {
+   inherit version;
+   cargoLock.lockFile = ./Cargo.lock;
+   doCheck = false;
+-  src = ./.;
++  src = lib.cleanSource ../.;
++  postUnpack = ''
++    sourceRoot="$sourceRoot/codex-rs"
++  '';
+ 
+   # Patch the workspace Cargo.toml so that cargo embeds the correct version in
+   # CARGO_PKG_VERSION (which the binary reads via env!("CARGO_PKG_VERSION")).
+@@ -38,6 +41,9 @@ rustPlatform.buildRustPackage (_: {
+   ];
+ 
+   cargoLock.outputHashes = {
++    "age-0.12.1" = "sha256-CNYGypRocOTPj454fLOr0xGA2zFj54PKPEC6opGE9f4=";
++    "age-core-0.12.0" = "sha256-CNYGypRocOTPj454fLOr0xGA2zFj54PKPEC6opGE9f4=";
++    "clatter-3.0.0" = "sha256-y/3o3xcMtdn8YFoYBLa6ac+FnoucSI5NLzdxL3wICf0=";
+     "crossterm-0.29.0" = "sha256-ewiWWQPEU1lSUHzmZTiO5yes5luIaQ9TrvCNnTWhxpE=";
+     "nucleo-0.5.0" = "sha256-Hm4SxtTSBrcWpXrtSqeO0TACbUxq3gizg1zD/6Yw/sI=";
+     "nucleo-matcher-0.3.1" = "sha256-Hm4SxtTSBrcWpXrtSqeO0TACbUxq3gizg1zD/6Yw/sI=";
+diff --git a/codex-rs/hooks/schema/generated/model-request.command.input.schema.json b/codex-rs/hooks/schema/generated/model-request.command.input.schema.json
+index 86bf69b39909e4f47f2771c5f0d7e0ca4f849ac0..66fe109aa7ffe29f40d6e11e04af859a89d1bec7 100644
+--- a/codex-rs/hooks/schema/generated/model-request.command.input.schema.json
++++ b/codex-rs/hooks/schema/generated/model-request.command.input.schema.json
+@@ -2,7 +2,7 @@
+   "$schema": "http://json-schema.org/draft-07/schema#",
+   "definitions": {
+     "AbsolutePathBuf": {
+-      "description": "A path that is guaranteed to be absolute and normalized (though it is not guaranteed to be canonicalized or exist on the filesystem).\n\nIMPORTANT: When deserializing an `AbsolutePathBuf`, a base path must be set using [AbsolutePathBufGuard::new]. If no base path is set, the deserialization will fail unless the path being deserialized is already absolute.",
++      "description": "A path that is guaranteed to be absolute and normalized (though it is not\nguaranteed to be canonicalized or exist on the filesystem).\n\nIMPORTANT: When deserializing an `AbsolutePathBuf`, a base path must be set\nusing [AbsolutePathBufGuard::new]. If no base path is set, the\ndeserialization will fail unless the path being deserialized is already\nabsolute.",
+       "type": "string"
+     },
+     "ModelRequestStatus": {
+@@ -61,9 +61,7 @@
+     {
+       "properties": {
+         "hook_event_name": {
+-          "enum": [
+-            "PreModelRequest"
+-          ],
++          "const": "PreModelRequest",
+           "type": "string"
+         }
+       },
+@@ -78,9 +76,7 @@
+           "$ref": "#/definitions/NullableString"
+         },
+         "hook_event_name": {
+-          "enum": [
+-            "PostModelRequest"
+-          ],
++          "const": "PostModelRequest",
+           "type": "string"
+         },
+         "status": {
+diff --git a/codex-rs/hooks/src/events/model_request.rs b/codex-rs/hooks/src/events/model_request.rs
+index 221f2b70cff433382057864fdce187e4beb73c50..c50d44236a6fa7ab91572e62b4e095fd4995686f 100644
+--- a/codex-rs/hooks/src/events/model_request.rs
++++ b/codex-rs/hooks/src/events/model_request.rs
+@@ -30,20 +30,13 @@ pub enum ModelRequestHookEvent {
+ }
+ 
+ // Hook schemas otherwise omit null from Option fields, but usage is always present on post.
+-fn token_usage_schema(
+-    generator: &mut schemars::r#gen::SchemaGenerator,
+-) -> schemars::schema::Schema {
+-    schemars::schema::SchemaObject {
+-        subschemas: Some(Box::new(schemars::schema::SubschemaValidation {
+-            any_of: Some(vec![
+-                generator.subschema_for::<TokenUsage>(),
+-                generator.subschema_for::<()>(),
+-            ]),
+-            ..Default::default()
+-        })),
+-        ..Default::default()
+-    }
+-    .into()
++fn token_usage_schema(generator: &mut schemars::SchemaGenerator) -> schemars::Schema {
++    schemars::json_schema!({
++        "anyOf": [
++            generator.subschema_for::<TokenUsage>(),
++            generator.subschema_for::<()>(),
++        ],
++    })
+ }
+ 
+ #[derive(Clone, Copy, Debug, Serialize, JsonSchema)]
+diff --git a/codex-rs/mxc-sandbox/src/availability.rs b/codex-rs/mxc-sandbox/src/availability.rs
+index 5e32aea948dcbcc3ce2069c371655ba9e1d8bb6b..0be30649e9e1263df6ac550463870d8991a0b069 100644
+--- a/codex-rs/mxc-sandbox/src/availability.rs
++++ b/codex-rs/mxc-sandbox/src/availability.rs
+@@ -1,55 +1,6 @@
+ //! Probe PSEC creation and startup attributes without launching a process.
+-//! Cache the result so automatic MXC selection requires a usable native API.
+-
+-use std::sync::OnceLock;
+-
+-use flatbuffers::FlatBufferBuilder;
+-use mxc_sdk::mxc_common::models::ContainerPolicy;
+-use mxc_sdk::mxc_common::ui_policy::resolve_ui_restrictions;
+-use mxc_sdk::process_container_common::PROCESS_SECURITY_ENVIRONMENT_FLAG_NONE;
+-use mxc_sdk::process_container_common::ProcessSecurityEnvironmentApi;
+-use mxc_sdk::process_container_common::SecurityEnvironmentStartupInfo;
+-use mxc_sdk::process_container_common::job_object::to_job_object_uilimit_mask;
+-use mxc_sdk::process_security_environment_spec::process_security_environment_layout::EndpointPolicyT;
+-use mxc_sdk::process_security_environment_spec::process_security_environment_layout::FilterAction;
+-use mxc_sdk::process_security_environment_spec::process_security_environment_layout::NetworkPolicyT;
+-use mxc_sdk::process_security_environment_spec::process_security_environment_layout::ProcessSecurityEnvironmentT;
+-use mxc_sdk::process_security_environment_spec::process_security_environment_layout::SchemaVersionT;
+-use mxc_sdk::process_security_environment_spec::process_security_environment_layout::finish_process_security_environment_buffer;
++//! The pinned backend caches this probe and grants no filesystem, network, or UI access.
+ 
+ pub(super) fn is_available() -> bool {
+-    static USABLE: OnceLock<bool> = OnceLock::new();
+-    *USABLE.get_or_init(|| {
+-        // Preserve the previous SDK's probe: no filesystem, network, or UI
+-        // grants, and no process launch. API-set presence alone is insufficient.
+-        let policy = ContainerPolicy::default();
+-        let mut egress = EndpointPolicyT::default();
+-        egress.default_action = FilterAction::deny;
+-        let mut network = NetworkPolicyT::default();
+-        network.egress = Some(Box::new(egress));
+-        let mut specification = ProcessSecurityEnvironmentT::default();
+-        specification.version = SchemaVersionT { major: 1, minor: 0 };
+-        specification.disallow_win32k_system_calls = policy.ui.disable;
+-        specification.ui_restrictions = u64::from(to_job_object_uilimit_mask(
+-            &resolve_ui_restrictions(&policy.ui, &policy.base_process_ui),
+-        ));
+-        specification.network_policy = Some(Box::new(network));
+-        let mut builder = FlatBufferBuilder::with_capacity(/* capacity */ 1024);
+-        let specification = specification.pack(&mut builder);
+-        finish_process_security_environment_buffer(&mut builder, specification);
+-        ProcessSecurityEnvironmentApi::load()
+-            .and_then(|api| {
+-                api.create(
+-                    builder.finished_data(),
+-                    PROCESS_SECURITY_ENVIRONMENT_FLAG_NONE,
+-                )
+-            })
+-            .and_then(|environment| {
+-                let startup_info =
+-                    SecurityEnvironmentStartupInfo::new(Default::default(), environment.raw(), &[]);
+-                environment.close();
+-                startup_info.map(drop)
+-            })
+-            .is_ok()
+-    })
++    appcontainer_common::base_container_runner::BaseContainerRunner::is_process_security_environment_usable()
+ }
+diff --git a/codex-rs/mxc-sandbox/src/native.rs b/codex-rs/mxc-sandbox/src/native.rs
+index 9c61518318d2e1a2757fdede889bfe7b3da6480e..2121711e4c8ecc90376566bd0f932d5c00e969d5 100644
+--- a/codex-rs/mxc-sandbox/src/native.rs
++++ b/codex-rs/mxc-sandbox/src/native.rs
+@@ -3,12 +3,13 @@
+ use anyhow::Context;
+ use anyhow::Result;
+ use anyhow::ensure;
+-use mxc_sdk::mxc_common::logger::Logger;
+-use mxc_sdk::mxc_common::logger::Mode;
+-use mxc_sdk::mxc_common::models::ExecutionRequest;
+-use mxc_sdk::mxc_common::sandbox_process::SandboxBackend;
+-use mxc_sdk::mxc_common::sandbox_process::StdioMode;
+-use mxc_sdk::process_container_common::base_container_runner::BaseContainerRunner;
++use appcontainer_common::base_container_runner::BaseContainerRunner;
++use learning_mode_windows::SecurityEnvironmentApi;
++use wxc_common::logger::Logger;
++use wxc_common::logger::Mode;
++use wxc_common::models::ExecutionRequest;
++use wxc_common::sandbox_process::SandboxBackend;
++use wxc_common::sandbox_process::StdioMode;
+ 
+ // The ETW functions used by tracelogging are documented Advapi32 exports on
+ // both Windows toolchains; 1.2.3 leaves their import library to the application.
+@@ -24,9 +25,11 @@ pub(super) fn launch(request: &ExecutionRequest) -> Result<i32> {
+             .any(|capability| capability.eq_ignore_ascii_case("permissiveLearningMode")),
+         "MXC native launch does not support permissiveLearningMode"
+     );
++    // With no least-privilege mode, legacy proxy, or capture enabled, this
++    // probe guarantees BaseContainerRunner chooses PSEC rather than SBOX.
+     if !request.policy.denied_paths.is_empty() {
+         ensure!(
+-            BaseContainerRunner::supports_native_denied_paths(),
++            SecurityEnvironmentApi::load()?.supports_deny_paths()?,
+             "this Windows build cannot enforce native MXC deny paths"
+         );
+     }
+diff --git a/codex-rs/mxc-sandbox/src/policy.rs b/codex-rs/mxc-sandbox/src/policy.rs
+index 3f98e961a14be37955250fd80409b2906e3cbfef..9425e1bb7ceb81772f4a319aaab5c4fe4de8a927 100644
+--- a/codex-rs/mxc-sandbox/src/policy.rs
++++ b/codex-rs/mxc-sandbox/src/policy.rs
+@@ -13,26 +13,27 @@ use codex_protocol::protocol::FileSystemSpecialPath;
+ use codex_utils_absolute_path::AbsolutePathBuf;
+ use codex_utils_path_uri::PathUri;
+ use codex_windows_sandbox::resolve_windows_deny_read_paths;
+-use mxc_sdk::mxc_common::cmdline::CommandLineContext;
+-use mxc_sdk::mxc_common::cmdline::CommandLineError;
+-use mxc_sdk::mxc_common::cmdline::cmdline_from_argv_for_context;
+-use mxc_sdk::mxc_common::filesystem_object::ExistingObjectComparison;
+-use mxc_sdk::mxc_common::filesystem_object::compare_existing_filesystem_objects;
+-use mxc_sdk::mxc_common::filesystem_object::normalize_object_conflicts;
+-use mxc_sdk::mxc_common::logger::Logger;
+-use mxc_sdk::mxc_common::logger::Mode;
+-use mxc_sdk::mxc_common::models::BaseProcessUiConfig;
+-use mxc_sdk::mxc_common::models::ContainerPolicy;
+-use mxc_sdk::mxc_common::models::ExecutionRequest;
+-use mxc_sdk::mxc_common::models::FallbackPolicy;
+-use mxc_sdk::mxc_common::models::NetworkAction;
+-use mxc_sdk::mxc_common::models::NetworkCidr;
+-use mxc_sdk::mxc_common::models::NetworkEgressPolicy;
+-use mxc_sdk::mxc_common::models::NetworkIngressPolicy;
+-use mxc_sdk::mxc_common::models::NetworkPeer;
+-use mxc_sdk::mxc_common::models::NetworkRule;
+-use mxc_sdk::mxc_common::models::UiPolicy;
+ use thiserror::Error;
++use wxc_common::cmdline::CommandLineContext;
++use wxc_common::cmdline::CommandLineError;
++use wxc_common::cmdline::cmdline_from_argv_for_context;
++use wxc_common::filesystem_object::ExistingObjectComparison;
++use wxc_common::filesystem_object::compare_existing_filesystem_objects;
++use wxc_common::filesystem_object::normalize_object_conflicts;
++use wxc_common::logger::Logger;
++use wxc_common::logger::Mode;
++use wxc_common::models::BaseProcessUiConfig;
++use wxc_common::models::ContainerPolicy;
++use wxc_common::models::ExecutionRequest;
++use wxc_common::models::FallbackPolicy;
++use wxc_common::models::NetworkAction;
++use wxc_common::models::NetworkCidr;
++use wxc_common::models::NetworkEgressPolicy;
++use wxc_common::models::NetworkIngressPolicy;
++use wxc_common::models::NetworkPeer;
++use wxc_common::models::NetworkPolicy;
++use wxc_common::models::NetworkRule;
++use wxc_common::models::UiPolicy;
+ 
+ use crate::MxcCommand;
+ 
+@@ -278,7 +279,7 @@ pub(super) fn build_request(
+             .to_str()
+             .ok_or(PolicyError::NonUnicodeCommandCwd)?
+             .to_owned(),
+-        env: (!env.is_empty()).then_some(env),
++        env,
+         policy: ContainerPolicy {
+             capabilities: vec!["registryRead".to_owned()],
+             readwrite_paths: unicode_paths(write)?,
+@@ -287,6 +288,12 @@ pub(super) fn build_request(
+             fallback: FallbackPolicy {
+                 allow_dacl_mutation: false,
+             },
++            default_network_policy: if egress_default == NetworkAction::Allow {
++                NetworkPolicy::Allow
++            } else {
++                NetworkPolicy::Block
++            },
++            allow_local_network: ingress_default == NetworkAction::Allow,
+             network_egress: Some(egress),
+             network_ingress: Some(NetworkIngressPolicy {
+                 default: ingress_default,
+diff --git a/codex-rs/mxc-sandbox/src/policy_tests.rs b/codex-rs/mxc-sandbox/src/policy_tests.rs
+index e91761c9f9c0357704ff1c21e29e39403bbb4191..b9de9f41c78381b6955cca3070b0d161e77eb884 100644
+--- a/codex-rs/mxc-sandbox/src/policy_tests.rs
++++ b/codex-rs/mxc-sandbox/src/policy_tests.rs
+@@ -16,13 +16,13 @@ use codex_protocol::protocol::FileSystemSpecialPath;
+ use codex_protocol::protocol::NetworkSandboxPolicy;
+ use codex_utils_absolute_path::AbsolutePathBuf;
+ use codex_utils_path_uri::PathUri;
+-use mxc_sdk::mxc_common::models::NetworkAction;
+-use mxc_sdk::mxc_common::models::NetworkCidr;
+-use mxc_sdk::mxc_common::models::NetworkEgressPolicy;
+-use mxc_sdk::mxc_common::models::NetworkIngressPolicy;
+-use mxc_sdk::mxc_common::models::NetworkPeer;
+-use mxc_sdk::mxc_common::models::NetworkRule;
+ use pretty_assertions::assert_eq;
++use wxc_common::models::NetworkAction;
++use wxc_common::models::NetworkCidr;
++use wxc_common::models::NetworkEgressPolicy;
++use wxc_common::models::NetworkIngressPolicy;
++use wxc_common::models::NetworkPeer;
++use wxc_common::models::NetworkRule;
+ 
+ use crate::CreateMxcCommandArgsParams;
+ use crate::MxcCommand;
+@@ -207,12 +207,12 @@ fn wrapper_preserves_exact_argv_and_separate_command_cwd() -> Result<()> {
+         (
+             r#""C:\Program Files\tool.exe" --permissions "" "quotes\" and slash\\""#.to_owned(),
+             cwd.to_str().unwrap().to_owned(),
+-            Some(vec!["CUSTOM=value".to_owned()]),
++            vec!["CUSTOM=value".to_owned()],
+         )
+     );
+     assert_eq!(
+         build_request(&parsed, &cwd, Vec::new(), &[], &[])?.env,
+-        None
++        Vec::<String>::new()
+     );
+     Ok(())
+ }
+diff --git a/codex-rs/mxc-sandbox/src/windows.rs b/codex-rs/mxc-sandbox/src/windows.rs
+index 99ef6179adf6b187968e9c44eeca25af6a46d4a0..70c38b6185df88c4a8c08f1671f162f276da46b2 100644
+--- a/codex-rs/mxc-sandbox/src/windows.rs
++++ b/codex-rs/mxc-sandbox/src/windows.rs
+@@ -8,8 +8,6 @@ use std::path::PathBuf;
+ use anyhow::Result;
+ use anyhow::ensure;
+ use codex_utils_path_uri::PathUri;
+-use mxc_sdk::mxc_common::filesystem_object::ExistingObjectComparison;
+-use mxc_sdk::mxc_common::filesystem_object::compare_existing_filesystem_objects;
+ use windows_sys::Win32::Foundation::RPC_E_CHANGED_MODE;
+ use windows_sys::Win32::Storage::FileSystem::GetDriveTypeW;
+ use windows_sys::Win32::Storage::FileSystem::GetLogicalDrives;
+@@ -23,6 +21,8 @@ use windows_sys::Win32::UI::Shell::FOLDERID_ProgramData;
+ use windows_sys::Win32::UI::Shell::FOLDERID_ProgramFiles;
+ use windows_sys::Win32::UI::Shell::FOLDERID_ProgramFilesX86;
+ use windows_sys::Win32::UI::Shell::SHGetKnownFolderPath;
++use wxc_common::filesystem_object::ExistingObjectComparison;
++use wxc_common::filesystem_object::compare_existing_filesystem_objects;
+ 
+ struct ComUninitializeGuard;
+ 
+diff --git a/codex-rs/runtime-agent-instance/src/runtime.rs b/codex-rs/runtime-agent-instance/src/runtime.rs
+index 0a1562cab18e8e1397dc6181f056f1b77e1b90e2..5ba332e48e354a614ce33560d94ad0f275e49f12 100644
+--- a/codex-rs/runtime-agent-instance/src/runtime.rs
++++ b/codex-rs/runtime-agent-instance/src/runtime.rs
+@@ -10,8 +10,8 @@ use codex_agent_identity::encode_ssh_ed25519_public_key;
+ use codex_utils_redacted_string::RedactedString;
+ use ed25519_dalek::Signer;
+ use ed25519_dalek::SigningKey;
+-use rand::TryRngCore;
+-use rand::rngs::OsRng;
++use rand::TryRng;
++use rand::rngs::SysRng;
+ use serde_json::json;
+ use std::fmt;
+ use std::io;
+@@ -35,7 +35,7 @@ impl RuntimeRegistration {
+         metadata: crate::RuntimeRegistrationMetadata,
+     ) -> io::Result<Self> {
+         let mut seed = Zeroizing::new([0u8; 32]);
+-        OsRng
++        SysRng
+             .try_fill_bytes(seed.as_mut())
+             .map_err(|_| io::Error::other("failed to generate runtime signing key"))?;
+         let signing_key = SigningKey::from_bytes(&seed);
 diff --git a/justfile b/justfile
 index 3614939c72498ec91690e6a01b30f21f76e9a0ab..69774722e8c8aae0c0466f240bf7a387fe475f5a 100644
 --- a/justfile
@@ -4875,20 +3804,28 @@ index 6b6537cb9cd7696a0e3402f644c9ef6404a1c08b..464e596ff87e679ac99ab54a2c426a85
   namespace {
   
 diff --git a/pnpm-workspace.yaml b/pnpm-workspace.yaml
-index 376f420d31d49b608b79238c66a694365d14a45b..74c4dbfa9c52a882c7b80136ea6b76bbd1cecc63 100644
+index 376f420d31d49b608b79238c66a694365d14a45b..e98e40fa317314657674869fb5648180bef81945 100644
 --- a/pnpm-workspace.yaml
 +++ b/pnpm-workspace.yaml
-@@ -3,9 +3,6 @@ packages:
-   - codex-rs/responses-api-proxy/npm
+@@ -1,13 +1,12 @@
+ packages:
+   - codex-cli
+-  - codex-rs/responses-api-proxy/npm
    - sdk/typescript
  
 -ignoredBuiltDependencies:
 -  - esbuild
 -
  minimumReleaseAge: 10080
- minimumReleaseAgeExclude: []
+-minimumReleaseAgeExclude: []
++# Reviewed security fixes; the seven-day policy still applies to other versions.
++minimumReleaseAgeExclude:
++  - body-parser@2.4.0
++  - fast-uri@3.1.9
  
-@@ -15,5 +12,26 @@ trustPolicy: no-downgrade
+ blockExoticSubdeps: true
+ strictDepBuilds: true
+@@ -15,5 +14,34 @@ trustPolicy: no-downgrade
  trustPolicyIgnoreAfter: 10080
  trustPolicyExclude: []
  allowBuilds:
@@ -4910,6 +3847,14 @@ index 376f420d31d49b608b79238c66a694365d14a45b..74c4dbfa9c52a882c7b80136ea6b76bb
 +# load-nyc-config uses yaml.load, which is supported by js-yaml 4 and removes
 +# the obsolete argparse/sprintf-js dependency (GHSA-hp3w-g68c-fv3c).
 +overrides:
++  # Bound EventSource memory and validate SRI algorithm tokens.
++  undici: "7.30.1"
++  # Preserve URI scheme, host, and path semantics during parsing.
++  fast-uri: "3.1.9"
++  # GHSA-mrhx-c7xc-m3w5 affects the pinned conformance tool too.
++  zod: "4.6.6"
++  # Reject trailing bytes after compressed requests (GHSA-27r3-jxmh-p828).
++  body-parser: "2.4.0"
 +  "@modelcontextprotocol/sdk": "1.32.1"
 +  esbuild: "0.28.2"
 +  # Reject quadratic zone-identifier parsing (GHSA-rxp7-6hxx-x8q5).
@@ -5013,7 +3958,9 @@ index 8b2d6bcde3ee965cf12baf75e2ec5c486fbdb3d3..3c3f812b3f4ea6922656696497d4d5a4
                  raise RuntimeError(
                      f"{artifact_label} archive {archive_path} is missing "
 diff --git a/scripts/codex_package/rg b/scripts/codex_package/rg
-index 3b7c34843aaafe4cf26a87b3daf5806195d4bb0e..04116e29d2281b8e10ab398b411da418ce46055b 100755
+old mode 100644
+new mode 100755
+index 3b7c34843aaafe4cf26a87b3daf5806195d4bb0e..04116e29d2281b8e10ab398b411da418ce46055b
 --- a/scripts/codex_package/rg
 +++ b/scripts/codex_package/rg
 @@ -16,14 +16,14 @@
@@ -5036,10 +3983,18 @@ index 3b7c34843aaafe4cf26a87b3daf5806195d4bb0e..04116e29d2281b8e10ab398b411da418
        ]
      },
 diff --git a/scripts/format.py b/scripts/format.py
-index 9b408e1c7c8ac0b9f5d25697775dc9a846adeaa4..cd2ffcb6c1bdaa871444c5d1e3902fee2b61985b 100644
+index 9b408e1c7c8ac0b9f5d25697775dc9a846adeaa4..5a538ad5815fb6eb19c9ae3519b45547707d4f2b 100644
 --- a/scripts/format.py
 +++ b/scripts/format.py
-@@ -41,9 +41,40 @@ def just_formatter_group(*, check: bool) -> FormatterGroup:
+@@ -2,6 +2,7 @@
+ """Format repository sources or check that they are already formatted."""
+ 
+ import argparse
++import json
+ import os
+ import shlex
+ import subprocess
+@@ -41,11 +42,77 @@ def just_formatter_group(*, check: bool) -> FormatterGroup:
  
  
  def rust_formatter_group(*, check: bool) -> FormatterGroup:
@@ -5061,25 +4016,107 @@ index 9b408e1c7c8ac0b9f5d25697775dc9a846adeaa4..cd2ffcb6c1bdaa871444c5d1e3902fee
 +    ).split(b"\0")
 +    rust_files = sorted(
 +        {
-+            os.path.relpath(REPO_ROOT / os.fsdecode(path), REPO_ROOT / "codex-rs")
++            str(REPO_ROOT / os.fsdecode(path))
 +            for path in paths
-+            if path and (REPO_ROOT / os.fsdecode(path)).is_file()
++            if path
++            and not os.fsdecode(path).startswith(
++                (
++                    ".engine/",
++                    "codex-rs/",
++                    "third_party/rust/aws-config/",
++                    "third_party/rust/aws-sigv4/",
++                )
++            )
++            and (REPO_ROOT / os.fsdecode(path)).is_file()
 +        }
 +    )
++    toolchain = json.loads((REPO_ROOT / "engine.lock").read_text())["toolchain"]
 +    args = [
++        "rustup",
++        "run",
++        toolchain,
 +        "rustfmt",
 +        "--edition",
 +        "2024",
-+        "--config-path",
-+        str(REPO_ROOT / "codex-rs/rustfmt.toml"),
 +        "--config",
 +        "imports_granularity=Item,skip_children=true",
 +    ]
      if check:
          args.append("--check")
+-    command = Command(tuple(args), REPO_ROOT / "codex-rs")
+-    return FormatterGroup("Rust", (command,))
 +    args.extend(rust_files)
-     command = Command(tuple(args), REPO_ROOT / "codex-rs")
-     return FormatterGroup("Rust", (command,))
++    commands = [Command(tuple(args), REPO_ROOT)]
++    # Preserve canonical upstream formatting; check only our two adapted files
++    # using the upstream edition and import style.
++    adapted_files = [
++        str(REPO_ROOT / path)
++        for path in (
++            "third_party/rust/aws-config/src/login/dpop.rs",
++            "third_party/rust/aws-sigv4/src/sign/v4a.rs",
++        )
++        if (REPO_ROOT / path).is_file()
++    ]
++    if adapted_files:
++        upstream_args = [
++            "rustup",
++            "run",
++            toolchain,
++            "rustfmt",
++            "--edition",
++            "2021",
++            "--config",
++            "skip_children=true",
++        ]
++        if check:
++            upstream_args.append("--check")
++        commands.append(Command(tuple(upstream_args + adapted_files), REPO_ROOT))
++    return FormatterGroup("Rust", tuple(commands))
+ 
+ 
+ def buildifier_formatter_group(*, check: bool) -> FormatterGroup:
+@@ -116,10 +183,40 @@ def python_sdk_formatter_group(*, check: bool) -> FormatterGroup:
+ 
+ 
+ def python_scripts_formatter_group(*, check: bool) -> FormatterGroup:
+-    args = ["uv", "run", "--frozen", "--project", "scripts", "ruff", "format"]
++    args = [
++        "uv",
++        "run",
++        "--frozen",
++        "--project",
++        "scripts",
++        "ruff",
++        "format",
++        "--force-exclude",
++    ]
+     if check:
+         args.append("--check")
+-    args.append(".")
++    paths = subprocess.check_output(
++        [
++            "git",
++            "ls-files",
++            "-z",
++            "--cached",
++            "--others",
++            "--exclude-standard",
++            "--",
++            "*.py",
++        ],
++        cwd=REPO_ROOT,
++    ).split(b"\0")
++    args.extend(
++        sorted(
++            {
++                os.fsdecode(path)
++                for path in paths
++                if path and (REPO_ROOT / os.fsdecode(path)).is_file()
++            }
++        )
++    )
+     return FormatterGroup("Python scripts", (Command(tuple(args)),))
+ 
  
 diff --git a/scripts/install/install.ps1 b/scripts/install/install.ps1
 index e9d0bc80574f8dd33174d883c0ec69fe2eefa50c..61109f59a15a87da3fc9bf58d3023677d88e4d41 100644
@@ -5602,7 +4639,9 @@ index e9d0bc80574f8dd33174d883c0ec69fe2eefa50c..61109f59a15a87da3fc9bf58d3023677
      & $codexCommand
  }
 diff --git a/scripts/install/install.sh b/scripts/install/install.sh
-index f27d1642be59405dd1a853e639b844e85bd39f47..965906dbeb65531773b2a381ff31c45e51a47e16 100755
+old mode 100644
+new mode 100755
+index e40cb02f432abea7753bcd54f103352e76d6bb64..8b53373ab8ca225d58b1f79a28cd11d5c287d516
 --- a/scripts/install/install.sh
 +++ b/scripts/install/install.sh
 @@ -2,28 +2,21 @@
@@ -5735,7 +4774,7 @@ index f27d1642be59405dd1a853e639b844e85bd39f47..965906dbeb65531773b2a381ff31c45e
    exit 1
  }
  
-@@ -319,27 +285,20 @@ release_url_for_asset() {
+@@ -320,27 +286,20 @@ release_url_for_asset() {
    asset="$1"
    resolved_version="$2"
  
@@ -5766,7 +4805,7 @@ index f27d1642be59405dd1a853e639b844e85bd39f47..965906dbeb65531773b2a381ff31c45e
      return 1
    fi
  }
-@@ -351,7 +310,7 @@ resolve_metadata_version() {
+@@ -352,7 +311,7 @@ resolve_metadata_version() {
      *) metadata_version="" ;;
    esac
    if [ -z "$metadata_version" ]; then
@@ -5775,7 +4814,7 @@ index f27d1642be59405dd1a853e639b844e85bd39f47..965906dbeb65531773b2a381ff31c45e
      return 1
    fi
    validate_version "$metadata_version"
-@@ -361,7 +320,7 @@ resolve_release_from_github() {
+@@ -362,7 +321,7 @@ resolve_release_from_github() {
    normalized_version="$1"
    if [ "$normalized_version" = "latest" ]; then
      requested_release="latest"
@@ -5784,7 +4823,7 @@ index f27d1642be59405dd1a853e639b844e85bd39f47..965906dbeb65531773b2a381ff31c45e
    else
      resolved_version="$normalized_version"
      requested_release="$resolved_version"
-@@ -369,7 +328,7 @@ resolve_release_from_github() {
+@@ -370,7 +329,7 @@ resolve_release_from_github() {
    fi
  
    if ! release_json="$(download_text "$metadata_url")"; then
@@ -5793,7 +4832,7 @@ index f27d1642be59405dd1a853e639b844e85bd39f47..965906dbeb65531773b2a381ff31c45e
      exit 1
    fi
  
-@@ -379,53 +338,12 @@ resolve_release_from_github() {
+@@ -380,53 +339,12 @@ resolve_release_from_github() {
      resolve_metadata_version
      resolved_version="$metadata_version"
    fi
@@ -5847,7 +4886,7 @@ index f27d1642be59405dd1a853e639b844e85bd39f47..965906dbeb65531773b2a381ff31c45e
    resolve_release_from_github "$normalized_version"
    select_release_assets
  }
-@@ -486,22 +404,13 @@ select_release_assets() {
+@@ -487,22 +405,13 @@ select_release_assets() {
      install_layout="legacy-platform-npm"
      asset="codex-npm-$npm_tag-$resolved_version.tgz"
    else
@@ -5874,7 +4913,7 @@ index f27d1642be59405dd1a853e639b844e85bd39f47..965906dbeb65531773b2a381ff31c45e
    fi
  }
  
-@@ -548,7 +457,7 @@ file_sha256() {
+@@ -549,7 +458,7 @@ file_sha256() {
      return
    fi
  
@@ -5883,7 +4922,7 @@ index f27d1642be59405dd1a853e639b844e85bd39f47..965906dbeb65531773b2a381ff31c45e
    exit 1
  }
  
-@@ -558,7 +467,7 @@ verify_archive_digest() {
+@@ -559,7 +468,7 @@ verify_archive_digest() {
    actual_digest="$(file_sha256 "$archive_path")"
  
    if [ "$actual_digest" != "$expected_digest" ]; then
@@ -5892,7 +4931,7 @@ index f27d1642be59405dd1a853e639b844e85bd39f47..965906dbeb65531773b2a381ff31c45e
      echo "expected: $expected_digest" >&2
      echo "actual:   $actual_digest" >&2
      return 1
-@@ -567,7 +476,7 @@ verify_archive_digest() {
+@@ -568,7 +477,7 @@ verify_archive_digest() {
  
  require_command() {
    if ! command -v "$1" >/dev/null 2>&1; then
@@ -5901,7 +4940,7 @@ index f27d1642be59405dd1a853e639b844e85bd39f47..965906dbeb65531773b2a381ff31c45e
      exit 1
    fi
  }
-@@ -608,8 +517,8 @@ add_to_path() {
+@@ -609,8 +518,8 @@ add_to_path() {
  
    profile="$(pick_profile)"
    path_profile="$profile"
@@ -5912,7 +4951,7 @@ index f27d1642be59405dd1a853e639b844e85bd39f47..965906dbeb65531773b2a381ff31c45e
    path_line="export PATH=\"$BIN_DIR:\$PATH\""
  
    if [ -f "$profile" ] && grep -F "$begin_marker" "$profile" >/dev/null 2>&1; then
-@@ -805,7 +714,7 @@ current_installed_version() {
+@@ -957,7 +866,7 @@ current_installed_version() {
  }
  
  resolve_existing_codex() {
@@ -5921,7 +4960,7 @@ index f27d1642be59405dd1a853e639b844e85bd39f47..965906dbeb65531773b2a381ff31c45e
  }
  
  classify_existing_codex() {
-@@ -897,8 +806,8 @@ print_launch_instructions() {
+@@ -1049,8 +958,8 @@ print_launch_instructions() {
  }
  
  maybe_launch_codex_now() {
@@ -5932,7 +4971,7 @@ index f27d1642be59405dd1a853e639b844e85bd39f47..965906dbeb65531773b2a381ff31c45e
      "$BIN_PATH"
    fi
  }
-@@ -913,8 +822,8 @@ detect_conflicting_install() {
+@@ -1065,8 +974,8 @@ detect_conflicting_install() {
  
    conflict_manager="$manager"
    conflict_path="$existing_path"
@@ -5943,7 +4982,7 @@ index f27d1642be59405dd1a853e639b844e85bd39f47..965906dbeb65531773b2a381ff31c45e
  }
  
  handle_conflicting_install() {
-@@ -924,23 +833,24 @@ handle_conflicting_install() {
+@@ -1076,23 +985,24 @@ handle_conflicting_install() {
  
    case "$conflict_manager" in
      brew)
@@ -5974,7 +5013,7 @@ index f27d1642be59405dd1a853e639b844e85bd39f47..965906dbeb65531773b2a381ff31c45e
    fi
  }
  
-@@ -1142,11 +1052,11 @@ release_dir="$RELEASES_DIR/$release_name"
+@@ -1294,11 +1204,11 @@ release_dir="$RELEASES_DIR/$release_name"
  current_version="$(current_installed_version)"
  
  if [ -n "$current_version" ] && [ "$current_version" != "$resolved_version" ]; then
@@ -5989,7 +5028,7 @@ index f27d1642be59405dd1a853e639b844e85bd39f47..965906dbeb65531773b2a381ff31c45e
  fi
  step "Detected platform: $platform_label"
  step "Resolved version: $resolved_version"
-@@ -1167,7 +1077,7 @@ trap 'exit 130' INT
+@@ -1319,7 +1229,7 @@ trap 'exit 130' INT
  trap 'exit 143' TERM
  
  acquire_install_lock
@@ -5998,7 +5037,7 @@ index f27d1642be59405dd1a853e639b844e85bd39f47..965906dbeb65531773b2a381ff31c45e
    { [ -e "$STANDALONE_ROOT/current" ] || [ -L "$STANDALONE_ROOT/current" ]; }; then
    echo "A dedicated daemon is already selected; retry the update." >&2
    exit 1
-@@ -1237,7 +1147,7 @@ if ! release_dir_is_complete "$release_dir" "$resolved_version" "$vendor_target"
+@@ -1389,7 +1299,7 @@ if ! release_dir_is_complete "$release_dir" "$resolved_version" "$vendor_target"
    archive_path="$tmp_dir/$asset"
    checksum_path="$tmp_dir/$checksum_asset"
  
@@ -6007,7 +5046,7 @@ index f27d1642be59405dd1a853e639b844e85bd39f47..965906dbeb65531773b2a381ff31c45e
    if [ "$install_layout" = "package" ]; then
      checksum_digest="$(release_asset_digest "$checksum_asset")"
      download_file_with_fallback "$checksum_url" "$checksum_fallback_url" "$checksum_path" "$checksum_digest" "$checksum_asset" "$asset"
-@@ -1255,10 +1165,10 @@ if ! release_dir_is_complete "$release_dir" "$resolved_version" "$vendor_target"
+@@ -1407,10 +1317,10 @@ if ! release_dir_is_complete "$release_dir" "$resolved_version" "$vendor_target"
    fi
  fi
  if ! release_dir_is_complete "$release_dir" "$resolved_version" "$vendor_target" "$install_layout"; then
@@ -6020,7 +5059,7 @@ index f27d1642be59405dd1a853e639b844e85bd39f47..965906dbeb65531773b2a381ff31c45e
    installed_codex="$release_dir/codex"
    if [ "$install_layout" = "package" ]; then
      installed_codex="$release_dir/bin/codex"
-@@ -1319,5 +1229,5 @@ case "$path_action" in
+@@ -1476,5 +1386,5 @@ case "$path_action" in
      ;;
  esac
  
@@ -6028,10 +5067,10 @@ index f27d1642be59405dd1a853e639b844e85bd39f47..965906dbeb65531773b2a381ff31c45e
 +printf 'Nyacode CLI %s installed successfully.\n' "$resolved_version"
  maybe_launch_codex_now
 diff --git a/scripts/install/test_install_sh.py b/scripts/install/test_install_sh.py
-index 2d495cddafb3726e0bec4bdc2a1ece7eea76e58c..ccec96509d783d8240c74ab6ddb65140d97f656f 100644
+index ad69ac4b784e37bedf19dfdc6d38f20571304aca..0ef48f413391edc62f6b6c9b1365710f1c899bd0 100644
 --- a/scripts/install/test_install_sh.py
 +++ b/scripts/install/test_install_sh.py
-@@ -24,15 +24,15 @@ class InstallShTest(unittest.TestCase):
+@@ -28,15 +28,15 @@ class InstallShTest(unittest.TestCase):
          self.assertEqual(
              requests,
              [
@@ -6050,7 +5089,7 @@ index 2d495cddafb3726e0bec4bdc2a1ece7eea76e58c..ccec96509d783d8240c74ab6ddb65140
  
      def test_exact_release_opt_out_uses_github_metadata_once(self) -> None:
          result, requests = run_installer(VERSION, use_mirror=False)
-@@ -41,9 +41,9 @@ class InstallShTest(unittest.TestCase):
+@@ -45,9 +45,9 @@ class InstallShTest(unittest.TestCase):
          self.assertEqual(
              requests,
              [
@@ -6062,7 +5101,7 @@ index 2d495cddafb3726e0bec4bdc2a1ece7eea76e58c..ccec96509d783d8240c74ab6ddb65140
                  f"rust-v{VERSION}/codex-package_SHA256SUMS",
              ],
          )
-@@ -57,9 +57,9 @@ class InstallShTest(unittest.TestCase):
+@@ -61,9 +61,9 @@ class InstallShTest(unittest.TestCase):
          self.assertEqual(
              requests,
              [
@@ -6074,7 +5113,7 @@ index 2d495cddafb3726e0bec4bdc2a1ece7eea76e58c..ccec96509d783d8240c74ab6ddb65140
                  f"rust-v{version}/codex-package_SHA256SUMS",
              ],
          )
-@@ -72,8 +72,8 @@ class InstallShTest(unittest.TestCase):
+@@ -76,8 +76,8 @@ class InstallShTest(unittest.TestCase):
          self.assertEqual(
              requests,
              [
@@ -6085,7 +5124,7 @@ index 2d495cddafb3726e0bec4bdc2a1ece7eea76e58c..ccec96509d783d8240c74ab6ddb65140
                  f"rust-v{VERSION}/codex-package_SHA256SUMS",
              ],
          )
-@@ -88,8 +88,8 @@ class InstallShTest(unittest.TestCase):
+@@ -92,8 +92,8 @@ class InstallShTest(unittest.TestCase):
          self.assertEqual(
              requests,
              [
@@ -6096,7 +5135,7 @@ index 2d495cddafb3726e0bec4bdc2a1ece7eea76e58c..ccec96509d783d8240c74ab6ddb65140
                  f"rust-v{VERSION}/codex-package_SHA256SUMS",
              ],
          )
-@@ -122,7 +122,7 @@ class InstallShTest(unittest.TestCase):
+@@ -126,7 +126,7 @@ class InstallShTest(unittest.TestCase):
              self.assertEqual(result.returncode, 0, result.stderr)
              install_bin = root / "install-bin"
              current = root / "codex-home" / "packages" / "standalone" / "current"
@@ -6105,7 +5144,7 @@ index 2d495cddafb3726e0bec4bdc2a1ece7eea76e58c..ccec96509d783d8240c74ab6ddb65140
              host_path = install_bin / "codex-code-mode-host"
              self.assertEqual(os.readlink(codex_path), str(current / "bin" / "codex"))
              self.assertEqual(
-@@ -131,7 +131,7 @@ class InstallShTest(unittest.TestCase):
+@@ -135,7 +135,7 @@ class InstallShTest(unittest.TestCase):
              )
              self.assertTrue(os.access(host_path, os.X_OK))
  
@@ -6114,7 +5153,7 @@ index 2d495cddafb3726e0bec4bdc2a1ece7eea76e58c..ccec96509d783d8240c74ab6ddb65140
          with tempfile.TemporaryDirectory() as temp_dir:
              root = Path(temp_dir)
              archive_path, checksum_path, metadata_json = create_package_release(root)
-@@ -150,9 +150,9 @@ class InstallShTest(unittest.TestCase):
+@@ -154,9 +154,9 @@ class InstallShTest(unittest.TestCase):
              self.assertEqual(
                  requests,
                  [
@@ -6127,7 +5166,7 @@ index 2d495cddafb3726e0bec4bdc2a1ece7eea76e58c..ccec96509d783d8240c74ab6ddb65140
                  ],
              )
  
-@@ -351,274 +351,64 @@ class InstallShTest(unittest.TestCase):
+@@ -573,102 +573,7 @@ class InstallShTest(unittest.TestCase):
                  (root / "codex-home/packages/standalone/auto-update-version").exists()
              )
  
@@ -6227,18 +5266,14 @@ index 2d495cddafb3726e0bec4bdc2a1ece7eea76e58c..ccec96509d783d8240c74ab6ddb65140
 -            self.assertIn("falling back to GitHub Releases", result.stderr)
 -
 -    def test_releases_asset_download_falls_back_to_github(self) -> None:
--        with tempfile.TemporaryDirectory() as temp_dir:
--            root = Path(temp_dir)
--            archive_path, checksum_path, metadata_json = create_package_release(root)
--
--            result, requests = run_installer_in(
--                root,
--                "latest",
--                metadata_json=metadata_json,
--                archive_path=archive_path,
--                checksum_path=checksum_path,
--                force_macos=True,
--                use_mirror=None,
++    def test_corrupt_github_checksum_is_rejected(self) -> None:
+         with tempfile.TemporaryDirectory() as temp_dir:
+             root = Path(temp_dir)
+             archive_path, checksum_path, metadata_json = create_package_release(root)
+@@ -681,166 +586,51 @@ class InstallShTest(unittest.TestCase):
+                 checksum_path=checksum_path,
+                 force_macos=True,
+                 use_mirror=None,
 -                releases_mode="asset_fallback",
 -            )
 -
@@ -6290,24 +5325,23 @@ index 2d495cddafb3726e0bec4bdc2a1ece7eea76e58c..ccec96509d783d8240c74ab6ddb65140
 -            self.assertIn("retrying from GitHub Releases", result.stderr)
 -
 -    def test_releases_wrong_checksum_digest_uses_github_metadata(self) -> None:
-+    def test_corrupt_github_checksum_is_rejected(self) -> None:
-         with tempfile.TemporaryDirectory() as temp_dir:
-             root = Path(temp_dir)
-             archive_path, checksum_path, metadata_json = create_package_release(root)
+-        with tempfile.TemporaryDirectory() as temp_dir:
+-            root = Path(temp_dir)
+-            archive_path, checksum_path, metadata_json = create_package_release(root)
 -            mirror_metadata = json.loads(metadata_json)
 -            for release_asset in mirror_metadata["assets"]:
 -                if release_asset["name"] == "codex-package_SHA256SUMS":
 -                    release_asset["digest"] = "sha256:" + "0" * 64
- 
-             result, requests = run_installer_in(
-                 root,
-                 "latest",
-                 metadata_json=metadata_json,
+-
+-            result, requests = run_installer_in(
+-                root,
+-                "latest",
+-                metadata_json=metadata_json,
 -                releases_metadata_json=json.dumps(mirror_metadata),
-                 archive_path=archive_path,
-                 checksum_path=checksum_path,
-                 force_macos=True,
-                 use_mirror=None,
+-                archive_path=archive_path,
+-                checksum_path=checksum_path,
+-                force_macos=True,
+-                use_mirror=None,
 +                releases_mode="corrupt_checksum_and_github",
              )
  
@@ -6330,8 +5364,9 @@ index 2d495cddafb3726e0bec4bdc2a1ece7eea76e58c..ccec96509d783d8240c74ab6ddb65140
              self.assertIn("checksum did not match expected digest", result.stderr)
  
 -    def test_releases_incomplete_checksum_manifest_falls_back_to_github(self) -> None:
--        with tempfile.TemporaryDirectory() as temp_dir:
--            root = Path(temp_dir)
++    def test_corrupt_fork_archive_is_rejected(self) -> None:
+         with tempfile.TemporaryDirectory() as temp_dir:
+             root = Path(temp_dir)
 -            archive_path, checksum_path, metadata_json = create_package_release(root)
 -            mirror_checksum_path = root / "mirror-SHA256SUMS"
 -            mirror_checksum_path.write_text(
@@ -6374,9 +5409,8 @@ index 2d495cddafb3726e0bec4bdc2a1ece7eea76e58c..ccec96509d783d8240c74ab6ddb65140
 -            self.assertIn("retrying from GitHub Releases", result.stderr)
 -
 -    def test_releases_corrupt_github_fallback_still_fails(self) -> None:
-+    def test_corrupt_fork_archive_is_rejected(self) -> None:
-         with tempfile.TemporaryDirectory() as temp_dir:
-             root = Path(temp_dir)
+-        with tempfile.TemporaryDirectory() as temp_dir:
+-            root = Path(temp_dir)
 -            archive_path, checksum_path, metadata_json = create_package_release(root)
 -
 +            archive, checksum, metadata = create_package_release(root)
@@ -6431,7 +5465,7 @@ index 2d495cddafb3726e0bec4bdc2a1ece7eea76e58c..ccec96509d783d8240c74ab6ddb65140
          with tempfile.TemporaryDirectory() as temp_dir:
              root = Path(temp_dir)
              archive_path, checksum_path, metadata_json = create_package_release(
-@@ -640,9 +430,9 @@ class InstallShTest(unittest.TestCase):
+@@ -862,9 +652,9 @@ class InstallShTest(unittest.TestCase):
              self.assertEqual(
                  requests,
                  [
@@ -6444,7 +5478,7 @@ index 2d495cddafb3726e0bec4bdc2a1ece7eea76e58c..ccec96509d783d8240c74ab6ddb65140
                  ],
              )
              self.assertIn(
-@@ -651,7 +441,7 @@ class InstallShTest(unittest.TestCase):
+@@ -873,7 +663,7 @@ class InstallShTest(unittest.TestCase):
              )
              self.assertNotIn("installed successfully", result.stdout)
  
@@ -6453,7 +5487,7 @@ index 2d495cddafb3726e0bec4bdc2a1ece7eea76e58c..ccec96509d783d8240c74ab6ddb65140
          with tempfile.TemporaryDirectory() as temp_dir:
              root = Path(temp_dir)
              archive_path, metadata_json = create_legacy_release(root)
-@@ -670,10 +460,9 @@ class InstallShTest(unittest.TestCase):
+@@ -892,10 +682,9 @@ class InstallShTest(unittest.TestCase):
              self.assertEqual(
                  first_requests,
                  [
@@ -6466,7 +5500,7 @@ index 2d495cddafb3726e0bec4bdc2a1ece7eea76e58c..ccec96509d783d8240c74ab6ddb65140
                      f"rust-v{VERSION}/codex-npm-darwin-arm64-{VERSION}.tgz",
                  ],
              )
-@@ -692,12 +481,11 @@ class InstallShTest(unittest.TestCase):
+@@ -914,12 +703,11 @@ class InstallShTest(unittest.TestCase):
              self.assertEqual(
                  second_requests,
                  [
@@ -6481,7 +5515,7 @@ index 2d495cddafb3726e0bec4bdc2a1ece7eea76e58c..ccec96509d783d8240c74ab6ddb65140
  
  
  def run_installer(
-@@ -802,7 +590,7 @@ def run_installer_in(
+@@ -1024,7 +812,7 @@ def run_installer_in(
                    exit 22
                  fi
                  ;;
@@ -6490,7 +5524,7 @@ index 2d495cddafb3726e0bec4bdc2a1ece7eea76e58c..ccec96509d783d8240c74ab6ddb65140
                  if [ "$CODEX_TEST_RELEASES_MODE" = "corrupt_checksum_and_github" ]; then
                    printf '<html>proxy error</html>\n' >"$output"
                    exit 0
-@@ -813,14 +601,14 @@ def run_installer_in(
+@@ -1035,14 +823,14 @@ def run_installer_in(
                    exit 22
                  fi
                  ;;
@@ -6507,7 +5541,7 @@ index 2d495cddafb3726e0bec4bdc2a1ece7eea76e58c..ccec96509d783d8240c74ab6ddb65140
                  if [ -n "$CODEX_TEST_LEGACY_ARCHIVE_PATH" ]; then
                    cp "$CODEX_TEST_LEGACY_ARCHIVE_PATH" "$output"
                  else
-@@ -863,7 +651,11 @@ def run_installer_in(
+@@ -1085,7 +873,11 @@ def run_installer_in(
  
      home = root / "home"
      home.mkdir(exist_ok=True)
@@ -6533,7 +5567,9 @@ index d75aa1f3b89618aa57c698bdbaf50482d893c054..63ee570a61e5692349b927624690faa7
    --runInBand tests/mcpConformance.test.ts
  ```
 diff --git a/scripts/stage_npm_packages.py b/scripts/stage_npm_packages.py
-index b258b4c94626562ef675302ceec1ee36ccdb6619..2c4960e937293afb36d8d0b1605aaf95be51550f 100755
+old mode 100644
+new mode 100755
+index b258b4c94626562ef675302ceec1ee36ccdb6619..2c4960e937293afb36d8d0b1605aaf95be51550f
 --- a/scripts/stage_npm_packages.py
 +++ b/scripts/stage_npm_packages.py
 @@ -19,7 +19,7 @@ from typing import Sequence
@@ -6546,7 +5582,9 @@ index b258b4c94626562ef675302ceec1ee36ccdb6619..2c4960e937293afb36d8d0b1605aaf95
      "x86_64-unknown-linux-musl",
      "aarch64-unknown-linux-musl",
 diff --git a/tools/buildifier b/tools/buildifier
-index d18dd60ac6b317d06c6ccf850654b2e06e29395d..d4c03d59c10b29cf3f10640c6bebebdfaff05561 100755
+old mode 100644
+new mode 100755
+index d18dd60ac6b317d06c6ccf850654b2e06e29395d..d4c03d59c10b29cf3f10640c6bebebdfaff05561
 --- a/tools/buildifier
 +++ b/tools/buildifier
 @@ -4,68 +4,68 @@
