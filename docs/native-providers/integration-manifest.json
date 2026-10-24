@@ -341,10 +341,7 @@
   "registry_metadata_source": "codex-rs/providers/provider-registry/src/lib.rs",
   "product_test_groups": {
     "backend_dispatch": {
-      "checks": [
-        "core-native-provider",
-        "provider-packages"
-      ],
+      "checks": ["core-native-provider", "provider-packages"],
       "minimum_tests": 1
     },
     "native_provider": {
@@ -411,10 +408,7 @@
       "minimum_tests": 1
     },
     "documentation": {
-      "checks": [
-        "python-controls",
-        "installer-tests"
-      ],
+      "checks": ["python-controls", "installer-tests"],
       "minimum_tests": 1
     }
   },

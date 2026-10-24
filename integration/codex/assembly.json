@@ -2730,7 +2730,7 @@
       "destination": "docs/dependency-upgrades.md",
       "mode": "100644",
       "replace": false,
-      "sha256": "95e1ef415c5bd6f433e724a672d69e9038d39ee52bbfd5ead95674b64c231068",
+      "sha256": "77a02ea56752f789a97b41df27c7b81618f80fe3d691c269c66df605ca5b3ccb",
       "source": "docs/dependency-upgrades.md"
     },
     {
@@ -2772,7 +2772,7 @@
       "destination": "docs/native-providers/integration-manifest.json",
       "mode": "100644",
       "replace": false,
-      "sha256": "2be95f3eb48a487a4eb36ccdbc77346e54a50f8fc5e12ae9e25a39bb92cccfbb",
+      "sha256": "4467631c3815fb5fa5635629743c01c6a50cdb00adb2214a2535cc0a042b48d8",
       "source": "docs/native-providers/integration-manifest.json"
     },
     {
@@ -3004,6 +3004,7 @@
       "destination": "scripts/tests/test_nyacode_release.py",
       "mode": "100644",
       "replace": false,
+      "sha256": "aaf37e1550ab49a96a627ff6ea6d256731218850262e154e95caa6e9a35d1cae",
       "source": "scripts/tests/test_nyacode_release.py"
     },
     {

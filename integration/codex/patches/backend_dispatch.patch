@@ -5488,7 +5488,7 @@ index 1823275ea4e8a690f6b233a934a044d839a5efb6..5fd20121de01ad695ca10c542ade554d
          http_headers: None,
          env_http_headers: None,
 diff --git a/codex-rs/deny.toml b/codex-rs/deny.toml
-index 1abe4ad02c77ff744ba63d1b41c58005a49d7c60..44fe80e840be9ce691370b602536536bfc9a7662 100644
+index 1abe4ad02c77ff744ba63d1b41c58005a49d7c60..847c364de566d83b10ec4794c535edf4b4a6e187 100644
 --- a/codex-rs/deny.toml
 +++ b/codex-rs/deny.toml
 @@ -73,22 +73,16 @@ ignore = [
@@ -5527,7 +5527,25 @@ index 1abe4ad02c77ff744ba63d1b41c58005a49d7c60..44fe80e840be9ce691370b602536536b
      # Each entry is the crate and version constraint, and its specific allow
      # list
      #{ allow = ["Zlib"], crate = "adler32" },
-@@ -251,6 +248,17 @@ deny = [
+@@ -181,6 +178,17 @@ exceptions = [
+ #{ path = "LICENSE", hash = 0xbd0eed23 }
+ #]
+ 
++# These pinned MXC subcrates omit package metadata; the repository license applies.
++[[licenses.clarify]]
++crate = "plm@0.1.0"
++expression = "MIT"
++license-files = [{ path = "../../../LICENSE.md", hash = 0x45c4defe }]
++
++[[licenses.clarify]]
++crate = "windows_sandbox_lifecycle@0.8.0"
++expression = "MIT"
++license-files = [{ path = "../../../../LICENSE.md", hash = 0x45c4defe }]
++
+ [licenses.private]
+ # If true, ignores workspace crates that aren't published, or are only
+ # published to private registries.
+@@ -251,6 +259,17 @@ deny = [
          "codex-responses-api-proxy",
          # Temporary migration exceptions.
          "codex-otel",
@@ -5545,7 +5563,7 @@ index 1abe4ad02c77ff744ba63d1b41c58005a49d7c60..44fe80e840be9ce691370b602536536b
          # Third-party crates that own their reqwest integration. These are not part of the
          # first-party migration count above.
          "oauth2",
-@@ -321,6 +329,7 @@ allow-git = [
+@@ -321,6 +340,7 @@ allow-git = [
      # CONNECT request handling needs this pinned H3 revision until released.
      "https://github.com/hyperium/h3",
      "https://github.com/juberti-oai/rust-sdks.git",

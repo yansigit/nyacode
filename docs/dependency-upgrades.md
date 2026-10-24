@@ -20,7 +20,7 @@ Some dependencies deliberately remain below their newest published version:
 
 | Dependency                      | Retained version                 | Constraint                                                                                                                                  |
 | ------------------------------- | -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| Rust                            | Exact `engine.lock` pin          | Engine dependencies must support the pinned compiler; standalone providers use `crates/providers/rust-toolchain.toml`.                                                                    |
+| Rust                            | Exact `engine.lock` pin          | Engine dependencies must support the pinned compiler; standalone providers use `crates/providers/rust-toolchain.toml`.                      |
 | TypeScript                      | 6.0.3                            | The current typescript-eslint and ts-jest peers do not support TypeScript 7.                                                                |
 | Keyring                         | 3.6.3                            | The 4.x facade changes Linux persistent keyutils/Secret Service storage. Moving existing credentials requires a separate backend migration. |
 | Tokio Tungstenite / Tungstenite | Pinned maintained fork revisions | The application uses fork-specific proxy and compression support absent from the upstream replacement.                                      |

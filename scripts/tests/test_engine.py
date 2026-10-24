@@ -612,7 +612,8 @@ class EngineTest(unittest.TestCase):
                         check.assert_not_called()
                         self.assertFalse((output / "product").exists())
                 self.assertEqual(
-                    json.loads((output / "engine.lock").read_text())["toolchain"], channel
+                    json.loads((output / "engine.lock").read_text())["toolchain"],
+                    channel,
                 )
                 self.assertEqual((self.root / "engine.lock").read_bytes(), accepted)
 
