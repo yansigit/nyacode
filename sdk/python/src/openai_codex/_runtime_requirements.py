@@ -61,4 +61,4 @@ class CheckoutCapabilities:
                     result[method] = frozenset(properties)
                 return result
         except (OSError, subprocess.SubprocessError, ValueError) as exc:
-            raise ValueError("Could not inspect the unversioned CLI's experimental schema") from exc
+            raise ValueError("Could not inspect the executable's experimental schema") from exc

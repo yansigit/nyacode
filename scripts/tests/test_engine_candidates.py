@@ -88,6 +88,7 @@ def qualification():
             name: "success"
             for name in (
                 "dependency_policy",
+                "container",
                 "controls",
                 "providers",
                 "validate",
@@ -279,6 +280,26 @@ class PromotionTest(unittest.TestCase):
             fixture = qualification()
             mutate(fixture)
             with self.assertRaises(ValueError):
+                candidates.validate_promotion(**fixture)
+
+    def test_full_workspace_container_is_required_in_jobs_and_report(self):
+        name = "Full workspace container / Complete Linux container verification"
+        for missing in ("job", "report"):
+            fixture = qualification()
+            if missing == "job":
+                fixture["jobs"] = [
+                    job for job in fixture["jobs"] if job["name"] != name
+                ]
+            else:
+                del fixture["report"]["results"]["container"]
+            with self.subTest(missing=missing), self.assertRaises(ValueError):
+                candidates.validate_promotion(**fixture)
+        for conclusion in ("failure", "cancelled", "skipped"):
+            fixture = qualification()
+            next(job for job in fixture["jobs"] if job["name"] == name)[
+                "conclusion"
+            ] = conclusion
+            with self.subTest(conclusion=conclusion), self.assertRaises(ValueError):
                 candidates.validate_promotion(**fixture)
 
     def test_artifact_cannot_claim_another_run_attempt_base_head_or_pr(self):

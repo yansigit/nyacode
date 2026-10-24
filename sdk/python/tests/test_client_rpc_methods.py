@@ -1,13 +1,14 @@
 from __future__ import annotations
 
 import json
+import os
 from pathlib import Path
 from typing import get_type_hints
 
 import pytest
 
 from openai_codex._runtime_requirements import CheckoutCapabilities
-from openai_codex.client import CodexClient, _params_dict
+from openai_codex.client import CodexClient, CodexConfig, _params_dict
 from openai_codex.errors import CodexError
 from openai_codex.generated.notification_registry import notification_turn_id
 from openai_codex.generated.v2_all import (
@@ -126,10 +127,13 @@ def test_new_options_accept_supported_runtime_metadata(
 
 
 @pytest.mark.parametrize("supports_options", [True, False])
-def test_unversioned_checkout_probes_and_caches_its_own_schema(
-    monkeypatch: pytest.MonkeyPatch, tmp_path: Path, supports_options: bool
+@pytest.mark.parametrize("version", ["0.0.0", "0.1.0", "0.153.0", "0.149.0"])
+def test_resolved_runtime_probes_and_caches_its_own_schema(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path, supports_options: bool, version: str
 ) -> None:
-    client, requests = _initialized_client(monkeypatch, {"userAgent": "codex-cli/0.0.0"})
+    client, requests = _initialized_client(
+        monkeypatch, {"userAgent": f"codex_cli_rs/{version} (Linux)"}
+    )
     command = ("checkout-codex", "--config", "key=value", "app-server")
     client._checkout_capabilities = CheckoutCapabilities(
         command, str(tmp_path), {"CUSTOM": "value"}
@@ -141,7 +145,7 @@ def test_unversioned_checkout_probes_and_caches_its_own_schema(
         output = Path(args[-1]) / "v2"
         output.mkdir()
         for name, fields in (
-            ("TurnStartParams", ["turnTrigger", "serviceTierForTurn"]),
+            ("TurnStartParams", ["toolOutput", "turnTrigger", "serviceTierForTurn"]),
             ("ThreadResumeParams", ["excludeTurns"]),
             ("ThreadForkParams", ["excludeTurns"]),
         ):
@@ -154,14 +158,17 @@ def test_unversioned_checkout_probes_and_caches_its_own_schema(
     monkeypatch.setattr("openai_codex._runtime_requirements.subprocess.run", generate_schema)
     for method, params in (
         ("turn/start", {"input": [], "turnTrigger": "automation"}),
+        ("turn/start", {"input": [], "toolOutput": {"name": "delegate", "output": "Investigate"}}),
+        ("turn/start", {"input": [], "serviceTierForTurn": "default"}),
         ("thread/resume", {"threadId": "thread-1", "excludeTurns": False}),
+        ("thread/fork", {"threadId": "thread-1", "excludeTurns": True}),
     ):
         if supports_options:
             client.request(method, params, response_model=InitializeResponse)
         else:
             with pytest.raises(CodexError, match="checkout does not support"):
                 client.request(method, params, response_model=InitializeResponse)
-    assert len(requests) == (2 if supports_options else 0)
+    assert len(requests) == (5 if supports_options else 0)
     assert probes == [
         (
             [*command, "generate-json-schema", "--experimental", "--out"],
@@ -176,6 +183,22 @@ def test_unversioned_checkout_probes_and_caches_its_own_schema(
     ]
     client.close()
     assert client._checkout_capabilities is None
+
+
+@pytest.mark.parametrize("version", ["0.1.0", "0.153.0"])
+def test_resolved_runtime_schema_failure_rejects_before_sending(
+    monkeypatch: pytest.MonkeyPatch, version: str
+) -> None:
+    client, requests = _initialized_client(monkeypatch, {"userAgent": f"codex_cli_rs/{version}"})
+    client._checkout_capabilities = CheckoutCapabilities(("missing-codex", "app-server"), None, {})
+
+    def fail_schema(*_args, **_kwargs):
+        raise OSError("schema unavailable")
+
+    monkeypatch.setattr("openai_codex._runtime_requirements.subprocess.run", fail_schema)
+    with pytest.raises(CodexError, match="Could not inspect"):
+        client.request("thread/fork", {"excludeTurns": True}, response_model=InitializeResponse)
+    assert requests == []
 
 
 def test_unversioned_custom_launch_requires_verifiable_capabilities(
@@ -692,3 +715,55 @@ def test_turn_notification_router_routes_unknown_turn_notifications() -> None:
     second = client.next_turn_notification("turn-2")
 
     assert [first.method, second.method] == ["unknown/direct", "unknown/nested"]
+
+
+@pytest.mark.skipif(not os.environ.get("CODEX_EXEC_PATH"), reason="CODEX_EXEC_PATH is not set")
+def test_packaged_runtime_checks_real_schema_before_gated_requests(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    binary = Path(os.environ["CODEX_EXEC_PATH"])
+    assert binary.is_file(), f"Configured CLI binary does not exist: {binary}"
+    (tmp_path / "codex").mkdir()
+    client = CodexClient(
+        CodexConfig(
+            codex_bin=str(binary),
+            env={
+                "HOME": str(tmp_path),
+                "CODEX_HOME": str(tmp_path / "codex"),
+                "NYACODE_HOME": str(tmp_path / "codex"),
+            },
+        )
+    )
+    try:
+        client.start()
+        metadata = client.initialize()
+        assert metadata.userAgent
+        assert client._runtime_version
+        capabilities = client._checkout_capabilities
+        assert capabilities is not None
+        assert "fields" not in capabilities.__dict__
+        requests = []
+
+        def capture(method, params):
+            requests.append((method, params))
+            return {}
+
+        monkeypatch.setattr(client, "_request_raw", capture)
+        expected = [
+            ("turn/start", {"toolOutput": {"name": "delegate", "output": "Investigate"}}),
+            ("turn/start", {"turnTrigger": "automation"}),
+            ("turn/start", {"serviceTierForTurn": "default"}),
+            ("thread/resume", {"threadId": "thread-1", "excludeTurns": False}),
+            ("thread/fork", {"threadId": "thread-1", "excludeTurns": True}),
+        ]
+        for method, params in expected:
+            client.request(method, params, response_model=InitializeResponse)
+        assert requests == expected
+        fields = capabilities.__dict__["fields"]
+        assert capabilities.fields is fields
+        assert {"toolOutput", "turnTrigger", "serviceTierForTurn"} <= fields["turn/start"]
+        assert "excludeTurns" in fields["thread/resume"]
+        assert "excludeTurns" in fields["thread/fork"]
+    finally:
+        client.close()
+    assert client._checkout_capabilities is None

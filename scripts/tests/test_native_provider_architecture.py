@@ -447,18 +447,23 @@ class AssemblyOwnershipTests(unittest.TestCase):
             self.assertEqual(
                 architecture.validate_assembly_ownership(root, assembly), []
             )
-            owned = root / "integration/codex/adapter/src/new.rs"
-            owned.parent.mkdir(parents=True)
-            owned.write_text("pub fn new() {}\n")
-            self.assertTrue(
-                any(
-                    "no assembly mapping" in error
-                    for error in architecture.validate_assembly_ownership(
-                        root, assembly
+            for relative in (
+                "integration/codex/adapter/src/new.rs",
+                "third_party/rust/new-dependency/src/lib.rs",
+            ):
+                with self.subTest(relative=relative):
+                    owned = root / relative
+                    owned.parent.mkdir(parents=True)
+                    owned.write_text("pub fn new() {}\n")
+                    self.assertTrue(
+                        any(
+                            "no assembly mapping" in error
+                            for error in architecture.validate_assembly_ownership(
+                                root, assembly
+                            )
+                        )
                     )
-                )
-            )
-            owned.unlink()
+                    owned.unlink()
             assembly["overlays"] = [{"destination": "codex-rs/core/src/unknown.rs"}]
             self.assertTrue(architecture.validate_assembly_ownership(root, assembly))
             assembly["overlays"] = []
