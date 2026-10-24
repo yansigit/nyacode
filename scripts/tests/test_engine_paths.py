@@ -134,7 +134,10 @@ class EnginePathTests(unittest.TestCase):
                 call.kwargs["env"]["NYACODE_ENGINE_ROOT"], str(engine_root)
             )
             self.assertEqual(call.kwargs["env"]["RUSTY_V8_ARCHIVE"], "pinned")
-            self.assertEqual(call.kwargs["env"]["RUSTUP_TOOLCHAIN"], "1.95.0")
+            self.assertEqual(
+                call.kwargs["env"]["RUSTUP_TOOLCHAIN"],
+                json.loads((ROOT / "engine.lock").read_text())["toolchain"],
+            )
             self.assertEqual(
                 call.kwargs["env"]["CARGO_TARGET_DIR"], str(ROOT / ".engine/target")
             )
@@ -188,7 +191,8 @@ class EnginePathTests(unittest.TestCase):
                 )
                 self.assertNotIn("--", run.call_args.args[0])
                 self.assertEqual(
-                    run.call_args.kwargs["env"]["RUSTUP_TOOLCHAIN"], "1.95.0"
+                    run.call_args.kwargs["env"]["RUSTUP_TOOLCHAIN"],
+                    json.loads((ROOT / "engine.lock").read_text())["toolchain"],
                 )
 
     def test_engine_run_locks_cargo_before_cli_arguments(self):

@@ -44,8 +44,12 @@ qualification of later changes.
 
 Provider implementation changes run standalone and linked integration checks.
 Shared, product, adapter, and unclassified inputs take the broader acceptance path.
-Engine upgrades qualify native contracts, both SDKs, and all six platform packages.
+Engine upgrades qualify native contracts, every Rust workspace crate in the container,
+both SDKs, and all six platform packages.
 The always-present `Engine acceptance` check fails on missing or cancelled results.
+Model-catalog requests and cache identity use the pinned upstream release version,
+or the pristine workspace version for an untagged baseline. Public package and CLI
+versions continue to come from `VERSION`.
 
 ```sh
 python3 scripts/engine.py upgrade rust-vX.Y.Z --mode controls

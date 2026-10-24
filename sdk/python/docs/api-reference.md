@@ -229,12 +229,11 @@ These options have the same behavior on sync and async `run(...)` and `turn(...)
 | `source: str \| None = None`              | Labels the caller that initiated a new turn, such as `"review_ui"`. This is metadata; it does not schedule work or grant authority. Ignored when input joins an active turn.                                 |
 
 `ExternalMessage`, `turn_service_tier`, `source`, and explicit `include_turns`
-on resume/fork require Codex CLI 0.151.0 or newer. The SDK raises `CodexError`
-before sending these options to an older runtime, which would otherwise ignore
-them. Published SDK releases install a matching runtime automatically; when
-using `CodexConfig.codex_bin`, choose a compatible executable. Unversioned local
-builds are checked lazily against their experimental schema before these options
-are sent. A custom `launch_args_override` must report a supported version.
+on resume/fork are checked lazily against the resolved executable’s experimental
+schema before being sent. This supports Nyacode’s independent product versions
+and rejects missing fields with `CodexError`. Published SDK releases install a
+matching runtime automatically. A custom `launch_args_override`, whose executable
+cannot be inspected, must report upstream CLI 0.151.0 or newer.
 
 ## Sandbox
 

@@ -317,7 +317,9 @@ def validate_links(workspace: Path, paths: set[str]) -> None:
                 raise EngineError(f"symlink chain escapes workspace: {name}")
 
 
-def product_version(workspace: Path, version: str, toolchain: str) -> None:
+def product_version(
+    workspace: Path, version: str, toolchain: str, engine_version: str
+) -> None:
     if not re.fullmatch(r"\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?", version):
         raise EngineError("VERSION must contain one semantic product version")
     manifest = workspace / "codex-rs/Cargo.toml"
@@ -336,6 +338,17 @@ def product_version(workspace: Path, version: str, toolchain: str) -> None:
         manifest.write_text(
             text[: section.start(1)] + replaced + text[section.end(1) :]
         )
+    catalog = workspace / "codex-rs/models-manager/src/lib.rs"
+    if catalog.is_file():
+        source, count = re.subn(
+            r'^const ENGINE_CLIENT_VERSION: &str = "@NYACODE_ENGINE_VERSION@";$',
+            f"const ENGINE_CLIENT_VERSION: &str = {json.dumps(engine_version)};",
+            catalog.read_text(),
+            flags=re.MULTILINE,
+        )
+        if count != 1:
+            raise EngineError("expected exactly one engine catalog version binding")
+        catalog.write_bytes(source.encode("utf-8"))
     actual_toolchain = tomllib.loads(
         (workspace / "codex-rs/rust-toolchain.toml").read_text()
     )["toolchain"]["channel"]
@@ -411,6 +424,18 @@ def assemble(
         if errors:
             raise EngineError("invalid assembly ownership: " + "; ".join(errors))
     archive_modes = extract_archive(archive, workspace)
+    upstream_version = (
+        lock.get("release_tag")
+        or tomllib.loads((workspace / "codex-rs/Cargo.toml").read_text())["workspace"][
+            "package"
+        ]["version"]
+    )
+    engine_version = re.fullmatch(
+        r"(\d+\.\d+\.\d+)(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?",
+        upstream_version.removeprefix("rust-v"),
+    )
+    if engine_version is None:
+        raise EngineError("upstream engine must have a semantic version")
     git(workspace, "init", "--quiet")
     git(workspace, "add", "--force", "--all", "--", ".")
     index_modes(
@@ -511,7 +536,7 @@ def assemble(
         allowed.add(name)
     shutil.copyfile(root / lock["assembled_lock"], workspace / "codex-rs/Cargo.lock")
     version = (root / lock["product_version_file"]).read_text().strip()
-    product_version(workspace, version, lock["toolchain"])
+    product_version(workspace, version, lock["toolchain"], engine_version[1])
     git(workspace, "add", "--force", "--all", "--", ".")
     index_modes(
         workspace,
@@ -761,7 +786,14 @@ def upgrade(
             "revision": revision,
             "archive_sha256": digest(archive.read_bytes()),
         }
+        with tempfile.TemporaryDirectory(prefix="nyacode-upstream-") as temporary:
+            pristine = Path(temporary)
+            extract_archive(archive, pristine)
+            candidate["toolchain"] = tomllib.loads(
+                (pristine / "codex-rs/rust-toolchain.toml").read_text()
+            )["toolchain"]["channel"]
         write_json(proposal / "engine.lock", candidate)
+        load_lock(proposal)
         cache = (cache_dir or CACHE).resolve()
         cache.mkdir(parents=True, exist_ok=True)
         pinned = cache / f"{revision}-{candidate['archive_sha256']}.tar.gz"

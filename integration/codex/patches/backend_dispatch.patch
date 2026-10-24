@@ -5502,7 +5502,7 @@ index 1823275ea4e8a690f6b233a934a044d839a5efb6..5fd20121de01ad695ca10c542ade554d
          http_headers: None,
          env_http_headers: None,
 diff --git a/codex-rs/deny.toml b/codex-rs/deny.toml
-index 31c5517af07dbbfa196c874d3fcf32032bfd575b..44fe80e840be9ce691370b602536536bfc9a7662 100644
+index 31c5517af07dbbfa196c874d3fcf32032bfd575b..7bd5a07f9bf8a0688f73615387a75c3822b62491 100644
 --- a/codex-rs/deny.toml
 +++ b/codex-rs/deny.toml
 @@ -73,17 +73,16 @@ ignore = [
@@ -5554,14 +5554,22 @@ index 31c5517af07dbbfa196c874d3fcf32032bfd575b..44fe80e840be9ce691370b602536536b
          # Third-party crates that own their reqwest integration. These are not part of the
          # first-party migration count above.
          "oauth2",
-@@ -316,6 +329,7 @@ allow-git = [
+@@ -315,12 +328,15 @@ allow-git = [
+     "https://github.com/helix-editor/nucleo.git",
      # CONNECT request handling needs this pinned H3 revision until released.
      "https://github.com/hyperium/h3",
++    "https://github.com/jmlepisto/clatter",
      "https://github.com/juberti-oai/rust-sdks.git",
 +    "https://github.com/kellpossible/cargo-i18n",
      "https://github.com/microsoft/mxc",
      "https://github.com/modelcontextprotocol/rust-sdk",
      "https://github.com/openai-oss-forks/crossterm",
+     "https://github.com/openai-oss-forks/tokio-tungstenite",
+     "https://github.com/openai-oss-forks/tungstenite-rs",
++    "https://github.com/str4d/rage",
+ ]
+ 
+ [sources.allow-org]
 diff --git a/codex-rs/exec-server/Cargo.toml b/codex-rs/exec-server/Cargo.toml
 index 0d1f1f5209ca66c6efdd9f6bb54058e89bc7a542..86eed960308a0152d694225eff6ff3e8d11f10c6 100644
 --- a/codex-rs/exec-server/Cargo.toml
@@ -8937,7 +8945,7 @@ index d598740ad4559f7ea4aae8c60f85a2dbc7589a2d..da5df84c2656aacc6db6ad0608a0ee3f
    GPT-5.6-Sol default · /tmp/project
    ? for shortcuts                                      ⚠ 1 warning · f2 to view
 diff --git a/codex-rs/tui/src/app/snapshots/codex_tui__app__daemon_menu__tests__daemon_cli_confirmation.snap b/codex-rs/tui/src/app/snapshots/codex_tui__app__daemon_menu__tests__daemon_cli_confirmation.snap
-index 4a946119946cae246bfb2721f7abc9b363c1df3b..ec306bd01a451eaadd90fe778f7915751aa6aa7e 100644
+index 4a946119946cae246bfb2721f7abc9b363c1df3b..cfdd58433a48c882640999ecfb4fc87dbe985508 100644
 --- a/codex-rs/tui/src/app/snapshots/codex_tui__app__daemon_menu__tests__daemon_cli_confirmation.snap
 +++ b/codex-rs/tui/src/app/snapshots/codex_tui__app__daemon_menu__tests__daemon_cli_confirmation.snap
 @@ -1,6 +1,5 @@
@@ -8947,15 +8955,17 @@ index 4a946119946cae246bfb2721f7abc9b363c1df3b..ec306bd01a451eaadd90fe778f791575
  expression: "render_bottom_popup(&app.chat_widget,\nwidth).replace(r\"C:\\cli-build\\bin\\codex\", \"/x/cli-build/bin/codex\")"
  ---
    Agent command center  Group: Project  g
-@@ -10,7 +9,7 @@ expression: "render_bottom_popup(&app.chat_widget,\nwidth).replace(r\"C:\\cli-bu
+@@ -10,8 +9,8 @@ expression: "render_bottom_popup(&app.chat_widget,\nwidth).replace(r\"C:\\cli-bu
                                                            │
                                                            │
  
 -                Update daemon and exit Codex?
+-                Use this CLI package v0.0.0 from /x/cli-build/bin/codex. Copy the
 +                Update daemon and exit Nyacode?
-                 Use this CLI package v0.0.0 from /x/cli-build/bin/codex. Copy the
++                Use this CLI package v0.1.0 from /x/cli-build/bin/codex. Copy the
                  complete package and pin it against automatic updates.
                  This may restart the daemon and interrupt active or queued work.
+                 Codex exits to update in this terminal. Relaunch it afterward.
 @@ -26,4 +25,4 @@ expression: "render_bottom_popup(&app.chat_widget,\nwidth).replace(r\"C:\\cli-bu
                                                            │
                                                            │
@@ -9372,7 +9382,7 @@ index dccb70d5766e43e2d1418f42a9485eb75e117146..eb4255ab8e8858b42549b51bceb6c6d4
              transcript_view: Default::default(),
              last_rendered_history_tail: None,
 diff --git a/codex-rs/tui/src/app/tests/active_reconnect_tests.rs b/codex-rs/tui/src/app/tests/active_reconnect_tests.rs
-index f102e25b47ab99b4871792797e86da2a51e07cbb..0ec5f4a5dac02d89451b65a325249a2659bceaaa 100644
+index f102e25b47ab99b4871792797e86da2a51e07cbb..de6e329fb62e971bf290f6f9ddc36466afebdb01 100644
 --- a/codex-rs/tui/src/app/tests/active_reconnect_tests.rs
 +++ b/codex-rs/tui/src/app/tests/active_reconnect_tests.rs
 @@ -416,13 +416,13 @@ async fn reconnect_restores_history_permissions_and_resumes_unsent_input() -> Re
@@ -9391,6 +9401,23 @@ index f102e25b47ab99b4871792797e86da2a51e07cbb..0ec5f4a5dac02d89451b65a325249a26
  "###);
          } else if edit_offline {
              assert!(notices.contains("unacknowledged prompt"));
+@@ -724,14 +724,8 @@ async fn reconnect_allows_slow_hydration_but_bounds_a_stalled_server() -> Result
+             app.begin_reconnect();
+             let mut session = crate::start_embedded_app_server_for_picker(&app.config).await?;
+             let mut tui = crate::tui::test_support::make_test_tui()?;
+-            app.finish_reconnect(
+-                &mut tui,
+-                &mut session,
+-                &mut events,
+-                result?,
+-                CODEX_CLI_VERSION,
+-            )
+-            .await?;
++            app.finish_reconnect(&mut tui, &mut session, &mut events, result?, "2.1.0")
++                .await?;
+             assert!(app.thread_unavailable(id));
+             app.handle_tui_event(
+                 &mut tui,
 diff --git a/codex-rs/tui/src/app/tests/background_exit_tests.rs b/codex-rs/tui/src/app/tests/background_exit_tests.rs
 index 3d2c8066de2ad2456b720930d74d741405d969a0..2a6dba626f661b892d4206c3bd80bf15e26a5f41 100644
 --- a/codex-rs/tui/src/app/tests/background_exit_tests.rs
@@ -9487,7 +9514,7 @@ index 7151dafd25bb7c4cb873e23c96bb4c1f64362e9f..09a7cbde7a38469fad11ca011c73914c
        ⌃x then · ⌃t open transcript · ⌃u interrupt turn · esc cancel
      "
 diff --git a/codex-rs/tui/src/app/tests/navigation_reconnect_tests.rs b/codex-rs/tui/src/app/tests/navigation_reconnect_tests.rs
-index d34ee7d38d38cb58a74ff5e19affcd404b642fa7..3cb232b9401ce6ac65c7ef2e4f317450f71279d0 100644
+index d34ee7d38d38cb58a74ff5e19affcd404b642fa7..94ec709544a075901cf18a8d04cb500406945624 100644
 --- a/codex-rs/tui/src/app/tests/navigation_reconnect_tests.rs
 +++ b/codex-rs/tui/src/app/tests/navigation_reconnect_tests.rs
 @@ -268,7 +268,7 @@ async fn reconnect_daemon_command_center_after_socket_replacement_without_a_conv
@@ -9499,7 +9526,24 @@ index d34ee7d38d38cb58a74ff5e19affcd404b642fa7..3cb232b9401ce6ac65c7ef2e4f317450
                  "Waiting for active turns.".into(),
              );
          }
-@@ -341,7 +341,7 @@ async fn reconnect_daemon_command_center_after_socket_replacement_without_a_conv
+@@ -324,14 +324,8 @@ async fn reconnect_daemon_command_center_after_socket_replacement_without_a_conv
+             app.reconnect.presentation,
+         )
+         .await?;
+-        app.finish_reconnect(
+-            &mut tui,
+-            &mut session,
+-            &mut events,
+-            connected,
+-            CODEX_CLI_VERSION,
+-        )
+-        .await?;
++        app.finish_reconnect(&mut tui, &mut session, &mut events, connected, "2.1.0")
++            .await?;
+         if interrupted_setup {
+             assert!(app.windows_sandbox.pending_setup.is_none());
+             assert!(app.windows_sandbox.setup_started_at.is_none());
+@@ -341,7 +335,7 @@ async fn reconnect_daemon_command_center_after_socket_replacement_without_a_conv
                  if let AppEvent::InsertHistoryCell(cell) = &event {
                      let rendered = lines_to_single_string(&cell.display_lines(/*width*/ 100));
                      if rendered.contains("Windows sandbox setup was interrupted") {
@@ -9569,7 +9613,7 @@ index 560a973eb77ae40eb95a9018d6a3e5d16bfe2023..f0b35d06b16534adf10d830075811a5a
  
    ⌃c quit
 diff --git a/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__active_reconnect__unavailable_conversation.snap b/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__active_reconnect__unavailable_conversation.snap
-index 335071a07742e41b50ce0eb62805f740d019b586..32447924859555731266c752571bf0b7ac01adfb 100644
+index 335071a07742e41b50ce0eb62805f740d019b586..bbdc4d76ae567fdfa2ba8145595131eec915a603 100644
 --- a/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__active_reconnect__unavailable_conversation.snap
 +++ b/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__active_reconnect__unavailable_conversation.snap
 @@ -3,8 +3,8 @@ source: tui/src/app/tests/active_reconnect_tests.rs
@@ -9578,8 +9622,8 @@ index 335071a07742e41b50ce0eb62805f740d019b586..32447924859555731266c752571bf0b7
  • This conversation is unavailable. Its cached transcript and draft remain here; input is paused. Open the agent picker or return to the parent to continue.
 -⚠ A background Codex service is running v2.0.0, different from your Codex CLI
 -  v0.0.0.
-+⚠ A background Nyacode service is running v2.0.0, different from your Nyacode
-+  CLI v0.0.0.
++⚠ A background Nyacode service is running v2.0.0, older than your Nyacode CLI
++  v2.1.0.
  › unavailable draft
  
    gpt-test default · /tmp/project
@@ -9691,7 +9735,7 @@ index eaaa3418dce023096d281e97e526991b61f3ebdd..37188294440a2b458174c8c57f9e1ba1
 -› Ask Codex to do anything
 +› Ask Nyacode to do anything
 diff --git a/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__navigation_reconnect__daemon_command_center_vanished_rename.snap b/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__navigation_reconnect__daemon_command_center_vanished_rename.snap
-index a8997b370eeb543ee849f29f437c6144a1439f82..e2cdd90493d3063b32810260e665035062b052fa 100644
+index a8997b370eeb543ee849f29f437c6144a1439f82..e462854af1deba95d2893b006c1cf5eb4a371995 100644
 --- a/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__navigation_reconnect__daemon_command_center_vanished_rename.snap
 +++ b/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__navigation_reconnect__daemon_command_center_vanished_rename.snap
 @@ -25,4 +25,4 @@ expression: "render_bottom_popup(&app.chat_widget, 100)"
@@ -9699,9 +9743,9 @@ index a8997b370eeb543ee849f29f437c6144a1439f82..e2cdd90493d3063b32810260e6650350
                                                            │
                                                            │
 -  Service v2.0.0 ≠ Codex CLI v0.0.0 · /daemon
-+  Service v2.0.0 ≠ Nyacode CLI v0.0.0 · /daemon
++  Service v2.0.0 < Nyacode CLI v2.1.0 · /daemon
 diff --git a/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__realtime_requests__voice_buffered_replay_reconciles_captions.snap b/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__realtime_requests__voice_buffered_replay_reconciles_captions.snap
-index ab3a8c84c9889e61267bb7d72e9963311b8e434f..f46d86e96c2915e3e9283581df05028bb83a0f46 100644
+index ab3a8c84c9889e61267bb7d72e9963311b8e434f..0471bd64f8908629f41cb080d146907266473122 100644
 --- a/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__realtime_requests__voice_buffered_replay_reconciles_captions.snap
 +++ b/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__realtime_requests__voice_buffered_replay_reconciles_captions.snap
 @@ -1,17 +1,16 @@
@@ -9712,7 +9756,7 @@ index ab3a8c84c9889e61267bb7d72e9963311b8e434f..f46d86e96c2915e3e9283581df05028b
  ---
  
 -  >_ OpenAI Codex (v0.0.0)
-+  >_ Nyacode (v0.0.0)
++  >_ Nyacode (v0.1.0)
       /tmp/project
  
    To get started, describe a task or try one of these commands:
@@ -9726,7 +9770,7 @@ index ab3a8c84c9889e61267bb7d72e9963311b8e434f..f46d86e96c2915e3e9283581df05028b
    /review - review any changes and find issues
  
 diff --git a/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__realtime_requests__voice_replay_reconciles_matching_captions.snap b/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__realtime_requests__voice_replay_reconciles_matching_captions.snap
-index 0dfd7333b6acd684d1881dd432fc4f137126b7b0..da48ec812021d2be35f049136693c0b6a7949a9a 100644
+index 0dfd7333b6acd684d1881dd432fc4f137126b7b0..34c548239300ae369751ff8b7246507319258d2f 100644
 --- a/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__realtime_requests__voice_replay_reconciles_matching_captions.snap
 +++ b/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__realtime_requests__voice_replay_reconciles_matching_captions.snap
 @@ -1,17 +1,16 @@
@@ -9737,7 +9781,7 @@ index 0dfd7333b6acd684d1881dd432fc4f137126b7b0..da48ec812021d2be35f049136693c0b6
  ---
  
 -  >_ OpenAI Codex (v0.0.0)
-+  >_ Nyacode (v0.0.0)
++  >_ Nyacode (v0.1.0)
       /tmp/project
  
    To get started, describe a task or try one of these commands:
@@ -9751,7 +9795,7 @@ index 0dfd7333b6acd684d1881dd432fc4f137126b7b0..da48ec812021d2be35f049136693c0b6
    /review - review any changes and find issues
  
 diff --git a/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__startup_frame_tests__startup_tip_in_transcript.snap b/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__startup_frame_tests__startup_tip_in_transcript.snap
-index d45000ee78fe1ae9bfea05d87a800f17d436103a..e72ddf25be6904033a6c66c558cb9f14e6462164 100644
+index d45000ee78fe1ae9bfea05d87a800f17d436103a..81e930009f53abc9e45dd579c2494bf6a68d31f3 100644
 --- a/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__startup_frame_tests__startup_tip_in_transcript.snap
 +++ b/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__startup_frame_tests__startup_tip_in_transcript.snap
 @@ -4,7 +4,7 @@ expression: "normalize_snapshot_paths(normalize_agent_center_snapshot(snapshots.
@@ -9759,7 +9803,7 @@ index d45000ee78fe1ae9bfea05d87a800f17d436103a..e72ddf25be6904033a6c66c558cb9f14
  80 columns
  
 -  >_ OpenAI Codex (v0.0.0)
-+  >_ Nyacode (v0.0.0)
++  >_ Nyacode (v0.1.0)
       /tmp/project
  
  • Conversation continues here.
@@ -9776,7 +9820,7 @@ index d45000ee78fe1ae9bfea05d87a800f17d436103a..e72ddf25be6904033a6c66c558cb9f14
  32 columns
  
 -  >_ OpenAI Codex (v0.0.0)
-+  >_ Nyacode (v0.0.0)
++  >_ Nyacode (v0.1.0)
       /tmp/project
  
  • Conversation continues here.
@@ -12880,11 +12924,15 @@ index bf5159f4fcbc553e28df6760f6dad804af235192..a32f959131278b7ce78476384266cb6a
  
    This conversation is
 diff --git a/codex-rs/tui/src/snapshots/codex_tui__update_prompt__tests__update_picker_selected_28x12.snap b/codex-rs/tui/src/snapshots/codex_tui__update_prompt__tests__update_picker_selected_28x12.snap
-index 53c8053051ed137cd64a19611d6f7dee8ca284a1..983a6388eea3fb5318321423de37910a692680cd 100644
+index 53c8053051ed137cd64a19611d6f7dee8ca284a1..fb11250bb49eb47c6b54c72ba1026e75915270a1 100644
 --- a/codex-rs/tui/src/snapshots/codex_tui__update_prompt__tests__update_picker_selected_28x12.snap
 +++ b/codex-rs/tui/src/snapshots/codex_tui__update_prompt__tests__update_picker_selected_28x12.snap
-@@ -6,8 +6,8 @@ expression: rendered
-   Update available · 0.0.0
+@@ -3,11 +3,11 @@ source: tui/src/update_prompt.rs
+ expression: rendered
+ ---
+ 
+-  Update available · 0.0.0
++  Update available · 0.1.0
    → 9.9.9
    Release notes:
 -  https://github.com/opena
@@ -12895,14 +12943,16 @@ index 53c8053051ed137cd64a19611d6f7dee8ca284a1..983a6388eea3fb5318321423de37910a
  › 3. Skip until next version
  
 diff --git a/codex-rs/tui/src/snapshots/codex_tui__update_prompt__tests__update_prompt_modal.snap b/codex-rs/tui/src/snapshots/codex_tui__update_prompt__tests__update_prompt_modal.snap
-index b547642270e9b9c612d1b62ccedf6d305b9b84d0..c03936a4d5f499281b9461544c1053804b25af38 100644
+index b547642270e9b9c612d1b62ccedf6d305b9b84d0..083ee4f9c76431fb4fde2860ef4f701dce4f7d9c 100644
 --- a/codex-rs/tui/src/snapshots/codex_tui__update_prompt__tests__update_prompt_modal.snap
 +++ b/codex-rs/tui/src/snapshots/codex_tui__update_prompt__tests__update_prompt_modal.snap
-@@ -4,9 +4,9 @@ expression: terminal.backend()
+@@ -3,10 +3,10 @@ source: tui/src/update_prompt.rs
+ expression: terminal.backend()
  ---
  
-   Update available · 0.0.0 → 9.9.9
+-  Update available · 0.0.0 → 9.9.9
 -  Release notes: https://github.com/openai/codex/releases/latest
++  Update available · 0.1.0 → 9.9.9
 +  Release notes: https://github.com/yansigit/nyacode/releases/latest
  
 -› 1. Update now (runs `npm install -g @openai/codex`)                           
@@ -13083,7 +13133,7 @@ index 2ee0395438048edd9f2db15f0cb90161a93386f3..997af591628872a68236114d77b4b5d3
      }
  
 diff --git a/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_server_auth_not_required.snap b/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_server_auth_not_required.snap
-index a00c3ae09ef24810d068f1ca93ae1eee6beb0815..af606669f74483f15eb60105a309a34ff4b38387 100644
+index a00c3ae09ef24810d068f1ca93ae1eee6beb0815..7c0b2266f51ebe8995d097e3992a9053699f4037 100644
 --- a/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_server_auth_not_required.snap
 +++ b/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_server_auth_not_required.snap
 @@ -4,7 +4,7 @@ expression: rendered
@@ -13091,12 +13141,12 @@ index a00c3ae09ef24810d068f1ca93ae1eee6beb0815..af606669f74483f15eb60105a309a34f
  /status
  
 -  >_ OpenAI Codex (v0.0.0)
-+  >_ Nyacode (v0.0.0)
++  >_ Nyacode (v0.1.0)
  
    Model:           gpt-5.6-sol (reasoning none, summaries auto)
    Model provider:  server-ollama
 diff --git a/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_server_auth_required.snap b/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_server_auth_required.snap
-index f7be0da370498541ac8b3dbb74aaa803116caa75..f9f0988318328d60bcd68095e910458f19c1bc39 100644
+index f7be0da370498541ac8b3dbb74aaa803116caa75..e1920a72006d091a5e573e38a00b9f3610499d9b 100644
 --- a/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_server_auth_required.snap
 +++ b/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_server_auth_required.snap
 @@ -4,7 +4,7 @@ expression: rendered
@@ -13104,12 +13154,12 @@ index f7be0da370498541ac8b3dbb74aaa803116caa75..f9f0988318328d60bcd68095e910458f
  /status
  
 -  >_ OpenAI Codex (v0.0.0)
-+  >_ Nyacode (v0.0.0)
++  >_ Nyacode (v0.1.0)
  
    Visit https://chatgpt.com/settings/usage for up-to-date
    information on rate limits and credits
 diff --git a/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_cached_limits_hide_credits_without_flag.snap b/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_cached_limits_hide_credits_without_flag.snap
-index 0f7605b35360fe877522cca63ac32e4add7c0ae0..e69a78fe32fe9cb7db25aafa1bb6286674a72243 100644
+index 0f7605b35360fe877522cca63ac32e4add7c0ae0..3b6abbcbbbf90b0ff41579220752bde93c7d6cc0 100644
 --- a/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_cached_limits_hide_credits_without_flag.snap
 +++ b/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_cached_limits_hide_credits_without_flag.snap
 @@ -4,7 +4,7 @@ expression: sanitized
@@ -13117,12 +13167,12 @@ index 0f7605b35360fe877522cca63ac32e4add7c0ae0..e69a78fe32fe9cb7db25aafa1bb62866
  /status
  
 -  >_ OpenAI Codex (v0.0.0)
-+  >_ Nyacode (v0.0.0)
++  >_ Nyacode (v0.1.0)
  
    Visit https://chatgpt.com/settings/usage for up-to-date
    information on rate limits and credits
 diff --git a/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_includes_credits_and_limits.snap b/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_includes_credits_and_limits.snap
-index 6783811c535b14bdb5d4bbb6d422fd0dbd9b3db6..a2807f360ca3744423b6b1de042f04e9bc25106a 100644
+index 6783811c535b14bdb5d4bbb6d422fd0dbd9b3db6..762cc0de00a63efa4b0d703417ea6e264830b931 100644
 --- a/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_includes_credits_and_limits.snap
 +++ b/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_includes_credits_and_limits.snap
 @@ -4,7 +4,7 @@ expression: sanitized
@@ -13130,12 +13180,12 @@ index 6783811c535b14bdb5d4bbb6d422fd0dbd9b3db6..a2807f360ca3744423b6b1de042f04e9
  /status
  
 -  >_ OpenAI Codex (v0.0.0)
-+  >_ Nyacode (v0.0.0)
++  >_ Nyacode (v0.1.0)
  
    Visit https://chatgpt.com/settings/usage for up-to-date
    information on rate limits and credits
 diff --git a/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_includes_enterprise_monthly_credit_limit.snap b/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_includes_enterprise_monthly_credit_limit.snap
-index 92686ae341a8be3c93b09abd1a3f50602b6d807b..337befbdca1b9ed439204ca814e29c082409d70c 100644
+index 92686ae341a8be3c93b09abd1a3f50602b6d807b..906d464c0f15539816b020a4107fd4c04770c5dc 100644
 --- a/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_includes_enterprise_monthly_credit_limit.snap
 +++ b/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_includes_enterprise_monthly_credit_limit.snap
 @@ -4,7 +4,7 @@ expression: sanitized
@@ -13143,12 +13193,12 @@ index 92686ae341a8be3c93b09abd1a3f50602b6d807b..337befbdca1b9ed439204ca814e29c08
  /status
  
 -  >_ OpenAI Codex (v0.0.0)
-+  >_ Nyacode (v0.0.0)
++  >_ Nyacode (v0.1.0)
  
    Visit https://chatgpt.com/settings/usage for up-to-date
    information on rate limits and credits
 diff --git a/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_includes_forked_from.snap b/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_includes_forked_from.snap
-index 9e2dde99016dfc27b5a841a1b1a549f18a2a31f8..ff2ddb021588cfd5b4d91f3db0aef1583b1e9ded 100644
+index 9e2dde99016dfc27b5a841a1b1a549f18a2a31f8..bbf0679860df2fce491f5dc5d6a18e1d585634e2 100644
 --- a/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_includes_forked_from.snap
 +++ b/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_includes_forked_from.snap
 @@ -4,7 +4,7 @@ expression: sanitized
@@ -13156,12 +13206,12 @@ index 9e2dde99016dfc27b5a841a1b1a549f18a2a31f8..ff2ddb021588cfd5b4d91f3db0aef158
  /status
  
 -  >_ OpenAI Codex (v0.0.0)
-+  >_ Nyacode (v0.0.0)
++  >_ Nyacode (v0.1.0)
  
    Visit https://chatgpt.com/settings/usage for up-to-date
    information on rate limits and credits
 diff --git a/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_includes_monthly_limit.snap b/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_includes_monthly_limit.snap
-index bdf79abd5e89b12f4210a18093de7e9e10400861..f7775863114247981d338b9a677e16d76ee47540 100644
+index bdf79abd5e89b12f4210a18093de7e9e10400861..bf10a539d6ecc1ad37c57b6a205adac9c9a4f127 100644
 --- a/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_includes_monthly_limit.snap
 +++ b/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_includes_monthly_limit.snap
 @@ -4,7 +4,7 @@ expression: sanitized
@@ -13169,12 +13219,12 @@ index bdf79abd5e89b12f4210a18093de7e9e10400861..f7775863114247981d338b9a677e16d7
  /status
  
 -  >_ OpenAI Codex (v0.0.0)
-+  >_ Nyacode (v0.0.0)
++  >_ Nyacode (v0.1.0)
  
    Visit https://chatgpt.com/settings/usage for up-to-date
    information on rate limits and credits
 diff --git a/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_includes_reasoning_details.snap b/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_includes_reasoning_details.snap
-index db8ba4caefa08a1c10ee60b6a8edb36c58505f2d..a32fd9a7f6b2a7ff655b04fe24ebade500e4abe6 100644
+index db8ba4caefa08a1c10ee60b6a8edb36c58505f2d..baf4ca09e25af4a6470cc14356e14c47a1abc02b 100644
 --- a/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_includes_reasoning_details.snap
 +++ b/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_includes_reasoning_details.snap
 @@ -4,7 +4,7 @@ expression: sanitized
@@ -13182,12 +13232,12 @@ index db8ba4caefa08a1c10ee60b6a8edb36c58505f2d..a32fd9a7f6b2a7ff655b04fe24ebade5
  /status
  
 -  >_ OpenAI Codex (v0.0.0)
-+  >_ Nyacode (v0.0.0)
++  >_ Nyacode (v0.1.0)
  
    Visit https://chatgpt.com/settings/usage for up-to-date
    information on rate limits and credits
 diff --git a/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_local_background_server.snap b/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_local_background_server.snap
-index c20a53281a953dff10f5f9caf3d9b3673d373f2a..e73fa4baf75391aefe2850095fe8f1752805b65b 100644
+index c20a53281a953dff10f5f9caf3d9b3673d373f2a..3c1ba0b16a48ce594c48f3cf3d329ebf86cdc02b 100644
 --- a/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_local_background_server.snap
 +++ b/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_local_background_server.snap
 @@ -4,7 +4,7 @@ expression: sanitized
@@ -13195,12 +13245,12 @@ index c20a53281a953dff10f5f9caf3d9b3673d373f2a..e73fa4baf75391aefe2850095fe8f175
  /status
  
 -  >_ OpenAI Codex (v0.0.0)
-+  >_ Nyacode (v0.0.0)
++  >_ Nyacode (v0.1.0)
  
    Visit https://chatgpt.com/settings/usage for up-to-date
    information on rate limits and credits
 diff --git a/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_remote_server.snap b/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_remote_server.snap
-index 57c04829f560ccb30afa1a0c5614f4d7534bfca3..81ae69d74486f1fb549c33b572e140b7265f1271 100644
+index 57c04829f560ccb30afa1a0c5614f4d7534bfca3..32fe36b4485099904357fbc554893c2119244d1b 100644
 --- a/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_remote_server.snap
 +++ b/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_remote_server.snap
 @@ -4,7 +4,7 @@ expression: sanitized
@@ -13208,12 +13258,12 @@ index 57c04829f560ccb30afa1a0c5614f4d7534bfca3..81ae69d74486f1fb549c33b572e140b7
  /status
  
 -  >_ OpenAI Codex (v0.0.0)
-+  >_ Nyacode (v0.0.0)
++  >_ Nyacode (v0.1.0)
  
    Visit https://chatgpt.com/settings/usage for up-to-date
    information on rate limits and credits
 diff --git a/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_shows_active_user_defined_profile.snap b/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_shows_active_user_defined_profile.snap
-index e21309d2f846bdcc3e4da0c2d547ee23aab9b6d6..88a56b3ec5c6926272a9c17a5b96a6b6be64e0ff 100644
+index e21309d2f846bdcc3e4da0c2d547ee23aab9b6d6..467dec0f5d6e07dc8ae543517a2788f21fd1b344 100644
 --- a/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_shows_active_user_defined_profile.snap
 +++ b/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_shows_active_user_defined_profile.snap
 @@ -4,7 +4,7 @@ expression: sanitized
@@ -13221,12 +13271,12 @@ index e21309d2f846bdcc3e4da0c2d547ee23aab9b6d6..88a56b3ec5c6926272a9c17a5b96a6b6
  /status
  
 -  >_ OpenAI Codex (v0.0.0)
-+  >_ Nyacode (v0.0.0)
++  >_ Nyacode (v0.1.0)
  
    Visit https://chatgpt.com/settings/usage for up-to-date
    information on rate limits and credits
 diff --git a/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_shows_auto_review_permissions.snap b/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_shows_auto_review_permissions.snap
-index a5c7c21c016dc59db91c59ab4ce588af568bc1b7..10d61fa5008125711e88e7508c7b404567b0542a 100644
+index a5c7c21c016dc59db91c59ab4ce588af568bc1b7..7c08c63d5178ef5fdf249ff82ee7087d934d2648 100644
 --- a/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_shows_auto_review_permissions.snap
 +++ b/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_shows_auto_review_permissions.snap
 @@ -4,7 +4,7 @@ expression: sanitized
@@ -13234,12 +13284,12 @@ index a5c7c21c016dc59db91c59ab4ce588af568bc1b7..10d61fa5008125711e88e7508c7b4045
  /status
  
 -  >_ OpenAI Codex (v0.0.0)
-+  >_ Nyacode (v0.0.0)
++  >_ Nyacode (v0.1.0)
  
    Visit https://chatgpt.com/settings/usage for up-to-date
    information on rate limits and credits
 diff --git a/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_shows_missing_limits_message.snap b/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_shows_missing_limits_message.snap
-index 8899e4ee37e035fbd2a6914af8f89ea9449b720f..cc8975a7a48255dbcaf566c459e6cd41d84e100b 100644
+index 8899e4ee37e035fbd2a6914af8f89ea9449b720f..f9c5fd00f92711f83140bf4598e6ff7a3e6b41ca 100644
 --- a/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_shows_missing_limits_message.snap
 +++ b/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_shows_missing_limits_message.snap
 @@ -4,7 +4,7 @@ expression: sanitized
@@ -13247,12 +13297,12 @@ index 8899e4ee37e035fbd2a6914af8f89ea9449b720f..cc8975a7a48255dbcaf566c459e6cd41
  /status
  
 -  >_ OpenAI Codex (v0.0.0)
-+  >_ Nyacode (v0.0.0)
++  >_ Nyacode (v0.1.0)
  
    Visit https://chatgpt.com/settings/usage for up-to-date
    information on rate limits and credits
 diff --git a/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_shows_refreshing_limits_notice.snap b/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_shows_refreshing_limits_notice.snap
-index af4953d845eb37b74198ce6ec7a46e3fa53b55f3..97f0a4c93e425513e30365276e928305b1363b0b 100644
+index af4953d845eb37b74198ce6ec7a46e3fa53b55f3..b18c3a136a34dca6343e51af60496fda57b7e052 100644
 --- a/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_shows_refreshing_limits_notice.snap
 +++ b/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_shows_refreshing_limits_notice.snap
 @@ -4,7 +4,7 @@ expression: sanitized
@@ -13260,12 +13310,12 @@ index af4953d845eb37b74198ce6ec7a46e3fa53b55f3..97f0a4c93e425513e30365276e928305
  /status
  
 -  >_ OpenAI Codex (v0.0.0)
-+  >_ Nyacode (v0.0.0)
++  >_ Nyacode (v0.1.0)
  
    Visit https://chatgpt.com/settings/usage for up-to-date
    information on rate limits and credits
 diff --git a/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_shows_stale_limits_message.snap b/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_shows_stale_limits_message.snap
-index 2ec2677aac8abdc13160d2d7cbcd2d49179213b5..aefb3892e15bd0eaf9465cf21ea32cfee3cba365 100644
+index 2ec2677aac8abdc13160d2d7cbcd2d49179213b5..f1cdcf47873049facb34db4d531dddec24f48fe1 100644
 --- a/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_shows_stale_limits_message.snap
 +++ b/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_shows_stale_limits_message.snap
 @@ -4,7 +4,7 @@ expression: sanitized
@@ -13273,12 +13323,12 @@ index 2ec2677aac8abdc13160d2d7cbcd2d49179213b5..aefb3892e15bd0eaf9465cf21ea32cfe
  /status
  
 -  >_ OpenAI Codex (v0.0.0)
-+  >_ Nyacode (v0.0.0)
++  >_ Nyacode (v0.1.0)
  
    Visit https://chatgpt.com/settings/usage for up-to-date
    information on rate limits and credits
 diff --git a/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_shows_unavailable_limits_message.snap b/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_shows_unavailable_limits_message.snap
-index d83ee6f2d05536189365d332d9b0895ff75c1760..a47b71afc79f748725ff1a965f1eebd12766049c 100644
+index d83ee6f2d05536189365d332d9b0895ff75c1760..eb73b0817e2e531b62c82cf63894a3f5c334ad09 100644
 --- a/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_shows_unavailable_limits_message.snap
 +++ b/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_shows_unavailable_limits_message.snap
 @@ -4,7 +4,7 @@ expression: sanitized
@@ -13286,12 +13336,12 @@ index d83ee6f2d05536189365d332d9b0895ff75c1760..a47b71afc79f748725ff1a965f1eebd1
  /status
  
 -  >_ OpenAI Codex (v0.0.0)
-+  >_ Nyacode (v0.0.0)
++  >_ Nyacode (v0.1.0)
  
    Visit https://chatgpt.com/settings/usage for up-to-date
    information on rate limits and credits
 diff --git a/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_truncates_halfwidth_kana_in_narrow_terminal.snap b/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_truncates_halfwidth_kana_in_narrow_terminal.snap
-index 593ffd201e47ba86305cdb188274f587d0489b9e..0f25291c01565475fc3495fdd08d8af5e9875518 100644
+index 593ffd201e47ba86305cdb188274f587d0489b9e..c26086c44b28cc13e54594f67a2535b52e4e9141 100644
 --- a/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_truncates_halfwidth_kana_in_narrow_terminal.snap
 +++ b/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_truncates_halfwidth_kana_in_narrow_terminal.snap
 @@ -4,7 +4,7 @@ expression: sanitized
@@ -13299,12 +13349,12 @@ index 593ffd201e47ba86305cdb188274f587d0489b9e..0f25291c01565475fc3495fdd08d8af5
  /status
  
 -  >_ OpenAI Codex (v0.0.0)
-+  >_ Nyacode (v0.0.0)
++  >_ Nyacode (v0.1.0)
  
    Visit https://chatgpt.com/settings/usage
    for up-to-date
 diff --git a/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_truncates_in_narrow_terminal.snap b/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_truncates_in_narrow_terminal.snap
-index be5c100eec2ce9f8845b8f84ee74db77a0ffe444..cb51ad065cf002c7811d4258fddeb7055637a10f 100644
+index be5c100eec2ce9f8845b8f84ee74db77a0ffe444..9ccbf2e2c65756293f9b50be7aa08b08148b9494 100644
 --- a/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_truncates_in_narrow_terminal.snap
 +++ b/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_truncates_in_narrow_terminal.snap
 @@ -4,7 +4,7 @@ expression: sanitized
@@ -13312,12 +13362,12 @@ index be5c100eec2ce9f8845b8f84ee74db77a0ffe444..cb51ad065cf002c7811d4258fddeb705
  /status
  
 -  >_ OpenAI Codex (v0.0.0)
-+  >_ Nyacode (v0.0.0)
++  >_ Nyacode (v0.1.0)
  
    Visit https://chatgpt.com/settings/usage for up-to-date
    information on rate limits and credits
 diff --git a/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_uses_generic_limit_labels_for_unsupported_windows.snap b/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_uses_generic_limit_labels_for_unsupported_windows.snap
-index 1ba1146d2cf9bc0bf786f53fd4d64519e6a5e244..acc1e4a6ac6b1c9da8096991713331d30f12a7a2 100644
+index 1ba1146d2cf9bc0bf786f53fd4d64519e6a5e244..161e009f8c1884a4881154acf207e8d4a8c56ba3 100644
 --- a/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_uses_generic_limit_labels_for_unsupported_windows.snap
 +++ b/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_uses_generic_limit_labels_for_unsupported_windows.snap
 @@ -4,7 +4,7 @@ expression: sanitized
@@ -13325,12 +13375,12 @@ index 1ba1146d2cf9bc0bf786f53fd4d64519e6a5e244..acc1e4a6ac6b1c9da8096991713331d3
  /status
  
 -  >_ OpenAI Codex (v0.0.0)
-+  >_ Nyacode (v0.0.0)
++  >_ Nyacode (v0.1.0)
  
    Visit https://chatgpt.com/settings/usage for up-to-date
    information on rate limits and credits
 diff --git a/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_wraps_enterprise_monthly_credit_details_in_narrow_terminal.snap b/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_wraps_enterprise_monthly_credit_details_in_narrow_terminal.snap
-index 29cf7973ffa18bb8db200e2df4e553f705473752..af99451591859bc9d79c5964727db1a2b89364d7 100644
+index 29cf7973ffa18bb8db200e2df4e553f705473752..10ac026f4892e55ac33df06d0e71dc5917964c85 100644
 --- a/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_wraps_enterprise_monthly_credit_details_in_narrow_terminal.snap
 +++ b/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_wraps_enterprise_monthly_credit_details_in_narrow_terminal.snap
 @@ -4,7 +4,7 @@ expression: sanitized
@@ -13338,12 +13388,12 @@ index 29cf7973ffa18bb8db200e2df4e553f705473752..af99451591859bc9d79c5964727db1a2
  /status
  
 -  >_ OpenAI Codex (v0.0.0)
-+  >_ Nyacode (v0.0.0)
++  >_ Nyacode (v0.1.0)
  
    Visit https://chatgpt.com/settings/usage for
    up-to-date
 diff --git a/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__transcript_overlay_status_rate_limit_refresh.snap b/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__transcript_overlay_status_rate_limit_refresh.snap
-index 51fbff67df9be7df543655806c3cca767288756c..6c513947bf18753238d84d4fb203118e0d49fe39 100644
+index 51fbff67df9be7df543655806c3cca767288756c..c2a4870ad64fdb10fa67c9fd9b6c619c9e116ddd 100644
 --- a/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__transcript_overlay_status_rate_limit_refresh.snap
 +++ b/codex-rs/tui/src/status/snapshots/codex_tui__status__tests__transcript_overlay_status_rate_limit_refresh.snap
 @@ -6,7 +6,7 @@ before:
@@ -13351,7 +13401,7 @@ index 51fbff67df9be7df543655806c3cca767288756c..6c513947bf18753238d84d4fb203118e
  /status
  
 -  >_ OpenAI Codex (v0.0.0)
-+  >_ Nyacode (v0.0.0)
++  >_ Nyacode (v0.1.0)
  
    Visit https://chatgpt.com/settings/usage for up-to-date
    information on rate limits and credits
@@ -13360,7 +13410,7 @@ index 51fbff67df9be7df543655806c3cca767288756c..6c513947bf18753238d84d4fb203118e
  /status
  
 -  >_ OpenAI Codex (v0.0.0)
-+  >_ Nyacode (v0.0.0)
++  >_ Nyacode (v0.1.0)
  
    Visit https://chatgpt.com/settings/usage for up-to-date
    information on rate limits and credits

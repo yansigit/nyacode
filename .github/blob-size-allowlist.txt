@@ -19,6 +19,8 @@ crates/chatgpt-chat/pdf-validator/validator.wasm
 integration/codex/compatibility/rpc.json
 inventory/baseline-tree.json
 inventory/downstream.json
+# Per-file assembly ownership includes the reviewed dependency sources.
+integration/codex/assembly.json
 # Strict integration patches include generated schemas and vendored binary data.
 integration/codex/patches/backend_dispatch.patch
 integration/codex/patches/dependency_override.patch

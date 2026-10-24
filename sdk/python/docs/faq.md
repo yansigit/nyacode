@@ -65,9 +65,10 @@ preserved in history. Pass it as the entire input to `thread.run(...)` or
 [runnable example](../examples/16_external_message).
 
 External messages and the new `include_turns`, `turn_service_tier`, and `source`
-options require CLI 0.151.0 or newer. If a custom executable is too old, the SDK
-raises `CodexError` before sending the request. Upgrade that executable or use
-the runtime installed with a matching SDK release.
+options are checked against the resolved executable’s experimental schema before
+the SDK sends the request. This supports Nyacode’s independent product versions
+while rejecting missing fields. A custom `launch_args_override`, whose executable
+cannot be inspected, must report upstream CLI 0.151.0 or newer.
 
 ## Does `include_turns=False` remove the conversation's context?
 

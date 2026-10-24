@@ -207,6 +207,7 @@ def validate_assembly_ownership(root: Path, assembly: dict[str, Any]) -> list[st
         root / "crates/chatgpt-chat",
         root / "integration/codex/adapter",
         root / "integration/codex/overlays",
+        root / "third_party/rust",
         *(root / "crates/providers").glob("provider-*"),
     ]
     for owned in owned_roots:
