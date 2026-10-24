@@ -9098,6 +9098,33 @@
       "upstream_source": null
     },
     {
+      "artifact": "generated",
+      "change": "modified",
+      "destination": {
+        "kind": "patch",
+        "patch": "integration/codex/patches/backend_dispatch.patch",
+        "path": "codex-rs/app-server/tests/suite/v2/snapshots/all__suite__v2__thread_sample__sample_inherits_parent_context.snap"
+      },
+      "git_status": "M",
+      "mode_changed": false,
+      "owner": "codex-rs",
+      "path": "codex-rs/app-server/tests/suite/v2/snapshots/all__suite__v2__thread_sample__sample_inherits_parent_context.snap",
+      "purpose": "backend_dispatch",
+      "regression_groups": [
+        "backend_dispatch"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "codex-rs/app-server/tests/suite/v2/snapshots/all__suite__v2__thread_sample__sample_inherits_parent_context.snap",
+        "sha256": "f22fc29285808edd25c862ae6186881bf6bf3444700305fb9cc0a97beeb835cb"
+      },
+      "upstream_source": {
+        "mode": "100644",
+        "path": "codex-rs/app-server/tests/suite/v2/snapshots/all__suite__v2__thread_sample__sample_inherits_parent_context.snap",
+        "sha256": "e1c7f693817285ca98d04ec8a95be8693ccd5bdba0abcd40549813af09574226"
+      }
+    },
+    {
       "artifact": "source",
       "change": "modified",
       "destination": {

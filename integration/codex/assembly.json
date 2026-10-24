@@ -3080,6 +3080,7 @@
         "codex-rs/app-server/tests/suite/v2/experimental_feature_list.rs",
         "codex-rs/app-server/tests/suite/v2/imagegen_extension.rs",
         "codex-rs/app-server/tests/suite/v2/mod.rs",
+        "codex-rs/app-server/tests/suite/v2/snapshots/all__suite__v2__thread_sample__sample_inherits_parent_context.snap",
         "codex-rs/apply-patch/src/invocation.rs",
         "codex-rs/arg0/src/lib.rs",
         "codex-rs/async-utils/src/backoff.rs",

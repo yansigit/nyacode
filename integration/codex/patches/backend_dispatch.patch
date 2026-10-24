@@ -2158,6 +2158,85 @@ index f1ac09e54db90841cef93d9b5aaf1954251c1f46..a0ce9e367bbd13f4f3b08522d0739d3c
  mod otel;
  mod output_schema;
  mod permission_profile_list;
+diff --git a/codex-rs/app-server/tests/suite/v2/snapshots/all__suite__v2__thread_sample__sample_inherits_parent_context.snap b/codex-rs/app-server/tests/suite/v2/snapshots/all__suite__v2__thread_sample__sample_inherits_parent_context.snap
+index f6d612a0423fd26c3a40e45a5978ce8289735246..b8ea5555a11eef8fecf3734b44a9a3aef1168751 100644
+--- a/codex-rs/app-server/tests/suite/v2/snapshots/all__suite__v2__thread_sample__sample_inherits_parent_context.snap
++++ b/codex-rs/app-server/tests/suite/v2/snapshots/all__suite__v2__thread_sample__sample_inherits_parent_context.snap
+@@ -16,7 +16,7 @@ Settings:
+   stream: true
+   tool_choice: "auto"
+ -- request 1 (turn) --
+-00:additional_tools/developer (3; hash=bf13940dee826ebd):
++00:additional_tools/developer (3; hash=b1c090a5d7044bd3):
+         - namespace/functions; hash=028af59ad835936d
+           - function/exec_command
+           - function/write_stdin
+@@ -27,13 +27,13 @@ Settings:
+           - function/create_goal
+           - function/update_goal
+           - function/parent_tool
+-        - namespace/multi_agent_v1: Tools for spawning and managing sub-agents.; hash=c826e5b07fd2820f
++        - namespace/multi_agent_v1: Tools for spawning and managing sub-agents.; hash=f86484e9120500b9
+           - function/close_agent
+           - function/resume_agent
+           - function/send_input
+           - function/spawn_agent
+           - function/wait_agent
+-        - namespace/web: Tools in the web namespace.; hash=0037b1ed8d50fab5
++        - namespace/web: Tools in the web namespace.; hash=588f931f9bb0336d
+           - function/run
+ 01:message/developer:
+     Retain these base instructions.
+@@ -77,7 +77,7 @@ Settings:
+ ## Window 2 (after request 2: input repeated)
+ Settings: same as window 1
+ -- request 3 (turn) --
+-00:additional_tools/developer (3; hash=bf13940dee826ebd):
++00:additional_tools/developer (3; hash=b1c090a5d7044bd3):
+         - namespace/functions; hash=028af59ad835936d
+           - function/exec_command
+           - function/write_stdin
+@@ -88,13 +88,13 @@ Settings: same as window 1
+           - function/create_goal
+           - function/update_goal
+           - function/parent_tool
+-        - namespace/multi_agent_v1: Tools for spawning and managing sub-agents.; hash=c826e5b07fd2820f
++        - namespace/multi_agent_v1: Tools for spawning and managing sub-agents.; hash=f86484e9120500b9
+           - function/close_agent
+           - function/resume_agent
+           - function/send_input
+           - function/spawn_agent
+           - function/wait_agent
+-        - namespace/web: Tools in the web namespace.; hash=0037b1ed8d50fab5
++        - namespace/web: Tools in the web namespace.; hash=588f931f9bb0336d
+           - function/run
+ 01:message/developer:
+     Retain these base instructions.
+@@ -137,7 +137,7 @@ Settings: same as window 1
+ ## Window 3 (after request 3: input repeated)
+ Settings: same as window 1
+ -- request 4 (turn) --
+-00:additional_tools/developer (3; hash=bf13940dee826ebd):
++00:additional_tools/developer (3; hash=b1c090a5d7044bd3):
+         - namespace/functions; hash=028af59ad835936d
+           - function/exec_command
+           - function/write_stdin
+@@ -148,13 +148,13 @@ Settings: same as window 1
+           - function/create_goal
+           - function/update_goal
+           - function/parent_tool
+-        - namespace/multi_agent_v1: Tools for spawning and managing sub-agents.; hash=c826e5b07fd2820f
++        - namespace/multi_agent_v1: Tools for spawning and managing sub-agents.; hash=f86484e9120500b9
+           - function/close_agent
+           - function/resume_agent
+           - function/send_input
+           - function/spawn_agent
+           - function/wait_agent
+-        - namespace/web: Tools in the web namespace.; hash=0037b1ed8d50fab5
++        - namespace/web: Tools in the web namespace.; hash=588f931f9bb0336d
+           - function/run
+ 01:message/developer:
+     Retain these base instructions.
 diff --git a/codex-rs/apply-patch/src/invocation.rs b/codex-rs/apply-patch/src/invocation.rs
 index 203a16161185b876eaea1d4b174ffe32b034161f..e2fe2f7a8be35abe90347adf1f5e7a566f569164 100644
 --- a/codex-rs/apply-patch/src/invocation.rs
