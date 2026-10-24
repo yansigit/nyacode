@@ -21195,6 +21195,34 @@
       "destination": {
         "kind": "patch",
         "patch": "integration/codex/patches/thread_model_child_routing.patch",
+        "path": "codex-rs/models-manager/src/lib.rs"
+      },
+      "git_status": "M",
+      "mode_changed": false,
+      "owner": "codex-rs",
+      "path": "codex-rs/models-manager/src/lib.rs",
+      "purpose": "thread_model_child_routing",
+      "regression_groups": [
+        "thread_model_child_routing",
+        "dependency_build"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "codex-rs/models-manager/src/lib.rs",
+        "sha256": "36244c6f82d7b07ad5d2a58d4286448e67b4c6bdaf3ed081c5ead53770aa3157"
+      },
+      "upstream_source": {
+        "mode": "100644",
+        "path": "codex-rs/models-manager/src/lib.rs",
+        "sha256": "b31b6e8fdaebedbbf07999b27c02201020e8d876ae293ac05a8fe4bf051244d3"
+      }
+    },
+    {
+      "artifact": "source",
+      "change": "modified",
+      "destination": {
+        "kind": "patch",
+        "patch": "integration/codex/patches/thread_model_child_routing.patch",
         "path": "codex-rs/models-manager/src/manager.rs"
       },
       "git_status": "M",

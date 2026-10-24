@@ -286,6 +286,53 @@ class EngineTest(unittest.TestCase):
             self.prepare()
         self.assertEqual(engine.assembly_report(output)["product_version"], "0.1.0")
 
+    def test_catalog_version_uses_pristine_engine_identity_and_exact_binding(self):
+        destination = "codex-rs/models-manager/src/lib.rs"
+        marker = 'const ENGINE_CLIENT_VERSION: &str = "@NYACODE_ENGINE_VERSION@";\n'
+        self.write("owned/catalog.rs", marker)
+        self.overlay("owned/catalog.rs", destination, False)
+        for tag, product, patched in (
+            (None, "0.1.0", True),
+            ("rust-v0.164.0", "0.1.0", True),
+            ("rust-v0.164.0", "0.0.0", False),
+        ):
+            with self.subTest(tag=tag, product=product, patched=patched):
+                self.lock["release_tag"] = tag
+                self.manifest["patches"] = []
+                self.write("VERSION", product + "\n")
+                self.write(
+                    self.lock["assembled_lock"],
+                    self.files["codex-rs/Cargo.lock"].replace(
+                        b"0.0.0", product.encode()
+                    ),
+                )
+                self.save_inputs()
+                if patched:
+                    self.add_patch(
+                        "diff --git a/codex-rs/Cargo.toml b/codex-rs/Cargo.toml\n"
+                        "--- a/codex-rs/Cargo.toml\n+++ b/codex-rs/Cargo.toml\n"
+                        '@@ -4 +4 @@\n-version = "0.0.0"\n+version = "9.9.9"\n',
+                        ["codex-rs/Cargo.toml"],
+                    )
+                output = self.prepare()
+                expected = "0.164.0" if tag else "0.0.0"
+                self.assertEqual(
+                    (output / destination).read_bytes(),
+                    f'const ENGINE_CLIENT_VERSION: &str = "{expected}";\n'.encode(),
+                )
+                self.assertEqual(
+                    engine.assembly_report(output)["product_version"], product
+                )
+        accepted = engine.assembly_report(output)
+        for source in ("// missing binding\n", marker * 2):
+            with self.subTest(source=source):
+                self.write("owned/catalog.rs", source)
+                with self.assertRaisesRegex(
+                    engine.EngineError, "exactly one engine catalog"
+                ):
+                    self.prepare()
+                self.assertEqual(engine.assembly_report(output), accepted)
+
     def test_unsafe_archive_paths_links_and_special_entries_are_rejected(self):
         cases = [
             ("codex-sha/../../escape", tarfile.REGTYPE, ""),
