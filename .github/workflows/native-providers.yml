@@ -75,7 +75,7 @@ jobs:
           -p codex-protocol -p codex-config -p codex-hooks -p codex-app-server-protocol
           -p codex-keyring-store -p codex-agent-identity -p codex-cloud-config
           -p codex-websocket-auth -p codex-core-plugins -p codex-shell-command
-          -p codex-utils-cargo-bin
+          -p codex-utils-cargo-bin -p codex-mxc-sandbox -p codex-runtime-agent-instance
       - name: Check terminal rendering and state snapshots
         working-directory: ${{ steps.engine.outputs.root }}/codex-rs
         run: cargo test --locked -p codex-tui --lib

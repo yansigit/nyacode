@@ -283,60 +283,6 @@
       "destination": {
         "kind": "patch",
         "patch": "integration/codex/patches/dependency_build.patch",
-        "path": ".github/actions/build-bazel-package-binaries/action.yml"
-      },
-      "git_status": "M",
-      "mode_changed": false,
-      "owner": "downstream-build",
-      "path": ".github/actions/build-bazel-package-binaries/action.yml",
-      "purpose": "dependency_build",
-      "regression_groups": [
-        "dependency_build"
-      ],
-      "source": {
-        "mode": "100644",
-        "path": ".github/actions/build-bazel-package-binaries/action.yml",
-        "sha256": "375ca4d8c5e0a3fc864466667661feeb9b58db349166c0309bb82f113e3c2669"
-      },
-      "upstream_source": {
-        "mode": "100644",
-        "path": ".github/actions/build-bazel-package-binaries/action.yml",
-        "sha256": "5bac07a7d7b293f778eb8cd8311764b0af58382a0443dbe7418d47a88e05fb7e"
-      }
-    },
-    {
-      "artifact": "source",
-      "change": "modified",
-      "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/dependency_build.patch",
-        "path": ".github/actions/build-cargo-package-binaries/action.yml"
-      },
-      "git_status": "M",
-      "mode_changed": false,
-      "owner": "downstream-build",
-      "path": ".github/actions/build-cargo-package-binaries/action.yml",
-      "purpose": "dependency_build",
-      "regression_groups": [
-        "dependency_build"
-      ],
-      "source": {
-        "mode": "100644",
-        "path": ".github/actions/build-cargo-package-binaries/action.yml",
-        "sha256": "a6ec13f707199311d289ffe80b836179c25c9f648b837ef1722499f948d0df68"
-      },
-      "upstream_source": {
-        "mode": "100644",
-        "path": ".github/actions/build-cargo-package-binaries/action.yml",
-        "sha256": "74f18fd40804f4af42fbebdc5f529eeaeaae1ac7426d08b9f947c416f14dd1a7"
-      }
-    },
-    {
-      "artifact": "source",
-      "change": "modified",
-      "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/dependency_build.patch",
         "path": ".github/actions/build-codex-packages/action.yml"
       },
       "git_status": "M",
@@ -876,33 +822,6 @@
       "destination": {
         "kind": "patch",
         "patch": "integration/codex/patches/dependency_build.patch",
-        "path": ".github/workflows/cargo-deny.yml"
-      },
-      "git_status": "M",
-      "mode_changed": false,
-      "owner": "downstream-build",
-      "path": ".github/workflows/cargo-deny.yml",
-      "purpose": "dependency_build",
-      "regression_groups": [
-        "dependency_build"
-      ],
-      "source": {
-        "mode": "100644",
-        "path": ".github/workflows/cargo-deny.yml",
-        "sha256": "aaeb7399b1fe55a665b95e86497480546337909a1f26dfdec32a6a570556ee40"
-      },
-      "upstream_source": {
-        "mode": "100644",
-        "path": ".github/workflows/cargo-deny.yml",
-        "sha256": "9be4532baa0bc7a8f84506f073690ddd844434ab820b59b1eade686744811b4b"
-      }
-    },
-    {
-      "artifact": "source",
-      "change": "modified",
-      "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/dependency_build.patch",
         "path": ".github/workflows/codespell.yml"
       },
       "git_status": "M",
@@ -1215,87 +1134,6 @@
       "destination": {
         "kind": "patch",
         "patch": "integration/codex/patches/dependency_build.patch",
-        "path": ".github/workflows/rust-ci-full-nextest-platform.yml"
-      },
-      "git_status": "M",
-      "mode_changed": false,
-      "owner": "downstream-build",
-      "path": ".github/workflows/rust-ci-full-nextest-platform.yml",
-      "purpose": "dependency_build",
-      "regression_groups": [
-        "dependency_build"
-      ],
-      "source": {
-        "mode": "100644",
-        "path": ".github/workflows/rust-ci-full-nextest-platform.yml",
-        "sha256": "4362d6396b9b83e535c26d26d3a6069480dfc9dc286a8ddffc6a69d17bd2b619"
-      },
-      "upstream_source": {
-        "mode": "100644",
-        "path": ".github/workflows/rust-ci-full-nextest-platform.yml",
-        "sha256": "167d414cb6ec8655cf4013644273f60d29cd5a8baf1172b88d1c302ba4e89a3d"
-      }
-    },
-    {
-      "artifact": "source",
-      "change": "modified",
-      "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/dependency_build.patch",
-        "path": ".github/workflows/rust-ci-full.yml"
-      },
-      "git_status": "M",
-      "mode_changed": false,
-      "owner": "downstream-build",
-      "path": ".github/workflows/rust-ci-full.yml",
-      "purpose": "dependency_build",
-      "regression_groups": [
-        "dependency_build"
-      ],
-      "source": {
-        "mode": "100644",
-        "path": ".github/workflows/rust-ci-full.yml",
-        "sha256": "fc93a3b12b173a6b84a2ee3c8ccb85c4ee72850b39e43eefe534ed613777abc5"
-      },
-      "upstream_source": {
-        "mode": "100644",
-        "path": ".github/workflows/rust-ci-full.yml",
-        "sha256": "0b5516edda071b97451f193e637cf4bb2009b6a235e9d23ca652d449081dfac9"
-      }
-    },
-    {
-      "artifact": "source",
-      "change": "modified",
-      "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/dependency_build.patch",
-        "path": ".github/workflows/rust-ci.yml"
-      },
-      "git_status": "M",
-      "mode_changed": false,
-      "owner": "downstream-build",
-      "path": ".github/workflows/rust-ci.yml",
-      "purpose": "dependency_build",
-      "regression_groups": [
-        "dependency_build"
-      ],
-      "source": {
-        "mode": "100644",
-        "path": ".github/workflows/rust-ci.yml",
-        "sha256": "a0fca43d3b17d7f8aee111f0287025729bc0023bc48d2735add29f1ba5a80bb0"
-      },
-      "upstream_source": {
-        "mode": "100644",
-        "path": ".github/workflows/rust-ci.yml",
-        "sha256": "c05e33c262c930fb9c1ba0774741180147a2c550b8ab74cb187a008bd9dfb7dc"
-      }
-    },
-    {
-      "artifact": "source",
-      "change": "modified",
-      "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/dependency_build.patch",
         "path": ".github/workflows/rust-release-argument-comment-lint.yml"
       },
       "git_status": "M",
@@ -1350,87 +1188,6 @@
       "destination": {
         "kind": "patch",
         "patch": "integration/codex/patches/dependency_build.patch",
-        "path": ".github/workflows/rust-release-windows.yml"
-      },
-      "git_status": "M",
-      "mode_changed": false,
-      "owner": "downstream-build",
-      "path": ".github/workflows/rust-release-windows.yml",
-      "purpose": "dependency_build",
-      "regression_groups": [
-        "dependency_build"
-      ],
-      "source": {
-        "mode": "100644",
-        "path": ".github/workflows/rust-release-windows.yml",
-        "sha256": "e16558b4984894e939064d684110e87649e3255c470ab0341e3d5526c614eb46"
-      },
-      "upstream_source": {
-        "mode": "100644",
-        "path": ".github/workflows/rust-release-windows.yml",
-        "sha256": "26a4833a4a9b0eb31a8fe394f784e3a32b1e409f232781316eb876dbe396c7b9"
-      }
-    },
-    {
-      "artifact": "source",
-      "change": "modified",
-      "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/dependency_build.patch",
-        "path": ".github/workflows/rust-release.yml"
-      },
-      "git_status": "M",
-      "mode_changed": false,
-      "owner": "downstream-build",
-      "path": ".github/workflows/rust-release.yml",
-      "purpose": "dependency_build",
-      "regression_groups": [
-        "dependency_build"
-      ],
-      "source": {
-        "mode": "100644",
-        "path": ".github/workflows/rust-release.yml",
-        "sha256": "6beb22384caf3e8e05fc153827041d035aa24f18b344e062de3127d8780cbcfd"
-      },
-      "upstream_source": {
-        "mode": "100644",
-        "path": ".github/workflows/rust-release.yml",
-        "sha256": "f0ec1861688535015b2245f3ceb8c465481757e3cd63558538282fcd3a81d673"
-      }
-    },
-    {
-      "artifact": "source",
-      "change": "modified",
-      "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/dependency_build.patch",
-        "path": ".github/workflows/rusty-v8-release.yml"
-      },
-      "git_status": "M",
-      "mode_changed": false,
-      "owner": "downstream-build",
-      "path": ".github/workflows/rusty-v8-release.yml",
-      "purpose": "dependency_build",
-      "regression_groups": [
-        "dependency_build"
-      ],
-      "source": {
-        "mode": "100644",
-        "path": ".github/workflows/rusty-v8-release.yml",
-        "sha256": "12f38d7e88bee0c21d9ad4a66adc746c4106864a6078dc4b7017e8ef86746e98"
-      },
-      "upstream_source": {
-        "mode": "100644",
-        "path": ".github/workflows/rusty-v8-release.yml",
-        "sha256": "6587433841d1b50fb08f4135704a014b501f097b07e59b5bf3d5b8b19b2fc488"
-      }
-    },
-    {
-      "artifact": "source",
-      "change": "modified",
-      "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/dependency_build.patch",
         "path": ".github/workflows/sdk.yml"
       },
       "git_status": "M",
@@ -1450,33 +1207,6 @@
         "mode": "100644",
         "path": ".github/workflows/sdk.yml",
         "sha256": "dd7d2b266dc56cb8a7b7cbb69e2c80f8ff512f03aa5767e18049ed26b45ee9d0"
-      }
-    },
-    {
-      "artifact": "source",
-      "change": "modified",
-      "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/dependency_build.patch",
-        "path": ".github/workflows/v8-canary.yml"
-      },
-      "git_status": "M",
-      "mode_changed": false,
-      "owner": "downstream-build",
-      "path": ".github/workflows/v8-canary.yml",
-      "purpose": "dependency_build",
-      "regression_groups": [
-        "dependency_build"
-      ],
-      "source": {
-        "mode": "100644",
-        "path": ".github/workflows/v8-canary.yml",
-        "sha256": "342dfff2e021461e397be04f4b22144559bcdf1c0a013ed195dd935d11e21e23"
-      },
-      "upstream_source": {
-        "mode": "100644",
-        "path": ".github/workflows/v8-canary.yml",
-        "sha256": "3f67f8b5519b5a6d61294dbfa2f5ec9009dec8f9fa85c153a1d3ebc173994931"
       }
     },
     {
@@ -1621,7 +1351,7 @@
       "source": {
         "mode": "100644",
         "path": "MODULE.bazel.lock",
-        "sha256": "b324009b4a7bba9b55d659d1f99ff3065fe5b93adaf4751f402326a270b79664"
+        "sha256": "809f85ec6b5724e75fbd7ac4820e169a001f7f0b5462766e83725e3c67bdb414"
       },
       "upstream_source": {
         "mode": "100644",
@@ -1932,7 +1662,7 @@
       "source": {
         "mode": "100644",
         "path": "codex-rs/Cargo.lock",
-        "sha256": "49f1c6fab8ba9fdff72b40854ff2c6863040e0f9115b75f76fff2cb33f368c16"
+        "sha256": "dc5e011da82fa54d99a83556ab6a995a8e64edbb7cc113d36ea6222bad0f423f"
       },
       "upstream_source": {
         "mode": "100644",
@@ -1959,7 +1689,7 @@
       "source": {
         "mode": "100644",
         "path": "codex-rs/Cargo.toml",
-        "sha256": "c9374d9177c3e707548cbfb46f6460d832fce6c91e5ca3abf34f5587bc067d74"
+        "sha256": "f19f941c0869555a51a9316f403786b385c222ead4c65823189d663d2ca29ecb"
       },
       "upstream_source": {
         "mode": "100644",
@@ -3477,6 +3207,33 @@
         "mode": "100644",
         "path": "codex-rs/app-server-protocol/schema/json/v2/ExternalAgentConfigImportParams.json",
         "sha256": "6b8d0a8fbd5a7ddd455ec0dea6d1b578f56841480c8a5fffbfcd045db79458ee"
+      }
+    },
+    {
+      "artifact": "generated",
+      "change": "modified",
+      "destination": {
+        "kind": "patch",
+        "patch": "integration/codex/patches/sdk_protocol.patch",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/FeedbackSaveParams.json"
+      },
+      "git_status": "M",
+      "mode_changed": false,
+      "owner": "downstream-sdk",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/FeedbackSaveParams.json",
+      "purpose": "sdk_protocol",
+      "regression_groups": [
+        "sdk_protocol"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/FeedbackSaveParams.json",
+        "sha256": "a62289184ed4c569249906d75b35a52e13bfa3ff3d884adc99243d1ba252c498"
+      },
+      "upstream_source": {
+        "mode": "100644",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/FeedbackSaveParams.json",
+        "sha256": "1c2cb8b988b832b50db4705af4d234da50a5d3f1377384dd638563da9275bfee"
       }
     },
     {
@@ -9339,6 +9096,33 @@
         "sha256": "507b7c53042e6ab30717e2c019a7e1fdcb961f833846d617f8a3ad022a4b2b59"
       },
       "upstream_source": null
+    },
+    {
+      "artifact": "generated",
+      "change": "modified",
+      "destination": {
+        "kind": "patch",
+        "patch": "integration/codex/patches/backend_dispatch.patch",
+        "path": "codex-rs/app-server/tests/suite/v2/snapshots/all__suite__v2__thread_sample__sample_inherits_parent_context.snap"
+      },
+      "git_status": "M",
+      "mode_changed": false,
+      "owner": "codex-rs",
+      "path": "codex-rs/app-server/tests/suite/v2/snapshots/all__suite__v2__thread_sample__sample_inherits_parent_context.snap",
+      "purpose": "backend_dispatch",
+      "regression_groups": [
+        "backend_dispatch"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "codex-rs/app-server/tests/suite/v2/snapshots/all__suite__v2__thread_sample__sample_inherits_parent_context.snap",
+        "sha256": "f22fc29285808edd25c862ae6186881bf6bf3444700305fb9cc0a97beeb835cb"
+      },
+      "upstream_source": {
+        "mode": "100644",
+        "path": "codex-rs/app-server/tests/suite/v2/snapshots/all__suite__v2__thread_sample__sample_inherits_parent_context.snap",
+        "sha256": "e1c7f693817285ca98d04ec8a95be8693ccd5bdba0abcd40549813af09574226"
+      }
     },
     {
       "artifact": "source",
@@ -17750,6 +17534,33 @@
       "change": "modified",
       "destination": {
         "kind": "patch",
+        "patch": "integration/codex/patches/thread_model_child_routing.patch",
+        "path": "codex-rs/core/tests/suite/hooks.rs"
+      },
+      "git_status": "M",
+      "mode_changed": false,
+      "owner": "codex-rs",
+      "path": "codex-rs/core/tests/suite/hooks.rs",
+      "purpose": "thread_model_child_routing",
+      "regression_groups": [
+        "thread_model_child_routing"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "codex-rs/core/tests/suite/hooks.rs",
+        "sha256": "39fd7b2125ba1162aa3624bb5d2852df30a4f28cd2ae11db74507d83b6099971"
+      },
+      "upstream_source": {
+        "mode": "100644",
+        "path": "codex-rs/core/tests/suite/hooks.rs",
+        "sha256": "28509519e6d237712cb418c5893fec72e90d741e74cb9467a4c0d624185b5f07"
+      }
+    },
+    {
+      "artifact": "source",
+      "change": "modified",
+      "destination": {
+        "kind": "patch",
         "patch": "integration/codex/patches/backend_dispatch.patch",
         "path": "codex-rs/core/tests/suite/mod.rs"
       },
@@ -17824,33 +17635,6 @@
         "mode": "100644",
         "path": "codex-rs/core/tests/suite/realtime_conversation.rs",
         "sha256": "a5247fc39613f6fcf54c58a1da35655d35ed27187d8e7f5969ab71766637ca11"
-      }
-    },
-    {
-      "artifact": "source",
-      "change": "modified",
-      "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/backend_dispatch.patch",
-        "path": "codex-rs/core/tests/suite/scenarios.rs"
-      },
-      "git_status": "M",
-      "mode_changed": false,
-      "owner": "codex-rs",
-      "path": "codex-rs/core/tests/suite/scenarios.rs",
-      "purpose": "backend_dispatch",
-      "regression_groups": [
-        "backend_dispatch"
-      ],
-      "source": {
-        "mode": "100644",
-        "path": "codex-rs/core/tests/suite/scenarios.rs",
-        "sha256": "4e6ff9f880077c470a97bfaa3f57d750330ada24587d49e58ac9f4760e540cdc"
-      },
-      "upstream_source": {
-        "mode": "100644",
-        "path": "codex-rs/core/tests/suite/scenarios.rs",
-        "sha256": "a4739d5e08d4af712bd5c7a93fea3ce9e29cc92026df1937be04095d3d5ff47e"
       }
     },
     {
@@ -18317,6 +18101,33 @@
       "change": "modified",
       "destination": {
         "kind": "patch",
+        "patch": "integration/codex/patches/thread_model_child_routing.patch",
+        "path": "codex-rs/core/tests/suite/snapshots/all__suite__scenarios__child_completion_wakes_parent_after_final_answer.snap"
+      },
+      "git_status": "M",
+      "mode_changed": false,
+      "owner": "codex-rs",
+      "path": "codex-rs/core/tests/suite/snapshots/all__suite__scenarios__child_completion_wakes_parent_after_final_answer.snap",
+      "purpose": "thread_model_child_routing",
+      "regression_groups": [
+        "thread_model_child_routing"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "codex-rs/core/tests/suite/snapshots/all__suite__scenarios__child_completion_wakes_parent_after_final_answer.snap",
+        "sha256": "2b20823e7578662664e3a2bd26b48fbab123c0e9bc0de3f0d446d106ce84a7e9"
+      },
+      "upstream_source": {
+        "mode": "100644",
+        "path": "codex-rs/core/tests/suite/snapshots/all__suite__scenarios__child_completion_wakes_parent_after_final_answer.snap",
+        "sha256": "e1892f19ce47a26d90a40d7125c650c94960265b7d9ec34e94a2977a6e71f7d0"
+      }
+    },
+    {
+      "artifact": "generated",
+      "change": "modified",
+      "destination": {
+        "kind": "patch",
         "patch": "integration/codex/patches/backend_dispatch.patch",
         "path": "codex-rs/core/tests/suite/snapshots/all__suite__scenarios__code_mode_catalog_messages.snap"
       },
@@ -18434,7 +18245,8 @@
       "path": "codex-rs/core/tests/suite/snapshots/all__suite__scenarios__compaction__remote_slash_compact.snap",
       "purpose": "tool_completion_persistence",
       "regression_groups": [
-        "tool_completion_persistence"
+        "tool_completion_persistence",
+        "thread_model_child_routing"
       ],
       "source": {
         "mode": "100644",
@@ -18445,6 +18257,33 @@
         "mode": "100644",
         "path": "codex-rs/core/tests/suite/snapshots/all__suite__scenarios__compaction__remote_slash_compact.snap",
         "sha256": "763ec32a98b6733e3a90b27bb82d66559c7ed1683323712ca58054d21e72c7d8"
+      }
+    },
+    {
+      "artifact": "generated",
+      "change": "modified",
+      "destination": {
+        "kind": "patch",
+        "patch": "integration/codex/patches/thread_model_child_routing.patch",
+        "path": "codex-rs/core/tests/suite/snapshots/all__suite__scenarios__frozen_cloud_skills__frozen_cloud_skills_with_named_executor_request_history.snap"
+      },
+      "git_status": "M",
+      "mode_changed": false,
+      "owner": "codex-rs",
+      "path": "codex-rs/core/tests/suite/snapshots/all__suite__scenarios__frozen_cloud_skills__frozen_cloud_skills_with_named_executor_request_history.snap",
+      "purpose": "thread_model_child_routing",
+      "regression_groups": [
+        "thread_model_child_routing"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "codex-rs/core/tests/suite/snapshots/all__suite__scenarios__frozen_cloud_skills__frozen_cloud_skills_with_named_executor_request_history.snap",
+        "sha256": "3d3c9b6c655e05e3b81f98d5cf2998b4bd5a5953d6c21eaa4291f4f44b7c2a15"
+      },
+      "upstream_source": {
+        "mode": "100644",
+        "path": "codex-rs/core/tests/suite/snapshots/all__suite__scenarios__frozen_cloud_skills__frozen_cloud_skills_with_named_executor_request_history.snap",
+        "sha256": "6f8897636e5c9866060f8d825869ee0a4726e3f740e37463553cdc99a99e6f90"
       }
     },
     {
@@ -18506,6 +18345,33 @@
       "change": "modified",
       "destination": {
         "kind": "patch",
+        "patch": "integration/codex/patches/thread_model_child_routing.patch",
+        "path": "codex-rs/core/tests/suite/snapshots/all__suite__scenarios__incremental_tools__prediction_fork_mcp_removal.snap"
+      },
+      "git_status": "M",
+      "mode_changed": false,
+      "owner": "codex-rs",
+      "path": "codex-rs/core/tests/suite/snapshots/all__suite__scenarios__incremental_tools__prediction_fork_mcp_removal.snap",
+      "purpose": "thread_model_child_routing",
+      "regression_groups": [
+        "thread_model_child_routing"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "codex-rs/core/tests/suite/snapshots/all__suite__scenarios__incremental_tools__prediction_fork_mcp_removal.snap",
+        "sha256": "85e176a2aa09b7156b0e76f5937637581a1ab3012e3d610e9b7848cca8fa22e3"
+      },
+      "upstream_source": {
+        "mode": "100644",
+        "path": "codex-rs/core/tests/suite/snapshots/all__suite__scenarios__incremental_tools__prediction_fork_mcp_removal.snap",
+        "sha256": "5b0caeef076beb1059c97b073e17ad89c832d2917148c8fc4f312c21a507a76d"
+      }
+    },
+    {
+      "artifact": "generated",
+      "change": "modified",
+      "destination": {
+        "kind": "patch",
         "patch": "integration/codex/patches/backend_dispatch.patch",
         "path": "codex-rs/core/tests/suite/snapshots/all__suite__scenarios__indirect_namespace_prefixes__catalog_indirect_namespace_prefixes.snap"
       },
@@ -18526,6 +18392,60 @@
         "mode": "100644",
         "path": "codex-rs/core/tests/suite/snapshots/all__suite__scenarios__indirect_namespace_prefixes__catalog_indirect_namespace_prefixes.snap",
         "sha256": "4dc0a201000c52ef432e6a431b134c42944e574754fa0d30903cf39f1c3b8373"
+      }
+    },
+    {
+      "artifact": "generated",
+      "change": "modified",
+      "destination": {
+        "kind": "patch",
+        "patch": "integration/codex/patches/thread_model_child_routing.patch",
+        "path": "codex-rs/core/tests/suite/snapshots/all__suite__scenarios__mcp_ema__enterprise_failure_preserves_ordinary_mcp_history.snap"
+      },
+      "git_status": "M",
+      "mode_changed": false,
+      "owner": "codex-rs",
+      "path": "codex-rs/core/tests/suite/snapshots/all__suite__scenarios__mcp_ema__enterprise_failure_preserves_ordinary_mcp_history.snap",
+      "purpose": "thread_model_child_routing",
+      "regression_groups": [
+        "thread_model_child_routing"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "codex-rs/core/tests/suite/snapshots/all__suite__scenarios__mcp_ema__enterprise_failure_preserves_ordinary_mcp_history.snap",
+        "sha256": "68e304b20549c71222d1bd74587abf762e433b7d46535baed259452a78edfbe0"
+      },
+      "upstream_source": {
+        "mode": "100644",
+        "path": "codex-rs/core/tests/suite/snapshots/all__suite__scenarios__mcp_ema__enterprise_failure_preserves_ordinary_mcp_history.snap",
+        "sha256": "1e850ef171102d009ad19b3c9ae5eff8709cf7d0dd82f24a9167359abe9386aa"
+      }
+    },
+    {
+      "artifact": "generated",
+      "change": "modified",
+      "destination": {
+        "kind": "patch",
+        "patch": "integration/codex/patches/thread_model_child_routing.patch",
+        "path": "codex-rs/core/tests/suite/snapshots/all__suite__scenarios__mcp_ema__enterprise_revocation_preserves_history_and_ordinary_tools.snap"
+      },
+      "git_status": "M",
+      "mode_changed": false,
+      "owner": "codex-rs",
+      "path": "codex-rs/core/tests/suite/snapshots/all__suite__scenarios__mcp_ema__enterprise_revocation_preserves_history_and_ordinary_tools.snap",
+      "purpose": "thread_model_child_routing",
+      "regression_groups": [
+        "thread_model_child_routing"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "codex-rs/core/tests/suite/snapshots/all__suite__scenarios__mcp_ema__enterprise_revocation_preserves_history_and_ordinary_tools.snap",
+        "sha256": "23a525f57d2427212f3ac653eb7e0c6bc90788182c07ce50d3598c5145090090"
+      },
+      "upstream_source": {
+        "mode": "100644",
+        "path": "codex-rs/core/tests/suite/snapshots/all__suite__scenarios__mcp_ema__enterprise_revocation_preserves_history_and_ordinary_tools.snap",
+        "sha256": "3781323a0cc23f30bad15f9b7be2fff532ec2b4c7a31fbab3a504a0f1ce46f54"
       }
     },
     {
@@ -18823,6 +18743,33 @@
         "mode": "100644",
         "path": "codex-rs/core/tests/suite/snapshots/all__suite__scenarios__skill_catalog_dedup__dedup_before_budgeting.snap",
         "sha256": "f29c9d305451079d5ebedfdc797e02a662e921c3bec743572cdad73795fcb71d"
+      }
+    },
+    {
+      "artifact": "generated",
+      "change": "modified",
+      "destination": {
+        "kind": "patch",
+        "patch": "integration/codex/patches/thread_model_child_routing.patch",
+        "path": "codex-rs/core/tests/suite/snapshots/all__suite__scenarios__skill_read_installation_recovery_request_history.snap"
+      },
+      "git_status": "M",
+      "mode_changed": false,
+      "owner": "codex-rs",
+      "path": "codex-rs/core/tests/suite/snapshots/all__suite__scenarios__skill_read_installation_recovery_request_history.snap",
+      "purpose": "thread_model_child_routing",
+      "regression_groups": [
+        "thread_model_child_routing"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "codex-rs/core/tests/suite/snapshots/all__suite__scenarios__skill_read_installation_recovery_request_history.snap",
+        "sha256": "b2700fc00221a0f5708ac23046746645a056741124d58bf5ac64589ec1d99399"
+      },
+      "upstream_source": {
+        "mode": "100644",
+        "path": "codex-rs/core/tests/suite/snapshots/all__suite__scenarios__skill_read_installation_recovery_request_history.snap",
+        "sha256": "693e14ea89973eb08bfb8149152c870e8c9a2716ad521c4537577b2b8c23ebe9"
       }
     },
     {
@@ -20126,6 +20073,33 @@
       "change": "modified",
       "destination": {
         "kind": "patch",
+        "patch": "integration/codex/patches/dependency_build.patch",
+        "path": "codex-rs/hooks/schema/generated/model-request.command.input.schema.json"
+      },
+      "git_status": "M",
+      "mode_changed": false,
+      "owner": "codex-rs",
+      "path": "codex-rs/hooks/schema/generated/model-request.command.input.schema.json",
+      "purpose": "dependency_build",
+      "regression_groups": [
+        "dependency_build"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "codex-rs/hooks/schema/generated/model-request.command.input.schema.json",
+        "sha256": "381a507c1d46294ee33a4f3405fed8f7c6c989a45280670d7257d81ad7234907"
+      },
+      "upstream_source": {
+        "mode": "100644",
+        "path": "codex-rs/hooks/schema/generated/model-request.command.input.schema.json",
+        "sha256": "f60683388becc6c50fd64999a83254f9f09b4c6e35548c4565004d9c54d44a38"
+      }
+    },
+    {
+      "artifact": "generated",
+      "change": "modified",
+      "destination": {
+        "kind": "patch",
         "patch": "integration/codex/patches/backend_dispatch.patch",
         "path": "codex-rs/hooks/schema/generated/stop.command.output.schema.json"
       },
@@ -20227,6 +20201,33 @@
         "mode": "100644",
         "path": "codex-rs/hooks/src/engine/plugin_trust.rs",
         "sha256": "75e15014d76f19da6d932ac297a6d9df79fe2c6320933f9cb00b176235e7facf"
+      }
+    },
+    {
+      "artifact": "source",
+      "change": "modified",
+      "destination": {
+        "kind": "patch",
+        "patch": "integration/codex/patches/dependency_build.patch",
+        "path": "codex-rs/hooks/src/events/model_request.rs"
+      },
+      "git_status": "M",
+      "mode_changed": false,
+      "owner": "codex-rs",
+      "path": "codex-rs/hooks/src/events/model_request.rs",
+      "purpose": "dependency_build",
+      "regression_groups": [
+        "dependency_build"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "codex-rs/hooks/src/events/model_request.rs",
+        "sha256": "5e176b1398b4d123e6eb775610829d07b668dd94ba9ceae1d70d26c074a1a84f"
+      },
+      "upstream_source": {
+        "mode": "100644",
+        "path": "codex-rs/hooks/src/events/model_request.rs",
+        "sha256": "7efe2c40235c22a0a939d451f0174391ae07c92e40e0f642054243c97203badf"
       }
     },
     {
@@ -21323,6 +21324,141 @@
         "mode": "100644",
         "path": "codex-rs/mxc-sandbox/Cargo.toml",
         "sha256": "9edcd0f2d5b8280cce7a40af28cb06b84008f2dde8e52003364f7083263d6613"
+      }
+    },
+    {
+      "artifact": "source",
+      "change": "modified",
+      "destination": {
+        "kind": "patch",
+        "patch": "integration/codex/patches/dependency_build.patch",
+        "path": "codex-rs/mxc-sandbox/src/availability.rs"
+      },
+      "git_status": "M",
+      "mode_changed": false,
+      "owner": "codex-rs",
+      "path": "codex-rs/mxc-sandbox/src/availability.rs",
+      "purpose": "dependency_build",
+      "regression_groups": [
+        "dependency_build"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "codex-rs/mxc-sandbox/src/availability.rs",
+        "sha256": "720af84aa226e9c0502b7971473a2d7a4e8cfa9051075d8107cc7031d5403aef"
+      },
+      "upstream_source": {
+        "mode": "100644",
+        "path": "codex-rs/mxc-sandbox/src/availability.rs",
+        "sha256": "7d115e5d3b4ae3c51be7dfeb34fd34258c28e4596e11835f3da4ab90dff86690"
+      }
+    },
+    {
+      "artifact": "source",
+      "change": "modified",
+      "destination": {
+        "kind": "patch",
+        "patch": "integration/codex/patches/dependency_build.patch",
+        "path": "codex-rs/mxc-sandbox/src/native.rs"
+      },
+      "git_status": "M",
+      "mode_changed": false,
+      "owner": "codex-rs",
+      "path": "codex-rs/mxc-sandbox/src/native.rs",
+      "purpose": "dependency_build",
+      "regression_groups": [
+        "dependency_build"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "codex-rs/mxc-sandbox/src/native.rs",
+        "sha256": "ec97c3bea1a360cc1e05e319a9408cc17fbab6a078a20987a85f8f4031d04e33"
+      },
+      "upstream_source": {
+        "mode": "100644",
+        "path": "codex-rs/mxc-sandbox/src/native.rs",
+        "sha256": "83448c95931cf00f6010638d2acba346e40844b4370f2257005ebc41268417e9"
+      }
+    },
+    {
+      "artifact": "source",
+      "change": "modified",
+      "destination": {
+        "kind": "patch",
+        "patch": "integration/codex/patches/dependency_build.patch",
+        "path": "codex-rs/mxc-sandbox/src/policy.rs"
+      },
+      "git_status": "M",
+      "mode_changed": false,
+      "owner": "codex-rs",
+      "path": "codex-rs/mxc-sandbox/src/policy.rs",
+      "purpose": "dependency_build",
+      "regression_groups": [
+        "dependency_build"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "codex-rs/mxc-sandbox/src/policy.rs",
+        "sha256": "aac154833b60e4ae6c4ae88c5747e0a4e80e85b9e167e2365875b6259c314fad"
+      },
+      "upstream_source": {
+        "mode": "100644",
+        "path": "codex-rs/mxc-sandbox/src/policy.rs",
+        "sha256": "db99365db23327fd992ebf62e673af40f908b55ff3049d7316329a7af9efeca1"
+      }
+    },
+    {
+      "artifact": "source",
+      "change": "modified",
+      "destination": {
+        "kind": "patch",
+        "patch": "integration/codex/patches/dependency_build.patch",
+        "path": "codex-rs/mxc-sandbox/src/policy_tests.rs"
+      },
+      "git_status": "M",
+      "mode_changed": false,
+      "owner": "codex-rs",
+      "path": "codex-rs/mxc-sandbox/src/policy_tests.rs",
+      "purpose": "dependency_build",
+      "regression_groups": [
+        "dependency_build"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "codex-rs/mxc-sandbox/src/policy_tests.rs",
+        "sha256": "c537f4c6420cdfe9c3eacd3cd3ca8083addd23fd3e4f7408579c6441205ef824"
+      },
+      "upstream_source": {
+        "mode": "100644",
+        "path": "codex-rs/mxc-sandbox/src/policy_tests.rs",
+        "sha256": "2321a7e180ef940e97f7b9b8a4f2ffae504df904b08d9262b317c0f8c5cd7bc2"
+      }
+    },
+    {
+      "artifact": "source",
+      "change": "modified",
+      "destination": {
+        "kind": "patch",
+        "patch": "integration/codex/patches/dependency_build.patch",
+        "path": "codex-rs/mxc-sandbox/src/windows.rs"
+      },
+      "git_status": "M",
+      "mode_changed": false,
+      "owner": "codex-rs",
+      "path": "codex-rs/mxc-sandbox/src/windows.rs",
+      "purpose": "dependency_build",
+      "regression_groups": [
+        "dependency_build"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "codex-rs/mxc-sandbox/src/windows.rs",
+        "sha256": "6fa89bf1639fd36e00dc32108092e528130e36117118e3c80ae192f247cbd93f"
+      },
+      "upstream_source": {
+        "mode": "100644",
+        "path": "codex-rs/mxc-sandbox/src/windows.rs",
+        "sha256": "7f67b89f0b68ede6716df95581d377d80c10daf16fea3861be106818797f8836"
       }
     },
     {
@@ -24195,6 +24331,33 @@
       "change": "modified",
       "destination": {
         "kind": "patch",
+        "patch": "integration/codex/patches/dependency_build.patch",
+        "path": "codex-rs/runtime-agent-instance/src/runtime.rs"
+      },
+      "git_status": "M",
+      "mode_changed": false,
+      "owner": "codex-rs",
+      "path": "codex-rs/runtime-agent-instance/src/runtime.rs",
+      "purpose": "dependency_build",
+      "regression_groups": [
+        "dependency_build"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "codex-rs/runtime-agent-instance/src/runtime.rs",
+        "sha256": "b11c61c28b0f90c82ea81727c5389b258dc988fea78d85ce96e50866eb049c00"
+      },
+      "upstream_source": {
+        "mode": "100644",
+        "path": "codex-rs/runtime-agent-instance/src/runtime.rs",
+        "sha256": "6f27d35844946d50f3bac9a4e14cd1c3133ef8435d992c0397b41a49e5889f93"
+      }
+    },
+    {
+      "artifact": "source",
+      "change": "modified",
+      "destination": {
+        "kind": "patch",
         "patch": "integration/codex/patches/backend_dispatch.patch",
         "path": "codex-rs/secrets/Cargo.toml"
       },
@@ -25576,7 +25739,7 @@
       "source": {
         "mode": "100644",
         "path": "codex-rs/tui/src/app/snapshots/codex_tui__app__daemon_menu__tests__daemon_cli_confirmation.snap",
-        "sha256": "d0a554500783a9e56c8b98f8698a7adc60bc6e64390639f59a48dde783409cbb"
+        "sha256": "488be3eb2dbd011e6243064339b49df3a6f3521be55f03507b89f368a1da43a1"
       },
       "upstream_source": {
         "mode": "100644",
@@ -25711,7 +25874,7 @@
       "source": {
         "mode": "100644",
         "path": "codex-rs/tui/src/app/snapshots/codex_tui__app__owned_transcript__empty_state_animation_tests__fresh_thread_header.snap",
-        "sha256": "d3bfc228a17680c77a60cda41564a146d0532c3410963317f3331db0054d6e6a"
+        "sha256": "04b86cd062a5cc6eb66ea36a3277114cd539424355c44fa96a40fc89a6d5dd45"
       },
       "upstream_source": {
         "mode": "100644",
@@ -25846,7 +26009,7 @@
       "source": {
         "mode": "100644",
         "path": "codex-rs/tui/src/app/snapshots/codex_tui__app__tests__app_server_thread_replacement_clears_previous_transcript_before_replay-2.snap",
-        "sha256": "6061f06381070b125ce2abf4e84be22c457d15924005994e6576c2b583f3ab46"
+        "sha256": "44dc5094f9a8f9651e4ad4d030e7a6583ff93375136aa338448cb1285e20afcc"
       },
       "upstream_source": {
         "mode": "100644",
@@ -25906,6 +26069,33 @@
         "mode": "100644",
         "path": "codex-rs/tui/src/app/snapshots/codex_tui__app__thread_goal_actions__tests__thread_goal_ephemeral_error_message_renders_snapshot.snap",
         "sha256": "79dcb823f7f15b3427696af70acf44ebb5e79f2244ea52d7d691e75e98ab2d3a"
+      }
+    },
+    {
+      "artifact": "generated",
+      "change": "modified",
+      "destination": {
+        "kind": "patch",
+        "patch": "integration/codex/patches/product_registration_config_branding.patch",
+        "path": "codex-rs/tui/src/app/snapshots/codex_tui__app__thread_title__tests__automatic_thread_title_pending.snap"
+      },
+      "git_status": "M",
+      "mode_changed": false,
+      "owner": "codex-rs",
+      "path": "codex-rs/tui/src/app/snapshots/codex_tui__app__thread_title__tests__automatic_thread_title_pending.snap",
+      "purpose": "product_registration_config_branding",
+      "regression_groups": [
+        "product_registration_config_branding"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "codex-rs/tui/src/app/snapshots/codex_tui__app__thread_title__tests__automatic_thread_title_pending.snap",
+        "sha256": "f6194e40420ea3d917d6088e9999f66d0f8102a5d7cc7960d87eb8cafc8e8003"
+      },
+      "upstream_source": {
+        "mode": "100644",
+        "path": "codex-rs/tui/src/app/snapshots/codex_tui__app__thread_title__tests__automatic_thread_title_pending.snap",
+        "sha256": "d42a77526dee315adad233bb4ea80963319a8e2409c59e193a4330d4bb35795a"
       }
     },
     {
@@ -26251,7 +26441,7 @@
       "source": {
         "mode": "100644",
         "path": "codex-rs/tui/src/app/tests/active_reconnect_tests.rs",
-        "sha256": "210a42b197753cb29dad22074cd9bd992f412cf64ab3cf4c9bca6ed87ae4b544"
+        "sha256": "b22c26333eb31952c2d71b07794f743b57b080822639acb60138ea4420d95ec5"
       },
       "upstream_source": {
         "mode": "100644",
@@ -26440,7 +26630,7 @@
       "source": {
         "mode": "100644",
         "path": "codex-rs/tui/src/app/tests/navigation_reconnect_tests.rs",
-        "sha256": "71586b55691b514a04317b76b3ea878efe18378d5a5336ac79a868ebcda9bef3"
+        "sha256": "f124957960febd7c711ff1c564cff483e14b63c1de965e8a8863a7bc324a9984"
       },
       "upstream_source": {
         "mode": "100644",
@@ -26575,7 +26765,7 @@
       "source": {
         "mode": "100644",
         "path": "codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__active_reconnect__unavailable_conversation.snap",
-        "sha256": "43672071776b0d53e9190eb4f3eb6162647f582ee7f6279cb0c447a7e39d8c3d"
+        "sha256": "0dd9eaa124b78a5d1bdc3d4ad488ee27d1a4470bf6a098592311c14ea4f32157"
       },
       "upstream_source": {
         "mode": "100644",
@@ -26899,7 +27089,7 @@
       "source": {
         "mode": "100644",
         "path": "codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__navigation_reconnect__daemon_command_center_vanished_rename.snap",
-        "sha256": "de6a0981e62d05bb393ad6d8f7ed8e935ae1bf83b14c6a05ab7ec4d8bff1a7f8"
+        "sha256": "2207f030794a98735b38b583b36ad9af286b6aec865b82fe0062ca8b541d666c"
       },
       "upstream_source": {
         "mode": "100644",
@@ -26926,7 +27116,7 @@
       "source": {
         "mode": "100644",
         "path": "codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__realtime_requests__voice_buffered_replay_reconciles_captions.snap",
-        "sha256": "58c5bfe20fd60f0937ec5208424c06af21f88571cacee91c6f2e4625dafcfd85"
+        "sha256": "7e12d24800e91ea2d76797390a185c8e188be1b849cae5b2a1d1b7cc837e176a"
       },
       "upstream_source": {
         "mode": "100644",
@@ -26953,7 +27143,7 @@
       "source": {
         "mode": "100644",
         "path": "codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__realtime_requests__voice_completed_after_thread_switch.snap",
-        "sha256": "852538fe20c845fc036261408a3937f44adca902d122d9e93fb141ffbc926220"
+        "sha256": "27d4611332d7b2163a838f186a5b43ddbbc08a1a4edaa4a18697bbe1a2f03e60"
       },
       "upstream_source": {
         "mode": "100644",
@@ -26980,7 +27170,7 @@
       "source": {
         "mode": "100644",
         "path": "codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__realtime_requests__voice_partial_completed_after_thread_switch.snap",
-        "sha256": "7d0fe2f2600b83a34f68a86c21cc7370e5a39ec446229d0f6305b8ba909a8bac"
+        "sha256": "c2cbd3106ad733a02a46581cf374d05b777ce07132f952b5ba642bb4fd3e8b88"
       },
       "upstream_source": {
         "mode": "100644",
@@ -27007,12 +27197,39 @@
       "source": {
         "mode": "100644",
         "path": "codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__realtime_requests__voice_replay_reconciles_matching_captions.snap",
-        "sha256": "350a4c99eaa07cfc21ffb2fa7e63bbbdd998e5d3e5d3d50dba85da7750a35244"
+        "sha256": "e97034d98a70d7a8433ceb51672b8ceb9750c01827f4f298c726f697035ec223"
       },
       "upstream_source": {
         "mode": "100644",
         "path": "codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__realtime_requests__voice_replay_reconciles_matching_captions.snap",
         "sha256": "fa1c467c950e5a2686a60a141e23cab120639188b0654f5141150329731511cf"
+      }
+    },
+    {
+      "artifact": "generated",
+      "change": "modified",
+      "destination": {
+        "kind": "patch",
+        "patch": "integration/codex/patches/product_registration_config_branding.patch",
+        "path": "codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__session_lifecycle_requests__new_session_tests__widget_replacement_preserves_mention_usage_with_history_disabled.snap"
+      },
+      "git_status": "M",
+      "mode_changed": false,
+      "owner": "codex-rs",
+      "path": "codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__session_lifecycle_requests__new_session_tests__widget_replacement_preserves_mention_usage_with_history_disabled.snap",
+      "purpose": "product_registration_config_branding",
+      "regression_groups": [
+        "product_registration_config_branding"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__session_lifecycle_requests__new_session_tests__widget_replacement_preserves_mention_usage_with_history_disabled.snap",
+        "sha256": "c21dd7c4009e4bbb5dc4620ed4f5d948639fb253d8abde4a9da5c6c7fca74724"
+      },
+      "upstream_source": {
+        "mode": "100644",
+        "path": "codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__session_lifecycle_requests__new_session_tests__widget_replacement_preserves_mention_usage_with_history_disabled.snap",
+        "sha256": "b5127f37d3547b2bbc9233aa6d1f81de96d5ea686d4ad7654919f79c55b5b872"
       }
     },
     {
@@ -27034,7 +27251,7 @@
       "source": {
         "mode": "100644",
         "path": "codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__startup_frame_tests__startup_tip_in_transcript.snap",
-        "sha256": "0bbf2c2611da5b91c050689f68fdf8865115e7e0fa5e1b0369ba05cfa185568d"
+        "sha256": "a2b21e8d190d105e1f429175756fe21d251a5593a0fd66a4392dc509fa4a19a5"
       },
       "upstream_source": {
         "mode": "100644",
@@ -29527,6 +29744,33 @@
       "change": "modified",
       "destination": {
         "kind": "patch",
+        "patch": "integration/codex/patches/product_registration_config_branding.patch",
+        "path": "codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__hooks_browser_view__tests__hooks_browser_model_requests.snap"
+      },
+      "git_status": "M",
+      "mode_changed": false,
+      "owner": "codex-rs",
+      "path": "codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__hooks_browser_view__tests__hooks_browser_model_requests.snap",
+      "purpose": "product_registration_config_branding",
+      "regression_groups": [
+        "product_registration_config_branding"
+      ],
+      "source": {
+        "mode": "100644",
+        "path": "codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__hooks_browser_view__tests__hooks_browser_model_requests.snap",
+        "sha256": "7ea059880f43d7628fd2ef45b5b6c31f94b99230126dcbb26d40ae936543e7b5"
+      },
+      "upstream_source": {
+        "mode": "100644",
+        "path": "codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__hooks_browser_view__tests__hooks_browser_model_requests.snap",
+        "sha256": "2f958c37f3322abdd4b34a20683199b3700ca53af0e1914ef3c3f5adab191bb1"
+      }
+    },
+    {
+      "artifact": "generated",
+      "change": "modified",
+      "destination": {
+        "kind": "patch",
         "patch": "integration/codex/patches/backend_dispatch.patch",
         "path": "codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__list_selection_view__tests__list_selection_footer_note_wraps.snap"
       },
@@ -31136,33 +31380,6 @@
         "mode": "100644",
         "path": "codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__declined_tool_suggestion.snap",
         "sha256": "72c9a019f4be90c1549d3154fb287dafa5504b5b95452e489ef5850747eca438"
-      }
-    },
-    {
-      "artifact": "generated",
-      "change": "modified",
-      "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/chat_integration.patch",
-        "path": "codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__default_footer_generating_thread_title.snap"
-      },
-      "git_status": "M",
-      "mode_changed": false,
-      "owner": "codex-rs",
-      "path": "codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__default_footer_generating_thread_title.snap",
-      "purpose": "chat_integration",
-      "regression_groups": [
-        "chat_integration"
-      ],
-      "source": {
-        "mode": "100644",
-        "path": "codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__default_footer_generating_thread_title.snap",
-        "sha256": "aed3831dbcf7a5725dceb7504fd7625e7b8fc1bce7fb35c089ccc6db40c0d444"
-      },
-      "upstream_source": {
-        "mode": "100644",
-        "path": "codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__default_footer_generating_thread_title.snap",
-        "sha256": "8856e4094b9c3047e0f02955608e1b476a6b539f6ec1fdb912519ae203407427"
       }
     },
     {
@@ -34852,7 +35069,7 @@
       "source": {
         "mode": "100644",
         "path": "codex-rs/tui/src/history_cell/snapshots/codex_tui__history_cell__tests__pnpm_update_available_history_cell_snapshot.snap",
-        "sha256": "c4304c0d8a2217c5cbfdee2aed542c006cf4b8f9cd7f766cc54e9a4984ecac58"
+        "sha256": "9323afe16717c79f41606853040c26e319d48a6a862cca9e2f5861e6eac097d7"
       },
       "upstream_source": {
         "mode": "100644",
@@ -34987,7 +35204,7 @@
       "source": {
         "mode": "100644",
         "path": "codex-rs/tui/src/history_cell/snapshots/codex_tui__history_cell__tests__session_info_availability_nux_tooltip_snapshot.snap",
-        "sha256": "a5dae17b8ea03ae895c2969586ddf72e37c8aef118de382683e0cd704ba77c50"
+        "sha256": "04c90c58285e37522d405df8c29ba39b5c872d6fe7ebd8ba708b5271c0157920"
       },
       "upstream_source": {
         "mode": "100644",
@@ -35041,7 +35258,7 @@
       "source": {
         "mode": "100644",
         "path": "codex-rs/tui/src/history_cell/snapshots/codex_tui__history_cell__tests__standalone_unix_update_available_history_cell_snapshot.snap",
-        "sha256": "c09e98b7f97aada3024928fd0e2a575c8a96ff2a81332fd4ca1fbb459c1036e2"
+        "sha256": "cbf949cd42ec6eefe3ad6f3c03bbf5ac745b955f469833243717e2448afe5fce"
       },
       "upstream_source": {
         "mode": "100644",
@@ -35068,7 +35285,7 @@
       "source": {
         "mode": "100644",
         "path": "codex-rs/tui/src/history_cell/snapshots/codex_tui__history_cell__tests__standalone_windows_update_available_history_cell_snapshot.snap",
-        "sha256": "d7c1486625f2c110d7e88c2aab63a42a9e2bd9f6c48c942b22ab99550e0b45d3"
+        "sha256": "74b0b88997f391ffc2d4c874d84a34708b121e76f6dbb322fc17bb6b9facdad1"
       },
       "upstream_source": {
         "mode": "100644",
@@ -37039,7 +37256,7 @@
       "source": {
         "mode": "100644",
         "path": "codex-rs/tui/src/snapshots/codex_tui__update_prompt__tests__update_picker_selected_28x12.snap",
-        "sha256": "3b4b2700ae9fb845c9b76e0d31fc8a56aefc6bdcb91af2161dda6a9358260066"
+        "sha256": "2d9b73a75ad62959b898ee1bc1f98b3230f6278e1cfe2f11b12f7fddbe10bcfd"
       },
       "upstream_source": {
         "mode": "100644",
@@ -37066,7 +37283,7 @@
       "source": {
         "mode": "100644",
         "path": "codex-rs/tui/src/snapshots/codex_tui__update_prompt__tests__update_prompt_modal.snap",
-        "sha256": "c3f662ac9b75d96d584f630c921f12fdd1fe108f5b5bea24ed8d694d5063a3e0"
+        "sha256": "a5f41dfff24f180ef75046e95daf65b2ab3383bc86be94c1a026744e1925b307"
       },
       "upstream_source": {
         "mode": "100644",
@@ -37282,7 +37499,7 @@
       "source": {
         "mode": "100644",
         "path": "codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_server_auth_not_required.snap",
-        "sha256": "4e351c12b0e0fdea1ca50968b3c0238b39432ebdfe52a4f404c45ec0390c8582"
+        "sha256": "90eae19f2ec9a7ee2d4ec5e21440c18e73ff7f366d8aca50fef74492d987d320"
       },
       "upstream_source": {
         "mode": "100644",
@@ -37309,7 +37526,7 @@
       "source": {
         "mode": "100644",
         "path": "codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_server_auth_required.snap",
-        "sha256": "d903ccbc226319857996ed8febc71528550ff968091e1c368c06a6f980ee0327"
+        "sha256": "79c5e495ec4a14833d1219676fb3a9c42291be176d5fcaa5fb9724579fb9444c"
       },
       "upstream_source": {
         "mode": "100644",
@@ -37336,7 +37553,7 @@
       "source": {
         "mode": "100644",
         "path": "codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_cached_limits_hide_credits_without_flag.snap",
-        "sha256": "e7162e5df0f64a14ab53dde557633af6c5659d520186a89b16abe990f44dc666"
+        "sha256": "0ad737eaef518b4e1c634cd473a291ed09163dc174d668674d6130683211a0fe"
       },
       "upstream_source": {
         "mode": "100644",
@@ -37363,7 +37580,7 @@
       "source": {
         "mode": "100644",
         "path": "codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_includes_credits_and_limits.snap",
-        "sha256": "90e98c0af37a916595ca021ac26d68c1c8a468d0910f830dfb12414b13bced50"
+        "sha256": "ea36ab1c5c4d0d4ab21b020b6a81fd0babf0ba22558a1dc2815d18e8e7e58ac8"
       },
       "upstream_source": {
         "mode": "100644",
@@ -37390,7 +37607,7 @@
       "source": {
         "mode": "100644",
         "path": "codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_includes_enterprise_monthly_credit_limit.snap",
-        "sha256": "caefe190a6f978a98d4b950408d0c70f04c655c0aeff4f1e365d8dd27d902c10"
+        "sha256": "af856972087163416867b05b73dd9e350f46b5c2c83397641293ed267496482c"
       },
       "upstream_source": {
         "mode": "100644",
@@ -37417,7 +37634,7 @@
       "source": {
         "mode": "100644",
         "path": "codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_includes_forked_from.snap",
-        "sha256": "cf7a8f2173fdd2e1afd5877db14efb8cd188fa187e1cb8bc9b573e52c9ecdb13"
+        "sha256": "e9d4fcaaa2c4e966386811fbf1eec85f0d9c902157b6e641b8e024a130706bc9"
       },
       "upstream_source": {
         "mode": "100644",
@@ -37444,7 +37661,7 @@
       "source": {
         "mode": "100644",
         "path": "codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_includes_monthly_limit.snap",
-        "sha256": "d0d2c0a77f65fbcfa88c42ca229a2786be9fe5a6365d8ba5f4f549ef1f8d08f0"
+        "sha256": "08b1724c574b1e4fcec6042d37d737f4c282e22386592dc3dcd319319fedd066"
       },
       "upstream_source": {
         "mode": "100644",
@@ -37471,7 +37688,7 @@
       "source": {
         "mode": "100644",
         "path": "codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_includes_reasoning_details.snap",
-        "sha256": "cbb95b03f403d63d6c0011d2651965a0ee2f50f2d661e657271d5addc30cf788"
+        "sha256": "9215dbab3af00c8402957c834303dd91065653e89027066ad3912a30642f64d2"
       },
       "upstream_source": {
         "mode": "100644",
@@ -37498,7 +37715,7 @@
       "source": {
         "mode": "100644",
         "path": "codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_local_background_server.snap",
-        "sha256": "95b98f884f3fae14c7b2ae102cf1c048271f88c311b2d0f1c473b7948e51e3f1"
+        "sha256": "d996af291cb280c9391b5f1375f27cf37b2339e9f399c6a00dcf369a8d4b3d14"
       },
       "upstream_source": {
         "mode": "100644",
@@ -37525,7 +37742,7 @@
       "source": {
         "mode": "100644",
         "path": "codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_remote_server.snap",
-        "sha256": "916c2b5c6811d72785640cf29e54062d5984edb00496228044b483ad1e72735d"
+        "sha256": "2b853d479754a399dcb8fb7739a431fd5f4ba11d7d3f533a6bc111d4cb6b01c8"
       },
       "upstream_source": {
         "mode": "100644",
@@ -37552,7 +37769,7 @@
       "source": {
         "mode": "100644",
         "path": "codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_shows_active_user_defined_profile.snap",
-        "sha256": "c5d56cf1e06166f055eaa0ac9d7f01e59cc8fd9be0452e9353d07239da115826"
+        "sha256": "f8f881cb0e1aed41fcd66f13a7c7ca73fe0494cb1cf6918603e3dcba4ea0af22"
       },
       "upstream_source": {
         "mode": "100644",
@@ -37579,7 +37796,7 @@
       "source": {
         "mode": "100644",
         "path": "codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_shows_auto_review_permissions.snap",
-        "sha256": "31a0d02e3b3d63ad9603aba4c1a7ccff409f9acc6a432db7401472289fe494a0"
+        "sha256": "c2ff2c9b38943437227f9a17c048f06306e54e42fdf2eb2fe82e9f73cf822fb8"
       },
       "upstream_source": {
         "mode": "100644",
@@ -37606,7 +37823,7 @@
       "source": {
         "mode": "100644",
         "path": "codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_shows_chatgpt_plan_without_email.snap",
-        "sha256": "8e5d7dc2bdb424df768264170d8f819a0a4074cfa60b4db64b327f3075b83ecd"
+        "sha256": "a6ad8b41eff48f23d84338781c3903153c81e14d5e6a9abd5ecd086180fe9aba"
       },
       "upstream_source": {
         "mode": "100644",
@@ -37633,7 +37850,7 @@
       "source": {
         "mode": "100644",
         "path": "codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_shows_missing_limits_message.snap",
-        "sha256": "3081c31ebe6aaae463fce280fd9a14a267e65bb424461fc6cdcf912e3cf09649"
+        "sha256": "9d9a44791d551f6d1b48fc03f1ad52d4a89d7ccfe1a3f0260a37f321c23ccf4e"
       },
       "upstream_source": {
         "mode": "100644",
@@ -37660,7 +37877,7 @@
       "source": {
         "mode": "100644",
         "path": "codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_shows_refreshing_limits_notice.snap",
-        "sha256": "eabfad48268184fec9720c06a741b4b2734346ab5d33e7806ba82a46bc53a73d"
+        "sha256": "318b91691b245f1a7d80d11c73a5cdc24c38b9c181b3bc20b0a6ca3f83d4f00f"
       },
       "upstream_source": {
         "mode": "100644",
@@ -37687,7 +37904,7 @@
       "source": {
         "mode": "100644",
         "path": "codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_shows_stale_limits_message.snap",
-        "sha256": "ab4ffcfc60f9cfe9e93828e184bade4ba2ad2b3c41ee07af901e9045317da668"
+        "sha256": "71a4c7f22fe6721c745f35572f1cb265821b96ffb84c3c020bbbfe39fcc19c59"
       },
       "upstream_source": {
         "mode": "100644",
@@ -37714,7 +37931,7 @@
       "source": {
         "mode": "100644",
         "path": "codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_shows_unavailable_limits_message.snap",
-        "sha256": "994f046f5e7a37a3b8a16514f1e77910d17f57ee898ffbf63ad3563a65a86722"
+        "sha256": "7c063e3e51a9dc4bb444caf9a6d67db7bfd90c1945eb14c48b58dbf597bcb758"
       },
       "upstream_source": {
         "mode": "100644",
@@ -37741,7 +37958,7 @@
       "source": {
         "mode": "100644",
         "path": "codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_truncates_halfwidth_kana_in_narrow_terminal.snap",
-        "sha256": "f77cc83c8569c187f04dd3aa79262f9ce36aac134ab749533c0b566bfe0df984"
+        "sha256": "5a9fc5534638da93055879717068d99974102a00807dc141ea99bc62554be440"
       },
       "upstream_source": {
         "mode": "100644",
@@ -37768,7 +37985,7 @@
       "source": {
         "mode": "100644",
         "path": "codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_truncates_in_narrow_terminal.snap",
-        "sha256": "900137e3cd16e7d7e1ff62b67afbaa6a895543d4efed3a849c3f4914f9f6f181"
+        "sha256": "eec67e2cf0a11e5baf77044ea48988cba5897df551a87175a2d06a5239e9406f"
       },
       "upstream_source": {
         "mode": "100644",
@@ -37795,7 +38012,7 @@
       "source": {
         "mode": "100644",
         "path": "codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_uses_default_reasoning_when_config_empty.snap",
-        "sha256": "7a47e71c19bda7531519074395f0a735d9d7a779e342ad92f43e2f2341b6962e"
+        "sha256": "3b85c752b1ebf97370f8f6d28fc9043530fa49ceb2a6634c53f3863f941a925d"
       },
       "upstream_source": {
         "mode": "100644",
@@ -37822,7 +38039,7 @@
       "source": {
         "mode": "100644",
         "path": "codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_uses_generic_limit_labels_for_unsupported_windows.snap",
-        "sha256": "62001500a7e1a48cd76e76962fb80851f23b084f8032fcda671a7525082bf47d"
+        "sha256": "3b663f1e213c5cf1c1bc0768cdd3b33789eb2db67ddd8e65046c9e2ad3b3bd86"
       },
       "upstream_source": {
         "mode": "100644",
@@ -37849,7 +38066,7 @@
       "source": {
         "mode": "100644",
         "path": "codex-rs/tui/src/status/snapshots/codex_tui__status__tests__status_snapshot_wraps_enterprise_monthly_credit_details_in_narrow_terminal.snap",
-        "sha256": "93394851bd8b04a625a732f798ca03bd1acfe2f478e4b68184e6d16604d53162"
+        "sha256": "d9292bc1f9e1d446065e3589a3b6e6cfa1b947a0fdd82e97592aa1edd76b4e7e"
       },
       "upstream_source": {
         "mode": "100644",
@@ -37876,7 +38093,7 @@
       "source": {
         "mode": "100644",
         "path": "codex-rs/tui/src/status/snapshots/codex_tui__status__tests__transcript_overlay_status_rate_limit_refresh.snap",
-        "sha256": "af2767bdf0a3341b160393dc12e9e5c7c4beb5415c2f69269447f83c78ee32f3"
+        "sha256": "a6ae2898576600deaeae9fc260bd4318e7ececcd248b093889eb11e3225f6059"
       },
       "upstream_source": {
         "mode": "100644",
@@ -39498,7 +39715,7 @@
       "source": {
         "mode": "100644",
         "path": "docs/container-verify.md",
-        "sha256": "4105fd7c67d9b671cfdad1e7bd0e6cc754808804120985e61c2033d3e06ea931"
+        "sha256": "548be97dcf9d0b810320597afbf85ac61371aa0949a9251d53ee0312b5f01091"
       },
       "upstream_source": null
     },
@@ -41512,7 +41729,7 @@
       "source": {
         "mode": "100644",
         "path": "sdk/python/docs/faq.md",
-        "sha256": "54faf5119d7f98e49b5f00d6c575e1041b038ee4d5a9ab269698e02d4fd66682"
+        "sha256": "041d22567dde3006763537db8b0b0613ee795ed7bf16e090f92ee15540410bff"
       },
       "upstream_source": {
         "mode": "100644",
@@ -68507,6 +68724,342 @@
         "mode": "100644",
         "path": "codex-rs/tui/src/tui/alternate_screen.rs",
         "sha256": "13e839247994d73e3bcd579662eda671163df6fe157896da3791deb0966a7a3a"
+      }
+    },
+    {
+      "artifact": "source",
+      "change": "modified",
+      "destination": {
+        "kind": "patch",
+        "patch": "integration/codex/patches/dependency_build.patch",
+        "path": ".github/actions/build-bazel-package-binaries/action.yml"
+      },
+      "git_status": "M",
+      "mode_changed": false,
+      "owner": "downstream-build",
+      "path": ".github/actions/build-bazel-package-binaries/action.yml",
+      "purpose": "dependency_build",
+      "regression_groups": [
+        "dependency_build"
+      ],
+      "retirement_reason": "Assembled workflow copy has no execution consumers; product-owned root workflows retain qualified build policy.",
+      "source": {
+        "mode": "100644",
+        "path": ".github/actions/build-bazel-package-binaries/action.yml",
+        "sha256": "375ca4d8c5e0a3fc864466667661feeb9b58db349166c0309bb82f113e3c2669"
+      },
+      "upstream_source": {
+        "mode": "100644",
+        "path": ".github/actions/build-bazel-package-binaries/action.yml",
+        "sha256": "5bac07a7d7b293f778eb8cd8311764b0af58382a0443dbe7418d47a88e05fb7e"
+      }
+    },
+    {
+      "artifact": "source",
+      "change": "modified",
+      "destination": {
+        "kind": "patch",
+        "patch": "integration/codex/patches/dependency_build.patch",
+        "path": ".github/actions/build-cargo-package-binaries/action.yml"
+      },
+      "git_status": "M",
+      "mode_changed": false,
+      "owner": "downstream-build",
+      "path": ".github/actions/build-cargo-package-binaries/action.yml",
+      "purpose": "dependency_build",
+      "regression_groups": [
+        "dependency_build"
+      ],
+      "retirement_reason": "Assembled workflow copy has no execution consumers; product-owned root workflows retain qualified build policy.",
+      "source": {
+        "mode": "100644",
+        "path": ".github/actions/build-cargo-package-binaries/action.yml",
+        "sha256": "a6ec13f707199311d289ffe80b836179c25c9f648b837ef1722499f948d0df68"
+      },
+      "upstream_source": {
+        "mode": "100644",
+        "path": ".github/actions/build-cargo-package-binaries/action.yml",
+        "sha256": "74f18fd40804f4af42fbebdc5f529eeaeaae1ac7426d08b9f947c416f14dd1a7"
+      }
+    },
+    {
+      "artifact": "source",
+      "change": "modified",
+      "destination": {
+        "kind": "patch",
+        "patch": "integration/codex/patches/dependency_build.patch",
+        "path": ".github/workflows/cargo-deny.yml"
+      },
+      "git_status": "M",
+      "mode_changed": false,
+      "owner": "downstream-build",
+      "path": ".github/workflows/cargo-deny.yml",
+      "purpose": "dependency_build",
+      "regression_groups": [
+        "dependency_build"
+      ],
+      "retirement_reason": "Assembled workflow copy has no execution consumers; product-owned root workflows retain qualified build policy.",
+      "source": {
+        "mode": "100644",
+        "path": ".github/workflows/cargo-deny.yml",
+        "sha256": "aaeb7399b1fe55a665b95e86497480546337909a1f26dfdec32a6a570556ee40"
+      },
+      "upstream_source": {
+        "mode": "100644",
+        "path": ".github/workflows/cargo-deny.yml",
+        "sha256": "9be4532baa0bc7a8f84506f073690ddd844434ab820b59b1eade686744811b4b"
+      }
+    },
+    {
+      "artifact": "source",
+      "change": "modified",
+      "destination": {
+        "kind": "patch",
+        "patch": "integration/codex/patches/dependency_build.patch",
+        "path": ".github/workflows/rust-ci-full-nextest-platform.yml"
+      },
+      "git_status": "M",
+      "mode_changed": false,
+      "owner": "downstream-build",
+      "path": ".github/workflows/rust-ci-full-nextest-platform.yml",
+      "purpose": "dependency_build",
+      "regression_groups": [
+        "dependency_build"
+      ],
+      "retirement_reason": "Assembled workflow copy has no execution consumers; product-owned root workflows retain qualified build policy.",
+      "source": {
+        "mode": "100644",
+        "path": ".github/workflows/rust-ci-full-nextest-platform.yml",
+        "sha256": "4362d6396b9b83e535c26d26d3a6069480dfc9dc286a8ddffc6a69d17bd2b619"
+      },
+      "upstream_source": {
+        "mode": "100644",
+        "path": ".github/workflows/rust-ci-full-nextest-platform.yml",
+        "sha256": "167d414cb6ec8655cf4013644273f60d29cd5a8baf1172b88d1c302ba4e89a3d"
+      }
+    },
+    {
+      "artifact": "source",
+      "change": "modified",
+      "destination": {
+        "kind": "patch",
+        "patch": "integration/codex/patches/dependency_build.patch",
+        "path": ".github/workflows/rust-ci-full.yml"
+      },
+      "git_status": "M",
+      "mode_changed": false,
+      "owner": "downstream-build",
+      "path": ".github/workflows/rust-ci-full.yml",
+      "purpose": "dependency_build",
+      "regression_groups": [
+        "dependency_build"
+      ],
+      "retirement_reason": "Assembled workflow copy has no execution consumers; product-owned root workflows retain qualified build policy.",
+      "source": {
+        "mode": "100644",
+        "path": ".github/workflows/rust-ci-full.yml",
+        "sha256": "fc93a3b12b173a6b84a2ee3c8ccb85c4ee72850b39e43eefe534ed613777abc5"
+      },
+      "upstream_source": {
+        "mode": "100644",
+        "path": ".github/workflows/rust-ci-full.yml",
+        "sha256": "0b5516edda071b97451f193e637cf4bb2009b6a235e9d23ca652d449081dfac9"
+      }
+    },
+    {
+      "artifact": "source",
+      "change": "modified",
+      "destination": {
+        "kind": "patch",
+        "patch": "integration/codex/patches/dependency_build.patch",
+        "path": ".github/workflows/rust-ci.yml"
+      },
+      "git_status": "M",
+      "mode_changed": false,
+      "owner": "downstream-build",
+      "path": ".github/workflows/rust-ci.yml",
+      "purpose": "dependency_build",
+      "regression_groups": [
+        "dependency_build"
+      ],
+      "retirement_reason": "Assembled workflow copy has no execution consumers; product-owned root workflows retain qualified build policy.",
+      "source": {
+        "mode": "100644",
+        "path": ".github/workflows/rust-ci.yml",
+        "sha256": "a0fca43d3b17d7f8aee111f0287025729bc0023bc48d2735add29f1ba5a80bb0"
+      },
+      "upstream_source": {
+        "mode": "100644",
+        "path": ".github/workflows/rust-ci.yml",
+        "sha256": "c05e33c262c930fb9c1ba0774741180147a2c550b8ab74cb187a008bd9dfb7dc"
+      }
+    },
+    {
+      "artifact": "source",
+      "change": "modified",
+      "destination": {
+        "kind": "patch",
+        "patch": "integration/codex/patches/dependency_build.patch",
+        "path": ".github/workflows/rust-release-windows.yml"
+      },
+      "git_status": "M",
+      "mode_changed": false,
+      "owner": "downstream-build",
+      "path": ".github/workflows/rust-release-windows.yml",
+      "purpose": "dependency_build",
+      "regression_groups": [
+        "dependency_build"
+      ],
+      "retirement_reason": "Assembled workflow copy has no execution consumers; product-owned root workflows retain qualified build policy.",
+      "source": {
+        "mode": "100644",
+        "path": ".github/workflows/rust-release-windows.yml",
+        "sha256": "e16558b4984894e939064d684110e87649e3255c470ab0341e3d5526c614eb46"
+      },
+      "upstream_source": {
+        "mode": "100644",
+        "path": ".github/workflows/rust-release-windows.yml",
+        "sha256": "26a4833a4a9b0eb31a8fe394f784e3a32b1e409f232781316eb876dbe396c7b9"
+      }
+    },
+    {
+      "artifact": "source",
+      "change": "modified",
+      "destination": {
+        "kind": "patch",
+        "patch": "integration/codex/patches/dependency_build.patch",
+        "path": ".github/workflows/rust-release.yml"
+      },
+      "git_status": "M",
+      "mode_changed": false,
+      "owner": "downstream-build",
+      "path": ".github/workflows/rust-release.yml",
+      "purpose": "dependency_build",
+      "regression_groups": [
+        "dependency_build"
+      ],
+      "retirement_reason": "Assembled workflow copy has no execution consumers; product-owned root workflows retain qualified build policy.",
+      "source": {
+        "mode": "100644",
+        "path": ".github/workflows/rust-release.yml",
+        "sha256": "6beb22384caf3e8e05fc153827041d035aa24f18b344e062de3127d8780cbcfd"
+      },
+      "upstream_source": {
+        "mode": "100644",
+        "path": ".github/workflows/rust-release.yml",
+        "sha256": "f0ec1861688535015b2245f3ceb8c465481757e3cd63558538282fcd3a81d673"
+      }
+    },
+    {
+      "artifact": "source",
+      "change": "modified",
+      "destination": {
+        "kind": "patch",
+        "patch": "integration/codex/patches/dependency_build.patch",
+        "path": ".github/workflows/rusty-v8-release.yml"
+      },
+      "git_status": "M",
+      "mode_changed": false,
+      "owner": "downstream-build",
+      "path": ".github/workflows/rusty-v8-release.yml",
+      "purpose": "dependency_build",
+      "regression_groups": [
+        "dependency_build"
+      ],
+      "retirement_reason": "Assembled workflow copy has no execution consumers; product-owned root workflows retain qualified build policy.",
+      "source": {
+        "mode": "100644",
+        "path": ".github/workflows/rusty-v8-release.yml",
+        "sha256": "12f38d7e88bee0c21d9ad4a66adc746c4106864a6078dc4b7017e8ef86746e98"
+      },
+      "upstream_source": {
+        "mode": "100644",
+        "path": ".github/workflows/rusty-v8-release.yml",
+        "sha256": "6587433841d1b50fb08f4135704a014b501f097b07e59b5bf3d5b8b19b2fc488"
+      }
+    },
+    {
+      "artifact": "source",
+      "change": "modified",
+      "destination": {
+        "kind": "patch",
+        "patch": "integration/codex/patches/dependency_build.patch",
+        "path": ".github/workflows/v8-canary.yml"
+      },
+      "git_status": "M",
+      "mode_changed": false,
+      "owner": "downstream-build",
+      "path": ".github/workflows/v8-canary.yml",
+      "purpose": "dependency_build",
+      "regression_groups": [
+        "dependency_build"
+      ],
+      "retirement_reason": "Assembled workflow copy has no execution consumers; product-owned root workflows retain qualified build policy.",
+      "source": {
+        "mode": "100644",
+        "path": ".github/workflows/v8-canary.yml",
+        "sha256": "342dfff2e021461e397be04f4b22144559bcdf1c0a013ed195dd935d11e21e23"
+      },
+      "upstream_source": {
+        "mode": "100644",
+        "path": ".github/workflows/v8-canary.yml",
+        "sha256": "3f67f8b5519b5a6d61294dbfa2f5ec9009dec8f9fa85c153a1d3ebc173994931"
+      }
+    },
+    {
+      "artifact": "generated",
+      "change": "modified",
+      "destination": {
+        "kind": "patch",
+        "patch": "integration/codex/patches/chat_integration.patch",
+        "path": "codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__default_footer_generating_thread_title.snap"
+      },
+      "git_status": "M",
+      "mode_changed": false,
+      "owner": "codex-rs",
+      "path": "codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__default_footer_generating_thread_title.snap",
+      "purpose": "chat_integration",
+      "regression_groups": [
+        "chat_integration"
+      ],
+      "retirement_reason": "Upstream removed obsolete title-progress snapshot.",
+      "source": {
+        "mode": "100644",
+        "path": "codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__default_footer_generating_thread_title.snap",
+        "sha256": "aed3831dbcf7a5725dceb7504fd7625e7b8fc1bce7fb35c089ccc6db40c0d444"
+      },
+      "upstream_source": {
+        "mode": "100644",
+        "path": "codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__default_footer_generating_thread_title.snap",
+        "sha256": "8856e4094b9c3047e0f02955608e1b476a6b539f6ec1fdb912519ae203407427"
+      }
+    },
+    {
+      "artifact": "source",
+      "change": "modified",
+      "destination": {
+        "kind": "patch",
+        "patch": "integration/codex/patches/backend_dispatch.patch",
+        "path": "codex-rs/core/tests/suite/scenarios.rs"
+      },
+      "git_status": "M",
+      "mode_changed": false,
+      "owner": "codex-rs",
+      "path": "codex-rs/core/tests/suite/scenarios.rs",
+      "purpose": "backend_dispatch",
+      "regression_groups": [
+        "backend_dispatch"
+      ],
+      "retirement_reason": "New upstream child-completion coverage uses ReasoningEffort; retire the obsolete unused-import cleanup.",
+      "source": {
+        "mode": "100644",
+        "path": "codex-rs/core/tests/suite/scenarios.rs",
+        "sha256": "4e6ff9f880077c470a97bfaa3f57d750330ada24587d49e58ac9f4760e540cdc"
+      },
+      "upstream_source": {
+        "mode": "100644",
+        "path": "codex-rs/core/tests/suite/scenarios.rs",
+        "sha256": "a4739d5e08d4af712bd5c7a93fea3ce9e29cc92026df1937be04095d3d5ff47e"
       }
     }
   ],

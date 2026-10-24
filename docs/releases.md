@@ -18,7 +18,8 @@ to pass.
 | Windows ARM64       | `aarch64-pc-windows-msvc`    | `windows-11-arm`       |
 
 The matrix uses [standard hosted runners](https://docs.github.com/en/actions/reference/runners/github-hosted-runners).
-There is one native build per target, using Rust 1.95.0, `Cargo.lock`, and the
+There is one native build per target, using the Rust version in `engine.lock`,
+the committed integration `Cargo.lock`, and the
 workspace's release optimization settings. Debug information is disabled to
 reduce disk and memory requirements. No `target-cpu=native` tuning is applied.
 Packages are platform specific; there is no single binary that runs on every OS.

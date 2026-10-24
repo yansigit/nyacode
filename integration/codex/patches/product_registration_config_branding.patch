@@ -49,7 +49,9 @@ index 79c0daea761e0f634960dd39e2dff6bdbfd02f63..f78710c1904c5a58f723798423311557
 +# Nyacode announcements. Add dated entries when a fork release is available.
 +announcements = []
 diff --git a/codex-cli/bin/codex.js b/codex-cli/bin/codex.js
-index 934600714b97f340cb5468e20e5fe560d751cbed..94d75b3e81f5c56c3edc724ae8e83a3cfb9233dc 100755
+old mode 100644
+new mode 100755
+index 934600714b97f340cb5468e20e5fe560d751cbed..94d75b3e81f5c56c3edc724ae8e83a3cfb9233dc
 --- a/codex-cli/bin/codex.js
 +++ b/codex-cli/bin/codex.js
 @@ -1,5 +1,5 @@
@@ -236,10 +238,10 @@ index 934600714b97f340cb5468e20e5fe560d751cbed..94d75b3e81f5c56c3edc724ae8e83a3c
  const child = spawn(binaryPath, process.argv.slice(2), {
    stdio: "inherit",
 diff --git a/codex-rs/app-server/src/config_manager.rs b/codex-rs/app-server/src/config_manager.rs
-index d2c2db748177905ab46d9dd58faeef11efb1582d..15d2c2e8d34c193b9705450d8c72d8ac40f476b2 100644
+index 4fe02c52642178e95baa10b1afdd8f31c3160f6e..b4756c1f6a240195a82b57c30784ff30c5e77641 100644
 --- a/codex-rs/app-server/src/config_manager.rs
 +++ b/codex-rs/app-server/src/config_manager.rs
-@@ -45,6 +45,7 @@ pub(crate) struct ConfigManager {
+@@ -47,6 +47,7 @@ pub(crate) struct ConfigManager {
      codex_home: PathBuf,
      cli_overrides: Arc<RwLock<Vec<(String, TomlValue)>>>,
      runtime_feature_enablement: Arc<RwLock<BTreeMap<String, bool>>>,
@@ -247,7 +249,7 @@ index d2c2db748177905ab46d9dd58faeef11efb1582d..15d2c2e8d34c193b9705450d8c72d8ac
      loader_overrides: LoaderOverrides,
      strict_config: bool,
      cloud_config_bundle: Arc<RwLock<CloudConfigBundleLoader>>,
-@@ -90,6 +91,7 @@ impl ConfigManager {
+@@ -106,6 +107,7 @@ impl ConfigManager {
              codex_home,
              cli_overrides: Arc::new(RwLock::new(cli_overrides)),
              runtime_feature_enablement: Arc::new(RwLock::new(BTreeMap::new())),
@@ -255,7 +257,7 @@ index d2c2db748177905ab46d9dd58faeef11efb1582d..15d2c2e8d34c193b9705450d8c72d8ac
              loader_overrides,
              strict_config,
              cloud_config_bundle: Arc::new(RwLock::new(cloud_config_bundle)),
-@@ -106,6 +108,40 @@ impl ConfigManager {
+@@ -123,6 +125,40 @@ impl ConfigManager {
          self.codex_home.as_path()
      }
  
@@ -293,10 +295,10 @@ index d2c2db748177905ab46d9dd58faeef11efb1582d..15d2c2e8d34c193b9705450d8c72d8ac
 +        }
 +    }
 +
-     pub(crate) fn with_embedded_network_policy(
-         mut self,
-         policy: crate::in_process::EmbeddedNetworkPolicy,
-@@ -229,6 +265,11 @@ impl ConfigManager {
+     /// Explicit account, policy-owner, and enterprise-login changes revoke cached access.
+     pub(crate) fn revoke_mcp_ema(&self) {
+         let mut current = self
+@@ -278,6 +314,11 @@ impl ConfigManager {
          self.apply_network_policy(&mut config);
          self.apply_runtime_feature_enablement(&mut config);
          self.apply_arg0_paths(&mut config);
@@ -305,14 +307,14 @@ index d2c2db748177905ab46d9dd58faeef11efb1582d..15d2c2e8d34c193b9705450d8c72d8ac
 +                .features
 +                .enabled(codex_features::Feature::ChatgptChat),
 +        );
-         Ok(config)
-     }
- 
+         config.config_layer_stack = config
+             .config_layer_stack
+             .with_mcp_ema_cancellation(mcp_ema_cancellation);
 diff --git a/codex-rs/app-server/src/request_processors/config_processor.rs b/codex-rs/app-server/src/request_processors/config_processor.rs
-index d903a6fce2da674d58040214068b96d8d184f71d..9035335e006eebbb0349626015cc676997ddb9e6 100644
+index 1500cd82a25d518ca90ea777c0b144d01eefafef..6f39538c747e82e6969b70ee33e6d874d6661111 100644
 --- a/codex-rs/app-server/src/request_processors/config_processor.rs
 +++ b/codex-rs/app-server/src/request_processors/config_processor.rs
-@@ -69,6 +69,7 @@ const SUPPORTED_EXPERIMENTAL_FEATURE_ENABLEMENT: &[&str] = &[
+@@ -70,6 +70,7 @@ const SUPPORTED_EXPERIMENTAL_FEATURE_ENABLEMENT: &[&str] = &[
      "api_key_model_discovery",
      "auth_elicitation",
      BACKGROUND_PAGINATED_ROLLOUT_MIGRATION_FEATURE,
@@ -320,7 +322,7 @@ index d903a6fce2da674d58040214068b96d8d184f71d..9035335e006eebbb0349626015cc6769
      "codex_apps_mcp_2026_07_28",
      "mcp_2026_07_28",
      "memories",
-@@ -221,6 +222,7 @@ impl ConfigRequestProcessor {
+@@ -222,6 +223,7 @@ impl ConfigRequestProcessor {
      }
  
      pub(crate) async fn handle_config_mutation(&self) {
@@ -328,10 +330,10 @@ index d903a6fce2da674d58040214068b96d8d184f71d..9035335e006eebbb0349626015cc6769
          self.thread_manager.plugins_manager().clear_cache();
          self.thread_manager.skills_service().clear_cache();
      }
-@@ -374,6 +376,7 @@ pub(super) async fn reload_user_config(
- }
+@@ -376,6 +378,7 @@ pub(super) async fn reload_user_config(
  
  async fn reload_user_config_inner(config_manager: &ConfigManager, thread_manager: &ThreadManager) {
+     config_manager.revoke_mcp_ema_startups();
 +    config_manager.refresh_chat_feature().await;
      if let Err(err) = config_manager.load_config_layers(/*cwd*/ None).await {
          tracing::warn!("failed to rebuild user config for runtime refresh: {err}");
@@ -414,10 +416,10 @@ index 94748ec05206fbe95080f0b7c820b73ce0f6c23c..a6b85c5ab7d7db235af956be1f2c93f3
  use serde::Deserialize;
  use serde::Serialize;
 diff --git a/codex-rs/config/Cargo.toml b/codex-rs/config/Cargo.toml
-index b4be94bb585c6757234299a78f8b42a02b3d2017..de156611b0d51917659d9116a54738581f8796c1 100644
+index 0663cb9e4b737b059d62b12b1f21bd88d6223338..2535dbcbaee331ecd83ee3943bb5b9709cf2b9af 100644
 --- a/codex-rs/config/Cargo.toml
 +++ b/codex-rs/config/Cargo.toml
-@@ -22,6 +22,7 @@ codex-model-provider-info = { workspace = true }
+@@ -23,6 +23,7 @@ codex-model-provider-info = { workspace = true }
  codex-network-proxy = { workspace = true }
  codex-protocol = { workspace = true }
  codex-utils-absolute-path = { workspace = true }
@@ -425,7 +427,7 @@ index b4be94bb585c6757234299a78f8b42a02b3d2017..de156611b0d51917659d9116a5473858
  codex-utils-path = { workspace = true }
  codex-utils-path-uri = { workspace = true }
  codex-utils-redacted-string = { workspace = true }
-@@ -30,7 +31,7 @@ futures = { workspace = true, features = ["alloc", "std"] }
+@@ -31,7 +32,7 @@ futures = { workspace = true, features = ["alloc", "std"] }
  gethostname = { workspace = true }
  indexmap = { workspace = true, features = ["serde"] }
  multimap = { workspace = true }
@@ -434,7 +436,7 @@ index b4be94bb585c6757234299a78f8b42a02b3d2017..de156611b0d51917659d9116a5473858
  regex-lite = { workspace = true }
  schemars = { workspace = true }
  serde = { workspace = true, features = ["derive"] }
-@@ -52,7 +53,7 @@ dns-lookup = { workspace = true }
+@@ -54,7 +55,7 @@ dns-lookup = { workspace = true }
  libc = { workspace = true }
  
  [target.'cfg(target_os = "macos")'.dependencies]
@@ -443,7 +445,7 @@ index b4be94bb585c6757234299a78f8b42a02b3d2017..de156611b0d51917659d9116a5473858
  
  [target.'cfg(target_os = "windows")'.dependencies]
  codex-windows-sandbox = { workspace = true }
-@@ -69,7 +70,7 @@ tempfile = { workspace = true }
+@@ -72,7 +73,7 @@ tempfile = { workspace = true }
  tokio = { workspace = true, features = ["full"] }
  tokio-stream = { workspace = true, features = ["net"] }
  tonic = { workspace = true, features = ["router", "transport"] }
@@ -468,10 +470,10 @@ index bf544f49204b4aba5f2d7b4f64c42c5f23c45b5f..36bb7f235a61086acfca8727790fc84e
          .filter(|path| path.canonicalize().ok().as_ref() == Some(codex_home));
      Some(alias.unwrap_or_else(|| codex_home.clone()))
 diff --git a/codex-rs/config/src/config_toml.rs b/codex-rs/config/src/config_toml.rs
-index 8c8c66ea1dc45669a3f52e3e0d3f10e633267167..5e5eb761bd3ce18548bb6e2881d7a3dfe1e2e830 100644
+index 7f70fb881485bf47e411b8cf2377795af620c743..f4d3d88f677793aa83fe33093cdf6a0399399cc8 100644
 --- a/codex-rs/config/src/config_toml.rs
 +++ b/codex-rs/config/src/config_toml.rs
-@@ -754,7 +754,7 @@ pub struct GoalsToml {
+@@ -756,7 +756,7 @@ pub struct GoalsToml {
  }
  
  #[derive(Serialize, Deserialize, Debug, Clone, Default, PartialEq, Eq, JsonSchema)]
@@ -481,10 +483,10 @@ index 8c8c66ea1dc45669a3f52e3e0d3f10e633267167..5e5eb761bd3ce18548bb6e2881d7a3df
      /// Whether multi-agent tools are enabled. Defaults to true.
      /// An enabled `features.multi_agent_v2` setting takes precedence.
 diff --git a/codex-rs/config/src/permissions_toml.rs b/codex-rs/config/src/permissions_toml.rs
-index 8853f73db2d8091c2caa5570d736437e6001434e..98baad96b01f71016914831ee1129150f3196fa6 100644
+index dd558495ce79fcd8e1a532eb1b98cb392cc2e448..f38f9c08ad18d552d0852b9837fcd64c4499c45a 100644
 --- a/codex-rs/config/src/permissions_toml.rs
 +++ b/codex-rs/config/src/permissions_toml.rs
-@@ -403,6 +403,7 @@ pub struct NetworkMitmInjectedHeaderToml {
+@@ -413,6 +413,7 @@ pub struct NetworkMitmInjectedHeaderToml {
  
  #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, JsonSchema)]
  #[serde(transparent)]
@@ -493,7 +495,7 @@ index 8853f73db2d8091c2caa5570d736437e6001434e..98baad96b01f71016914831ee1129150
  
  impl<'de> Deserialize<'de> for NetworkMitmToml {
 diff --git a/codex-rs/config/src/schema.rs b/codex-rs/config/src/schema.rs
-index 770e73ee5cca4b51b73109a36045edc1bea65a61..794e113f4580999b0254aa8ce3a151fccf170d51 100644
+index f7d6b6a7d296e745fcd15bb7fe577a9d52ef440a..fd6fd5e7665fa5fd717d8c18da2abbf09023ff60 100644
 --- a/codex-rs/config/src/schema.rs
 +++ b/codex-rs/config/src/schema.rs
 @@ -4,14 +4,9 @@ use codex_features::FEATURES;
@@ -625,7 +627,16 @@ index 770e73ee5cca4b51b73109a36045edc1bea65a61..794e113f4580999b0254aa8ce3a151fc
                  feature.key.to_string(),
                  schema_gen.subschema_for::<codex_features::FeatureToml<
                      codex_features::SleepToolConfigToml,
-@@ -154,14 +144,14 @@ pub fn features_schema(schema_gen: &mut SchemaGenerator) -> Schema {
+@@ -154,7 +144,7 @@ pub fn features_schema(schema_gen: &mut SchemaGenerator) -> Schema {
+             continue;
+         }
+         if feature.id == codex_features::Feature::RuntimeAgentInstances {
+-            validation.properties.insert(
++            properties.insert(
+                 feature.key.to_string(),
+                 schema_gen.subschema_for::<codex_features::FeatureToml<
+                     codex_features::RuntimeAgentInstancesConfigToml,
+@@ -163,14 +153,14 @@ pub fn features_schema(schema_gen: &mut SchemaGenerator) -> Schema {
              continue;
          }
          if feature.id == codex_features::Feature::AppsMcpPathOverride {
@@ -642,7 +653,7 @@ index 770e73ee5cca4b51b73109a36045edc1bea65a61..794e113f4580999b0254aa8ce3a151fc
                  feature.key.to_string(),
                  schema_gen.subschema_for::<codex_features::FeatureToml<
                      codex_features::NetworkProxyConfigToml,
-@@ -169,70 +159,56 @@ pub fn features_schema(schema_gen: &mut SchemaGenerator) -> Schema {
+@@ -178,70 +168,56 @@ pub fn features_schema(schema_gen: &mut SchemaGenerator) -> Schema {
              );
              continue;
          }
@@ -744,7 +755,7 @@ index 770e73ee5cca4b51b73109a36045edc1bea65a61..794e113f4580999b0254aa8ce3a151fc
          })
          .into_generator()
          .into_root_schema_for::<ConfigToml>();
-@@ -240,30 +216,21 @@ pub fn config_schema() -> RootSchema {
+@@ -249,30 +225,21 @@ pub fn config_schema() -> RootSchema {
      schema
  }
  
@@ -786,7 +797,7 @@ index 770e73ee5cca4b51b73109a36045edc1bea65a61..794e113f4580999b0254aa8ce3a151fc
      }
  }
  
-@@ -299,3 +266,30 @@ pub fn write_config_schema(out_path: &Path) -> anyhow::Result<()> {
+@@ -308,3 +275,30 @@ pub fn write_config_schema(out_path: &Path) -> anyhow::Result<()> {
      std::fs::write(out_path, json)?;
      Ok(())
  }
@@ -864,7 +875,7 @@ index 345f994183ac644fa27dba38778a251b5b2babab..fdd205e4d7ee4815276385cd0fb22de8
  
  pub(crate) fn deserialize<'de, D>(deserializer: D) -> Result<Option<f64>, D::Error>
 diff --git a/codex-rs/config/src/types.rs b/codex-rs/config/src/types.rs
-index 8846fb3d95abe0da0526c77a7b06932dda3d14a4..9c35582af028eaf96d1ede0128b9211026754c0a 100644
+index a42d709777aa2242c5b4a45ba8476edbb95a139c..fb9af25e523d93f190beb166a6b8886865eb5c10 100644
 --- a/codex-rs/config/src/types.rs
 +++ b/codex-rs/config/src/types.rs
 @@ -488,7 +488,7 @@ pub struct AppToolConfig {
@@ -913,7 +924,7 @@ index 8846fb3d95abe0da0526c77a7b06932dda3d14a4..9c35582af028eaf96d1ede0128b92110
      /// Defaults for installed plugin activation. Omission preserves source enablement.
      /// Explicit plugin enablement settings override this default, but cannot enable
 diff --git a/codex-rs/core/config.schema.json b/codex-rs/core/config.schema.json
-index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd71101f73c72 100644
+index cce71e46c17084a76d7d7ad7945145f3d4d1a256..71f3d3d74ebf610d70b4ebab1912a96f19608303 100644
 --- a/codex-rs/core/config.schema.json
 +++ b/codex-rs/core/config.schema.json
 @@ -3,7 +3,7 @@
@@ -1232,7 +1243,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
        "properties": {
          "analytics": {
            "$ref": "#/definitions/AnalyticsConfigToml"
-@@ -808,6 +784,9 @@
+@@ -811,6 +787,9 @@
              "browser_use_full_cdp_access": {
                "type": "boolean"
              },
@@ -1242,7 +1253,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
              "chronicle": {
                "type": "boolean"
              },
-@@ -1356,7 +1335,7 @@
+@@ -1368,7 +1347,7 @@
            "description": "Optional path to a file containing model instructions."
          },
          "model_provider": {
@@ -1251,7 +1262,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
            "type": "string"
          },
          "model_reasoning_effort": {
-@@ -1386,7 +1365,7 @@
+@@ -1398,7 +1377,7 @@
            "$ref": "#/definitions/SandboxMode"
          },
          "service_tier": {
@@ -1260,7 +1271,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
            "type": "string"
          },
          "tools": {
-@@ -1429,24 +1408,18 @@
+@@ -1441,24 +1420,18 @@
        "description": "When mouse selections are copied on release.",
        "oneOf": [
          {
@@ -1288,7 +1299,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
            "type": "string"
          }
        ]
-@@ -1498,7 +1471,7 @@
+@@ -1510,7 +1483,7 @@
          },
          "url_prefixes": {
            "default": [],
@@ -1297,7 +1308,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
            "items": {
              "type": "string"
            },
-@@ -1521,7 +1494,7 @@
+@@ -1533,7 +1506,7 @@
          },
          "reminder_interval_seconds": {
            "format": "uint64",
@@ -1306,7 +1317,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
            "type": "integer"
          },
          "sleep_tool": {
-@@ -1535,17 +1508,13 @@
+@@ -1547,17 +1520,13 @@
        "description": "Which inference boundaries may receive current-time reminders.",
        "oneOf": [
          {
@@ -1326,7 +1337,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
            "type": "string"
          }
        ]
-@@ -1569,7 +1538,7 @@
+@@ -1581,7 +1550,7 @@
      },
      "ExternalConfigMigrationPrompts": {
        "additionalProperties": false,
@@ -1335,7 +1346,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
        "properties": {
          "home": {
            "description": "Tracks whether home-level external config migration prompts are hidden.",
-@@ -1741,7 +1710,7 @@
+@@ -1763,7 +1732,7 @@
        "type": "object"
      },
      "FileSystemAccessMode": {
@@ -1344,7 +1355,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
        "oneOf": [
          {
            "enum": [
-@@ -1751,10 +1720,8 @@
+@@ -1773,10 +1742,8 @@
            "type": "string"
          },
          {
@@ -1356,7 +1367,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
            "type": "string"
          }
        ]
-@@ -1773,11 +1740,14 @@
+@@ -1795,11 +1762,14 @@
        ]
      },
      "FilesystemPermissionsToml": {
@@ -1373,7 +1384,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
            "type": "integer"
          }
        },
-@@ -1818,7 +1788,8 @@
+@@ -1840,7 +1810,8 @@
          },
          "redirect_port": {
            "format": "uint16",
@@ -1383,7 +1394,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
            "type": "integer"
          },
          "resource": {
-@@ -1849,9 +1820,7 @@
+@@ -1871,9 +1842,7 @@
            "additionalProperties": false,
            "properties": {
              "kind": {
@@ -1394,7 +1405,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
                "type": "string"
              },
              "name": {
-@@ -1872,9 +1841,7 @@
+@@ -1894,9 +1863,7 @@
            "additionalProperties": false,
            "properties": {
              "kind": {
@@ -1405,7 +1416,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
                "type": "string"
              },
              "name": {
-@@ -1915,7 +1882,7 @@
+@@ -1937,7 +1904,7 @@
          "max_goal_token_budget": {
            "description": "Maximum token budget allowed for a goal and default budget for new goals.",
            "format": "uint64",
@@ -1414,7 +1425,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
            "type": "integer"
          }
        },
-@@ -1937,7 +1904,7 @@
+@@ -1959,7 +1926,7 @@
            "type": "boolean"
          },
          "sandbox_approval": {
@@ -1423,7 +1434,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
            "type": "boolean"
          },
          "skill_approval": {
-@@ -1958,9 +1925,9 @@
+@@ -1980,9 +1947,9 @@
        "description": "User-configurable prompt, approval, and context settings for Guardian v2.",
        "properties": {
          "async_classifier_conversation_token_limit": {
@@ -1435,7 +1446,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
            "type": "integer"
          },
          "async_classifier_mode": {
-@@ -1983,25 +1950,25 @@
+@@ -2005,25 +1972,25 @@
          },
          "max_action_tokens": {
            "format": "uint",
@@ -1468,7 +1479,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
            "type": "integer"
          },
          "persist_scores": {
-@@ -2066,31 +2033,31 @@
+@@ -2088,31 +2055,31 @@
          },
          "max_message_entry_tokens": {
            "format": "uint",
@@ -1509,7 +1520,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
            "type": "integer"
          },
          "sources": {
-@@ -2117,9 +2084,9 @@
+@@ -2139,9 +2106,9 @@
        "properties": {
          "max_bytes": {
            "default": null,
@@ -1521,7 +1532,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
            "type": "integer"
          },
          "persistence": {
-@@ -2137,17 +2104,13 @@
+@@ -2159,17 +2126,13 @@
      "HistoryPersistence": {
        "oneOf": [
          {
@@ -1541,7 +1552,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
            "type": "string"
          }
        ]
-@@ -2157,9 +2120,9 @@
+@@ -2179,9 +2142,9 @@
          {
            "properties": {
              "additionalContextLimit": {
@@ -1553,7 +1564,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
                "type": "integer"
              },
              "async": {
-@@ -2180,13 +2143,11 @@
+@@ -2202,13 +2165,11 @@
              "timeout": {
                "default": null,
                "format": "uint64",
@@ -1569,7 +1580,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
                "type": "string"
              }
            },
-@@ -2213,16 +2174,14 @@
+@@ -2235,16 +2196,14 @@
              "timeout": {
                "default": null,
                "format": "uint64",
@@ -1588,7 +1599,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
                "type": "string"
              }
            },
-@@ -2236,9 +2195,7 @@
+@@ -2258,9 +2217,7 @@
          {
            "properties": {
              "type": {
@@ -1599,7 +1610,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
                "type": "string"
              }
            },
-@@ -2250,9 +2207,7 @@
+@@ -2272,9 +2229,7 @@
          {
            "properties": {
              "type": {
@@ -1610,7 +1621,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
                "type": "string"
              }
            },
-@@ -2376,16 +2331,18 @@
+@@ -2412,16 +2367,18 @@
      "KeybindingsSpec": {
        "anyOf": [
          {
@@ -1630,7 +1641,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
      },
      "LegacyAppPathString": {
        "type": "string"
-@@ -2474,27 +2431,21 @@
+@@ -2518,27 +2475,21 @@
        "type": "object"
      },
      "McpServerAuth": {
@@ -1665,7 +1676,25 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
            "type": "string"
          }
        ]
-@@ -2550,7 +2501,8 @@
+@@ -2573,7 +2524,7 @@
+           "type": "string"
+         },
+         "client_secret": {
+-          "description": "Provisioned client secret for confidential IdP login and token exchange. Omitted for a public client.",
++          "description": "Provisioned client secret for confidential IdP login and token exchange.\nOmitted for a public client.",
+           "type": "string"
+         },
+         "issuer": {
+@@ -2586,7 +2537,7 @@
+               "$ref": "#/definitions/McpEmaTokenEndpointAuthMethod"
+             }
+           ],
+-          "description": "Registered EMA client authentication method. Defaults to client_secret_basic when a secret is configured; requires a client secret."
++          "description": "Registered EMA client authentication method. Defaults to client_secret_basic\nwhen a secret is configured; requires a client secret."
+         }
+       },
+       "required": [
+@@ -2606,7 +2557,8 @@
          "callback_port": {
            "description": "Fixed callback port that takes precedence over Codex's global OAuth callback port.",
            "format": "uint16",
@@ -1675,7 +1704,16 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
            "type": "integer"
          },
          "callback_url": {
-@@ -2583,7 +2535,7 @@
+@@ -2627,7 +2579,7 @@
+               "$ref": "#/definitions/McpEmaTokenEndpointAuthMethod"
+             }
+           ],
+-          "description": "Registered EMA client authentication method. Defaults to client_secret_basic when a secret is configured; requires a client secret."
++          "description": "Registered EMA client authentication method. Defaults to client_secret_basic\nwhen a secret is configured; requires a client secret."
+         }
+       },
+       "type": "object"
+@@ -2647,7 +2599,7 @@
          "output_token_limit": {
            "description": "Token budget for this tool's output, before the standard 20% serialization allowance.",
            "format": "uint",
@@ -1684,7 +1722,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
            "type": "integer"
          }
        },
-@@ -2593,17 +2545,13 @@
+@@ -2657,17 +2609,13 @@
        "description": "Readiness needed before startup can expose this server's tools to the model.",
        "oneOf": [
          {
@@ -1705,7 +1743,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
            "type": "string"
          }
        ]
-@@ -2639,8 +2587,8 @@
+@@ -2703,8 +2651,8 @@
          "max_raw_memories_for_consolidation": {
            "description": "Maximum number of recent raw memories retained for global consolidation.",
            "format": "uint",
@@ -1716,7 +1754,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
            "type": "integer"
          },
          "max_rollout_age_days": {
-@@ -2651,8 +2599,8 @@
+@@ -2715,8 +2663,8 @@
          "max_rollouts_per_startup": {
            "description": "Maximum number of rollout candidates processed per pass.",
            "format": "uint",
@@ -1727,7 +1765,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
            "type": "integer"
          },
          "max_unused_days": {
-@@ -2663,8 +2611,8 @@
+@@ -2727,8 +2675,8 @@
          "min_rate_limit_remaining_percent": {
            "description": "Minimum remaining percentage required in Codex rate-limit windows before memory startup runs.",
            "format": "int64",
@@ -1738,7 +1776,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
            "type": "integer"
          },
          "min_rollout_idle_hours": {
-@@ -2698,13 +2646,15 @@
+@@ -2762,13 +2710,15 @@
        "anyOf": [
          {
            "format": "uint16",
@@ -1756,7 +1794,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
              "type": "integer"
            },
            "type": "array"
-@@ -2715,7 +2665,7 @@
+@@ -2779,7 +2729,7 @@
      "ModelAvailabilityNuxConfig": {
        "additionalProperties": {
          "format": "uint32",
@@ -1765,7 +1803,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
          "type": "integer"
        },
        "type": "object"
-@@ -2728,6 +2678,7 @@
+@@ -2792,6 +2742,7 @@
            "default": [],
            "description": "Command arguments.",
            "items": {
@@ -1773,7 +1811,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
              "type": "string"
            },
            "type": "array"
-@@ -2746,16 +2697,16 @@
+@@ -2810,16 +2761,16 @@
          },
          "refresh_interval_ms": {
            "default": 300000,
@@ -1793,7 +1831,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
            "type": "integer"
          }
        },
-@@ -2844,13 +2795,13 @@
+@@ -2908,13 +2859,13 @@
                "$ref": "#/definitions/ModelProviderCapabilities"
              }
            ],
@@ -1809,7 +1847,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
            "type": "object"
          },
          "env_key": {
-@@ -2858,11 +2809,11 @@
+@@ -2922,11 +2873,11 @@
            "type": "string"
          },
          "env_key_instructions": {
@@ -1823,7 +1861,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
            "type": "string"
          },
          "gateway_oauth": {
-@@ -2875,13 +2826,14 @@
+@@ -2939,13 +2890,14 @@
          },
          "http_headers": {
            "additionalProperties": {
@@ -1840,7 +1878,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
            "type": "string"
          },
          "name": {
-@@ -2889,8 +2841,13 @@
+@@ -2953,8 +2905,13 @@
            "description": "Friendly display name.",
            "type": "string"
          },
@@ -1854,7 +1892,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
              "type": "string"
            },
            "description": "Optional query parameters to append to the base URL.",
-@@ -2899,24 +2856,24 @@
+@@ -2963,24 +2920,24 @@
          "request_max_retries": {
            "description": "Maximum number of times to retry a failed HTTP request to this provider.",
            "format": "uint64",
@@ -1884,7 +1922,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
            "type": "integer"
          },
          "supports_standalone_web_search": {
-@@ -2930,9 +2887,9 @@
+@@ -2994,9 +2951,9 @@
            "type": "boolean"
          },
          "websocket_connect_timeout_ms": {
@@ -1896,7 +1934,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
            "type": "integer"
          },
          "wire_api": {
-@@ -2952,8 +2909,8 @@
+@@ -3016,8 +2973,8 @@
        "properties": {
          "default_wait_timeout_ms": {
            "format": "int64",
@@ -1907,7 +1945,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
            "type": "integer"
          },
          "disable_direct_message": {
-@@ -2968,7 +2925,7 @@
+@@ -3032,7 +2989,7 @@
            "type": "boolean"
          },
          "expose_spawn_agent_model_overrides": {
@@ -1916,7 +1954,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
            "type": "boolean"
          },
          "hide_spawn_agent_metadata": {
-@@ -2976,13 +2933,13 @@
+@@ -3040,13 +2997,13 @@
          },
          "max_concurrent_threads_per_session": {
            "format": "uint",
@@ -1933,7 +1971,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
            "type": "integer"
          },
          "message_board_in_memory": {
-@@ -2999,8 +2956,8 @@
+@@ -3063,8 +3020,8 @@
          },
          "min_wait_timeout_ms": {
            "format": "int64",
@@ -1944,16 +1982,16 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
            "type": "integer"
          },
          "multi_agent_mode_hint_text": {
-@@ -3010,7 +2967,7 @@
+@@ -3074,7 +3031,7 @@
            "type": "boolean"
          },
          "preserve_fork_prefix": {
--          "description": "Preserve the parent's model-visible history on full forks and append child instructions. Defaults to false. Legacy compaction without a reusable context baseline still rebuilds.",
-+          "description": "Preserve the parent's model-visible history on full forks and append child instructions.\nDefaults to false. Legacy compaction without a reusable context baseline still rebuilds.",
+-          "description": "Preserve the parent's model-visible history on full forks and append child instructions. Defaults to true. Legacy compaction without a reusable context baseline still rebuilds.",
++          "description": "Preserve the parent's model-visible history on full forks and append child instructions.\nDefaults to true. Legacy compaction without a reusable context baseline still rebuilds.",
            "type": "boolean"
          },
          "root_agent_usage_hint_text": {
-@@ -3051,6 +3008,9 @@
+@@ -3115,6 +3072,9 @@
        "type": "string"
      },
      "NetworkDomainPermissionsToml": {
@@ -1963,7 +2001,28 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
        "type": "object"
      },
      "NetworkMitmActionToml": {
-@@ -3176,7 +3136,7 @@
+@@ -3176,7 +3136,8 @@
+           "default": [],
+           "items": {
+             "format": "uint16",
+-            "minimum": 0.0,
++            "maximum": 65535,
++            "minimum": 0,
+             "type": "integer"
+           },
+           "type": "array"
+@@ -3251,8 +3212,8 @@
+         "version": {
+           "description": "Set to 2 when using origin-scoped hooks or credential substitution.",
+           "format": "uint8",
+-          "maximum": 2.0,
+-          "minimum": 2.0,
++          "maximum": 2,
++          "minimum": 2,
+           "type": "integer"
+         }
+       },
+@@ -3269,7 +3230,7 @@
        "additionalProperties": false,
        "properties": {
          "allow_local_binding": {
@@ -1972,7 +2031,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
            "type": "boolean"
          },
          "allow_upstream_proxy": {
-@@ -3255,7 +3215,7 @@
+@@ -3348,7 +3309,7 @@
        "additionalProperties": false,
        "properties": {
          "allow_local_binding": {
@@ -1981,7 +2040,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
            "type": "boolean"
          },
          "allow_upstream_proxy": {
-@@ -3305,6 +3265,9 @@
+@@ -3398,6 +3359,9 @@
        "type": "string"
      },
      "NetworkUnixSocketPermissionsToml": {
@@ -1991,7 +2050,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
        "type": "object"
      },
      "NonPrefixedMcpToolNamesConfigToml": {
-@@ -3382,17 +3345,13 @@
+@@ -3475,17 +3439,13 @@
      "NotificationCondition": {
        "oneOf": [
          {
@@ -2011,7 +2070,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
            "type": "string"
          }
        ]
-@@ -3422,24 +3381,18 @@
+@@ -3515,24 +3475,18 @@
        "description": "Determine where Codex should store and read MCP credentials.",
        "oneOf": [
          {
@@ -2041,7 +2100,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
            "type": "string"
          }
        ]
-@@ -3479,11 +3432,11 @@
+@@ -3572,11 +3526,11 @@
            "description": "Optional log exporter"
          },
          "log_agent_responses": {
@@ -2055,7 +2114,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
            "type": "boolean"
          },
          "log_user_prompt": {
-@@ -3496,7 +3449,7 @@
+@@ -3589,7 +3543,7 @@
                "$ref": "#/definitions/OtelExporterKind"
              }
            ],
@@ -2064,7 +2123,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
          },
          "span_attributes": {
            "additionalProperties": {
-@@ -3628,17 +3581,13 @@
+@@ -3721,17 +3675,13 @@
      "OtelHttpProtocol": {
        "oneOf": [
          {
@@ -2084,7 +2143,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
            "type": "string"
          }
        ]
-@@ -3680,6 +3629,9 @@
+@@ -3773,6 +3723,9 @@
        "type": "object"
      },
      "PermissionsToml": {
@@ -2094,7 +2153,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
        "type": "object"
      },
      "Personality": {
-@@ -3695,7 +3647,7 @@
+@@ -3788,7 +3741,7 @@
        "additionalProperties": false,
        "properties": {
          "auto_provision": {
@@ -2103,7 +2162,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
            "type": "boolean"
          },
          "enabled": {
-@@ -3710,11 +3662,11 @@
+@@ -3803,11 +3756,11 @@
            "type": "object"
          },
          "release_id": {
@@ -2117,7 +2176,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
            "type": "string"
          }
        },
-@@ -3722,7 +3674,7 @@
+@@ -3815,7 +3768,7 @@
      },
      "PluginMcpServerConfig": {
        "additionalProperties": false,
@@ -2126,7 +2185,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
        "properties": {
          "default_tools_approval_mode": {
            "allOf": [
-@@ -3773,7 +3725,7 @@
+@@ -3866,7 +3819,7 @@
                "$ref": "#/definitions/PluginsDefaultConfig"
              }
            ],
@@ -2135,7 +2194,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
          }
        },
        "type": "object"
-@@ -3834,7 +3786,7 @@
+@@ -3927,7 +3880,7 @@
      },
      "RawMcpServerConfig": {
        "additionalProperties": false,
@@ -2144,7 +2203,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
        "properties": {
          "args": {
            "default": null,
-@@ -3972,7 +3924,7 @@
+@@ -4065,7 +4018,7 @@
          "startup_timeout_ms": {
            "default": null,
            "format": "uint64",
@@ -2153,7 +2212,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
            "type": "integer"
          },
          "startup_timeout_sec": {
-@@ -3986,9 +3938,9 @@
+@@ -4079,9 +4032,9 @@
          },
          "tool_input_schema_max_bytes": {
            "default": null,
@@ -2165,7 +2224,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
            "type": "integer"
          },
          "tool_timeout_sec": {
-@@ -4115,7 +4067,7 @@
+@@ -4208,7 +4161,7 @@
        "type": "string"
      },
      "ReasoningSummary": {
@@ -2174,7 +2233,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
        "oneOf": [
          {
            "enum": [
-@@ -4126,10 +4078,8 @@
+@@ -4219,10 +4172,8 @@
            "type": "string"
          },
          {
@@ -2186,7 +2245,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
            "type": "string"
          }
        ]
-@@ -4138,17 +4088,13 @@
+@@ -4231,17 +4182,13 @@
        "description": "Remote context-compaction protocols supported by a model provider.",
        "oneOf": [
          {
@@ -2206,7 +2265,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
            "type": "string"
          }
        ]
-@@ -4178,17 +4124,13 @@
+@@ -4271,17 +4218,13 @@
        "description": "Working directory to use when resuming or forking a session.",
        "oneOf": [
          {
@@ -2226,7 +2285,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
            "type": "string"
          }
        ]
-@@ -4197,24 +4139,18 @@
+@@ -4290,24 +4233,18 @@
        "description": "Right-click text paste when the fullscreen TUI has no selection.",
        "oneOf": [
          {
@@ -2254,7 +2313,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
            "type": "string"
          }
        ]
-@@ -4227,7 +4163,7 @@
+@@ -4320,7 +4257,7 @@
          },
          "limit_tokens": {
            "format": "int64",
@@ -2263,7 +2322,27 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
            "type": "integer"
          },
          "prefill_token_weight": {
-@@ -4293,7 +4229,7 @@
+@@ -4359,17 +4296,13 @@
+     "RuntimeAuthMode": {
+       "oneOf": [
+         {
++          "const": "dual_header",
+           "description": "Send the actor credential and a runtime assertion together during migration.",
+-          "enum": [
+-            "dual_header"
+-          ],
+           "type": "string"
+         },
+         {
++          "const": "assertion_only",
+           "description": "Send only the runtime assertion as the request credential.",
+-          "enum": [
+-            "assertion_only"
+-          ],
+           "type": "string"
+         }
+       ]
+@@ -4416,7 +4349,7 @@
        "type": "string"
      },
      "ShellEnvironmentPolicyFilter": {
@@ -2272,7 +2351,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
        "enum": [
          "include",
          "exclude"
-@@ -4303,24 +4239,18 @@
+@@ -4426,24 +4359,18 @@
      "ShellEnvironmentPolicyInherit": {
        "oneOf": [
          {
@@ -2301,7 +2380,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
            "type": "string"
          }
        ]
-@@ -4361,7 +4291,7 @@
+@@ -4484,7 +4411,7 @@
            "additionalProperties": {
              "$ref": "#/definitions/ShellEnvironmentPolicyFilter"
            },
@@ -2310,7 +2389,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
            "type": "object"
          },
          "ignore_default_excludes": {
-@@ -4427,9 +4357,9 @@
+@@ -4550,9 +4477,9 @@
            "type": "boolean"
          },
          "max_context_tokens": {
@@ -2322,7 +2401,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
            "type": "integer"
          }
        },
-@@ -4451,17 +4381,13 @@
+@@ -4574,17 +4501,13 @@
        "description": "How the sleep tool is selected when its feature gate is enabled.",
        "oneOf": [
          {
@@ -2342,7 +2421,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
            "type": "string"
          }
        ]
-@@ -4471,9 +4397,7 @@
+@@ -4594,9 +4517,7 @@
          {
            "properties": {
              "type": {
@@ -2353,7 +2432,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
                "type": "string"
              }
            },
-@@ -4490,7 +4414,7 @@
+@@ -4613,7 +4534,7 @@
          "auto_compact_fallback_buffer_tokens": {
            "description": "Additional tokens available after the compaction threshold for fallback note-taking.",
            "format": "int64",
@@ -2362,7 +2441,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
            "type": "integer"
          },
          "auto_compact_fallback_prompt": {
-@@ -4507,7 +4431,7 @@
+@@ -4630,7 +4551,7 @@
            "type": "string"
          },
          "reminder_message_template": {
@@ -2371,7 +2450,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
            "maxLength": 2000,
            "minLength": 1,
            "type": "string"
-@@ -4515,7 +4439,7 @@
+@@ -4638,7 +4559,7 @@
          "reminder_threshold_tokens": {
            "description": "Number of tokens remaining before auto-compaction when the wrap-up reminder is emitted.",
            "format": "int64",
@@ -2380,7 +2459,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
            "type": "integer"
          },
          "use_history_notes_extension": {
-@@ -4529,24 +4453,18 @@
+@@ -4652,24 +4573,18 @@
        "description": "A model-facing surface on which a tool can be exposed.",
        "oneOf": [
          {
@@ -2408,7 +2487,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
            "type": "string"
          }
        ]
-@@ -4566,13 +4484,13 @@
+@@ -4689,13 +4604,13 @@
        "type": "object"
      },
      "ToolResultLogConfig": {
@@ -2424,7 +2503,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
            "type": "integer"
          }
        },
-@@ -4661,23 +4579,19 @@
+@@ -4784,23 +4699,19 @@
        "description": "Transcript encoding shared by rendering, provenance instructions and budget recovery.",
        "oneOf": [
          {
@@ -2451,7 +2530,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
        "enum": [
          "trusted",
          "untrusted"
-@@ -4704,16 +4618,16 @@
+@@ -4827,16 +4738,16 @@
              }
            ],
            "default": "auto",
@@ -2471,7 +2550,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
            "type": "boolean"
          },
          "copy_on_select": {
-@@ -4723,15 +4637,15 @@
+@@ -4846,15 +4757,15 @@
              }
            ],
            "default": "auto",
@@ -2490,7 +2569,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
            "type": "boolean"
          },
          "effects": {
-@@ -4752,7 +4666,7 @@
+@@ -4875,7 +4786,7 @@
          },
          "fullscreen_transcript": {
            "default": true,
@@ -2499,7 +2578,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
            "type": "boolean"
          },
          "keymap": {
-@@ -4836,6 +4750,7 @@
+@@ -4959,6 +4870,7 @@
                "open_transcript": null,
                "queue": null,
                "submit": null,
@@ -2507,7 +2586,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
                "toggle_fast_mode": null,
                "toggle_raw_output": null,
                "toggle_shortcuts": null,
-@@ -4945,7 +4860,7 @@
+@@ -5068,7 +4980,7 @@
                "word": null
              }
            },
@@ -2516,7 +2595,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
          },
          "model_availability_nux": {
            "allOf": [
-@@ -4958,7 +4873,7 @@
+@@ -5081,7 +4993,7 @@
          },
          "mouse_scroll_speed": {
            "default": null,
@@ -2525,7 +2604,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
            "exclusiveMinimum": 0.0,
            "format": "double",
            "type": "number"
-@@ -4970,7 +4885,7 @@
+@@ -5093,7 +5005,7 @@
              }
            ],
            "default": "unfocused",
@@ -2534,7 +2613,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
          },
          "notification_method": {
            "allOf": [
-@@ -4979,7 +4894,7 @@
+@@ -5102,7 +5014,7 @@
              }
            ],
            "default": "auto",
@@ -2543,7 +2622,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
          },
          "notifications": {
            "allOf": [
-@@ -4988,7 +4903,7 @@
+@@ -5111,7 +5023,7 @@
              }
            ],
            "default": true,
@@ -2552,7 +2631,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
          },
          "pet": {
            "default": null,
-@@ -5019,7 +4934,7 @@
+@@ -5142,7 +5054,7 @@
          },
          "raw_output_mode": {
            "default": false,
@@ -2561,7 +2640,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
            "type": "boolean"
          },
          "rendering": {
-@@ -5043,7 +4958,7 @@
+@@ -5166,7 +5078,7 @@
              }
            ],
            "default": null,
@@ -2570,7 +2649,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
          },
          "right_click_paste": {
            "allOf": [
-@@ -5052,7 +4967,7 @@
+@@ -5175,7 +5087,7 @@
              }
            ],
            "default": "auto",
@@ -2579,7 +2658,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
          },
          "screen_reader_detection_done": {
            "description": "Records the one-time screen-reader detection attempt. Either value skips detection.",
-@@ -5069,17 +4984,17 @@
+@@ -5192,17 +5104,17 @@
          },
          "show_server_version_notice": {
            "default": true,
@@ -2600,7 +2679,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
            "items": {
              "type": "string"
            },
-@@ -5087,19 +5002,19 @@
+@@ -5210,19 +5122,19 @@
          },
          "status_line_use_colors": {
            "default": true,
@@ -2624,7 +2703,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
            "items": {
              "type": "string"
            },
-@@ -5107,12 +5022,12 @@
+@@ -5230,12 +5142,12 @@
          },
          "theme": {
            "default": null,
@@ -2639,7 +2718,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
            "type": "boolean"
          }
        },
-@@ -5698,6 +5613,14 @@
+@@ -5821,6 +5733,14 @@
            ],
            "description": "Submit the current composer draft."
          },
@@ -2654,7 +2733,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
          "toggle_fast_mode": {
            "allOf": [
              {
-@@ -5743,7 +5666,7 @@
+@@ -5866,7 +5786,7 @@
      },
      "TuiKeymap": {
        "additionalProperties": false,
@@ -2663,7 +2742,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
        "properties": {
          "agents": {
            "allOf": [
-@@ -5860,6 +5783,7 @@
+@@ -5983,6 +5903,7 @@
              "open_transcript": null,
              "queue": null,
              "submit": null,
@@ -2671,7 +2750,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
              "toggle_fast_mode": null,
              "toggle_raw_output": null,
              "toggle_shortcuts": null,
-@@ -6199,17 +6123,13 @@
+@@ -6322,17 +6243,13 @@
      "TuiPetAnchor": {
        "oneOf": [
          {
@@ -2691,7 +2770,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
            "type": "string"
          }
        ]
-@@ -6243,7 +6163,7 @@
+@@ -6366,7 +6283,7 @@
      },
      "TuiVimNormalKeymap": {
        "additionalProperties": false,
@@ -2700,7 +2779,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
        "properties": {
          "append_after_cursor": {
            "allOf": [
-@@ -6538,7 +6458,7 @@
+@@ -6661,7 +6578,7 @@
      },
      "TuiVimOperatorKeymap": {
        "additionalProperties": false,
@@ -2709,7 +2788,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
        "properties": {
          "cancel": {
            "allOf": [
-@@ -6843,16 +6763,14 @@
+@@ -6966,16 +6883,14 @@
            "type": "string"
          },
          {
@@ -2728,7 +2807,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
        "enum": [
          "low",
          "medium",
-@@ -6938,15 +6856,30 @@
+@@ -7061,15 +6976,30 @@
        "description": "Wire protocol that the provider speaks.",
        "oneOf": [
          {
@@ -2761,7 +2840,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
        "type": "object"
      }
    },
-@@ -6961,11 +6894,11 @@
+@@ -7084,11 +7014,11 @@
        "description": "Agent-related settings (thread limits, etc.)."
      },
      "allow_login_shell": {
@@ -2775,7 +2854,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
        "type": "boolean"
      },
      "analytics": {
-@@ -6974,7 +6907,7 @@
+@@ -7097,7 +7027,7 @@
            "$ref": "#/definitions/AnalyticsConfigToml"
          }
        ],
@@ -2784,7 +2863,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
      },
      "approval_policy": {
        "allOf": [
-@@ -6990,7 +6923,7 @@
+@@ -7113,7 +7043,7 @@
            "$ref": "#/definitions/ApprovalsReviewer"
          }
        ],
@@ -2793,7 +2872,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
      },
      "apps": {
        "allOf": [
-@@ -7024,9 +6957,9 @@
+@@ -7147,9 +7077,9 @@
        "description": "Optional policy instructions for the guardian auto-reviewer."
      },
      "background_terminal_max_timeout": {
@@ -2805,7 +2884,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
        "type": "integer"
      },
      "browser_use": {
-@@ -7037,7 +6970,7 @@
+@@ -7160,7 +7090,7 @@
        "type": "string"
      },
      "check_for_update_on_startup": {
@@ -2814,7 +2893,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
        "type": "boolean"
      },
      "cli_auth_credentials_store": {
-@@ -7047,7 +6980,7 @@
+@@ -7170,7 +7100,7 @@
          }
        ],
        "default": null,
@@ -2823,7 +2902,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
      },
      "cloud": {
        "allOf": [
-@@ -7069,7 +7002,7 @@
+@@ -7192,7 +7122,7 @@
        "type": "boolean"
      },
      "default_permissions": {
@@ -2832,7 +2911,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
        "type": "string"
      },
      "desktop": {
-@@ -7091,27 +7024,27 @@
+@@ -7214,27 +7144,27 @@
        "$ref": "#/definitions/AbsolutePathBuf"
      },
      "experimental_realtime_start_instructions": {
@@ -2866,7 +2945,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
        "type": "string"
      },
      "experimental_thread_store": {
-@@ -7197,6 +7130,9 @@
+@@ -7323,6 +7253,9 @@
          "browser_use_full_cdp_access": {
            "type": "boolean"
          },
@@ -2876,7 +2955,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
          "chronicle": {
            "type": "boolean"
          },
-@@ -7716,7 +7652,7 @@
+@@ -7851,7 +7784,7 @@
            "$ref": "#/definitions/FeedbackConfigToml"
          }
        ],
@@ -2885,7 +2964,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
      },
      "file_opener": {
        "allOf": [
-@@ -7724,7 +7660,7 @@
+@@ -7859,7 +7792,7 @@
            "$ref": "#/definitions/UriBasedFileOpener"
          }
        ],
@@ -2894,7 +2973,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
      },
      "forced_chatgpt_workspace_id": {
        "allOf": [
-@@ -7751,7 +7687,7 @@
+@@ -7886,7 +7819,7 @@
          }
        ],
        "default": null,
@@ -2903,7 +2982,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
      },
      "goals": {
        "allOf": [
-@@ -7763,7 +7699,7 @@
+@@ -7898,7 +7831,7 @@
      },
      "hide_agent_reasoning": {
        "default": false,
@@ -2912,16 +2991,16 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
        "type": "boolean"
      },
      "history": {
-@@ -7816,7 +7752,7 @@
+@@ -7951,7 +7884,7 @@
            "$ref": "#/definitions/AbsolutePathBuf"
          }
        ],
--      "description": "Directory where Codex writes log files. Setting this value explicitly also enables the TUI text log in this directory. Defaults to `$CODEX_HOME/log`."
-+      "description": "Directory where Codex writes log files. Setting this value explicitly\nalso enables the TUI text log in this directory.\nDefaults to `$CODEX_HOME/log`."
+-      "description": "Directory for log files. Setting this value explicitly also routes the SQLite logs database here and enables the TUI text log in this directory. When unset, log files use `$CODEX_HOME/log` and SQLite logs use `sqlite_home`. Existing SQLite logs in `sqlite_home` are not migrated automatically. A managed `sqlite_home` requirement keeps SQLite logs in that required directory."
++      "description": "Directory for log files. Setting this value explicitly also routes the\nSQLite logs database here and enables the TUI text log in this directory.\nWhen unset, log files use `$CODEX_HOME/log` and SQLite logs use `sqlite_home`.\nExisting SQLite logs in `sqlite_home` are not migrated automatically.\nA managed `sqlite_home` requirement keeps SQLite logs in that required directory."
      },
      "marketplaces": {
        "additionalProperties": {
-@@ -7836,13 +7772,14 @@
+@@ -7971,13 +7904,14 @@
        "description": "Trusted enterprise IdP shared by EMA-enabled MCP servers and plugins."
      },
      "mcp_oauth_callback_port": {
@@ -2939,7 +3018,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
        "type": "string"
      },
      "mcp_oauth_credentials_store": {
-@@ -7852,12 +7789,12 @@
+@@ -7987,12 +7921,12 @@
          }
        ],
        "default": null,
@@ -2955,7 +3034,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
        "type": "integer"
      },
      "mcp_servers": {
-@@ -7891,7 +7828,7 @@
+@@ -8026,7 +7960,7 @@
            "$ref": "#/definitions/AutoCompactTokenLimitScope"
          }
        ],
@@ -2964,7 +3043,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
      },
      "model_catalog_json": {
        "allOf": [
-@@ -7899,7 +7836,7 @@
+@@ -8034,7 +7968,7 @@
            "$ref": "#/definitions/AbsolutePathBuf"
          }
        ],
@@ -2973,7 +3052,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
      },
      "model_context_window": {
        "description": "Size of the context window for the model, in tokens.",
-@@ -7912,13 +7849,13 @@
+@@ -8047,13 +7981,13 @@
            "$ref": "#/definitions/AbsolutePathBuf"
          }
        ],
@@ -2991,7 +3070,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
        "type": "integer"
      },
      "model_provider": {
-@@ -7930,7 +7867,7 @@
+@@ -8065,7 +7999,7 @@
          "$ref": "#/definitions/ModelProviderInfo"
        },
        "default": {},
@@ -3000,7 +3079,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
        "type": "object"
      },
      "model_reasoning_effort": {
-@@ -7953,7 +7890,7 @@
+@@ -8088,7 +8022,7 @@
            "$ref": "#/definitions/Notice"
          }
        ],
@@ -3009,7 +3088,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
      },
      "notify": {
        "default": null,
-@@ -8040,12 +7977,12 @@
+@@ -8175,12 +8109,12 @@
        "default": 32768,
        "description": "Maximum total bytes of project instruction content across all selected environments.",
        "format": "uint",
@@ -3024,7 +3103,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
        "items": {
          "type": "string"
        },
-@@ -8064,7 +8001,7 @@
+@@ -8199,7 +8133,7 @@
          }
        ],
        "default": null,
@@ -3033,7 +3112,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
      },
      "responses_api_metadata": {
        "additionalProperties": {
-@@ -8094,7 +8031,7 @@
+@@ -8229,7 +8163,7 @@
        "description": "Sandbox configuration to apply if `sandbox` is `WorkspaceWrite`."
      },
      "service_tier": {
@@ -3042,7 +3121,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
        "type": "string"
      },
      "shell_environment_policy": {
-@@ -8114,7 +8051,7 @@
+@@ -8249,7 +8183,7 @@
        }
      },
      "show_raw_agent_reasoning": {
@@ -3051,7 +3130,7 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
        "type": "boolean"
      },
      "skills": {
-@@ -8131,22 +8068,22 @@
+@@ -8266,22 +8200,22 @@
            "$ref": "#/definitions/AbsolutePathBuf"
          }
        ],
@@ -3063,8 +3142,8 @@ index 80c0539b5bbc9c88c7c08ddb0d481f32297a5b46..5413220b6f31e7ba4d84ccb743ecd711
        "type": "boolean"
      },
      "thread_unload_delay_secs": {
--      "description": "Seconds a thread must have no subscribers and no activity before app-server unloads it. Defaults to 1800 (30 minutes); zero unloads immediately. Changes require a server restart.",
-+      "description": "Seconds a thread must have no subscribers and no activity before app-server\nunloads it. Defaults to 1800 (30 minutes); zero unloads immediately.\nChanges require a server restart.",
+-      "description": "Seconds a thread must have no subscribers and no activity before app-server unloads it. Defaults to 1800 (30 minutes); zero unloads immediately. Resolved when each thread is loaded; request config overrides apply per thread.",
++      "description": "Seconds a thread must have no subscribers and no activity before app-server\nunloads it. Defaults to 1800 (30 minutes); zero unloads immediately.\nResolved when each thread is loaded; request config overrides apply per thread.",
        "format": "uint64",
 -      "minimum": 0.0,
 +      "minimum": 0,
@@ -3160,10 +3239,10 @@ index 87ffe6dc8bea4d093822a8c1e868df477490e669..784954cd0130319ab371e3fd9feaab26
  #[strum(serialize_all = "camelCase")]
  pub enum MultiAgentMode {
 diff --git a/codex-rs/rmcp-client/src/enterprise_oauth_logout_tests.rs b/codex-rs/rmcp-client/src/enterprise_oauth_logout_tests.rs
-index 3916c01b418510969976527c3656e5c2974c8c09..a18fa78030fd241a6f88ba56fee3236b38110058 100644
+index 4f88d2702836472e43cebfd17dd21728ceb12df5..e95b92875e6bf9aeb276307803ac7a6ce811eb31 100644
 --- a/codex-rs/rmcp-client/src/enterprise_oauth_logout_tests.rs
 +++ b/codex-rs/rmcp-client/src/enterprise_oauth_logout_tests.rs
-@@ -375,7 +375,7 @@ impl CredentialBuilderApi for FileKeyring {
+@@ -386,7 +386,7 @@ impl CredentialBuilderApi for FileKeyring {
          _service: &str,
          user: &str,
      ) -> keyring::Result<Box<Credential>> {
@@ -3198,6 +3277,44 @@ index bca03e34f7cfa95bfeeb37779b75cf34f9476231..9351cae6bcec1ee9b54f783fb7d61424
              ))
          });
      }
+diff --git a/codex-rs/tui/src/app/snapshots/codex_tui__app__thread_title__tests__automatic_thread_title_pending.snap b/codex-rs/tui/src/app/snapshots/codex_tui__app__thread_title__tests__automatic_thread_title_pending.snap
+index be3bc665c5f12e081b51ed03421ef6c9ae27b180..2680425c4cc1cf2b54674d5a6d2fecd2613dbb96 100644
+--- a/codex-rs/tui/src/app/snapshots/codex_tui__app__thread_title__tests__automatic_thread_title_pending.snap
++++ b/codex-rs/tui/src/app/snapshots/codex_tui__app__thread_title__tests__automatic_thread_title_pending.snap
+@@ -5,6 +5,6 @@ expression: "normalize_snapshot_paths(format!(\"terminal title: {}\\nfooter:\\n{
+ ---
+ terminal title: project
+ footer:
+-› Ask Codex to do anything
++› Ask Nyacode to do anything
+ 
+   gpt-5.2 default · /tmp/project
+diff --git a/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__session_lifecycle_requests__new_session_tests__widget_replacement_preserves_mention_usage_with_history_disabled.snap b/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__session_lifecycle_requests__new_session_tests__widget_replacement_preserves_mention_usage_with_history_disabled.snap
+index 6a47bf2b72c15db36e55aa7f626b9ad94828bbbd..11bf0dffed909ae477e3bfa5407c3d173e6770c7 100644
+--- a/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__session_lifecycle_requests__new_session_tests__widget_replacement_preserves_mention_usage_with_history_disabled.snap
++++ b/codex-rs/tui/src/app/tests/snapshots/codex_tui__app__tests__session_lifecycle_requests__new_session_tests__widget_replacement_preserves_mention_usage_with_history_disabled.snap
+@@ -2,7 +2,7 @@
+ source: tui/src/app/tests/new_session_tests.rs
+ expression: "normalize_snapshot_paths(render_bottom_popup(&app.chat_widget, 80))"
+ ---
+-  >_ OpenAI Codex (v0.0.0)
++  >_ Nyacode (v0.1.0)
+      /tmp/project
+ 
+ 
+diff --git a/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__hooks_browser_view__tests__hooks_browser_model_requests.snap b/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__hooks_browser_view__tests__hooks_browser_model_requests.snap
+index ee8751bf865a291476c04ad40f5721deac0cd220..0a63c2c6a28009133c3981722df44ce9037b9645 100644
+--- a/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__hooks_browser_view__tests__hooks_browser_model_requests.snap
++++ b/codex-rs/tui/src/bottom_pane/snapshots/codex_tui__bottom_pane__hooks_browser_view__tests__hooks_browser_model_requests.snap
+@@ -12,7 +12,7 @@ expression: "render_lines(&view, 112)"
+   UserPromptSubmit      0           0           When the user submits a prompt                                  
+   SubagentStart         0           0           When a subagent is created                                      
+   SubagentStop          0           0           Right before a subagent ends its turn                           
+-  Stop                  0           0           Right before Codex ends its turn                                
++  Stop                  0           0           Right before Nyacode ends its turn                              
+   Interrupt             0           0           Right before an interrupted turn is aborted                     
+   PreModelRequest       0           0           Before a model request                                          
+ › PostModelRequest      0           0           After a model request, including failures                       
 diff --git a/codex-rs/tui/src/onboarding/auth.rs b/codex-rs/tui/src/onboarding/auth.rs
 index 2cdc98ca68e47667e84864cbefab3664bffa842f..af0f3907494b699240398ffc094601895c194446 100644
 --- a/codex-rs/tui/src/onboarding/auth.rs
@@ -3275,10 +3392,10 @@ index 2cdc98ca68e47667e84864cbefab3664bffa842f..af0f3907494b699240398ffc09460189
  
            Included with your ChatGPT plan
 diff --git a/codex-rs/tui/src/onboarding/bedrock.rs b/codex-rs/tui/src/onboarding/bedrock.rs
-index d1ea4d24640c3d681efe1f2737bc525a85ab2616..7e9454c1faaf4b5ce9d1742e525188cad0fb3e03 100644
+index 16c6f911292b848d4b05af1b74cb777037edd04e..0aa25ce3ef4c2b5e3abf57a3329abe798390d3d8 100644
 --- a/codex-rs/tui/src/onboarding/bedrock.rs
 +++ b/codex-rs/tui/src/onboarding/bedrock.rs
-@@ -379,9 +379,9 @@ impl BedrockState {
+@@ -372,9 +372,9 @@ impl BedrockState {
          let mut footer = Vec::new();
          match &self.view {
              BedrockView::GovCloudWarning(_) => {
@@ -3290,7 +3407,7 @@ index d1ea4d24640c3d681efe1f2737bc525a85ab2616..7e9454c1faaf4b5ce9d1742e525188ca
                      "application configuration and security guidance"
                          .cyan()
                          .underlined(),
-@@ -483,7 +483,7 @@ impl BedrockState {
+@@ -476,7 +476,7 @@ impl BedrockState {
              }
              BedrockView::EnvironmentInstructions => {
                  lines.push(
@@ -3300,7 +3417,7 @@ index d1ea4d24640c3d681efe1f2737bc525a85ab2616..7e9454c1faaf4b5ce9d1742e525188ca
                  lines.push("".into());
                  lines.push(Line::from(vec![
 diff --git a/codex-rs/tui/src/onboarding/bedrock_tests.rs b/codex-rs/tui/src/onboarding/bedrock_tests.rs
-index 8f9f240587ac2e3a840308041cf35d81aa94393e..b66de9df57f4574b1067e98685ce393e538f1413 100644
+index 7292b90b7f7c14ac66a7833e44d686ca9c55f6ca..baf1504185fdcdf919b98743341b8eeea1ef286e 100644
 --- a/codex-rs/tui/src/onboarding/bedrock_tests.rs
 +++ b/codex-rs/tui/src/onboarding/bedrock_tests.rs
 @@ -43,14 +43,14 @@ fn gov_cloud_guidance_scrolls_in_short_panes() {
@@ -3320,7 +3437,7 @@ index 8f9f240587ac2e3a840308041cf35d81aa94393e..b66de9df57f4574b1067e98685ce393e
      }
      assert_eq!(render_visible_at(&state, area), initial);
      state.handle_guidance_key_event(&KeyEvent::new(KeyCode::Down, KeyModifiers::NONE));
-@@ -514,7 +514,7 @@ fn credential_entries_share_region_and_keep_aws_secrets_hidden() {
+@@ -503,7 +503,7 @@ fn credential_entries_share_region_and_keep_aws_secrets_hidden() {
      insta::assert_snapshot!(render_visible(&access_keys), @r###"
      > Set up Amazon Bedrock
  

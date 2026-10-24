@@ -1,8 +1,8 @@
 diff --git a/codex-rs/tui/src/bottom_pane/chat_composer.rs b/codex-rs/tui/src/bottom_pane/chat_composer.rs
-index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed406187077d5dfff4 100644
+index 90e854d12876d8bf2e0763e2253b5593aa77e4b9..64a4d55c653c06c8ae179306235ca84a6a72276a 100644
 --- a/codex-rs/tui/src/bottom_pane/chat_composer.rs
 +++ b/codex-rs/tui/src/bottom_pane/chat_composer.rs
-@@ -9,6 +9,9 @@
+@@ -11,6 +11,9 @@
  //! search, or blocking view. The app reads clipboard text asynchronously and delivers a normal
  //! paste only while the same thread, draft, and cursor remain eligible. Intervening input or focus
  //! loss cancels the pending paste; a late clipboard result cannot overwrite newer input.
@@ -13,8 +13,8 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
  //! Owned transcripts keep persistent status below the composer and hints on a separate final row.
  //! Shortcut help expands above the composer, with its close hint replacing the final shortcuts row
 @@ -26,6 +29,10 @@
- //! absorbed prefix.
- //! The plain-text preset keeps both prefixes literal, so Enter and Tab submit ordinary text.
+ //! The plain-text preset keeps command prefixes literal, including `!`, so Enter and Tab
+ //! submit ordinary text without enabling shell mode.
  //!
 +//! Native Chat uses its own `app::native_chat` controller and a separate `TextArea`.
 +//! This Codex composer only offers `/chat` and `/codex` when the development flag
@@ -23,7 +23,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
  //! # Mention Menus
  //!
  //! By default, `@` lists plugins, filesystem entries, and skills. Skills are hidden when their
-@@ -650,6 +657,7 @@ pub(crate) struct ChatComposer {
+@@ -652,6 +659,7 @@ pub(crate) struct ChatComposer {
      mentions_v2_enabled: bool,
      goal_command_enabled: bool,
      voice_command_enabled: bool,
@@ -31,7 +31,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
      worktrees_enabled: bool,
      windows_degraded_sandbox_active: bool,
      side_conversation_active: bool,
-@@ -823,6 +831,7 @@ impl ChatComposer {
+@@ -826,6 +834,7 @@ impl ChatComposer {
              mentions_v2_enabled: false,
              goal_command_enabled: false,
              voice_command_enabled: false,
@@ -39,7 +39,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              worktrees_enabled: false,
              windows_degraded_sandbox_active: false,
              side_conversation_active: false,
-@@ -1034,6 +1043,10 @@ impl ChatComposer {
+@@ -1037,6 +1046,10 @@ impl ChatComposer {
          self.update_slash_command_catalog(|composer| composer.goal_command_enabled = enabled);
      }
  
@@ -50,7 +50,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
      pub fn set_voice_command_enabled(&mut self, enabled: bool) {
          self.update_slash_command_catalog(|composer| composer.voice_command_enabled = enabled);
      }
-@@ -5072,7 +5085,7 @@ mod tests {
+@@ -5067,7 +5080,7 @@ mod tests {
                  /*has_input_focus*/ true,
                  sender,
                  /*enhanced_keys_supported*/ false,
@@ -59,7 +59,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
                  /*disable_paste_burst*/ false,
              ),
              rx,
-@@ -5119,7 +5132,7 @@ mod tests {
+@@ -5114,7 +5127,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -68,7 +68,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -5173,7 +5186,7 @@ mod tests {
+@@ -5168,7 +5181,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -77,7 +77,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
          composer.set_footer_hint_override(Some(vec![("K".to_string(), "label".to_string())]));
-@@ -5211,7 +5224,7 @@ mod tests {
+@@ -5206,7 +5219,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -86,7 +86,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
          composer.set_footer_hint_override(Some(vec![("K".to_string(), "label".to_string())]));
-@@ -5260,7 +5273,7 @@ mod tests {
+@@ -5255,7 +5268,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              enhanced_keys_supported,
@@ -95,7 +95,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
          setup(&mut composer);
-@@ -5435,7 +5448,7 @@ mod tests {
+@@ -5430,7 +5443,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ true,
@@ -104,7 +104,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
          let area = Rect::new(0, 0, 40, 5);
-@@ -5497,7 +5510,7 @@ mod tests {
+@@ -5452,7 +5465,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ true,
@@ -113,7 +113,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
          composer.set_status_line_enabled(/*enabled*/ true);
-@@ -5556,7 +5569,7 @@ mod tests {
+@@ -5511,7 +5524,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ true,
@@ -122,7 +122,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
          composer.set_text_content_with_mention_bindings(
-@@ -5584,7 +5597,7 @@ mod tests {
+@@ -5539,7 +5552,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ true,
@@ -131,7 +131,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
          composer.set_text_content_with_mention_bindings(
-@@ -5635,7 +5648,7 @@ mod tests {
+@@ -5590,7 +5603,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ true,
@@ -140,7 +140,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
          composer.set_text_content_with_mention_bindings(
-@@ -5671,7 +5684,7 @@ mod tests {
+@@ -5626,7 +5639,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ true,
@@ -149,7 +149,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
          let url = "https://github.com/openai/codex/pull/20252";
-@@ -5708,7 +5721,7 @@ mod tests {
+@@ -5663,7 +5676,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -158,7 +158,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -5765,7 +5778,7 @@ mod tests {
+@@ -5692,7 +5705,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -167,7 +167,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -6034,7 +6047,7 @@ mod tests {
+@@ -5961,7 +5974,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ true,
@@ -176,7 +176,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -6063,7 +6076,7 @@ mod tests {
+@@ -5990,7 +6003,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ true,
@@ -185,7 +185,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
          composer.set_vim_enabled(/*enabled*/ true);
-@@ -6126,7 +6139,7 @@ mod tests {
+@@ -6053,7 +6066,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ true,
@@ -194,7 +194,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ true,
          );
          composer.set_vim_enabled(/*enabled*/ true);
-@@ -6161,7 +6174,7 @@ mod tests {
+@@ -6085,7 +6098,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ true,
@@ -203,7 +203,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ true,
          );
          composer.set_vim_enabled(/*enabled*/ true);
-@@ -6198,7 +6211,7 @@ mod tests {
+@@ -6120,7 +6133,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ true,
@@ -212,7 +212,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ true,
          );
          composer.set_collaboration_modes_enabled(/*enabled*/ true);
-@@ -6244,7 +6257,7 @@ mod tests {
+@@ -6166,7 +6179,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ true,
@@ -221,7 +221,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ true,
          );
          composer.set_vim_enabled(/*enabled*/ true);
-@@ -6275,7 +6288,7 @@ mod tests {
+@@ -6197,7 +6210,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ true,
@@ -230,7 +230,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ true,
          );
          composer.set_vim_enabled(/*enabled*/ true);
-@@ -6300,7 +6313,7 @@ mod tests {
+@@ -6222,7 +6235,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -239,7 +239,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -6324,7 +6337,7 @@ mod tests {
+@@ -6246,7 +6259,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -248,7 +248,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -6350,7 +6363,7 @@ mod tests {
+@@ -6272,7 +6285,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -257,7 +257,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -6418,7 +6431,7 @@ mod tests {
+@@ -6340,7 +6353,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -266,7 +266,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -6451,7 +6464,7 @@ mod tests {
+@@ -6373,7 +6386,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ true,
@@ -275,7 +275,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
          composer.set_steer_enabled(/*enabled*/ true);
-@@ -6492,7 +6505,7 @@ mod tests {
+@@ -6414,7 +6427,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ true,
@@ -284,7 +284,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
          composer.set_steer_enabled(/*enabled*/ true);
-@@ -6526,7 +6539,7 @@ mod tests {
+@@ -6448,7 +6461,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ true,
@@ -293,7 +293,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
          composer.set_steer_enabled(/*enabled*/ true);
-@@ -6559,7 +6572,7 @@ mod tests {
+@@ -6479,7 +6492,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ true,
@@ -302,7 +302,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
          composer.set_vim_enabled(/*enabled*/ true);
-@@ -6599,7 +6612,7 @@ mod tests {
+@@ -6519,7 +6532,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ true,
@@ -311,7 +311,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
          let area = Rect::new(0, 0, 80, 10);
-@@ -6635,7 +6648,7 @@ mod tests {
+@@ -6555,7 +6568,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -320,7 +320,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -6681,7 +6694,7 @@ mod tests {
+@@ -6601,7 +6614,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -329,7 +329,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
          let remote_image_url = "https://example.com/one.png".to_string();
-@@ -6723,7 +6736,7 @@ mod tests {
+@@ -6643,7 +6656,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -338,7 +338,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -6766,7 +6779,7 @@ mod tests {
+@@ -6686,7 +6699,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -347,7 +347,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -6806,7 +6819,7 @@ mod tests {
+@@ -6726,7 +6739,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -356,7 +356,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
          composer.set_steer_enabled(true);
-@@ -6832,7 +6845,7 @@ mod tests {
+@@ -6752,7 +6765,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -365,7 +365,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -6862,7 +6875,7 @@ mod tests {
+@@ -6782,7 +6795,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -374,7 +374,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
          composer.set_connectors_enabled(/*enabled*/ true);
-@@ -6906,7 +6919,7 @@ mod tests {
+@@ -6826,7 +6839,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -383,7 +383,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
          composer.set_connectors_enabled(/*enabled*/ true);
-@@ -6946,7 +6959,7 @@ mod tests {
+@@ -6866,7 +6879,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -392,7 +392,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
          composer.set_text_content("$".to_string(), Vec::new(), Vec::new());
-@@ -7618,7 +7631,7 @@ mod tests {
+@@ -7573,7 +7586,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -401,7 +401,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
          composer.set_text_content("$".to_string(), Vec::new(), Vec::new());
-@@ -7627,7 +7640,7 @@ mod tests {
+@@ -7582,7 +7595,7 @@ mod tests {
          let skill_path = test_path_buf("/tmp/skill/SKILL.md").abs();
          composer.set_skill_mentions(Some(vec![SkillMetadata {
              name: "codex".to_string(),
@@ -410,7 +410,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              short_description: None,
              interface: None,
              dependencies: None,
-@@ -7656,7 +7669,7 @@ mod tests {
+@@ -7611,7 +7624,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -419,7 +419,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
          composer.set_connectors_enabled(/*enabled*/ true);
-@@ -8061,7 +8074,7 @@ mod tests {
+@@ -8016,7 +8029,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -428,7 +428,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
          composer.set_connectors_enabled(/*enabled*/ true);
-@@ -8101,7 +8114,7 @@ mod tests {
+@@ -8056,7 +8069,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -437,7 +437,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -8347,7 +8360,7 @@ mod tests {
+@@ -8302,7 +8315,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -446,7 +446,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -8374,7 +8387,7 @@ mod tests {
+@@ -8329,7 +8342,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -455,7 +455,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -8407,7 +8420,7 @@ mod tests {
+@@ -8362,7 +8375,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -464,7 +464,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -8450,7 +8463,7 @@ mod tests {
+@@ -8405,7 +8418,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -473,7 +473,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -8491,7 +8504,7 @@ mod tests {
+@@ -8446,7 +8459,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -482,7 +482,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -8535,7 +8548,7 @@ mod tests {
+@@ -8490,7 +8503,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -491,7 +491,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -8584,7 +8597,7 @@ mod tests {
+@@ -8539,7 +8552,7 @@ mod tests {
                  /*has_input_focus*/ true,
                  sender,
                  /*enhanced_keys_supported*/ false,
@@ -500,7 +500,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
                  /*disable_paste_burst*/ false,
              );
              composer.set_plugin_mentions(Some(vec![PluginCapabilitySummary {
-@@ -8637,7 +8650,7 @@ mod tests {
+@@ -8592,7 +8605,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -509,7 +509,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -8669,7 +8682,7 @@ mod tests {
+@@ -8624,7 +8637,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -518,7 +518,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
          composer.set_mentions_v2_enabled(/*enabled*/ true);
-@@ -8705,7 +8718,7 @@ mod tests {
+@@ -8660,7 +8673,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -527,7 +527,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -8736,7 +8749,7 @@ mod tests {
+@@ -8691,7 +8704,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -536,7 +536,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -8760,7 +8773,7 @@ mod tests {
+@@ -8715,7 +8728,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -545,7 +545,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -8794,7 +8807,7 @@ mod tests {
+@@ -8749,7 +8762,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -554,7 +554,16 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -8843,7 +8856,7 @@ mod tests {
+@@ -8798,7 +8811,7 @@ mod tests {
+             /*has_input_focus*/ true,
+             sender,
+             /*enhanced_keys_supported*/ false,
+-            "Ask Codex to do anything".to_string(),
++            "Ask Nyacode to do anything".to_string(),
+             /*disable_paste_burst*/ false,
+         );
+ 
+@@ -8886,7 +8899,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -572,7 +581,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -8976,7 +8989,7 @@ mod tests {
+@@ -8961,7 +8974,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -581,7 +590,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -9006,7 +9019,7 @@ mod tests {
+@@ -8997,7 +9010,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -590,7 +599,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -9042,7 +9055,7 @@ mod tests {
+@@ -9030,7 +9043,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -599,7 +608,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -9075,7 +9088,7 @@ mod tests {
+@@ -9061,7 +9074,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -608,7 +617,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -9106,7 +9119,7 @@ mod tests {
+@@ -9090,7 +9103,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -617,16 +626,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -9135,7 +9148,7 @@ mod tests {
-             /*has_input_focus*/ true,
-             sender,
-             /*enhanced_keys_supported*/ false,
--            "Ask Codex to do anything".to_string(),
-+            "Ask Nyacode to do anything".to_string(),
-             /*disable_paste_burst*/ false,
-         );
- 
-@@ -9169,7 +9182,7 @@ mod tests {
+@@ -9124,7 +9137,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -635,7 +635,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
          composer.set_steer_enabled(true);
-@@ -9197,7 +9210,7 @@ mod tests {
+@@ -9152,7 +9165,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -644,7 +644,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
          composer.set_steer_enabled(true);
-@@ -9239,7 +9252,7 @@ mod tests {
+@@ -9194,7 +9207,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -653,7 +653,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
          composer.set_steer_enabled(false);
-@@ -9284,7 +9297,7 @@ mod tests {
+@@ -9239,7 +9252,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -662,7 +662,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -9325,7 +9338,7 @@ mod tests {
+@@ -9280,7 +9293,7 @@ mod tests {
                  /*has_input_focus*/ true,
                  sender.clone(),
                  /*enhanced_keys_supported*/ false,
@@ -671,7 +671,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
                  /*disable_paste_burst*/ false,
              );
  
-@@ -9427,7 +9440,7 @@ mod tests {
+@@ -9382,7 +9395,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -680,7 +680,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -9464,7 +9477,7 @@ mod tests {
+@@ -9419,7 +9432,7 @@ mod tests {
                  /*has_input_focus*/ true,
                  sender,
                  /*enhanced_keys_supported*/ false,
@@ -689,7 +689,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
                  /*disable_paste_burst*/ false,
              );
              type_chars_humanlike(&mut composer, &input.chars().collect::<Vec<_>>());
-@@ -9490,7 +9503,7 @@ mod tests {
+@@ -9445,7 +9458,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -698,7 +698,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
          composer.set_service_tier_commands_enabled(/*enabled*/ true);
-@@ -9565,7 +9578,7 @@ mod tests {
+@@ -9520,7 +9533,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -707,7 +707,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -9617,7 +9630,7 @@ mod tests {
+@@ -9572,7 +9585,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -716,7 +716,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
          composer.set_steer_enabled(true);
-@@ -9651,7 +9664,7 @@ mod tests {
+@@ -9606,7 +9619,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -725,7 +725,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
          composer.draft.textarea.insert_str("restore me");
-@@ -9689,7 +9702,7 @@ mod tests {
+@@ -9644,7 +9657,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -734,7 +734,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
          composer.set_task_running(/*running*/ true);
-@@ -9733,7 +9746,7 @@ mod tests {
+@@ -9688,7 +9701,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -743,7 +743,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
          composer.set_queue_submissions(/*queue_submissions*/ true);
-@@ -9769,7 +9782,7 @@ mod tests {
+@@ -9724,7 +9737,7 @@ mod tests {
                  /*has_input_focus*/ true,
                  sender,
                  /*enhanced_keys_supported*/ false,
@@ -752,7 +752,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
                  /*disable_paste_burst*/ false,
              );
              composer.set_task_running(/*running*/ true);
-@@ -9818,7 +9831,7 @@ mod tests {
+@@ -9773,7 +9786,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -761,7 +761,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
          composer
-@@ -9854,7 +9867,7 @@ mod tests {
+@@ -9809,7 +9822,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -770,7 +770,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
          composer.set_task_running(/*running*/ true);
-@@ -9887,7 +9900,7 @@ mod tests {
+@@ -9842,7 +9855,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -779,7 +779,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
          let mut keymap = RuntimeKeymap::defaults();
-@@ -9913,7 +9926,7 @@ mod tests {
+@@ -9868,7 +9881,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -788,7 +788,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
          composer.set_task_running(/*running*/ true);
-@@ -9947,7 +9960,7 @@ mod tests {
+@@ -9902,7 +9915,7 @@ mod tests {
                  /*has_input_focus*/ true,
                  sender,
                  /*enhanced_keys_supported*/ false,
@@ -797,7 +797,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
                  /*disable_paste_burst*/ false,
              );
              composer.set_task_running(/*running*/ true);
-@@ -9993,7 +10006,7 @@ mod tests {
+@@ -9948,7 +9961,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -806,7 +806,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -10024,7 +10037,7 @@ mod tests {
+@@ -9976,7 +9989,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -815,7 +815,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
          composer.set_task_running(/*running*/ true);
-@@ -10056,7 +10069,7 @@ mod tests {
+@@ -10006,7 +10019,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -824,7 +824,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -10083,7 +10096,7 @@ mod tests {
+@@ -10031,7 +10044,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -833,7 +833,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -10129,7 +10142,7 @@ mod tests {
+@@ -10075,7 +10088,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -842,7 +842,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
          composer.set_collaboration_modes_enabled(/*enabled*/ true);
-@@ -10152,7 +10165,7 @@ mod tests {
+@@ -10097,7 +10110,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -851,7 +851,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
          composer.set_collaboration_modes_enabled(/*enabled*/ true);
-@@ -10191,7 +10204,7 @@ mod tests {
+@@ -10118,7 +10131,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -860,7 +860,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -10225,7 +10238,7 @@ mod tests {
+@@ -10150,7 +10163,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -869,7 +869,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -10253,7 +10266,7 @@ mod tests {
+@@ -10178,7 +10191,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -878,7 +878,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
          composer.set_task_running(/*running*/ false);
-@@ -10282,7 +10295,7 @@ mod tests {
+@@ -10207,7 +10220,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -887,7 +887,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -10309,7 +10322,7 @@ mod tests {
+@@ -10234,7 +10247,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -896,7 +896,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -10359,7 +10372,7 @@ mod tests {
+@@ -10284,7 +10297,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -905,7 +905,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
          composer.set_collaboration_modes_enabled(/*enabled*/ true);
-@@ -10397,7 +10410,7 @@ mod tests {
+@@ -10322,7 +10335,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -914,7 +914,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -10664,7 +10677,7 @@ mod tests {
+@@ -10589,7 +10602,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -923,7 +923,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -10743,7 +10756,7 @@ mod tests {
+@@ -10668,7 +10681,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -932,7 +932,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -10820,7 +10833,7 @@ mod tests {
+@@ -10745,7 +10758,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -941,7 +941,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -10862,7 +10875,7 @@ mod tests {
+@@ -10787,7 +10800,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -950,7 +950,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -10907,7 +10920,7 @@ mod tests {
+@@ -10832,7 +10845,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -959,7 +959,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -10944,7 +10957,7 @@ mod tests {
+@@ -10869,7 +10882,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -968,7 +968,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -10993,7 +11006,7 @@ mod tests {
+@@ -10918,7 +10931,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -977,7 +977,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
          let path = PathBuf::from("/tmp/image1.png");
-@@ -11031,7 +11044,7 @@ mod tests {
+@@ -10956,7 +10969,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -986,7 +986,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -11065,7 +11078,7 @@ mod tests {
+@@ -10990,7 +11003,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -995,7 +995,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
          let remote_image_url = "https://example.com/remote.png".to_string();
-@@ -11099,7 +11112,7 @@ mod tests {
+@@ -11024,7 +11037,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -1004,7 +1004,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
          let remote_image_urls = vec![
-@@ -11131,7 +11144,7 @@ mod tests {
+@@ -11056,7 +11069,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -1013,7 +1013,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -11186,7 +11199,7 @@ mod tests {
+@@ -11111,7 +11124,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -1022,7 +1022,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
          composer.set_text_content("hello".to_string(), Vec::new(), Vec::new());
-@@ -11218,7 +11231,7 @@ mod tests {
+@@ -11143,7 +11156,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -1031,7 +1031,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -11252,7 +11265,7 @@ mod tests {
+@@ -11177,7 +11190,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -1040,7 +1040,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -11287,7 +11300,7 @@ mod tests {
+@@ -11209,7 +11222,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -1049,7 +1049,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -11322,7 +11335,7 @@ mod tests {
+@@ -11244,7 +11257,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -1058,7 +1058,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -11347,7 +11360,7 @@ mod tests {
+@@ -11269,7 +11282,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -1067,7 +1067,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -11390,7 +11403,7 @@ mod tests {
+@@ -11312,7 +11325,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -1076,7 +1076,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -11433,7 +11446,7 @@ mod tests {
+@@ -11355,7 +11368,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -1085,7 +1085,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -11476,7 +11489,7 @@ mod tests {
+@@ -11398,7 +11411,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -1094,7 +1094,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -11527,7 +11540,7 @@ mod tests {
+@@ -11451,7 +11464,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -1103,7 +1103,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
          let path = PathBuf::from("/tmp/image2.png");
-@@ -11566,7 +11579,7 @@ mod tests {
+@@ -11490,7 +11503,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -1112,7 +1112,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
          let path = PathBuf::from("/tmp/image_dup.png");
-@@ -11595,7 +11608,7 @@ mod tests {
+@@ -11519,7 +11532,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -1121,7 +1121,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
          let path = PathBuf::from("/tmp/image3.png");
-@@ -11638,7 +11651,7 @@ mod tests {
+@@ -11562,7 +11575,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -1130,7 +1130,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -11664,7 +11677,7 @@ mod tests {
+@@ -11588,7 +11601,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -1139,7 +1139,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -11724,7 +11737,7 @@ mod tests {
+@@ -11648,7 +11661,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -1148,7 +1148,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -11787,7 +11800,7 @@ mod tests {
+@@ -11711,7 +11724,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -1157,7 +1157,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -11828,7 +11841,7 @@ mod tests {
+@@ -11752,7 +11765,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -1166,7 +1166,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -11852,7 +11865,7 @@ mod tests {
+@@ -11776,7 +11789,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -1175,7 +1175,25 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -11889,7 +11902,7 @@ mod tests {
+@@ -11813,7 +11826,7 @@ mod tests {
+             /*has_input_focus*/ true,
+             sender,
+             /*enhanced_keys_supported*/ false,
+-            "Ask Codex to do anything".to_string(),
++            "Ask Nyacode to do anything".to_string(),
+             /*disable_paste_burst*/ false,
+         );
+ 
+@@ -11991,7 +12004,7 @@ mod tests {
+             /*has_input_focus*/ true,
+             sender,
+             /*enhanced_keys_supported*/ false,
+-            "Ask Codex to do anything".to_string(),
++            "Ask Nyacode to do anything".to_string(),
+             /*disable_paste_burst*/ false,
+         );
+ 
+@@ -12020,7 +12033,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -1193,7 +1211,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -12096,7 +12109,7 @@ mod tests {
+@@ -12106,7 +12119,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -1202,7 +1220,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -12143,7 +12156,7 @@ mod tests {
+@@ -12139,7 +12152,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -1211,7 +1229,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -12182,7 +12195,7 @@ mod tests {
+@@ -12169,7 +12182,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -1220,7 +1238,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -12215,7 +12228,7 @@ mod tests {
+@@ -12212,7 +12225,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -1229,7 +1247,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -12245,7 +12258,7 @@ mod tests {
+@@ -12237,7 +12250,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -1238,25 +1256,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -12288,7 +12301,7 @@ mod tests {
-             /*has_input_focus*/ true,
-             sender,
-             /*enhanced_keys_supported*/ false,
--            "Ask Codex to do anything".to_string(),
-+            "Ask Nyacode to do anything".to_string(),
-             /*disable_paste_burst*/ false,
-         );
- 
-@@ -12315,7 +12328,7 @@ mod tests {
-             /*has_input_focus*/ true,
-             sender,
-             /*enhanced_keys_supported*/ false,
--            "Ask Codex to do anything".to_string(),
-+            "Ask Nyacode to do anything".to_string(),
-             /*disable_paste_burst*/ false,
-         );
- 
-@@ -12340,7 +12353,7 @@ mod tests {
+@@ -12262,7 +12275,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -1265,7 +1265,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
          composer.set_collaboration_modes_enabled(/*enabled*/ true);
-@@ -12374,7 +12387,7 @@ mod tests {
+@@ -12296,7 +12309,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -1274,7 +1274,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -12415,7 +12428,7 @@ mod tests {
+@@ -12337,7 +12350,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -1283,7 +1283,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
          composer.set_text_content("!git status".to_string(), Vec::new(), Vec::new());
-@@ -12435,7 +12448,7 @@ mod tests {
+@@ -12357,7 +12370,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -1292,7 +1292,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
          composer.set_text_content("!git status".to_string(), Vec::new(), Vec::new());
-@@ -12455,7 +12468,7 @@ mod tests {
+@@ -12377,7 +12390,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -1301,7 +1301,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
          composer.set_text_content("git status".to_string(), Vec::new(), Vec::new());
-@@ -12475,7 +12488,7 @@ mod tests {
+@@ -12397,7 +12410,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -1310,7 +1310,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -12500,7 +12513,7 @@ mod tests {
+@@ -12422,7 +12435,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -1319,7 +1319,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -12534,7 +12547,7 @@ mod tests {
+@@ -12456,7 +12469,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -1328,7 +1328,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -12560,7 +12573,7 @@ mod tests {
+@@ -12482,7 +12495,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -1337,7 +1337,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -12587,7 +12600,7 @@ mod tests {
+@@ -12509,7 +12522,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -1346,7 +1346,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -12615,7 +12628,7 @@ mod tests {
+@@ -12537,7 +12550,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -1355,7 +1355,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -12636,7 +12649,7 @@ mod tests {
+@@ -12558,7 +12571,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -1364,7 +1364,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -12661,7 +12674,7 @@ mod tests {
+@@ -12583,7 +12596,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -1373,7 +1373,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -12698,7 +12711,7 @@ mod tests {
+@@ -12620,7 +12633,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -1382,7 +1382,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -12718,7 +12731,7 @@ mod tests {
+@@ -12640,7 +12653,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -1391,7 +1391,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -12763,7 +12776,7 @@ mod tests {
+@@ -12685,7 +12698,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -1400,7 +1400,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
              /*disable_paste_burst*/ false,
          );
  
-@@ -12800,7 +12813,7 @@ mod tests {
+@@ -12722,7 +12735,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -1410,7 +1410,7 @@ index 756c2d68400e84be38090a6b6d07162d5327c313..6c047cce5ee62f9cf95418ed40618707
          );
  
 diff --git a/codex-rs/tui/src/bottom_pane/chat_composer/footer_state_tests.rs b/codex-rs/tui/src/bottom_pane/chat_composer/footer_state_tests.rs
-index 558a38a652bb88d0f362dd5e0c738f80822bbac2..8ba2445206f6e62be5015dc93fbb2dc07ddbc0ef 100644
+index 5db883b7e67104ffade76592d30efee8294d08f8..327062533b33c4615889d8d00de36d51882eaec5 100644
 --- a/codex-rs/tui/src/bottom_pane/chat_composer/footer_state_tests.rs
 +++ b/codex-rs/tui/src/bottom_pane/chat_composer/footer_state_tests.rs
 @@ -14,7 +14,7 @@ fn composer() -> ChatComposer {
@@ -1423,7 +1423,7 @@ index 558a38a652bb88d0f362dd5e0c738f80822bbac2..8ba2445206f6e62be5015dc93fbb2dc0
      );
      composer.set_status_line_enabled(/*enabled*/ true);
 diff --git a/codex-rs/tui/src/bottom_pane/chat_composer/history_search.rs b/codex-rs/tui/src/bottom_pane/chat_composer/history_search.rs
-index 1be819fbc7e537d95bbce6e771531fe4ac334406..8fffbdc44d857525233132365cd118c947ae696e 100644
+index 7c55cf937cf07b3a9d88e5239e6f0a121764c50e..70698fd0209d5dc80b32e334e70e698ce12496a6 100644
 --- a/codex-rs/tui/src/bottom_pane/chat_composer/history_search.rs
 +++ b/codex-rs/tui/src/bottom_pane/chat_composer/history_search.rs
 @@ -558,7 +558,7 @@ mod tests {
@@ -1525,7 +1525,7 @@ index 1be819fbc7e537d95bbce6e771531fe4ac334406..8fffbdc44d857525233132365cd118c9
              /*disable_paste_burst*/ false,
          );
          composer
-@@ -1040,7 +1040,7 @@ mod tests {
+@@ -1050,7 +1050,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -1534,7 +1534,7 @@ index 1be819fbc7e537d95bbce6e771531fe4ac334406..8fffbdc44d857525233132365cd118c9
              /*disable_paste_burst*/ false,
          );
          composer
-@@ -1069,7 +1069,7 @@ mod tests {
+@@ -1079,7 +1079,7 @@ mod tests {
                  /*has_input_focus*/ true,
                  sender,
                  /*enhanced_keys_supported*/ false,
@@ -1543,7 +1543,7 @@ index 1be819fbc7e537d95bbce6e771531fe4ac334406..8fffbdc44d857525233132365cd118c9
                  /*disable_paste_burst*/ false,
              );
              composer
-@@ -1108,7 +1108,7 @@ mod tests {
+@@ -1118,7 +1118,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -1552,7 +1552,7 @@ index 1be819fbc7e537d95bbce6e771531fe4ac334406..8fffbdc44d857525233132365cd118c9
              /*disable_paste_burst*/ false,
          );
  
-@@ -1139,7 +1139,7 @@ mod tests {
+@@ -1149,7 +1149,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -1561,7 +1561,7 @@ index 1be819fbc7e537d95bbce6e771531fe4ac334406..8fffbdc44d857525233132365cd118c9
              /*disable_paste_burst*/ false,
          );
  
-@@ -1174,7 +1174,7 @@ mod tests {
+@@ -1184,7 +1184,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -1570,7 +1570,7 @@ index 1be819fbc7e537d95bbce6e771531fe4ac334406..8fffbdc44d857525233132365cd118c9
              /*disable_paste_burst*/ false,
          );
          composer
-@@ -1207,7 +1207,7 @@ mod tests {
+@@ -1217,7 +1217,7 @@ mod tests {
              /*has_input_focus*/ true,
              sender,
              /*enhanced_keys_supported*/ false,
@@ -1580,7 +1580,7 @@ index 1be819fbc7e537d95bbce6e771531fe4ac334406..8fffbdc44d857525233132365cd118c9
          );
          composer
 diff --git a/codex-rs/tui/src/bottom_pane/chat_composer/history_search_paste_tests.rs b/codex-rs/tui/src/bottom_pane/chat_composer/history_search_paste_tests.rs
-index bd0610df367753abaf0191ff891843c19f8cc73d..c6f0d9b4ed2e0b5b5ebe4aaed6d9a75de78a7d37 100644
+index 2c9392fb911e5e039de0fe4e6a700f47c0f08249..6e18919eb99497951c3985aa7166e8204d76319f 100644
 --- a/codex-rs/tui/src/bottom_pane/chat_composer/history_search_paste_tests.rs
 +++ b/codex-rs/tui/src/bottom_pane/chat_composer/history_search_paste_tests.rs
 @@ -22,7 +22,7 @@ fn composer_with_history() -> ChatComposer {
@@ -1606,10 +1606,10 @@ index 897f662f61ec1e7aff8ce77d418009b211ef3f31..b5e31fae9894368b52fa4a5cdb21b1d8
      );
      composer.set_status_line_enabled(/*enabled*/ true);
 diff --git a/codex-rs/tui/src/bottom_pane/chat_composer/slash_input.rs b/codex-rs/tui/src/bottom_pane/chat_composer/slash_input.rs
-index 4ea71254c1d26a826edaca132ec66a6782c72996..8325719cf8b7123ee823d8fac09e619598f39f8d 100644
+index 066e56c31785d10c4826086ce4cba16ca028034e..c6eb65d9fbb48b59ba18a9fbb80de57dfef12ead 100644
 --- a/codex-rs/tui/src/bottom_pane/chat_composer/slash_input.rs
 +++ b/codex-rs/tui/src/bottom_pane/chat_composer/slash_input.rs
-@@ -180,6 +180,7 @@ impl<'a> SlashInput<'a> {
+@@ -179,6 +179,7 @@ impl<'a> SlashInput<'a> {
                  daybreak_command_description: self.command_flags.daybreak_command_description,
                  goal_command_enabled: self.command_flags.goal_command_enabled,
                  voice_command_enabled: self.command_flags.voice_command_enabled,
@@ -1617,7 +1617,7 @@ index 4ea71254c1d26a826edaca132ec66a6782c72996..8325719cf8b7123ee823d8fac09e6195
                  worktrees_enabled: self.command_flags.worktrees_enabled,
                  windows_degraded_sandbox_active: self.command_flags.allow_elevate_sandbox,
                  side_conversation_active: self.command_flags.side_conversation_active,
-@@ -219,6 +220,7 @@ impl ChatComposer {
+@@ -218,6 +219,7 @@ impl ChatComposer {
              daybreak_command_description: self.popups.daybreak_command_description,
              goal_command_enabled: self.goal_command_enabled,
              voice_command_enabled: self.voice_command_enabled,
@@ -1625,7 +1625,7 @@ index 4ea71254c1d26a826edaca132ec66a6782c72996..8325719cf8b7123ee823d8fac09e6195
              worktrees_enabled: self.worktrees_enabled,
              allow_elevate_sandbox: self.windows_degraded_sandbox_active,
              side_conversation_active: self.side_conversation_active,
-@@ -607,7 +609,7 @@ mod tests {
+@@ -625,7 +627,7 @@ mod tests {
              /*has_input_focus*/ true,
              AppEventSender::new(tx),
              /*enhanced_keys_supported*/ false,
@@ -1660,7 +1660,7 @@ index 3b8930982028b5a3a179229e99f21bfebc83fda3..d5e9880f75fffdc765770763d99d8af0
                                                              
    ? for shortcuts                        100% context left
 diff --git a/codex-rs/tui/src/bottom_pane/chat_composer/snapshots/codex_tui__bottom_pane__chat_composer__sparkle__tests__a_fresh_astra_response_waits_for_the_pending_command_to_leave.snap b/codex-rs/tui/src/bottom_pane/chat_composer/snapshots/codex_tui__bottom_pane__chat_composer__sparkle__tests__a_fresh_astra_response_waits_for_the_pending_command_to_leave.snap
-index b60d0594be524e22c114fa713852d8c39162627e..1ba5974a099a6c32a332297fb9b1784ac25f0b29 100644
+index 6697092d6c229a627f07ce1afdaa064f7f4907cc..906ad77057cfeb1cb10be6ffbb0d4bc61e2b8ac1 100644
 --- a/codex-rs/tui/src/bottom_pane/chat_composer/snapshots/codex_tui__bottom_pane__chat_composer__sparkle__tests__a_fresh_astra_response_waits_for_the_pending_command_to_leave.snap
 +++ b/codex-rs/tui/src/bottom_pane/chat_composer/snapshots/codex_tui__bottom_pane__chat_composer__sparkle__tests__a_fresh_astra_response_waits_for_the_pending_command_to_leave.snap
 @@ -1,6 +1,5 @@
@@ -2086,7 +2086,7 @@ index b39da3eda7df3a23325eba623f9b552314efdc23..1e58456d8a1e3303cf08dc8222055fbe
          animations_enabled: true,
          effects: Default::default(),
 diff --git a/codex-rs/tui/src/bottom_pane/chat_composer/status_surface_tests.rs b/codex-rs/tui/src/bottom_pane/chat_composer/status_surface_tests.rs
-index 8e650b767056931920d588134ba85bf3de38eb01..3cd834565a54bb861e114289aba21e3ee5ef7052 100644
+index 03e761f4f022a9e968489b2530945fc313b870ba..6b5298f979fd43ff3886d10bd3c501fca117a0fb 100644
 --- a/codex-rs/tui/src/bottom_pane/chat_composer/status_surface_tests.rs
 +++ b/codex-rs/tui/src/bottom_pane/chat_composer/status_surface_tests.rs
 @@ -10,7 +10,7 @@ fn composer() -> ChatComposer {
@@ -2470,7 +2470,7 @@ index 7a31d0b1820fc8423c9246c9b31c06afbbb48f8e..fcbe8d522da27b713dd27f24e8979c9f
  "                                        "
  "                                        "
 diff --git a/codex-rs/tui/src/chatwidget.rs b/codex-rs/tui/src/chatwidget.rs
-index da3d310f271ee664621bc7ce9914665535326d04..803978888f606e2f4e4d9f817d2677f355ee5c84 100644
+index 4b9d285d29d75bcc856ba358c7f091f310dfb729..18bde9d0ad628b1013adfa73c327a17001ad2a19 100644
 --- a/codex-rs/tui/src/chatwidget.rs
 +++ b/codex-rs/tui/src/chatwidget.rs
 @@ -1,4 +1,4 @@
@@ -2487,7 +2487,7 @@ index da3d310f271ee664621bc7ce9914665535326d04..803978888f606e2f4e4d9f817d2677f3
  pub(crate) use self::pets::ConfiguredPetLoadGeneration;
  mod session_flow;
  mod session_header;
-@@ -1735,6 +1736,10 @@ impl ChatWidget {
+@@ -1740,6 +1741,10 @@ impl ChatWidget {
      }
  
      /// Whether an agent message stream is active (not a plan stream).
@@ -2498,7 +2498,7 @@ index da3d310f271ee664621bc7ce9914665535326d04..803978888f606e2f4e4d9f817d2677f3
      pub(crate) fn has_active_agent_stream(&self) -> bool {
          self.stream_controller.is_some()
      }
-@@ -2093,7 +2098,7 @@ impl Drop for ChatWidget {
+@@ -2098,7 +2103,7 @@ impl Drop for ChatWidget {
      }
  }
  
@@ -2762,10 +2762,10 @@ index 767548773f4b4cfbe5ed7c7bae76c7879b19b0f7..ad087af3863a7ba05424c80ec8de0f5c
              .set_goal_command_enabled(self.config.features.enabled(Feature::Goals));
      }
 diff --git a/codex-rs/tui/src/chatwidget/slash_dispatch.rs b/codex-rs/tui/src/chatwidget/slash_dispatch.rs
-index fd56394f6b80f286c1e5bed0ad203d27f4126640..26a83bf432d0569a71e47b9b26551b1337057257 100644
+index e9ea6e42fec43479cba9ca940d4516a8151219b3..4ec0bff6f009c1e1662e3cd176d185752c2a9838 100644
 --- a/codex-rs/tui/src/chatwidget/slash_dispatch.rs
 +++ b/codex-rs/tui/src/chatwidget/slash_dispatch.rs
-@@ -545,6 +545,12 @@ impl ChatWidget {
+@@ -539,6 +539,12 @@ impl ChatWidget {
              SlashCommand::Hooks => {
                  self.add_hooks_output();
              }
@@ -2778,7 +2778,7 @@ index fd56394f6b80f286c1e5bed0ad203d27f4126640..26a83bf432d0569a71e47b9b26551b13
              SlashCommand::Daemon => self.app_event_tx.send(AppEvent::OpenDaemonMenu),
              SlashCommand::Warnings => self.app_event_tx.send(AppEvent::OpenWarnings),
              SlashCommand::Status => {
-@@ -588,6 +594,9 @@ impl ChatWidget {
+@@ -582,6 +588,9 @@ impl ChatWidget {
              SlashCommand::Statusline => {
                  self.open_status_line_setup();
              }
@@ -2788,7 +2788,7 @@ index fd56394f6b80f286c1e5bed0ad203d27f4126640..26a83bf432d0569a71e47b9b26551b13
              SlashCommand::Config => {
                  self.open_config_panel();
              }
-@@ -1276,6 +1285,7 @@ impl ChatWidget {
+@@ -1270,6 +1279,7 @@ impl ChatWidget {
              service_tier_commands_enabled: !self.current_model_service_tier_commands().is_empty(),
              daybreak_command_description: self.daybreak_command_description(),
              voice_command_enabled: self.realtime_conversation_available_for_thread,
@@ -2796,7 +2796,7 @@ index fd56394f6b80f286c1e5bed0ad203d27f4126640..26a83bf432d0569a71e47b9b26551b13
              worktrees_enabled: self.local_worktree_operations,
              allow_elevate_sandbox,
              side_conversation_active: self.active_side_conversation,
-@@ -1298,6 +1308,8 @@ impl ChatWidget {
+@@ -1292,6 +1302,8 @@ impl ChatWidget {
              SlashCommand::Ide
              | SlashCommand::Status
              | SlashCommand::Daemon
@@ -2805,7 +2805,7 @@ index fd56394f6b80f286c1e5bed0ad203d27f4126640..26a83bf432d0569a71e47b9b26551b13
              | SlashCommand::Pwd
              | SlashCommand::Usage
              | SlashCommand::DebugConfig
-@@ -1366,6 +1378,7 @@ impl ChatWidget {
+@@ -1360,6 +1372,7 @@ impl ChatWidget {
              | SlashCommand::Title
              | SlashCommand::Statusline
              | SlashCommand::Config
@@ -3125,20 +3125,6 @@ index b3e42a748622518316dba8391dbe546eab158f81..2cacd1121f1e73bb9beab7be45273169
 +› Ask Nyacode to do anything
  
    GPT-5.6-Sol default · /tmp/project
-diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__default_footer_generating_thread_title.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__default_footer_generating_thread_title.snap
-index cc63d0d4885429665d466a0d9fdc6444149b836d..ff044d8813eef01d35ea85ef1a521dc59d6ebfa6 100644
---- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__default_footer_generating_thread_title.snap
-+++ b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__default_footer_generating_thread_title.snap
-@@ -1,7 +1,7 @@
- ---
- source: tui/src/chatwidget/tests/terminal_title.rs
--expression: "render_bottom_popup(&chat, 100)"
-+expression: "normalize_snapshot_paths(render_bottom_popup(&chat, 100))"
- ---
--› Ask Codex to do anything
-+› Ask Nyacode to do anything
- 
-   GPT-5.6-Sol default · /tmp/project · ⠋
 diff --git a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__esc_interrupt_goal_paused_footer.snap b/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__esc_interrupt_goal_paused_footer.snap
 index d9aaa4e578c9048c3e79a9786c6cc7419e351f22..00712721323f0cd26c7f8e50e31fa7fe408c5663 100644
 --- a/codex-rs/tui/src/chatwidget/snapshots/codex_tui__chatwidget__tests__esc_interrupt_goal_paused_footer.snap
@@ -4274,7 +4260,7 @@ index b3c1022a076464bfa794e394c516bd0a775cc5f4..5792e24f1ac6c69fb411f83bc3cc77e4
  ---
  ■ Usage limit reached. You've reached your usage limit. Increase your limits to continue using codex.
 diff --git a/codex-rs/tui/src/chatwidget/status_surfaces.rs b/codex-rs/tui/src/chatwidget/status_surfaces.rs
-index d7a5c3bb64e616f12e53849350c3c50be8bfb01f..d113d3ca74926a6a60214bed31d92a5ce0e39783 100644
+index d7340e54379c772214146f74435ee437fa22d8b0..9eb6df69e7b1ab3c12e444d6ea7c4aceeca58534 100644
 --- a/codex-rs/tui/src/chatwidget/status_surfaces.rs
 +++ b/codex-rs/tui/src/chatwidget/status_surfaces.rs
 @@ -229,7 +229,7 @@ impl ChatWidget {
@@ -4286,7 +4272,7 @@ index d7a5c3bb64e616f12e53849350c3c50be8bfb01f..d113d3ca74926a6a60214bed31d92a5c
      ///
      /// This does not attempt to restore the shell or terminal's previous title;
      /// it only clears the managed title and updates the cache after a successful
-@@ -885,7 +885,7 @@ impl ChatWidget {
+@@ -864,7 +864,7 @@ impl ChatWidget {
          item: StatusSurfacePreviewItem,
      ) -> Option<String> {
          let status_line_item = match item {
@@ -4295,7 +4281,7 @@ index d7a5c3bb64e616f12e53849350c3c50be8bfb01f..d113d3ca74926a6a60214bed31d92a5c
              StatusSurfacePreviewItem::ProjectName => return self.terminal_title_project_name(),
              StatusSurfacePreviewItem::ProjectRoot => StatusLineItem::ProjectRoot,
              StatusSurfacePreviewItem::Status => return Some(self.run_state_status_text()),
-@@ -931,7 +931,7 @@ impl ChatWidget {
+@@ -910,7 +910,7 @@ impl ChatWidget {
          now: Instant,
      ) -> Option<String> {
          match item {
@@ -4359,10 +4345,10 @@ index be9bbbea1102fe3eb4f68d79601c33d1cd4c6034..fd63a0b452d746f69bc737f0a329baa5
  use super::*;
  use pretty_assertions::assert_eq;
 diff --git a/codex-rs/tui/src/chatwidget/tests/permissions.rs b/codex-rs/tui/src/chatwidget/tests/permissions.rs
-index edc6565840be5c67a58d347355bd59bcd52d067f..885c430e825fc9ce99612f6383edef081ab4ad6f 100644
+index ba06f624ed10a8bee5ec94247f2793114809cecb..d5b675ea01a350fed758a6fe6b8a5bef9334a93d 100644
 --- a/codex-rs/tui/src/chatwidget/tests/permissions.rs
 +++ b/codex-rs/tui/src/chatwidget/tests/permissions.rs
-@@ -980,7 +980,7 @@ async fn startup_windows_sandbox_prompt_blocks_disallowed_unelevated_fallback()
+@@ -998,7 +998,7 @@ async fn startup_windows_sandbox_prompt_blocks_disallowed_unelevated_fallback()
  
      let popup = render_bottom_popup(&chat, /*width*/ 120);
      assert!(
@@ -4743,7 +4729,7 @@ index 51efc1d5e09c9b444a79ddc522a6ea92955275aa..ebc5c8e5df7fc607fd14f1e62052a66b
  
    Copy unconfirmed; /export saves chat
 diff --git a/codex-rs/tui/src/chatwidget/tests/status_and_layout.rs b/codex-rs/tui/src/chatwidget/tests/status_and_layout.rs
-index 760f72edc7c456c3c0d228a4112953f4e7f4f613..7501b849846ce84946fc84a7caa1090055edc360 100644
+index 65d7739959567951eccb46b54ed995ecc342ba60..0f8d07fe21bcc789a9f289bf0240cbb318508ad0 100644
 --- a/codex-rs/tui/src/chatwidget/tests/status_and_layout.rs
 +++ b/codex-rs/tui/src/chatwidget/tests/status_and_layout.rs
 @@ -533,14 +533,14 @@ async fn completed_plan_table_tail_skips_provisional_history_insert() {

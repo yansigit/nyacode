@@ -1,5 +1,5 @@
 diff --git a/codex-rs/agent-identity/src/lib.rs b/codex-rs/agent-identity/src/lib.rs
-index 14a9e35190118d3f62fe1197dd9735229f34e4cd..9b4cbc3a652d8b6f8ccd1daa2bcc33471bd4e017 100644
+index 30f2b8a2eba5b0dbd0d9a948b3b0a030ac91c078..46766b871f368e7cbe89c00e38f0b15827d4c909 100644
 --- a/codex-rs/agent-identity/src/lib.rs
 +++ b/codex-rs/agent-identity/src/lib.rs
 @@ -27,8 +27,8 @@ use jsonwebtoken::Validation;
@@ -63,10 +63,10 @@ index e5028e3370e3f99408ce331a117d3b99901cdfc3..a854b83362eef71e829cb41ba48467cb
                      .outgoing
                      .send_account_notification(
 diff --git a/codex-rs/app-server/src/request_processors/thread_processor.rs b/codex-rs/app-server/src/request_processors/thread_processor.rs
-index 9563a250cc43bf5691537ed009199112265a5548..6c3b63aa6d98748bdacde8d4ba895510f5de2510 100644
+index 4d104e2d5e3818577d3725c801cc06c5c44d053a..82a0fb7b0f8332a0a3a98f0b0a3792546bae8186 100644
 --- a/codex-rs/app-server/src/request_processors/thread_processor.rs
 +++ b/codex-rs/app-server/src/request_processors/thread_processor.rs
-@@ -1675,6 +1675,35 @@ impl ThreadRequestProcessor {
+@@ -1717,6 +1717,35 @@ impl ThreadRequestProcessor {
          Ok(())
      }
  
@@ -102,7 +102,7 @@ index 9563a250cc43bf5691537ed009199112265a5548..6c3b63aa6d98748bdacde8d4ba895510
      #[allow(clippy::too_many_arguments)]
      fn build_thread_config_overrides(
          &self,
-@@ -4107,6 +4136,17 @@ impl ThreadRequestProcessor {
+@@ -4169,6 +4198,17 @@ impl ThreadRequestProcessor {
                  runtime_workspace_roots = Some(resolve_runtime_workspace_roots(restored_roots));
              }
          }
@@ -120,7 +120,7 @@ index 9563a250cc43bf5691537ed009199112265a5548..6c3b63aa6d98748bdacde8d4ba895510
          let mut typesafe_overrides = self.build_thread_config_overrides(
              model,
              model_provider,
-@@ -5293,6 +5333,12 @@ impl ThreadRequestProcessor {
+@@ -5425,6 +5465,12 @@ impl ThreadRequestProcessor {
              Some(cli_overrides)
          };
          let runtime_workspace_roots = runtime_workspace_roots.map(resolve_runtime_workspace_roots);
@@ -134,7 +134,7 @@ index 9563a250cc43bf5691537ed009199112265a5548..6c3b63aa6d98748bdacde8d4ba895510
              model,
              model_provider,
 diff --git a/codex-rs/app-server/src/request_processors/thread_processor_tests.rs b/codex-rs/app-server/src/request_processors/thread_processor_tests.rs
-index a42e06dc9d0eff3e9ddc2888ae964f5d72103c72..a394727599146a754d569938574dc11c700b9cb3 100644
+index dab5a6062feac96c18191492443aee46f0742369..13f3f12d657cc04a48428124db36f7c420ff7317 100644
 --- a/codex-rs/app-server/src/request_processors/thread_processor_tests.rs
 +++ b/codex-rs/app-server/src/request_processors/thread_processor_tests.rs
 @@ -644,6 +644,7 @@ mod thread_processor_behavior_tests {
@@ -160,7 +160,7 @@ index f9a06f2e47e3bcface5f4be91ef1ec8c21630281..67664c1e0bb9f1dff4724b44c0dd8e14
          .as_array()
          .expect("attributes")
 diff --git a/codex-rs/cli/src/doctor/thread_inventory.rs b/codex-rs/cli/src/doctor/thread_inventory.rs
-index 971c32f8311c62d5ae96cf3bc8a539312b1e4e64..37f2f8cc6e03c0e08dfb28e0a8d5acb519e09e34 100644
+index 46bd3bbf153a6eb4f6b1dc03f0bb8761630ad1b7..f8a02b7faeb5fbe9c86841a6d33234d88ce9cb44 100644
 --- a/codex-rs/cli/src/doctor/thread_inventory.rs
 +++ b/codex-rs/cli/src/doctor/thread_inventory.rs
 @@ -192,10 +192,10 @@ fn missing_state_db_check(scan: RolloutScan, details: Vec<String>) -> DoctorChec
@@ -276,18 +276,18 @@ index 6ffc7bbdf6753f6a2acfccef3382fb23c9dd6367..138d5a476ee65f50242d8cef8f7d6a45
          }
      }
 diff --git a/codex-rs/config/src/thread_config/remote.rs b/codex-rs/config/src/thread_config/remote.rs
-index da0af3bca082c5b811e4d4bc4d6bfdecbdca427b..e4191c67ab1d9aa87ce09de059d8fdf420b3c2e4 100644
+index 0f2a436758642fb39d646de7e490fe5657d0a338..3fdb9efcb7559d327de2cb06a746317805777ae6 100644
 --- a/codex-rs/config/src/thread_config/remote.rs
 +++ b/codex-rs/config/src/thread_config/remote.rs
-@@ -20,6 +20,7 @@ use super::UserThreadConfig;
- use proto::thread_config_loader_client::ThreadConfigLoaderClient;
+@@ -21,6 +21,7 @@ use proto::thread_config_loader_client::ThreadConfigLoaderClient;
  
+ #[allow(clippy::double_must_use)] // Emitted by async_trait in the generated tonic service.
  #[path = "proto/codex.thread_config.v1.rs"]
 +#[allow(clippy::trivially_copy_pass_by_ref)]
  mod proto;
  
  const REMOTE_THREAD_CONFIG_LOAD_TIMEOUT: Duration = Duration::from_secs(5);
-@@ -160,6 +161,11 @@ fn model_provider_from_proto(
+@@ -161,6 +162,11 @@ fn model_provider_from_proto(
      let id = provider.id;
      let wire_api = match proto::WireApi::try_from(provider.wire_api) {
          Ok(proto::WireApi::Responses) => WireApi::Responses,
@@ -299,7 +299,7 @@ index da0af3bca082c5b811e4d4bc4d6bfdecbdca427b..e4191c67ab1d9aa87ce09de059d8fdf4
          Ok(proto::WireApi::Unspecified) => {
              return Err(parse_error("remote thread config omitted wire_api"));
          }
-@@ -184,6 +190,7 @@ fn model_provider_from_proto(
+@@ -185,6 +191,7 @@ fn model_provider_from_proto(
          gateway_oauth: None,
          aws: None,
          wire_api,
@@ -307,7 +307,7 @@ index da0af3bca082c5b811e4d4bc4d6bfdecbdca427b..e4191c67ab1d9aa87ce09de059d8fdf4
          query_params: provider.query_params.map(redacted_string_map),
          http_headers: provider.http_headers.map(redacted_string_map),
          env_http_headers: provider.env_http_headers.map(|map| map.values),
-@@ -197,6 +204,7 @@ fn model_provider_from_proto(
+@@ -198,6 +205,7 @@ fn model_provider_from_proto(
          capabilities: None,
          include_internal_metadata: false,
      };
@@ -315,7 +315,7 @@ index da0af3bca082c5b811e4d4bc4d6bfdecbdca427b..e4191c67ab1d9aa87ce09de059d8fdf4
      Ok((id, info))
  }
  
-@@ -216,6 +224,7 @@ fn model_provider_to_proto(
+@@ -217,6 +225,7 @@ fn model_provider_to_proto(
          gateway_oauth: _,
          aws: _,
          wire_api,
@@ -323,7 +323,7 @@ index da0af3bca082c5b811e4d4bc4d6bfdecbdca427b..e4191c67ab1d9aa87ce09de059d8fdf4
          query_params,
          http_headers,
          env_http_headers,
-@@ -240,6 +249,7 @@ fn model_provider_to_proto(
+@@ -241,6 +250,7 @@ fn model_provider_to_proto(
          experimental_bearer_token: experimental_bearer_token.map(RedactedString::into_inner),
          auth: auth.map(model_provider_auth_to_proto),
          wire_api: proto_wire_api(wire_api).into(),
@@ -331,7 +331,7 @@ index da0af3bca082c5b811e4d4bc4d6bfdecbdca427b..e4191c67ab1d9aa87ce09de059d8fdf4
          query_params: query_params.map(proto_string_map),
          http_headers: http_headers.map(proto_string_map),
          env_http_headers: env_http_headers.map(|values| proto::StringMap { values }),
-@@ -314,6 +324,11 @@ fn proto_string_map(values: HashMap<String, RedactedString>) -> proto::StringMap
+@@ -315,6 +325,11 @@ fn proto_string_map(values: HashMap<String, RedactedString>) -> proto::StringMap
  fn proto_wire_api(wire_api: WireApi) -> proto::WireApi {
      match wire_api {
          WireApi::Responses => proto::WireApi::Responses,
@@ -343,7 +343,7 @@ index da0af3bca082c5b811e4d4bc4d6bfdecbdca427b..e4191c67ab1d9aa87ce09de059d8fdf4
      }
  }
  
-@@ -494,6 +509,7 @@ mod tests {
+@@ -495,6 +510,7 @@ mod tests {
                                  cwd: workspace_cwd,
                              }),
                              wire_api: proto::WireApi::Responses.into(),
@@ -351,7 +351,7 @@ index da0af3bca082c5b811e4d4bc4d6bfdecbdca427b..e4191c67ab1d9aa87ce09de059d8fdf4
                              query_params: Some(proto::StringMap {
                                  values: HashMap::from([(
                                      "api-version".to_string(),
-@@ -565,6 +581,7 @@ mod tests {
+@@ -566,6 +582,7 @@ mod tests {
                  cwd: workspace_dir(),
              }),
              wire_api: WireApi::Responses,
@@ -359,7 +359,7 @@ index da0af3bca082c5b811e4d4bc4d6bfdecbdca427b..e4191c67ab1d9aa87ce09de059d8fdf4
              query_params: Some(HashMap::from([(
                  "api-version".to_string(),
                  "2026-04-16".into(),
-@@ -593,4 +610,38 @@ mod tests {
+@@ -594,4 +611,38 @@ mod tests {
              .expect("current dir")
              .join("workspace")
      }
@@ -732,10 +732,10 @@ index 3d56d7e646e275b6d66b0501d5f7021e1d300bdf..d8f62b497150dc49abbf234cb1b15ece
 +    }
 +}
 diff --git a/codex-rs/core/src/agent/control/spawn.rs b/codex-rs/core/src/agent/control/spawn.rs
-index 04ae8ab6376347a4bb1aadbd8529173e93d4d0f0..a86e625fe26a174abcd15b6a61720057ccb045af 100644
+index 22cd725605272a5e4e3b475c8ad2fb2835df0203..23d10e18a7534a501ff798a4417ea2da5093d8a5 100644
 --- a/codex-rs/core/src/agent/control/spawn.rs
 +++ b/codex-rs/core/src/agent/control/spawn.rs
-@@ -474,6 +474,13 @@ impl LocalAgentControl {
+@@ -479,6 +479,13 @@ impl LocalAgentControl {
                      ))
                  })?;
              config.model_provider_id = stored_model_provider;
@@ -750,10 +750,10 @@ index 04ae8ab6376347a4bb1aadbd8529173e93d4d0f0..a86e625fe26a174abcd15b6a61720057
          let parent_thread_id = owner_thread_id
              .or_else(|| initial_history.get_resumed_parent_thread_id())
 diff --git a/codex-rs/core/src/agent/control_tests.rs b/codex-rs/core/src/agent/control_tests.rs
-index ffc7e11f7a5f23c378ae68023768c8a534347cc2..54d70b08124acb8218bf3f203284d4dcf612e55a 100644
+index 59027230a4639ae0b5725ffdbdc54fd47bc4478d..1a7ba607b6b4405142d87219bcf2f47dfba33034 100644
 --- a/codex-rs/core/src/agent/control_tests.rs
 +++ b/codex-rs/core/src/agent/control_tests.rs
-@@ -1371,6 +1371,9 @@ async fn check_v2_agent_reload(route: V2ReloadRoute) {
+@@ -1374,6 +1374,9 @@ async fn check_v2_agent_reload(route: V2ReloadRoute) {
          .get("ollama")
          .cloned()
          .expect("ollama provider should be configured");
@@ -763,7 +763,7 @@ index ffc7e11f7a5f23c378ae68023768c8a534347cc2..54d70b08124acb8218bf3f203284d4dc
  
      let mut parent_turn = parent_thread.session.new_default_turn().await;
      let residency_pin = match route {
-@@ -1422,6 +1425,10 @@ async fn check_v2_agent_reload(route: V2ReloadRoute) {
+@@ -1425,6 +1428,10 @@ async fn check_v2_agent_reload(route: V2ReloadRoute) {
          .await
          .expect("reloaded child thread should exist");
      if matches!(route, V2ReloadRoute::Sender) {
@@ -787,10 +787,10 @@ index 84ab5014d18ebc0232b3cdbb52730a38761420e8..0356bd1f68b32371afd2022a3971c4cc
                  interrupt: None,
                  consumer_dropped,
 diff --git a/codex-rs/core/src/session/turn.rs b/codex-rs/core/src/session/turn.rs
-index 8925df02baa224bea27785b6e8c2653b4c80f334..5a3874005405c9270f0de2cd26a4d3de3c1654e6 100644
+index 32fdf7bd27d02e3b04b26174034f5210fe94c9ce..b4672a402f0fa2df41ec4e2e5d643c867e9fe0c0 100644
 --- a/codex-rs/core/src/session/turn.rs
 +++ b/codex-rs/core/src/session/turn.rs
-@@ -1805,6 +1805,16 @@ async fn run_sampling_request(
+@@ -1819,6 +1819,16 @@ async fn run_sampling_request(
              },
          };
  
@@ -807,7 +807,7 @@ index 8925df02baa224bea27785b6e8c2653b4c80f334..5a3874005405c9270f0de2cd26a4d3de
          let original_input = original_input.get_or_insert(prompt.input);
  
          let retry = handle_response_stream_error(
-@@ -2280,7 +2290,8 @@ pub(super) fn realtime_text_for_event(msg: &EventMsg) -> Option<RealtimeEventTex
+@@ -2296,7 +2306,8 @@ pub(super) fn realtime_text_for_event(msg: &EventMsg) -> Option<RealtimeEventTex
          | EventMsg::CollabCloseEnd(_)
          | EventMsg::CollabResumeBegin(_)
          | EventMsg::CollabResumeEnd(_)
@@ -817,7 +817,51 @@ index 8925df02baa224bea27785b6e8c2653b4c80f334..5a3874005405c9270f0de2cd26a4d3de
      }
  }
  
-@@ -2730,12 +2741,49 @@ async fn try_run_sampling_request(
+@@ -2724,21 +2735,28 @@ async fn try_run_sampling_request(
+     let mut request_token_usage = None;
+     sess.set_server_reasoning_included(step_context.settings.model_info.use_responses_lite)
+         .await;
+-    let mut stream = match client_session
+-        .stream(
+-            prompt,
+-            &step_context.settings.model_info,
+-            &step_context.session_telemetry,
+-            effort,
+-            step_context.settings.reasoning_summary,
+-            step_context.settings.service_tier.clone(),
+-            responses_metadata,
+-            &inference_trace,
+-        )
+-        .instrument(trace_span!("stream_request"))
+-        .or_cancel(&cancellation_token)
+-        .await?
+-    {
++    // shortcut: native streams lack inference fences; support sync post hooks when backends expose them.
++    let stream_result = if defer_tool_dispatch && turn_context.provider.backend().is_some() {
++        Err(CodexErr::Stream(
++            "synchronous PostModelRequest hooks require a backend with per-request completion boundaries; native provider sessions do not expose those boundaries".into(),
++        ))
++    } else {
++        client_session
++            .stream(
++                prompt,
++                &step_context.settings.model_info,
++                &step_context.session_telemetry,
++                effort,
++                step_context.settings.reasoning_summary,
++                step_context.settings.service_tier.clone(),
++                responses_metadata,
++                &inference_trace,
++            )
++            .instrument(trace_span!("stream_request"))
++            .or_cancel(&cancellation_token)
++            .await?
++    };
++    let mut stream = match stream_result {
+         Ok(stream) => stream,
+         Err(error) => {
+             if let Some(finish_post_request) = finish_post_request {
+@@ -2800,12 +2818,49 @@ async fn try_run_sampling_request(
              codex.usage.total_tokens = field::Empty,
          );
  
@@ -873,7 +917,7 @@ index 8925df02baa224bea27785b6e8c2653b4c80f334..5a3874005405c9270f0de2cd26a4d3de
          // Account for an already-received terminal error even if cancellation raced it.
          // Cancellation still stops ordinary stream events before they can run tools.
          let event = match event {
-@@ -2794,6 +2842,36 @@ async fn try_run_sampling_request(
+@@ -2876,6 +2931,36 @@ async fn try_run_sampling_request(
          record_turn_ttft_metric(&turn_context, &event).await;
  
          match event {
@@ -910,7 +954,7 @@ index 8925df02baa224bea27785b6e8c2653b4c80f334..5a3874005405c9270f0de2cd26a4d3de
              ResponseEvent::Created { response_id } => {
                  if let Some(response_id) = response_id {
                      turn_context
-@@ -2914,6 +2992,10 @@ async fn try_run_sampling_request(
+@@ -3002,6 +3087,10 @@ async fn try_run_sampling_request(
                  // Hosts can keep the current response intact and deliver mail before the next
                  // model request instead of cutting off its remaining tool calls.
                  if preempt_for_mailbox_mail
@@ -918,10 +962,10 @@ index 8925df02baa224bea27785b6e8c2653b4c80f334..5a3874005405c9270f0de2cd26a4d3de
 +                        .session_control
 +                        .as_ref()
 +                        .is_some_and(|control| control.capabilities.defer_mailbox_preemption)
+                     && !*draining_for_mailbox
                      && !turn_context
                          .config
-                         .features
-@@ -3115,6 +3197,20 @@ async fn try_run_sampling_request(
+@@ -3222,6 +3311,20 @@ async fn try_run_sampling_request(
                  if let Some(false) = end_turn {
                      needs_follow_up = true;
                  }
@@ -943,10 +987,10 @@ index 8925df02baa224bea27785b6e8c2653b4c80f334..5a3874005405c9270f0de2cd26a4d3de
                      needs_follow_up,
                      last_agent_message,
 diff --git a/codex-rs/core/src/thread_manager.rs b/codex-rs/core/src/thread_manager.rs
-index 4910246f076b98029b112812a3184ab65296d1db..04298cbe5c62854152341e9d8a009b99c95a1b19 100644
+index b2d22649a62334dd5dee40f4c0c9288e94dbcc5c..a3b552ac7c474daaccbae0e37225b343a58ff7e4 100644
 --- a/codex-rs/core/src/thread_manager.rs
 +++ b/codex-rs/core/src/thread_manager.rs
-@@ -2335,6 +2335,13 @@ impl ThreadManagerState {
+@@ -2396,6 +2396,13 @@ impl ThreadManagerState {
          };
          let attachment_source =
              forked_from_thread_id.filter(|_| matches!(&initial_history, InitialHistory::Forked(_)));
@@ -960,7 +1004,7 @@ index 4910246f076b98029b112812a3184ab65296d1db..04298cbe5c62854152341e9d8a009b99
          let spawn_result = Session::spawn(SessionSpawnArgs {
              startup,
              config,
-@@ -2342,7 +2349,7 @@ impl ThreadManagerState {
+@@ -2404,7 +2411,7 @@ impl ThreadManagerState {
              instructions,
              installation_id: self.installation_id.clone(),
              auth_manager,
@@ -970,10 +1014,10 @@ index 4910246f076b98029b112812a3184ab65296d1db..04298cbe5c62854152341e9d8a009b99
              environment_manager: Arc::clone(&self.environment_manager),
              skills_service: Arc::clone(&self.skills_service),
 diff --git a/codex-rs/core/src/thread_manager_tests.rs b/codex-rs/core/src/thread_manager_tests.rs
-index 0800effb8a675dc7eb287981fcf4117ed3d22d34..81a508c278ed487f1fba67d0fc98d422ddede26e 100644
+index 9578c924594942e396dfc6e585dc5134a6010a19..23f84e923cadaab31ba026da876167abd2025a40 100644
 --- a/codex-rs/core/src/thread_manager_tests.rs
 +++ b/codex-rs/core/src/thread_manager_tests.rs
-@@ -3514,3 +3514,88 @@ async fn interrupted_fork_snapshot_uses_persisted_mid_turn_history_without_live_
+@@ -3555,3 +3555,88 @@ async fn interrupted_fork_snapshot_uses_persisted_mid_turn_history_without_live_
          1,
      );
  }
@@ -1063,7 +1107,7 @@ index 0800effb8a675dc7eb287981fcf4117ed3d22d34..81a508c278ed487f1fba67d0fc98d422
 +    }
 +}
 diff --git a/codex-rs/core/src/thread_spawn.rs b/codex-rs/core/src/thread_spawn.rs
-index 29dc6c44ab21547bb2c9713aaf10effa83eb014a..d9b2fbc1f31990dd68d9de95fde5baafd96fb6fc 100644
+index 4d8d3f469d4860dda415ccf3271e4c24c8a755bb..6669439c9a56af32eadffd74bfbc1427078fee75 100644
 --- a/codex-rs/core/src/thread_spawn.rs
 +++ b/codex-rs/core/src/thread_spawn.rs
 @@ -37,6 +37,8 @@ pub(crate) struct ThreadSpawnRequest {
@@ -1132,17 +1176,109 @@ index 75a2bf9bf04b17bbf84b4e12b08f7608b9f85b2d..e6ceeeb0e80b5dad51b06024c47ddee6
          | ResponseEvent::ServerModel(_)
          | ResponseEvent::ModelVerifications(_)
          | ResponseEvent::TurnModerationMetadata(_)
+diff --git a/codex-rs/core/tests/suite/hooks.rs b/codex-rs/core/tests/suite/hooks.rs
+index e60331cc942bddf547b8c8b332af415226fe8c5f..2f9f170a33a45ff18d5393525febe8820cf80f03 100644
+--- a/codex-rs/core/tests/suite/hooks.rs
++++ b/codex-rs/core/tests/suite/hooks.rs
+@@ -6126,6 +6126,87 @@ async fn model_request_observer_reports_cancellation() -> Result<()> {
+     Ok(())
+ }
+ 
++#[tokio::test]
++async fn native_sync_post_model_hook_fails_before_inference_or_tool_dispatch() -> Result<()> {
++    skip_if_no_network!(Ok(()));
++    let server = start_mock_server().await;
++    let mut response = ev_completed("native-tool");
++    response["response"]["output"] = json!([{
++        "type": "function_call",
++        "call_id": "native-call",
++        "name": "update_plan",
++        "arguments": "{\"plan\":[{\"step\":\"Unexpected side effect\",\"status\":\"in_progress\"}]}"
++    }]);
++    let requests = mount_sse_once(&server, sse(vec![response])).await;
++    let base_url = server.uri();
++    let test = test_codex()
++        .with_model("gpt-6-luna")
++        .with_pre_build_hook(|home| {
++            write_lifecycle_hooks(home, &["PostModelRequest"]).unwrap();
++            let path = home.join("hooks.json");
++            let mut config: Value = serde_json::from_slice(&fs::read(&path).unwrap()).unwrap();
++            config["hooks"]["PreToolUse"] = json!([{"hooks": [{
++                "type": "command",
++                "command": format!("touch '{}'", home.join("tool-dispatched").display()),
++            }]}]);
++            fs::write(path, config.to_string()).unwrap();
++        })
++        .with_config(move |config| {
++            trust_discovered_hooks(config);
++            config.model_provider_id = "opencode-go".into();
++            config.model_provider = config.model_providers["opencode-go"].clone();
++            config.model_provider.base_url = Some(base_url);
++            config.model_provider.experimental_bearer_token =
++                Some("fixture-token".to_string().into());
++            config.model_catalog = None;
++            config.update_plan_enabled = true;
++            config.features.disable(Feature::Apps).unwrap();
++        })
++        .build_with_auto_env(&server)
++        .await?;
++    test.codex
++        .start_or_steer_turn(TurnInputRequest::user_input(vec![UserInput::Text {
++            text: "Update the plan.".into(),
++            text_elements: vec![],
++        }]))
++        .await?;
++    let error = timeout(
++        Duration::from_secs(10),
++        wait_for_event_match(&test.codex, |event| {
++            if let EventMsg::Error(error) = event {
++                Some(error.clone())
++            } else {
++                None
++            }
++        }),
++    )
++    .await?;
++    assert!(error.message.contains("synchronous PostModelRequest hooks"));
++    timeout(
++        Duration::from_secs(10),
++        wait_for_event(&test.codex, |event| {
++            matches!(event, EventMsg::TurnComplete(_))
++        }),
++    )
++    .await?;
++    let post = wait_for_hook_inputs(test.codex_home_path(), "PostModelRequest", 1).await?;
++    assert_eq!(post.len(), 1);
++    assert_eq!(post[0]["status"], "failed");
++    assert_eq!(post[0]["token_usage"], Value::Null);
++    assert!(
++        post[0]["error"]
++            .as_str()
++            .unwrap()
++            .contains("synchronous PostModelRequest hooks")
++    );
++    assert!(
++        requests.requests().is_empty(),
++        "native inference must not start"
++    );
++    assert!(!test.codex_home_path().join("tool-dispatched").exists());
++    Ok(())
++}
++
+ #[test_case::test_case(Some(false), false; "sync finishes before dispatch")]
+ #[test_case::test_case(Some(false), true; "resume after interrupt preserves aborted custom call and usage")]
+ #[test_case::test_case(Some(true), false; "async dispatches before stream ends")]
 diff --git a/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__agent_eviction__idle_eviction_followup.snap b/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__agent_eviction__idle_eviction_followup.snap
-index 5056206357203b5ec76081784a2ca903109107b0..e75794bdd2f6ecaddd421357342770e259b65308 100644
+index b32892eaa7407d8df6d22ebf97a5f8e7ac036a2b..620ac3cdf1659491202e97013fbc5a8ba5ed76e6 100644
 --- a/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__agent_eviction__idle_eviction_followup.snap
 +++ b/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__agent_eviction__idle_eviction_followup.snap
-@@ -7,12 +7,12 @@ Scenario: A parent delegates an API migration, queues a note while the worker is
+@@ -7,12 +7,12 @@ Scenario: A parent with no configured environment delegates an API migration, qu
  
  ## Window 1
  -- request 1 (turn) --
--00:additional_tools/developer (2; hash=122dc70cb8c7e8f0):
-+00:additional_tools/developer (2; hash=0d0391daf429f6aa):
-         - namespace/functions; hash=f859506569b16c70
+-00:additional_tools/developer (2; hash=7958a01e34d95ac2):
++00:additional_tools/developer (2; hash=a0dd738f5457cc8c):
+         - namespace/functions; hash=30a5fc1fcffb1c04
            - custom/exec
            - function/wait
            - function/request_user_input
@@ -1151,13 +1287,13 @@ index 5056206357203b5ec76081784a2ca903109107b0..e75794bdd2f6ecaddd421357342770e2
            - function/followup_task
            - function/interrupt_agent
            - function/list_agents
-@@ -66,12 +66,12 @@ Scenario: A parent delegates an API migration, queues a note while the worker is
+@@ -66,12 +66,12 @@ Scenario: A parent with no configured environment delegates an API migration, qu
  
  ## Window 2 (after request 6: input diverged at item 03)
  -- request 7 (turn) --
--00:additional_tools/developer (2; hash=122dc70cb8c7e8f0):
-+00:additional_tools/developer (2; hash=0d0391daf429f6aa):
-         - namespace/functions; hash=f859506569b16c70
+-00:additional_tools/developer (2; hash=7958a01e34d95ac2):
++00:additional_tools/developer (2; hash=a0dd738f5457cc8c):
+         - namespace/functions; hash=30a5fc1fcffb1c04
            - custom/exec
            - function/wait
            - function/request_user_input
@@ -1188,6 +1324,160 @@ index c0f63f83b6ec4d75537a1c6c38b37522a6a836c9..0e6e01227d207786765b1486bb3675b8
            - function/create_channel
            - function/followup_task
            - function/get_channels
+diff --git a/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__child_completion_wakes_parent_after_final_answer.snap b/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__child_completion_wakes_parent_after_final_answer.snap
+index f84d16e7842414732dbd16d0419ddd3b0e13370f..bbf9ed0807241dfd70aa2d601f6fccda7ce5ab8b 100644
+--- a/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__child_completion_wakes_parent_after_final_answer.snap
++++ b/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__child_completion_wakes_parent_after_final_answer.snap
+@@ -16,7 +16,7 @@ Settings:
+   text: {"verbosity":"low"}
+   tool_choice: "auto"
+ -- request 1 (turn) --
+-00:additional_tools/developer (3; hash=37af7b347b5c1eb7):
++00:additional_tools/developer (3; hash=32f0c7aed90c1505):
+         - namespace/functions; hash=a3c60999d0288751
+           - custom/exec
+           - function/wait
+@@ -24,7 +24,7 @@ Settings:
+           - function/request_user_input_async
+         - namespace/clock: Tools for reading and waiting on time.; hash=f402e8c5e9b5e317
+           - function/sleep
+-        - namespace/collaboration: Tools for spawning and managing sub-agents.; hash=2c8d6295978dbe63
++        - namespace/collaboration: Tools for spawning and managing sub-agents.; hash=48f3c983ab019481
+           - function/followup_task
+           - function/interrupt_agent
+           - function/list_agents
+@@ -53,14 +53,14 @@ Settings:
+ ## Window 2 (after request 3: input diverged at item 00)
+ Settings: same as window 1
+ -- request 4 (turn) --
+-00:additional_tools/developer (3; hash=ce2de39d992cd930):
++00:additional_tools/developer (3; hash=0211f99018b4edea):
+         - namespace/functions; hash=fa0731964313a476
+           - custom/exec
+           - function/wait
+           - function/request_user_input
+         - namespace/clock: Tools for reading and waiting on time.; hash=f402e8c5e9b5e317
+           - function/sleep
+-        - namespace/collaboration: Tools for spawning and managing sub-agents.; hash=2c8d6295978dbe63
++        - namespace/collaboration: Tools for spawning and managing sub-agents.; hash=48f3c983ab019481
+           - function/followup_task
+           - function/interrupt_agent
+           - function/list_agents
+diff --git a/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__frozen_cloud_skills__frozen_cloud_skills_with_named_executor_request_history.snap b/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__frozen_cloud_skills__frozen_cloud_skills_with_named_executor_request_history.snap
+index 174e980e1a08fe1bbceb9bf5779af611230360ae..d9e2efb5b0477a65f17a61f9f9d0782800d385e9 100644
+--- a/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__frozen_cloud_skills__frozen_cloud_skills_with_named_executor_request_history.snap
++++ b/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__frozen_cloud_skills__frozen_cloud_skills_with_named_executor_request_history.snap
+@@ -17,7 +17,7 @@ Settings:
+   text: {"verbosity":"low"}
+   tool_choice: "auto"
+ -- request 1 (request) --
+-00:additional_tools/developer (3; hash=e075a43448be3246):
++00:additional_tools/developer (3; hash=a4974768e35e60e8):
+         - namespace/functions; hash=bbcd688349ca7e12
+           - custom/exec
+           - function/wait
+@@ -25,7 +25,7 @@ Settings:
+           - function/request_user_input_async
+         - namespace/clock: Tools for reading and waiting on time.; hash=f402e8c5e9b5e317
+           - function/sleep
+-        - namespace/collaboration: Tools for spawning and managing sub-agents.; hash=2c8d6295978dbe63
++        - namespace/collaboration: Tools for spawning and managing sub-agents.; hash=48f3c983ab019481
+           - function/followup_task
+           - function/interrupt_agent
+           - function/list_agents
+diff --git a/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__incremental_tools__prediction_fork_mcp_removal.snap b/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__incremental_tools__prediction_fork_mcp_removal.snap
+index 655d2bcbdfb879a60d917525908741da607a1c59..9c1e990eef0d6f91d28d8861476311222e0befbd 100644
+--- a/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__incremental_tools__prediction_fork_mcp_removal.snap
++++ b/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__incremental_tools__prediction_fork_mcp_removal.snap
+@@ -16,7 +16,7 @@ Settings:
+   text: {"verbosity":"low"}
+   tool_choice: "auto"
+ -- request 1 (turn) --
+-00:additional_tools/developer (3; hash=94348ab8527021ff):
++00:additional_tools/developer (3; hash=351c7f46ade7bc7d):
+         - namespace/functions; hash=124fee69a69ed6b2
+           - function/exec_command
+           - function/write_stdin
+@@ -26,7 +26,7 @@ Settings:
+           - function/request_user_input
+           - custom/apply_patch
+           - function/view_image
+-        - namespace/multi_agent_v1: Tools for spawning and managing sub-agents.; hash=2327142bda177c50
++        - namespace/multi_agent_v1: Tools for spawning and managing sub-agents.; hash=0e26006e9962f42e
+           - function/close_agent
+           - function/resume_agent
+           - function/send_input
+@@ -60,7 +60,7 @@ Settings:
+ ## Window 2 (after request 3: input diverged at item 05)
+ Settings: same as window 1
+ -- request 4 (turn) --
+-00:additional_tools/developer (3; hash=94348ab8527021ff):
++00:additional_tools/developer (3; hash=351c7f46ade7bc7d):
+         - namespace/functions; hash=124fee69a69ed6b2
+           - function/exec_command
+           - function/write_stdin
+@@ -70,7 +70,7 @@ Settings: same as window 1
+           - function/request_user_input
+           - custom/apply_patch
+           - function/view_image
+-        - namespace/multi_agent_v1: Tools for spawning and managing sub-agents.; hash=2327142bda177c50
++        - namespace/multi_agent_v1: Tools for spawning and managing sub-agents.; hash=0e26006e9962f42e
+           - function/close_agent
+           - function/resume_agent
+           - function/send_input
+diff --git a/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__mcp_ema__enterprise_failure_preserves_ordinary_mcp_history.snap b/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__mcp_ema__enterprise_failure_preserves_ordinary_mcp_history.snap
+index d6f765f0a863dfbe167ee9e40ad5ffd031963b63..bdc63ce9f49b12b76bc2638e5e423206cbe8bdc1 100644
+--- a/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__mcp_ema__enterprise_failure_preserves_ordinary_mcp_history.snap
++++ b/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__mcp_ema__enterprise_failure_preserves_ordinary_mcp_history.snap
+@@ -16,7 +16,7 @@ Settings:
+   stream: true
+   text: {"verbosity":"low"}
+   tool_choice: "auto"
+-  tools (13; hash=75ef17d8adc1b3db):
++  tools (13; hash=6e997d7e0f8487fd):
+     - function/exec_command: Runs a command in a PTY, returning output or a session ID for ongoing interaction.; args=[cmd, justification, login, max_output_tokens, prefix_rule, sandbox_permissions, shell, tty, workdir, yield_time_ms]; hash=c04108e51a8548c5
+     - function/write_stdin: Writes characters to an existing unified exec session and returns recent output.; args=[chars, max_output_tokens, session_id, yield_time_ms]; hash=7fb62d8a3e2df4e2
+     - function/list_mcp_resources: Lists resources provided by MCP servers. Resources allow servers to share data that provides cont...; args=[cursor, server]; hash=6792edaff13561bd
+@@ -29,7 +29,7 @@ Settings:
+       - function/sleep
+     - custom/apply_patch: The `apply_patch` tool can be used to edit files. This is a FREEFORM tool, so do not wrap the pat...; hash=dea9f12b0111a4ba
+     - function/view_image: View a local image file from the filesystem when visual inspection is needed. Use this for images...; args=[detail, path]; hash=3b766d5bdec5d50e
+-    - namespace/collaboration: Tools for spawning and managing sub-agents.; hash=2c8d6295978dbe63
++    - namespace/collaboration: Tools for spawning and managing sub-agents.; hash=48f3c983ab019481
+       - function/followup_task
+       - function/interrupt_agent
+       - function/list_agents
+diff --git a/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__mcp_ema__enterprise_revocation_preserves_history_and_ordinary_tools.snap b/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__mcp_ema__enterprise_revocation_preserves_history_and_ordinary_tools.snap
+index abd3e86398b5d249602cafe246b5ffbfa63b46c5..0d5bc1b2ac9c5886ba7a41afb84b07ede4a1b43d 100644
+--- a/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__mcp_ema__enterprise_revocation_preserves_history_and_ordinary_tools.snap
++++ b/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__mcp_ema__enterprise_revocation_preserves_history_and_ordinary_tools.snap
+@@ -16,7 +16,7 @@ Settings:
+   stream: true
+   text: {"verbosity":"low"}
+   tool_choice: "auto"
+-  tools (14; hash=c23674e45d0ff686):
++  tools (14; hash=adcc86c44bdb8804):
+     - function/exec_command: Runs a command in a PTY, returning output or a session ID for ongoing interaction.; args=[cmd, justification, login, max_output_tokens, prefix_rule, sandbox_permissions, shell, tty, workdir, yield_time_ms]; hash=c04108e51a8548c5
+     - function/write_stdin: Writes characters to an existing unified exec session and returns recent output.; args=[chars, max_output_tokens, session_id, yield_time_ms]; hash=7fb62d8a3e2df4e2
+     - function/list_mcp_resources: Lists resources provided by MCP servers. Resources allow servers to share data that provides cont...; args=[cursor, server]; hash=6792edaff13561bd
+@@ -29,7 +29,7 @@ Settings:
+       - function/sleep
+     - custom/apply_patch: The `apply_patch` tool can be used to edit files. This is a FREEFORM tool, so do not wrap the pat...; hash=dea9f12b0111a4ba
+     - function/view_image: View a local image file from the filesystem when visual inspection is needed. Use this for images...; args=[detail, path]; hash=3b766d5bdec5d50e
+-    - namespace/collaboration: Tools for spawning and managing sub-agents.; hash=2c8d6295978dbe63
++    - namespace/collaboration: Tools for spawning and managing sub-agents.; hash=48f3c983ab019481
+       - function/followup_task
+       - function/interrupt_agent
+       - function/list_agents
+@@ -67,7 +67,7 @@ Settings:
+ 
+ ## Window 2 (after request 2)
+ Settings: relative to window 1
+-  tools (13; hash=75ef17d8adc1b3db):
++  tools (13; hash=6e997d7e0f8487fd):
+     - removed namespace/mcp__enterprise
+ -- request 3 (turn) --
+ 00:message/developer:
 diff --git a/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__model_instructions__incremental_model_instructions.snap b/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__model_instructions__incremental_model_instructions.snap
 index 0a1d2ba5a5f4a3724e448c705f9c857d3ae7fe31..cdbeb3cef75fefbb61071f83c0d8f4440ef04287 100644
 --- a/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__model_instructions__incremental_model_instructions.snap
@@ -1243,6 +1533,28 @@ index 5fb3ec889e962788945050c06fadcb42562fcca0..df3e8af2f6e266e84f24b9e66ae5765d
            - function/sleep
 -        - namespace/collaboration: Tools for spawning and managing sub-agents.; hash=7e156cf57f85af87
 +        - namespace/collaboration: Tools for spawning and managing sub-agents.; hash=27629ca7251ef17d
+           - function/followup_task
+           - function/interrupt_agent
+           - function/list_agents
+diff --git a/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__skill_read_installation_recovery_request_history.snap b/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__skill_read_installation_recovery_request_history.snap
+index 2ca54aadadf0e4f8ffd16e7854833893e1551238..e30d9e47dae33d9ece7571a2267d7a727cf76ae0 100644
+--- a/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__skill_read_installation_recovery_request_history.snap
++++ b/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__skill_read_installation_recovery_request_history.snap
+@@ -7,7 +7,7 @@ Scenario: Astra reads Cloud instructions, discovers an omitted deployment instal
+ 
+ ## Window 1
+ -- request 1 (request) --
+-00:additional_tools/developer (3; hash=e075a43448be3246):
++00:additional_tools/developer (3; hash=a4974768e35e60e8):
+         - namespace/functions; hash=bbcd688349ca7e12
+           - custom/exec
+           - function/wait
+@@ -15,7 +15,7 @@ Scenario: Astra reads Cloud instructions, discovers an omitted deployment instal
+           - function/request_user_input_async
+         - namespace/clock: Tools for reading and waiting on time.; hash=f402e8c5e9b5e317
+           - function/sleep
+-        - namespace/collaboration: Tools for spawning and managing sub-agents.; hash=2c8d6295978dbe63
++        - namespace/collaboration: Tools for spawning and managing sub-agents.; hash=48f3c983ab019481
            - function/followup_task
            - function/interrupt_agent
            - function/list_agents
@@ -1339,10 +1651,10 @@ index 8b31556e8e1ec16765ea86c54755c00ce26346d1..87d34e76e3e3f5c6c1210cba50acf4fb
          assert_eq!(pending.target, SessionImportTarget::New);
      }
 diff --git a/codex-rs/external-agent-migration/src/sessions/records_cla.rs b/codex-rs/external-agent-migration/src/sessions/records_cla.rs
-index 13ff14cd70fb37c6e7d869c4a755cffa8402b994..9b5669d5b92c19d3465c384c02b3379ba0ae226b 100644
+index 957995074c6ec7c72fa6c0d77ab30c37e5c06123..940645cd99ce032897fd6294289d1aad62730065 100644
 --- a/codex-rs/external-agent-migration/src/sessions/records_cla.rs
 +++ b/codex-rs/external-agent-migration/src/sessions/records_cla.rs
-@@ -146,7 +146,7 @@ pub(super) fn read_session_import(path: &Path) -> io::Result<ParsedSessionImport
+@@ -155,7 +155,7 @@ pub(super) fn read_session_import(path: &Path) -> io::Result<ParsedSessionImport
          custom_title,
          ai_title,
          messages,
@@ -1392,7 +1704,7 @@ index 0cb1dd2a5701ba07d9ab73464a9968279d2065d0..07b23ac3c2cea218a6dccb3851758df8
      },
      "stopReason": {
 diff --git a/codex-rs/model-provider-info/Cargo.toml b/codex-rs/model-provider-info/Cargo.toml
-index e6a740d25ddfc26edffa23a32e6b8f9123eef982..cd525cc2dd568f9ee79255e7b85af34e5528efdd 100644
+index 51d3026637dce62a30f6574cb1a5d4624877ebe0..20b789cf17779eea5a4bd7a428c838b3e1f7ef52 100644
 --- a/codex-rs/model-provider-info/Cargo.toml
 +++ b/codex-rs/model-provider-info/Cargo.toml
 @@ -13,6 +13,7 @@ path = "src/lib.rs"
@@ -1401,9 +1713,9 @@ index e6a740d25ddfc26edffa23a32e6b8f9123eef982..cd525cc2dd568f9ee79255e7b85af34e
  [dependencies]
 +codex-provider-registry = { workspace = true, default-features = false }
  codex-client = { workspace = true }
+ codex-http-client = { workspace = true }
  codex-protocol = { workspace = true }
- codex-utils-redacted-string = { workspace = true }
-@@ -25,5 +26,6 @@ url = { workspace = true }
+@@ -25,5 +26,6 @@ serde = { workspace = true, features = ["derive"] }
  codex-utils-absolute-path = { workspace = true }
  maplit = { workspace = true }
  pretty_assertions = { workspace = true }
@@ -1411,10 +1723,10 @@ index e6a740d25ddfc26edffa23a32e6b8f9123eef982..cd525cc2dd568f9ee79255e7b85af34e
  tempfile = { workspace = true }
  toml = { workspace = true }
 diff --git a/codex-rs/model-provider-info/src/lib.rs b/codex-rs/model-provider-info/src/lib.rs
-index f020d34c25413a7ac581dc5ed0a5187be17caa99..a8ccceffd7e3d86aa05a2081b8cd949a71c5f30f 100644
+index a70ab290eabc30292adf9d837cddf473e5661827..1219a79676b4318782d960c56bb350a1a9afbc60 100644
 --- a/codex-rs/model-provider-info/src/lib.rs
 +++ b/codex-rs/model-provider-info/src/lib.rs
-@@ -108,12 +108,36 @@ pub enum WireApi {
+@@ -110,12 +110,36 @@ pub enum WireApi {
      /// The Responses API exposed by OpenAI at `/v1/responses`.
      #[default]
      Responses,
@@ -1451,7 +1763,7 @@ index f020d34c25413a7ac581dc5ed0a5187be17caa99..a8ccceffd7e3d86aa05a2081b8cd949a
          };
          f.write_str(value)
      }
-@@ -127,8 +151,23 @@ impl<'de> Deserialize<'de> for WireApi {
+@@ -129,8 +153,23 @@ impl<'de> Deserialize<'de> for WireApi {
          let value = String::deserialize(deserializer)?;
          match value.as_str() {
              "responses" => Ok(Self::Responses),
@@ -1476,7 +1788,7 @@ index f020d34c25413a7ac581dc5ed0a5187be17caa99..a8ccceffd7e3d86aa05a2081b8cd949a
          }
      }
  }
-@@ -164,6 +203,9 @@ pub struct ModelProviderInfo {
+@@ -166,6 +205,9 @@ pub struct ModelProviderInfo {
      /// Which wire protocol this provider expects.
      #[serde(default)]
      pub wire_api: WireApi,
@@ -1486,7 +1798,7 @@ index f020d34c25413a7ac581dc5ed0a5187be17caa99..a8ccceffd7e3d86aa05a2081b8cd949a
      /// Optional API capability overrides for a custom Responses-compatible provider.
      /// Unspecified capabilities retain their existing provider defaults.
      pub capabilities: Option<ModelProviderCapabilities>,
-@@ -296,7 +338,71 @@ other non-default provider fields are not supported"
+@@ -298,7 +340,71 @@ other non-default provider fields are not supported"
          Ok(())
      }
  
@@ -1558,7 +1870,7 @@ index f020d34c25413a7ac581dc5ed0a5187be17caa99..a8ccceffd7e3d86aa05a2081b8cd949a
          if let Some(gateway) = &self.gateway_oauth {
              gateway.validate(self)?;
          }
-@@ -425,6 +531,11 @@ other non-default provider fields are not supported"
+@@ -427,6 +533,11 @@ other non-default provider fields are not supported"
  
      /// Builds an API provider with managed residency taking precedence over configured headers.
      pub fn to_api_provider(&self, auth_mode: Option<AuthMode>) -> CodexResult<ApiProvider> {
@@ -1570,7 +1882,7 @@ index f020d34c25413a7ac581dc5ed0a5187be17caa99..a8ccceffd7e3d86aa05a2081b8cd949a
          let default_base_url = if matches!(
              auth_mode,
              Some(
-@@ -497,6 +608,9 @@ other non-default provider fields are not supported"
+@@ -499,6 +610,9 @@ other non-default provider fields are not supported"
  
      /// Effective maximum number of request retries for this provider.
      pub fn request_max_retries(&self) -> u64 {
@@ -1580,7 +1892,7 @@ index f020d34c25413a7ac581dc5ed0a5187be17caa99..a8ccceffd7e3d86aa05a2081b8cd949a
          self.request_max_retries
              .unwrap_or(DEFAULT_REQUEST_MAX_RETRIES)
              .min(MAX_REQUEST_MAX_RETRIES)
-@@ -504,6 +618,9 @@ other non-default provider fields are not supported"
+@@ -506,6 +620,9 @@ other non-default provider fields are not supported"
  
      /// Effective maximum number of stream reconnection attempts for this provider.
      pub fn stream_max_retries(&self) -> u64 {
@@ -1590,7 +1902,7 @@ index f020d34c25413a7ac581dc5ed0a5187be17caa99..a8ccceffd7e3d86aa05a2081b8cd949a
          self.stream_max_retries
              .unwrap_or(DEFAULT_STREAM_MAX_RETRIES)
              .min(MAX_STREAM_MAX_RETRIES)
-@@ -535,6 +652,7 @@ other non-default provider fields are not supported"
+@@ -537,6 +654,7 @@ other non-default provider fields are not supported"
              gateway_oauth: None,
              aws: None,
              wire_api: WireApi::Responses,
@@ -1598,7 +1910,7 @@ index f020d34c25413a7ac581dc5ed0a5187be17caa99..a8ccceffd7e3d86aa05a2081b8cd949a
              query_params: None,
              http_headers: Some(
                  [("version".to_string(), env!("CARGO_PKG_VERSION").into())]
-@@ -587,6 +705,7 @@ other non-default provider fields are not supported"
+@@ -589,6 +707,7 @@ other non-default provider fields are not supported"
                  auth_refresh: None,
              })),
              wire_api: WireApi::Responses,
@@ -1606,7 +1918,7 @@ index f020d34c25413a7ac581dc5ed0a5187be17caa99..a8ccceffd7e3d86aa05a2081b8cd949a
              query_params: None,
              http_headers: Some(HashMap::from([(
                  AMAZON_BEDROCK_MANTLE_CLIENT_AGENT_HEADER.to_string(),
-@@ -659,6 +778,13 @@ pub const OLLAMA_OSS_PROVIDER_ID: &str = "ollama";
+@@ -661,6 +780,13 @@ pub const OLLAMA_OSS_PROVIDER_ID: &str = "ollama";
  /// Built-in default provider list.
  pub fn built_in_model_providers(
      openai_base_url: Option<String>,
@@ -1620,7 +1932,7 @@ index f020d34c25413a7ac581dc5ed0a5187be17caa99..a8ccceffd7e3d86aa05a2081b8cd949a
  ) -> HashMap<String, ModelProviderInfo> {
      use ModelProviderInfo as P;
      let openai_provider = P::create_openai_provider(openai_base_url);
-@@ -666,11 +792,7 @@ pub fn built_in_model_providers(
+@@ -668,11 +794,7 @@ pub fn built_in_model_providers(
      let amazon_bedrock_runtime_provider =
          P::create_amazon_bedrock_runtime_provider(/*aws*/ None);
  
@@ -1633,7 +1945,7 @@ index f020d34c25413a7ac581dc5ed0a5187be17caa99..a8ccceffd7e3d86aa05a2081b8cd949a
          (OPENAI_PROVIDER_ID, openai_provider),
          (AMAZON_BEDROCK_PROVIDER_ID, amazon_bedrock_provider),
          (
-@@ -688,7 +810,33 @@ pub fn built_in_model_providers(
+@@ -690,7 +812,33 @@ pub fn built_in_model_providers(
      ]
      .into_iter()
      .map(|(k, v)| (k.to_string(), v))
@@ -1668,7 +1980,7 @@ index f020d34c25413a7ac581dc5ed0a5187be17caa99..a8ccceffd7e3d86aa05a2081b8cd949a
  }
  
  /// Merge configured providers into the built-in provider catalog.
-@@ -764,6 +912,7 @@ pub fn create_oss_provider_with_base_url(base_url: &str, wire_api: WireApi) -> M
+@@ -766,6 +914,7 @@ pub fn create_oss_provider_with_base_url(base_url: &str, wire_api: WireApi) -> M
          gateway_oauth: None,
          aws: None,
          wire_api,
@@ -1928,10 +2240,10 @@ index 9c818af7dd81bc6e6e6314148905eae5106f51a0..6aa4891914854e9a023c8cf8ea15a367
  mod shared_state;
  pub mod test_support;
 diff --git a/codex-rs/model-provider/src/models_identity.rs b/codex-rs/model-provider/src/models_identity.rs
-index 409ff83a07abde4f97a62195a62f4c87deeb185e..5bf512d87c4bcbd389af279e4d582ec7b0119a11 100644
+index 713064a24cf662f731962c10e7d742b76cd9b2be..eb80b8049def321d63cc9ad8ef6be2bc14b978e8 100644
 --- a/codex-rs/model-provider/src/models_identity.rs
 +++ b/codex-rs/model-provider/src/models_identity.rs
-@@ -86,7 +86,7 @@ pub(crate) fn identity(
+@@ -96,7 +96,7 @@ pub(crate) fn identity(
      if let Some(gateway_oauth) = &provider_info.gateway_oauth {
          field(&serde_json::to_vec(gateway_oauth)?);
      }
@@ -1941,7 +2253,7 @@ index 409ff83a07abde4f97a62195a62f4c87deeb185e..5bf512d87c4bcbd389af279e4d582ec7
  
  #[cfg(test)]
 diff --git a/codex-rs/model-provider/src/provider.rs b/codex-rs/model-provider/src/provider.rs
-index f8f0790dde816a26b9e10b38df5d3030d4fc2f95..e1cf842b1d06bd74476d62e57a60d47140b5e574 100644
+index a5263a85239d136318cd8d0ed2bf9452f79e8ab3..45b964e2f665c79ea45a91963c063560bd04675b 100644
 --- a/codex-rs/model-provider/src/provider.rs
 +++ b/codex-rs/model-provider/src/provider.rs
 @@ -64,11 +64,15 @@ pub struct ProviderAuthRecoveryMessages {
@@ -1960,9 +2272,9 @@ index f8f0790dde816a26b9e10b38df5d3030d4fc2f95..e1cf842b1d06bd74476d62e57a60d471
              Self::MissingChatgptAccountDetails => {
                  write!(f, "plan type is required for chatgpt authentication")
              }
-@@ -106,6 +110,9 @@ pub const DEFAULT_MEMORY_CONSOLIDATION_PREFERRED_MODEL: &str = "gpt-5.6-terra";
- /// `ModelProviderInfo` returned by `info` is the serialized/configured provider
- /// metadata used by the default OpenAI-compatible implementation.
+@@ -114,6 +118,9 @@ pub const DEFAULT_MEMORY_CONSOLIDATION_PREFERRED_MODEL: &str = "gpt-5.6-terra";
+ /// workspace shared by multiple users. Request authentication, credential refresh,
+ /// and permission checks are unchanged.
  pub trait ModelProvider: fmt::Debug + Send + Sync {
 +    fn backend(&self) -> Option<Arc<codex_provider_adapter::backend::NativeBackend>> {
 +        None
@@ -1970,7 +2282,7 @@ index f8f0790dde816a26b9e10b38df5d3030d4fc2f95..e1cf842b1d06bd74476d62e57a60d471
      /// Returns the configured provider metadata.
      fn info(&self) -> &ModelProviderInfo;
  
-@@ -337,6 +344,12 @@ pub fn create_model_provider(
+@@ -345,6 +352,12 @@ pub fn create_model_provider(
      provider_info: ModelProviderInfo,
      auth_manager: Option<Arc<AuthManager>>,
  ) -> SharedModelProvider {
@@ -1983,7 +2295,7 @@ index f8f0790dde816a26b9e10b38df5d3030d4fc2f95..e1cf842b1d06bd74476d62e57a60d471
      if provider_info.is_amazon_bedrock() {
          return Arc::new(AmazonBedrockModelProvider::new(provider_info, auth_manager));
      }
-@@ -644,6 +657,7 @@ mod tests {
+@@ -652,6 +665,7 @@ mod tests {
              gateway_oauth: None,
              aws: None,
              wire_api: WireApi::Responses,
@@ -1991,7 +2303,7 @@ index f8f0790dde816a26b9e10b38df5d3030d4fc2f95..e1cf842b1d06bd74476d62e57a60d471
              query_params: None,
              http_headers: None,
              env_http_headers: None,
-@@ -1403,4 +1417,21 @@ printf '%s\n' '{"AccessKeyId":"exported","SecretAccessKey":"secret"}'
+@@ -1411,4 +1425,21 @@ printf '%s\n' '{"AccessKeyId":"exported","SecretAccessKey":"secret"}'
              }
          }
      }
@@ -2014,10 +2326,10 @@ index f8f0790dde816a26b9e10b38df5d3030d4fc2f95..e1cf842b1d06bd74476d62e57a60d471
 +    }
  }
 diff --git a/codex-rs/model-provider/src/shared_state_test_support.rs b/codex-rs/model-provider/src/shared_state_test_support.rs
-index d86ab79605a122dd0a6f6c299deeae02d01d13e4..d4aeef68b31140df181240003d7f697627696270 100644
+index d7a60e063ecb1d47b540190e91748974328a7499..b6886208b1791b95903609b0dba933d21ae0be81 100644
 --- a/codex-rs/model-provider/src/shared_state_test_support.rs
 +++ b/codex-rs/model-provider/src/shared_state_test_support.rs
-@@ -106,8 +106,11 @@ pub fn seed_gateway_auth(
+@@ -107,8 +107,11 @@ pub fn seed_gateway_auth(
          digest.update(scope.as_bytes());
          digest.update([0]);
      }
@@ -2054,10 +2366,10 @@ index cd7b59a0530b6ead4c3852d0a3217aa7115a4d81..305e117da6695f8e3c6bf3453f0271e2
 +    ENGINE_CLIENT_VERSION.to_owned()
  }
 diff --git a/codex-rs/models-manager/src/manager.rs b/codex-rs/models-manager/src/manager.rs
-index b1efc0fe7c0303f68304f5c78b5626b1f77496cc..69cbb99904e676e270ea7b948a9fc5289cae34ae 100644
+index a78f51c69887e3e5bf1becd00441e5fca3efe782..66f52574d4fa07963c8d61d691df3471b444ced2 100644
 --- a/codex-rs/models-manager/src/manager.rs
 +++ b/codex-rs/models-manager/src/manager.rs
-@@ -46,6 +46,9 @@ pub trait ModelsEndpointClient: fmt::Debug + Send + Sync {
+@@ -49,6 +49,9 @@ pub trait ModelsEndpointClient: fmt::Debug + Send + Sync {
      /// Return `None` when identity is unavailable; cached catalog reuse is then disabled.
      fn identity(&self) -> Option<String>;
  
@@ -2067,7 +2379,7 @@ index b1efc0fe7c0303f68304f5c78b5626b1f77496cc..69cbb99904e676e270ea7b948a9fc528
      /// Returns whether this provider can authenticate command-scoped requests.
      fn has_command_auth(&self) -> bool;
  
-@@ -118,6 +121,8 @@ pub trait ModelsManager: fmt::Debug + Send + Sync {
+@@ -121,6 +124,8 @@ pub trait ModelsManager: fmt::Debug + Send + Sync {
      /// Static catalogs ignore this setting.
      fn set_api_key_model_discovery_enabled(&self, _enabled: bool) {}
  
@@ -2076,7 +2388,7 @@ index b1efc0fe7c0303f68304f5c78b5626b1f77496cc..69cbb99904e676e270ea7b948a9fc528
      /// List all available models, refreshing according to the specified strategy.
      ///
      /// Returns model presets sorted by priority and filtered by auth mode and visibility.
-@@ -379,6 +384,9 @@ impl StaticModelsManager {
+@@ -382,6 +387,9 @@ impl StaticModelsManager {
  }
  
  impl ModelsManager for OpenAiModelsManager {
@@ -2130,7 +2442,7 @@ index c0ad8b734a94baedc96e93186ce6d8cc3d588ce3..605518ec15908d441e0b2973004c7423
      pub const ROOT: &str = "/root";
      pub const MORPHEUS: &str = "/morpheus";
 diff --git a/codex-rs/protocol/src/openai_models.rs b/codex-rs/protocol/src/openai_models.rs
-index 45e3d5c0963048f197afcc4e5cdff3770df54a9b..7151592325f1069e3563930d799cda3548cf8985 100644
+index d3d3dd8930e4fce1bec486aa480df88ae5b50461..a947c477f6333d85fed3dfce6b21ba077f489f01 100644
 --- a/codex-rs/protocol/src/openai_models.rs
 +++ b/codex-rs/protocol/src/openai_models.rs
 @@ -9,12 +9,8 @@ use std::str::FromStr;
@@ -2179,7 +2491,7 @@ index 45e3d5c0963048f197afcc4e5cdff3770df54a9b..7151592325f1069e3563930d799cda35
          })
      }
  }
-@@ -1427,19 +1414,10 @@ mod tests {
+@@ -1432,19 +1419,10 @@ mod tests {
  
          assert_eq!(
              ReasoningEffort::json_schema(&mut effort_generator),
@@ -2243,10 +2555,10 @@ index 13d06dc3e4571c12d5e4f1ba66c6b4770bd7397a..00fb570d8eafe6f5f6192da2ad2c5dce
                          actions: vec![Box::new(|tx| tx.send(AppEvent::StartAgentsDaemon))],
                          dismiss_on_select: true,
 diff --git a/codex-rs/tui/src/app/agents_overview_new.rs b/codex-rs/tui/src/app/agents_overview_new.rs
-index 1b96018362cc109231de02a179ed49d51593386f..198125cc39642d68ce7da3dd6c719ca03be7995a 100644
+index d8ddafc880fd514dfeaaf5d6f0ef196f56525e53..6f7fbecc1a12efdc449c9fafc1749fd6e67418db 100644
 --- a/codex-rs/tui/src/app/agents_overview_new.rs
 +++ b/codex-rs/tui/src/app/agents_overview_new.rs
-@@ -184,10 +184,13 @@ impl App {
+@@ -178,10 +178,13 @@ impl App {
                      );
                      if !matches!(self.app_server_target, AppServerTarget::Embedded) {
                          message.push_str(
@@ -2263,7 +2575,7 @@ index 1b96018362cc109231de02a179ed49d51593386f..198125cc39642d68ce7da3dd6c719ca0
                      (None, format!("Failed to start session: {error}"))
                  };
 diff --git a/codex-rs/tui/src/app/agents_overview_tests.rs b/codex-rs/tui/src/app/agents_overview_tests.rs
-index 8603973f3e3815a336755a24910a6115145419fc..bff6723c60233266b843e8af533a0e4891fe1fc5 100644
+index 1293fe6533fa71bf85a364ec3b4cb6990e30af35..d48707d4c27d8415c50f14fcc5fd17297b5f1316 100644
 --- a/codex-rs/tui/src/app/agents_overview_tests.rs
 +++ b/codex-rs/tui/src/app/agents_overview_tests.rs
 @@ -99,7 +99,7 @@ async fn server_version_overview_notice_updates_and_clears() {
@@ -2547,10 +2859,10 @@ index 870b86f61cf4b6daa6a73074549ed7e558a0a3d0..4a577d2eb6bd216bb4f06da6e2378a32
    gpt-test default · /tmp/project
    ? for shortcuts
 diff --git a/codex-rs/tui/src/app/tests/model_catalog.rs b/codex-rs/tui/src/app/tests/model_catalog.rs
-index 273725c2f2d3613eec36c618e38184576424be30..15fa127ad9d6639a5fe4c24b76276ee205bf40e0 100644
+index ec429d438833bf30056b1e8d57020eb371e3686d..35cf5bfde00e75ceb0cd336d296cb7d7047534d4 100644
 --- a/codex-rs/tui/src/app/tests/model_catalog.rs
 +++ b/codex-rs/tui/src/app/tests/model_catalog.rs
-@@ -512,7 +512,7 @@ async fn accepted_model_migration_persists_target_default_reasoning_effort() ->
+@@ -541,7 +541,7 @@ async fn accepted_model_migration_persists_target_default_reasoning_effort() ->
  
      Our latest Sol is more intelligent and more efficient so your usage limits go further. This model is a great daily driver for complex tasks, especially coding.
  

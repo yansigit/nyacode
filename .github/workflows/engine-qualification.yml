@@ -188,7 +188,7 @@ jobs:
           binaries: nyacode codex-code-mode-host ${{ runner.os == 'Windows' && 'codex-command-runner codex-windows-sandbox-setup' || '' }}
           build-mode: release
           working-directory: ${{ steps.engine.outputs.root }}/codex-rs
-      - name: Test Windows terminal process handling
+      - name: Test Windows terminal and sandbox policies
         if: runner.os == 'Windows'
         # MSYS bash makes native descendants inherit disabled Ctrl-C handling.
         # Use a native parent shell to exercise ordinary ConPTY signal behavior.
@@ -196,7 +196,7 @@ jobs:
         working-directory: ${{ steps.engine.outputs.root }}/codex-rs
         env:
           TARGET: ${{ matrix.target }}
-        run: cargo test --locked --release --target "$env:TARGET" -p codex-utils-pty --lib
+        run: cargo test --locked --release --target "$env:TARGET" -p codex-utils-pty -p codex-mxc-sandbox --lib
       - name: Assemble archive and smoke-test its extracted bytes
         shell: bash
         env:
