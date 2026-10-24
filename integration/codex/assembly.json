@@ -252,7 +252,7 @@
       "destination": "codex-rs/app-server/examples/chatgpt_chat_probe.rs",
       "mode": "100644",
       "replace": false,
-      "sha256": "e6b1b7d64f36e0a9cf8588310a809bf30f5ece4d08a9eae0e6fe350f1f0f58e3",
+      "sha256": "07bbbed38c1a9289ddf1ddc3491926711eb46f832bb7f923576ba6de9d8f94f0",
       "source": "integration/codex/overlays/codex-rs/app-server/examples/chatgpt_chat_probe.rs"
     },
     {
