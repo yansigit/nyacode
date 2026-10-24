@@ -77,7 +77,7 @@
       "destination": ".github/workflows/container-verify.yml",
       "mode": "100644",
       "replace": false,
-      "sha256": "74fd55ccf433198771bdf634ad579228036a7e60bea409a87aa6fd0906cbba9a",
+      "sha256": "fb39d0ecad65212f7645df47f842f86c36f4b9fe7ed4461162a9ff912d1d5e27",
       "source": ".github/workflows/container-verify.yml"
     },
     {
@@ -91,7 +91,7 @@
       "destination": ".github/workflows/nyacode-release.yml",
       "mode": "100644",
       "replace": false,
-      "sha256": "e6571785b057105c1cfda203147991d9fcfbd22bd136692680e6213b6c3e1b15",
+      "sha256": "53f45d537844727cc3ca69319bea6d2637c4f1c39915c9b4efee13dcba1591cc",
       "source": ".github/workflows/nyacode-release.yml"
     },
     {
@@ -2723,7 +2723,7 @@
       "destination": "docs/container-verify.md",
       "mode": "100644",
       "replace": false,
-      "sha256": "65b05647fa2a0169f22e133b0de8773fb5b4c0509ccfdc80ec0473bbef8daacf",
+      "sha256": "8d258f4de251ba8e45caf39605906a0e039eace741d8de61dd9078d24191adc6",
       "source": "docs/container-verify.md"
     },
     {
@@ -2772,7 +2772,7 @@
       "destination": "docs/native-providers/integration-manifest.json",
       "mode": "100644",
       "replace": false,
-      "sha256": "52a32d104dc15a0d2fb2eca1f63dcaa79bf2ed31c4ca3890ad25e02d31a4b24b",
+      "sha256": "65ee30cc01d452457a15ac31165925cbcfb5776c5dfd15ffc5040602d7a484fd",
       "source": "docs/native-providers/integration-manifest.json"
     },
     {
@@ -3004,7 +3004,8 @@
       "destination": "scripts/tests/test_nyacode_release.py",
       "mode": "100644",
       "replace": false,
-      "source": "scripts/tests/test_nyacode_release.py"
+      "source": "scripts/tests/test_nyacode_release.py",
+      "sha256": "aaf37e1550ab49a96a627ff6ea6d256731218850262e154e95caa6e9a35d1cae"
     },
     {
       "destination": "scripts/tests/test_verify_container.py",

@@ -34,6 +34,7 @@ COMMIT = "a" * 40
 
 
 def build_fixtures(root: Path) -> Path:
+    toolchain = json.loads((release.ROOT / "engine.lock").read_text())["toolchain"]
     dist = root / "dist"
     dist.mkdir()
     executable = root / "executable"
@@ -75,7 +76,7 @@ def build_fixtures(root: Path) -> Path:
                 "commit": COMMIT,
                 "target": target,
                 "profile": "release",
-                "rust_toolchain": "1.95.0",
+                "rust_toolchain": toolchain,
                 "archive": archive.name,
                 "sha256": release.sha256(archive),
                 "smoke_test": "passed",
@@ -390,7 +391,7 @@ class EngineReleaseTest(unittest.TestCase):
             path.parent.mkdir(parents=True, exist_ok=True)
             path.write_text("assembled engine license\n")
         (self.workspace / "codex-rs/rust-toolchain.toml").write_text(
-            '[toolchain]\nchannel = "1.95.0"\n'
+            f"[toolchain]\nchannel = {json.dumps(self.lock['toolchain'])}\n"
         )
         (self.workspace / "VERSION").write_text("9.8.7\n")
         dist = self.root / "dist"

@@ -32,6 +32,7 @@ TARGETS = (
 REQUIRED_JOBS = {
     "Dependency policy / cargo-deny",
     "Engine controls",
+    "Full workspace container / Complete Linux container verification",
     "Standalone providers",
     "Release tooling and version",
     "Native provider checks / Linux architecture, tests, and features",
@@ -184,6 +185,7 @@ def validate_promotion(
             name: "success"
             for name in (
                 "dependency_policy",
+                "container",
                 "controls",
                 "providers",
                 "validate",

@@ -761,7 +761,14 @@ def upgrade(
             "revision": revision,
             "archive_sha256": digest(archive.read_bytes()),
         }
+        with tempfile.TemporaryDirectory(prefix="nyacode-upstream-") as temporary:
+            pristine = Path(temporary)
+            extract_archive(archive, pristine)
+            candidate["toolchain"] = tomllib.loads(
+                (pristine / "codex-rs/rust-toolchain.toml").read_text()
+            )["toolchain"]["channel"]
         write_json(proposal / "engine.lock", candidate)
+        load_lock(proposal)
         cache = (cache_dir or CACHE).resolve()
         cache.mkdir(parents=True, exist_ok=True)
         pinned = cache / f"{revision}-{candidate['archive_sha256']}.tar.gz"

@@ -1530,7 +1530,7 @@ index e3ade9c703dc0dda221adf001f2cc99e3fe42d75..0e9005523e451465db6c7ec871e52aac
    Use /daemon to manage the local background server.
    Updating may interrupt active or queued work.
 diff --git a/codex-rs/tui/src/history_cell/snapshots/codex_tui__history_cell__tests__pnpm_update_available_history_cell_snapshot.snap b/codex-rs/tui/src/history_cell/snapshots/codex_tui__history_cell__tests__pnpm_update_available_history_cell_snapshot.snap
-index a9dd9cac784bd0993eb09bc518071a1e253f0ae2..c6b14a1ce772bced937ec0624a6ac54c91ff42ba 100644
+index a9dd9cac784bd0993eb09bc518071a1e253f0ae2..ca5606b9d8f0e7eb8068f7da27f58fd01a0f71ed 100644
 --- a/codex-rs/tui/src/history_cell/snapshots/codex_tui__history_cell__tests__pnpm_update_available_history_cell_snapshot.snap
 +++ b/codex-rs/tui/src/history_cell/snapshots/codex_tui__history_cell__tests__pnpm_update_available_history_cell_snapshot.snap
 @@ -2,10 +2,10 @@
@@ -1545,7 +1545,7 @@ index a9dd9cac784bd0993eb09bc518071a1e253f0ae2..c6b14a1ce772bced937ec0624a6ac54c
 -│ https://github.com/openai/codex/releases/latest │
 -╰─────────────────────────────────────────────────╯
 +╭─────────────────────────────────────────────────────╮
-+│ ✨ Update available! 0.0.0 -> 9.9.9                 │
++│ ✨ Update available! 0.1.0 -> 9.9.9                 │
 +│ Run pnpm add -g @yansigit/nyacode to update.        │
 +│                                                     │
 +│ See full release notes:                             │
@@ -1632,7 +1632,7 @@ index ab195e3d1aea7bbd4b3bd68b2eab569a43c2f0cb..2d7c6de40b20180157c0143595f823e0
       /tmp/project
    permissions: YOLO mode
 diff --git a/codex-rs/tui/src/history_cell/snapshots/codex_tui__history_cell__tests__session_info_availability_nux_tooltip_snapshot.snap b/codex-rs/tui/src/history_cell/snapshots/codex_tui__history_cell__tests__session_info_availability_nux_tooltip_snapshot.snap
-index e5cc9a0cecf082a98967e33e8019e28a39af5f2a..652da50530a40623cb919a5cf5cd394a0a3b2694 100644
+index e5cc9a0cecf082a98967e33e8019e28a39af5f2a..7d8c394949e707ed909d296cc7459300ea6bf98b 100644
 --- a/codex-rs/tui/src/history_cell/snapshots/codex_tui__history_cell__tests__session_info_availability_nux_tooltip_snapshot.snap
 +++ b/codex-rs/tui/src/history_cell/snapshots/codex_tui__history_cell__tests__session_info_availability_nux_tooltip_snapshot.snap
 @@ -1,10 +1,9 @@
@@ -1643,7 +1643,7 @@ index e5cc9a0cecf082a98967e33e8019e28a39af5f2a..652da50530a40623cb919a5cf5cd394a
  ---
  
 -  >_ OpenAI Codex (v0.0.0)
-+  >_ Nyacode (v0.0.0)
++  >_ Nyacode (v0.1.0)
       /tmp/project
  
    Tip: Model just became available
@@ -1666,7 +1666,7 @@ index 562070e86d5eaa0b9e97397c04d87060d05bb395..9a3e68c5c50e37d20fd1dad3d6454908
      link 2..7: forum -> https://example.com
      link 9..28: https://example.com -> https://example.com
 diff --git a/codex-rs/tui/src/history_cell/snapshots/codex_tui__history_cell__tests__standalone_unix_update_available_history_cell_snapshot.snap b/codex-rs/tui/src/history_cell/snapshots/codex_tui__history_cell__tests__standalone_unix_update_available_history_cell_snapshot.snap
-index c8f352dbb49ceafe78df86e841e95824c4e6f469..9c690557d51ade2bcb4841491894158613434ceb 100644
+index c8f352dbb49ceafe78df86e841e95824c4e6f469..bc329aebd32a6d2598935a2191ef1c56ee5e82f9 100644
 --- a/codex-rs/tui/src/history_cell/snapshots/codex_tui__history_cell__tests__standalone_unix_update_available_history_cell_snapshot.snap
 +++ b/codex-rs/tui/src/history_cell/snapshots/codex_tui__history_cell__tests__standalone_unix_update_available_history_cell_snapshot.snap
 @@ -2,10 +2,11 @@
@@ -1681,7 +1681,7 @@ index c8f352dbb49ceafe78df86e841e95824c4e6f469..9c690557d51ade2bcb48414918941586
 -│ https://github.com/openai/codex/releases/latest                                                     │
 -╰─────────────────────────────────────────────────────────────────────────────────────────────────────╯
 +╭────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-+│ ✨ Update available! 0.0.0 -> 9.9.9                                                                        │
++│ ✨ Update available! 0.1.0 -> 9.9.9                                                                        │
 +│ Run sh -c 'curl -fsSL https://raw.githubusercontent.com/yansigit/nyacode/main/scripts/install/install.sh | │
 +│ CODEX_NON_INTERACTIVE=1 sh' to update.                                                                     │
 +│                                                                                                            │
@@ -1689,12 +1689,15 @@ index c8f352dbb49ceafe78df86e841e95824c4e6f469..9c690557d51ade2bcb48414918941586
 +│ https://github.com/yansigit/nyacode/releases/latest                                                        │
 +╰────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 diff --git a/codex-rs/tui/src/history_cell/snapshots/codex_tui__history_cell__tests__standalone_windows_update_available_history_cell_snapshot.snap b/codex-rs/tui/src/history_cell/snapshots/codex_tui__history_cell__tests__standalone_windows_update_available_history_cell_snapshot.snap
-index fb15a05775d4063e2780ba29d0ae15e9ad5297c8..fdff5e1417bd10412383e81beac4086a106b0ec2 100644
+index fb15a05775d4063e2780ba29d0ae15e9ad5297c8..fea46e53a1e5b17ee58a79a89e293332be579184 100644
 --- a/codex-rs/tui/src/history_cell/snapshots/codex_tui__history_cell__tests__standalone_windows_update_available_history_cell_snapshot.snap
 +++ b/codex-rs/tui/src/history_cell/snapshots/codex_tui__history_cell__tests__standalone_windows_update_available_history_cell_snapshot.snap
-@@ -5,8 +5,8 @@ expression: rendered
+@@ -3,10 +3,10 @@ source: tui/src/history_cell/tests.rs
+ expression: rendered
+ ---
  ╭────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
- │ ✨ Update available! 0.0.0 -> 9.9.9                                                                        │
+-│ ✨ Update available! 0.0.0 -> 9.9.9                                                                        │
++│ ✨ Update available! 0.1.0 -> 9.9.9                                                                        │
  │ Run powershell -ExecutionPolicy Bypass -c '$env:CODEX_NON_INTERACTIVE=1; irm                               │
 -│ https://chatgpt.com/codex/install.ps1 | iex' to update.                                                    │
 +│ https://raw.githubusercontent.com/yansigit/nyacode/main/scripts/install/install.ps1 | iex' to update.      │
