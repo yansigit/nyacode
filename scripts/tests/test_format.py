@@ -23,11 +23,21 @@ class OwnedFormatTests(unittest.TestCase):
                 "integration/codex/overlays/helper.rs",
                 "codex-rs/old.rs",
                 ".engine/workspace/upstream.rs",
+                "third_party/rust/aws-config/src/lib.rs",
+                "third_party/rust/aws-config/src/login/dpop.rs",
+                "third_party/rust/aws-sigv4/src/lib.rs",
+                "third_party/rust/aws-sigv4/src/sign/v4a.rs",
+                "third_party/rust/custom/src/lib.rs",
             ]:
                 path = root / name
                 path.parent.mkdir(parents=True, exist_ok=True)
                 path.touch()
-            names = b"crates/provider/src/lib.rs\0integration/codex/overlays/helper.rs\0codex-rs/old.rs\0.engine/workspace/upstream.rs\0deleted.rs\0"
+            names = (
+                b"\0".join(
+                    str(path.relative_to(root)).encode() for path in root.rglob("*.rs")
+                )
+                + b"\0deleted.rs\0"
+            )
             with (
                 patch.object(formatter, "REPO_ROOT", root),
                 patch.object(formatter.subprocess, "check_output", return_value=names),
@@ -46,6 +56,36 @@ class OwnedFormatTests(unittest.TestCase):
                     for name in group.commands[0].args
                 )
             )
+            self.assertIn(
+                str(root / "third_party/rust/custom/src/lib.rs"), group.commands[0].args
+            )
+            self.assertFalse(
+                any("/third_party/rust/aws-" in arg for arg in group.commands[0].args)
+            )
+            self.assertEqual(len(group.commands), 2)
+            upstream = group.commands[1]
+            self.assertEqual(
+                upstream.args[:8],
+                (
+                    "rustup",
+                    "run",
+                    "1.95.0",
+                    "rustfmt",
+                    "--edition",
+                    "2021",
+                    "--config",
+                    "skip_children=true",
+                ),
+            )
+            self.assertIn("--check", upstream.args)
+            self.assertEqual(
+                set(upstream.args[9:]),
+                {
+                    str(root / "third_party/rust/aws-config/src/login/dpop.rs"),
+                    str(root / "third_party/rust/aws-sigv4/src/sign/v4a.rs"),
+                },
+            )
+            self.assertEqual(upstream.cwd, root)
             self.assertNotIn("deleted.rs", group.commands[0].args)
             self.assertNotIn("--config-path", group.commands[0].args)
             self.assertEqual(group.commands[0].cwd, root)

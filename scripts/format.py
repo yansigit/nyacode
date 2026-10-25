@@ -62,7 +62,14 @@ def rust_formatter_group(*, check: bool) -> FormatterGroup:
             str(REPO_ROOT / os.fsdecode(path))
             for path in paths
             if path
-            and not os.fsdecode(path).startswith((".engine/", "codex-rs/"))
+            and not os.fsdecode(path).startswith(
+                (
+                    ".engine/",
+                    "codex-rs/",
+                    "third_party/rust/aws-config/",
+                    "third_party/rust/aws-sigv4/",
+                )
+            )
             and (REPO_ROOT / os.fsdecode(path)).is_file()
         }
     )
@@ -80,8 +87,32 @@ def rust_formatter_group(*, check: bool) -> FormatterGroup:
     if check:
         args.append("--check")
     args.extend(rust_files)
-    command = Command(tuple(args), REPO_ROOT)
-    return FormatterGroup("Rust", (command,))
+    commands = [Command(tuple(args), REPO_ROOT)]
+    # Preserve canonical upstream formatting; check only our two adapted files
+    # using the upstream edition and import style.
+    adapted_files = [
+        str(REPO_ROOT / path)
+        for path in (
+            "third_party/rust/aws-config/src/login/dpop.rs",
+            "third_party/rust/aws-sigv4/src/sign/v4a.rs",
+        )
+        if (REPO_ROOT / path).is_file()
+    ]
+    if adapted_files:
+        upstream_args = [
+            "rustup",
+            "run",
+            toolchain,
+            "rustfmt",
+            "--edition",
+            "2021",
+            "--config",
+            "skip_children=true",
+        ]
+        if check:
+            upstream_args.append("--check")
+        commands.append(Command(tuple(upstream_args + adapted_files), REPO_ROOT))
+    return FormatterGroup("Rust", tuple(commands))
 
 
 def buildifier_formatter_group(*, check: bool) -> FormatterGroup:
