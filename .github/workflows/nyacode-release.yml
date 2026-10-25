@@ -11,7 +11,9 @@ permissions:
 
 concurrency:
   group: nyacode-packages-${{ github.ref }}
-  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+  # This workflow never runs on pull_request events; merge, tag, and manual
+  # runs queue instead of canceling an in-flight publication mid-verification.
+  cancel-in-progress: false
 
 jobs:
   validate:

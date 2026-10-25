@@ -65,11 +65,12 @@ local Python tests do not establish successful foreign-platform builds.
    `integration/codex/Cargo.lock`, set `VERSION`, and prepare again to validate
    the pair. Commit both product inputs in the reviewed change on `main`.
 2. Run the dry run against that exact commit and inspect all platform results.
-3. Create a tag naming that commit. For example, after choosing a version:
+3. Create a tag naming that commit. The tag must be `rust-v` followed by the
+   value in `VERSION` — for the current product version:
 
    ```sh
    gh api repos/yansigit/nyacode/git/refs --method POST \
-     -f ref=refs/tags/rust-v1.0.0 -f sha=FULL_REVIEWED_COMMIT_SHA
+     -f ref=refs/tags/rust-v0.1.0 -f sha=FULL_REVIEWED_COMMIT_SHA
    ```
 
 The tag must be `rust-v` followed by the Nyacode product version, and its commit must
