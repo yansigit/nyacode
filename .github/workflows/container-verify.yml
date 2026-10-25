@@ -15,7 +15,9 @@ jobs:
   full:
     name: Complete Linux container verification
     runs-on: ubuntu-24.04
-    timeout-minutes: 360
+    # Observed runs finish in under four hours; keep the job under the 360-minute
+    # runner cap so a runaway build fails from this explicit timeout instead.
+    timeout-minutes: 330
     env:
       CARGO_BUILD_JOBS: "2"
     steps:

@@ -20,6 +20,13 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  # Directly dispatched rehearsal runs serialize per ref. This is ignored when
+  # the workflow is invoked as a reusable workflow; the caller's concurrency
+  # (engine-acceptance, nyacode-release) governs those runs.
+  group: engine-qualification-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   dependency_policy:
     name: Dependency policy
@@ -49,9 +56,12 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
+      - name: Read the providers toolchain pin
+        id: providers
+        run: python3 -c 'import os, pathlib, tomllib; print("toolchain=" + tomllib.loads(pathlib.Path("crates/providers/rust-toolchain.toml").read_text())["toolchain"]["channel"], file=open(os.environ["GITHUB_OUTPUT"], "a"))'
       - uses: dtolnay/rust-toolchain@e2a55d2ffb04f378e9626c28d38b36d230d1e12f
         with:
-          toolchain: 1.95.0
+          toolchain: ${{ steps.providers.outputs.toolchain }}
       - run: cargo test --manifest-path crates/providers/Cargo.toml --locked --all-features
 
   validate:
@@ -109,7 +119,9 @@ jobs:
   build:
     name: Package ${{ matrix.target }}
     needs: validate
-    timeout-minutes: 360
+    # Observed runs finish in under four hours; keep the job under the 360-minute
+    # runner cap so a runaway build fails from this explicit timeout instead.
+    timeout-minutes: 330
     strategy:
       fail-fast: false
       matrix:

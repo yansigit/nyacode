@@ -9,6 +9,13 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  # The required "Engine acceptance" check runs a multi-hour qualification at
+  # full scope. Queue back-to-back pushes to main instead of overlapping them,
+  # and cancel superseded runs on the same pull request.
+  group: engine-acceptance-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
   select:
     name: Select acceptance scope
@@ -55,9 +62,12 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
+      - name: Read the providers toolchain pin
+        id: providers
+        run: python3 -c 'import os, pathlib, tomllib; print("toolchain=" + tomllib.loads(pathlib.Path("crates/providers/rust-toolchain.toml").read_text())["toolchain"]["channel"], file=open(os.environ["GITHUB_OUTPUT"], "a"))'
       - uses: dtolnay/rust-toolchain@e2a55d2ffb04f378e9626c28d38b36d230d1e12f
         with:
-          toolchain: 1.95.0
+          toolchain: ${{ steps.providers.outputs.toolchain }}
       - run: cargo test --manifest-path crates/providers/Cargo.toml --locked --all-features
 
   affected:
