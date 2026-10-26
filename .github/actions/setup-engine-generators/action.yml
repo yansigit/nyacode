@@ -1,0 +1,52 @@
+name: Set up engine generators
+description: Install the tools that deterministic engine generators need on ubuntu-24.04 (pinned Rust, Node and pnpm, uv, Bazelisk, CMake, libclang).
+inputs:
+  engine-lock:
+    description: engine.lock whose toolchain pin selects the Rust toolchain. Relative paths resolve from the workspace.
+    default: engine.lock
+runs:
+  using: composite
+  steps:
+    - name: Read the engine toolchain pin
+      id: toolchain
+      shell: bash
+      env:
+        ENGINE_LOCK: ${{ inputs.engine-lock }}
+      run: python3 -c 'import json, os; print("toolchain=" + json.load(open(os.environ["ENGINE_LOCK"]))["toolchain"], file=open(os.environ["GITHUB_OUTPUT"], "a"))'
+
+    - uses: dtolnay/rust-toolchain@e2a55d2ffb04f378e9626c28d38b36d230d1e12f # master, 2026-10-12
+      with:
+        toolchain: ${{ steps.toolchain.outputs.toolchain }}
+
+    # cmake builds aws-lc-sys and bindgen (through btls-sys) loads libclang. The
+    # generator crates need no protoc themselves; it stays for the full workspace
+    # check that engine-sync runs after generation.
+    - name: Install native build tools
+      shell: bash
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y clang libclang-dev cmake libssl-dev pkg-config protobuf-compiler
+        llvm_lib="$(ls -d /usr/lib/llvm-*/lib 2>/dev/null | sort -V | tail -n 1)"
+        if [[ -z "$llvm_lib" ]] || ! compgen -G "$llvm_lib/libclang*.so*" >/dev/null; then
+          echo "libclang shared library was not found under /usr/lib/llvm-*/lib" >&2
+          exit 1
+        fi
+        echo "LIBCLANG_PATH=$llvm_lib" >> "$GITHUB_ENV"
+
+    # pnpm takes its version from the root package.json packageManager pin (12.11.2).
+    - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+      with:
+        run_install: false
+
+    - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+      with:
+        node-version: 26.11.1
+
+    - uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884 # v10.3.0
+      with:
+        version: "0.13.0"
+
+    # Bazelisk reads .bazelversion in the workspace it runs in.
+    - uses: bazel-contrib/setup-bazel@c5acdfb288317d0b5c0bbd7a396a3dc868bb0f86 # 0.19.0
+      with:
+        bazelisk-version: 1.29.0

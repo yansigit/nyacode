@@ -82,6 +82,23 @@ scripts/verify-container.sh
 
 Full workspace checks, cache volumes, and container requirements are described in [container verification](container-verify.md).
 
+### Engine generator prerequisites
+
+`engine.py generate` regenerates schemas, lockfiles, and the Bazel lock inside an assembled engine workspace. Before it runs any generator, it checks that each selected generator's tools are on `PATH` and reports every missing tool once. `clang` also counts as present when `LIBCLANG_PATH` names a directory that holds libclang. The versions below are the CI pins:
+
+| Tool               | Version                                                 | Generators                                                         |
+| ------------------ | ------------------------------------------------------- | ------------------------------------------------------------------ |
+| Rust toolchain     | the `toolchain` in `engine.lock`, installed with rustup | `app-server-schema`, `config-schema`, `hooks-schema`, `cargo-lock` |
+| Node.js            | 26.11.1                                                 | `pnpm-lock`                                                        |
+| pnpm               | 12.11.2, the `packageManager` pin in `package.json`     | `pnpm-lock`                                                        |
+| uv                 | 0.13.0                                                  | `app-server-schema`, `uv-lock`                                     |
+| Bazelisk           | 1.29.0, which reads `.bazelversion`                     | `bazel-lock`                                                       |
+| cmake              | apt `cmake`                                             | cargo generators (builds `aws-lc-sys`)                             |
+| clang and libclang | apt `clang libclang-dev`, or `LIBCLANG_PATH`            | cargo generators (`bindgen` in `btls-sys`)                         |
+| cargo-insta        | `cargo install --locked cargo-insta`                    | `snapshots` (opt-in)                                               |
+
+On ubuntu-24.04, `.github/actions/setup-engine-generators` installs these with the same pins. The `generated` job in `engine-qualification.yml` and the `finish` job in `engine-sync.yml` both use it. Outside CI, install the same tools with your platform's package manager.
+
 ## Logging
 
 Nyacode honors `RUST_LOG`. The TUI records diagnostics in bounded local stores by default. To enable plaintext logging:

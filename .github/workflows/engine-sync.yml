@@ -184,16 +184,10 @@ jobs:
           code=$?
           set -e
           if [[ "$code" -ne 0 && "$code" -ne 2 ]]; then exit "$code"; fi
-      - name: Read the toolchain the rebased engine pins
-        id: rust
-        run: python3 -c 'import json, os; print("toolchain=" + json.load(open(os.environ["RUNNER_TEMP"] + "/sync/source/engine.lock"))["toolchain"], file=open(os.environ["GITHUB_OUTPUT"], "a"))'
-      - uses: dtolnay/rust-toolchain@e2a55d2ffb04f378e9626c28d38b36d230d1e12f
+      - name: Install the tools the rebased engine's generators and checks need
+        uses: ./.github/actions/setup-engine-generators
         with:
-          toolchain: ${{ steps.rust.outputs.toolchain }}
-      - name: Install Linux build dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y clang libclang-dev cmake libssl-dev pkg-config protobuf-compiler
+          engine-lock: ${{ runner.temp }}/sync/source/engine.lock
       - name: Read the resolver's attribution
         id: resolution
         if: needs.rebase.outputs.conflicts == 'true'

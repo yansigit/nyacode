@@ -49,6 +49,70 @@ LOG_TAIL_LINES = 25
 
 Command = tuple[list[str], str]
 
+# Executables each generator runs. The cargo generators also build aws-lc-sys (cmake) and
+# btls-sys through bindgen, which loads libclang; their graphs need no protoc.
+GENERATOR_TOOLS: dict[str, tuple[str, ...]] = {
+    "app-server-schema": ("cargo", "uv", "cmake", "clang"),
+    "config-schema": ("cargo", "cmake", "clang"),
+    "hooks-schema": ("cargo", "cmake", "clang"),
+    "pnpm-lock": ("pnpm", "node"),
+    "uv-lock": ("uv",),
+    "bazel-lock": ("bazel",),
+    "cargo-lock": ("cargo",),
+    "snapshots": ("cargo", "cargo-insta", "cmake", "clang"),
+}
+TOOL_INSTALL: dict[str, str] = {
+    "cargo": "the Rust toolchain that engine.lock pins, installed with rustup",
+    "cargo-insta": "cargo install --locked cargo-insta",
+    "clang": "apt-get install clang libclang-dev, or set LIBCLANG_PATH to a directory holding libclang",
+    "cmake": "apt-get install cmake",
+    "bazel": "Bazelisk, which reads .bazelversion",
+    "node": "Node.js 26.11.1, the CI pin",
+    "pnpm": "pnpm 12.11.2, the packageManager pin in package.json",
+    "uv": "uv 0.13.0 (https://docs.astral.sh/uv/)",
+}
+PREREQUISITES_HINT = (
+    "CI installs these with .github/actions/setup-engine-generators; "
+    "see docs/install.md, Engine generator prerequisites."
+)
+
+
+def tool_available(tool: str, environment: Mapping[str, str]) -> bool:
+    """A tool is on PATH; clang may instead be a libclang directory named by LIBCLANG_PATH."""
+    if tool == "clang":
+        directory = environment.get("LIBCLANG_PATH", "")
+        if directory and any(Path(directory).glob("libclang*")):
+            return True
+    return shutil.which(tool) is not None
+
+
+def missing_tools(
+    generators: list[dict[str, Any]], environment: Mapping[str, str]
+) -> dict[str, list[str]]:
+    """Missing tool name -> the selected generator ids that need it."""
+    missing: dict[str, list[str]] = {}
+    for generator in generators:
+        for tool in GENERATOR_TOOLS.get(generator["id"], ()):
+            if not tool_available(tool, environment):
+                missing.setdefault(tool, []).append(generator["id"])
+    return missing
+
+
+def preflight(
+    generators: list[dict[str, Any]], environment: Mapping[str, str] | None = None
+) -> None:
+    """Fail before any generator runs, naming every missing tool once."""
+    missing = missing_tools(
+        generators, os.environ if environment is None else environment
+    )
+    if not missing:
+        return
+    lines = ["engine generate needs tools that are not available:"]
+    for tool, identifiers in sorted(missing.items()):
+        lines.append(f"  {tool} (for {', '.join(identifiers)}): {TOOL_INSTALL[tool]}")
+    lines.append(PREREQUISITES_HINT)
+    raise EngineError("\n".join(lines))
+
 
 def commands_for(
     generator_id: str,
@@ -382,6 +446,7 @@ def generate(
     selected = select(generators, only, deterministic=deterministic)
     if not selected:
         raise EngineError("no generators selected")
+    preflight(selected)
     environment = generator_environment(root, workspace, lock["toolchain"])
     patterns = {generator["id"]: list(generator["outputs"]) for generator in selected}
     baseline_outputs = {

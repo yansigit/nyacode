@@ -346,12 +346,133 @@ class GenerateTest(unittest.TestCase):
         with self.assertRaisesRegex(engine.EngineError, "must be a boolean"):
             engine_manifest.read_generators({"generated": [dict(FAKE, opt_in="yes")]})
 
+    def test_missing_tools_fail_before_any_generator_runs(self):
+        self.ownership["generated"] = [
+            dict(FAKE, id="pnpm-lock", outputs=["out/*.json"])
+        ]
+        self.save_ownership()
+        marker = self.base / "ran"
+        command = python(
+            f"import pathlib\npathlib.Path({str(marker)!r}).write_text('ran')\n"
+        )
+        with (
+            patch.object(
+                engine_generate.shutil,
+                "which",
+                side_effect=lambda tool: None if tool in {"pnpm", "node"} else "/bin/x",
+            ),
+            self.assertRaises(engine.EngineError) as caught,
+        ):
+            self.generate({"pnpm-lock": [command]}, only=["pnpm-lock"])
+        self.assertIn("pnpm (for pnpm-lock)", str(caught.exception))
+        self.assertIn("node (for pnpm-lock)", str(caught.exception))
+        self.assertFalse(marker.exists())
+
     def test_overlapping_generator_outputs_are_rejected(self):
         generators = engine_manifest.read_generators(
             {"generated": [FAKE, dict(FAKE, id="other", outputs=["out/a.json"])]}
         )
         with self.assertRaisesRegex(engine.EngineError, "several generators"):
             engine_manifest.generator_of("out/a.json", generators)
+
+
+class PreflightTest(unittest.TestCase):
+    """Tool requirements are checked with shutil.which before any generator runs."""
+
+    @staticmethod
+    def generators(*identifiers):
+        return [{"id": identifier} for identifier in identifiers]
+
+    @staticmethod
+    def available(*tools):
+        return patch.object(
+            engine_generate.shutil,
+            "which",
+            side_effect=lambda tool: f"/usr/bin/{tool}" if tool in tools else None,
+        )
+
+    def test_every_declared_generator_has_a_tool_mapping(self):
+        ownership = json.loads(
+            (
+                Path(__file__).resolve().parents[2] / "integration/codex/ownership.json"
+            ).read_text()
+        )
+        declared = {generator["id"] for generator in ownership["generated"]}
+        self.assertEqual(declared - set(engine_generate.GENERATOR_TOOLS), set())
+
+    def test_every_required_tool_has_an_install_hint(self):
+        for tools in engine_generate.GENERATOR_TOOLS.values():
+            for tool in tools:
+                self.assertIn(tool, engine_generate.TOOL_INSTALL)
+
+    def test_missing_tools_are_listed_with_the_generators_that_need_them(self):
+        with self.available("cargo", "node"):
+            missing = engine_generate.missing_tools(
+                self.generators("app-server-schema", "config-schema", "pnpm-lock"), {}
+            )
+        self.assertEqual(
+            missing,
+            {
+                "uv": ["app-server-schema"],
+                "cmake": ["app-server-schema", "config-schema"],
+                "clang": ["app-server-schema", "config-schema"],
+                "pnpm": ["pnpm-lock"],
+            },
+        )
+
+    def test_cargo_lock_needs_only_cargo(self):
+        with self.available("cargo"):
+            self.assertEqual(
+                engine_generate.missing_tools(self.generators("cargo-lock"), {}), {}
+            )
+
+    def test_libclang_directory_named_by_libclang_path_satisfies_clang(self):
+        with (
+            tempfile.TemporaryDirectory() as directory,
+            self.available("cargo", "cmake"),
+        ):
+            libdir = Path(directory)
+            (libdir / "libclang.so.1").write_text("")
+            self.assertEqual(
+                engine_generate.missing_tools(
+                    self.generators("config-schema"), {"LIBCLANG_PATH": str(libdir)}
+                ),
+                {},
+            )
+            self.assertEqual(
+                engine_generate.missing_tools(
+                    self.generators("config-schema"),
+                    {"LIBCLANG_PATH": str(libdir / "absent")},
+                ),
+                {"clang": ["config-schema"]},
+            )
+
+    def test_unmapped_generator_ids_need_no_tools(self):
+        with self.available():
+            engine_generate.preflight(self.generators("fake"), {})
+
+    def test_preflight_reports_each_missing_tool_once_with_install_guidance(self):
+        with self.available("cargo"):
+            with self.assertRaises(engine.EngineError) as caught:
+                engine_generate.preflight(
+                    self.generators("hooks-schema", "pnpm-lock"), {}
+                )
+        message = str(caught.exception)
+        self.assertEqual(message.count("cmake (for hooks-schema)"), 1)
+        self.assertEqual(message.count("clang (for hooks-schema)"), 1)
+        self.assertIn("node (for pnpm-lock)", message)
+        self.assertIn("pnpm 12.11.2", message)
+        self.assertIn("setup-engine-generators", message)
+        self.assertIn("docs/install.md", message)
+
+    def test_preflight_passes_when_every_selected_tool_resolves(self):
+        every_tool = {
+            tool for tools in engine_generate.GENERATOR_TOOLS.values() for tool in tools
+        }
+        with self.available(*every_tool):
+            engine_generate.preflight(
+                self.generators(*engine_generate.GENERATOR_TOOLS), {}
+            )
 
 
 if __name__ == "__main__":
