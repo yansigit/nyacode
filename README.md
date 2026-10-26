@@ -10,19 +10,32 @@ Nyacode is an independently maintained multi-provider coding agent for your term
 
 Account switching is bounded by verified continuation safety. See the [provider coverage and acceptance records](docs/native-providers/README.md) for supported routes and remaining limitations.
 
-## Build and run
+## Install
 
-Build from source while Nyacode release packages are being prepared:
+macOS and Linux:
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/yansigit/nyacode/main/scripts/install/install.sh | sh
+```
+
+Windows (PowerShell):
+
+```powershell
+irm https://raw.githubusercontent.com/yansigit/nyacode/main/scripts/install/install.ps1 | iex
+```
+
+The installer downloads the latest [GitHub release](https://github.com/yansigit/nyacode/releases) for your platform, verifies its SHA-256 checksum, and installs `nyacode` on your `PATH`. macOS packages are not notarized and Windows packages are not Authenticode signed. See [installation and development](docs/install.md) to pin a version or change the install location.
+
+## Build from source
 
 ```sh
 gh repo clone yansigit/nyacode
 cd nyacode
 python3 scripts/build_nyacode.py
 ./.engine/target/debug/nyacode --help
-./.engine/target/debug/nyacode
 ```
 
-The repository pins its Rust toolchain. See [installation and development](docs/install.md) for prerequisites and installation instructions.
+The repository pins its Rust toolchain. See [installation and development](docs/install.md) for prerequisites.
 
 The build prepares a disposable workspace from `engine.lock` and Nyacode-owned source. Provider crates live under `crates/`; engine patches and overlays live under `integration/codex/`. See [engine development](docs/engine.md).
 

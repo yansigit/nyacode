@@ -108,7 +108,7 @@ helpers, package metadata, and bundled license notices. Windows names have
 `.exe` suffixes. Build metadata records the source commit, target, Rust version,
 profile, smoke-test result, and archive digest.
 
-The checked-in [standalone installers](install.md#standalone-installers-and-npm)
+The checked-in [standalone installers](install.md#install-a-release)
 install these packages. GitHub's automatic source archives retain the tagged
 source. GitHub Releases are the distribution channel for this pipeline; npm,
 Homebrew, WinGet, Apple notarization, and Windows Authenticode signing are not
