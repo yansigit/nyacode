@@ -206,6 +206,16 @@ engine-schema *args: prepare-engine
 engine-controls:
     {{ python }} {{ justfile_directory() }}/scripts/engine.py check --mode controls
 
+# Carry the patch stack onto an upstream revision (40-hex commit); exits 2 on conflicts.
+[no-cd]
+engine-rebase REV *args:
+    {{ python }} {{ justfile_directory() }}/scripts/engine.py rebase --onto {{ quote(REV) }} {args}
+
+# Write the reviewed rebase workspace back into patches (pass --workspace DIR/workspace).
+[no-cd]
+engine-export *args:
+    {{ python }} {{ justfile_directory() }}/scripts/engine.py export {args}
+
 # Edits the disposable assembly; copy changes into owned inputs before preparing again.
 [no-cd]
 write-hooks-schema:
