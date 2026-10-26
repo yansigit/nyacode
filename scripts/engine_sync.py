@@ -8,11 +8,20 @@ the rebased versions, plus .engine-sync/sync.json. Each run starts from the late
 in, validates the result, and commits the next snapshot.
 
 plan            choose the source and upstream revision; `noop` when nothing moved.
+                With --tag, plan a stable release candidate instead (see below).
 rebase          materialize the source tree, rebase onto upstream, fold. Exit 0 clean, 2 conflicts.
 finish          apply a resolution (if any), export into the source tree, validate, commit.
+                A candidate plan (one with "candidate") commits ONE allowlisted commit on main
+                and writes candidate.json (schema 2) plus candidate.bundle instead of a snapshot.
+classify        decide whether main's patches carry mechanically onto a candidate (no snapshot,
+                no resolver); writes classification.json. Runs in the qualification workflow.
 verify          check a snapshot bundle against the sync branch before it is pushed.
 push            verify, then push the snapshot to origin sync/upstream-main.
 resolve-local   download a run's plan and rebase it locally for manual resolution.
+
+A stable candidate plan starts from the snapshot on sync/upstream-main whose upstream is the
+closest ancestor-or-equal of merge-base(release commit, upstream main), then falls back to the
+newest snapshot, then to main when the snapshot's pinned engine differs from main's.
 """
 
 from __future__ import annotations
@@ -33,6 +42,7 @@ from pathlib import Path
 from typing import Any
 
 import engine
+import engine_compatibility
 import engine_patches
 import engine_status
 
@@ -70,6 +80,37 @@ RESOLUTION_KIND = re.compile(r"human|ai:[A-Za-z0-9._-]+/[A-Za-z0-9._:-]+")
 EMPTY_TREE = "4b825dc642cb6eb9a060e54bf8d69288fbee4904"
 HEX40 = re.compile(r"[0-9a-f]{40}")
 IDENTITY = engine_patches.IDENTITY
+# Stable candidates: the only paths one candidate commit may change, relative to its base.
+CANDIDATE_SCHEMA = 2
+CANDIDATE_JSON = "candidate.json"
+CANDIDATE_BUNDLE = "candidate.bundle"
+CANDIDATE_REF = "refs/nyacode/candidate"
+IMPORTED_REF = "refs/nyacode/imported/candidate"
+CANDIDATE_EXACT = frozenset(
+    {
+        "engine.lock",
+        "inventory/downstream.json",
+        "integration/codex/Cargo.lock",
+        "integration/codex/assembly.json",
+        "integration/codex/ownership.json",
+    }
+)
+CANDIDATE_PREFIXES = (
+    "integration/codex/patches/",
+    "integration/codex/generated/",
+    "integration/codex/compatibility/",
+)
+CANDIDATE_PATHSPECS = (
+    *sorted(CANDIDATE_EXACT),
+    *(prefix.rstrip("/") for prefix in CANDIDATE_PREFIXES),
+)
+GENERATE_DIR = "generate"
+CLASSIFICATION_NAME = "classification.json"
+SNAPSHOT_SEARCH = 400
+ANCESTOR_CHECKS = 60
+# Storage fixture drift fails the classification job outright; RPC drift only needs review.
+STORAGE_CHANGED = "changed durable storage input"
+MODES = {"100644", "100755"}
 
 Runner = Callable[[list[str], Path, dict[str, str] | None], int]
 
@@ -129,6 +170,12 @@ def commit_of(repo: Path, ref: str) -> str:
 
 def allowed(path: str) -> bool:
     return any(path == item or path.startswith(item + "/") for item in ALLOWLIST)
+
+
+def candidate_allowed(path: str) -> bool:
+    if path.startswith("/") or any(part in {"", ".", ".."} for part in path.split("/")):
+        return False
+    return path in CANDIDATE_EXACT or path.startswith(CANDIDATE_PREFIXES)
 
 
 def export_paths(
@@ -222,6 +269,58 @@ def upstream_date(revision: str, source: str, local_repo: Path | None) -> str:
     return str(commit["commit"]["committer"]["date"])
 
 
+def upstream_merge_base(revision: str) -> str:
+    """The upstream main commit where a release commit meets main, as GitHub compares them."""
+    main_revision, _ = resolve_upstream(UPSTREAM_REF, None)
+    with tempfile.TemporaryDirectory(prefix="engine-sync-base-") as scratch:
+        comparison = engine.github_json(
+            f"repos/{REPOSITORY}/compare/{revision}...{main_revision}",
+            Path(scratch) / "compare.log",
+        )
+    base = str((comparison.get("merge_base_commit") or {}).get("sha", ""))
+    if not HEX40.fullmatch(base):
+        raise engine.EngineError("GitHub reported no merge base for the release")
+    return base
+
+
+def upstream_ancestor_or_equal(ancestor: str, descendant: str) -> bool:
+    if ancestor == descendant:
+        return True
+    with tempfile.TemporaryDirectory(prefix="engine-sync-ancestry-") as scratch:
+        comparison = engine.github_json(
+            f"repos/{REPOSITORY}/compare/{ancestor}...{descendant}",
+            Path(scratch) / "compare.log",
+        )
+    return comparison.get("status") == "ahead"
+
+
+def release_snapshot(repo: Path, head: str, revision: str) -> tuple[str, str]:
+    """Newest snapshot whose upstream is an ancestor-or-equal of the release's merge base."""
+    base = upstream_merge_base(revision)
+    history = (
+        engine.git(
+            repo, "rev-list", "--first-parent", f"--max-count={SNAPSHOT_SEARCH}", head
+        )
+        .decode()
+        .split()
+    )
+    checks = 0
+    for commit in history:
+        try:
+            upstream = read_meta(repo, commit)["upstream"]["revision"]
+        except (engine.EngineError, KeyError, TypeError):
+            continue
+        if checks == ANCESTOR_CHECKS:
+            break
+        checks += 1
+        if upstream_ancestor_or_equal(upstream, base):
+            return commit, (
+                f"snapshot {short(commit)} carries upstream {short(upstream)}, "
+                f"at or before the release base {short(base)}"
+            )
+    return head, "no snapshot at or before the release base; using the newest snapshot"
+
+
 def plan(
     *,
     repo: Path = ROOT,
@@ -229,9 +328,23 @@ def plan(
     local_repo: Path | None = None,
     snapshot_ref: str = REMOTE_BRANCH,
     main_ref: str = "HEAD",
+    tag: str | None = None,
+    release_revision: str | None = None,
 ) -> dict[str, Any]:
+    """Choose the source and upstream revision. With tag, plan a stable release candidate."""
     main_sha = commit_of(repo, main_ref)
-    revision, source = resolve_upstream(upstream_ref, local_repo)
+    if tag is None:
+        revision, source = resolve_upstream(upstream_ref, local_repo)
+        ref = upstream_ref
+    else:
+        if not engine.STABLE_RELEASE.fullmatch(tag) or not HEX40.fullmatch(
+            release_revision or ""
+        ):
+            raise engine.EngineError(
+                "a stable plan needs a rust-vX.Y.Z tag and its full commit"
+            )
+        revision, source, ref = release_revision, "github", f"refs/tags/{tag}"
+        local_repo = None
     if not HEX40.fullmatch(revision):
         raise engine.EngineError("upstream did not resolve to an immutable commit")
     snapshot_sha = optional_commit(repo, snapshot_ref)
@@ -242,7 +355,7 @@ def plan(
             "revision": revision,
             "date": upstream_date(revision, source, local_repo),
             "source": source,
-            "ref": upstream_ref,
+            "ref": ref,
             "local_repo": str(local_repo) if local_repo else None,
         },
         "main_sha": main_sha,
@@ -251,19 +364,26 @@ def plan(
         "from": {"kind": "main", "ref": main_sha},
         "reason": "no snapshot on " + REMOTE_BRANCH if snapshot_sha is None else None,
     }
+    if tag is not None:
+        result["candidate"] = {"tag": tag, "revision": revision}
+    selection = None
     if snapshot_sha is None:
         return result
+    if tag is None:
+        meta = read_meta(repo, snapshot_sha)
+        if meta["upstream"]["revision"] == revision and meta["main_base"] == main_sha:
+            result.update(
+                {
+                    "action": "noop",
+                    "main_base": meta["main_base"],
+                    "from": {"kind": "snapshot", "ref": snapshot_sha},
+                    "reason": "snapshot already at upstream and main",
+                }
+            )
+            return result
+    else:
+        snapshot_sha, selection = release_snapshot(repo, snapshot_sha, revision)
     meta = read_meta(repo, snapshot_sha)
-    if meta["upstream"]["revision"] == revision and meta["main_base"] == main_sha:
-        result.update(
-            {
-                "action": "noop",
-                "main_base": meta["main_base"],
-                "from": {"kind": "snapshot", "ref": snapshot_sha},
-                "reason": "snapshot already at upstream and main",
-            }
-        )
-        return result
     source_main = meta["main_base"]
     if pin_at(repo, source_main) != pin_at(repo, main_sha):
         result["reason"] = (
@@ -274,11 +394,12 @@ def plan(
     if blockers:
         result["reason"] = "main changed beyond patch edits: " + "; ".join(blockers)
         return result
+    carry = "carry the snapshot forward and fold main's patch edits"
     result.update(
         {
             "main_base": source_main,
             "from": {"kind": "snapshot", "ref": snapshot_sha},
-            "reason": "carry the snapshot forward and fold main's patch edits",
+            "reason": carry if selection is None else f"{selection}; {carry}",
         }
     )
     return result
@@ -423,6 +544,9 @@ def rebase_plan(
         }
     else:
         target = {"onto": upstream["revision"]}
+    if "candidate" in plan_value:
+        # Stable candidates record their release tag in the report; the lock takes it from there.
+        target["tag"] = plan_value["candidate"]["tag"]
     output = directory / REBASE_DIR
     engine_patches.rebase(root=source, output=output, cache_dir=cache_dir, **target)
     if plan_value["from"]["kind"] == "snapshot":
@@ -450,7 +574,8 @@ def generate_supported(runner: Runner) -> bool:
 
 
 def create_commit(source: Path, parent: str | None, message: str) -> str:
-    engine.git(source, "add", "--force", "--all", "--", ".")
+    # Build output under .engine is ignored by git, but --force would still stage it.
+    engine.git(source, "add", "--force", "--all", "--", ".", ":(exclude).engine")
     tree = engine.git(source, "write-tree").decode().strip()
     arguments = [*IDENTITY, "commit-tree", tree, "-m", message]
     if parent:
@@ -499,6 +624,117 @@ def apply_resolution(
     return label
 
 
+def regenerate(
+    *, source: Path, directory: Path, runner: Runner, notes: list[str]
+) -> None:
+    """Write deterministic generator outputs back into the exported source.
+
+    Generators need an assembled workspace with its marker, so the exported source is
+    prepared into a disposable directory first. Build output stays outside the source tree.
+    """
+    if not generate_supported(runner):
+        notes.append(
+            "engine generate is unavailable; generated paths were not regenerated"
+        )
+        print(notes[-1])
+        return
+    workspace = directory / GENERATE_DIR
+    prepared = runner(
+        [
+            sys.executable,
+            str(ENGINE),
+            "--root",
+            str(source),
+            "prepare",
+            "--output",
+            str(workspace),
+        ],
+        ROOT,
+        None,
+    )
+    if prepared:
+        raise engine.EngineError("assembly for generation failed")
+    code = runner(
+        [
+            sys.executable,
+            str(ENGINE),
+            "--root",
+            str(source),
+            "generate",
+            "--workspace",
+            str(workspace),
+            "--write-back",
+        ],
+        ROOT,
+        {"CARGO_TARGET_DIR": str(directory / "target")},
+    )
+    if code:
+        raise engine.EngineError("engine generate --write-back failed")
+
+
+def write_candidate(
+    *,
+    plan_value: dict[str, Any],
+    directory: Path,
+    source: Path,
+    label: str,
+    report: dict[str, Any],
+    notes: list[str],
+    prepared: bool,
+    conflicts: list[str],
+) -> Path:
+    """Commit the candidate's single allowlisted commit on main, bundle it, and describe it."""
+    candidate = plan_value["candidate"]
+    tag, revision = candidate["tag"], candidate["revision"]
+    base = plan_value["main_sha"]
+    commit = create_commit(
+        source,
+        base,
+        f"Qualify engine {tag}\n\nUpstream {revision}\nResolution: {label}",
+    )
+    problems = verify_candidate_commit(source, commit, base, tag)
+    if problems:
+        raise engine.EngineError("candidate is not allowlisted: " + "; ".join(problems))
+    engine.git(source, "update-ref", CANDIDATE_REF, commit)
+    engine.git(
+        source,
+        "bundle",
+        "create",
+        str(directory / CANDIDATE_BUNDLE),
+        CANDIDATE_REF,
+        f"^{base}",
+    )
+    path = directory / CANDIDATE_JSON
+    engine.write_json(
+        path,
+        {
+            "schema_version": CANDIDATE_SCHEMA,
+            "tag": tag,
+            "revision": revision,
+            "base_sha": base,
+            "resolution": label,
+            "prepared": prepared,
+            "conflicts": conflicts,
+            "commit": commit,
+            "bundle": CANDIDATE_BUNDLE,
+            "report": {
+                "totals": report["totals"],
+                "patches": [
+                    {"name": patch["name"], "status": patch["status"]}
+                    for patch in report["patches"]
+                ],
+            },
+            "notes": notes,
+            "created_at": now(),
+        },
+    )
+    record(
+        "candidate-ready",
+        f"Candidate {tag} at {short(commit)} (resolution: {label}, prepared: {prepared})",
+    )
+    return path
+
+
 def finish(
     *,
     plan_value: dict[str, Any],
@@ -509,12 +745,33 @@ def finish(
     accept: list[str] | None = None,
     assign: list[str] | None = None,
     skip_cargo: bool = False,
+    allow_unresolved: bool = False,
     runner: Runner = run_command,
 ) -> Path:
+    """Validate the rebase and commit it: a snapshot, or a stable candidate (candidate.json)."""
     output = directory / REBASE_DIR
     workspace = output / "workspace"
     source = directory / SOURCE_DIR
     report = engine.read_json(output / engine_patches.REPORT_NAME)
+    candidate = "candidate" in plan_value
+    conflicts = sorted(engine_patches.conflict_paths(report))
+    if allow_unresolved and candidate and resolution is None and conflicts:
+        # A draft that only repins engine.lock keeps the conflicts visible without publishing
+        # patch bytes that were never validated. It cannot pass qualification until repaired.
+        lock_plan = engine_patches.plan_lock(
+            source, engine.load_lock(source), output / engine_patches.REPORT_NAME
+        )
+        (source / "engine.lock").write_text(lock_plan["text"])
+        return write_candidate(
+            plan_value=plan_value,
+            directory=directory,
+            source=source,
+            label="human",
+            report=report,
+            notes=["unresolved conflicts; patches were not exported"],
+            prepared=False,
+            conflicts=conflicts,
+        )
     label = apply_resolution(workspace, report, resolution, resolution_kind)
     notes: list[str] = []
 
@@ -533,28 +790,7 @@ def finish(
         assign=assignments,
         accept=accept or [],
     )
-    if generate_supported(runner):
-        code = runner(
-            [
-                sys.executable,
-                str(ENGINE),
-                "--root",
-                str(source),
-                "generate",
-                "--workspace",
-                str(workspace),
-                "--write-back",
-            ],
-            ROOT,
-            None,
-        )
-        if code:
-            raise engine.EngineError("engine generate --write-back failed")
-    else:
-        notes.append(
-            "engine generate is unavailable; generated paths were not regenerated"
-        )
-        print(notes[-1])
+    regenerate(source=source, directory=directory, runner=runner, notes=notes)
     if "fold" in report:
         notes.append(
             f"folded {len(report['fold']['changed'])} main-side patch paths; "
@@ -613,6 +849,18 @@ def finish(
             raise engine.EngineError(f"validation failed: {name}")
     if skip_cargo:
         notes.append("cargo check was skipped")
+
+    if candidate:
+        return write_candidate(
+            plan_value=plan_value,
+            directory=directory,
+            source=source,
+            label=label,
+            report=report,
+            notes=notes,
+            prepared=True,
+            conflicts=[],
+        )
 
     upstream = plan_value["upstream"]
     meta = {
@@ -720,6 +968,188 @@ def verify_bundle(
     return problems
 
 
+def candidate_lock(repo: Path, commit: str) -> dict[str, Any]:
+    return json.loads(engine.git(repo, "show", f"{commit}:engine.lock"))
+
+
+def verify_candidate_commit(repo: Path, commit: str, base: str, tag: str) -> list[str]:
+    """Problems that stop a stable candidate commit from being published or qualified.
+
+    A candidate is exactly one commit whose parent is the base. Every changed path must be
+    allowlisted, and no symlink, submodule, or type change may appear. Its engine.lock must
+    name the release tag.
+    """
+    problems: list[str] = []
+    parents = (
+        engine.git(repo, "rev-list", "--parents", "-n", "1", commit).decode().split()
+    )
+    if parents[1:] != [base]:
+        problems.append(f"parent is not the base {short(base)}")
+    count = engine.git(repo, "rev-list", "--count", f"{base}..{commit}").decode()
+    if count.strip() != "1":
+        problems.append("a candidate is exactly one commit on the base")
+    raw = engine.git(
+        repo, "diff-tree", "-r", "-z", "--no-renames", "--raw", base, commit
+    )
+    fields = raw.split(b"\0")
+    for meta, path in zip(fields[0::2], fields[1::2]):
+        if not meta:
+            continue
+        old_mode, new_mode, _, _, status = meta.decode().lstrip(":").split()
+        name = os.fsdecode(path)
+        if not candidate_allowed(name):
+            problems.append(f"path outside the candidate allowlist: {name}")
+        if "120000" in (old_mode, new_mode) or "160000" in (old_mode, new_mode):
+            problems.append(f"symlink or submodule: {name}")
+        if status[0] not in {"M", "A", "D"}:
+            problems.append(f"unsupported change {status}: {name}")
+        if new_mode not in MODES | {"000000"} or old_mode not in MODES | {"000000"}:
+            problems.append(f"unsupported file mode change: {name}")
+    try:
+        lock = candidate_lock(repo, commit)
+    except (engine.EngineError, ValueError) as error:
+        return problems + [f"engine.lock is unreadable: {error}"]
+    if lock.get("release_tag") != tag or not HEX40.fullmatch(
+        str(lock.get("revision", ""))
+    ):
+        problems.append("engine.lock does not pin the candidate's release tag")
+    return problems
+
+
+def import_candidate_bundle(repo: Path, bundle: Path) -> str:
+    """Verify a candidate bundle's shape and import its one head; returns the commit."""
+    heads = engine.git(repo, "bundle", "list-heads", str(bundle)).decode().split("\n")
+    refs = [line.split()[1] for line in heads if line.strip()]
+    if refs != [CANDIDATE_REF]:
+        raise engine.EngineError(
+            "candidate bundle must carry exactly one candidate head"
+        )
+    engine.git(repo, "bundle", "verify", str(bundle))
+    engine.git(
+        repo,
+        "fetch",
+        "--quiet",
+        "--no-tags",
+        str(bundle),
+        f"+{CANDIDATE_REF}:{IMPORTED_REF}",
+    )
+    return commit_of(repo, IMPORTED_REF)
+
+
+def allowlisted_entries(repo: Path, tree: str) -> dict[str, tuple[str, str]]:
+    """Mode and blob of every candidate-allowlisted path in a tree."""
+    output = engine.git(repo, "ls-tree", "-r", "-z", tree, "--", *CANDIDATE_PATHSPECS)
+    entries: dict[str, tuple[str, str]] = {}
+    for record in output.split(b"\0"):
+        if not record:
+            continue
+        meta, _, name = record.partition(b"\t")
+        mode, _, sha = meta.decode().split()
+        entries[os.fsdecode(name)] = (mode, sha)
+    return entries
+
+
+def classify(
+    *,
+    repo: Path = ROOT,
+    directory: Path,
+    base: str,
+    commit: str,
+    tag: str,
+    runner: Runner = run_command,
+    cache_dir: Path | None = None,
+) -> dict[str, Any]:
+    """Mechanical means main's patches carry onto the candidate's pin with no conflicts and no
+    contract change, producing exactly the candidate's allowlisted bytes. Anything else is
+    assisted. No snapshot and no resolver take part, so the verdict is reproducible."""
+    problems = verify_candidate_commit(repo, commit, base, tag)
+    if problems:
+        raise engine.EngineError("candidate is not allowlisted: " + "; ".join(problems))
+    revision = candidate_lock(repo, commit)["revision"]
+    plan_value = {
+        "schema_version": SCHEMA_VERSION,
+        "action": "sync",
+        "candidate": {"tag": tag, "revision": revision},
+        "upstream": {
+            "revision": revision,
+            "date": upstream_date(revision, "github", None),
+            "source": "github",
+            "ref": f"refs/tags/{tag}",
+            "local_repo": None,
+        },
+        "main_sha": base,
+        "main_base": base,
+        "snapshot_sha": None,
+        "from": {"kind": "main", "ref": base},
+        "reason": "classify the mechanical carry of main's patches",
+    }
+    reasons: list[str] = []
+    code = rebase_plan(plan_value, directory, repo=repo, cache_dir=cache_dir)
+    output = directory / REBASE_DIR
+    if code == 2:
+        report = engine.read_json(output / engine_patches.REPORT_NAME)
+        conflicts = sorted(engine_patches.conflict_paths(report))
+        reasons.append(
+            f"rebase onto {short(revision)} conflicts in {len(conflicts)} files"
+        )
+    else:
+        source = directory / SOURCE_DIR
+        try:
+            engine_patches.export(
+                root=source, workspace=output / "workspace", update_lock=True
+            )
+        except engine.EngineError as error:
+            # Export refuses new or unowned paths; that is a human decision, not a failure.
+            reasons.append(f"export needs review: {error}")
+        else:
+            notes: list[str] = []
+            regenerate(source=source, directory=directory, runner=runner, notes=notes)
+            if notes:
+                reasons.append("generated outputs could not be regenerated")
+            reasons += compatibility_reasons(directory / GENERATE_DIR, source)
+            engine.git(
+                source, "add", "--force", "--all", "--", ".", ":(exclude).engine"
+            )
+            actual = allowlisted_entries(
+                source, engine.git(source, "write-tree").decode().strip()
+            )
+            expected = allowlisted_entries(repo, commit)
+            differing = sorted(
+                name
+                for name in set(expected) | set(actual)
+                if expected.get(name) != actual.get(name)
+            )
+            if differing:
+                reasons.append(
+                    f"allowlisted paths differ from the candidate: {differing[:10]}"
+                )
+    verdict = "assisted" if reasons else "mechanical"
+    result = {
+        "classification": verdict,
+        "reasons": reasons,
+        "tag": tag,
+        "revision": revision,
+        "commit": commit,
+    }
+    engine.write_json(directory / CLASSIFICATION_NAME, result)
+    return result
+
+
+def compatibility_reasons(workspace: Path, source: Path) -> list[str]:
+    """RPC and storage drift: storage fails the job; any RPC change needs human review."""
+    fixtures = source / "integration/codex/compatibility"
+    try:
+        errors = engine_compatibility.check(workspace, fixtures)
+    except (OSError, ValueError, KeyError) as error:
+        return [f"compatibility fixtures could not be checked: {error}"]
+    if any(STORAGE_CHANGED in error for error in errors):
+        raise engine.EngineError(
+            "durable storage fixtures changed: "
+            + "; ".join(error for error in errors if STORAGE_CHANGED in error)
+        )
+    return [f"compatibility: {error}" for error in errors]
+
+
 def fetch_remote_head(repo: Path) -> str | None:
     """Refresh origin's sync head; returns it, or None when the branch does not exist yet."""
     if not plain_git(repo, "ls-remote", "--heads", "origin", BRANCH).strip():
@@ -824,6 +1254,10 @@ def main(argv: list[str] | None = None) -> int:
     planner.add_argument("--main-ref", default="HEAD")
     planner.add_argument("--repo", type=Path, default=ROOT)
     planner.add_argument("--output", type=Path, required=True)
+    planner.add_argument("--tag", help="plan a stable rust-vX.Y.Z release candidate")
+    planner.add_argument(
+        "--revision", help="the release tag's full commit SHA (with --tag)"
+    )
 
     rebaser = sub.add_parser(
         "rebase", help="rebase the plan's source onto upstream and fold"
@@ -844,7 +1278,23 @@ def main(argv: list[str] | None = None) -> int:
     finisher.add_argument("--accept", action="append", default=[], metavar="PATH")
     finisher.add_argument("--assign", action="append", default=[], metavar="PATH=PATCH")
     finisher.add_argument("--skip-cargo", action="store_true")
+    finisher.add_argument(
+        "--allow-unresolved",
+        action="store_true",
+        help="candidate plans only: draft an engine.lock-only candidate when conflicts remain",
+    )
     finisher.add_argument("--cache-dir", type=Path)
+
+    classifier = sub.add_parser(
+        "classify", help="decide whether a candidate is a mechanical carry"
+    )
+    classifier.add_argument("--base", required=True)
+    classifier.add_argument("--commit", required=True)
+    classifier.add_argument("--tag", required=True)
+    classifier.add_argument("--dir", type=Path, required=True)
+    classifier.add_argument("--repo", type=Path, default=ROOT)
+    classifier.add_argument("--cache-dir", type=Path)
+    classifier.add_argument("--github-output", type=Path)
 
     verifier = sub.add_parser("verify", help="check a snapshot bundle before pushing")
     verifier.add_argument("--dir", type=Path, required=True)
@@ -874,6 +1324,8 @@ def main(argv: list[str] | None = None) -> int:
                 local_repo=args.local_repo,
                 snapshot_ref=args.snapshot_ref,
                 main_ref=args.main_ref,
+                tag=args.tag,
+                release_revision=args.revision,
             )
             engine.write_json(args.output, value)
             if value["action"] == "noop":
@@ -905,8 +1357,31 @@ def main(argv: list[str] | None = None) -> int:
                 accept=args.accept,
                 assign=args.assign,
                 skip_cargo=args.skip_cargo,
+                allow_unresolved=args.allow_unresolved,
             )
             print(snapshot)
+            return 0
+        if args.command == "classify":
+            result = classify(
+                repo=args.repo,
+                directory=args.dir,
+                base=args.base,
+                commit=args.commit,
+                tag=args.tag,
+                cache_dir=args.cache_dir,
+            )
+            record(
+                "classified",
+                f"Candidate {args.tag} classified {result['classification']}"
+                + (f": {'; '.join(result['reasons'])}" if result["reasons"] else ""),
+            )
+            print(json.dumps(result, indent=2, sort_keys=True))
+            if args.github_output:
+                with args.github_output.open("a") as output:
+                    output.write(
+                        f"classification={result['classification']}\n"
+                        f"reasons={json.dumps(result['reasons'], sort_keys=True)}\n"
+                    )
             return 0
         if args.command == "verify":
             _, problems = verify_directory(args.repo, args.dir, main_ref=args.main_ref)

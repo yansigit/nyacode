@@ -63,8 +63,9 @@ versions continue to come from `VERSION`.
 python3 scripts/engine.py upgrade rust-vX.Y.Z --mode controls
 ```
 
-An upgrade proposal lives under `.engine/upgrades` and never changes the accepted
-pin. Discovery runs every three hours and is idempotent. Repository variable
+A stable candidate is a bundle built from the current default branch and never changes
+the accepted pin until it is promoted; see [stable candidates](#stable-candidates). Discovery
+runs every three hours and is idempotent. Repository variable
 `NYACODE_ENGINE_UPGRADES_ENABLED=true` is the kill switch: when it is not `true`,
 discovery and publication refuse in every mode, including manual dispatch. Observation
 and promotion of an already-running candidate continue, so in-flight work can finish.
@@ -74,15 +75,80 @@ The trusted publisher records the exact qualification run ID returned by GitHub.
 It never reopens a candidate that was merged or closed with the `engine:reject`
 label. A candidate closed without that label gets a new pull request on a rebuilt
 branch. An open candidate whose branch is not based on the current default branch is
-rebuilt from the same `engine.lock`, force-updated, and re-dispatched. Publishing a
-newer tag closes each older open `engine/rust-v*` candidate with a comment linking
-its replacement. Failed candidates remain drafts with linked diagnostics.
+replaced by a bundle built on the current base, force-pushed, and re-dispatched. An
+open candidate already at the same commit is left alone; one at a different commit on
+the same base requires manual repair. Publishing a newer tag closes each older open
+`engine/rust-v*` candidate with a comment linking its replacement. Unresolved
+candidates remain drafts with the conflicting files listed in the pull request.
 
 Every three hours the sweep job finds the latest qualification run for each open
 candidate. Once that run has completed, the sweep reports it and promotes it if
 eligible, without waiting on a hosted job. Promotion verifies the exact candidate
-commit, current base, allowed files, complete qualification, and strict branch
-protection before an immediate squash merge.
+commit, current base, allowed files, complete qualification, classification, and strict
+branch protection before an immediate squash merge. Mechanical candidates merge
+automatically; assisted candidates additionally need an approval (see below).
+
+## Stable candidates
+
+A stable `rust-vX.Y.Z` release (never a prerelease or draft) becomes a candidate in three
+read-only steps and one trusted publication:
+
+1. `discover` resolves the tag to its commit and plans the carry with
+   `scripts/engine_sync.py plan --tag`. The planner starts from the snapshot on
+   `sync/upstream-main` whose upstream is the closest ancestor-or-equal of the release's
+   merge base with upstream main. Without one it uses the newest snapshot, and it uses
+   main when that snapshot's pinned engine differs from main's.
+2. `construct` rebases the patch stack onto the release and folds main's patch edits. Conflicts
+   go to `engine-resolve.yml` only when `NYACODE_RESOLVER_AGENT` is set.
+3. `build` validates the result (manifest, assembly, controls, `cargo check --locked`), then
+   writes one commit on the current default branch and bundles it with `candidate.json`
+   (schema 2). Only these paths may change: `engine.lock`, `integration/codex/patches/**`,
+   `integration/codex/generated/**`, `integration/codex/compatibility/**`,
+   `integration/codex/Cargo.lock`, `integration/codex/assembly.json`,
+   `integration/codex/ownership.json`, and `inventory/downstream.json`. Symlinks,
+   submodules, type changes, and paths outside the list are refused.
+
+`publish-candidate` verifies the bundle again against the current base (single commit,
+parent equal to the base, allowlisted paths, pinned release tag), pushes `engine/rust-v*`
+with the job token, opens a pull request, and dispatches the read-only qualification. The
+qualification job `classify` decides the candidate's class:
+
+- **Mechanical**: main's committed patches, rebased onto the candidate's pin with no
+  snapshot and no resolver, produce exactly the candidate's allowlisted bytes, with zero
+  conflicts and no compatibility change. Such candidates merge automatically.
+- **Assisted**: anything else, including any RPC schema change (for example an added enum
+  value), a rebase conflict, or an AI-resolved carry. The reasons are listed on the pull
+  request and in the status issue.
+
+Storage fixture drift fails the classification job outright; it is never an assisted
+candidate.
+
+### Approving an assisted candidate
+
+An assisted candidate merges only after an approval of its exact head commit by a user
+with `admin`, `maintain`, or `write` permission on the repository. The approval must be
+the reviewer's latest decision: a later changes-requested or dismissal from such a user
+blocks it. Approvals of older commits, comments, and reviews from users without write
+access do not count. The pull request carries the `engine:needs-approval` label while it
+waits. Approving the pull request dispatches `engine-review.yml`, which runs a sweep;
+the sweep promotes the approved head if everything else still holds. Pushing a new commit
+to the candidate branch invalidates the approval.
+
+### Labels
+
+- `engine:reject` on a closed candidate stops it from being published again.
+- `engine:needs-approval` marks an assisted candidate awaiting approval.
+- `engine:status` marks the single "Upstream sync status" issue.
+
+Create all three labels before enabling the kill switch.
+
+### After the merge
+
+When a squash of a qualified candidate lands on the default branch, `engine-acceptance`
+runs only the `controls` scope for that push, but only when the merged tree equals the
+qualified head's tree, the squash's single parent equals the qualified base, and a successful
+qualification report names that exact head, base, and pull request. Every other push keeps
+the full scope. Any API error selects the full scope.
 
 A separate trusted observer waits up to 350 minutes for a run dispatched by the same
 invocation, reports its result, and passes its validated ID to the promotion job.
@@ -95,7 +161,7 @@ single open issue titled "Upstream sync status" (label `engine:status`). The iss
 shows the current pin, the last update, and the 30 most recent events, including
 skips, rejections, supersessions, qualification results, and failed jobs. Maintainers
 reject a candidate by closing its pull request and adding the `engine:reject` label.
-Create the `engine:status` and `engine:reject` labels before enabling the kill switch.
+Create the `engine:status`, `engine:reject`, and `engine:needs-approval` labels before enabling the kill switch.
 
 Qualification packages may run for 360 minutes. If observation times out or an
 older run needs its report restored, replay only the observer from the default
