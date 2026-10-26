@@ -1,0 +1,437 @@
+"""Rebase and export must keep the patch stack exact, fail loudly on ambiguity, and never misroute."""
+
+import contextlib
+import io
+import json
+import sys
+import tarfile
+import tempfile
+import unittest
+from pathlib import Path
+from unittest.mock import patch
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+import engine
+import engine_patches
+
+PIN = "a" * 40
+README = "".join(f"line {number}\n" for number in range(1, 31)).encode()
+BASE_FILES = {
+    "README.md": README,
+    "codex-rs/Cargo.toml": b'[workspace]\nmembers = ["cli"]\n[workspace.package]\nversion = "0.0.0"\n',
+    "codex-rs/rust-toolchain.toml": b'[toolchain]\nchannel = "1.95.0"\n',
+    "docs/extra.md": b"extra one\nextra two\n",
+    "docs/old.md": b"obsolete\n",
+    "legacy.txt": b"engine-level delete\n",
+}
+
+
+def write_files(root: Path, files: dict[str, bytes | None]) -> None:
+    for name, data in files.items():
+        path = root / name
+        if data is None:
+            path.unlink(missing_ok=True)
+            continue
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_bytes(data)
+
+
+def commit(repo: Path, message: str) -> str:
+    engine.git(repo, "add", "--force", "--all", "--", ".")
+    engine.git(
+        repo,
+        "-c",
+        "user.name=test",
+        "-c",
+        "user.email=test@example.invalid",
+        "commit",
+        "-q",
+        "--allow-empty",
+        "-m",
+        message,
+    )
+    return engine.git(repo, "rev-parse", "HEAD").decode().strip()
+
+
+def make_archive(path: Path, files: dict[str, bytes]) -> None:
+    with tarfile.open(path, "w:gz") as archive:
+        for name, data in files.items():
+            member = tarfile.TarInfo("codex-sha/" + name)
+            member.mode = 0o644
+            member.size = len(data)
+            archive.addfile(member, io.BytesIO(data))
+
+
+def make_patch(
+    base: dict[str, bytes], edits: dict[str, bytes | None]
+) -> tuple[bytes, list[str]]:
+    """Generate a patch the way inventory/generate.py does: git diff --binary between two trees."""
+    with tempfile.TemporaryDirectory(prefix="patch-fixture-") as scratch:
+        repo = Path(scratch)
+        engine.git(repo, "init", "--quiet")
+        write_files(repo, base)
+        commit(repo, "base")
+        write_files(repo, edits)
+        engine.git(repo, "add", "--force", "--all", "--", ".")
+        diff = engine.git(
+            repo,
+            "diff",
+            "--cached",
+            "--binary",
+            "--full-index",
+            "--no-ext-diff",
+            "--no-renames",
+            "HEAD",
+        )
+        return diff, sorted(engine.changed_paths(repo, "HEAD"))
+
+
+class PatchStackTest(unittest.TestCase):
+    def setUp(self):
+        self.temporary = tempfile.TemporaryDirectory(prefix="engine-patches-")
+        self.addCleanup(self.temporary.cleanup)
+        self.base = Path(self.temporary.name)
+        self.root = self.base / "product"
+        self.root.mkdir()
+        self.cache = self.base / "cache"
+        self.cache.mkdir()
+        self.files = dict(BASE_FILES)
+
+        staged = self.base / "pinned.tar.gz"
+        make_archive(staged, self.files)
+        sha = engine.digest(staged.read_bytes())
+        staged.rename(self.cache / f"{PIN}-{sha}.tar.gz")
+        self.lock = {
+            "schema_version": 1,
+            "repository": "openai/codex",
+            "revision": PIN,
+            "release_tag": None,
+            "archive_sha256": sha,
+            "toolchain": "1.95.0",
+            "integration_contract_version": 1,
+            "baseline_product_revision": "b" * 40,
+            "product_version_file": "VERSION",
+            "assembly_manifest": "integration/codex/assembly.json",
+            "assembled_lock": "integration/codex/Cargo.lock",
+        }
+        self.write_lock()
+        self.manifest = {
+            "schema_version": 1,
+            "patches": [],
+            "overlays": [],
+            "deletes": ["legacy.txt"],
+        }
+        self.write_manifest()
+        self.upstream = self.base / "upstream"
+        self.upstream.mkdir()
+        engine.git(self.upstream, "init", "--quiet")
+        write_files(self.upstream, self.files)
+        self.pin_commit = commit(self.upstream, "pin")
+
+    def write_lock(self):
+        (self.root / "engine.lock").write_text(json.dumps(self.lock, indent=2) + "\n")
+
+    def write_manifest(self):
+        path = self.root / self.lock["assembly_manifest"]
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(json.dumps(self.manifest, indent=2, sort_keys=True) + "\n")
+
+    def manifest_text(self):
+        return (self.root / self.lock["assembly_manifest"]).read_text()
+
+    def add_patch(self, name, edits, base=None):
+        diff, paths = make_patch(base or self.files, edits)
+        path = self.root / f"integration/codex/patches/{name}.patch"
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_bytes(diff)
+        self.manifest["patches"].append(
+            {"path": f"integration/codex/patches/{name}.patch", "paths": paths}
+        )
+        self.write_manifest()
+        return diff
+
+    def upstream_commit(self, edits):
+        engine.git(self.upstream, "reset", "--quiet", "--hard", self.pin_commit)
+        write_files(self.upstream, edits)
+        return commit(self.upstream, "upstream")
+
+    def rebase(self, onto, name="out", **kwargs):
+        return engine_patches.rebase(
+            root=self.root,
+            onto_local_ref=onto,
+            local_repo=self.upstream,
+            cache_dir=self.cache,
+            output=self.base / name,
+            **kwargs,
+        )
+
+    def edited_readme(self, line, text):
+        lines = README.decode().splitlines(keepends=True)
+        lines[line - 1] = text + "\n"
+        return "".join(lines).encode()
+
+
+class RebaseAndExportTest(PatchStackTest):
+    def test_same_base_rebase_is_noop_and_export_is_byte_identical(self):
+        original = self.add_patch(
+            "documentation", {"README.md": self.edited_readme(2, "LINE TWO")}
+        )
+        original_manifest = self.manifest_text()
+        output, report = self.rebase(self.pin_commit, "same")
+        self.assertEqual(report["totals"]["conflicted_patches"], 0)
+        self.assertEqual(report["onto"]["revision"], self.pin_commit)
+        engine_patches.export(root=self.root, workspace=output / "workspace")
+        self.assertEqual(
+            (self.root / "integration/codex/patches/documentation.patch").read_bytes(),
+            original,
+        )
+        self.assertEqual(self.manifest_text(), original_manifest)
+
+    def test_non_overlapping_upstream_edit_is_clean_and_merged(self):
+        self.add_patch(
+            "documentation", {"README.md": self.edited_readme(2, "LINE TWO")}
+        )
+        onto = self.upstream_commit(
+            {"README.md": self.edited_readme(28, "LINE TWENTY EIGHT")}
+        )
+        output, report = self.rebase(onto, "clean")
+        self.assertEqual(report["totals"]["conflicted_patches"], 0)
+        self.assertEqual(report["patches"][0]["files"][0]["status"], "clean")
+        merged = (output / "workspace/README.md").read_text()
+        self.assertIn("LINE TWO", merged)
+        self.assertIn("LINE TWENTY EIGHT", merged)
+
+    def test_overlapping_upstream_edit_conflicts_and_exits_two(self):
+        self.add_patch(
+            "documentation", {"README.md": self.edited_readme(2, "PATCH SIDE")}
+        )
+        onto = self.upstream_commit(
+            {"README.md": self.edited_readme(2, "UPSTREAM SIDE")}
+        )
+        output, report = self.rebase(onto, "conflict")
+        record = report["patches"][0]["files"][0]
+        self.assertEqual((record["status"], record["conflict_blocks"]), ("conflict", 1))
+        self.assertEqual(report["totals"]["conflicted_patches"], 1)
+        self.assertEqual(report["totals"]["conflict_blocks"], 1)
+        self.assertIn("<<<<<<< ", (output / "workspace/README.md").read_text())
+        argv = [
+            "engine.py",
+            "--root",
+            str(self.root),
+            "--cache-dir",
+            str(self.cache),
+            "rebase",
+            "--onto-local-ref",
+            onto,
+            "--local-repo",
+            str(self.upstream),
+            "--output",
+            str(self.base / "cli-conflict"),
+        ]
+        with patch.object(sys, "argv", argv), contextlib.redirect_stdout(io.StringIO()):
+            self.assertEqual(engine.main(), 2)
+
+    def test_upstream_deletes_patched_file_reports_deleted_upstream(self):
+        self.add_patch(
+            "documentation", {"README.md": self.edited_readme(2, "PATCH SIDE")}
+        )
+        onto = self.upstream_commit({"README.md": None})
+        _, report = self.rebase(onto, "deleted")
+        record = report["patches"][0]["files"][0]
+        self.assertEqual(record["status"], "deleted_upstream")
+        self.assertEqual(record["conflict_blocks"], 1)
+
+    def test_export_refuses_conflict_markers(self):
+        self.add_patch(
+            "documentation", {"README.md": self.edited_readme(2, "PATCH SIDE")}
+        )
+        onto = self.upstream_commit(
+            {"README.md": self.edited_readme(2, "UPSTREAM SIDE")}
+        )
+        output, _ = self.rebase(onto, "markers")
+        with self.assertRaisesRegex(engine.EngineError, "conflict markers"):
+            engine_patches.export(root=self.root, workspace=output / "workspace")
+
+    def test_unresolved_modify_delete_refuses_until_accepted(self):
+        self.add_patch(
+            "documentation", {"README.md": self.edited_readme(2, "PATCH SIDE")}
+        )
+        onto = self.upstream_commit({"README.md": None})
+        output, _ = self.rebase(onto, "unresolved")
+        with self.assertRaisesRegex(engine.EngineError, "still hold merged bytes"):
+            engine_patches.export(root=self.root, workspace=output / "workspace")
+        engine_patches.export(
+            root=self.root, workspace=output / "workspace", accept=["README.md"]
+        )
+        patch_text = (
+            self.root / "integration/codex/patches/documentation.patch"
+        ).read_bytes()
+        self.assertIn(b"PATCH SIDE", patch_text)
+
+    def test_changed_undeclared_path_is_error_until_assigned(self):
+        self.add_patch(
+            "documentation", {"README.md": self.edited_readme(2, "LINE TWO")}
+        )
+        output, _ = self.rebase(self.pin_commit, "undeclared")
+        workspace = output / "workspace"
+        (workspace / "notes").mkdir()
+        (workspace / "notes/new.txt").write_text("new\n")
+        with self.assertRaisesRegex(engine.EngineError, "not owned by any patch"):
+            engine_patches.export(root=self.root, workspace=workspace)
+        engine_patches.export(
+            root=self.root,
+            workspace=workspace,
+            assign=["notes/new.txt=documentation"],
+        )
+        manifest = json.loads(self.manifest_text())
+        self.assertEqual(
+            manifest["patches"][0]["paths"], ["README.md", "notes/new.txt"]
+        )
+        self.assertIn(
+            b"notes/new.txt",
+            (self.root / "integration/codex/patches/documentation.patch").read_bytes(),
+        )
+
+    def test_declared_path_reverted_is_dropped_from_patch(self):
+        self.add_patch(
+            "documentation",
+            {
+                "README.md": self.edited_readme(2, "LINE TWO"),
+                "docs/extra.md": b"changed\n",
+            },
+        )
+        output, _ = self.rebase(self.pin_commit, "reverted")
+        workspace = output / "workspace"
+        (workspace / "docs/extra.md").write_bytes(BASE_FILES["docs/extra.md"])
+        result = engine_patches.export(root=self.root, workspace=workspace)
+        self.assertEqual(result["dropped"], {"documentation": ["docs/extra.md"]})
+        manifest = json.loads(self.manifest_text())
+        self.assertEqual(manifest["patches"][0]["paths"], ["README.md"])
+        self.assertNotIn(
+            b"docs/extra.md",
+            (self.root / "integration/codex/patches/documentation.patch").read_bytes(),
+        )
+
+    def test_upstream_rename_of_patched_file_fails_loudly(self):
+        self.add_patch(
+            "documentation", {"README.md": self.edited_readme(2, "LINE TWO")}
+        )
+        onto = self.upstream_commit({"README.md": None, "GUIDE.md": README})
+        with self.assertRaisesRegex(engine.EngineError, "renamed a patched path"):
+            self.rebase(onto, "renamed")
+
+    def test_binary_patch_round_trips_byte_identically(self):
+        blob = bytes(range(256)) * 4
+        original = self.add_patch(
+            "assets",
+            {"assets/logo.bin": blob, "README.md": self.edited_readme(3, "LINE THREE")},
+        )
+        self.assertIn(b"GIT binary patch", original)
+        onto = self.upstream_commit({"docs/extra.md": b"extra one\nupstream\n"})
+        output, report = self.rebase(onto, "binary")
+        self.assertEqual(report["totals"]["conflicted_patches"], 0)
+        self.assertEqual((output / "workspace/assets/logo.bin").read_bytes(), blob)
+        engine_patches.export(root=self.root, workspace=output / "workspace")
+        self.assertEqual(
+            (self.root / "integration/codex/patches/assets.patch").read_bytes(),
+            original,
+        )
+
+    def test_patch_deletions_are_recorded_and_engine_deletes_preserved(self):
+        self.add_patch(
+            "documentation",
+            {"README.md": self.edited_readme(2, "LINE TWO"), "docs/old.md": None},
+        )
+        self.manifest["deletes"] = sorted(["docs/old.md", "legacy.txt"])
+        self.write_manifest()
+        output, _ = self.rebase(self.pin_commit, "deletes")
+        self.manifest["deletes"] = ["legacy.txt"]
+        self.write_manifest()
+        engine_patches.export(root=self.root, workspace=output / "workspace")
+        manifest = json.loads(self.manifest_text())
+        self.assertEqual(manifest["deletes"], ["docs/old.md", "legacy.txt"])
+
+    def test_export_update_lock_writes_engine_lock_from_github_report(self):
+        self.add_patch(
+            "documentation", {"README.md": self.edited_readme(2, "LINE TWO")}
+        )
+        onto = self.upstream_commit({"README.md": self.edited_readme(28, "LINE 28")})
+        new_files = dict(BASE_FILES, **{"README.md": self.edited_readme(28, "LINE 28")})
+        new_archive = self.base / "new.tar.gz"
+        make_archive(new_archive, new_files)
+        new_sha = engine.digest(new_archive.read_bytes())
+        with patch.object(
+            engine_patches, "fetch_revision", return_value=(new_archive, new_sha)
+        ):
+            output, report = engine_patches.rebase(
+                root=self.root,
+                onto=onto,
+                cache_dir=self.cache,
+                output=self.base / "github",
+            )
+        self.assertEqual(report["onto"]["source"], "github")
+        engine_patches.export(
+            root=self.root, workspace=output / "workspace", update_lock=True
+        )
+        lock = json.loads((self.root / "engine.lock").read_text())
+        self.assertEqual((lock["revision"], lock["archive_sha256"]), (onto, new_sha))
+        self.assertIsNone(lock["release_tag"])
+        engine.load_lock(self.root)
+
+    def test_update_lock_refuses_local_ref_reports(self):
+        self.add_patch(
+            "documentation", {"README.md": self.edited_readme(2, "LINE TWO")}
+        )
+        output, _ = self.rebase(self.pin_commit, "local")
+        with self.assertRaisesRegex(engine.EngineError, "GitHub archive digest"):
+            engine_patches.export(
+                root=self.root, workspace=output / "workspace", update_lock=True
+            )
+
+    def test_export_rejects_non_pristine_workspace(self):
+        with self.assertRaisesRegex(engine.EngineError, "not a rebase workspace"):
+            engine_patches.export(root=self.root, workspace=self.base / "missing")
+
+
+class FetchRevisionTest(unittest.TestCase):
+    def test_downloads_once_then_reuses_verified_cache(self):
+        with tempfile.TemporaryDirectory(prefix="fetch-") as scratch:
+            cache = Path(scratch) / "cache"
+            source = Path(scratch) / "source.tar.gz"
+            make_archive(source, BASE_FILES)
+            payload = source.read_bytes()
+            revision = "c" * 40
+
+            def fake_download(repository, rev, destination):
+                self.assertEqual((repository, rev), ("openai/codex", revision))
+                destination.write_bytes(payload)
+
+            with patch.object(
+                engine, "download", side_effect=fake_download
+            ) as download:
+                first = engine_patches.fetch_revision(revision, cache)
+                second = engine_patches.fetch_revision(revision, cache)
+            self.assertEqual(download.call_count, 1)
+            self.assertEqual(first, second)
+            self.assertEqual(first[1], engine.digest(payload))
+            self.assertTrue(first[0].name.startswith(revision))
+
+    def test_rejects_mutable_revisions(self):
+        with self.assertRaisesRegex(engine.EngineError, "immutable"):
+            engine_patches.fetch_revision("main", Path(tempfile.gettempdir()))
+
+
+class ManifestValidationTest(unittest.TestCase):
+    def test_patch_paths_must_be_file_disjoint(self):
+        manifest = {
+            "patches": [
+                {"path": "integration/codex/patches/a.patch", "paths": ["x.rs"]},
+                {"path": "integration/codex/patches/b.patch", "paths": ["x.rs"]},
+            ]
+        }
+        with self.assertRaisesRegex(engine.EngineError, "file-disjoint"):
+            engine_patches.patch_entries(manifest)
+
+
+if __name__ == "__main__":
+    unittest.main()

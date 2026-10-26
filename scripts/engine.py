@@ -228,14 +228,15 @@ def extract_archive(archive: Path, workspace: Path) -> dict[str, str]:
         }
 
 
-def git(workspace: Path, *args: str) -> bytes:
+def git_process(workspace: Path, *args: str) -> subprocess.CompletedProcess[bytes]:
+    """Run git with the engine's hermetic configuration without judging the exit code."""
     env = os.environ.copy()
     env.update(
         {"LC_ALL": "C", "GIT_CONFIG_GLOBAL": os.devnull, "GIT_CONFIG_NOSYSTEM": "1"}
     )
     for name in ("GIT_DIR", "GIT_WORK_TREE", "GIT_INDEX_FILE", "GIT_COMMON_DIR"):
         env.pop(name, None)
-    result = subprocess.run(
+    return subprocess.run(
         [
             "git",
             "-c",
@@ -254,6 +255,10 @@ def git(workspace: Path, *args: str) -> bytes:
         capture_output=True,
         check=False,
     )
+
+
+def git(workspace: Path, *args: str) -> bytes:
+    result = git_process(workspace, *args)
     if result.returncode:
         raise EngineError(
             f"git {' '.join(args)} failed:\n{result.stderr.decode(errors='replace')}"
@@ -928,11 +933,39 @@ def main() -> int:
             command.add_argument("--artifact-dir", type=Path)
         if name == "upgrade":
             command.add_argument("tag")
+    rebase_command = subparsers.add_parser(
+        "rebase", help="carry the patch stack onto a new upstream revision"
+    )
+    target = rebase_command.add_mutually_exclusive_group(required=True)
+    target.add_argument("--onto", metavar="REV")
+    target.add_argument("--onto-local-ref", metavar="REF")
+    rebase_command.add_argument(
+        "--tag", help="stable rust-vX.Y.Z release tag to record"
+    )
+    rebase_command.add_argument("--output", type=Path)
+    rebase_command.add_argument(
+        "--local-repo",
+        type=Path,
+        help="repository resolving --onto-local-ref (default: root)",
+    )
+    rebase_command.add_argument("--root", dest="subroot", type=Path)
+    export_command = subparsers.add_parser(
+        "export", help="write workspace edits back into patches and assembly.json"
+    )
+    export_command.add_argument("--workspace", type=Path, required=True)
+    export_command.add_argument("--root", dest="subroot", type=Path)
+    export_command.add_argument("--report", type=Path)
+    export_command.add_argument("--update-lock", action="store_true")
+    export_command.add_argument("--allow-new-paths", action="store_true")
+    export_command.add_argument(
+        "--assign", action="append", default=[], metavar="PATH=PATCH"
+    )
+    export_command.add_argument("--accept", action="append", default=[], metavar="PATH")
     args = parser.parse_args()
+    # engine_manifest and engine_patches import this file as `engine`; reuse this module
+    # object so that EngineError is the same class when the script runs as __main__.
+    sys.modules.setdefault("engine", sys.modules[__name__])
     if args.command == "manifest":
-        # engine_manifest imports this file as `engine`; reuse this module object so that
-        # EngineError is the same class when the script runs as __main__.
-        sys.modules.setdefault("engine", sys.modules[__name__])
         import engine_manifest
 
         try:
@@ -940,8 +973,16 @@ def main() -> int:
         except (EngineError, OSError, ValueError, KeyError) as error:
             print(f"engine: {error}", file=sys.stderr)
             return 1
-    kwargs = {"root": args.root, "output": args.output, "cache_dir": args.cache_dir}
+    kwargs = {
+        "root": args.root,
+        "output": getattr(args, "output", None),
+        "cache_dir": args.cache_dir,
+    }
     try:
+        if args.command in {"rebase", "export"}:
+            import engine_patches
+
+            return engine_patches.run(args)
         if args.command == "prepare":
             output = prepare(**kwargs)
         elif args.command == "check":

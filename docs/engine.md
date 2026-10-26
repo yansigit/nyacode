@@ -125,3 +125,30 @@ pin and committed Cargo lock, and installs its assembly provenance under
 it does not prepare an engine or update either lock. After an accepted toolchain
 change, explicitly update and review the rust-overlay entry in `flake.lock` if
 needed. Preparation is not required for `nix develop`.
+
+## Carrying patches forward
+
+`engine-rebase` carries the ordered patch stack onto a newer upstream commit. Each
+patch is committed alone on the pinned revision, then 3-way merged onto the new
+revision with renames disabled. The result is a clean workspace whose uncommitted
+diff against `pristine` is the patch stack. Work is staged under `.engine/rebase/<rev>`.
+
+```sh
+just engine-rebase <40-hex-commit>                 # exit 0 clean, 2 conflicts, 1 error
+python3 scripts/engine.py rebase --onto-local-ref upstream/main   # rehearse from a local ref
+just engine-export --workspace .engine/rebase/<rev>/workspace     # write patches back
+just engine-export --workspace ... --update-lock                  # also repin engine.lock
+```
+
+Review `rebase-report.json` first; every conflicted file lists its conflict blocks.
+Resolve conflict markers in the workspace. `export` refuses while markers remain,
+and refuses modify/delete or binary conflicts still holding merged bytes unless
+they are passed with `--accept PATH`. A changed path owned by no patch is an error
+until it is assigned with `--assign PATH=PATCH`. A rename of a patched path fails the
+rebase loudly; port that change by hand.
+
+`--update-lock` needs a GitHub-sourced report (`--onto`, not `--onto-local-ref`),
+because local archives do not carry GitHub's digest. The tool does not regenerate
+`integration/codex/Cargo.lock`, `inventory/downstream.json`, or overlay sources;
+run `just engine-checks` after an export and regenerate the inventory when it reports
+changed ownership.
