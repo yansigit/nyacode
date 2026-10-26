@@ -12,6 +12,11 @@ Source of truth:
   recomputed; no validator reads them.
 
 Generated outputs: integration/codex/assembly.json and inventory/downstream.json.
+
+Generated outputs: files under integration/codex/generated/<repo path> are whole-file outputs of
+the generators declared in ownership.json `generated`. Each file must match exactly one generator's
+output patterns, may not also be patched, overlaid, deleted, or the assembled lock, and is listed in
+assembly.json `generated` with its sha256 and mode.
 """
 
 from __future__ import annotations
@@ -30,6 +35,20 @@ OWNERSHIP = "integration/codex/ownership.json"
 ASSEMBLY = "integration/codex/assembly.json"
 INVENTORY = "inventory/downstream.json"
 PATCH_DIR = "integration/codex/patches"
+GENERATED_ROOT = "integration/codex/generated"
+GENERATOR_ID = re.compile(r"[a-z][a-z0-9-]*\Z")
+GENERATOR_FIELDS = (
+    "id",
+    "command",
+    "outputs",
+    "owner",
+    "purpose",
+    "regression_groups",
+    "deterministic",
+    "opt_in",
+    "timeout_seconds",
+    "tree",
+)
 REQUIRED_KEYS = (
     "artifact_rules",
     "deletes",
@@ -105,6 +124,132 @@ def is_generated(path: str, rules: dict[str, Any]) -> bool:
     return any(
         fragment in f"/{path}/" for fragment in rules["generated_fragments"]
     ) or any(path.endswith(suffix) for suffix in rules["generated_suffixes"])
+
+
+def glob_regex(pattern: str) -> re.Pattern[str]:
+    """Repo-path glob: `*` and `?` stay in one segment; `**` spans segments (`**/` may be empty)."""
+    parts: list[str] = []
+    index = 0
+    while index < len(pattern):
+        if pattern.startswith("**/", index):
+            parts.append("(?:.*/)?")
+            index += 3
+        elif pattern.startswith("**", index):
+            parts.append(".*")
+            index += 2
+        elif pattern[index] == "*":
+            parts.append("[^/]*")
+            index += 1
+        elif pattern[index] == "?":
+            parts.append("[^/]")
+            index += 1
+        else:
+            parts.append(re.escape(pattern[index]))
+            index += 1
+    return re.compile("".join(parts) + r"\Z")
+
+
+def static_prefix(pattern: str) -> str:
+    """The directory above the first wildcard; generators walk only this subtree."""
+    literal = pattern.split("*", 1)[0].split("?", 1)[0]
+    return literal.rsplit("/", 1)[0] if "/" in literal else ""
+
+
+def read_generators(ownership: dict[str, Any]) -> list[dict[str, Any]]:
+    """Validated ownership.json `generated` entries; absent means no generated outputs."""
+    generators = ownership.get("generated", [])
+    if not isinstance(generators, list):
+        raise EngineError(f"{OWNERSHIP} generated must be a list")
+    seen: set[str] = set()
+    for generator in generators:
+        unknown = set(generator) - set(GENERATOR_FIELDS)
+        if unknown:
+            raise EngineError(
+                f"unsupported generator fields for {generator.get('id')}: {sorted(unknown)}"
+            )
+        identifier = generator.get("id", "")
+        if not isinstance(identifier, str) or not GENERATOR_ID.fullmatch(identifier):
+            raise EngineError(f"generator id must be lowercase words: {identifier!r}")
+        if identifier in seen:
+            raise EngineError(f"duplicate generator id: {identifier}")
+        seen.add(identifier)
+        outputs = generator.get("outputs")
+        if not isinstance(outputs, list) or not outputs:
+            raise EngineError(f"generator {identifier} needs non-empty outputs")
+        for pattern in outputs:
+            if not isinstance(pattern, str) or pattern.startswith("/"):
+                raise EngineError(
+                    f"generator {identifier} output must be relative: {pattern!r}"
+                )
+            relative(pattern.replace("*", "_").replace("?", "_"))
+        for field in ("owner", "purpose"):
+            if not generator.get(field):
+                raise EngineError(f"generator {identifier} needs {field}")
+        groups = generator.get("regression_groups")
+        if not isinstance(groups, list) or not groups:
+            raise EngineError(f"generator {identifier} needs regression_groups")
+        if not isinstance(generator.get("command", ""), str):
+            raise EngineError(f"generator {identifier} command must be a description")
+        for flag in ("deterministic", "opt_in", "tree"):
+            if flag in generator and not isinstance(generator[flag], bool):
+                raise EngineError(f"generator {identifier} {flag} must be a boolean")
+        timeout = generator.get("timeout_seconds")
+        if timeout is not None and (not isinstance(timeout, int) or timeout < 1):
+            raise EngineError(
+                f"generator {identifier} timeout_seconds must be positive"
+            )
+        if generator.get("tree", True) and not generator.get("deterministic"):
+            raise EngineError(
+                f"generator {identifier} moves outputs into the generated tree, so it must be deterministic"
+            )
+    return generators
+
+
+def declared_generators(root: Path) -> list[dict[str, Any]]:
+    """Every generator in ownership.json; none when the repository has no ownership file."""
+    path = located(root, OWNERSHIP)
+    if not path.is_file():
+        return []
+    return read_generators(json.loads(path.read_text()))
+
+
+def tree_generators(root: Path) -> list[dict[str, Any]]:
+    """Generators whose outputs are whole files moved into the generated tree."""
+    return [
+        generator
+        for generator in declared_generators(root)
+        if generator.get("tree", True)
+    ]
+
+
+def generator_of(path: str, generators: list[dict[str, Any]]) -> dict[str, Any] | None:
+    """The single generator whose outputs cover path; overlapping outputs are an error."""
+    matches = [
+        generator
+        for generator in generators
+        if any(glob_regex(pattern).fullmatch(path) for pattern in generator["outputs"])
+    ]
+    if len(matches) > 1:
+        raise EngineError(
+            f"path matches several generators: {path}: {[item['id'] for item in matches]}"
+        )
+    return matches[0] if matches else None
+
+
+def generated_files(root: Path) -> list[str]:
+    """Repo-relative paths of every regular file in the generated tree."""
+    tree = located(root, GENERATED_ROOT)
+    if not tree.exists():
+        return []
+    names: list[str] = []
+    for path in sorted(tree.rglob("*")):
+        if path.is_symlink():
+            raise EngineError(
+                f"generated outputs must be regular files: {path.relative_to(root).as_posix()}"
+            )
+        if path.is_file():
+            names.append(path.relative_to(tree).as_posix())
+    return names
 
 
 def patch_statuses(root: Path, patch: str) -> dict[str, str]:
@@ -243,12 +388,49 @@ def build(root: Path) -> tuple[dict[str, Any], dict[str, Any]]:
     if unknown_replace:
         raise EngineError(f"replaced destinations are not overlays: {unknown_replace}")
 
+    # Generated outputs: whole files under GENERATED_ROOT replace upstream files after patches.
+    generators = read_generators(ownership)
+    generator_by_id = {generator["id"]: generator for generator in generators}
+    generated_rows = []
+    generated_of: dict[str, str] = {}
+    for name in generated_files(root):
+        relative(name)
+        generator = generator_of(name, generators)
+        if generator is None:
+            raise EngineError(f"generated output matches no generator: {name}")
+        if not generator.get("tree", True):
+            raise EngineError(
+                f"generator {generator['id']} keeps its outputs in patches; {name} may not be in the generated tree"
+            )
+        if (
+            name in patch_of
+            or name in overlay_of
+            or name in deletes
+            or name == assembled_lock
+        ):
+            raise EngineError(
+                f"generated path is also patched, overlaid, or deleted: {name}"
+            )
+        source = f"{GENERATED_ROOT}/{name}"
+        path = located(root, source)
+        generated_rows.append(
+            {
+                "generator": generator["id"],
+                "mode": canonical.get(source, file_mode(path)),
+                "path": name,
+                "sha256": digest(blob(path)),
+            }
+        )
+        generated_of[name] = generator["id"]
+
     # Defaults and overrides.
     for prefix in ownership["overlay_roots"]:
         checked_prefix(prefix)
     overrides: dict[str, dict[str, Any]] = ownership["overrides"]
     lock_path = "codex-rs/Cargo.lock"
-    declared = set(patch_of) | set(overlay_of) | set(deletes) | {lock_path}
+    declared = (
+        set(patch_of) | set(overlay_of) | set(deletes) | {lock_path} | set(generated_of)
+    )
     for name, override in overrides.items():
         relative(name)
         if name not in declared:
@@ -275,6 +457,17 @@ def build(root: Path) -> tuple[dict[str, Any], dict[str, Any]]:
                 )
             defaults = ownership["overlay_roots"][prefix]
             status = "A" if name not in replaced else "M"
+        elif name in generated_of:
+            generator = generator_by_id[generated_of[name]]
+            destination = {
+                "generator": generator["id"],
+                "kind": "generated",
+                "path": name,
+                "source": f"{GENERATED_ROOT}/{name}",
+            }
+            defaults = generator
+            # Generated files replace upstream files; creating new ones needs an overlay.
+            status = "M"
         else:
             patch = patch_of[name]
             status = status_of[name]
@@ -293,7 +486,7 @@ def build(root: Path) -> tuple[dict[str, Any], dict[str, Any]]:
                 raise EngineError(f"no {field} for {name}; add it to {OWNERSHIP}")
         derived_artifact = (
             "generated"
-            if is_generated(name, rules)
+            if name in generated_of or is_generated(name, rules)
             else "dependency_override"
             if metadata["purpose"] == "dependency_override"
             else "source"
@@ -333,6 +526,7 @@ def build(root: Path) -> tuple[dict[str, Any], dict[str, Any]]:
         "inventory": INVENTORY,
         "regression_manifest": ownership["regression_manifest"],
         "deletes": sorted(deletes),
+        "generated": sorted(generated_rows, key=lambda item: item["path"]),
         "overlays": overlay_rows,
         "patches": patch_rows,
     }

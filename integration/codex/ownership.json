@@ -19,7 +19,136 @@
     "patches/rules_rust_build_script_tools_transition.patch",
     "patches/rules_rust_windows_process_wrapper_skip_temp_outputs.patch"
   ],
-  "description": "Human-maintained engine ownership metadata. integration/codex/assembly.json and inventory/downstream.json are generated from this file, the ordered patches in integration/codex/patches, and the overlay source bytes; run `just engine-manifest` after changing any of them. Owner, purpose and regression groups come from the patch or overlay-root defaults below, with per-path overrides for deviations. Overlay membership, deletes, baseline identities and retired history are inputs held here. Patch paths and deletions are read from each patch's git diff headers; overlay sha256 and mode are read from source bytes. Historical source/upstream_source hashes for paths in the baseline diff are carried forward from the committed inventory.",
+  "description": "Human-maintained engine ownership metadata. integration/codex/assembly.json and inventory/downstream.json are generated from this file, the ordered patches in integration/codex/patches, and the overlay source bytes; run `just engine-manifest` after changing any of them. Owner, purpose and regression groups come from the patch or overlay-root defaults below, with per-path overrides for deviations. Overlay membership, deletes, baseline identities and retired history are inputs held here. Generated outputs are declared under `generated`; their bytes live in integration/codex/generated and are checked by `engine.py generate`. Patch paths and deletions are read from each patch's git diff headers; overlay sha256 and mode are read from source bytes. Historical source/upstream_source hashes for paths in the baseline diff are carried forward from the committed inventory.",
+  "generated": [
+    {
+      "command": "python3 codex-rs/app-server-protocol/scripts/write_schema_fixtures.py, then the same with --experimental; the stable run also regenerates the Python SDK types through sdk/python/scripts/update_sdk_artifacts.py generate-types",
+      "deterministic": true,
+      "id": "app-server-schema",
+      "outputs": [
+        "codex-rs/app-server-protocol/schema/json/**",
+        "codex-rs/app-server-protocol/schema/typescript/**",
+        "codex-rs/app-server-protocol/schema/precomputed/app-server-exports-experimental.json.zst",
+        "codex-rs/app-server-protocol/schema/precomputed/app-server-exports-stable.json.zst",
+        "sdk/python/src/openai_codex/generated/notification_registry.py",
+        "sdk/python/src/openai_codex/generated/v2_all.py"
+      ],
+      "owner": "downstream-sdk",
+      "purpose": "sdk_protocol",
+      "regression_groups": [
+        "sdk_protocol"
+      ],
+      "timeout_seconds": 5400
+    },
+    {
+      "command": "cargo run --locked -p codex-config-schema --bin codex-write-config-schema",
+      "deterministic": true,
+      "id": "config-schema",
+      "outputs": [
+        "codex-rs/core/config.schema.json"
+      ],
+      "owner": "codex-rs",
+      "purpose": "product_registration_config_branding",
+      "regression_groups": [
+        "product_registration_config_branding"
+      ],
+      "timeout_seconds": 3600
+    },
+    {
+      "command": "cargo run --locked -p codex-hooks --bin write_hooks_schema_fixtures",
+      "deterministic": true,
+      "id": "hooks-schema",
+      "outputs": [
+        "codex-rs/hooks/schema/generated/*.json"
+      ],
+      "owner": "codex-rs",
+      "purpose": "hooks_schema",
+      "regression_groups": [
+        "backend_dispatch",
+        "dependency_build",
+        "thread_model_child_routing"
+      ],
+      "timeout_seconds": 3600
+    },
+    {
+      "command": "pnpm install --lockfile-only (pnpm 12.11.2, starting from the workspace lock)",
+      "deterministic": true,
+      "id": "pnpm-lock",
+      "outputs": [
+        "pnpm-lock.yaml"
+      ],
+      "owner": "downstream-build",
+      "purpose": "dependency_override",
+      "regression_groups": [
+        "dependency_build"
+      ],
+      "timeout_seconds": 1800
+    },
+    {
+      "command": "uv lock in sdk/python and scripts (minimal changes: existing pins are kept)",
+      "deterministic": true,
+      "id": "uv-lock",
+      "outputs": [
+        "sdk/python/uv.lock",
+        "scripts/uv.lock"
+      ],
+      "owner": "downstream-build",
+      "purpose": "dependency_override",
+      "regression_groups": [
+        "dependency_build"
+      ],
+      "timeout_seconds": 1800
+    },
+    {
+      "command": "bazel mod deps --lockfile_mode=update (just bazel-lock-update)",
+      "deterministic": true,
+      "id": "bazel-lock",
+      "outputs": [
+        "MODULE.bazel.lock"
+      ],
+      "owner": "downstream-build",
+      "purpose": "dependency_override",
+      "regression_groups": [
+        "dependency_build"
+      ],
+      "timeout_seconds": 3600
+    },
+    {
+      "command": "cargo metadata --format-version 1 without --locked: adds only missing lock entries; written back to integration/codex/Cargo.lock",
+      "deterministic": true,
+      "id": "cargo-lock",
+      "outputs": [
+        "codex-rs/Cargo.lock"
+      ],
+      "owner": "coordinator",
+      "purpose": "dependency_override",
+      "regression_groups": [
+        "dependency_build"
+      ],
+      "timeout_seconds": 900,
+      "tree": false
+    },
+    {
+      "command": "cargo insta test --accept --unreferenced=delete -p <crate> for each --crate, then delete *.snap.new (opt-in; not used for identity)",
+      "deterministic": false,
+      "id": "snapshots",
+      "opt_in": true,
+      "outputs": [
+        "codex-rs/**/*.snap"
+      ],
+      "owner": "codex-rs",
+      "purpose": "snapshot_fixtures",
+      "regression_groups": [
+        "backend_dispatch",
+        "chat_integration",
+        "product_registration_config_branding",
+        "thread_model_child_routing",
+        "tool_completion_persistence"
+      ],
+      "timeout_seconds": 7200,
+      "tree": false
+    }
+  ],
   "overlay_roots": {
     ".dockerignore": {
       "owner": "downstream-build",

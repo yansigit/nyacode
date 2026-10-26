@@ -44,6 +44,7 @@ REQUIRED_JOBS = {
     "Release tooling and version",
     "Native provider checks / Linux architecture, tests, and features",
     "SDKs against the packaged CLI",
+    "Generated outputs are reproducible",
     "Verify complete release set",
     "Engine acceptance",
     *(f"Package {target}" for target in TARGETS),
@@ -200,6 +201,7 @@ def validate_promotion(
                 "checks",
                 "build",
                 "sdk",
+                "generated",
                 "verify",
             )
         }

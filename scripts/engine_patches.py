@@ -22,9 +22,11 @@ from pathlib import Path, PurePosixPath
 from typing import Any
 
 import engine
+import engine_manifest
 from engine import EngineError, digest, git, located, read_json, relative, write_json
 
 ROOT = engine.ROOT
+GENERATED_ROOT = engine.GENERATED_ROOT
 REPOSITORY = "openai/codex"
 REPORT_NAME = "rebase-report.json"
 REBASE_GENERATOR = "nyacode-engine-rebase-v1"
@@ -247,13 +249,19 @@ def classify_patch(
     new_entries: dict[str, tuple[str, str]],
     merged: dict[str, tuple[str, str]],
     conflicted: set[str],
+    generated: dict[str, str] | None = None,
 ) -> list[dict[str, Any]]:
+    """Per-path status; conflicts in generated outputs are `regenerate` and resolve to upstream."""
+    generated = generated or {}
     files = []
     for path in sorted(paths):
         in_old = path in old_entries
         in_new = path in new_entries
         found = merged.get(path)
-        if path in conflicted:
+        if path in conflicted and path in generated:
+            status = "regenerate"
+            blocks = 0
+        elif path in conflicted:
             status = "deleted_upstream" if in_old and not in_new else "conflict"
             blocks = conflict_blocks(stack, found)
         else:
@@ -264,10 +272,41 @@ def classify_patch(
             "status": status,
             "conflict_blocks": blocks,
         }
-        if path in conflicted:
+        if path in generated:
+            record["generator"] = generated[path]
+        if path in conflicted and status != "regenerate":
             record["merged_blob"] = found[1] if found is not None else None
+        if status == "regenerate":
+            upstream = new_entries.get(path)
+            record["merged_blob"] = upstream[1] if upstream is not None else None
         files.append(record)
     return files
+
+
+def generated_tree_records(
+    root: Path,
+    new_entries: dict[str, tuple[str, str]],
+    stack: Path,
+    generated: dict[str, str],
+    patched: set[str],
+) -> list[dict[str, Any]]:
+    """Generated-tree files are not patches; they regenerate when upstream's bytes differ from ours."""
+    records = []
+    for path in sorted(set(generated) - patched):
+        source = located(root, f"{GENERATED_ROOT}/{path}")
+        ours = source.read_bytes() if source.is_file() else None
+        entry = new_entries.get(path)
+        upstream = git(stack, "cat-file", "blob", entry[1]) if entry else None
+        status = "clean" if ours is not None and ours == upstream else "regenerate"
+        records.append(
+            {
+                "path": path,
+                "generator": generated[path],
+                "status": status,
+                "conflict_blocks": 0,
+            }
+        )
+    return records
 
 
 def check_renames(stack: Path, old: str, new: str, paths: set[str]) -> None:
@@ -329,7 +368,9 @@ def compose_workspace(
     return workspace
 
 
-def totals_for(patches: list[dict[str, Any]]) -> dict[str, int]:
+def totals_for(
+    patches: list[dict[str, Any]], generated: list[dict[str, Any]] | None = None
+) -> dict[str, int]:
     conflicted_patches = sum(1 for patch in patches if patch["status"] == "conflict")
     files = [
         record
@@ -337,12 +378,54 @@ def totals_for(patches: list[dict[str, Any]]) -> dict[str, int]:
         for record in patch["files"]
         if record["status"] in CONFLICTED
     ]
+    regenerate = [
+        record
+        for record in [*(r for p in patches for r in p["files"]), *(generated or [])]
+        if record["status"] == "regenerate"
+    ]
     return {
         "clean_patches": len(patches) - conflicted_patches,
         "conflicted_patches": conflicted_patches,
         "conflicted_files": len(files),
         "conflict_blocks": sum(record["conflict_blocks"] for record in files),
+        "regenerate_files": len(regenerate),
     }
+
+
+def generated_predicate(root: Path, manifest: dict[str, Any]):
+    """Repo paths that tree generators own: committed generated files and their outputs.
+
+    Overlay destinations are excluded: overlays own those paths, not generators.
+    """
+    generators = engine_manifest.tree_generators(root)
+    overlays = {item["destination"] for item in manifest.get("overlays", [])}
+    committed = set(engine_manifest.generated_files(root))
+
+    def owned(path: str) -> bool:
+        if path in overlays:
+            return False
+        return (
+            path in committed
+            or engine_manifest.generator_of(path, generators) is not None
+        )
+
+    return owned, committed
+
+
+def generated_owners(root: Path, entries: list[dict[str, Any]]) -> dict[str, str]:
+    """Generator id for each generated path: committed tree files and patched generator outputs."""
+    generators = engine_manifest.declared_generators(root)
+    owners: dict[str, str] = {}
+    for name in engine_manifest.generated_files(root):
+        owner = engine_manifest.generator_of(name, generators)
+        if owner is not None:
+            owners[name] = owner["id"]
+    for entry in entries:
+        for name in entry["paths"]:
+            owner = engine_manifest.generator_of(name, generators)
+            if owner is not None:
+                owners.setdefault(name, owner["id"])
+    return owners
 
 
 def is_rebase_output(path: Path) -> bool:
@@ -377,6 +460,7 @@ def rebase(
         raise EngineError("archive cache must be outside the tracked product tree")
     manifest = read_json(root / lock["assembly_manifest"])
     entries = patch_entries(manifest)
+    generated = generated_owners(root, entries)
     local = (local_repo or root).resolve()
     if onto_local_ref is not None:
         revision = resolve_local(local, onto_local_ref)
@@ -415,6 +499,7 @@ def rebase(
             root=root,
             lock=lock,
             entries=entries,
+            generated=generated,
             archive_old=archive_old,
             archive_new=archive_new,
             revision=revision,
@@ -439,6 +524,7 @@ def build_report(
     root: Path,
     lock: dict[str, Any],
     entries: list[dict[str, Any]],
+    generated: dict[str, str],
     archive_old: Path,
     archive_new: Path,
     revision: str,
@@ -493,8 +579,16 @@ def build_report(
             )
         merged = tree_entries(stack, merged_tree)
         files = classify_patch(
-            stack, paths, old_entries, new_entries, merged, conflicted
+            stack, paths, old_entries, new_entries, merged, conflicted, generated
         )
+        # Regenerated outputs take upstream's bytes; the generator rebuilds them later.
+        for record in files:
+            if record["status"] == "regenerate":
+                upstream = new_entries.get(record["path"])
+                if upstream is None:
+                    merged.pop(record["path"], None)
+                else:
+                    merged[record["path"]] = upstream
         merges.append((paths, merged))
         patches.append(
             {
@@ -506,6 +600,9 @@ def build_report(
                 "files": files,
             }
         )
+    generated_records = generated_tree_records(
+        root, new_entries, stack, generated, all_paths
+    )
     compose_workspace(stage, stack, new_commit, new_entries, merges)
     return {
         "schema_version": 1,
@@ -525,7 +622,8 @@ def build_report(
             "ref": ref,
         },
         "patches": patches,
-        "totals": totals_for(patches),
+        "generated": generated_records,
+        "totals": totals_for(patches, generated_records),
     }
 
 
@@ -560,7 +658,8 @@ def summary_lines(report: dict[str, Any]) -> list[str]:
     totals = report["totals"]
     lines.append(
         f"totals: {totals['clean_patches']} clean, {totals['conflicted_patches']} conflicted patches; "
-        f"{totals['conflicted_files']} conflicted files; {totals['conflict_blocks']} conflict blocks"
+        f"{totals['conflicted_files']} conflicted files; {totals['conflict_blocks']} conflict blocks; "
+        f"{totals['regenerate_files']} regenerate files"
     )
     return lines
 
@@ -587,7 +686,11 @@ def unresolved_conflicts(
         for record in patch.get("files", []):
             blob = record.get("merged_blob")
             path = record["path"]
-            if record["status"] not in CONFLICTED or blob is None or path in accepted:
+            if (
+                record["status"] not in CONFLICTED | {"regenerate"}
+                or blob is None
+                or path in accepted
+            ):
                 continue
             target = located(workspace, path)
             if target.is_symlink() or not target.is_file():
@@ -655,6 +758,17 @@ def export(
             f"refusing export: conflicts still hold merged bytes: {pending}; "
             "resolve them or pass --accept PATH"
         )
+    # Generated outputs are regenerated by their generators; they never go back into patches.
+    is_generated, committed = generated_predicate(root, manifest)
+    generated_ignored = sorted(path for path in changed | deleted if is_generated(path))
+    uncommitted = [path for path in generated_ignored if path not in committed]
+    if uncommitted:
+        raise EngineError(
+            f"generated outputs are not committed under integration/codex/generated: "
+            f"{uncommitted}; run engine.py generate --write-back first"
+        )
+    changed = {path for path in changed if not is_generated(path)}
+    deleted = {path for path in deleted if not is_generated(path)}
 
     assigned: dict[str, str] = {}
     for item in assign or []:
@@ -672,7 +786,8 @@ def export(
         if not allow_new_paths:
             raise EngineError(
                 f"changed paths not owned by any patch: {undeclared}; "
-                "use --assign PATH=PATCH or --allow-new-paths"
+                "use --assign PATH=PATCH or --allow-new-paths "
+                "(generated outputs belong under integration/codex/generated via generate --write-back)"
             )
         still_open = []
         for path in undeclared:
@@ -763,6 +878,7 @@ def export(
         "dropped": {name: paths for name, paths in dropped.items() if paths},
         "assigned": assigned,
         "deletes": manifest["deletes"],
+        "generated_ignored": generated_ignored,
         "lock": lock_result,
     }
 
@@ -845,6 +961,10 @@ def run(args: Any) -> int:
         print(f"rewrote {name}")
     for name, paths in result["dropped"].items():
         print(f"dropped from {name}: {paths}")
+    if result["generated_ignored"]:
+        print(
+            f"generated outputs not exported (regenerate instead): {result['generated_ignored']}"
+        )
     if result["lock"]:
         print(f"updated engine.lock: {result['lock']}")
     return 0

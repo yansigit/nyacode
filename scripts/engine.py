@@ -23,6 +23,7 @@ CACHE = (
     Path(os.environ.get("XDG_CACHE_HOME", Path.home() / ".cache")) / "nyacode/engine"
 )
 MARKER = Path(".git/nyacode/inputs.json")
+GENERATED_ROOT = "integration/codex/generated"
 STABLE_RELEASE = re.compile(r"rust-v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)\Z")
 
 
@@ -535,6 +536,39 @@ def assemble(
             path.chmod(0o755 if mode == "100755" else 0o644)
         touched.add(name)
         allowed.add(name)
+    overlay_names = {overlay["destination"] for overlay in manifest.get("overlays", [])}
+    generated_modes: dict[str, str] = {}
+    for item in manifest.get("generated", []):
+        name = item["path"]
+        relative(name)
+        if (
+            name in touched
+            or name in deletes
+            or name in overlay_names
+            or name == "codex-rs/Cargo.lock"
+        ):
+            raise EngineError(f"generated destination collision: {name}")
+        path = located(workspace, name)
+        if not path.is_file() or path.is_symlink():
+            raise EngineError(
+                f"generated output must replace an upstream regular file: {name}"
+            )
+        source_name = f"{GENERATED_ROOT}/{name}"
+        source = input_file(source_name)
+        mode = item["mode"]
+        if inputs[source_name]["sha256"] != item.get("sha256"):
+            raise EngineError(
+                f"generated output sha256 does not match assembly manifest: {source_name}; "
+                "review the change, then run `python3 scripts/engine.py manifest --write`"
+            )
+        if mode not in {"100644", "100755"} or inputs[source_name]["mode"] != mode:
+            raise EngineError(f"generated output mode mismatch: {source_name}")
+        path.unlink()
+        shutil.copyfile(source, path)
+        path.chmod(0o755 if mode == "100755" else 0o644)
+        generated_modes[name] = mode
+        touched.add(name)
+        allowed.add(name)
     for name in deletes:
         path = located(workspace, name)
         if name in touched and name not in patched_deletes:
@@ -550,7 +584,13 @@ def assemble(
     git(workspace, "add", "--force", "--all", "--", ".")
     index_modes(
         workspace,
-        {item["destination"]: item["mode"] for item in manifest.get("overlays", [])},
+        {
+            **{
+                item["destination"]: item["mode"]
+                for item in manifest.get("overlays", [])
+            },
+            **generated_modes,
+        },
     )
     actual = changed_paths(workspace, pristine)
     if actual - allowed:
@@ -961,10 +1001,46 @@ def main() -> int:
         "--assign", action="append", default=[], metavar="PATH=PATCH"
     )
     export_command.add_argument("--accept", action="append", default=[], metavar="PATH")
+    generate_command = subparsers.add_parser(
+        "generate",
+        help="run generators in an assembled workspace; --write-back updates integration/codex/generated",
+    )
+    generate_command.add_argument("--workspace", type=Path, required=True)
+    generate_command.add_argument(
+        "--only", action="append", metavar="ID", help="generator id (repeatable)"
+    )
+    generate_command.add_argument(
+        "--deterministic",
+        action="store_true",
+        help="run only the drift-checked generators",
+    )
+    generate_command.add_argument(
+        "--write-back",
+        action="store_true",
+        help="copy current outputs into integration/codex/generated and regenerate assembly.json",
+    )
+    generate_command.add_argument(
+        "--crate",
+        action="append",
+        default=[],
+        metavar="CRATE",
+        help="crate for the snapshots generator (repeatable)",
+    )
+    generate_command.add_argument(
+        "--report", type=Path, help="write the JSON result here"
+    )
     args = parser.parse_args()
     # engine_manifest and engine_patches import this file as `engine`; reuse this module
     # object so that EngineError is the same class when the script runs as __main__.
     sys.modules.setdefault("engine", sys.modules[__name__])
+    if args.command == "generate":
+        import engine_generate
+
+        try:
+            return engine_generate.run(args)
+        except (EngineError, OSError, ValueError, KeyError) as error:
+            print(f"engine: {error}", file=sys.stderr)
+            return 1
     if args.command == "manifest":
         import engine_manifest
 

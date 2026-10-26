@@ -221,6 +221,11 @@ engine-rebase REV *args:
 engine-export *args:
     {{ python }} {{ justfile_directory() }}/scripts/engine.py export {args}
 
+# Run generators in the assembled workspace; add --write-back to update integration/codex/generated.
+[no-cd]
+engine-generate *args: prepare-engine
+    {{ python }} {{ justfile_directory() }}/scripts/engine.py generate --workspace {{ justfile_directory() }}/.engine/workspace {args}
+
 # Edits the disposable assembly; copy changes into owned inputs before preparing again.
 [no-cd]
 write-hooks-schema:

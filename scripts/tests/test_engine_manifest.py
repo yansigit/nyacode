@@ -231,6 +231,90 @@ class ManifestTest(unittest.TestCase):
         self.assertEqual(drifted.returncode, 1)
         self.assertIn("overlays changed=1", drifted.stderr)
 
+    def enable_generator(self, outputs=("docs/*.md",), **extra):
+        self.ownership["generated"] = [
+            {
+                "id": "schema",
+                "command": "fixture",
+                "outputs": list(outputs),
+                "owner": "downstream-docs",
+                "purpose": "documentation",
+                "regression_groups": ["documentation"],
+                "deterministic": True,
+                **extra,
+            }
+        ]
+        self.save_ownership()
+
+    def test_generated_file_derives_assembly_entry_and_inventory_owner(self):
+        self.enable_generator()
+        self.write("integration/codex/generated/docs/generated.md", "generated\n")
+        code, output = self.run_quietly(write=True)
+        self.assertEqual(code, 0, output)
+        assembly = json.loads((self.root / engine_manifest.ASSEMBLY).read_text())
+        self.assertEqual(
+            assembly["generated"],
+            [
+                {
+                    "generator": "schema",
+                    "mode": "100644",
+                    "path": "docs/generated.md",
+                    "sha256": engine.digest(b"generated\n"),
+                }
+            ],
+        )
+        entry = self.entry("docs/generated.md")
+        self.assertEqual(entry["artifact"], "generated")
+        self.assertEqual(entry["owner"], "downstream-docs")
+        self.assertEqual(entry["purpose"], "documentation")
+        self.assertEqual(entry["regression_groups"], ["documentation"])
+        self.assertEqual(
+            entry["destination"],
+            {
+                "generator": "schema",
+                "kind": "generated",
+                "path": "docs/generated.md",
+                "source": "integration/codex/generated/docs/generated.md",
+            },
+        )
+        self.assertEqual(entry["git_status"], "M")
+        code, output = self.run_quietly(write=False)
+        self.assertEqual(code, 0, output)
+
+    def test_generated_path_may_not_also_be_patched(self):
+        self.enable_generator(outputs=("docs/*.md", "codex-rs/*.rs"))
+        self.write("integration/codex/generated/codex-rs/core.rs", "generated\n")
+        with self.assertRaisesRegex(
+            engine.EngineError, "generated path is also patched, overlaid, or deleted"
+        ):
+            engine_manifest.run(self.root, write=True)
+
+    def test_generated_file_without_a_generator_is_rejected(self):
+        self.enable_generator()
+        self.write("integration/codex/generated/other/x.md", "x\n")
+        with self.assertRaisesRegex(
+            engine.EngineError, "generated output matches no generator"
+        ):
+            engine_manifest.run(self.root, write=True)
+
+    def test_generated_output_matching_two_generators_is_rejected(self):
+        self.enable_generator()
+        self.ownership["generated"].append(
+            dict(self.ownership["generated"][0], id="second")
+        )
+        self.save_ownership()
+        self.write("integration/codex/generated/docs/generated.md", "x\n")
+        with self.assertRaisesRegex(engine.EngineError, "several generators"):
+            engine_manifest.run(self.root, write=True)
+
+    def test_glob_outputs_are_repo_relative_and_single_segment_by_default(self):
+        self.enable_generator(outputs=("docs/*.md",))
+        self.write("integration/codex/generated/docs/deep/nested.md", "x\n")
+        with self.assertRaisesRegex(
+            engine.EngineError, "generated output matches no generator"
+        ):
+            engine_manifest.run(self.root, write=True)
+
 
 if __name__ == "__main__":
     unittest.main()
