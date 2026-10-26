@@ -12,9 +12,7 @@ index 4877781c36b9d39b5fb6d469aa0ff72f611cef3e..280fa64aaeda5cec0aff8844ab3659af
  
  Direct `build_npm_package.py` invocations are still useful for package-specific
 diff --git a/codex-cli/scripts/build_npm_package.py b/codex-cli/scripts/build_npm_package.py
-old mode 100644
-new mode 100755
-index 12f4f9dc8993108f5315bb8632f99c6793539124..68106f3b2f6eab247c05e7acce33bb13bf5afb25
+index 12f4f9dc8993108f5315bb8632f99c6793539124..68106f3b2f6eab247c05e7acce33bb13bf5afb25 100755
 --- a/codex-cli/scripts/build_npm_package.py
 +++ b/codex-cli/scripts/build_npm_package.py
 @@ -1,5 +1,5 @@
@@ -4960,9 +4958,7 @@ index 7e24379417d86401ecd407e1b7ff88515b8a3fd0..5e02f6a26db21c198ea3fb454c3e286d
              "Custom-Header".to_string(),
              "Value".into(),
 diff --git a/codex-rs/core/tests/suite/client_websockets.rs b/codex-rs/core/tests/suite/client_websockets.rs
-old mode 100644
-new mode 100755
-index 288b8e208be27b3fb3a14d6b4a74922950a7d8dd..ef9ff17832cd90cd8dea38d1a4dc11050eb62865
+index 288b8e208be27b3fb3a14d6b4a74922950a7d8dd..ef9ff17832cd90cd8dea38d1a4dc11050eb62865 100755
 --- a/codex-rs/core/tests/suite/client_websockets.rs
 +++ b/codex-rs/core/tests/suite/client_websockets.rs
 @@ -2722,6 +2722,7 @@ fn websocket_provider_with_connect_timeout(

@@ -36235,7 +36235,7 @@ index 1e08cd3ce6310389c18931263317ccfbb4bc1f9e..6128c9ee3c0660ba546e4f6ae134caa7
  extend-exclude = [
    "notebooks/**",
 diff --git a/sdk/python/scripts/update_sdk_artifacts.py b/sdk/python/scripts/update_sdk_artifacts.py
-index bc32e7ce04dcfd2fe99d07bfb3367790a30cc68d..fcddfbff51a0177fa3ca144190e674feff1f8776 100644
+index bc32e7ce04dcfd2fe99d07bfb3367790a30cc68d..fcddfbff51a0177fa3ca144190e674feff1f8776 100755
 --- a/sdk/python/scripts/update_sdk_artifacts.py
 +++ b/sdk/python/scripts/update_sdk_artifacts.py
 @@ -3,6 +3,7 @@
@@ -44037,7 +44037,7 @@ index 8932fa70b51c7efff710261b46e3ec54592fd5a4..f7a5221f10c41c7337a3a22f97ee5103
 +  "packageManager": "pnpm@12.11.2+sha512.25a51652a196785af5f28bda6dfe8dc582ebefa4ac1d180221ce1390231c5fb76637822ea4b6e4633ce74acdcb0a77f725af11bad38177fdeddaee818a955cb9"
  }
 diff --git a/sdk/typescript/samples/basic_streaming.ts b/sdk/typescript/samples/basic_streaming.ts
-index 09b58e965058c1d33c1e5aeb99d44727f1b29aba..fb8e662d337f65fcdb1652d3844b206af4a3e95f 100644
+index 09b58e965058c1d33c1e5aeb99d44727f1b29aba..fb8e662d337f65fcdb1652d3844b206af4a3e95f 100755
 --- a/sdk/typescript/samples/basic_streaming.ts
 +++ b/sdk/typescript/samples/basic_streaming.ts
 @@ -3,8 +3,8 @@
@@ -44052,7 +44052,7 @@ index 09b58e965058c1d33c1e5aeb99d44727f1b29aba..fb8e662d337f65fcdb1652d3844b206a
  
  const codex = new Codex({ codexPathOverride: codexPathOverride() });
 diff --git a/sdk/typescript/samples/structured_output.ts b/sdk/typescript/samples/structured_output.ts
-index 60063c10fa3db85dd609b3715ec22d44324f16ac..2d8b44d080d6934baf2ff81c63f5d8010af0cdbb 100644
+index 60063c10fa3db85dd609b3715ec22d44324f16ac..2d8b44d080d6934baf2ff81c63f5d8010af0cdbb 100755
 --- a/sdk/typescript/samples/structured_output.ts
 +++ b/sdk/typescript/samples/structured_output.ts
 @@ -1,6 +1,6 @@
@@ -44064,7 +44064,7 @@ index 60063c10fa3db85dd609b3715ec22d44324f16ac..2d8b44d080d6934baf2ff81c63f5d801
  import { codexPathOverride } from "./helpers.ts";
  
 diff --git a/sdk/typescript/samples/structured_output_zod.ts b/sdk/typescript/samples/structured_output_zod.ts
-index 917bc39114feed46ccb7d64dade30bcfb8c1c9a2..b0fd7635f36d6cb0b7a13787453ad1f23d309d87 100644
+index 917bc39114feed46ccb7d64dade30bcfb8c1c9a2..b0fd7635f36d6cb0b7a13787453ad1f23d309d87 100755
 --- a/sdk/typescript/samples/structured_output_zod.ts
 +++ b/sdk/typescript/samples/structured_output_zod.ts
 @@ -1,9 +1,8 @@

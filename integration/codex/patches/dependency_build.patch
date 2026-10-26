@@ -3958,9 +3958,7 @@ index 8b2d6bcde3ee965cf12baf75e2ec5c486fbdb3d3..3c3f812b3f4ea6922656696497d4d5a4
                  raise RuntimeError(
                      f"{artifact_label} archive {archive_path} is missing "
 diff --git a/scripts/codex_package/rg b/scripts/codex_package/rg
-old mode 100644
-new mode 100755
-index 3b7c34843aaafe4cf26a87b3daf5806195d4bb0e..04116e29d2281b8e10ab398b411da418ce46055b
+index 3b7c34843aaafe4cf26a87b3daf5806195d4bb0e..04116e29d2281b8e10ab398b411da418ce46055b 100755
 --- a/scripts/codex_package/rg
 +++ b/scripts/codex_package/rg
 @@ -16,14 +16,14 @@
@@ -4639,9 +4637,7 @@ index e9d0bc80574f8dd33174d883c0ec69fe2eefa50c..61109f59a15a87da3fc9bf58d3023677
      & $codexCommand
  }
 diff --git a/scripts/install/install.sh b/scripts/install/install.sh
-old mode 100644
-new mode 100755
-index e40cb02f432abea7753bcd54f103352e76d6bb64..8b53373ab8ca225d58b1f79a28cd11d5c287d516
+index e40cb02f432abea7753bcd54f103352e76d6bb64..8b53373ab8ca225d58b1f79a28cd11d5c287d516 100755
 --- a/scripts/install/install.sh
 +++ b/scripts/install/install.sh
 @@ -2,28 +2,21 @@
@@ -5567,9 +5563,7 @@ index d75aa1f3b89618aa57c698bdbaf50482d893c054..63ee570a61e5692349b927624690faa7
    --runInBand tests/mcpConformance.test.ts
  ```
 diff --git a/scripts/stage_npm_packages.py b/scripts/stage_npm_packages.py
-old mode 100644
-new mode 100755
-index b258b4c94626562ef675302ceec1ee36ccdb6619..2c4960e937293afb36d8d0b1605aaf95be51550f
+index b258b4c94626562ef675302ceec1ee36ccdb6619..2c4960e937293afb36d8d0b1605aaf95be51550f 100755
 --- a/scripts/stage_npm_packages.py
 +++ b/scripts/stage_npm_packages.py
 @@ -19,7 +19,7 @@ from typing import Sequence
@@ -5582,9 +5576,7 @@ index b258b4c94626562ef675302ceec1ee36ccdb6619..2c4960e937293afb36d8d0b1605aaf95
      "x86_64-unknown-linux-musl",
      "aarch64-unknown-linux-musl",
 diff --git a/tools/buildifier b/tools/buildifier
-old mode 100644
-new mode 100755
-index d18dd60ac6b317d06c6ccf850654b2e06e29395d..d4c03d59c10b29cf3f10640c6bebebdfaff05561
+index d18dd60ac6b317d06c6ccf850654b2e06e29395d..d4c03d59c10b29cf3f10640c6bebebdfaff05561 100755
 --- a/tools/buildifier
 +++ b/tools/buildifier
 @@ -4,68 +4,68 @@

@@ -49,9 +49,7 @@ index 79c0daea761e0f634960dd39e2dff6bdbfd02f63..f78710c1904c5a58f723798423311557
 +# Nyacode announcements. Add dated entries when a fork release is available.
 +announcements = []
 diff --git a/codex-cli/bin/codex.js b/codex-cli/bin/codex.js
-old mode 100644
-new mode 100755
-index 934600714b97f340cb5468e20e5fe560d751cbed..94d75b3e81f5c56c3edc724ae8e83a3cfb9233dc
+index 934600714b97f340cb5468e20e5fe560d751cbed..94d75b3e81f5c56c3edc724ae8e83a3cfb9233dc 100755
 --- a/codex-cli/bin/codex.js
 +++ b/codex-cli/bin/codex.js
 @@ -1,5 +1,5 @@
