@@ -1,5 +1,6 @@
 """The rolling sync must plan, rebase, fold, validate, and snapshot without network or cargo."""
 
+import hashlib
 import json
 import os
 import sys
@@ -326,8 +327,23 @@ class RebaseFinishTest(SyncTest):
             for index, call in enumerate(commands)
             if "manifest" in call and "--check" in call
         ]
-        prepare = [index for index, call in enumerate(commands) if "prepare" in call]
-        self.assertTrue(manifest and prepare and controls)
+        prepare = [
+            index
+            for index, call in enumerate(commands)
+            if "prepare" in call and str(directory / engine_sync.PREPARED_DIR) in call
+        ]
+        generation = [
+            index
+            for index, call in enumerate(commands)
+            if "prepare" in call and str(directory / engine_sync.GENERATE_DIR) in call
+        ]
+        write_back = next(
+            index for index, call in enumerate(commands) if "--write-back" in call
+        )
+        self.assertTrue(manifest and prepare and controls and generation)
+        # Generators run in an assembled workspace, so generation prepares before writing back.
+        self.assertLess(generation[0], write_back)
+        self.assertLess(write_back, manifest[0])
         self.assertLess(manifest[0], prepare[0])
         self.assertLess(prepare[0], controls[0])
         self.assertFalse(any(call[0] == "cargo" for call in commands))
@@ -439,6 +455,342 @@ class VerifyBundleTest(SyncTest):
         self.assertTrue(
             any("product content differs" in problem for problem in problems)
         )
+
+
+DATE = "2026-10-23T18:50:54+00:00"
+TAG = "rust-v1.2.3"
+UPSTREAM_ONE = "1" * 40
+UPSTREAM_TWO = "2" * 40
+MERGE_BASE = "3" * 40
+
+
+def snapshot_meta(upstream, main_base):
+    return {
+        "schema_version": 1,
+        "upstream": {"revision": upstream, "date": DATE},
+        "main_base": main_base,
+        "from": {"kind": "main", "ref": main_base},
+        "report": {"totals": {}, "patches": []},
+        "resolution": "none",
+        "notes": [],
+        "created_at": "2026-10-26T00:00:00Z",
+    }
+
+
+class CandidateTest(SyncTest):
+    def stable_plan(self, upstream):
+        with patch.object(engine_sync, "upstream_date", return_value=DATE):
+            return engine_sync.plan(
+                repo=self.repo,
+                tag=TAG,
+                release_revision=upstream,
+                main_ref="main",
+                snapshot_ref=engine_sync.BRANCH,
+            )
+
+    def build_candidate(self, upstream, *, allow_unresolved=False, name="candidate"):
+        plan_value = self.stable_plan(upstream)
+        directory = self.base / name
+        code = engine_sync.rebase_plan(
+            plan_value, directory, repo=self.repo, cache_dir=self.cache
+        )
+        path = engine_sync.finish(
+            plan_value=plan_value,
+            directory=directory,
+            repo=self.repo,
+            runner=FakeRunner(),
+            skip_cargo=True,
+            allow_unresolved=allow_unresolved,
+        )
+        return engine.read_json(path), code
+
+    def classify(self, commit, base, runner=None):
+        with (
+            patch.object(engine_sync, "upstream_date", return_value=DATE),
+            patch.object(engine_sync, "compatibility_reasons", return_value=[]),
+        ):
+            return engine_sync.classify(
+                repo=self.repo,
+                directory=self.base / f"classify-{commit[:12]}",
+                base=base,
+                commit=commit,
+                tag=TAG,
+                runner=runner or FakeRunner(),
+                cache_dir=self.cache,
+            )
+
+    def candidate_commit(self, base, files, *, tag=TAG, symlink=None):
+        """A commit on base that pins the release and changes only the given files."""
+        engine.git(self.repo, "checkout", "--quiet", "--detach", base)
+        lock = json.loads(engine.git(self.repo, "show", f"{base}:engine.lock"))
+        lock.update(release_tag=tag, revision=UPSTREAM_ONE)
+        payload = {"engine.lock": (json.dumps(lock, indent=2) + "\n").encode(), **files}
+        fixtures.write_files(self.repo, payload)
+        if symlink:
+            link, target = symlink
+            (self.repo / link).parent.mkdir(parents=True, exist_ok=True)
+            os.symlink(target, self.repo / link)
+        commit = fixtures.commit(self.repo, "candidate")
+        engine.git(self.repo, "checkout", "--quiet", "main")
+        return commit
+
+    def test_stable_plan_starts_from_the_closest_snapshot_at_or_before_the_release_base(
+        self,
+    ):
+        upstream = self.upstream_commit({})
+        base = self.product_commit({2: "PATCH SIDE"})
+        older = self.snapshot(base, upstream=UPSTREAM_ONE, main_base=base)
+        newer = self.commit_on(
+            older,
+            {},
+            snapshot_meta(UPSTREAM_TWO, base),
+            branch=engine_sync.BRANCH,
+        )
+        with (
+            patch.object(engine_sync, "upstream_date", return_value=DATE),
+            patch.object(engine_sync, "upstream_merge_base", return_value=MERGE_BASE),
+            patch.object(
+                engine_sync,
+                "upstream_ancestor_or_equal",
+                side_effect=lambda ancestor, descendant: ancestor == UPSTREAM_ONE,
+            ),
+        ):
+            value = engine_sync.plan(
+                repo=self.repo,
+                tag=TAG,
+                release_revision=upstream,
+                main_ref="main",
+                snapshot_ref=engine_sync.BRANCH,
+            )
+        self.assertEqual(value["from"], {"kind": "snapshot", "ref": older})
+        self.assertNotEqual(value["from"]["ref"], newer)
+        self.assertEqual(value["candidate"], {"tag": TAG, "revision": upstream})
+
+    def test_stable_plan_falls_back_to_the_newest_snapshot_then_to_main(self):
+        upstream = self.upstream_commit({})
+        base = self.product_commit({2: "PATCH SIDE"})
+        older = self.snapshot(base, upstream=UPSTREAM_ONE, main_base=base)
+        newer = self.commit_on(
+            older, {}, snapshot_meta(UPSTREAM_TWO, base), branch=engine_sync.BRANCH
+        )
+        with (
+            patch.object(engine_sync, "upstream_date", return_value=DATE),
+            patch.object(engine_sync, "upstream_merge_base", return_value=MERGE_BASE),
+            patch.object(engine_sync, "upstream_ancestor_or_equal", return_value=False),
+        ):
+            value = engine_sync.plan(
+                repo=self.repo,
+                tag=TAG,
+                release_revision=upstream,
+                main_ref="main",
+                snapshot_ref=engine_sync.BRANCH,
+            )
+        self.assertEqual(value["from"], {"kind": "snapshot", "ref": newer})
+        self.assertIn("newest snapshot", value["reason"])
+
+    def test_candidate_is_one_allowlisted_commit_on_main(self):
+        upstream = self.upstream_commit({"README.md": self.readme({28: "UPSTREAM 28"})})
+        main = self.product_commit({2: "PATCH SIDE"})
+        candidate, code = self.build_candidate(upstream)
+        self.assertEqual(code, 0)
+        self.assertEqual(
+            (candidate["schema_version"], candidate["tag"], candidate["prepared"]),
+            (2, TAG, True),
+        )
+        self.assertEqual(
+            (candidate["resolution"], candidate["base_sha"]), ("none", main)
+        )
+        commit = candidate["commit"]
+        self.assertEqual(
+            engine_sync.import_candidate_bundle(
+                self.repo, self.base / "candidate" / candidate["bundle"]
+            ),
+            commit,
+        )
+        self.assertEqual(
+            engine.git(self.repo, "rev-parse", f"{commit}^").decode().strip(), main
+        )
+        changed = (
+            engine.git(self.repo, "diff", "--name-only", main, commit).decode().split()
+        )
+        self.assertIn("engine.lock", changed)
+        self.assertTrue(all(engine_sync.candidate_allowed(name) for name in changed))
+        self.assertEqual(
+            json.loads(self.read_at(commit, "engine.lock"))["release_tag"], TAG
+        )
+        self.assertEqual(
+            engine_sync.verify_candidate_commit(self.repo, commit, main, TAG), []
+        )
+
+    def test_unresolved_conflicts_draft_an_engine_lock_only_candidate(self):
+        base = self.product_commit({2: "PATCH SIDE"})
+        upstream = self.upstream_commit(
+            {"README.md": self.readme({2: "UPSTREAM SIDE"})}
+        )
+        candidate, code = self.build_candidate(
+            upstream, allow_unresolved=True, name="draft"
+        )
+        self.assertEqual(code, 2)
+        self.assertFalse(candidate["prepared"])
+        self.assertTrue(candidate["conflicts"])
+        commit = candidate["commit"]
+        self.assertEqual(
+            engine.git(self.repo, "diff", "--name-only", base, commit).decode().split(),
+            ["engine.lock"],
+        )
+        self.assertEqual(
+            engine_sync.verify_candidate_commit(self.repo, commit, base, TAG), []
+        )
+
+    def test_candidate_commit_rejects_paths_symlinks_wrong_parents_and_wrong_tags(self):
+        base = self.product_commit({2: "PATCH SIDE"})
+        good = self.candidate_commit(
+            base, {"integration/codex/patches/documentation.patch": b"changed\n"}
+        )
+        self.assertEqual(
+            engine_sync.verify_candidate_commit(self.repo, good, base, TAG), []
+        )
+        outside = self.candidate_commit(base, {".github/workflows/x.yml": b"x\n"})
+        self.assertTrue(
+            any(
+                "outside the candidate allowlist: .github/workflows/x.yml" in problem
+                for problem in engine_sync.verify_candidate_commit(
+                    self.repo, outside, base, TAG
+                )
+            )
+        )
+        linked = self.candidate_commit(
+            base,
+            {},
+            symlink=("integration/codex/patches/link.patch", "documentation.patch"),
+        )
+        self.assertTrue(
+            any(
+                "symlink or submodule" in problem
+                for problem in engine_sync.verify_candidate_commit(
+                    self.repo, linked, base, TAG
+                )
+            )
+        )
+        self.assertTrue(
+            any(
+                "does not pin" in problem
+                for problem in engine_sync.verify_candidate_commit(
+                    self.repo, good, base, "rust-v9.9.9"
+                )
+            )
+        )
+        stacked = self.candidate_commit(
+            good, {"integration/codex/patches/documentation.patch": b"again\n"}
+        )
+        problems = engine_sync.verify_candidate_commit(self.repo, stacked, base, TAG)
+        self.assertTrue(
+            any("parent is not the base" in problem for problem in problems)
+        )
+
+    def test_bundle_must_carry_exactly_one_candidate_head(self):
+        base = self.product_commit({2: "PATCH SIDE"})
+        good = self.candidate_commit(
+            base, {"integration/codex/patches/documentation.patch": b"x\n"}
+        )
+        engine.git(self.repo, "update-ref", engine_sync.CANDIDATE_REF, good)
+        two_heads = self.base / "two-heads.bundle"
+        engine.git(
+            self.repo,
+            "bundle",
+            "create",
+            str(two_heads),
+            engine_sync.CANDIDATE_REF,
+            "main",
+        )
+        with self.assertRaisesRegex(engine.EngineError, "exactly one candidate head"):
+            engine_sync.import_candidate_bundle(self.repo, two_heads)
+        single = self.base / "one-head.bundle"
+        engine.git(
+            self.repo,
+            "bundle",
+            "create",
+            str(single),
+            engine_sync.CANDIDATE_REF,
+            f"^{base}",
+        )
+        self.assertEqual(engine_sync.import_candidate_bundle(self.repo, single), good)
+
+    def test_mechanical_when_main_patches_carry_to_exactly_the_candidate_bytes(self):
+        self.product_commit({2: "PATCH SIDE"})
+        upstream = self.upstream_commit({"README.md": self.readme({28: "UPSTREAM 28"})})
+        main = engine.git(self.repo, "rev-parse", "main").decode().strip()
+        candidate, _ = self.build_candidate(upstream, name="mechanical")
+        result = self.classify(candidate["commit"], main)
+        self.assertEqual(result["classification"], "mechanical", result["reasons"])
+        self.assertEqual(result["reasons"], [])
+        self.assertEqual(
+            engine.read_json(
+                self.base
+                / f"classify-{candidate['commit'][:12]}"
+                / "classification.json"
+            )["classification"],
+            "mechanical",
+        )
+
+    def test_assisted_when_the_candidate_bytes_differ_from_the_carry(self):
+        main = self.product_commit({2: "PATCH SIDE"})
+        upstream = self.upstream_commit({"README.md": self.readme({28: "UPSTREAM 28"})})
+        candidate, _ = self.build_candidate(upstream, name="baseline")
+        lock_bytes = self.read_at(candidate["commit"], "engine.lock")
+        tampered = self.commit_on(
+            main,
+            {
+                "integration/codex/patches/documentation.patch": b"tampered\n",
+                "engine.lock": lock_bytes,
+            },
+        )
+        result = self.classify(tampered, main)
+        self.assertEqual(result["classification"], "assisted")
+        self.assertTrue(
+            any("allowlisted paths differ" in reason for reason in result["reasons"])
+        )
+
+    def test_conflicting_carry_is_assisted_not_mechanical(self):
+        base = self.product_commit({2: "PATCH SIDE"})
+        upstream = self.upstream_commit(
+            {"README.md": self.readme({2: "UPSTREAM SIDE"})}
+        )
+        candidate, code = self.build_candidate(
+            upstream, allow_unresolved=True, name="conflict"
+        )
+        self.assertEqual(code, 2)
+        result = self.classify(candidate["commit"], base)
+        self.assertEqual(result["classification"], "assisted")
+        self.assertTrue(any("conflicts" in reason for reason in result["reasons"]))
+
+    def test_rpc_drift_needs_review_and_storage_drift_fails_the_job(self):
+        source = self.base / "source"
+        fixtures_dir = source / "integration/codex/compatibility"
+        fixtures_dir.mkdir(parents=True)
+        schema = {"type": "object", "properties": {"method": {"enum": ["a"]}}}
+        (fixtures_dir / "rpc.json").write_text(json.dumps({"schema/x.json": schema}))
+        (fixtures_dir / "storage.json").write_text(
+            json.dumps({"state/db.bin": hashlib.sha256(b"old").hexdigest()})
+        )
+        workspace = self.base / "generated"
+        (workspace / "schema").mkdir(parents=True)
+        (workspace / "state").mkdir()
+        (workspace / "schema/x.json").write_text(
+            json.dumps(
+                {"type": "object", "properties": {"method": {"enum": ["a", "b"]}}}
+            )
+        )
+        (workspace / "state/db.bin").write_bytes(b"old")
+        reasons = engine_sync.compatibility_reasons(workspace, source)
+        self.assertTrue(
+            any("changed existing contract" in reason for reason in reasons)
+        )
+        (workspace / "state/db.bin").write_bytes(b"new")
+        with self.assertRaisesRegex(
+            engine.EngineError, "durable storage fixtures changed"
+        ):
+            engine_sync.compatibility_reasons(workspace, source)
 
 
 if __name__ == "__main__":

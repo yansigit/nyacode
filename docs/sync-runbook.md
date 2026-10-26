@@ -49,7 +49,41 @@ replaced by the rebased versions. It adds `.engine-sync/sync.json`:
 - `notes`: anything skipped, such as an unavailable `engine generate`.
 
 `engine.lock` in a snapshot pins the upstream main revision with `release_tag: null`.
-Stable-tag promotion from a snapshot is out of scope for this workflow.
+Stable-tag candidates start from a snapshot but are built by `engine-upgrades.yml`, not by
+this workflow; see [Stable candidates](engine.md#stable-candidates).
+
+## Stable candidates
+
+`scripts/engine_sync.py plan --tag rust-vX.Y.Z --revision <commit>` plans a release. The
+plan's `candidate` field makes `rebase` and `finish` behave differently: `finish` writes
+`candidate.json` (schema 2) and `candidate.bundle` instead of a snapshot. That bundle holds
+one commit on the current default branch, limited to the candidate allowlist, and it is the
+only artifact the publisher accepts. The sync's daily snapshots never move `main`.
+
+Classification runs in the qualification workflow:
+
+```sh
+python3 scripts/engine_sync.py classify --base <main-sha> --commit <candidate-sha> \
+  --tag rust-vX.Y.Z --dir .engine/classify
+```
+
+It rebases main's committed patches onto the candidate's pin with no snapshot and no
+resolver, regenerates, and compares the allowlisted bytes with the candidate's. The result
+is `mechanical` only when nothing conflicts, the bytes match exactly, and the RPC and storage
+fixtures are unchanged. Storage drift fails the job.
+
+An unresolved carry (conflicts, no resolver configured) publishes a draft whose commit only
+repins `engine.lock`, with the conflicting files listed in the pull request. Such a draft
+cannot pass qualification. A maintainer repairs the candidate branch as a single commit on
+the base. Then re-dispatch the qualification:
+
+```sh
+gh workflow run engine-qualification.yml --ref engine/rust-vX.Y.Z \
+  -f base_sha=<base> -f pull_request=<number> -f release_tag=rust-vX.Y.Z
+```
+
+Assisted candidates (see [engine.md](engine.md#stable-candidates)) need an approval of their
+exact head by a maintainer with write access before promotion.
 
 ## Configuration
 

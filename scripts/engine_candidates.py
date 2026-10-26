@@ -1,5 +1,12 @@
 #!/usr/bin/env python3
-"""Propose pinned engine releases and promote only exact, fully qualified heads."""
+"""Plan stable engine releases as bundled candidates and promote only exact, qualified heads.
+
+Discovery plans a stable rust-vX.Y.Z release from the newest suitable snapshot. A read-only job
+builds one commit on the current default branch, limited to the candidate allowlist, and bundles
+it. Publication verifies that bundle and pushes engine/<tag>. Qualification classifies the change
+as mechanical or assisted. Mechanical candidates merge automatically; assisted candidates wait for
+an approval on their exact head.
+"""
 
 from __future__ import annotations
 
@@ -17,6 +24,7 @@ import zipfile
 from pathlib import Path
 from types import SimpleNamespace
 
+import engine_sync
 from engine_status import record
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -24,6 +32,11 @@ WORKFLOW = "engine-qualification.yml"
 SHA = re.compile(r"[0-9a-f]{40}")
 TAG = re.compile(r"rust-v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)")
 MUTABLE_LOCK_FIELDS = {"revision", "release_tag", "archive_sha256", "toolchain"}
+PROPOSAL_SCHEMA = 2
+CLASSIFICATIONS = {"mechanical", "assisted"}
+CHANGE_STATUSES = {"added", "modified", "removed"}
+APPROVER_PERMISSIONS = {"admin", "maintain", "write"}
+NEEDS_APPROVAL = "engine:needs-approval"
 RETRY_DELAYS = (2, 8)
 TRANSIENT = re.compile(
     r"HTTP (?:429|5\d\d)|rate limit|timeout|connection reset|EOF", re.IGNORECASE
@@ -47,6 +60,7 @@ REQUIRED_JOBS = {
     "Generated outputs are reproducible",
     "Verify complete release set",
     "Engine acceptance",
+    "Classify candidate",
     *(f"Package {target}" for target in TARGETS),
 }
 
@@ -60,10 +74,14 @@ def positive_integer(value: str) -> int:
 def select_mode(paths: list[str], candidate_branch: str = "") -> str:
     """Unknown inputs, shared dependencies and engine changes qualify every target."""
     if candidate_branch.startswith("engine/"):
-        if not TAG.fullmatch(candidate_branch.removeprefix("engine/")) or paths != [
-            "engine.lock"
-        ]:
-            raise ValueError("Engine candidate branches may change only engine.lock")
+        if (
+            not TAG.fullmatch(candidate_branch.removeprefix("engine/"))
+            or not paths
+            or not all(engine_sync.candidate_allowed(path) for path in paths)
+        ):
+            raise ValueError(
+                "Engine candidate branches may change only allowlisted candidate paths"
+            )
         return "full"
     mode = "controls"
     for path in paths:
@@ -177,6 +195,42 @@ def validate_promotion(
         or parents != [current_base]
     ):
         raise ValueError("Candidate is stale, foreign, or has unexpected commits")
+    validate_report(report, run, pr["number"], head, current_base)
+    if not changed_files or any(
+        not engine_sync.candidate_allowed(item.get("filename", ""))
+        or item.get("status") not in CHANGE_STATUSES
+        for item in changed_files
+    ):
+        raise ValueError(
+            "Automatic candidates may change only allowlisted candidate paths"
+        )
+    if report.get("classification") not in CLASSIFICATIONS:
+        raise ValueError("Qualification report lacks a valid classification")
+    validate_jobs(jobs, head)
+
+
+REPORT_JOBS = (
+    "dependency_policy",
+    "container",
+    "controls",
+    "providers",
+    "validate",
+    "checks",
+    "build",
+    "sdk",
+    "generated",
+    "verify",
+)
+
+
+def validate_report(report: dict, run: dict, number: int, head: str, base: str) -> None:
+    """The qualification artifact must name this run, attempt, PR, base, and head exactly."""
+    if (
+        not SHA.fullmatch(head)
+        or not SHA.fullmatch(base)
+        or not TAG.fullmatch(report.get("release_tag", ""))
+    ):
+        raise ValueError("Invalid qualification identity")
     if (
         type(report.get("schema_version")) is not int
         or report.get("schema_version") != 1
@@ -185,35 +239,13 @@ def validate_promotion(
             for key in ("pull_request", "run_id", "run_attempt")
         )
         or report.get("head_sha") != head
-        or report.get("base_sha") != current_base
-        or report.get("pull_request") != pr["number"]
+        or report.get("base_sha") != base
+        or report.get("pull_request") != number
         or report.get("run_id") != run["id"]
         or report.get("run_attempt") != run["run_attempt"]
-        or report.get("results")
-        != {
-            name: "success"
-            for name in (
-                "dependency_policy",
-                "container",
-                "controls",
-                "providers",
-                "validate",
-                "checks",
-                "build",
-                "sdk",
-                "generated",
-                "verify",
-            )
-        }
+        or report.get("results") != {name: "success" for name in REPORT_JOBS}
     ):
         raise ValueError("Qualification report identity/results do not match")
-    if (
-        len(changed_files) != 1
-        or changed_files[0].get("filename") != "engine.lock"
-        or changed_files[0].get("status") != "modified"
-    ):
-        raise ValueError("Automatic candidates may change only engine.lock")
-    validate_jobs(jobs, head)
 
 
 class GhError(subprocess.CalledProcessError):
@@ -385,88 +417,63 @@ def discover(args, repository: str, branch: str) -> None:
         )
         print("No newer stable engine release is available")
         return
-    preflight = subprocess.run(
-        [
-            sys.executable,
-            str(ROOT / "scripts/engine.py"),
-            "upgrade",
-            tag,
-            "--mode",
-            "controls",
-        ],
-        cwd=ROOT,
-        check=False,
+    plan_value = engine_sync.plan(
+        repo=ROOT, main_ref="HEAD", tag=tag, release_revision=revision
     )
-    candidate = json.loads(
-        (ROOT / ".engine/upgrades" / tag / "engine.lock").read_text()
-    )
-    validate_lock(original, candidate, tag, revision)
+    if plan_value["main_sha"] != base:
+        raise ValueError("Default branch moved during discovery; retry")
     args.output.parent.mkdir(parents=True, exist_ok=True)
-    args.output.write_text(
-        json.dumps(
-            {
-                "schema_version": 1,
-                "base_sha": base,
-                "tag": tag,
-                "revision": revision,
-                "engine_lock": candidate,
-                "prepared": preflight.returncode == 0,
-                "diagnostics_url": discovery_url(repository),
-            },
-            indent=2,
-        )
-        + "\n"
-    )
-    outcome = "passed" if preflight.returncode == 0 else "failed"
+    args.output.write_text(json.dumps(plan_value, indent=2, sort_keys=True) + "\n")
     record(
-        "proposed",
-        f"Proposed {tag}; preflight {outcome}",
+        "planned",
+        f"Planned {tag} from {plan_value['from']['kind']}: {plan_value['reason']}",
         discovery_url(repository) or None,
     )
 
 
-def write_candidate(repository: str, base: str, proposal: dict, *, exists: bool) -> str:
-    tag = proposal["tag"]
-    commit = api(f"repos/{repository}/git/commits/{base}")
-    content = json.dumps(proposal["engine_lock"], indent=2) + "\n"
-    blob = api(
-        f"repos/{repository}/git/blobs",
-        data={"content": content, "encoding": "utf-8"},
+def push_candidate(repository: str, commit: str, branch: str, *, force: bool) -> None:
+    """Push one verified commit with the job token; force only replaces a stale candidate."""
+    token = os.environ.get("GH_TOKEN", "")
+    if not token:
+        raise ValueError("A job token is required to push the candidate branch")
+    auth = base64.b64encode(f"x-access-token:{token}".encode()).decode()
+    argv = [
+        "git",
+        "-c",
+        f"http.https://github.com/.extraheader=AUTHORIZATION: basic {auth}",
+        "push",
+        "--quiet",
+    ]
+    if force:
+        argv.append("--force")
+    argv += [f"https://github.com/{repository}.git", f"{commit}:refs/heads/{branch}"]
+    result = subprocess.run(argv, cwd=ROOT, capture_output=True, text=True, check=False)
+    if result.returncode:
+        raise ValueError(f"candidate push to {branch} failed")
+
+
+def candidate_lock_at(commit: str) -> dict:
+    return json.loads(
+        subprocess.check_output(["git", "show", f"{commit}:engine.lock"], cwd=ROOT)
     )
-    tree = api(
-        f"repos/{repository}/git/trees",
-        data={
-            "base_tree": commit["tree"]["sha"],
-            "tree": [
-                {
-                    "path": "engine.lock",
-                    "mode": "100644",
-                    "type": "blob",
-                    "sha": blob["sha"],
-                }
-            ],
-        },
+
+
+def label_pull_request(repository: str, number: int, label: str) -> None:
+    api(
+        f"repos/{repository}/issues/{number}/labels",
+        data={"labels": [label]},
     )
-    head = api(
-        f"repos/{repository}/git/commits",
-        data={
-            "message": f"Qualify engine {tag}",
-            "tree": tree["sha"],
-            "parents": [base],
-        },
-    )["sha"]
-    if exists:
-        api(
-            f"repos/{repository}/git/refs/heads/engine/{tag}",
-            data={"sha": head, "force": True},
-            method="PATCH",
-        )
-    else:
-        api(
-            f"repos/{repository}/git/refs",
-            data={"ref": f"refs/heads/engine/{tag}", "sha": head},
-        )
-    return head
+
+
+def describe_conflicts(proposal: dict) -> str:
+    conflicts = proposal.get("conflicts") or []
+    if not conflicts:
+        return ""
+    listing = "\n".join(f"- `{path}`" for path in conflicts[:50])
+    return (
+        "\n\nUpstream carry conflicts in these files; this draft is not qualifiable until a "
+        "reviewer repairs the patches:\n" + listing
+    )
 
 
 def supersede(repository: str, branch: str, tag: str, url: str) -> None:
@@ -529,17 +536,35 @@ def publish(args, repository: str, branch: str) -> None:
     if args.proposal.stat().st_size > 65536:
         raise ValueError("Oversized proposal")
     proposal = json.loads(args.proposal.read_text())
+    if (
+        not isinstance(proposal, dict)
+        or proposal.get("schema_version") != PROPOSAL_SCHEMA
+    ):
+        raise ValueError(
+            f"Unsupported candidate proposal; expected schema {PROPOSAL_SCHEMA} with a bundle"
+        )
     base = current_base(repository, branch)
-    if proposal.get("schema_version") != 1 or proposal.get("base_sha") != base:
+    if proposal.get("base_sha") != base:
         raise ValueError("Proposal base is stale")
     if type(proposal.get("prepared")) is not bool:
-        raise ValueError("Proposal must record its preflight result")
+        raise ValueError("Proposal must record its preparation result")
+    tag = proposal.get("tag", "")
+    if not TAG.fullmatch(tag):
+        raise ValueError("Proposal names no stable release tag")
     original = lock_at(repository, base)
-    revision = stable_release(proposal["tag"], original["repository"])
+    revision = stable_release(tag, original["repository"])
     if proposal.get("revision") != revision:
-        raise ValueError("Upstream release tag moved since discovery")
-    validate_lock(original, proposal["engine_lock"], proposal["tag"], revision)
-    tag = proposal["tag"]
+        raise ValueError("Upstream release tag moved since planning")
+    if args.bundle is None:
+        raise ValueError("A candidate bundle is required")
+    # The bundle is untrusted data: import one head, then verify its shape before any push.
+    commit = engine_sync.import_candidate_bundle(ROOT, args.bundle)
+    if proposal.get("commit") != commit:
+        raise ValueError("Bundle head does not match the proposal")
+    problems = engine_sync.verify_candidate_commit(ROOT, commit, base, tag)
+    if problems:
+        raise ValueError("Candidate bundle is not allowlisted: " + "; ".join(problems))
+    validate_lock(original, candidate_lock_at(commit), tag, revision)
     candidate_branch = f"engine/{tag}"
     pulls = api(
         f"repos/{repository}/pulls?state=all&head={repository.split('/')[0]}:{candidate_branch}&per_page=100",
@@ -573,23 +598,7 @@ def publish(args, repository: str, branch: str) -> None:
             raise
         head = None
     if pr is not None and head is not None:
-        prior = api(f"repos/{repository}/compare/{base}...{head}")
-        files = prior["files"]
-        if (
-            prior["total_commits"] != 1
-            or len(files) != 1
-            or files[0]["filename"] != "engine.lock"
-            or files[0]["status"] != "modified"
-            or lock_at(repository, head) != proposal["engine_lock"]
-        ):
-            raise ValueError(
-                "Existing candidate requires manual repair; its branch was not changed"
-            )
-        parents = [
-            parent["sha"]
-            for parent in api(f"repos/{repository}/git/commits/{head}")["parents"]
-        ]
-        if parents == [base]:
+        if head == commit:
             record(
                 "unchanged",
                 f"{candidate_branch} is unchanged and already published",
@@ -597,7 +606,17 @@ def publish(args, repository: str, branch: str) -> None:
             )
             print(f"Unchanged candidate already published: {pr['html_url']}")
             return
-    write_candidate(repository, base, proposal, exists=head is not None)
+        parents = [
+            parent["sha"]
+            for parent in api(f"repos/{repository}/git/commits/{head}")["parents"]
+        ]
+        if parents == [base]:
+            # Same base, different content: a reviewer may have approved the existing head.
+            raise ValueError(
+                "Existing candidate requires manual repair; its branch was not changed"
+            )
+    push_candidate(repository, commit, candidate_branch, force=head is not None)
+    url = discovery_url(repository)
     if pr is None:
         pr = api(
             f"repos/{repository}/pulls",
@@ -606,18 +625,17 @@ def publish(args, repository: str, branch: str) -> None:
                 "head": candidate_branch,
                 "base": branch,
                 "body": (
-                    f"Pin upstream {revision}. Full engine qualification is dispatched explicitly. "
-                    "Only engine.lock is eligible for automatic promotion; any integration repair requires review.\n\n"
+                    f"Pin upstream {revision} for {tag}. Full engine qualification is dispatched "
+                    "explicitly and classifies the change: mechanical candidates merge "
+                    "automatically, assisted candidates need an approval on this exact head.\n\n"
+                    f"Resolution: {proposal.get('resolution', 'none')}.\n\n"
                     + (
-                        "Preflight passed."
+                        "Preparation passed."
                         if proposal["prepared"]
-                        else "Preflight failed. This draft requires targeted integration repair before promotion."
+                        else "Preparation failed; this draft requires targeted repair before promotion."
                     )
-                    + (
-                        f" [Preflight diagnostics]({discovery_url(repository)})."
-                        if discovery_url(repository)
-                        else ""
-                    )
+                    + (f" [Planning diagnostics]({url})." if url else "")
+                    + describe_conflicts(proposal)
                 ),
                 "draft": not proposal["prepared"],
             },
@@ -749,7 +767,12 @@ def observe(args, repository: str, branch: str) -> bool:
     consider_promotion = conclusion == "success" and not incomplete
     if conclusion == "success":
         try:
-            report_for(repository, run["id"])
+            report = report_for(repository, run["id"])
+            reasons = report.get("classification_reasons") or []
+            lines.append(
+                f"Classification: **{report.get('classification', 'missing')}**"
+                + (f" ({'; '.join(reasons)})." if reasons else ".")
+            )
         except (ValueError, zipfile.BadZipFile):
             lines.append(
                 "Qualification report is missing or invalid; automatic promotion is blocked."
@@ -814,6 +837,121 @@ def observe(args, repository: str, branch: str) -> bool:
     return consider_promotion
 
 
+def approved_head(repository: str, number: int, head: str) -> bool:
+    """An approval of this exact head by a writer, with no later change request from a writer.
+
+    Each reviewer's latest decision counts. Approvals of other commits, comments, and reviews
+    from users without write access never satisfy the gate.
+    """
+    latest: dict[str, dict] = {}
+    for review in sorted(
+        pages(f"repos/{repository}/pulls/{number}/reviews?per_page=100"),
+        key=lambda item: item["id"],
+    ):
+        login = (review.get("user") or {}).get("login")
+        if login and review.get("state") in {
+            "APPROVED",
+            "CHANGES_REQUESTED",
+            "DISMISSED",
+        }:
+            latest[login] = review
+    writers: dict[str, bool] = {}
+
+    def writer(login: str) -> bool:
+        if login not in writers:
+            permission = api(
+                f"repos/{repository}/collaborators/{login}/permission",
+                method="GET",
+            )
+            writers[login] = permission.get("permission") in APPROVER_PERMISSIONS
+        return writers[login]
+
+    approvals = [
+        review["id"]
+        for login, review in latest.items()
+        if review["state"] == "APPROVED"
+        and review.get("commit_id") == head
+        and writer(login)
+    ]
+    if not approvals:
+        return False
+    newest = max(approvals)
+    return not any(
+        review["state"] == "CHANGES_REQUESTED"
+        and review["id"] > newest
+        and writer(login)
+        for login, review in latest.items()
+    )
+
+
+def qualified_merge(repository: str, sha: str) -> bool:
+    """True only for the squash of an exact candidate whose qualification is complete.
+
+    The merge must be a single-parent commit on the qualified base with the qualified head's
+    tree, and a successful run's report must name that head, base, and PR. Anything else,
+    including any API error, is not qualified.
+    """
+    try:
+        if not SHA.fullmatch(sha):
+            return False
+        branch = api(f"repos/{repository}", method="GET")["default_branch"]
+        pulls = [
+            pr
+            for pr in api(f"repos/{repository}/commits/{sha}/pulls", method="GET")
+            if pr.get("merged_at")
+            and pr.get("merge_commit_sha") == sha
+            and pr["base"]["ref"] == branch
+            and is_candidate(pr, repository, branch)
+        ]
+        if len(pulls) != 1:
+            return False
+        pr = pulls[0]
+        head = pr["head"]["sha"]
+        merge = api(f"repos/{repository}/git/commits/{sha}", method="GET")
+        parents = [parent["sha"] for parent in merge["parents"]]
+        if len(parents) != 1 or not SHA.fullmatch(head):
+            return False
+        head_commit = api(f"repos/{repository}/git/commits/{head}", method="GET")
+        if head_commit["tree"]["sha"] != merge["tree"]["sha"]:
+            return False
+        workflow = api(f"repos/{repository}/actions/workflows/{WORKFLOW}", method="GET")
+        runs = api(
+            f"repos/{repository}/actions/workflows/{WORKFLOW}/runs?head_sha={head}&per_page=100",
+            method="GET",
+        )["workflow_runs"]
+        dispatched = sorted(
+            (
+                run
+                for run in runs
+                if run["event"] == "workflow_dispatch"
+                and run["head_branch"] == pr["head"]["ref"]
+                and run["head_repository"]["full_name"] == repository
+                and run["workflow_id"] == workflow["id"]
+                and run["path"] == f".github/workflows/{WORKFLOW}"
+                and run["status"] == "completed"
+                and run["conclusion"] == "success"
+                and run["head_sha"] == head
+            ),
+            key=lambda run: run["id"],
+            reverse=True,
+        )
+        for run in dispatched:
+            report = report_for(repository, run["id"])
+            validate_report(report, run, pr["number"], head, parents[0])
+            validate_jobs(run_jobs(repository, run), head)
+            return True
+        return False
+    except (
+        ValueError,
+        KeyError,
+        TypeError,
+        OSError,
+        subprocess.CalledProcessError,
+        zipfile.BadZipFile,
+    ):
+        return False
+
+
 def promote(args, repository: str, branch: str) -> None:
     run = api(f"repos/{repository}/actions/runs/{args.run_id}")
     workflow = api(f"repos/{repository}/actions/workflows/{WORKFLOW}")
@@ -853,6 +991,20 @@ def promote(args, repository: str, branch: str) -> None:
     validate_lock(original, candidate, report["release_tag"], revision)
     if report.get("engine_lock_sha256") != hashlib.sha256(raw).hexdigest():
         raise ValueError("Qualified engine lock differs from the candidate pin")
+    if report["classification"] == "assisted" and not approved_head(
+        repository, number, run["head_sha"]
+    ):
+        # Waiting is a normal outcome: the sweep revisits the candidate after each approval.
+        reasons = report.get("classification_reasons") or []
+        label_pull_request(repository, number, NEEDS_APPROVAL)
+        record(
+            "awaiting-approval",
+            f"awaiting approval for {pr['html_url']} "
+            f"(assisted: {'; '.join(reasons) or 'reviewer judgement required'})",
+            pr.get("html_url"),
+        )
+        print(f"Awaiting an approval on {run['head_sha']} for {pr['html_url']}")
+        return
     owner, name = repository.split("/")
     protected = api(
         "graphql",
@@ -951,11 +1103,17 @@ def main() -> int:
     select.add_argument("--github-output", type=Path)
     select.add_argument("--candidate-branch", default="")
     select.add_argument("--base", default="")
+    select.add_argument(
+        "--merge-sha",
+        default="",
+        help="pushed default-branch commit; a qualified candidate squash selects controls",
+    )
     discovery = sub.add_parser("discover")
     discovery.add_argument("--tag", default="")
     discovery.add_argument("--output", type=Path, required=True)
     writer = sub.add_parser("publish")
     writer.add_argument("--proposal", type=Path, required=True)
+    writer.add_argument("--bundle", type=Path, required=True)
     writer.add_argument("--github-output", type=Path)
     promotion = sub.add_parser("promote")
     promotion.add_argument("--run-id", type=positive_integer, required=True)
@@ -970,6 +1128,16 @@ def main() -> int:
             mode = select_mode(
                 args.paths_file.read_text().splitlines(), args.candidate_branch
             )
+            repository = os.environ.get("GITHUB_REPOSITORY", "")
+            if (
+                mode == "full"
+                and args.merge_sha
+                and not args.candidate_branch.startswith("engine/")
+                and repository
+                and qualified_merge(repository, args.merge_sha)
+            ):
+                # The exact qualified candidate already passed full qualification at its head.
+                mode = "controls"
             if args.candidate_branch.startswith("engine/"):
                 if not SHA.fullmatch(args.base):
                     raise ValueError(

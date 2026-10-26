@@ -33,13 +33,15 @@ jobs:
           BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
           HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
           CANDIDATE_BRANCH: ${{ github.head_ref || github.ref_name }}
+          # Only a push to the default branch can be a qualified candidate squash.
+          MERGE_SHA: ${{ github.event_name == 'push' && github.sha || '' }}
           GH_TOKEN: ${{ github.token }}
         run: |
           : > "$RUNNER_TEMP/changed-paths"
           if [[ "$BASE" =~ ^[0-9a-f]{40}$ && "$HEAD" =~ ^[0-9a-f]{40}$ ]]; then
             git diff --no-renames --name-only "$BASE" "$HEAD" > "$RUNNER_TEMP/changed-paths"
           fi
-          python3 scripts/engine_candidates.py select --paths-file "$RUNNER_TEMP/changed-paths" --github-output "$GITHUB_OUTPUT" --candidate-branch "$CANDIDATE_BRANCH" --base "$BASE"
+          python3 scripts/engine_candidates.py select --paths-file "$RUNNER_TEMP/changed-paths" --github-output "$GITHUB_OUTPUT" --candidate-branch "$CANDIDATE_BRANCH" --base "$BASE" --merge-sha "$MERGE_SHA"
 
   controls:
     name: Assembly controls
