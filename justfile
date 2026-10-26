@@ -206,6 +206,11 @@ engine-schema *args: prepare-engine
 engine-controls:
     {{ python }} {{ justfile_directory() }}/scripts/engine.py check --mode controls
 
+# Regenerate integration/codex/assembly.json and inventory/downstream.json from ownership metadata.
+[no-cd]
+engine-manifest:
+    {{ python }} {{ justfile_directory() }}/scripts/engine.py manifest --write
+
 # Edits the disposable assembly; copy changes into owned inputs before preparing again.
 [no-cd]
 write-hooks-schema:

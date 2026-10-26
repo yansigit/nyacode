@@ -24,10 +24,11 @@ storage namespaces are unchanged, and this migration moves no user data.
 
 Edit provider implementations in `crates/providers`, Chat in `crates/chatgpt-chat`,
 and engine-dependent product modules in `integration/codex/adapter` or
-`integration/codex/overlays`. Every new owned file must be mapped in
-`integration/codex/assembly.json`. Engine changes belong in the ordered patches,
-with an owner, purpose, and guarded regression group in `inventory/downstream.json`.
-The inventory retains retired baseline changes separately from active integration.
+`integration/codex/overlays`. Ownership metadata lives in
+`integration/codex/ownership.json`. Run `just engine-manifest` to regenerate
+`integration/codex/assembly.json` and `inventory/downstream.json`; controls enforce
+that both stay in sync with the ownership metadata, patches, and overlay bytes.
+Retired baseline changes remain in `ownership.json` alongside the active inventory.
 
 `just fix`, schema generators, and Bazel lock updates modify disposable assembled
 source. Review and copy the changes into owned sources or integration patches

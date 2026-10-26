@@ -502,6 +502,11 @@ def assemble(
         if os.name == "nt":
             canonical.setdefault(overlay["source"], mode)
         source = input_file(overlay["source"], symlink=mode == "120000")
+        if inputs[overlay["source"]]["sha256"] != overlay.get("sha256"):
+            raise EngineError(
+                f"overlay source sha256 does not match assembly manifest: {overlay['source']}; "
+                "review the change, then run `python3 scripts/engine.py manifest --write`"
+            )
         if (
             mode not in {"100644", "100755", "120000"}
             or inputs[overlay["source"]]["mode"] != mode
@@ -663,6 +668,14 @@ def check(
     commands = [
         [
             sys.executable,
+            str(root / "scripts/engine.py"),
+            "--root",
+            str(root),
+            "manifest",
+            "--check",
+        ],
+        [
+            sys.executable,
             "-m",
             "unittest",
             "discover",
@@ -670,7 +683,17 @@ def check(
             "scripts/tests",
             "-p",
             "test_engine.py",
-        ]
+        ],
+        [
+            sys.executable,
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
+            "scripts/tests",
+            "-p",
+            "test_engine_manifest.py",
+        ],
     ]
     if mode in {"providers", "full"}:
         commands.extend(
@@ -823,6 +846,8 @@ def upgrade(
             names.add(manifest["regression_manifest"])
         if (root / "docs/native-providers/integration-manifest.json").exists():
             names.add("docs/native-providers/integration-manifest.json")
+        if (root / "integration/codex/ownership.json").is_file():
+            names.add("integration/codex/ownership.json")
         names.update(entry["path"] for entry in manifest.get("patches", []))
         names.update(entry["source"] for entry in manifest.get("overlays", []))
         names.update(
@@ -879,6 +904,17 @@ def main() -> int:
     parser.add_argument("--cache-dir", type=Path)
     parser.add_argument("--json", action="store_true")
     subparsers = parser.add_subparsers(dest="command", required=True)
+    manifest_command = subparsers.add_parser(
+        "manifest",
+        help="regenerate or verify integration/codex/assembly.json and inventory/downstream.json",
+    )
+    manifest_mode = manifest_command.add_mutually_exclusive_group(required=True)
+    manifest_mode.add_argument(
+        "--write", action="store_true", help="regenerate both generated files"
+    )
+    manifest_mode.add_argument(
+        "--check", action="store_true", help="fail if committed files drift"
+    )
     for name in ("prepare", "check", "upgrade"):
         command = subparsers.add_parser(name)
         command.add_argument("--output", type=Path)
@@ -893,6 +929,17 @@ def main() -> int:
         if name == "upgrade":
             command.add_argument("tag")
     args = parser.parse_args()
+    if args.command == "manifest":
+        # engine_manifest imports this file as `engine`; reuse this module object so that
+        # EngineError is the same class when the script runs as __main__.
+        sys.modules.setdefault("engine", sys.modules[__name__])
+        import engine_manifest
+
+        try:
+            return engine_manifest.run(args.root, write=args.write)
+        except (EngineError, OSError, ValueError, KeyError) as error:
+            print(f"engine: {error}", file=sys.stderr)
+            return 1
     kwargs = {"root": args.root, "output": args.output, "cache_dir": args.cache_dir}
     try:
         if args.command == "prepare":
