@@ -650,9 +650,10 @@ class EngineTest(unittest.TestCase):
                     patch.object(
                         engine,
                         "download",
-                        side_effect=lambda repo, revision, destination, source=archive: (
-                            shutil.copyfile(source, destination)
-                        ),
+                        side_effect=lambda repo,
+                        revision,
+                        destination,
+                        source=archive: (shutil.copyfile(source, destination)),
                     ),
                     patch.object(
                         engine, "check", return_value=output / "workspace"
@@ -755,6 +756,64 @@ class EngineTest(unittest.TestCase):
         for name, content in before.items():
             self.assertEqual((self.root / name).read_bytes(), content)
         self.assertFalse((self.root / ".engine/workspace").exists())
+
+    def generated(self, path, data, generator="fixture"):
+        """Commit a generated output as `manifest --write` records it."""
+        payload = data.encode() if isinstance(data, str) else data
+        self.write(f"integration/codex/generated/{path}", payload)
+        self.manifest.setdefault("generated", []).append(
+            {
+                "generator": generator,
+                "mode": "100644",
+                "path": path,
+                "sha256": engine.digest(payload),
+            }
+        )
+        self.save_inputs()
+
+    def test_generated_output_replaces_upstream_file_and_digest_mismatch_fails_closed(
+        self,
+    ):
+        self.generated("README.md", "generated\n")
+        output = self.prepare()
+        self.assertEqual((output / "README.md").read_text(), "generated\n")
+        report = engine.assembly_report(output)
+        self.assertIn("README.md", report["changed_paths"])
+        self.assertIn("integration/codex/generated/README.md", report["inputs"])
+        self.write("integration/codex/generated/README.md", "edited\n")
+        with self.assertRaisesRegex(
+            engine.EngineError,
+            r"generated output sha256 does not match.*README.md.*manifest --write",
+        ):
+            self.prepare()
+        self.assertEqual((output / "README.md").read_text(), "generated\n")
+
+    def test_generated_output_may_not_be_patched_overlaid_or_create_a_new_file(self):
+        self.generated("README.md", "generated\n")
+        self.add_patch(
+            "diff --git a/README.md b/README.md\n--- a/README.md\n+++ b/README.md\n"
+            "@@ -1 +1 @@\n-upstream\n+patched\n",
+            ["README.md"],
+        )
+        with self.assertRaisesRegex(
+            engine.EngineError, "generated destination collision"
+        ):
+            self.prepare()
+        self.manifest["patches"] = []
+        self.manifest["generated"] = [
+            {
+                "generator": "fixture",
+                "mode": "100644",
+                "path": "docs/new.md",
+                "sha256": engine.digest(b"new\n"),
+            }
+        ]
+        self.write("integration/codex/generated/docs/new.md", "new\n")
+        self.save_inputs()
+        with self.assertRaisesRegex(
+            engine.EngineError, "must replace an upstream regular file"
+        ):
+            self.prepare()
 
 
 if __name__ == "__main__":

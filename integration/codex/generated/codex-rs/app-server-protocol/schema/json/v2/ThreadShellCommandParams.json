@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "properties": {
+    "command": {
+      "description": "Shell command string evaluated by the thread's configured shell.\nUnlike `command/exec`, this intentionally preserves shell syntax\nsuch as pipes, redirects, and quoting. This runs unsandboxed with full\naccess rather than inheriting the thread sandbox policy.",
+      "type": "string"
+    },
+    "threadId": {
+      "type": "string"
+    },
+    "timeoutMs": {
+      "description": "Maximum execution time in milliseconds. Defaults to one hour when omitted\nor null. Must be non-negative; zero requests an immediate timeout, not\nunlimited execution. Does not affect the immediate RPC acknowledgement.",
+      "format": "int64",
+      "type": [
+        "integer",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "command",
+    "threadId"
+  ],
+  "title": "ThreadShellCommandParams",
+  "type": "object"
+}

@@ -6421,19 +6421,6 @@ index d519e3b3d089a78461e4bf0ef822d1a010960dde..a9497fcef690bb0d2f7caf48121af3d4
  regex = { workspace = true }
  schemars = { workspace = true }
  serde = { workspace = true, features = ["derive"] }
-diff --git a/codex-rs/hooks/schema/generated/stop.command.output.schema.json b/codex-rs/hooks/schema/generated/stop.command.output.schema.json
-index a2bac59cd12a7a02de5ce5b259e68263cba74b2f..a7190d64d66a981cfbcbaf18a8e4cc62cf725cc8 100644
---- a/codex-rs/hooks/schema/generated/stop.command.output.schema.json
-+++ b/codex-rs/hooks/schema/generated/stop.command.output.schema.json
-@@ -24,7 +24,7 @@
-     },
-     "reason": {
-       "default": null,
--      "description": "Claude requires `reason` when `decision` is `block`; we enforce that semantic rule during output parsing rather than in the JSON schema.",
-+      "description": "Claude requires `reason` when `decision` is `block`; we enforce that\nsemantic rule during output parsing rather than in the JSON schema.",
-       "type": "string"
-     },
-     "stopReason": {
 diff --git a/codex-rs/hooks/src/engine/plugin_fingerprint.rs b/codex-rs/hooks/src/engine/plugin_fingerprint.rs
 index 6b85cd9ac1dcebc08ddfa5c01300dc8df0e10923..afed0e6739a6086042c6f519bc1db6ea6b8df764 100644
 --- a/codex-rs/hooks/src/engine/plugin_fingerprint.rs

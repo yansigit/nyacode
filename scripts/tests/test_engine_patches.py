@@ -13,6 +13,7 @@ from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import engine
+import engine_manifest
 import engine_patches
 
 PIN = "a" * 40
@@ -588,6 +589,161 @@ class FoldTest(PatchStackTest):
         (main / "engine.lock").write_text(json.dumps(lock, indent=2) + "\n")
         blockers = engine_patches.fold_blockers(base, main)
         self.assertIn("pinned upstream revision changed", blockers)
+
+
+
+class GeneratedOutputsTest(PatchStackTest):
+    """Generated outputs leave the patches; their conflicts are regenerated, not resolved by hand."""
+
+    def write_ownership(self, outputs, tree=True):
+        ownership = {
+            "schema_version": 1,
+            "generated": [
+                {
+                    "id": "readme",
+                    "command": "fixture",
+                    "outputs": list(outputs),
+                    "owner": "downstream-docs",
+                    "purpose": "documentation",
+                    "regression_groups": ["documentation"],
+                    "deterministic": True,
+                    "tree": tree,
+                }
+            ],
+        }
+        path = self.root / "integration/codex/ownership.json"
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(json.dumps(ownership, indent=2, sort_keys=True) + "\n")
+
+    def test_export_drops_generated_outputs_from_patches_and_reports_them(self):
+        self.write_ownership(["README.md"])
+        committed = self.root / "integration/codex/generated/README.md"
+        committed.parent.mkdir(parents=True, exist_ok=True)
+        committed.write_bytes(self.edited_readme(2, "LINE TWO"))
+        self.add_patch(
+            "documentation",
+            {
+                "README.md": self.edited_readme(2, "LINE TWO"),
+                "docs/extra.md": b"EXTRA ONE\nextra two\n",
+            },
+        )
+        output, _ = self.rebase(self.pin_commit, "generated-export")
+        (output / "workspace/README.md").write_text("regenerated elsewhere\n")
+        with patch.object(engine_manifest, "run", return_value=0):
+            result = engine_patches.export(
+                root=self.root, workspace=output / "workspace"
+            )
+        self.assertEqual(result["generated_ignored"], ["README.md"])
+        self.assertEqual(result["dropped"], {"documentation": ["README.md"]})
+        patch_bytes = (
+            self.root / "integration/codex/patches/documentation.patch"
+        ).read_bytes()
+        self.assertNotIn(b"README.md", patch_bytes)
+        self.assertIn(b"docs/extra.md", patch_bytes)
+        self.assertEqual(self.manifest_text().count("README.md"), 0)
+
+    def test_export_refuses_generator_outputs_that_are_not_committed(self):
+        self.write_ownership(["README.md"])
+        self.add_patch(
+            "documentation",
+            {
+                "README.md": self.edited_readme(2, "LINE TWO"),
+                "docs/extra.md": b"EXTRA ONE\nextra two\n",
+            },
+        )
+        output, _ = self.rebase(self.pin_commit, "uncommitted")
+        with self.assertRaisesRegex(engine.EngineError, "not committed.*README.md"):
+            engine_patches.export(root=self.root, workspace=output / "workspace")
+        self.assertIn(
+            b"README.md",
+            (self.root / "integration/codex/patches/documentation.patch").read_bytes(),
+        )
+
+    def test_regenerate_conflict_blocks_export_until_regenerated_or_accepted(self):
+        self.write_ownership(["README.md"], tree=False)
+        self.add_patch(
+            "documentation", {"README.md": self.edited_readme(2, "LINE TWO")}
+        )
+        onto = self.upstream_commit(
+            {"README.md": self.edited_readme(2, "UPSTREAM TWO")}
+        )
+        output, report = self.rebase(onto, "regenerate-blocks")
+        self.assertEqual(report["totals"]["regenerate_files"], 1)
+        with (
+            patch.object(engine_manifest, "run", return_value=0),
+            self.assertRaisesRegex(
+                engine.EngineError, "conflicts still hold merged bytes"
+            ),
+        ):
+            engine_patches.export(root=self.root, workspace=output / "workspace")
+        (output / "workspace/README.md").write_bytes(
+            self.edited_readme(2, "REGENERATED")
+        )
+        with patch.object(engine_manifest, "run", return_value=0):
+            result = engine_patches.export(
+                root=self.root, workspace=output / "workspace"
+            )
+        self.assertEqual(
+            result["rewritten"], ["integration/codex/patches/documentation.patch"]
+        )
+        self.assertIn(
+            b"REGENERATED",
+            (self.root / "integration/codex/patches/documentation.patch").read_bytes(),
+        )
+
+    def test_conflict_in_generated_output_is_regenerate_and_takes_upstream(self):
+        self.write_ownership(["README.md"])
+        self.add_patch(
+            "documentation", {"README.md": self.edited_readme(2, "LINE TWO")}
+        )
+        onto = self.upstream_commit(
+            {"README.md": self.edited_readme(2, "UPSTREAM TWO")}
+        )
+        output, report = self.rebase(onto, "generated-regenerate")
+        [record] = report["patches"][0]["files"]
+        self.assertEqual(record["status"], "regenerate")
+        self.assertEqual(record["conflict_blocks"], 0)
+        self.assertEqual(record["generator"], "readme")
+        self.assertEqual(report["patches"][0]["status"], "clean")
+        totals = report["totals"]
+        self.assertEqual(totals["conflicted_files"], 0)
+        self.assertEqual(totals["conflict_blocks"], 0)
+        self.assertEqual(totals["regenerate_files"], 1)
+        self.assertEqual(
+            (output / "workspace/README.md").read_bytes(),
+            (self.upstream / "README.md").read_bytes(),
+        )
+        self.assertIn("1 regenerate files", engine_patches.summary_lines(report)[-1])
+
+    def test_generated_tree_file_is_regenerate_only_when_upstream_bytes_differ(self):
+        self.write_ownership(["README.md"])
+        committed = self.root / "integration/codex/generated/README.md"
+        committed.parent.mkdir(parents=True, exist_ok=True)
+        committed.write_bytes(README)
+        self.manifest["generated"] = [
+            {
+                "generator": "readme",
+                "mode": "100644",
+                "path": "README.md",
+                "sha256": engine.digest(README),
+            }
+        ]
+        self.add_patch("documentation", {"docs/extra.md": b"EXTRA ONE\nextra two\n"})
+        same, same_report = self.rebase(self.pin_commit, "generated-same")
+        self.assertEqual(same_report["generated"][0]["status"], "clean")
+        self.assertEqual(same_report["totals"]["regenerate_files"], 0)
+        onto = self.upstream_commit(
+            {"README.md": self.edited_readme(3, "UPSTREAM THREE")}
+        )
+        output, report = self.rebase(onto, "generated-moved")
+        [record] = report["generated"]
+        self.assertEqual(record["status"], "regenerate")
+        self.assertEqual(record["generator"], "readme")
+        self.assertEqual(report["totals"]["regenerate_files"], 1)
+        self.assertEqual(
+            (output / "workspace/README.md").read_bytes(),
+            (self.upstream / "README.md").read_bytes(),
+        )
 
 
 class FetchRevisionTest(unittest.TestCase):

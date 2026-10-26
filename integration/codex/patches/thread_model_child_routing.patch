@@ -1690,19 +1690,6 @@ index 04ecf7363763d6755861703b47dfe61f088a5be0..2442fc967a5b502d643907d3e6b2365e
          attributed_mcp_server_ids: BTreeSet::new(),
      })
  }
-diff --git a/codex-rs/hooks/schema/generated/subagent-stop.command.output.schema.json b/codex-rs/hooks/schema/generated/subagent-stop.command.output.schema.json
-index 0cb1dd2a5701ba07d9ab73464a9968279d2065d0..07b23ac3c2cea218a6dccb3851758df86d17ed32 100644
---- a/codex-rs/hooks/schema/generated/subagent-stop.command.output.schema.json
-+++ b/codex-rs/hooks/schema/generated/subagent-stop.command.output.schema.json
-@@ -24,7 +24,7 @@
-     },
-     "reason": {
-       "default": null,
--      "description": "Claude requires `reason` when `decision` is `block`; we enforce that semantic rule during output parsing rather than in the JSON schema.",
-+      "description": "Claude requires `reason` when `decision` is `block`; we enforce that\nsemantic rule during output parsing rather than in the JSON schema.",
-       "type": "string"
-     },
-     "stopReason": {
 diff --git a/codex-rs/model-provider-info/Cargo.toml b/codex-rs/model-provider-info/Cargo.toml
 index 51d3026637dce62a30f6574cb1a5d4624877ebe0..20b789cf17779eea5a4bd7a428c838b3e1f7ef52 100644
 --- a/codex-rs/model-provider-info/Cargo.toml

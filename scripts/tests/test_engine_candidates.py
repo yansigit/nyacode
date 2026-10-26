@@ -100,6 +100,7 @@ def qualification():
                 "checks",
                 "build",
                 "sdk",
+                "generated",
                 "verify",
             )
         },

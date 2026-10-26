@@ -2329,41 +2329,6 @@ index 6e15faf07d2edd4b04f36a00bb2b886a233f889c..fe4120777297dc884f0213cb83f9907c
      "crossterm-0.29.0" = "sha256-ewiWWQPEU1lSUHzmZTiO5yes5luIaQ9TrvCNnTWhxpE=";
      "nucleo-0.5.0" = "sha256-Hm4SxtTSBrcWpXrtSqeO0TACbUxq3gizg1zD/6Yw/sI=";
      "nucleo-matcher-0.3.1" = "sha256-Hm4SxtTSBrcWpXrtSqeO0TACbUxq3gizg1zD/6Yw/sI=";
-diff --git a/codex-rs/hooks/schema/generated/model-request.command.input.schema.json b/codex-rs/hooks/schema/generated/model-request.command.input.schema.json
-index 86bf69b39909e4f47f2771c5f0d7e0ca4f849ac0..66fe109aa7ffe29f40d6e11e04af859a89d1bec7 100644
---- a/codex-rs/hooks/schema/generated/model-request.command.input.schema.json
-+++ b/codex-rs/hooks/schema/generated/model-request.command.input.schema.json
-@@ -2,7 +2,7 @@
-   "$schema": "http://json-schema.org/draft-07/schema#",
-   "definitions": {
-     "AbsolutePathBuf": {
--      "description": "A path that is guaranteed to be absolute and normalized (though it is not guaranteed to be canonicalized or exist on the filesystem).\n\nIMPORTANT: When deserializing an `AbsolutePathBuf`, a base path must be set using [AbsolutePathBufGuard::new]. If no base path is set, the deserialization will fail unless the path being deserialized is already absolute.",
-+      "description": "A path that is guaranteed to be absolute and normalized (though it is not\nguaranteed to be canonicalized or exist on the filesystem).\n\nIMPORTANT: When deserializing an `AbsolutePathBuf`, a base path must be set\nusing [AbsolutePathBufGuard::new]. If no base path is set, the\ndeserialization will fail unless the path being deserialized is already\nabsolute.",
-       "type": "string"
-     },
-     "ModelRequestStatus": {
-@@ -61,9 +61,7 @@
-     {
-       "properties": {
-         "hook_event_name": {
--          "enum": [
--            "PreModelRequest"
--          ],
-+          "const": "PreModelRequest",
-           "type": "string"
-         }
-       },
-@@ -78,9 +76,7 @@
-           "$ref": "#/definitions/NullableString"
-         },
-         "hook_event_name": {
--          "enum": [
--            "PostModelRequest"
--          ],
-+          "const": "PostModelRequest",
-           "type": "string"
-         },
-         "status": {
 diff --git a/codex-rs/hooks/src/events/model_request.rs b/codex-rs/hooks/src/events/model_request.rs
 index 221f2b70cff433382057864fdce187e4beb73c50..c50d44236a6fa7ab91572e62b4e095fd4995686f 100644
 --- a/codex-rs/hooks/src/events/model_request.rs

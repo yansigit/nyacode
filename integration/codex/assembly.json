@@ -8,6 +8,1184 @@
     "patches/rules_rust_build_script_tools_transition.patch",
     "patches/rules_rust_windows_process_wrapper_skip_temp_outputs.patch"
   ],
+  "generated": [
+    {
+      "generator": "bazel-lock",
+      "mode": "100644",
+      "path": "MODULE.bazel.lock",
+      "sha256": "809f85ec6b5724e75fbd7ac4820e169a001f7f0b5462766e83725e3c67bdb414"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/ApplyPatchApprovalParams.json",
+      "sha256": "67eabfaccd8f361fb1f83ba026ae3cb9ed7c1acc6255b3cca12ccf58e71b84c8"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/ApplyPatchApprovalResponse.json",
+      "sha256": "44416468c4390502b13dcbdc324057491043731ae94523405777f186131d1a2a"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/ChatgptAuthTokensRefreshParams.json",
+      "sha256": "7dbfc19af82df057163bb4e13c929639c09c23676ff4fe6a754d8955e3c7057a"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/ClientRequest.json",
+      "sha256": "3b9c5a3e61e7d7b363cec410cf07e95a6d67de6aea7435821834b669da443841"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/CommandExecutionRequestApprovalParams.json",
+      "sha256": "773bb3b5fe6e35b1aa74f7401f697dfb6ba961533c5392eb757572448e792965"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/CommandExecutionRequestApprovalResponse.json",
+      "sha256": "7b93c55aeee0f0431c871fc032a4bf56db0969f535d410dbfe22d191dce4c9ea"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/ExecCommandApprovalParams.json",
+      "sha256": "dae80f679f3bdec269e45822bcb835731cb43f59d1717ecbb8b0eef94a71c839"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/ExecCommandApprovalResponse.json",
+      "sha256": "5a129cd746f62c2cdc2904bb50a35706667dab5d0b754762968c7676f2956836"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/FileChangeRequestApprovalParams.json",
+      "sha256": "02d556086eb4c0e01626d02e57586093b46b3986817509c891162848841c3829"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/FuzzyFileSearchResponse.json",
+      "sha256": "bbc2616548507f473f9ba7558014deec29f8db2519dddcf747b06b38c5f08ca7"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/FuzzyFileSearchSessionUpdatedNotification.json",
+      "sha256": "7025f6f8cce961d8d45bc186662635bac330d2f98a54853f48f56adee033ad5b"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/McpServerElicitationRequestParams.json",
+      "sha256": "941ea3eb63be6d1824174e8ab9b66917f0388f2d375782b6c35332a723364674"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/PermissionsRequestApprovalParams.json",
+      "sha256": "6ff8659107659909a41f873f25cf567db589512d4f323dddf18ec8735e0ce9ab"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/PermissionsRequestApprovalResponse.json",
+      "sha256": "5d8023864f59150af06f160cff7f03773cf1ca9d695069bf4cc00adb7f982c6b"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/ServerNotification.json",
+      "sha256": "cad8efd5fe1c47f112877f4366f1b40116d173acfc5fd70e45630e36c13228fd"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/ServerRequest.json",
+      "sha256": "461e0eccb241798a14aea0d0dd0a4d6b461f14abf848e3dcfc55c919174fd444"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/ToolRequestUserInputParams.json",
+      "sha256": "5773339c8459903c56448d705e6ff899a978532cc10162211b9ab918f824b26e"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/codex_app_server_protocol.schemas.json",
+      "sha256": "ef2ee2f2864260c2e9fe3d283e60772f5c6ed0fa2802855e7fc001dfa64f2b4e"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/codex_app_server_protocol.v2.schemas.json",
+      "sha256": "545183c572e387c1627dcb4f7efcc16e7d8741e8e2e6102779a7a3a526fd2036"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v1/InitializeParams.json",
+      "sha256": "47cd2c635af384289c54fb9a9f6ed158dc02811bdc13fd489c0bf1dbb18660a2"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v1/InitializeResponse.json",
+      "sha256": "b3984c50bfa8f9e2580aef6d3c124aef12f1d78c9094262ad9c0122762cc5d21"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/AccountRateLimitsUpdatedNotification.json",
+      "sha256": "6da9aed1a35dffd5d8c089ba2112b8a953387be5a88fc94624e77b98e29a75bd"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/AccountUpdatedNotification.json",
+      "sha256": "587a4d212423b09e043584cbe85d4bb5f7430b58e5c80dc4caef51819901414f"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/AppListUpdatedNotification.json",
+      "sha256": "80b46a345c8a0f20e830717b8cf14a16b760cd625225ad4b2bf7f961c0469b19"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/AppsInstalledParams.json",
+      "sha256": "5ee34d80bac17450ed9095849db002fecd4024724bcdcfeacac9849bd0f01d1f"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/AppsInstalledResponse.json",
+      "sha256": "8ccff521c3e0888be599f5dae9c4f71590a2f7784a50b19f0fd90336d91db0b2"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/AppsListParams.json",
+      "sha256": "cefc54b716983f3bda7670ce2357d5202c9a410836f875626e1e0b9eb86de147"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/AppsListResponse.json",
+      "sha256": "42991a433469702cc01e18963f7fe17abe62c3d5514c3077c3b308eeb98f8292"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/AppsReadParams.json",
+      "sha256": "35afc9b942206688827d541cb2e7c57e01a8159b926ebcdb3f8d6beff725a6df"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/CommandExecOutputDeltaNotification.json",
+      "sha256": "eedd5a8296abb396f08d3c236113523f071328a92e80494ac4efbf2403bbe7c5"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/CommandExecParams.json",
+      "sha256": "79c05d27f3bb97404228df2a768cf66c311e0620b06a16d372e00b92e92634e0"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/CommandExecResizeParams.json",
+      "sha256": "39f46ee6d373de212ccce4df711a620daa55559e0653d3c86f90441fac3e9538"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/CommandExecTerminateParams.json",
+      "sha256": "77a4a1ba1e2257e87494f31941d03efea416654bcf8a810bede5ccf776ca9fb7"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/CommandExecWriteParams.json",
+      "sha256": "50ae8459e73174c9d45dbfc809a487c1905f6b693a6c9fa4f0e8c65e3b632e77"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/ConfigBatchWriteParams.json",
+      "sha256": "8e1c0a446029d1e2deeabc73538dfcb7fddca114ccafaf065c4aa2c4e551fc9d"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/ConfigReadParams.json",
+      "sha256": "5fe58f0778d93c4d090489f3997ff0bbb1837ba8baf1deefc34fd981cdb3b8db"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/ConfigReadResponse.json",
+      "sha256": "369087284acd4e3f7737de38932250fddd9798e0a29c2033809486d3188d93a9"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/ConfigRequirementsReadResponse.json",
+      "sha256": "d3e54c7884eb50f4bad7cc07c32dfe573b7276757ab6f40286720de90ec53914"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/ConfigWarningNotification.json",
+      "sha256": "49faaa5780a3c55b619a4609502c1735105e1669aaa41712f3af2b733f63b884"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/ConfigWriteResponse.json",
+      "sha256": "e60a2798d4012f83b3f944b4825844f3e9f8f9222d5c9a160ec824e5e22ff307"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/ConsumeAccountRateLimitResetCreditParams.json",
+      "sha256": "5d25ed46c299445c1d37ef999bf35c3d6db15b6d7fe160e79af700c61c3c5cd6"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/ErrorNotification.json",
+      "sha256": "bb5ef6d757bebb4f1cc37f95df452515a9cbf23286b8f4924a77f34ad6011cbc"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/ExperimentalFeatureEnablementSetParams.json",
+      "sha256": "7e5b74b28632010ac6bc79b9f445e011c3d0eea2766cba735a03114b89f28d32"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/ExperimentalFeatureListParams.json",
+      "sha256": "619eccb65f57ce9bd46c74db3036c1a369c9b6911e288a4b6ad5a5bc8bd27f11"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/ExperimentalFeatureListResponse.json",
+      "sha256": "117803a96982d6e8b9ead5fce02650e0525214094002208841ace1264b6786de"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/ExternalAgentConfigDetectParams.json",
+      "sha256": "78d030b114c34fb96db2f21231e56321370a6e500c765ebedcfa42883f3c7985"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/ExternalAgentConfigDetectResponse.json",
+      "sha256": "117fed351212401a87018f91777e290a477cbfd0a42f9c0965b9d3415e57a878"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/ExternalAgentConfigImportHistoriesReadResponse.json",
+      "sha256": "eb40de1daa7c4641ce176e121c7dbd9e8cbfa1804ae27e55d5afcf7b0fd03128"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/ExternalAgentConfigImportParams.json",
+      "sha256": "e5cd7cda71dfd6dbf4f3c82fd39c5ea1895c2f4379659febcea197f9ccd9a5be"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/FeedbackSaveParams.json",
+      "sha256": "a62289184ed4c569249906d75b35a52e13bfa3ff3d884adc99243d1ba252c498"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/FeedbackUploadResponse.json",
+      "sha256": "6fb17fb7b2315239299027ff18575a4ad043c378bf25b0cf7f7fe818ce28b791"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/FsChangedNotification.json",
+      "sha256": "18f858b4db233f2ccbb325c2d2fd71c76ab33ce06b2d65069c5e419c003b09ea"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/FsCopyParams.json",
+      "sha256": "1b5aef6827ed8b4be50cb0d7cfa7a2332b88d69975d604f309e9e4af5f9c847f"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/FsCreateDirectoryParams.json",
+      "sha256": "6b90798975198983a5147a348cd4d009d4ce9d3e4c2690b3cbbf14e00fe36102"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/FsGetMetadataParams.json",
+      "sha256": "025d60c62787a674cce2703118665ed7461f3119036cd27fa2fe8c600431a3da"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/FsReadDirectoryParams.json",
+      "sha256": "e7f9a03e442ebf90258074f8b3ee20ad93233e86c6f3d078b3ee99e44fb93e91"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/FsReadFileParams.json",
+      "sha256": "ad471983a028d06ecd66b9b04db385c57819088e17ae332113e361d1ca1c2770"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/FsRemoveParams.json",
+      "sha256": "a106f0d3342863bb3fd0cafbd36122076b658352861f8f7e62655ffc0e208060"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/FsWatchParams.json",
+      "sha256": "ba31858012c1a1117ac07f8f54b8a18fbae67ff58ab43aac0880a2985683d879"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/FsWatchResponse.json",
+      "sha256": "c33346823c634a66d531dfd73eb07285c098b47f9d13ece751f920e42b7577ff"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/FsWriteFileParams.json",
+      "sha256": "343d1c93dd9db16c4b22222e281b576f404a80a20ea28629ca1580756672107a"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/GetAccountParams.json",
+      "sha256": "0c00359a1380a7ca6a8a825c59bf6ade35b719483169a84e7d520df0bcca813f"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/GetAccountRateLimitsResponse.json",
+      "sha256": "903edb104361b7ba577c3d0bd036ac2b3ab3519cb037f1f79da3cc809377d582"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/GetAccountResponse.json",
+      "sha256": "644d003cabd56ca3191820cf8ea53db34123375935b85da7d8eabb53db8392ef"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/HookCompletedNotification.json",
+      "sha256": "7c32d3978a97410e19c52ba470a80ae38232d2cef4cf74ea34074deea90aa3ac"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/HookStartedNotification.json",
+      "sha256": "46eada915e2e3c2dfb15e74d222b70b3506b3f1bcbc73609f2f5dc148edd1df3"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/HooksListResponse.json",
+      "sha256": "07e739a4bc69ac96524750aece038eaa471c491764d415291059fdb16a0ac76e"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/ItemCompletedNotification.json",
+      "sha256": "4a1d9821a4d2dad3a119593b050670d606da5b2c5f0825af5c7194e017c8b5c8"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/ItemGuardianApprovalReviewCompletedNotification.json",
+      "sha256": "9fcb67072aa5d66b7ebca03cb09f0e7582a1ca69321771b140959ded0822472a"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/ItemGuardianApprovalReviewStartedNotification.json",
+      "sha256": "11d147a350c5fc04a5f45332f144769bf6e7b61c9f1eb925363a943d5cdbd4dd"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/ItemStartedNotification.json",
+      "sha256": "63ffcb7824a6fe66f6e1427c91dc13120e289e5c6c41f04bf57c784a472bdc6a"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/ListMcpServerStatusParams.json",
+      "sha256": "84de6b7b7dc9883f2c746206be831513f8bfc5ad20a89eda53d4f6b4fdf12fce"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/ListMcpServerStatusResponse.json",
+      "sha256": "64f2cdbf621d766a7deaa1d514f34f8fd516f8fe9e95a6d0ce5e48afa973969a"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/LoginAccountParams.json",
+      "sha256": "5d28ad4819045f1d1dc561cc562c78a1ce829bbfed471460f4a78721f78898d3"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/LoginAccountResponse.json",
+      "sha256": "d2ddf4be59c7f10d1b3d71d665fc7479b3abfef4559bdc93e29be10284ae6ec2"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/MarketplaceAddResponse.json",
+      "sha256": "bcc401de8e597e1b22a44178d579c825f0b1ab73fbc75062a670eeeb868b2b5e"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/MarketplaceRemoveResponse.json",
+      "sha256": "ab7dbcd4ed224192d93eeb8c00a1b8eddcaaf44904f94ad772c4dc9532c1f03b"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/MarketplaceUpgradeResponse.json",
+      "sha256": "96f8ba9e68973ff5465f95912a3e76854e3f531cb7fd4e524859ecd79c6e9168"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/McpServerOauthLoginResponse.json",
+      "sha256": "2e3a40c164ff233ef60a8155d931a2b138fb331af19168c1ef1fc5888635643c"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/ModelListParams.json",
+      "sha256": "ce1187142e6422a4cce9050a7645196e0a85b03936ae461b98a6ed411d135ca8"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/ModelListResponse.json",
+      "sha256": "ec95c7456f179183eae37ca03d8528997d512bfb4569e03dbf96af7c308e9083"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/NullableGetAccountRateLimitsParams.json",
+      "sha256": "af5290fd762968586e4cc3e485512484d6832a35d8e0cb00c985787719bf5d73"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/PermissionProfileListParams.json",
+      "sha256": "c3241813fcb829cb3369563390d9ca063e5525d354339ca0925a2fe3c4993351"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/PermissionProfileListResponse.json",
+      "sha256": "d2c94d2938db0b18903a46d8eff748872e80626d9dd60a287bcc0e2e3b7f9ec9"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/PlanDeltaNotification.json",
+      "sha256": "20820fe3d1e49c89c1d364e116ee34202162f98144cd410e6db146c52310bace"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/PluginInstallParams.json",
+      "sha256": "1c7c841d65c2b3353c16ca0a12603444f5e976a9fa021591ce174a072ff2551e"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/PluginInstalledParams.json",
+      "sha256": "34ca2037a5f895b62c38693bfabb6c830896ecf4d02e7096f0a46edb0dad860e"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/PluginInstalledResponse.json",
+      "sha256": "8b5e00cbecc321e3ed956138297b1e1de816311c07580f0c7a5b5a6123fc16e7"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/PluginListParams.json",
+      "sha256": "d25ee9741f4c238342f2ea31aaca6ce2a07db7a079cd717eb374e2eefd9f0c4d"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/PluginListResponse.json",
+      "sha256": "312e35a51fe4efb15b80a58222c6743035e5cee00f086328cb7c6fb2cd7d97d7"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/PluginReadParams.json",
+      "sha256": "71eb07730f61ab6a6c50319143aed1ca5d877b31618494b8bbefc3b14575fcb7"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/PluginReadResponse.json",
+      "sha256": "4d6405de0c7d253e6ca555cb8cabb00b38e8026af1b699febea05c5dd419d605"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/PluginReconcileResponse.json",
+      "sha256": "27713909fc19f932890b402276501c05730ace347da1e79b027b8167e4389f03"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/PluginShareCheckoutResponse.json",
+      "sha256": "5928844e36ada0684a05aee9d21853be2e067bbd7ea88d48bb60646e4ffc8acd"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/PluginShareListResponse.json",
+      "sha256": "f826614741fc676aab436c74f6467f13dcddc76281b221c0124220d7a3a9b7bf"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/PluginShareSaveParams.json",
+      "sha256": "e36fd4d60bd2d9ebd4a75940e93c795c7352a23caaff6364788ca419bf1b4c9b"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/ProcessExitedNotification.json",
+      "sha256": "48b19d89f8f223b0b2fa821454d5e05d60a2b87a26e8e8f970ae3db641e0166a"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/ProcessOutputDeltaNotification.json",
+      "sha256": "985f49ff0eb520d5773d992a7db16b6463203c2a48676e1aa74d2f1659692047"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/RawResponseCompletedNotification.json",
+      "sha256": "5698ae602013be223e73638248f6fe348a8dcd5bab2f772ab1eab14c070e34b4"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/RawResponseItemCompletedNotification.json",
+      "sha256": "68b0cb63618404df9a1a8357009585ed45436bd2f1666b376b88eaa9cab693f4"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/ReviewStartParams.json",
+      "sha256": "11c39480671e5bbd415db78e83c55ddfbaee79e895ed3ec963c5920fea0bc348"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/ReviewStartResponse.json",
+      "sha256": "c4f7debeba9218913aa013cc68963cef405154305d0d025fbc141759aa056f4f"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/SkillsChangedNotification.json",
+      "sha256": "a6893be062e6b34a13b0c54ee9a1486b83242a71c0bb4b812d1f5be90047d1b3"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/SkillsConfigWriteParams.json",
+      "sha256": "06b128b99498691482f0e30292c3ea330bc4e5726436c981eb5447c0ae9b3110"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/SkillsExtraRootsSetParams.json",
+      "sha256": "3b169c29126e5acf99950011a7fdf26bd05e960ba82821d05cf99889ad29d6ff"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/SkillsListResponse.json",
+      "sha256": "7b1b3388ac6a68840d1f70f3e5b8d5016022b1337b717256870186c27ad96cc4"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadAttachmentListParams.json",
+      "sha256": "76c94ab325c43b1f5de138fa518074b4992e7d729d92a8167b0136c1d678e93d"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadAttachmentOwnerListParams.json",
+      "sha256": "aebb5dd43929e550f04bd64bedfedceca45122978334c9a518625261e5bcb7c8"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadForkParams.json",
+      "sha256": "849693284b562f9865848b9563e1c01783d4fe2c902f3f776612338779d95f11"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadForkResponse.json",
+      "sha256": "4798fe9cd94fe9f13b0d21f1f8f6d690af77193f11e00f5925732eaa723d7111"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadItemsListParams.json",
+      "sha256": "c3f1357d4c302925dd344f666f5592d736fad1cf3a645bd2a9428524ab2a5b8b"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadItemsListResponse.json",
+      "sha256": "f73a73190ddf037c46eb37e924609326b1c45d1fdda58dd4542a74f579bd3874"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadListParams.json",
+      "sha256": "16c9f7922c11313d63e8bdcfd3eefe9b873df2fc2304c38cc05345fbdea41f18"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadListResponse.json",
+      "sha256": "c1f0bdbd79df93f7db1f7a61d15b735213ea06478ceb833e32fa4c38391259c8"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadLoadedListParams.json",
+      "sha256": "406b8562245d5425f943e51194e35aeaa23de60f46429973355a81ee2a7b3f98"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadLoadedListResponse.json",
+      "sha256": "2f9fd26ec502cc3841972bafc98510eeed9c4316eb1612f5c3055a7bf2412b6a"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadMetadataUpdateParams.json",
+      "sha256": "25b4123f7a805af86763528fe64782b09642d804d61c2ac679fdfb27f585eef7"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadMetadataUpdateResponse.json",
+      "sha256": "c83081aff56313d262188f74338fe372e227ec459b66d771bd0c5a1748497676"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadReadParams.json",
+      "sha256": "d373ecb9e36bae4b26de0b9635e5bb0612b5bd030809252a5417eebbe4f0df37"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadReadResponse.json",
+      "sha256": "57de9fd31144e2922e539c3fbc34fee6d3c1d09de906885ec1fc4c82a6135d54"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadReadStateChangedNotification.json",
+      "sha256": "df0a9a8f0b8524eb79700d7ecae65565a56bd7922375105f4e0d14c7597c18e1"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadRealtimeItemCompletedNotification.json",
+      "sha256": "4826de5d6be67818b64076c397f672f3190d7abb936fdb2b46e48e4025a44ac6"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadRealtimeItemStartedNotification.json",
+      "sha256": "bf496aea4687867f77b7eb92a8616d23f72365f4e62752f857d7902aca82217c"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadRealtimeOutputAudioDeltaNotification.json",
+      "sha256": "90f40b95c066bb050f4036db64daddbddcb4bf92471fca1bf5c599668de37068"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadRealtimeTranscriptDeltaNotification.json",
+      "sha256": "a8bb877125331bdb4e1b7aafe5016292a53fdf60859fc7f1a2e79241fb191eed"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadRealtimeTranscriptDoneNotification.json",
+      "sha256": "f0b1c79bdf86738b4646e49242abfe0b144978d2a2233615d1597fef2062faa6"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadResumeParams.json",
+      "sha256": "bd4d61dfa0e8b6f3efb90381d9ef3253b7efc36566580418d559477a3519581b"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadResumeResponse.json",
+      "sha256": "91f9be672d9f4916280798de9d25b8a165d7da7b8f51af8614c9cbe41c41a29f"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadRevertResponse.json",
+      "sha256": "68779d4a03a7793866edc8761d51a3a661d1f2d336a5efe69abf52a03383e8c7"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadSectionListParams.json",
+      "sha256": "6ad06acb4f824855e900ec657d7b4e50b5eaeec543fd6bc42d3f8a7428769d58"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadSettingsUpdatedNotification.json",
+      "sha256": "aef6d4f4e41f8f321a0dc9e12692c051181cd7327d8dc1afc51e5f1edbab4d59"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadShellCommandParams.json",
+      "sha256": "4205f7b95f1d6a4af5ede35f5519d089a9527ece6965859a4e284f9c2edd6fa5"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadStartParams.json",
+      "sha256": "580a892f86fc410f83f842ed4e9f24498715bf61b62e0dd3059b5c3c3ed1c1da"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadStartResponse.json",
+      "sha256": "6c927b337f4195e230353519636fca25e2bc19aeb01c67639de451f874bb3aa0"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadStartedNotification.json",
+      "sha256": "e93f8856b931a08cdabb629e6e34c08a496793a10373aaa1cf7672cc874facb9"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadTurnsListParams.json",
+      "sha256": "21306e5b7e68bf6f94761c568d29fb4ac61ad6d17f1172c039a91c6958b97571"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadTurnsListResponse.json",
+      "sha256": "e34749776a8abe3cc9707f97176250b5914b7cceae7feca2e20726be4848c67c"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadUnarchiveResponse.json",
+      "sha256": "fbb109a6b1a7f434862e8f026c78c5ecdb4ac1c5be57fc847f17da2941b68c34"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/TurnCompletedNotification.json",
+      "sha256": "1e5600847ea7d51af815727875c5e2b86a717ae71a764667f679e4b1c8daec25"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/TurnDiffUpdatedNotification.json",
+      "sha256": "afa6d4169797b6648671372e649dfcf55b7ce1437b1f700886dabe582d35cbe3"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/TurnStartParams.json",
+      "sha256": "ab82be2f660f40d2fc2bd102e52d47667cc6b85dc9ec071213734c4efe8ea577"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/TurnStartResponse.json",
+      "sha256": "78d88d8970d40056c452d7f6439d8fa5e78f2f9eb60889cc553916242e0045b6"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/TurnStartedNotification.json",
+      "sha256": "b4dd29e946670d044d57277d184b8152a910abec523eb19b8c6fe5b583ea7519"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/TurnSteerParams.json",
+      "sha256": "ac8c115497beea80ea89293e1c8de5f11f12477a0e3691a7af0aa76e00a323b9"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/WindowsSandboxSetupStartParams.json",
+      "sha256": "a39c37ea74477ac103f480407cfc37699940ac3d0e02f1f8cbb61f6a3849ee2e"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/json/v2/WindowsWorldWritableWarningNotification.json",
+      "sha256": "feab9b1694c460cf22086c1db2e356e143680d3823d96b88f3b891e7ede54911"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/precomputed/app-server-exports-experimental.json.zst",
+      "sha256": "a2e3cdc8ebac0043fae5125dd615b4ecc41b68feeee3366e98fbac502ea6819b"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/precomputed/app-server-exports-stable.json.zst",
+      "sha256": "ef91f0d49983727be413b47cbcfbc023c5226fc21be0c058a43f47267eae481f"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/typescript/ClientRequest.ts",
+      "sha256": "663ea91eca1f04c049de3a72e0f1c4d96ab4d7ca3c92981add4a55a042a10835"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/typescript/ServerNotification.ts",
+      "sha256": "7a4da77fcd15ac5f1b3d90de6cbebf8e99f9205a0f35f85579584037317ac60a"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/typescript/ServerNotificationEnvelope.ts",
+      "sha256": "32b5f6f63e1ec1cd19a11d3c0bdc3db021c24fb1dcaf9419a2921ce444d81afa"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/typescript/v2/Account.ts",
+      "sha256": "3da73cd49d1cdd42c5950a7242d9731502302cf52fe7fb61dc34a529e572c563"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/typescript/v2/AttestationGenerateParams.ts",
+      "sha256": "ed0604eff563222fc730b2154d041ff8f7ba06b81f79a039c87a342f29e2ffad"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/typescript/v2/CommandExecResizeResponse.ts",
+      "sha256": "ba90bd6ad057b23a69fbc865f51246d42507d0ac8fe269fcd5ef2eac59195d65"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/typescript/v2/CommandExecTerminateResponse.ts",
+      "sha256": "b7f070d761b45f20698fa88cbb265d56bc2cd32be0304d6d3afb9148249c0144"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/typescript/v2/CommandExecWriteResponse.ts",
+      "sha256": "fae91ed93edf661e2affd062904c52c18751ebea12b0f0652632380ac7a2874a"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/typescript/v2/FsCopyResponse.ts",
+      "sha256": "32bd40c9abdf364fd181b9776dca8424bdc3597aa3b4272fa686308fed323fa1"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/typescript/v2/FsCreateDirectoryResponse.ts",
+      "sha256": "f6dd7cb1828d94fb6e06847bdf43569cd294e48b68a614ca91e609045aa3e097"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/typescript/v2/FsRemoveResponse.ts",
+      "sha256": "7175341a5ea94c0f68856446aa6aee8bf43ad632102c66d13df0286e12e873f4"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/typescript/v2/FsUnwatchResponse.ts",
+      "sha256": "e3c9c659584094e32046cf3560854368cc805e8e2eb79c59ae2c72e571ef6d0d"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/typescript/v2/FsWriteFileResponse.ts",
+      "sha256": "1474e4094c3dcf05b935938be7f726f41ab7565a201baef6433fa6e8d4cf7aec"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/typescript/v2/GatewayOAuthCancelResponse.ts",
+      "sha256": "d9a367665881ff967eb851905ca75ef4c8aca66712186d480ba17e8b3c993731"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/typescript/v2/GatewayOAuthLoginResponse.ts",
+      "sha256": "987615926515fa6941f0628425e67253cceb589f82607f8f7023a38d8a41b7f1"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/typescript/v2/LoginAccountParams.ts",
+      "sha256": "3207d64f774192ef8515f64a47dc77b268a5611de692efa2e6723bc386494260"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/typescript/v2/LoginAccountResponse.ts",
+      "sha256": "cdcfda085fef45b2f8466fdbf08de6232fcf5ccc76de8670926f50754e664f6a"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/typescript/v2/LogoutAccountResponse.ts",
+      "sha256": "a14608a016c18e8f9f77bd1aea30639988cc82671ca09ad4be5aa12fbdba44e3"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/typescript/v2/McpServerRefreshResponse.ts",
+      "sha256": "e2bfc21d3183016c4d572b2b7f7c7a00e4143a54b53365cf7ba63d0000979041"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/typescript/v2/ModelProviderCapabilitiesReadParams.ts",
+      "sha256": "8c68b7faeb7e09f80ad76c43ee3ac6d330089ca7ae1ac4ac88d44b348f51330f"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/typescript/v2/PluginShareDeleteResponse.ts",
+      "sha256": "69a63019721128a6649599a71d0757035bc457a2bf68297c2514b260ba04d498"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/typescript/v2/PluginShareListParams.ts",
+      "sha256": "590d2dc5bfc6170be8fbf8dd5c1807a7fb09a46d28614b154320fce11366d6aa"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/typescript/v2/PluginUninstallResponse.ts",
+      "sha256": "0a1cedda750e703462fde8ad455f0955cd930ea55434fb84bbf229a059ce1e39"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/typescript/v2/SkillsChangedNotification.ts",
+      "sha256": "31d755fa0cbb70ec221ccb1315b7f495ee6c75d2d0f5e310a889838e27daeaf5"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/typescript/v2/SkillsExtraRootsSetResponse.ts",
+      "sha256": "0d43311c68b3353680ca221dc8b88e3be0aa5ded57143537e56c606010764af7"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/typescript/v2/ThreadApproveGuardianDeniedActionResponse.ts",
+      "sha256": "b0b451e57bf3ddba84be386d10557f1122d768036d776e3824a21808b072ee7e"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/typescript/v2/ThreadArchiveResponse.ts",
+      "sha256": "b9536ccabe62bffe11ae5349a388db69254f2dee187db26f0d3b2a64641ef8f0"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/typescript/v2/ThreadAttachmentRemoveResponse.ts",
+      "sha256": "e63ffb1813c947e5f958866e2242686ce2a86a6b97177f7b22bea553937de428"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/typescript/v2/ThreadCompactStartResponse.ts",
+      "sha256": "40cb62eab515cc97b3ac22ed657b1d76b154848fbb8893d3bd557f3e8b52948e"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/typescript/v2/ThreadDeleteResponse.ts",
+      "sha256": "1892825a1af15089eb621b4290ac2896a549c95bbff25c499ab58166d007e8de"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/typescript/v2/ThreadExtra.ts",
+      "sha256": "866dff0c9223e87edec1bb2dd93c6176a6d0982d2acdf33a3b2c573ed34ebf57"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/typescript/v2/ThreadInjectItemsResponse.ts",
+      "sha256": "ac46b9b8d52e2f8e87d4f92108322a83b1d1c7940549ec38a9c50751d36096c2"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/typescript/v2/ThreadSectionDeleteResponse.ts",
+      "sha256": "cd195222fc4e331f49fa74f31b072f88f3c859ce8494b89374e8a827a9e5d552"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/typescript/v2/ThreadSectionMoveResponse.ts",
+      "sha256": "478d6c4ca128c61f8ac7331035e2905e08900f3e000b9cd2dbca7759084e6510"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/typescript/v2/ThreadSetNameResponse.ts",
+      "sha256": "55fb3ddfffa22b2806645b3033747af18dc1729b772a741c74ac22b926d92425"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/typescript/v2/ThreadShellCommandResponse.ts",
+      "sha256": "e2d1e7dd78a568be5e5b3ecbb0b95f02d96d50a9a5a6d911dab6eb18ed93c3d3"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/typescript/v2/TurnInterruptResponse.ts",
+      "sha256": "05fe22ab44406fc39d6525114ee81e22695153e83e26bdca4b169d8f3e604208"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "codex-rs/app-server-protocol/schema/typescript/v2/index.ts",
+      "sha256": "dc53f0eb178c22e30bdb4d5b63cf52461ffcbf14561ad05a076e2b0f86c6bf44"
+    },
+    {
+      "generator": "config-schema",
+      "mode": "100644",
+      "path": "codex-rs/core/config.schema.json",
+      "sha256": "f1c589527e9b406f9854883d28152b0473e506c388e9244284864491d60cbc83"
+    },
+    {
+      "generator": "hooks-schema",
+      "mode": "100644",
+      "path": "codex-rs/hooks/schema/generated/model-request.command.input.schema.json",
+      "sha256": "381a507c1d46294ee33a4f3405fed8f7c6c989a45280670d7257d81ad7234907"
+    },
+    {
+      "generator": "hooks-schema",
+      "mode": "100644",
+      "path": "codex-rs/hooks/schema/generated/stop.command.output.schema.json",
+      "sha256": "75e46c59ba62467e3f57f80f58c60189304099e8f7a43898a81ac7859eb1bdf0"
+    },
+    {
+      "generator": "hooks-schema",
+      "mode": "100644",
+      "path": "codex-rs/hooks/schema/generated/subagent-stop.command.output.schema.json",
+      "sha256": "63e8b4fbc25d38a64f1531769b4e56daff98be6bcf1b75831d0ec75be500fe8a"
+    },
+    {
+      "generator": "pnpm-lock",
+      "mode": "100644",
+      "path": "pnpm-lock.yaml",
+      "sha256": "60eb8d1b4e02f41db3231cdeb7d82c52c31924a832243c9278630f1cdce62a05"
+    },
+    {
+      "generator": "uv-lock",
+      "mode": "100644",
+      "path": "scripts/uv.lock",
+      "sha256": "16bcb25f801184a01d4ccfee80ffd56444fff9ea8c4b9b7db1e6deccdc1c5f91"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "sdk/python/src/openai_codex/generated/notification_registry.py",
+      "sha256": "d27bc9c1a2d7500950a4620a47f0f65a92ee1f21aa03a4d1b4c7fa1e1ddbf7ec"
+    },
+    {
+      "generator": "app-server-schema",
+      "mode": "100644",
+      "path": "sdk/python/src/openai_codex/generated/v2_all.py",
+      "sha256": "9965ada923f8907f27a76a3f0daf83ac6e8c84f0eaea7e73b9cd4b6e8d7c73a8"
+    },
+    {
+      "generator": "uv-lock",
+      "mode": "100644",
+      "path": "sdk/python/uv.lock",
+      "sha256": "c703eb4a9b9c3226b9d6f63f7e6ae37763bcfc0e0a33ba67a183e19403a5688c"
+    }
+  ],
   "inventory": "inventory/downstream.json",
   "overlays": [
     {
@@ -2947,7 +4125,7 @@
       "destination": "scripts/native_provider_architecture.py",
       "mode": "100644",
       "replace": false,
-      "sha256": "f67033fdcf44ede23f35d7d0d6b5e8b053222e013799374eb1866222946037db",
+      "sha256": "e22e5be4abf8e797cdad1076295222e5a4afee01b776cc76e06b3eb34807c5c1",
       "source": "scripts/native_provider_architecture.py"
     },
     {
@@ -11250,7 +12428,6 @@
         "codex-rs/feedback/src/metadata_tests.rs",
         "codex-rs/feedback/src/report_upload.rs",
         "codex-rs/hooks/Cargo.toml",
-        "codex-rs/hooks/schema/generated/stop.command.output.schema.json",
         "codex-rs/hooks/src/engine/plugin_fingerprint.rs",
         "codex-rs/hooks/src/engine/plugin_trust.rs",
         "codex-rs/hooks/src/schema.rs",
@@ -11807,7 +12984,6 @@
         "codex-rs/Cargo.toml",
         "codex-rs/cli/tests/app_server_daemon/package.rs",
         "codex-rs/default.nix",
-        "codex-rs/hooks/schema/generated/model-request.command.input.schema.json",
         "codex-rs/hooks/src/events/model_request.rs",
         "codex-rs/mxc-sandbox/src/availability.rs",
         "codex-rs/mxc-sandbox/src/native.rs",
@@ -11848,11 +13024,7 @@
     {
       "path": "integration/codex/patches/dependency_override.patch",
       "paths": [
-        "MODULE.bazel.lock",
-        "codex-rs/utils/pty/src/unix_io.rs",
-        "pnpm-lock.yaml",
-        "scripts/uv.lock",
-        "sdk/python/uv.lock"
+        "codex-rs/utils/pty/src/unix_io.rs"
       ]
     },
     {
@@ -11888,7 +13060,6 @@
         "codex-rs/config/src/tui_keymap.rs",
         "codex-rs/config/src/tui_mouse_scroll.rs",
         "codex-rs/config/src/types.rs",
-        "codex-rs/core/config.schema.json",
         "codex-rs/network-proxy/src/credential_broker/configured.rs",
         "codex-rs/protocol/src/config_types.rs",
         "codex-rs/rmcp-client/src/enterprise_oauth_logout_tests.rs",
@@ -11923,192 +13094,6 @@
     {
       "path": "integration/codex/patches/sdk_protocol.patch",
       "paths": [
-        "codex-rs/app-server-protocol/schema/json/ApplyPatchApprovalParams.json",
-        "codex-rs/app-server-protocol/schema/json/ApplyPatchApprovalResponse.json",
-        "codex-rs/app-server-protocol/schema/json/ChatgptAuthTokensRefreshParams.json",
-        "codex-rs/app-server-protocol/schema/json/ClientRequest.json",
-        "codex-rs/app-server-protocol/schema/json/CommandExecutionRequestApprovalParams.json",
-        "codex-rs/app-server-protocol/schema/json/CommandExecutionRequestApprovalResponse.json",
-        "codex-rs/app-server-protocol/schema/json/ExecCommandApprovalParams.json",
-        "codex-rs/app-server-protocol/schema/json/ExecCommandApprovalResponse.json",
-        "codex-rs/app-server-protocol/schema/json/FileChangeRequestApprovalParams.json",
-        "codex-rs/app-server-protocol/schema/json/FuzzyFileSearchResponse.json",
-        "codex-rs/app-server-protocol/schema/json/FuzzyFileSearchSessionUpdatedNotification.json",
-        "codex-rs/app-server-protocol/schema/json/McpServerElicitationRequestParams.json",
-        "codex-rs/app-server-protocol/schema/json/PermissionsRequestApprovalParams.json",
-        "codex-rs/app-server-protocol/schema/json/PermissionsRequestApprovalResponse.json",
-        "codex-rs/app-server-protocol/schema/json/ServerNotification.json",
-        "codex-rs/app-server-protocol/schema/json/ServerRequest.json",
-        "codex-rs/app-server-protocol/schema/json/ToolRequestUserInputParams.json",
-        "codex-rs/app-server-protocol/schema/json/codex_app_server_protocol.schemas.json",
-        "codex-rs/app-server-protocol/schema/json/codex_app_server_protocol.v2.schemas.json",
-        "codex-rs/app-server-protocol/schema/json/v1/InitializeParams.json",
-        "codex-rs/app-server-protocol/schema/json/v1/InitializeResponse.json",
-        "codex-rs/app-server-protocol/schema/json/v2/AccountRateLimitsUpdatedNotification.json",
-        "codex-rs/app-server-protocol/schema/json/v2/AccountUpdatedNotification.json",
-        "codex-rs/app-server-protocol/schema/json/v2/AppListUpdatedNotification.json",
-        "codex-rs/app-server-protocol/schema/json/v2/AppsInstalledParams.json",
-        "codex-rs/app-server-protocol/schema/json/v2/AppsInstalledResponse.json",
-        "codex-rs/app-server-protocol/schema/json/v2/AppsListParams.json",
-        "codex-rs/app-server-protocol/schema/json/v2/AppsListResponse.json",
-        "codex-rs/app-server-protocol/schema/json/v2/AppsReadParams.json",
-        "codex-rs/app-server-protocol/schema/json/v2/CommandExecOutputDeltaNotification.json",
-        "codex-rs/app-server-protocol/schema/json/v2/CommandExecParams.json",
-        "codex-rs/app-server-protocol/schema/json/v2/CommandExecResizeParams.json",
-        "codex-rs/app-server-protocol/schema/json/v2/CommandExecTerminateParams.json",
-        "codex-rs/app-server-protocol/schema/json/v2/CommandExecWriteParams.json",
-        "codex-rs/app-server-protocol/schema/json/v2/ConfigBatchWriteParams.json",
-        "codex-rs/app-server-protocol/schema/json/v2/ConfigReadParams.json",
-        "codex-rs/app-server-protocol/schema/json/v2/ConfigReadResponse.json",
-        "codex-rs/app-server-protocol/schema/json/v2/ConfigRequirementsReadResponse.json",
-        "codex-rs/app-server-protocol/schema/json/v2/ConfigWarningNotification.json",
-        "codex-rs/app-server-protocol/schema/json/v2/ConfigWriteResponse.json",
-        "codex-rs/app-server-protocol/schema/json/v2/ConsumeAccountRateLimitResetCreditParams.json",
-        "codex-rs/app-server-protocol/schema/json/v2/ErrorNotification.json",
-        "codex-rs/app-server-protocol/schema/json/v2/ExperimentalFeatureEnablementSetParams.json",
-        "codex-rs/app-server-protocol/schema/json/v2/ExperimentalFeatureListParams.json",
-        "codex-rs/app-server-protocol/schema/json/v2/ExperimentalFeatureListResponse.json",
-        "codex-rs/app-server-protocol/schema/json/v2/ExternalAgentConfigDetectParams.json",
-        "codex-rs/app-server-protocol/schema/json/v2/ExternalAgentConfigDetectResponse.json",
-        "codex-rs/app-server-protocol/schema/json/v2/ExternalAgentConfigImportHistoriesReadResponse.json",
-        "codex-rs/app-server-protocol/schema/json/v2/ExternalAgentConfigImportParams.json",
-        "codex-rs/app-server-protocol/schema/json/v2/FeedbackSaveParams.json",
-        "codex-rs/app-server-protocol/schema/json/v2/FeedbackUploadResponse.json",
-        "codex-rs/app-server-protocol/schema/json/v2/FsChangedNotification.json",
-        "codex-rs/app-server-protocol/schema/json/v2/FsCopyParams.json",
-        "codex-rs/app-server-protocol/schema/json/v2/FsCreateDirectoryParams.json",
-        "codex-rs/app-server-protocol/schema/json/v2/FsGetMetadataParams.json",
-        "codex-rs/app-server-protocol/schema/json/v2/FsReadDirectoryParams.json",
-        "codex-rs/app-server-protocol/schema/json/v2/FsReadFileParams.json",
-        "codex-rs/app-server-protocol/schema/json/v2/FsRemoveParams.json",
-        "codex-rs/app-server-protocol/schema/json/v2/FsWatchParams.json",
-        "codex-rs/app-server-protocol/schema/json/v2/FsWatchResponse.json",
-        "codex-rs/app-server-protocol/schema/json/v2/FsWriteFileParams.json",
-        "codex-rs/app-server-protocol/schema/json/v2/GetAccountParams.json",
-        "codex-rs/app-server-protocol/schema/json/v2/GetAccountRateLimitsResponse.json",
-        "codex-rs/app-server-protocol/schema/json/v2/GetAccountResponse.json",
-        "codex-rs/app-server-protocol/schema/json/v2/HookCompletedNotification.json",
-        "codex-rs/app-server-protocol/schema/json/v2/HookStartedNotification.json",
-        "codex-rs/app-server-protocol/schema/json/v2/HooksListResponse.json",
-        "codex-rs/app-server-protocol/schema/json/v2/ItemCompletedNotification.json",
-        "codex-rs/app-server-protocol/schema/json/v2/ItemGuardianApprovalReviewCompletedNotification.json",
-        "codex-rs/app-server-protocol/schema/json/v2/ItemGuardianApprovalReviewStartedNotification.json",
-        "codex-rs/app-server-protocol/schema/json/v2/ItemStartedNotification.json",
-        "codex-rs/app-server-protocol/schema/json/v2/ListMcpServerStatusParams.json",
-        "codex-rs/app-server-protocol/schema/json/v2/ListMcpServerStatusResponse.json",
-        "codex-rs/app-server-protocol/schema/json/v2/LoginAccountParams.json",
-        "codex-rs/app-server-protocol/schema/json/v2/LoginAccountResponse.json",
-        "codex-rs/app-server-protocol/schema/json/v2/MarketplaceAddResponse.json",
-        "codex-rs/app-server-protocol/schema/json/v2/MarketplaceRemoveResponse.json",
-        "codex-rs/app-server-protocol/schema/json/v2/MarketplaceUpgradeResponse.json",
-        "codex-rs/app-server-protocol/schema/json/v2/McpServerOauthLoginResponse.json",
-        "codex-rs/app-server-protocol/schema/json/v2/ModelListParams.json",
-        "codex-rs/app-server-protocol/schema/json/v2/ModelListResponse.json",
-        "codex-rs/app-server-protocol/schema/json/v2/NullableGetAccountRateLimitsParams.json",
-        "codex-rs/app-server-protocol/schema/json/v2/PermissionProfileListParams.json",
-        "codex-rs/app-server-protocol/schema/json/v2/PermissionProfileListResponse.json",
-        "codex-rs/app-server-protocol/schema/json/v2/PlanDeltaNotification.json",
-        "codex-rs/app-server-protocol/schema/json/v2/PluginInstallParams.json",
-        "codex-rs/app-server-protocol/schema/json/v2/PluginInstalledParams.json",
-        "codex-rs/app-server-protocol/schema/json/v2/PluginInstalledResponse.json",
-        "codex-rs/app-server-protocol/schema/json/v2/PluginListParams.json",
-        "codex-rs/app-server-protocol/schema/json/v2/PluginListResponse.json",
-        "codex-rs/app-server-protocol/schema/json/v2/PluginReadParams.json",
-        "codex-rs/app-server-protocol/schema/json/v2/PluginReadResponse.json",
-        "codex-rs/app-server-protocol/schema/json/v2/PluginReconcileResponse.json",
-        "codex-rs/app-server-protocol/schema/json/v2/PluginShareCheckoutResponse.json",
-        "codex-rs/app-server-protocol/schema/json/v2/PluginShareListResponse.json",
-        "codex-rs/app-server-protocol/schema/json/v2/PluginShareSaveParams.json",
-        "codex-rs/app-server-protocol/schema/json/v2/ProcessExitedNotification.json",
-        "codex-rs/app-server-protocol/schema/json/v2/ProcessOutputDeltaNotification.json",
-        "codex-rs/app-server-protocol/schema/json/v2/RawResponseCompletedNotification.json",
-        "codex-rs/app-server-protocol/schema/json/v2/RawResponseItemCompletedNotification.json",
-        "codex-rs/app-server-protocol/schema/json/v2/ReviewStartParams.json",
-        "codex-rs/app-server-protocol/schema/json/v2/ReviewStartResponse.json",
-        "codex-rs/app-server-protocol/schema/json/v2/SkillsChangedNotification.json",
-        "codex-rs/app-server-protocol/schema/json/v2/SkillsConfigWriteParams.json",
-        "codex-rs/app-server-protocol/schema/json/v2/SkillsExtraRootsSetParams.json",
-        "codex-rs/app-server-protocol/schema/json/v2/SkillsListResponse.json",
-        "codex-rs/app-server-protocol/schema/json/v2/ThreadAttachmentListParams.json",
-        "codex-rs/app-server-protocol/schema/json/v2/ThreadAttachmentOwnerListParams.json",
-        "codex-rs/app-server-protocol/schema/json/v2/ThreadForkParams.json",
-        "codex-rs/app-server-protocol/schema/json/v2/ThreadForkResponse.json",
-        "codex-rs/app-server-protocol/schema/json/v2/ThreadItemsListParams.json",
-        "codex-rs/app-server-protocol/schema/json/v2/ThreadItemsListResponse.json",
-        "codex-rs/app-server-protocol/schema/json/v2/ThreadListParams.json",
-        "codex-rs/app-server-protocol/schema/json/v2/ThreadListResponse.json",
-        "codex-rs/app-server-protocol/schema/json/v2/ThreadLoadedListParams.json",
-        "codex-rs/app-server-protocol/schema/json/v2/ThreadLoadedListResponse.json",
-        "codex-rs/app-server-protocol/schema/json/v2/ThreadMetadataUpdateParams.json",
-        "codex-rs/app-server-protocol/schema/json/v2/ThreadMetadataUpdateResponse.json",
-        "codex-rs/app-server-protocol/schema/json/v2/ThreadReadParams.json",
-        "codex-rs/app-server-protocol/schema/json/v2/ThreadReadResponse.json",
-        "codex-rs/app-server-protocol/schema/json/v2/ThreadReadStateChangedNotification.json",
-        "codex-rs/app-server-protocol/schema/json/v2/ThreadRealtimeItemCompletedNotification.json",
-        "codex-rs/app-server-protocol/schema/json/v2/ThreadRealtimeItemStartedNotification.json",
-        "codex-rs/app-server-protocol/schema/json/v2/ThreadRealtimeOutputAudioDeltaNotification.json",
-        "codex-rs/app-server-protocol/schema/json/v2/ThreadRealtimeTranscriptDeltaNotification.json",
-        "codex-rs/app-server-protocol/schema/json/v2/ThreadRealtimeTranscriptDoneNotification.json",
-        "codex-rs/app-server-protocol/schema/json/v2/ThreadResumeParams.json",
-        "codex-rs/app-server-protocol/schema/json/v2/ThreadResumeResponse.json",
-        "codex-rs/app-server-protocol/schema/json/v2/ThreadRevertResponse.json",
-        "codex-rs/app-server-protocol/schema/json/v2/ThreadSectionListParams.json",
-        "codex-rs/app-server-protocol/schema/json/v2/ThreadSettingsUpdatedNotification.json",
-        "codex-rs/app-server-protocol/schema/json/v2/ThreadShellCommandParams.json",
-        "codex-rs/app-server-protocol/schema/json/v2/ThreadStartParams.json",
-        "codex-rs/app-server-protocol/schema/json/v2/ThreadStartResponse.json",
-        "codex-rs/app-server-protocol/schema/json/v2/ThreadStartedNotification.json",
-        "codex-rs/app-server-protocol/schema/json/v2/ThreadTurnsListParams.json",
-        "codex-rs/app-server-protocol/schema/json/v2/ThreadTurnsListResponse.json",
-        "codex-rs/app-server-protocol/schema/json/v2/ThreadUnarchiveResponse.json",
-        "codex-rs/app-server-protocol/schema/json/v2/TurnCompletedNotification.json",
-        "codex-rs/app-server-protocol/schema/json/v2/TurnDiffUpdatedNotification.json",
-        "codex-rs/app-server-protocol/schema/json/v2/TurnStartParams.json",
-        "codex-rs/app-server-protocol/schema/json/v2/TurnStartResponse.json",
-        "codex-rs/app-server-protocol/schema/json/v2/TurnStartedNotification.json",
-        "codex-rs/app-server-protocol/schema/json/v2/TurnSteerParams.json",
-        "codex-rs/app-server-protocol/schema/json/v2/WindowsSandboxSetupStartParams.json",
-        "codex-rs/app-server-protocol/schema/json/v2/WindowsWorldWritableWarningNotification.json",
-        "codex-rs/app-server-protocol/schema/precomputed/app-server-exports-experimental.json.zst",
-        "codex-rs/app-server-protocol/schema/precomputed/app-server-exports-stable.json.zst",
-        "codex-rs/app-server-protocol/schema/typescript/ClientRequest.ts",
-        "codex-rs/app-server-protocol/schema/typescript/ServerNotification.ts",
-        "codex-rs/app-server-protocol/schema/typescript/ServerNotificationEnvelope.ts",
-        "codex-rs/app-server-protocol/schema/typescript/v2/Account.ts",
-        "codex-rs/app-server-protocol/schema/typescript/v2/AttestationGenerateParams.ts",
-        "codex-rs/app-server-protocol/schema/typescript/v2/CommandExecResizeResponse.ts",
-        "codex-rs/app-server-protocol/schema/typescript/v2/CommandExecTerminateResponse.ts",
-        "codex-rs/app-server-protocol/schema/typescript/v2/CommandExecWriteResponse.ts",
-        "codex-rs/app-server-protocol/schema/typescript/v2/FsCopyResponse.ts",
-        "codex-rs/app-server-protocol/schema/typescript/v2/FsCreateDirectoryResponse.ts",
-        "codex-rs/app-server-protocol/schema/typescript/v2/FsRemoveResponse.ts",
-        "codex-rs/app-server-protocol/schema/typescript/v2/FsUnwatchResponse.ts",
-        "codex-rs/app-server-protocol/schema/typescript/v2/FsWriteFileResponse.ts",
-        "codex-rs/app-server-protocol/schema/typescript/v2/GatewayOAuthCancelResponse.ts",
-        "codex-rs/app-server-protocol/schema/typescript/v2/GatewayOAuthLoginResponse.ts",
-        "codex-rs/app-server-protocol/schema/typescript/v2/LoginAccountParams.ts",
-        "codex-rs/app-server-protocol/schema/typescript/v2/LoginAccountResponse.ts",
-        "codex-rs/app-server-protocol/schema/typescript/v2/LogoutAccountResponse.ts",
-        "codex-rs/app-server-protocol/schema/typescript/v2/McpServerRefreshResponse.ts",
-        "codex-rs/app-server-protocol/schema/typescript/v2/ModelProviderCapabilitiesReadParams.ts",
-        "codex-rs/app-server-protocol/schema/typescript/v2/PluginShareDeleteResponse.ts",
-        "codex-rs/app-server-protocol/schema/typescript/v2/PluginShareListParams.ts",
-        "codex-rs/app-server-protocol/schema/typescript/v2/PluginUninstallResponse.ts",
-        "codex-rs/app-server-protocol/schema/typescript/v2/SkillsChangedNotification.ts",
-        "codex-rs/app-server-protocol/schema/typescript/v2/SkillsExtraRootsSetResponse.ts",
-        "codex-rs/app-server-protocol/schema/typescript/v2/ThreadApproveGuardianDeniedActionResponse.ts",
-        "codex-rs/app-server-protocol/schema/typescript/v2/ThreadArchiveResponse.ts",
-        "codex-rs/app-server-protocol/schema/typescript/v2/ThreadAttachmentRemoveResponse.ts",
-        "codex-rs/app-server-protocol/schema/typescript/v2/ThreadCompactStartResponse.ts",
-        "codex-rs/app-server-protocol/schema/typescript/v2/ThreadDeleteResponse.ts",
-        "codex-rs/app-server-protocol/schema/typescript/v2/ThreadExtra.ts",
-        "codex-rs/app-server-protocol/schema/typescript/v2/ThreadInjectItemsResponse.ts",
-        "codex-rs/app-server-protocol/schema/typescript/v2/ThreadSectionDeleteResponse.ts",
-        "codex-rs/app-server-protocol/schema/typescript/v2/ThreadSectionMoveResponse.ts",
-        "codex-rs/app-server-protocol/schema/typescript/v2/ThreadSetNameResponse.ts",
-        "codex-rs/app-server-protocol/schema/typescript/v2/ThreadShellCommandResponse.ts",
-        "codex-rs/app-server-protocol/schema/typescript/v2/TurnInterruptResponse.ts",
-        "codex-rs/app-server-protocol/schema/typescript/v2/index.ts",
         "codex-rs/app-server-protocol/scripts/write_schema_fixtures.py",
         "sdk/python-runtime/README.md",
         "sdk/python-runtime/pyproject.toml",
@@ -12119,8 +13104,6 @@
         "sdk/python/scripts/update_sdk_artifacts.py",
         "sdk/python/src/openai_codex/_runtime_requirements.py",
         "sdk/python/src/openai_codex/client.py",
-        "sdk/python/src/openai_codex/generated/notification_registry.py",
-        "sdk/python/src/openai_codex/generated/v2_all.py",
         "sdk/python/tests/test_artifact_workflow_and_binaries.py",
         "sdk/python/tests/test_client_rpc_methods.py",
         "sdk/python/tests/test_contract_generation.py",
@@ -12181,7 +13164,6 @@
         "codex-rs/external-agent-migration/src/sessions/records_cla.rs",
         "codex-rs/external-agent-migration/src/sessions/records_cla_tests.rs",
         "codex-rs/external-agent-migration/src/sessions/records_cur.rs",
-        "codex-rs/hooks/schema/generated/subagent-stop.command.output.schema.json",
         "codex-rs/model-provider-info/Cargo.toml",
         "codex-rs/model-provider-info/src/lib.rs",
         "codex-rs/model-provider-info/src/model_provider_info_tests.rs",

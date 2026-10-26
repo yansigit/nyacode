@@ -126,6 +126,33 @@ it does not prepare an engine or update either lock. After an accepted toolchain
 change, explicitly update and review the rust-overlay entry in `flake.lock` if
 needed. Preparation is not required for `nix develop`.
 
+## Generated outputs
+
+Whole files produced by generators live under `integration/codex/generated/<repo
+path>` instead of the patches. `prepare` copies them into the assembly and checks
+their sha256 against `assembly.json`; export never writes them back into patches.
+`ownership.json` `generated` declares each generator with its output patterns,
+owner, purpose, regression groups, and whether it is `deterministic` (drift-checked)
+and `tree` (its outputs are moved into the generated tree).
+
+```sh
+just engine-generate --deterministic                      # report differences from the assembly
+just engine-generate --only config-schema --write-back   # update integration/codex/generated
+just engine-generate --only snapshots --crate codex-cli  # opt-in; not drift-checked
+```
+
+`generate` compares each generator's outputs with the workspace before it ran.
+`--write-back` copies outputs whose bytes differ from upstream into the generated tree
+and removes tree files the generator no longer produces; it rewrites `assembly.json`
+unless a patch still carries an output, which export must remove first. Outputs that
+upstream lacks need an overlay. During rebase, a conflict in a generated path is
+`regenerate` rather than a conflict: the workspace takes upstream's bytes, and export
+refuses that path until it is regenerated or passed with `--accept`.
+
+The schema, config, hook, pnpm, uv, and bazel lock generators reproduce their committed
+bytes at the pinned revision. `snapshots` is opt-in and its output is not part of the
+drift check; its snapshots stay in the patches.
+
 ## Carrying patches forward
 
 `engine-rebase` carries the ordered patch stack onto a newer upstream commit. Each

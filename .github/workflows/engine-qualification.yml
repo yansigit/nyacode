@@ -318,6 +318,50 @@ jobs:
           compression-level: 0
           retention-days: 3
 
+  generated:
+    name: Generated outputs are reproducible
+    runs-on: ubuntu-24.04
+    timeout-minutes: 150
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Install Linux build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang libclang-dev cmake libssl-dev pkg-config protobuf-compiler
+      - name: Read the engine toolchain pin
+        id: toolchain
+        run: python3 -c 'import json, os; print("toolchain=" + json.load(open("engine.lock"))["toolchain"], file=open(os.environ["GITHUB_OUTPUT"], "a"))'
+      - uses: dtolnay/rust-toolchain@e2a55d2ffb04f378e9626c28d38b36d230d1e12f
+        with:
+          toolchain: ${{ steps.toolchain.outputs.toolchain }}
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+        with:
+          run_install: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 26.11.1
+      - uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884 # v10.3.0
+        with:
+          version: "0.13.0"
+      - uses: bazel-contrib/setup-bazel@c5acdfb288317d0b5c0bbd7a396a3dc868bb0f86 # 0.19.0
+        with:
+          bazelisk-version: 1.29.0
+      - name: Prepare pinned engine source
+        uses: ./.github/actions/prepare-engine
+      - name: Regenerate deterministic outputs in the pinned workspace
+        run: python3 scripts/engine.py generate --workspace "$NYACODE_ENGINE_ROOT" --deterministic
+      - name: Fail when regeneration changes the assembled tree
+        run: |
+          # The assembly index records the committed bytes; any worktree change or new file is drift.
+          drift="$(git -C "$NYACODE_ENGINE_ROOT" diff --name-status)"
+          untracked="$(git -C "$NYACODE_ENGINE_ROOT" ls-files --others --exclude-standard)"
+          if [ -n "$drift" ] || [ -n "$untracked" ]; then
+            printf '%s\n%s\n' "$drift" "$untracked" >&2
+            echo "Generated outputs drifted from the committed tree; run engine.py generate --write-back and review." >&2
+            exit 1
+          fi
   verdict:
     name: Engine acceptance
     if: always()
@@ -331,6 +375,7 @@ jobs:
         checks,
         build,
         sdk,
+        generated,
         verify,
       ]
     runs-on: ubuntu-24.04

@@ -232,6 +232,11 @@ sync-finish run_id:
     {{ python }} {{ justfile_directory() }}/scripts/engine_sync.py finish --plan {{ quote(justfile_directory() / ".engine/sync" / run_id / "plan.json") }} --dir {{ quote(justfile_directory() / ".engine/sync" / run_id) }} --resolution-kind human
     {{ python }} {{ justfile_directory() }}/scripts/engine_sync.py push --dir {{ quote(justfile_directory() / ".engine/sync" / run_id) }} --confirm
 
+# Run generators in the assembled workspace; add --write-back to update integration/codex/generated.
+[no-cd]
+engine-generate *args: prepare-engine
+    {{ python }} {{ justfile_directory() }}/scripts/engine.py generate --workspace {{ justfile_directory() }}/.engine/workspace {args}
+
 # Edits the disposable assembly; copy changes into owned inputs before preparing again.
 [no-cd]
 write-hooks-schema:
