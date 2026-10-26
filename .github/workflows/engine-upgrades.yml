@@ -2,11 +2,11 @@ name: Engine upgrades
 
 on:
   schedule:
-    - cron: "17 4 * * *"
+    - cron: "17 */3 * * *"
   workflow_dispatch:
     inputs:
       release_tag:
-        description: Stable rust-vX.Y.Z tag (empty selects latest); manual rehearsal bypasses the schedule gate.
+        description: Stable rust-vX.Y.Z tag (empty selects latest); discovery stays gated by the repository kill switch.
         type: string
         default: ""
       qualification_run:
@@ -32,6 +32,8 @@ jobs:
     permissions:
       contents: read
       actions: read
+    env:
+      NYACODE_STATUS_FILE: ${{ runner.temp }}/status/discover.jsonl
     outputs:
       proposed: ${{ steps.proposal.outputs.proposed }}
     steps:
@@ -44,12 +46,9 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           RELEASE_TAG: ${{ inputs.release_tag || '' }}
-          SCHEDULED: ${{ github.event_name == 'schedule' }}
           NYACODE_ENGINE_UPGRADES_ENABLED: ${{ vars.NYACODE_ENGINE_UPGRADES_ENABLED }}
         run: |
-          args=()
-          if [[ "$SCHEDULED" == 'true' ]]; then args+=(--scheduled); fi
-          python3 scripts/engine_candidates.py discover --tag "$RELEASE_TAG" --output "$RUNNER_TEMP/candidate/candidate.json" "${args[@]}"
+          python3 scripts/engine_candidates.py discover --tag "$RELEASE_TAG" --output "$RUNNER_TEMP/candidate/candidate.json"
           if [[ -f "$RUNNER_TEMP/candidate/candidate.json" ]]; then
             echo 'proposed=true' >> "$GITHUB_OUTPUT"
             python3 -c 'import json, os; proposal = json.load(open(os.environ["RUNNER_TEMP"] + "/candidate/candidate.json")); print("prepared=" + str(proposal["prepared"]).lower(), file=open(os.environ["GITHUB_OUTPUT"], "a"))'
@@ -70,6 +69,14 @@ jobs:
           include-hidden-files: true
           if-no-files-found: warn
           retention-days: 7
+      - name: Retain upstream sync status events
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: engine-status-discover
+          path: ${{ runner.temp }}/status/discover.jsonl
+          if-no-files-found: ignore
+          retention-days: 7
 
   publish-candidate:
     name: Publish approved pin and explicitly dispatch qualification
@@ -80,6 +87,8 @@ jobs:
       contents: write
       pull-requests: write
       actions: write
+    env:
+      NYACODE_STATUS_FILE: ${{ runner.temp }}/status/publish-candidate.jsonl
     outputs:
       qualification_run: ${{ steps.publish.outputs.qualification_run }}
     steps:
@@ -95,7 +104,16 @@ jobs:
         id: publish
         env:
           GH_TOKEN: ${{ github.token }}
+          NYACODE_ENGINE_UPGRADES_ENABLED: ${{ vars.NYACODE_ENGINE_UPGRADES_ENABLED }}
         run: python3 scripts/engine_candidates.py publish --proposal "$RUNNER_TEMP/candidate/candidate.json" --github-output "$GITHUB_OUTPUT"
+      - name: Retain upstream sync status events
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: engine-status-publish-candidate
+          path: ${{ runner.temp }}/status/publish-candidate.jsonl
+          if-no-files-found: ignore
+          retention-days: 7
 
   observe:
     name: Report completed candidate qualification
@@ -112,6 +130,8 @@ jobs:
       contents: read
       pull-requests: write
       actions: read
+    env:
+      NYACODE_STATUS_FILE: ${{ runner.temp }}/status/observe.jsonl
     outputs:
       consider_promotion: ${{ steps.report.outputs.consider_promotion }}
       qualification_run: ${{ steps.report.outputs.qualification_run }}
@@ -127,6 +147,14 @@ jobs:
           QUALIFICATION_RUN: ${{ github.event.workflow_run.id || inputs.qualification_run || needs.publish-candidate.outputs.qualification_run }}
         # Leave ten minutes within the hosted job limit to fail closed and allow manual replay.
         run: python3 scripts/engine_candidates.py observe --run-id "$QUALIFICATION_RUN" --wait-seconds 21000 --github-output "$GITHUB_OUTPUT"
+      - name: Retain upstream sync status events
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: engine-status-observe
+          path: ${{ runner.temp }}/status/observe.jsonl
+          if-no-files-found: ignore
+          retention-days: 7
 
   promote:
     name: Promote only the exact fully qualified candidate
@@ -137,6 +165,8 @@ jobs:
       contents: write
       pull-requests: write
       actions: read
+    env:
+      NYACODE_STATUS_FILE: ${{ runner.temp }}/status/promote.jsonl
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -147,3 +177,76 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           QUALIFICATION_RUN: ${{ needs.observe.outputs.qualification_run }}
         run: python3 scripts/engine_candidates.py promote --run-id "$QUALIFICATION_RUN"
+      - name: Retain upstream sync status events
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: engine-status-promote
+          path: ${{ runner.temp }}/status/promote.jsonl
+          if-no-files-found: ignore
+          retention-days: 7
+
+  sweep:
+    name: Observe and promote open candidates without waiting
+    # Scheduled sweeps find completed qualification runs without holding a hosted job open.
+    if: >-
+      github.event_name == 'schedule' ||
+      (github.event_name == 'workflow_dispatch' && inputs.release_tag == '' && inputs.qualification_run == '')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    permissions:
+      contents: write
+      pull-requests: write
+      actions: read
+    env:
+      NYACODE_STATUS_FILE: ${{ runner.temp }}/status/sweep.jsonl
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          persist-credentials: false
+      - name: Observe completed candidates and promote only exact qualified heads
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 scripts/engine_candidates.py sweep
+      - name: Retain upstream sync status events
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: engine-status-sweep
+          path: ${{ runner.temp }}/status/sweep.jsonl
+          if-no-files-found: ignore
+          retention-days: 7
+
+  status:
+    name: Publish the upstream sync status issue
+    if: always()
+    needs: [discover, publish-candidate, observe, promote, sweep]
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      issues: write
+    concurrency:
+      group: engine-upgrades-status
+      cancel-in-progress: false
+    env:
+      NYACODE_STATUS_FILE: ${{ runner.temp }}/status/status.jsonl
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          persist-credentials: false
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          pattern: engine-status-*
+          path: ${{ runner.temp }}/status
+          merge-multiple: true
+      - name: Record failed or cancelled upstream sync jobs
+        env:
+          RESULTS: ${{ toJSON(needs) }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: python3 scripts/engine_status.py failures
+      - name: Upsert the single upstream sync status issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 scripts/engine_status.py publish --repository "$GITHUB_REPOSITORY" --status-dir "$RUNNER_TEMP/status"

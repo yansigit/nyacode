@@ -37,7 +37,7 @@ jobs:
         run: |
           : > "$RUNNER_TEMP/changed-paths"
           if [[ "$BASE" =~ ^[0-9a-f]{40}$ && "$HEAD" =~ ^[0-9a-f]{40}$ ]]; then
-            git diff --name-only "$BASE" "$HEAD" > "$RUNNER_TEMP/changed-paths"
+            git diff --no-renames --name-only "$BASE" "$HEAD" > "$RUNNER_TEMP/changed-paths"
           fi
           python3 scripts/engine_candidates.py select --paths-file "$RUNNER_TEMP/changed-paths" --github-output "$GITHUB_OUTPUT" --candidate-branch "$CANDIDATE_BRANCH" --base "$BASE"
 

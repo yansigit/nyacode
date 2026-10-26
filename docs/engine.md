@@ -63,18 +63,38 @@ python3 scripts/engine.py upgrade rust-vX.Y.Z --mode controls
 ```
 
 An upgrade proposal lives under `.engine/upgrades` and never changes the accepted
-pin. Stable-release discovery runs daily at 04:17 UTC when repository variable
-`NYACODE_ENGINE_UPGRADES_ENABLED=true`. Failed candidates remain drafts with linked
-diagnostics. Promotion verifies the exact candidate commit, current base, allowed
-files, complete qualification, and strict branch protection before an immediate
-squash merge. Product release tags and publication remain explicit.
+pin. Discovery runs every three hours and is idempotent. Repository variable
+`NYACODE_ENGINE_UPGRADES_ENABLED=true` is the kill switch: when it is not `true`,
+discovery and publication refuse in every mode, including manual dispatch. Observation
+and promotion of an already-running candidate continue, so in-flight work can finish.
+Product release tags and publication remain explicit.
 
 The trusted publisher records the exact qualification run ID returned by GitHub.
-A separate trusted observer waits up to 350 minutes for that run, reports its
-result, and passes its validated ID to the separate promotion job. Candidate
-qualification keeps read-only credentials. The `workflow_run` trigger remains a
-fallback, but automatic continuation does not depend on delivery of bot-generated
-events.
+It never reopens a candidate that was merged or closed with the `engine:reject`
+label. A candidate closed without that label gets a new pull request on a rebuilt
+branch. An open candidate whose branch is not based on the current default branch is
+rebuilt from the same `engine.lock`, force-updated, and re-dispatched. Publishing a
+newer tag closes each older open `engine/rust-v*` candidate with a comment linking
+its replacement. Failed candidates remain drafts with linked diagnostics.
+
+Every three hours the sweep job finds the latest qualification run for each open
+candidate. Once that run has completed, the sweep reports it and promotes it if
+eligible, without waiting on a hosted job. Promotion verifies the exact candidate
+commit, current base, allowed files, complete qualification, and strict branch
+protection before an immediate squash merge.
+
+A separate trusted observer waits up to 350 minutes for a run dispatched by the same
+invocation, reports its result, and passes its validated ID to the promotion job.
+Candidate qualification keeps read-only credentials. The `workflow_run` trigger
+remains a fallback, and automatic continuation does not depend on delivery of
+bot-generated events.
+
+Each job records its events as an artifact, and a final `status` job upserts the
+single open issue titled "Upstream sync status" (label `engine:status`). The issue
+shows the current pin, the last update, and the 30 most recent events, including
+skips, rejections, supersessions, qualification results, and failed jobs. Maintainers
+reject a candidate by closing its pull request and adding the `engine:reject` label.
+Create the `engine:status` and `engine:reject` labels before enabling the kill switch.
 
 Qualification packages may run for 360 minutes. If observation times out or an
 older run needs its report restored, replay only the observer from the default

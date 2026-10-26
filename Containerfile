@@ -1,8 +1,8 @@
 # Ubuntu 26.04 verification image for Nyacode.
 # Docker and Podman both build this file; it uses no BuildKit-only syntax.
 #
-#   docker build -f Containerfile -t nyacode-verify:rust-1.95 .
-#   podman build -f Containerfile -t nyacode-verify:rust-1.95 .
+#   docker build -f Containerfile -t nyacode-verify:rust-1.99 .
+#   podman build -f Containerfile -t nyacode-verify:rust-1.99 .
 #
 # scripts/verify-container.sh is the supported entrypoint. The repository is
 # bind-mounted at runtime. This image does not copy it, and it does not expect
@@ -10,7 +10,7 @@
 
 FROM ubuntu:26.04
 
-ARG RUST_VERSION=1.95.0
+ARG RUST_VERSION=1.99.1
 ARG NEXTEST_VERSION=0.9.148
 ARG SCCACHE_VERSION=0.18.0
 

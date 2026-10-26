@@ -7,6 +7,7 @@ import io
 import json
 import os
 import subprocess
+import sys
 import tempfile
 import unittest
 import zipfile
@@ -14,6 +15,7 @@ from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import patch
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 SPEC = importlib.util.spec_from_file_location(
     "engine_candidates", Path(__file__).resolve().parents[1] / "engine_candidates.py"
 )
@@ -24,6 +26,9 @@ HEAD = "b" * 40
 REVISION = "c" * 40
 REPOSITORY = "owner/product"
 TAG = "rust-v1.2.3"
+NEW = "e" * 40
+OLD = "d" * 40
+PR_URL = "https://example.invalid/pr/7"
 
 
 def lock():
@@ -431,6 +436,7 @@ class GitHubBoundaryTest(unittest.TestCase):
             path.write_text(json.dumps({"schema_version": 1, "base_sha": HEAD}))
             args = type("Args", (), {"proposal": path})()
             with (
+                patch.dict(os.environ, {"NYACODE_ENGINE_UPGRADES_ENABLED": "true"}),
                 patch.object(candidates, "current_base", return_value=BASE),
                 patch.object(candidates, "api") as api,
                 self.assertRaises(ValueError),
@@ -527,8 +533,16 @@ class ControllerFlowTest(unittest.TestCase):
                 }
             )
         )
+        for patcher in (
+            patch.dict(os.environ, {"NYACODE_ENGINE_UPGRADES_ENABLED": "true"}),
+            patch.object(candidates, "pages", return_value=[]),
+        ):
+            patcher.start()
+            self.addCleanup(patcher.stop)
 
-    def test_disabled_schedule_does_not_query_releases_or_run_candidate_code(self):
+    def test_disabled_discovery_in_every_mode_does_not_query_releases_or_run_code(
+        self,
+    ):
         (self.root / "engine.lock").write_text(json.dumps(self.original))
         with (
             patch.object(candidates, "ROOT", self.root),
@@ -538,7 +552,13 @@ class ControllerFlowTest(unittest.TestCase):
             patch.object(candidates, "pages") as pages,
             patch.object(candidates.subprocess, "run") as run,
         ):
-            candidates.discover(SimpleNamespace(scheduled=True), REPOSITORY, "main")
+            for tag in ("", TAG):
+                with self.subTest(tag=tag):
+                    candidates.discover(
+                        SimpleNamespace(tag=tag, output=self.proposal),
+                        REPOSITORY,
+                        "main",
+                    )
             pages.assert_not_called()
             run.assert_not_called()
 
@@ -553,7 +573,7 @@ class ControllerFlowTest(unittest.TestCase):
             if path.endswith("per_page=100"):
                 return []
             if "/git/ref/heads/" in path:
-                raise subprocess.CalledProcessError(1, ["gh"], stderr=b"HTTP 404")
+                raise candidates.GhError(1, ["gh"], b"HTTP 404")
             if path.endswith(BASE):
                 return {"tree": {"sha": "tree"}}
             if path.endswith("/pulls"):
@@ -620,7 +640,7 @@ class ControllerFlowTest(unittest.TestCase):
                     "api",
                     side_effect=[
                         [],
-                        subprocess.CalledProcessError(1, ["gh"], stderr=b"HTTP 404"),
+                        candidates.GhError(1, ["gh"], b"HTTP 404"),
                         {"tree": {"sha": "tree"}},
                         {"sha": "blob"},
                         {"sha": "tree"},
@@ -697,7 +717,7 @@ class ControllerFlowTest(unittest.TestCase):
             if "/pulls?" in path:
                 return []
             if "/git/ref/" in path:
-                raise subprocess.CalledProcessError(1, ["gh"], stderr=b"HTTP 404")
+                raise candidates.GhError(1, ["gh"], b"HTTP 404")
             if path.endswith(BASE):
                 return {"tree": {"sha": "tree"}}
             if path.endswith("/pulls"):
@@ -746,6 +766,8 @@ class ControllerFlowTest(unittest.TestCase):
                 ]
             if "/git/ref/" in path:
                 return {"object": {"sha": HEAD}}
+            if "/git/commits/" in path:
+                return {"parents": [{"sha": BASE}]}
             return {
                 "total_commits": 1,
                 "files": [{"filename": "engine.lock", "status": "modified"}],
@@ -981,9 +1003,8 @@ class ControllerFlowTest(unittest.TestCase):
     ):
         for moved, merged in ((False, True), (True, True), (False, False)):
             fixture = qualification()
-            fixture["report"]["engine_lock_sha256"] = hashlib.sha256(
-                (json.dumps(self.candidate, indent=2) + "\n").encode()
-            ).hexdigest()
+            raw = (json.dumps(self.candidate, indent=2) + "\n").encode()
+            fixture["report"]["engine_lock_sha256"] = hashlib.sha256(raw).hexdigest()
 
             def api(path, *, data=None, snapshot=fixture):
                 if path.endswith("/runs/123"):
@@ -1019,7 +1040,9 @@ class ControllerFlowTest(unittest.TestCase):
                 ),
                 patch.object(candidates, "run_jobs", return_value=fixture["jobs"]),
                 patch.object(
-                    candidates, "lock_at", side_effect=[self.original, self.candidate]
+                    candidates,
+                    "lock_bytes_at",
+                    side_effect=[json.dumps(self.original).encode(), raw],
                 ),
                 patch.object(candidates, "stable_release", return_value=REVISION),
                 patch.object(
@@ -1053,6 +1076,487 @@ class ControllerFlowTest(unittest.TestCase):
                         ],
                         data={"sha": HEAD, "merge_method": "squash"},
                     )
+
+
+class GhCommandTest(unittest.TestCase):
+    def call(self, results):
+        return (
+            patch.object(candidates.subprocess, "run", side_effect=results),
+            patch.object(candidates.time, "sleep"),
+            patch.object(candidates.sys, "stderr", io.StringIO()),
+        )
+
+    def test_transient_failures_retry_with_backoff_then_succeed(self):
+        runs = [
+            subprocess.CompletedProcess([], 1, b"", b"HTTP 502 Bad Gateway"),
+            subprocess.CompletedProcess([], 0, b'{"ok": true}', b""),
+        ]
+        run_patch, sleep_patch, stderr_patch = self.call(runs)
+        with run_patch as run, sleep_patch as sleep, stderr_patch as stderr:
+            self.assertEqual(candidates.api(f"repos/{REPOSITORY}"), {"ok": True})
+        self.assertEqual(run.call_count, 2)
+        self.assertEqual([call.args for call in sleep.call_args_list], [(2,)])
+        self.assertIn("HTTP 502 Bad Gateway", stderr.getvalue())
+
+    def test_transient_failures_stop_after_three_attempts_with_status_and_stderr(self):
+        for message, status in (
+            (b"HTTP 503 Service Unavailable", 503),
+            (b"HTTP 429 Too Many Requests", 429),
+            (b"API rate limit exceeded", None),
+            (b"Get https://api.github.com: i/o timeout", None),
+            (b"read: connection reset by peer", None),
+            (b"unexpected EOF", None),
+        ):
+            run_patch, sleep_patch, stderr_patch = self.call(
+                [subprocess.CompletedProcess([], 1, b"", message)] * 3
+            )
+            with (
+                self.subTest(message=message),
+                run_patch as run,
+                sleep_patch as sleep,
+                stderr_patch as stderr,
+                self.assertRaises(candidates.GhError) as error,
+            ):
+                candidates.api(f"repos/{REPOSITORY}")
+            self.assertEqual(run.call_count, 3)
+            self.assertEqual([call.args for call in sleep.call_args_list], [(2,), (8,)])
+            self.assertEqual(error.exception.status, status)
+            self.assertIn(message.decode(), stderr.getvalue())
+
+    def test_non_transient_failures_fail_immediately_with_parsed_status(self):
+        run_patch, sleep_patch, stderr_patch = self.call(
+            [subprocess.CompletedProcess([], 1, b"", b"HTTP 404 Not Found")]
+        )
+        with (
+            run_patch as run,
+            sleep_patch as sleep,
+            stderr_patch as stderr,
+            self.assertRaises(candidates.GhError) as error,
+        ):
+            candidates.api(f"repos/{REPOSITORY}/git/ref/heads/missing")
+        self.assertEqual(error.exception.status, 404)
+        self.assertEqual(run.call_count, 1)
+        sleep.assert_not_called()
+        self.assertIn("HTTP 404 Not Found", stderr.getvalue())
+
+    def test_main_turns_gh_failures_into_a_nonzero_stop(self):
+        with (
+            patch.object(
+                candidates.sys, "argv", ["controller", "observe", "--run-id", "123"]
+            ),
+            patch.dict(os.environ, {"GITHUB_REPOSITORY": REPOSITORY}),
+            patch.object(
+                candidates,
+                "api",
+                side_effect=candidates.GhError(1, ["gh"], b"HTTP 404"),
+            ),
+            patch.object(candidates.sys, "stderr", io.StringIO()),
+        ):
+            self.assertEqual(candidates.main(), 1)
+
+
+def publish_fake(replies):
+    """Route each mocked gh call by its path; anything unexpected fails the test."""
+
+    def api(path, *, data=None, method="POST"):
+        for matches, reply in replies:
+            if matches(path, method):
+                return reply(path, data) if callable(reply) else reply
+        raise AssertionError(f"Unexpected gh call {method} {path}")
+
+    return api
+
+
+class LifecycleTest(unittest.TestCase):
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.temp.cleanup)
+        self.root = Path(self.temp.name)
+        self.original = lock()
+        self.candidate = {**self.original, "revision": REVISION, "release_tag": TAG}
+        self.proposal = self.root / "candidate.json"
+        self.proposal.write_text(
+            json.dumps(
+                {
+                    "schema_version": 1,
+                    "base_sha": BASE,
+                    "tag": TAG,
+                    "revision": REVISION,
+                    "engine_lock": self.candidate,
+                    "prepared": True,
+                }
+            )
+        )
+        enabled = patch.dict(os.environ, {"NYACODE_ENGINE_UPGRADES_ENABLED": "true"})
+        enabled.start()
+        self.addCleanup(enabled.stop)
+
+    def publish(self, api, *, output=None):
+        with (
+            patch.object(candidates, "current_base", return_value=BASE),
+            patch.object(
+                candidates, "lock_at", side_effect=[self.original, self.candidate]
+            ),
+            patch.object(candidates, "stable_release", return_value=REVISION),
+            patch.object(candidates, "api", side_effect=api) as gh,
+            patch.object(candidates, "pages", return_value=[]),
+            patch.object(candidates.subprocess, "run") as run,
+        ):
+            candidates.publish(
+                SimpleNamespace(proposal=self.proposal, github_output=output),
+                REPOSITORY,
+                "main",
+            )
+        run.assert_not_called()
+        return gh.call_args_list
+
+    def events(self, status_file):
+        if not status_file.exists():
+            return []
+        return [json.loads(line) for line in status_file.read_text().splitlines()]
+
+    def test_merged_candidate_is_a_recorded_noop(self):
+        merged = {
+            "number": 7,
+            "state": "closed",
+            "merged_at": "2026-10-01T00:00:00Z",
+            "html_url": PR_URL,
+            "labels": [],
+        }
+        status_file = self.root / "status.jsonl"
+        with patch.dict(os.environ, {"NYACODE_STATUS_FILE": str(status_file)}):
+            calls = self.publish(
+                publish_fake([(lambda p, m: "/pulls?" in p, [merged])])
+            )
+        self.assertEqual(len(calls), 1)
+        self.assertEqual(
+            [event["kind"] for event in self.events(status_file)], ["merged"]
+        )
+
+    def test_rejected_closed_candidate_is_a_noop(self):
+        rejected = {
+            "number": 7,
+            "state": "closed",
+            "merged_at": None,
+            "html_url": PR_URL,
+            "labels": [{"name": "engine:reject"}],
+        }
+        calls = self.publish(publish_fake([(lambda p, m: "/pulls?" in p, [rejected])]))
+        self.assertEqual(len(calls), 1)
+
+    def test_closed_unlabelled_candidate_gets_a_new_pull_request_on_a_rebuilt_branch(
+        self,
+    ):
+        closed = {
+            "number": 7,
+            "state": "closed",
+            "merged_at": None,
+            "html_url": PR_URL,
+            "labels": [],
+        }
+        output = self.root / "github-output"
+        calls = self.publish(
+            publish_fake(
+                [
+                    (lambda p, m: "/pulls?" in p, [closed]),
+                    (
+                        lambda p, m: p.endswith("/git/ref/heads/engine/rust-v1.2.3"),
+                        {"object": {"sha": HEAD}},
+                    ),
+                    (
+                        lambda p, m: p.endswith(f"/git/commits/{BASE}"),
+                        {"tree": {"sha": "tree"}},
+                    ),
+                    (lambda p, m: p.endswith("/git/blobs"), {"sha": "blob"}),
+                    (lambda p, m: p.endswith("/git/trees"), {"sha": "tree"}),
+                    (lambda p, m: p.endswith("/git/commits"), {"sha": NEW}),
+                    (
+                        lambda p, m: (
+                            p.endswith("/git/refs/heads/engine/rust-v1.2.3")
+                            and m == "PATCH"
+                        ),
+                        {},
+                    ),
+                    (
+                        lambda p, m: p.endswith("/pulls"),
+                        {"number": 8, "html_url": "https://example.invalid/pr/8"},
+                    ),
+                    (lambda p, m: p.endswith("/dispatches"), {"workflow_run_id": 789}),
+                ]
+            ),
+            output=output,
+        )
+        sent = {
+            (c.args[0], c.kwargs.get("method", "POST")): c.kwargs.get("data")
+            for c in calls
+        }
+        self.assertEqual(
+            sent[(f"repos/{REPOSITORY}/git/refs/heads/engine/{TAG}", "PATCH")],
+            {"sha": NEW, "force": True},
+        )
+        self.assertFalse(sent[(f"repos/{REPOSITORY}/pulls", "POST")]["draft"])
+        dispatch = sent[
+            (
+                f"repos/{REPOSITORY}/actions/workflows/{candidates.WORKFLOW}/dispatches",
+                "POST",
+            )
+        ]
+        self.assertEqual(dispatch["inputs"]["pull_request"], "8")
+        self.assertEqual(output.read_text(), "qualification_run=789\n")
+
+    def test_stale_open_candidate_is_force_rebuilt_and_redispatched(self):
+        open_pr = {
+            "number": 7,
+            "state": "open",
+            "draft": False,
+            "merged_at": None,
+            "html_url": PR_URL,
+            "labels": [],
+        }
+        calls = self.publish(
+            publish_fake(
+                [
+                    (lambda p, m: "/pulls?" in p, [open_pr]),
+                    (
+                        lambda p, m: p.endswith("/git/ref/heads/engine/rust-v1.2.3"),
+                        {"object": {"sha": HEAD}},
+                    ),
+                    (
+                        lambda p, m: "/compare/" in p,
+                        {
+                            "total_commits": 1,
+                            "files": [
+                                {"filename": "engine.lock", "status": "modified"}
+                            ],
+                        },
+                    ),
+                    (
+                        lambda p, m: p.endswith(f"/git/commits/{HEAD}"),
+                        {"parents": [{"sha": OLD}]},
+                    ),
+                    (
+                        lambda p, m: p.endswith(f"/git/commits/{BASE}"),
+                        {"tree": {"sha": "tree"}},
+                    ),
+                    (lambda p, m: p.endswith("/git/blobs"), {"sha": "blob"}),
+                    (lambda p, m: p.endswith("/git/trees"), {"sha": "tree"}),
+                    (lambda p, m: p.endswith("/git/commits"), {"sha": NEW}),
+                    (
+                        lambda p, m: (
+                            p.endswith("/git/refs/heads/engine/rust-v1.2.3")
+                            and m == "PATCH"
+                        ),
+                        {},
+                    ),
+                    (lambda p, m: p.endswith("/dispatches"), {"workflow_run_id": 789}),
+                ]
+            )
+        )
+        self.assertFalse(
+            [
+                c
+                for c in calls
+                if c.args[0].endswith("/pulls")
+                and c.kwargs.get("method", "POST") == "POST"
+            ]
+        )
+        patch_call = next(
+            c
+            for c in calls
+            if c.kwargs.get("method") == "PATCH" and "/git/refs/" in c.args[0]
+        )
+        self.assertEqual(patch_call.kwargs["data"], {"sha": NEW, "force": True})
+        dispatch = next(c for c in calls if c.args[0].endswith("/dispatches"))
+        self.assertEqual(dispatch.kwargs["data"]["inputs"]["pull_request"], "7")
+
+    def test_publishing_a_newer_tag_closes_older_candidates_with_a_comment(self):
+        def pr(number, ref, repo=REPOSITORY):
+            return {
+                "number": number,
+                "html_url": f"https://example.invalid/pr/{number}",
+                "base": {"ref": "main"},
+                "head": {"ref": ref, "sha": HEAD, "repo": {"full_name": repo}},
+            }
+
+        open_prs = [
+            pr(3, "engine/rust-v1.2.2"),
+            pr(4, "engine/rust-v1.2.4"),
+            pr(5, "feature/x"),
+            pr(6, "engine/rust-v1.2.0", repo="attacker/fork"),
+        ]
+        calls = []
+
+        def api(path, *, data=None, method="POST"):
+            calls.append((path, data, method))
+            return {}
+
+        with (
+            patch.object(candidates, "pages", return_value=open_prs),
+            patch.object(candidates, "api", side_effect=api),
+        ):
+            candidates.supersede(REPOSITORY, "main", TAG, PR_URL)
+        self.assertEqual(
+            calls,
+            [
+                (
+                    f"repos/{REPOSITORY}/issues/3/comments",
+                    {"body": f"Superseded by {PR_URL}"},
+                    "POST",
+                ),
+                (f"repos/{REPOSITORY}/pulls/3", {"state": "closed"}, "PATCH"),
+            ],
+        )
+
+    def test_sweep_promotes_a_completed_successful_candidate_without_waiting(self):
+        pr = {
+            "number": 7,
+            "html_url": PR_URL,
+            "base": {"ref": "main"},
+            "head": {
+                "ref": f"engine/{TAG}",
+                "sha": HEAD,
+                "repo": {"full_name": REPOSITORY},
+            },
+        }
+        run = {
+            "id": 123,
+            "event": "workflow_dispatch",
+            "head_branch": f"engine/{TAG}",
+            "status": "completed",
+            "conclusion": "success",
+        }
+        with (
+            patch.object(candidates, "pages", return_value=[pr]),
+            patch.object(
+                candidates, "api", return_value={"workflow_runs": [run]}
+            ) as api,
+            patch.object(candidates, "observe", return_value=True) as observe,
+            patch.object(candidates, "promote") as promote,
+        ):
+            candidates.sweep(SimpleNamespace(), REPOSITORY, "main")
+        self.assertEqual(
+            api.call_args.args[0].split("?")[0],
+            f"repos/{REPOSITORY}/actions/workflows/{candidates.WORKFLOW}/runs",
+        )
+        self.assertEqual(observe.call_args.args[0].wait_seconds, 0)
+        self.assertEqual(promote.call_args.args[0].run_id, 123)
+
+    def test_sweep_ignores_in_progress_candidates(self):
+        pr = {
+            "number": 7,
+            "html_url": PR_URL,
+            "base": {"ref": "main"},
+            "head": {
+                "ref": f"engine/{TAG}",
+                "sha": HEAD,
+                "repo": {"full_name": REPOSITORY},
+            },
+        }
+        run = {
+            "id": 123,
+            "event": "workflow_dispatch",
+            "head_branch": f"engine/{TAG}",
+            "status": "in_progress",
+            "conclusion": None,
+        }
+        with (
+            patch.object(candidates, "pages", return_value=[pr]),
+            patch.object(candidates, "api", return_value={"workflow_runs": [run]}),
+            patch.object(candidates, "observe") as observe,
+            patch.object(candidates, "promote") as promote,
+        ):
+            candidates.sweep(SimpleNamespace(), REPOSITORY, "main")
+        observe.assert_not_called()
+        promote.assert_not_called()
+
+    def test_disabled_publish_refuses_before_any_github_request_and_records_it(self):
+        status_file = self.root / "status.jsonl"
+        with (
+            patch.dict(
+                os.environ,
+                {
+                    "NYACODE_ENGINE_UPGRADES_ENABLED": "",
+                    "NYACODE_STATUS_FILE": str(status_file),
+                },
+            ),
+            patch.object(candidates, "api") as api,
+            patch.object(candidates, "current_base") as base,
+        ):
+            candidates.publish(
+                SimpleNamespace(proposal=self.proposal), REPOSITORY, "main"
+            )
+        api.assert_not_called()
+        base.assert_not_called()
+        self.assertEqual(
+            [event["kind"] for event in self.events(status_file)], ["disabled"]
+        )
+
+    def promote_with_lock(self, raw, digest):
+        fixture = qualification()
+        fixture["report"]["engine_lock_sha256"] = digest
+
+        def api(path, *, data=None, method="POST"):
+            if path.endswith("/runs/123"):
+                return fixture["run"]
+            if "/workflows/" in path:
+                return {"id": 456}
+            if path == "graphql":
+                return {
+                    "data": {
+                        "repository": {"ref": {"branchProtectionRule": protection()}}
+                    }
+                }
+            if path.endswith("/pulls/7"):
+                return {**fixture["pr"], "mergeable_state": "clean"}
+            return {"parents": [{"sha": BASE}]}
+
+        with (
+            patch.object(candidates, "api", side_effect=api),
+            patch.object(candidates, "report_for", return_value=fixture["report"]),
+            patch.object(candidates, "current_base", side_effect=[BASE, BASE]),
+            patch.object(candidates, "pages", return_value=fixture["changed_files"]),
+            patch.object(candidates, "run_jobs", return_value=fixture["jobs"]),
+            patch.object(
+                candidates,
+                "lock_bytes_at",
+                side_effect=[json.dumps(self.original).encode(), raw],
+            ),
+            patch.object(candidates, "stable_release", return_value=REVISION),
+            patch.object(candidates, "command", return_value={"merged": True}) as merge,
+        ):
+            candidates.promote(SimpleNamespace(run_id=123), REPOSITORY, "main")
+        return merge
+
+    def test_promotion_digest_is_taken_over_the_raw_engine_lock_bytes(self):
+        raw = json.dumps(self.candidate).encode()
+        self.promote_with_lock(
+            raw, hashlib.sha256(raw).hexdigest()
+        ).assert_called_once()
+        pretty = (json.dumps(self.candidate, indent=2) + "\n").encode()
+        with self.assertRaisesRegex(ValueError, "differs from the candidate pin"):
+            self.promote_with_lock(raw, hashlib.sha256(pretty).hexdigest())
+
+
+class WorkflowScheduleTest(unittest.TestCase):
+    def test_three_hourly_sweep_and_kill_switch_are_wired_through_the_workflow(self):
+        workflow = (
+            candidates.ROOT / ".github/workflows/engine-upgrades.yml"
+        ).read_text()
+        self.assertIn('cron: "17 */3 * * *"', workflow)
+        sweep = workflow.split("\n  sweep:\n", 1)[1].split("\n  status:\n", 1)[0]
+        self.assertIn(
+            "contents: write\n      pull-requests: write\n      actions: read", sweep
+        )
+        self.assertIn("python3 scripts/engine_candidates.py sweep", sweep)
+        publisher = workflow.split("\n  publish-candidate:\n", 1)[1].split(
+            "\n  observe:\n", 1
+        )[0]
+        self.assertIn(
+            "NYACODE_ENGINE_UPGRADES_ENABLED: ${{ vars.NYACODE_ENGINE_UPGRADES_ENABLED }}",
+            publisher,
+        )
+        status = workflow.split("\n  status:\n", 1)[1]
+        self.assertIn("contents: read\n      issues: write", status)
 
 
 if __name__ == "__main__":
