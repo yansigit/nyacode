@@ -477,12 +477,15 @@ class HelperTest(unittest.TestCase):
             (ROOT / "integration/codex/agent/cursor-cli.json").read_text()
         )
         self.assertIn("Read(**)", cursor["permissions"]["allow"])
-        self.assertIn("Shell(cargo check)", cursor["permissions"]["allow"])
+        self.assertFalse(
+            any(rule.startswith("Shell(") for rule in cursor["permissions"]["allow"])
+        )
+        self.assertIn("Shell(*)", cursor["permissions"]["deny"])
         opencode = json.loads(
             (ROOT / "integration/codex/agent/opencode.json").read_text()
         )
         self.assertEqual(opencode["permission"]["bash"]["*"], "deny")
-        self.assertEqual(opencode["permission"]["bash"]["cargo check *"], "allow")
+        self.assertEqual(opencode["permission"]["bash"], {"*": "deny"})
         self.assertEqual(opencode["permission"]["webfetch"], "deny")
         self.assertEqual(opencode["permission"]["external_directory"], "deny")
 

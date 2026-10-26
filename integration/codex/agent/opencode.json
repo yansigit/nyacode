@@ -6,8 +6,7 @@
     },
     "read": "allow",
     "bash": {
-      "*": "deny",
-      "cargo check *": "allow"
+      "*": "deny"
     },
     "task": "deny",
     "webfetch": "deny",

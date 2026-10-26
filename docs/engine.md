@@ -208,7 +208,6 @@ Security model:
   credentials before anything is merged. This workflow publishes nothing.
 - A merge that contains AI resolutions always requires human approval.
 
-Known limits: the Cursor allow list includes `Shell(cargo check)` and OpenCode allows
-`cargo check *`, so build scripts can run with the agent's own key in the environment.
-Remove those grants if that is unacceptable. The validation command also runs build
-scripts, but without any agent key.
+The agent may not run shell commands, so no build script ever runs with the agent's
+key in its environment. The resolver runs the validation command itself, without any
+agent key, and feeds failures back to the agent on the next iteration.
