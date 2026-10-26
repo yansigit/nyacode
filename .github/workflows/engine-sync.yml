@@ -1,0 +1,291 @@
+name: Engine sync
+
+# Daily rolling carry of the Nyacode patch stack onto upstream main. Each run starts from the
+# latest snapshot on sync/upstream-main (or from main), rebases onto upstream, folds main's
+# patch edits, validates, and publishes the next snapshot. See docs/sync-runbook.md.
+
+on:
+  schedule:
+    - cron: "43 5 * * *"
+  workflow_dispatch:
+    inputs:
+      upstream_ref:
+        description: Upstream ref or 40-hex commit to sync to (empty selects openai/codex main). An explicit ref never publishes a snapshot.
+        type: string
+        default: ""
+
+permissions:
+  contents: read
+
+concurrency:
+  group: engine-sync
+  cancel-in-progress: false
+
+jobs:
+  plan:
+    name: Plan the daily upstream sync
+    if: vars.NYACODE_ENGINE_SYNC_ENABLED == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    outputs:
+      action: ${{ steps.plan.outputs.action }}
+    env:
+      GH_TOKEN: ${{ github.token }}
+      NYACODE_STATUS_FILE: ${{ runner.temp }}/status/sync-plan.jsonl
+      RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+      UPSTREAM_REF: ${{ inputs.upstream_ref || '' }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Fetch the latest snapshot branch when it exists
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          auth=$(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)
+          git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $auth" fetch --quiet --no-tags origin '+refs/heads/sync/upstream-main:refs/remotes/origin/sync/upstream-main' || echo "no snapshot branch yet"
+      - name: Choose the source and upstream revision
+        id: plan
+        run: |
+          args=()
+          if [[ -n "$UPSTREAM_REF" ]]; then args+=(--upstream-ref "$UPSTREAM_REF"); fi
+          mkdir -p "$RUNNER_TEMP/plan"
+          python3 scripts/engine_sync.py plan "${args[@]}" --output "$RUNNER_TEMP/plan/plan.json"
+          python3 -c 'import json, os; plan = json.load(open(os.environ["RUNNER_TEMP"] + "/plan/plan.json")); print("action=" + plan["action"], file=open(os.environ["GITHUB_OUTPUT"], "a"))'
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: steps.plan.outputs.action == 'sync'
+        with:
+          name: engine-sync-plan
+          path: ${{ runner.temp }}/plan/plan.json
+          if-no-files-found: error
+          retention-days: 7
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: always()
+        with:
+          name: engine-status-sync-plan
+          path: ${{ runner.temp }}/status/sync-plan.jsonl
+          if-no-files-found: ignore
+          retention-days: 7
+
+  rebase:
+    name: Rebase the patch stack and fold main's edits
+    needs: plan
+    if: needs.plan.outputs.action == 'sync'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    permissions:
+      contents: read
+    outputs:
+      conflicts: ${{ steps.rebase.outputs.conflicts }}
+    env:
+      GH_TOKEN: ${{ github.token }}
+      NYACODE_STATUS_FILE: ${{ runner.temp }}/status/sync-rebase.jsonl
+      RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Fetch the latest snapshot branch when it exists
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          auth=$(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)
+          git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $auth" fetch --quiet --no-tags origin '+refs/heads/sync/upstream-main:refs/remotes/origin/sync/upstream-main' || echo "no snapshot branch yet"
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: engine-sync-plan
+          path: ${{ runner.temp }}/plan
+      - name: Rebase onto upstream and fold main's patch edits
+        id: rebase
+        run: |
+          set +e
+          python3 scripts/engine_sync.py rebase --plan "$RUNNER_TEMP/plan/plan.json" --output "$RUNNER_TEMP/sync"
+          code=$?
+          set -e
+          case "$code" in
+            0) echo "conflicts=false" >> "$GITHUB_OUTPUT" ;;
+            2) echo "conflicts=true" >> "$GITHUB_OUTPUT" ;;
+            *) exit "$code" ;;
+          esac
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: steps.rebase.outputs.conflicts == 'true'
+        with:
+          name: engine-sync-conflicts
+          path: ${{ runner.temp }}/sync/conflicts
+          if-no-files-found: error
+          retention-days: 7
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: always()
+        with:
+          name: engine-status-sync-rebase
+          path: ${{ runner.temp }}/status/sync-rebase.jsonl
+          if-no-files-found: ignore
+          retention-days: 7
+
+  resolve:
+    name: Resolve conflicts with the configured agent
+    needs: [plan, rebase]
+    if: needs.rebase.outputs.conflicts == 'true' && vars.NYACODE_RESOLVER_AGENT != ''
+    permissions:
+      contents: read
+    uses: ./.github/workflows/engine-resolve.yml
+    with:
+      plan_artifact: engine-sync-plan
+      agent: ${{ vars.NYACODE_RESOLVER_AGENT }}
+      model: ${{ vars.NYACODE_RESOLVER_MODEL }}
+    secrets:
+      CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
+      OPENCODE_API_KEY: ${{ secrets.OPENCODE_API_KEY }}
+
+  finish:
+    name: Validate the rebased source and build the snapshot bundle
+    needs: [plan, rebase, resolve]
+    if: >-
+      !cancelled() && needs.plan.outputs.action == 'sync' && needs.rebase.result == 'success' &&
+      (needs.rebase.outputs.conflicts != 'true' || needs.resolve.result == 'success')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 300
+    permissions:
+      contents: read
+    env:
+      GH_TOKEN: ${{ github.token }}
+      NYACODE_STATUS_FILE: ${{ runner.temp }}/status/sync-finish.jsonl
+      RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+      CONFLICTS: ${{ needs.rebase.outputs.conflicts }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Fetch the latest snapshot branch when it exists
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          auth=$(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)
+          git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $auth" fetch --quiet --no-tags origin '+refs/heads/sync/upstream-main:refs/remotes/origin/sync/upstream-main' || echo "no snapshot branch yet"
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: engine-sync-plan
+          path: ${{ runner.temp }}/plan
+      - name: Download the resolution when conflicts were resolved
+        if: needs.rebase.outputs.conflicts == 'true'
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: engine-resolution
+          path: ${{ runner.temp }}/resolution
+      - name: Rebuild the rebase deterministically from the plan
+        run: |
+          set +e
+          python3 scripts/engine_sync.py rebase --plan "$RUNNER_TEMP/plan/plan.json" --output "$RUNNER_TEMP/sync"
+          code=$?
+          set -e
+          if [[ "$code" -ne 0 && "$code" -ne 2 ]]; then exit "$code"; fi
+      - name: Read the toolchain the rebased engine pins
+        id: rust
+        run: python3 -c 'import json, os; print("toolchain=" + json.load(open(os.environ["RUNNER_TEMP"] + "/sync/source/engine.lock"))["toolchain"], file=open(os.environ["GITHUB_OUTPUT"], "a"))'
+      - uses: dtolnay/rust-toolchain@e2a55d2ffb04f378e9626c28d38b36d230d1e12f
+        with:
+          toolchain: ${{ steps.rust.outputs.toolchain }}
+      - name: Install Linux build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang libclang-dev cmake libssl-dev pkg-config protobuf-compiler
+      - name: Read the resolver's attribution
+        id: resolution
+        if: needs.rebase.outputs.conflicts == 'true'
+        run: python3 -c 'import json, os; data = json.load(open(os.environ["RUNNER_TEMP"] + "/resolution/resolution.json")); print("kind=ai:" + data["agent"] + "/" + data["model"], file=open(os.environ["GITHUB_OUTPUT"], "a"))'
+      - name: Apply the resolution, export, validate, and build the snapshot
+        run: |
+          args=(finish --plan "$RUNNER_TEMP/plan/plan.json" --dir "$RUNNER_TEMP/sync")
+          if [[ "$CONFLICTS" == "true" ]]; then
+            args+=(--resolution "$RUNNER_TEMP/resolution/resolution.patch" --resolution-kind "$RESOLUTION_KIND")
+          fi
+          python3 scripts/engine_sync.py "${args[@]}"
+        env:
+          RESOLUTION_KIND: ${{ steps.resolution.outputs.kind }}
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: engine-sync-snapshot
+          path: |
+            ${{ runner.temp }}/sync/snapshot.json
+            ${{ runner.temp }}/sync/snapshot.bundle
+          if-no-files-found: error
+          retention-days: 7
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: always()
+        with:
+          name: engine-status-sync-finish
+          path: ${{ runner.temp }}/status/sync-finish.jsonl
+          if-no-files-found: ignore
+          retention-days: 7
+
+  commit:
+    name: Push the verified snapshot to sync/upstream-main
+    needs: finish
+    # Explicit upstream refs are rehearsals; only scheduled and default runs publish.
+    if: >-
+      needs.finish.result == 'success' &&
+      (github.event_name != 'workflow_dispatch' || inputs.upstream_ref == '')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    permissions:
+      # Pushing needs write access; this job runs only trusted scripts and verifies the bundle first.
+      contents: write
+    env:
+      NYACODE_STATUS_FILE: ${{ runner.temp }}/status/sync-commit.jsonl
+      RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: engine-sync-snapshot
+          path: ${{ runner.temp }}/sync
+      - name: Verify the bundle against the sync head and push it
+        run: python3 scripts/engine_sync.py push --dir "$RUNNER_TEMP/sync" --main-ref HEAD
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: always()
+        with:
+          name: engine-status-sync-commit
+          path: ${{ runner.temp }}/status/sync-commit.jsonl
+          if-no-files-found: ignore
+          retention-days: 7
+
+  status:
+    name: Publish the upstream sync status issue
+    if: always() && needs.plan.result == 'success'
+    needs: [plan, rebase, resolve, finish, commit]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      issues: write
+    # Shares the upgrades status issue; one group keeps the single upsert serialized.
+    concurrency:
+      group: engine-upgrades-status
+      cancel-in-progress: false
+    env:
+      NYACODE_STATUS_FILE: ${{ runner.temp }}/status/sync-status.jsonl
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          pattern: engine-status-sync-*
+          path: ${{ runner.temp }}/status
+          merge-multiple: true
+      - name: Record failed or cancelled sync jobs
+        env:
+          RESULTS: ${{ toJSON(needs) }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: python3 scripts/engine_status.py failures
+      - name: Upsert the single upstream sync status issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 scripts/engine_status.py publish --repository "$GITHUB_REPOSITORY" --status-dir "$RUNNER_TEMP/status"

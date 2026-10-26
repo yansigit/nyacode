@@ -279,6 +279,39 @@ def check_renames(stack: Path, old: str, new: str, paths: set[str]) -> None:
             )
 
 
+def write_paths(
+    workspace: Path,
+    stack: Path,
+    paths: set[str],
+    merged: dict[str, tuple[str, str]],
+    known: dict[str, tuple[str, str]],
+) -> list[str]:
+    """Write merged blobs into the workspace (absent paths are removed); returns unknown paths."""
+    added: list[str] = []
+    for path in sorted(paths):
+        destination = located(workspace, path)
+        found = merged.get(path)
+        if destination.is_symlink() or destination.exists():
+            destination.unlink()
+        if found is None:
+            continue
+        mode, oid = found
+        data = git(stack, "cat-file", "blob", oid)
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        if mode == "120000":
+            target = os.fsdecode(data)
+            engine.safe_link(path, target)
+            engine.create_link(destination, target)
+        elif mode in {"100644", "100755"}:
+            destination.write_bytes(data)
+            destination.chmod(0o755 if mode == "100755" else 0o644)
+        else:
+            raise EngineError(f"unsupported mode {mode}: {path}")
+        if path not in known:
+            added.append(path)
+    return added
+
+
 def compose_workspace(
     stage: Path,
     stack: Path,
@@ -302,31 +335,55 @@ def compose_workspace(
     git(workspace, "remote", "remove", "origin")
     git(workspace, "reset", "--quiet", "--hard")
     for paths, merged in merges:
-        added: list[str] = []
-        for path in sorted(paths):
-            destination = located(workspace, path)
-            found = merged.get(path)
-            if destination.is_symlink() or destination.exists():
-                destination.unlink()
-            if found is None:
-                continue
-            mode, oid = found
-            data = git(stack, "cat-file", "blob", oid)
-            destination.parent.mkdir(parents=True, exist_ok=True)
-            if mode == "120000":
-                target = os.fsdecode(data)
-                engine.safe_link(path, target)
-                engine.create_link(destination, target)
-            elif mode in {"100644", "100755"}:
-                destination.write_bytes(data)
-                destination.chmod(0o755 if mode == "100755" else 0o644)
-            else:
-                raise EngineError(f"unsupported mode {mode}: {path}")
-            if path not in new_entries:
-                added.append(path)
+        added = write_paths(workspace, stack, paths, merged, new_entries)
         for start in range(0, len(added), 200):
             git(workspace, "add", "--intent-to-add", "--", *added[start : start + 200])
     return workspace
+
+
+def stage_workspace(workspace: Path) -> None:
+    git(workspace, "-c", "core.filemode=true", "add", "--force", "--all", "--", ".")
+
+
+def workspace_tree(workspace: Path) -> str:
+    """Tree of the workspace's current bytes; the state that resolutions are checked against."""
+    stage_workspace(workspace)
+    return git(workspace, "write-tree").decode().strip()
+
+
+def workspace_changes(workspace: Path, tree: str) -> set[str]:
+    stage_workspace(workspace)
+    return engine.changed_paths(workspace, tree)
+
+
+def tree_names(stack: Path, before: str, after: str) -> set[str]:
+    output = git(stack, "diff", "--name-only", "-z", "--no-renames", before, after)
+    return {os.fsdecode(name) for name in output.split(b"\0") if name}
+
+
+def conflict_paths(report: dict[str, Any]) -> set[str]:
+    return {
+        record["path"]
+        for patch in report.get("patches", [])
+        for record in patch.get("files", [])
+        if record["status"] in CONFLICTED
+    }
+
+
+def resolution_paths(resolution: Path) -> set[str]:
+    """Paths a unified diff touches, read without applying it."""
+    output = engine.git_process(
+        resolution.parent, "apply", "--numstat", str(resolution)
+    )
+    if output.returncode:
+        raise EngineError(
+            f"resolution is not a readable patch: {output.stderr.decode(errors='replace')}"
+        )
+    return {
+        os.fsdecode(line.split(b"\t", 2)[2])
+        for line in output.stdout.splitlines()
+        if line.count(b"\t") >= 2
+    }
 
 
 def totals_for(patches: list[dict[str, Any]]) -> dict[str, int]:
@@ -506,10 +563,11 @@ def build_report(
                 "files": files,
             }
         )
-    compose_workspace(stage, stack, new_commit, new_entries, merges)
+    workspace = compose_workspace(stage, stack, new_commit, new_entries, merges)
     return {
         "schema_version": 1,
         "generated_by": REBASE_GENERATOR,
+        "workspace_tree": workspace_tree(workspace),
         "from": {
             "revision": lock["revision"],
             "archive_sha256": lock["archive_sha256"],
@@ -600,6 +658,244 @@ def unresolved_conflicts(
             ):
                 unresolved.append(path)
     return unresolved
+
+
+FOLD_INPUTS = ("integration/codex", "engine.lock", "inventory/downstream.json")
+FOLD_GENERATED = ("integration/codex/assembly.json", "inventory/downstream.json")
+
+
+def pin_of(lock: dict[str, Any]) -> tuple[Any, Any]:
+    return (lock["revision"], lock["archive_sha256"])
+
+
+def manifest_shape(manifest: dict[str, Any]) -> dict[str, Any]:
+    """A manifest with the per-patch path lists removed; ownership may move, nothing else."""
+    shape = {key: value for key, value in manifest.items() if key != "patches"}
+    shape["patches"] = [
+        {key: value for key, value in entry.items() if key != "paths"}
+        for entry in manifest.get("patches", [])
+    ]
+    return shape
+
+
+def integration_inputs(root: Path) -> dict[str, bytes]:
+    files: dict[str, bytes] = {}
+    base = root / "integration/codex"
+    if base.is_dir():
+        for path in sorted(base.rglob("*")):
+            if path.is_dir() and not path.is_symlink():
+                continue
+            files[path.relative_to(root).as_posix()] = engine.blob(path)
+    downstream = root / "inventory/downstream.json"
+    if downstream.is_file():
+        files["inventory/downstream.json"] = downstream.read_bytes()
+    return files
+
+
+def fold_blockers(base_root: Path, main_root: Path) -> list[str]:
+    """Reasons main's integration changes since base cannot be carried by fold alone.
+
+    Fold carries only patch content edits (and ownership moves) at a shared pin. Anything
+    else main changed in integration/codex, or a different patch set, needs a fresh snapshot.
+    """
+    try:
+        base_lock = engine.load_lock(base_root)
+        main_lock = engine.load_lock(main_root)
+        base_manifest = read_json(located(base_root, base_lock["assembly_manifest"]))
+        main_manifest = read_json(located(main_root, main_lock["assembly_manifest"]))
+        base_entries = patch_entries(base_manifest)
+        main_entries = patch_entries(main_manifest)
+    except (EngineError, OSError, ValueError, KeyError) as error:
+        return [f"unreadable engine inputs: {error}"]
+    blockers = []
+    if pin_of(base_lock) != pin_of(main_lock):
+        blockers.append("pinned upstream revision changed")
+    if [(patch_name(e), e["path"]) for e in base_entries] != [
+        (patch_name(e), e["path"]) for e in main_entries
+    ]:
+        blockers.append("patch set changed")
+    if manifest_shape(base_manifest) != manifest_shape(main_manifest):
+        blockers.append("assembly manifest changed beyond patch path lists")
+    patch_files = {entry["path"] for entry in base_entries}
+    base_inputs = integration_inputs(base_root)
+    main_inputs = integration_inputs(main_root)
+    for name in sorted(set(base_inputs) | set(main_inputs)):
+        if base_inputs.get(name) == main_inputs.get(name):
+            continue
+        if name in patch_files or name in FOLD_GENERATED:
+            continue
+        blockers.append(f"integration input changed: {name}")
+    return blockers
+
+
+def apply_stack(
+    stack: Path, root: Path, pristine: str, entries: list[dict[str, Any]]
+) -> str:
+    """Apply every patch of a stack in order on a pristine commit; returns the tip."""
+    tip = pristine
+    tree = git(stack, "rev-parse", f"{pristine}^{{tree}}").decode().strip()
+    for entry in entries:
+        tip = apply_patch(
+            stack,
+            tip,
+            tree,
+            located(root, entry["path"]),
+            set(entry["paths"]),
+            patch_name(entry),
+        )
+        tree = git(stack, "rev-parse", f"{tip}^{{tree}}").decode().strip()
+    return tip
+
+
+def workspace_commit(workspace: Path, stack: Path) -> str:
+    """Commit the workspace's bytes into the stack so they can take part in a merge."""
+    tree = workspace_tree(workspace)
+    commit = (
+        git(workspace, *IDENTITY, "commit-tree", tree, "-m", "fold ours")
+        .decode()
+        .strip()
+    )
+    git(workspace, "update-ref", "refs/nyacode/fold-ours", commit)
+    git(
+        stack,
+        "fetch",
+        "--quiet",
+        "--no-tags",
+        str(workspace),
+        "+refs/nyacode/fold-ours:refs/nyacode/fold-ours",
+    )
+    return commit
+
+
+def fold(
+    *,
+    output: Path,
+    base_root: Path,
+    main_root: Path,
+    cache_dir: Path | None = None,
+    base_commit: str | None = None,
+    main_commit: str | None = None,
+) -> dict[str, Any]:
+    """Carry main's patch edits since base onto a rebase output, merging per path.
+
+    base is the patch stack at the base commit's pin, theirs is main's stack at the same pin,
+    and ours is the rebased workspace. Paths that the rebase already conflicts are not merged;
+    a main-side edit to such a path is listed under fold.deferred for the resolver.
+    """
+    output = output.absolute()
+    if not is_rebase_output(output):
+        raise EngineError(f"fold needs a rebase output directory: {output}")
+    report_path = output / REPORT_NAME
+    report = read_json(report_path)
+    if "fold" in report:
+        raise EngineError("rebase output was already folded")
+    blockers = fold_blockers(base_root, main_root)
+    if blockers:
+        raise EngineError("cannot fold main-side changes: " + "; ".join(blockers))
+    base_lock = engine.load_lock(base_root)
+    main_lock = engine.load_lock(main_root)
+    cache = (cache_dir or engine.CACHE).resolve()
+    workspace = output / "workspace"
+    stack = output / "stack"
+
+    # The stacks are patched on the pin both sides share; the workspace is patched on the
+    # rebase target, whose pristine tree is the `pristine` branch set by the rebase.
+    pin_commit, _ = import_pristine(
+        stack,
+        engine.archive_for(base_lock, cache),
+        parent=None,
+        message=f"pinned {base_lock['revision']}",
+    )
+    base_entries = patch_entries(
+        read_json(located(base_root, base_lock["assembly_manifest"]))
+    )
+    main_entries = patch_entries(
+        read_json(located(main_root, main_lock["assembly_manifest"]))
+    )
+    base_tip = apply_stack(stack, base_root, pin_commit, base_entries)
+    main_tip = apply_stack(stack, main_root, pin_commit, main_entries)
+    upstream_tree = git(stack, "rev-parse", f"{PRISTINE}^{{tree}}").decode().strip()
+    ours = workspace_commit(workspace, stack)
+    ours_tree = git(stack, "rev-parse", f"{ours}^{{tree}}").decode().strip()
+    base_tree = git(stack, "rev-parse", f"{base_tip}^{{tree}}").decode().strip()
+    main_tree = git(stack, "rev-parse", f"{main_tip}^{{tree}}").decode().strip()
+    merged_tree, conflicted = merge_tree(stack, base_tip, ours, main_tip)
+    changed = tree_names(stack, ours_tree, merged_tree)
+    theirs_changed = tree_names(stack, base_tree, main_tree)
+    vs_pristine = tree_names(stack, upstream_tree, merged_tree)
+
+    owners: dict[str, str] = {}
+    for patch in report["patches"]:
+        for record in patch["files"]:
+            owners.setdefault(record["path"], patch["name"])
+    for entry in base_entries + main_entries:
+        for path in entry["paths"]:
+            owners[path] = patch_name(entry)
+    rebase_conflicts = conflict_paths(report)
+    merged = tree_entries(stack, merged_tree)
+    known = tree_entries(stack, upstream_tree)
+
+    deferred = sorted(path for path in theirs_changed if path in rebase_conflicts)
+    records: dict[str, tuple[str, dict[str, Any]]] = {}
+    assign: dict[str, str] = {}
+    for path in sorted(changed):
+        if path in rebase_conflicts:
+            continue
+        owner = owners.get(path)
+        if owner is None:
+            raise EngineError(f"fold change has no owning patch: {path}")
+        entry = merged.get(path)
+        is_conflict = path in conflicted
+        record: dict[str, Any] = {
+            "path": path,
+            "status": "conflict" if is_conflict else "clean",
+            "conflict_blocks": conflict_blocks(stack, entry) if is_conflict else 0,
+        }
+        if is_conflict:
+            record["merged_blob"] = entry[1] if entry else None
+        records[path] = (owner, record)
+        if path in vs_pristine:
+            assign[path] = owner
+    unexpected = conflicted - set(owners)
+    if unexpected:
+        raise EngineError(
+            f"fold conflicts outside patch ownership: {sorted(unexpected)}"
+        )
+
+    added = write_paths(workspace, stack, set(records), merged, known)
+    for start in range(0, len(added), 200):
+        git(workspace, "add", "--intent-to-add", "--", *added[start : start + 200])
+
+    for patch in report["patches"]:
+        patch["files"] = [f for f in patch["files"] if f["path"] not in records]
+    by_name = {patch["name"]: patch for patch in report["patches"]}
+    for path, (owner, record) in sorted(records.items()):
+        if owner not in by_name:
+            raise EngineError(f"fold owner is missing from the rebase report: {owner}")
+        by_name[owner]["files"].append(record)
+    for patch in report["patches"]:
+        patch["files"].sort(key=lambda item: item["path"])
+        patch["status"] = (
+            "conflict"
+            if any(item["status"] in CONFLICTED for item in patch["files"])
+            else "clean"
+        )
+    report["totals"] = totals_for(report["patches"])
+    report["fold"] = {
+        "pin": {
+            "revision": base_lock["revision"],
+            "archive_sha256": base_lock["archive_sha256"],
+        },
+        "base": base_commit,
+        "main": main_commit,
+        "changed": sorted(records),
+        "deferred": deferred,
+        "conflicted": sorted(path for path in records if path in conflicted),
+        "assign": dict(sorted(assign.items())),
+    }
+    report["workspace_tree"] = workspace_tree(workspace)
+    write_json(report_path, report)
+    return report
 
 
 def export(
@@ -831,6 +1127,22 @@ def run(args: Any) -> int:
         for line in summary_lines(report):
             print(line)
         print(f"output: {output}")
+        return 2 if report["totals"]["conflicted_patches"] else 0
+    if args.command == "fold":
+        report = fold(
+            output=args.output,
+            base_root=args.base_root,
+            main_root=args.main_root,
+            cache_dir=args.cache_dir,
+            base_commit=args.base_commit,
+            main_commit=args.main_commit,
+        )
+        for line in summary_lines(report):
+            print(line)
+        print(
+            f"fold: {len(report['fold']['changed'])} changed paths, "
+            f"{len(report['fold']['deferred'])} deferred to resolution"
+        )
         return 2 if report["totals"]["conflicted_patches"] else 0
     result = export(
         root=root,

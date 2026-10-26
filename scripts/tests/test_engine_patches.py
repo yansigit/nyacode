@@ -3,6 +3,7 @@
 import contextlib
 import io
 import json
+import shutil
 import sys
 import tarfile
 import tempfile
@@ -391,6 +392,202 @@ class RebaseAndExportTest(PatchStackTest):
     def test_export_rejects_non_pristine_workspace(self):
         with self.assertRaisesRegex(engine.EngineError, "not a rebase workspace"):
             engine_patches.export(root=self.root, workspace=self.base / "missing")
+
+
+class FoldTest(PatchStackTest):
+    """Fold carries main's patch edits onto a rebased workspace and reports what it cannot merge."""
+
+    def main_tree(self, edits, manifest_changes=None):
+        """Copy the product root as main would look after the given patch edits."""
+        main = self.base / "main-root"
+        if main.exists():
+            shutil.rmtree(main)
+        shutil.copytree(self.root, main)
+        diff, paths = make_patch(self.files, edits)
+        (main / "integration/codex/patches/documentation.patch").write_bytes(diff)
+        manifest = json.loads((main / self.lock["assembly_manifest"]).read_text())
+        manifest["patches"][0]["paths"] = paths
+        for key, value in (manifest_changes or {}).items():
+            manifest[key] = value
+        (main / self.lock["assembly_manifest"]).write_text(
+            json.dumps(manifest, indent=2, sort_keys=True) + "\n"
+        )
+        return main
+
+    def base_tree(self):
+        base = self.base / "base-root"
+        if base.exists():
+            shutil.rmtree(base)
+        shutil.copytree(self.root, base)
+        return base
+
+    def readme_with(self, edits):
+        lines = README.decode().splitlines(keepends=True)
+        for line, text in edits.items():
+            lines[line - 1] = text + "\n"
+        return "".join(lines).encode()
+
+    def test_main_side_patch_edit_is_carried_and_upstream_edit_kept(self):
+        self.add_patch(
+            "documentation", {"README.md": self.edited_readme(2, "PATCH SIDE")}
+        )
+        base = self.base_tree()
+        main = self.main_tree(
+            {"README.md": self.readme_with({2: "PATCH SIDE", 3: "MAIN THREE"})}
+        )
+        onto = self.upstream_commit(
+            {"README.md": self.edited_readme(28, "UPSTREAM 28")}
+        )
+        output, _ = self.rebase(onto, "fold-clean")
+        report = engine_patches.fold(
+            output=output, base_root=base, main_root=main, cache_dir=self.cache
+        )
+        self.assertEqual(report["fold"]["changed"], ["README.md"])
+        self.assertEqual(report["fold"]["deferred"], [])
+        self.assertEqual(report["totals"]["conflicted_patches"], 0)
+        merged = (output / "workspace/README.md").read_text()
+        for expected in ("PATCH SIDE", "MAIN THREE", "UPSTREAM 28"):
+            self.assertIn(expected, merged)
+        self.assertEqual(report["fold"]["assign"], {"README.md": "documentation"})
+
+    def test_main_added_path_is_written_and_assigned_to_its_owner(self):
+        self.add_patch(
+            "documentation", {"README.md": self.edited_readme(2, "PATCH SIDE")}
+        )
+        base = self.base_tree()
+        main = self.main_tree(
+            {
+                "README.md": self.edited_readme(2, "PATCH SIDE"),
+                "notes/extra.txt": b"extra note\n",
+            }
+        )
+        onto = self.upstream_commit(
+            {"README.md": self.edited_readme(28, "UPSTREAM 28")}
+        )
+        output, _ = self.rebase(onto, "fold-added")
+        report = engine_patches.fold(
+            output=output, base_root=base, main_root=main, cache_dir=self.cache
+        )
+        self.assertEqual(report["fold"]["changed"], ["notes/extra.txt"])
+        self.assertEqual(report["fold"]["assign"], {"notes/extra.txt": "documentation"})
+        self.assertEqual(
+            (output / "workspace/notes/extra.txt").read_text(), "extra note\n"
+        )
+        listed = engine.git(
+            output / "workspace",
+            "ls-tree",
+            "-r",
+            "--name-only",
+            report["workspace_tree"],
+        )
+        self.assertIn(b"notes/extra.txt", listed.split(b"\n"))
+
+    def test_overlapping_main_and_upstream_edits_are_a_reported_conflict(self):
+        self.add_patch(
+            "documentation", {"README.md": self.edited_readme(2, "PATCH SIDE")}
+        )
+        base = self.base_tree()
+        # Edits far apart: the rebase itself is clean, and only main's edit meets upstream's.
+        main = self.main_tree(
+            {"README.md": self.readme_with({2: "PATCH SIDE", 25: "MAIN 25"})}
+        )
+        onto = self.upstream_commit(
+            {"README.md": self.edited_readme(25, "UPSTREAM 25")}
+        )
+        output, _ = self.rebase(onto, "fold-conflict")
+        report = engine_patches.fold(
+            output=output, base_root=base, main_root=main, cache_dir=self.cache
+        )
+        record = next(
+            item
+            for item in report["patches"][0]["files"]
+            if item["path"] == "README.md"
+        )
+        self.assertEqual((record["status"], record["conflict_blocks"]), ("conflict", 1))
+        self.assertEqual(report["fold"]["conflicted"], ["README.md"])
+        self.assertEqual(report["totals"]["conflicted_patches"], 1)
+        self.assertIn("<<<<<<< ", (output / "workspace/README.md").read_text())
+
+    def test_main_edit_to_an_already_conflicted_path_is_deferred(self):
+        self.add_patch(
+            "documentation", {"README.md": self.edited_readme(2, "PATCH SIDE")}
+        )
+        base = self.base_tree()
+        main = self.main_tree(
+            {"README.md": self.readme_with({2: "PATCH SIDE", 4: "MAIN FOUR"})}
+        )
+        onto = self.upstream_commit(
+            {"README.md": self.edited_readme(2, "UPSTREAM SIDE")}
+        )
+        output, rebase_report = self.rebase(onto, "fold-deferred")
+        self.assertEqual(rebase_report["totals"]["conflicted_patches"], 1)
+        report = engine_patches.fold(
+            output=output, base_root=base, main_root=main, cache_dir=self.cache
+        )
+        self.assertEqual(report["fold"]["deferred"], ["README.md"])
+        self.assertEqual(report["totals"]["conflicted_files"], 1)
+        self.assertNotIn("MAIN FOUR", (output / "workspace/README.md").read_text())
+
+    def test_fold_refuses_integration_inputs_it_cannot_carry(self):
+        self.add_patch(
+            "documentation", {"README.md": self.edited_readme(2, "PATCH SIDE")}
+        )
+        base = self.base_tree()
+        main = self.base / "main-extra"
+        shutil.copytree(base, main)
+        (main / "integration/codex/overlays").mkdir()
+        (main / "integration/codex/overlays/note.txt").write_text("new\n")
+        onto = self.upstream_commit({"README.md": self.edited_readme(28, "X")})
+        output, _ = self.rebase(onto, "fold-refused")
+        with self.assertRaisesRegex(engine.EngineError, "integration input changed"):
+            engine_patches.fold(
+                output=output, base_root=base, main_root=main, cache_dir=self.cache
+            )
+        self.assertNotIn(
+            "fold", json.loads((output / "rebase-report.json").read_text())
+        )
+
+    def test_fold_refuses_manifest_changes_beyond_patch_path_lists(self):
+        self.add_patch(
+            "documentation", {"README.md": self.edited_readme(2, "PATCH SIDE")}
+        )
+        base = self.base_tree()
+        main = self.main_tree(
+            {"README.md": self.edited_readme(2, "PATCH SIDE")},
+            {"deletes": ["legacy.txt", "docs/old.md"]},
+        )
+        blockers = engine_patches.fold_blockers(base, main)
+        self.assertIn("assembly manifest changed beyond patch path lists", blockers)
+
+    def test_fold_refuses_a_second_fold(self):
+        self.add_patch(
+            "documentation", {"README.md": self.edited_readme(2, "PATCH SIDE")}
+        )
+        base = self.base_tree()
+        main = self.main_tree(
+            {"README.md": self.readme_with({2: "PATCH SIDE", 3: "MAIN THREE"})}
+        )
+        onto = self.upstream_commit({"README.md": self.edited_readme(28, "X")})
+        output, _ = self.rebase(onto, "fold-twice")
+        engine_patches.fold(
+            output=output, base_root=base, main_root=main, cache_dir=self.cache
+        )
+        with self.assertRaisesRegex(engine.EngineError, "already folded"):
+            engine_patches.fold(
+                output=output, base_root=base, main_root=main, cache_dir=self.cache
+            )
+
+    def test_fold_refuses_a_pin_change(self):
+        self.add_patch(
+            "documentation", {"README.md": self.edited_readme(2, "PATCH SIDE")}
+        )
+        base = self.base_tree()
+        main = self.main_tree({"README.md": self.edited_readme(2, "PATCH SIDE")})
+        lock = json.loads((main / "engine.lock").read_text())
+        lock["revision"] = "c" * 40
+        (main / "engine.lock").write_text(json.dumps(lock, indent=2) + "\n")
+        blockers = engine_patches.fold_blockers(base, main)
+        self.assertIn("pinned upstream revision changed", blockers)
 
 
 class FetchRevisionTest(unittest.TestCase):

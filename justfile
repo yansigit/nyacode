@@ -221,6 +221,17 @@ engine-rebase REV *args:
 engine-export *args:
     {{ python }} {{ justfile_directory() }}/scripts/engine.py export {args}
 
+# Download a sync run's plan, rebase it locally into .engine/sync/RUN, and list conflicts.
+[no-cd]
+sync-resolve run_id:
+    {{ python }} {{ justfile_directory() }}/scripts/engine_sync.py resolve-local --run-id {{ quote(run_id) }} --output {{ quote(justfile_directory() / ".engine/sync" / run_id) }}
+
+# Finish a locally resolved sync run (edit .engine/sync/RUN/rebase/workspace first), then push after y/N.
+[no-cd]
+sync-finish run_id:
+    {{ python }} {{ justfile_directory() }}/scripts/engine_sync.py finish --plan {{ quote(justfile_directory() / ".engine/sync" / run_id / "plan.json") }} --dir {{ quote(justfile_directory() / ".engine/sync" / run_id) }} --resolution-kind human
+    {{ python }} {{ justfile_directory() }}/scripts/engine_sync.py push --dir {{ quote(justfile_directory() / ".engine/sync" / run_id) }} --confirm
+
 # Edits the disposable assembly; copy changes into owned inputs before preparing again.
 [no-cd]
 write-hooks-schema:

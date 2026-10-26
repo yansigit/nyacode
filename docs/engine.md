@@ -152,3 +152,7 @@ because local archives do not carry GitHub's digest. The tool does not regenerat
 `integration/codex/Cargo.lock`, `inventory/downstream.json`, or overlay sources;
 run `just engine-checks` after an export and regenerate the inventory when it reports
 changed ownership.
+
+A daily workflow runs this carry against upstream main and publishes snapshots on
+`sync/upstream-main`, so a stable-tag promotion starts from a nearby snapshot. See
+[the upstream sync runbook](sync-runbook.md).

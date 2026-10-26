@@ -961,6 +961,20 @@ def main() -> int:
         "--assign", action="append", default=[], metavar="PATH=PATCH"
     )
     export_command.add_argument("--accept", action="append", default=[], metavar="PATH")
+    fold_command = subparsers.add_parser(
+        "fold",
+        help="carry main-side patch edits onto a rebase output, merging per path",
+    )
+    fold_command.add_argument("--output", type=Path, required=True)
+    fold_command.add_argument("--base-root", type=Path, required=True)
+    fold_command.add_argument("--main-root", type=Path, required=True)
+    fold_command.add_argument(
+        "--base-commit", help="product commit the base tree came from"
+    )
+    fold_command.add_argument(
+        "--main-commit", help="product commit the main tree came from"
+    )
+    fold_command.add_argument("--root", dest="subroot", type=Path)
     args = parser.parse_args()
     # engine_manifest and engine_patches import this file as `engine`; reuse this module
     # object so that EngineError is the same class when the script runs as __main__.
@@ -979,7 +993,7 @@ def main() -> int:
         "cache_dir": args.cache_dir,
     }
     try:
-        if args.command in {"rebase", "export"}:
+        if args.command in {"rebase", "export", "fold"}:
             import engine_patches
 
             return engine_patches.run(args)
