@@ -264,6 +264,7 @@ class PromotionTest(unittest.TestCase):
             lambda f: f["pr"]["head"].update(ref="unrelated"),
             lambda f: f["pr"].update(draft=True),
             lambda f: f["pr"].update(state="closed"),
+            lambda f: f["pr"].update(labels=[{"name": "engine:reject"}]),
         ):
             fixture = qualification()
             mutate(fixture)
@@ -1122,6 +1123,20 @@ class GhCommandTest(unittest.TestCase):
             self.assertEqual([call.args for call in sleep.call_args_list], [(2,), (8,)])
             self.assertEqual(error.exception.status, status)
             self.assertIn(message.decode(), stderr.getvalue())
+
+    def test_writes_are_not_retried(self):
+        run_patch, sleep_patch, stderr_patch = self.call(
+            [subprocess.CompletedProcess([], 1, b"", b"HTTP 502 Bad Gateway")]
+        )
+        with (
+            run_patch as run,
+            sleep_patch as sleep,
+            stderr_patch,
+            self.assertRaises(candidates.GhError),
+        ):
+            candidates.api(f"repos/{REPOSITORY}/merges", data={"sha": HEAD})
+        self.assertEqual(run.call_count, 1)
+        sleep.assert_not_called()
 
     def test_non_transient_failures_fail_immediately_with_parsed_status(self):
         run_patch, sleep_patch, stderr_patch = self.call(

@@ -169,6 +169,7 @@ def validate_promotion(
     if (
         pr["state"] != "open"
         or pr["draft"]
+        or has_label(pr, "engine:reject")
         or pr["head"]["repo"]["full_name"] != repository
         or pr["head"]["ref"] != f"engine/{tag}"
         or pr["base"]["sha"] != current_base
@@ -235,7 +236,7 @@ def command(args: list[str], *, data: dict | None = None, raw: bool = False):
             return result.stdout if raw else json.loads(result.stdout)
         text = result.stderr.decode(errors="replace")
         sys.stderr.write(text)
-        if delay is None or not TRANSIENT.search(text):
+        if delay is None or data is not None or not TRANSIENT.search(text):
             raise GhError(result.returncode, args, result.stderr)
         time.sleep(delay)
 
