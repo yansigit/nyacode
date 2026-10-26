@@ -33,10 +33,11 @@ jobs:
       action: ${{ steps.plan.outputs.action }}
     env:
       GH_TOKEN: ${{ github.token }}
-      NYACODE_STATUS_FILE: ${{ runner.temp }}/status/sync-plan.jsonl
       RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
       UPSTREAM_REF: ${{ inputs.upstream_ref || '' }}
     steps:
+      - name: Select the status file
+        run: echo "NYACODE_STATUS_FILE=$RUNNER_TEMP/status/sync-plan.jsonl" >> "$GITHUB_ENV"
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
@@ -82,9 +83,10 @@ jobs:
       conflicts: ${{ steps.rebase.outputs.conflicts }}
     env:
       GH_TOKEN: ${{ github.token }}
-      NYACODE_STATUS_FILE: ${{ runner.temp }}/status/sync-rebase.jsonl
       RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
     steps:
+      - name: Select the status file
+        run: echo "NYACODE_STATUS_FILE=$RUNNER_TEMP/status/sync-rebase.jsonl" >> "$GITHUB_ENV"
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
@@ -153,10 +155,11 @@ jobs:
       contents: read
     env:
       GH_TOKEN: ${{ github.token }}
-      NYACODE_STATUS_FILE: ${{ runner.temp }}/status/sync-finish.jsonl
       RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
       CONFLICTS: ${{ needs.rebase.outputs.conflicts }}
     steps:
+      - name: Select the status file
+        run: echo "NYACODE_STATUS_FILE=$RUNNER_TEMP/status/sync-finish.jsonl" >> "$GITHUB_ENV"
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
@@ -230,9 +233,10 @@ jobs:
       # Pushing needs write access; this job runs only trusted scripts and verifies the bundle first.
       contents: write
     env:
-      NYACODE_STATUS_FILE: ${{ runner.temp }}/status/sync-commit.jsonl
       RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
     steps:
+      - name: Select the status file
+        run: echo "NYACODE_STATUS_FILE=$RUNNER_TEMP/status/sync-commit.jsonl" >> "$GITHUB_ENV"
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
@@ -263,9 +267,9 @@ jobs:
     concurrency:
       group: engine-upgrades-status
       cancel-in-progress: false
-    env:
-      NYACODE_STATUS_FILE: ${{ runner.temp }}/status/sync-status.jsonl
     steps:
+      - name: Select the status file
+        run: echo "NYACODE_STATUS_FILE=$RUNNER_TEMP/status/sync-status.jsonl" >> "$GITHUB_ENV"
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
