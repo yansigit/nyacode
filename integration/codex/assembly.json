@@ -77,28 +77,28 @@
       "destination": ".github/workflows/container-verify.yml",
       "mode": "100644",
       "replace": false,
-      "sha256": "fb39d0ecad65212f7645df47f842f86c36f4b9fe7ed4461162a9ff912d1d5e27",
+      "sha256": "585dbfb3c96725161f7e575ca1c09e84b9c1993c4744344a09490e8063fa79ad",
       "source": ".github/workflows/container-verify.yml"
     },
     {
       "destination": ".github/workflows/native-providers.yml",
       "mode": "100644",
       "replace": false,
-      "sha256": "3b1274ba23878462e4f531d4ca400e9877d97f4ae1eaf34f4d94b137206e766b",
+      "sha256": "9801bce64d9c2bb57c7a2294e3d9f5151d3a5b1cbb0509b091002f002d4a0ff1",
       "source": ".github/workflows/native-providers.yml"
     },
     {
       "destination": ".github/workflows/nyacode-release.yml",
       "mode": "100644",
       "replace": false,
-      "sha256": "53f45d537844727cc3ca69319bea6d2637c4f1c39915c9b4efee13dcba1591cc",
+      "sha256": "8832bb5e7cde6b5f69be14a2666457232f68963bc5c0142cb99e6d280a663855",
       "source": ".github/workflows/nyacode-release.yml"
     },
     {
       "destination": "Containerfile",
       "mode": "100644",
       "replace": false,
-      "sha256": "9e41d593cc57f8444bb413eb671a685fb102f563ea30f7f538b0f9f3ecc77768",
+      "sha256": "3a2f37a4e08cdd9f2537b38e3ee86ede9dbd2d56c1c4166760175b78b0644fce",
       "source": "Containerfile"
     },
     {
@@ -2758,14 +2758,14 @@
       "destination": "docs/native-providers/account-pools.md",
       "mode": "100644",
       "replace": false,
-      "sha256": "dd23b876ec1e6dcfea132970f00aa9de4c6aa35dc95371284a18bc956093930c",
+      "sha256": "7729406d32e0b66deae94f38435b39668b92a2e2e9abefc27df4cd5d34c7c9db",
       "source": "docs/native-providers/account-pools.md"
     },
     {
       "destination": "docs/native-providers/coverage-matrix.md",
       "mode": "100644",
       "replace": false,
-      "sha256": "4f18adaa8c8fd3ff4634ff928e126aca43b09a2821441871fd54c65848abfdff",
+      "sha256": "0c48d9f9ef3ea8860bec2b3813c90c90a6cf1b71f9b828ab677792f7e675f1fe",
       "source": "docs/native-providers/coverage-matrix.md"
     },
     {
@@ -2779,7 +2779,7 @@
       "destination": "docs/native-providers/ledger.md",
       "mode": "100644",
       "replace": false,
-      "sha256": "6809400b51d4e2e3dd3bf1e4d2460691f12e1bd66e3e1cfd1b10c653a1e2aae7",
+      "sha256": "6470c0ebf357b75c3fd5878723f18ab31ea7c98a22d22e8175862e932793c5c2",
       "source": "docs/native-providers/ledger.md"
     },
     {
@@ -2800,21 +2800,21 @@
       "destination": "docs/native-providers/multi-provider-agents.md",
       "mode": "100644",
       "replace": false,
-      "sha256": "d609d48853af5e39480b2990356d8c52021cde9b8b1f1e535570ad62e907a1ef",
+      "sha256": "d8d8fd10d63e236353144be2674b71a5919a4b65861981ad498aa90a85b56c12",
       "source": "docs/native-providers/multi-provider-agents.md"
     },
     {
       "destination": "docs/native-providers/refactor-architecture.md",
       "mode": "100644",
       "replace": false,
-      "sha256": "18ac0bfbdf533c5aa8fba630c0a96420ee6db0afc293852c48d22d396093d424",
+      "sha256": "89e3cd6cc5814df8ba41baf94296b2d1788f60ebb0240796064adcd84e4de94c",
       "source": "docs/native-providers/refactor-architecture.md"
     },
     {
       "destination": "docs/native-providers/refactor-baseline.md",
       "mode": "100644",
       "replace": false,
-      "sha256": "fa3167a1378400e3184e17e051982240ec6604ec072cb4e40e93bfd808e8963d",
+      "sha256": "b09e93f1993fae2752c0142ff8a727cec1deebb789b7a9d69096467eb0127ed0",
       "source": "docs/native-providers/refactor-baseline.md"
     },
     {
@@ -2835,7 +2835,7 @@
       "destination": "docs/native-providers/usage.md",
       "mode": "100644",
       "replace": false,
-      "sha256": "94b06b3351a5ccc14b23ad652f30b80ad34a4707caaf12bd3c2c353117002d0b",
+      "sha256": "2a8f40c27d3c614a3211b306a69152ba1ba766fa26eeb2aa551e4e9aedb92312",
       "source": "docs/native-providers/usage.md"
     },
     {
@@ -2849,7 +2849,7 @@
       "destination": "docs/releases.md",
       "mode": "100644",
       "replace": false,
-      "sha256": "d0b28770074793db884fa8935f6f45a2e8dc2bf608c770ab1e6dece8fa9f8b19",
+      "sha256": "fc06b47667974b528ed973be9724eb4f039cc7f1a860664c03eb3b377fbf4244",
       "source": "docs/releases.md"
     },
     {
@@ -2926,18 +2926,21 @@
       "destination": "scripts/build_nyacode.py",
       "mode": "100644",
       "replace": false,
+      "sha256": "1f957159abe0a7b1cb221d34805604383830166df4647819115d5d16225a8537",
       "source": "scripts/build_nyacode.py"
     },
     {
       "destination": "scripts/codex_package/test_dotslash.py",
       "mode": "100644",
       "replace": false,
+      "sha256": "7da5c762700452c1800f3c4163607abb7c2ef6c8c73c6294c0bd0797298d9e4c",
       "source": "scripts/codex_package/test_dotslash.py"
     },
     {
       "destination": "scripts/native_provider_acceptance.py",
       "mode": "100755",
       "replace": false,
+      "sha256": "acb227c23616a385c7454d4a653958c14bce3118694bd6b1e487578c3a2795c0",
       "source": "scripts/native_provider_acceptance.py"
     },
     {
@@ -2951,24 +2954,28 @@
       "destination": "scripts/native_provider_checks.py",
       "mode": "100644",
       "replace": false,
+      "sha256": "dc20b320ef789cf001f0e89e60a122044ed6df53b65473482fc321effa22bbff",
       "source": "scripts/native_provider_checks.py"
     },
     {
       "destination": "scripts/native_provider_multiagent_acceptance.py",
       "mode": "100644",
       "replace": false,
+      "sha256": "d5ab43397d56fdbcaa1e6d0b6d1337620f8c8fb0d74583f70353d2cf17fcbb03",
       "source": "scripts/native_provider_multiagent_acceptance.py"
     },
     {
       "destination": "scripts/native_provider_upstream_probe.py",
       "mode": "100644",
       "replace": false,
+      "sha256": "9361f853fe658a10c9cb39fcc98f78fd79394294c9d4fe374f9ac3afc6f9ddaf",
       "source": "scripts/native_provider_upstream_probe.py"
     },
     {
       "destination": "scripts/nyacode_release.py",
       "mode": "100644",
       "replace": false,
+      "sha256": "37d12ed4757363d49e8310dd3a12d24c3953f9e76f9cbba0c867df63eadd808d",
       "source": "scripts/nyacode_release.py"
     },
     {
@@ -2982,24 +2989,28 @@
       "destination": "scripts/tests/test_native_provider_checks.py",
       "mode": "100644",
       "replace": false,
+      "sha256": "ea6fece3413efdf32cfb5134ed6bf9a6ad5b020449577c2800ed720ec335c4af",
       "source": "scripts/tests/test_native_provider_checks.py"
     },
     {
       "destination": "scripts/tests/test_native_provider_multiagent.py",
       "mode": "100644",
       "replace": false,
+      "sha256": "0e2d10c22c754f3bd0c5f09fb1a5f170beb1d50919ff45eef5137bd14eac4518",
       "source": "scripts/tests/test_native_provider_multiagent.py"
     },
     {
       "destination": "scripts/tests/test_native_provider_upstream_probe.py",
       "mode": "100644",
       "replace": false,
+      "sha256": "2544801e24ff262f60893f4a90a946e27c7259695c9a35ecf94fb7d323f572ba",
       "source": "scripts/tests/test_native_provider_upstream_probe.py"
     },
     {
       "destination": "scripts/tests/test_nyacode_branding.py",
       "mode": "100644",
       "replace": false,
+      "sha256": "a925f003cf6a26533479d9cde4239e7b8697570c864025a8284ca27810f869aa",
       "source": "scripts/tests/test_nyacode_branding.py"
     },
     {
@@ -3027,6 +3038,7 @@
       "destination": "scripts/verify_container.py",
       "mode": "100755",
       "replace": false,
+      "sha256": "6623d661768b5806af534047d61a504ba2b89f4a08eef48f93cbc3b1ebf8b5a1",
       "source": "scripts/verify_container.py"
     },
     {

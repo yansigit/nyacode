@@ -95,8 +95,17 @@ class EngineTest(unittest.TestCase):
                 "destination": destination,
                 "replace": replace,
                 "mode": mode,
+                "sha256": engine.digest(engine.blob(self.root / source)),
             }
         )
+        self.save_inputs()
+
+    def refresh_overlay_hashes(self):
+        """Record reviewed overlay source bytes, as `manifest --write` does."""
+        for overlay in self.manifest["overlays"]:
+            overlay["sha256"] = engine.digest(
+                engine.blob(self.root / overlay["source"])
+            )
         self.save_inputs()
 
     def add_patch(self, contents, paths, name="change.patch"):
@@ -142,10 +151,23 @@ class EngineTest(unittest.TestCase):
         old_hash = engine.assembly_report(output)["input_sha256"]
         (output / "stray-build-file").write_text("stale")
         self.write("owned/README.md", "second\n")
+        self.refresh_overlay_hashes()
         self.prepare()
         self.assertEqual((output / "README.md").read_text(), "second\n")
         self.assertFalse((output / "stray-build-file").exists())
         self.assertNotEqual(engine.assembly_report(output)["input_sha256"], old_hash)
+
+    def test_overlay_source_edit_without_manifest_refresh_fails_closed(self):
+        self.write("owned/README.md", "reviewed\n")
+        self.overlay()
+        output = self.prepare()
+        self.write("owned/README.md", "unreviewed\n")
+        with self.assertRaisesRegex(
+            engine.EngineError,
+            r"sha256 does not match assembly manifest: owned/README.md.*manifest --write",
+        ):
+            self.prepare()
+        self.assertEqual((output / "README.md").read_text(), "reviewed\n")
 
     def test_failed_patch_preserves_last_good_output_and_diagnostics(self):
         output = self.prepare()
@@ -327,6 +349,7 @@ class EngineTest(unittest.TestCase):
         for source in ("// missing binding\n", marker * 2):
             with self.subTest(source=source):
                 self.write("owned/catalog.rs", source)
+                self.refresh_overlay_hashes()
                 with self.assertRaisesRegex(
                     engine.EngineError, "exactly one engine catalog"
                 ):
