@@ -1,10 +1,47 @@
 # Installing and building Nyacode
 
-Build from source until this fork publishes its own release packages. Upstream Codex installers and packages do not contain Nyacode's native provider features.
+Install a published release with the standalone installer, or build from source. Upstream Codex installers and packages do not contain Nyacode's native provider features.
 
 The [release pipeline](releases.md) builds optimized packages for Linux, macOS,
 and Windows on x64 and ARM64. Manual workflow runs produce downloadable test
 artifacts; matching `rust-vX.Y.Z` tags publish GitHub Releases after validation.
+
+## Install a release
+
+On macOS or Linux:
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/yansigit/nyacode/main/scripts/install/install.sh | sh
+```
+
+On Windows (PowerShell):
+
+```powershell
+irm https://raw.githubusercontent.com/yansigit/nyacode/main/scripts/install/install.ps1 | iex
+```
+
+The installers download the matching package from **yansigit/nyacode** GitHub releases, verify it against the release's SHA-256 checksums, and add the command directory to `PATH`. They never fall back to OpenAI's release service. macOS packages are not notarized and Windows packages are not Authenticode signed, so the OS may show a trust prompt.
+
+To install a specific version, including prereleases:
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/yansigit/nyacode/main/scripts/install/install.sh | sh -s -- --release 0.1.0
+```
+
+```powershell
+$env:NYACODE_RELEASE = "0.1.0"; irm https://raw.githubusercontent.com/yansigit/nyacode/main/scripts/install/install.ps1 | iex
+```
+
+Both installers read these environment variables:
+
+| Variable                  | Purpose                                                                                       |
+| ------------------------- | --------------------------------------------------------------------------------------------- |
+| `NYACODE_RELEASE`         | Version to install (default `latest`); `--release` / `-Release` takes precedence.             |
+| `NYACODE_INSTALL_DIR`     | Command directory (default `~/.local/bin`; on Windows `%LOCALAPPDATA%\Programs\Nyacode\bin`). |
+| `NYACODE_HOME`            | Private state directory (default `~/.nyacode`).                                               |
+| `NYACODE_NON_INTERACTIVE` | Set to `1`, `true`, or `yes` to skip prompts.                                                 |
+
+Legacy `CODEX_` aliases remain supported. Run the installer again to upgrade.
 
 ## Build from source
 
@@ -46,18 +83,17 @@ NYACODE_HOME=/path/to/nyacode-home nyacode
 
 ## Standalone installers and npm
 
-The checked-in `scripts/install/install.sh` and `install.ps1` install the `nyacode` command from **yansigit/nyacode** GitHub releases. They retain the native archive layout for compatibility and never fall back to OpenAI's release service. They require a matching release to have been published first.
+The [one-line installs](#install-a-release) fetch the checked-in `scripts/install/install.sh` and `install.ps1`. They retain the native archive layout for compatibility. An explicit `--release` version must already be published on GitHub.
 
-Once a release is published, run the installer from this checkout:
+The same installers can run from a checkout:
 
 ```sh
 sh scripts/install/install.sh --release latest
 ```
 
 On Windows, run `pwsh -File scripts/install/install.ps1 -Release latest`.
-To select a prerelease, replace `latest` with its explicit version. Release
-archives can also be downloaded from GitHub; retain their directory layout so
-the CLI can find its bundled helpers.
+Release archives can also be downloaded from GitHub; retain their directory
+layout so the CLI can find its bundled helpers.
 
 The npm launcher and TypeScript SDK target `@yansigit/nyacode` and `@yansigit/nyacode-sdk`. These names are distribution configuration, not a claim that a package is already published. There is no Nyacode Homebrew cask configured.
 
