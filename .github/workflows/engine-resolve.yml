@@ -1,0 +1,182 @@
+name: Engine resolve
+
+on:
+  workflow_call:
+    inputs:
+      plan_artifact:
+        description: Artifact name holding plan.json for the upstream rebase.
+        type: string
+        required: true
+      agent:
+        description: AI resolver CLI, cursor or opencode. Claude and Anthropic are not supported.
+        type: string
+        required: true
+      model:
+        description: Model for the selected CLI. Claude and Anthropic model names are refused.
+        type: string
+        required: true
+      cli_version:
+        description: Pinned CLI version. An exact opencode-ai version, or the version string the installed Cursor agent must report.
+        type: string
+        required: false
+        default: ""
+    secrets:
+      CURSOR_API_KEY:
+        description: Cursor CLI key, exposed only to the Cursor step.
+        required: false
+      OPENCODE_API_KEY:
+        description: OpenCode provider key, exposed only to the OpenCode step.
+        required: false
+    outputs:
+      resolved:
+        description: "true when resolution.patch was produced and every deterministic check passed."
+        value: ${{ jobs.resolve.outputs.resolved }}
+
+permissions:
+  contents: read
+
+jobs:
+  resolve:
+    name: AI conflict resolution without write credentials
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    permissions:
+      contents: read
+      actions: read
+    outputs:
+      resolved: ${{ steps.cursor.outputs.resolved || steps.opencode.outputs.resolved }}
+    steps:
+      # Trusted scripts and agent templates come from the default branch, never from the plan.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.15.0"
+      - name: Read the Rust toolchain pin
+        id: toolchain
+        run: python3 -c 'import json, os; print("toolchain=" + json.load(open("engine.lock"))["toolchain"], file=open(os.environ["GITHUB_OUTPUT"], "a"))'
+      - uses: dtolnay/rust-toolchain@e2a55d2ffb04f378e9626c28d38b36d230d1e12f
+        with:
+          toolchain: ${{ steps.toolchain.outputs.toolchain }}
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        if: inputs.agent == 'opencode'
+        with:
+          node-version: 26.11.1
+      - name: Install the pinned OpenCode CLI
+        if: inputs.agent == 'opencode'
+        env:
+          CLI_VERSION: ${{ inputs.cli_version }}
+        run: |
+          set -euo pipefail
+          if [[ ! "$CLI_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "::error::cli_version must be an exact opencode-ai version such as 1.2.3" >&2
+            exit 1
+          fi
+          npm install --global "opencode-ai@${CLI_VERSION}"
+          opencode --version | grep -qF -- "$CLI_VERSION"
+      - name: Install the Cursor CLI from a reviewed installer
+        if: inputs.agent == 'cursor'
+        env:
+          CLI_VERSION: ${{ inputs.cli_version }}
+        run: |
+          set -euo pipefail
+          expected="$(tr -d '[:space:]' < integration/codex/agent/cursor-install.sha256)"
+          if [[ "$expected" == "UNPINNED" || ! "$expected" =~ ^[0-9a-f]{64}$ ]]; then
+            echo "::error::The Cursor installer is not pinned. Review https://cursor.com/install and commit its SHA-256 to integration/codex/agent/cursor-install.sha256." >&2
+            exit 1
+          fi
+          if [[ -z "$CLI_VERSION" ]]; then
+            echo "::error::cli_version is required for the Cursor CLI" >&2
+            exit 1
+          fi
+          installer="$RUNNER_TEMP/cursor-install.sh"
+          curl --proto '=https' --tlsv1.2 -fsSL https://cursor.com/install -o "$installer"
+          actual="$(sha256sum "$installer" | cut -d' ' -f1)"
+          if [[ "$actual" != "$expected" ]]; then
+            echo "::error::Cursor installer SHA-256 mismatch: expected $expected, got $actual" >&2
+            exit 1
+          fi
+          bash "$installer"
+          # The installer has no documented version selector, so the installed build must report the pin.
+          export PATH="$HOME/.local/bin:$HOME/.cursor/bin:$PATH"
+          binary="$(command -v agent || command -v cursor-agent || true)"
+          if [[ -z "$binary" ]]; then
+            echo "::error::The Cursor CLI was not installed" >&2
+            exit 1
+          fi
+          "$binary" --version | tee "$RUNNER_TEMP/cursor-version.txt"
+          if ! grep -qF -- "$CLI_VERSION" "$RUNNER_TEMP/cursor-version.txt"; then
+            echo "::error::The installed Cursor CLI does not report cli_version $CLI_VERSION" >&2
+            exit 1
+          fi
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+          echo "$HOME/.cursor/bin" >> "$GITHUB_PATH"
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: ${{ inputs.plan_artifact }}
+          path: ${{ runner.temp }}/plan
+      - name: Carry the patch stack onto the planned upstream revision
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -uo pipefail
+          status=0
+          python3 scripts/engine_sync.py rebase --plan "$RUNNER_TEMP/plan/plan.json" --output "$RUNNER_TEMP/sync" || status=$?
+          # Exit 2 reports conflicts, which this job resolves; any other failure stops the job.
+          if [[ "$status" -ne 0 && "$status" -ne 2 ]]; then
+            exit "$status"
+          fi
+      - name: Fetch locked dependencies for the validation command
+        run: |
+          set -euo pipefail
+          # Prepare copies the assembled lock into place; a lock that needs updating fails here.
+          cp integration/codex/Cargo.lock "$RUNNER_TEMP/sync/workspace/codex-rs/Cargo.lock"
+          cargo fetch --locked --manifest-path "$RUNNER_TEMP/sync/workspace/codex-rs/Cargo.toml"
+      - name: Resolve conflicts with Cursor (only CURSOR_API_KEY is exposed)
+        id: cursor
+        if: inputs.agent == 'cursor'
+        env:
+          CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
+          MODEL: ${{ inputs.model }}
+          NYACODE_STATUS_FILE: ${{ runner.temp }}/status/resolve.jsonl
+        run: |
+          set -euo pipefail
+          python3 scripts/engine_resolve.py --dir "$RUNNER_TEMP/sync" --agent cursor --model "$MODEL" \
+            --out "$RUNNER_TEMP/resolve/resolution.patch" --max-blocks 60 --iterations 2 \
+            --timeout 900 --validate-cmd "cargo check --offline --manifest-path codex-rs/Cargo.toml" \
+            --validate-timeout 480
+          echo "resolved=true" >> "$GITHUB_OUTPUT"
+      - name: Resolve conflicts with OpenCode (only OPENCODE_API_KEY is exposed)
+        id: opencode
+        if: inputs.agent == 'opencode'
+        env:
+          OPENCODE_API_KEY: ${{ secrets.OPENCODE_API_KEY }}
+          MODEL: ${{ inputs.model }}
+          NYACODE_STATUS_FILE: ${{ runner.temp }}/status/resolve.jsonl
+        run: |
+          set -euo pipefail
+          python3 scripts/engine_resolve.py --dir "$RUNNER_TEMP/sync" --agent opencode --model "$MODEL" \
+            --out "$RUNNER_TEMP/resolve/resolution.patch" --max-blocks 60 --iterations 2 \
+            --timeout 900 --validate-cmd "cargo check --offline --manifest-path codex-rs/Cargo.toml" \
+            --validate-timeout 480
+          echo "resolved=true" >> "$GITHUB_OUTPUT"
+      - name: Retain the resolution and its evidence
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: engine-resolution
+          path: |
+            ${{ runner.temp }}/resolve/resolution.patch
+            ${{ runner.temp }}/resolve/resolution.json
+          if-no-files-found: warn
+          retention-days: 7
+      - name: Retain upstream sync status events
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: engine-status-resolve-${{ inputs.agent }}
+          path: ${{ runner.temp }}/status/resolve.jsonl
+          if-no-files-found: ignore
+          retention-days: 7

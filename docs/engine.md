@@ -156,3 +156,62 @@ changed ownership.
 A daily workflow runs this carry against upstream main and publishes snapshots on
 `sync/upstream-main`, so a stable-tag promotion starts from a nearby snapshot. See
 [the upstream sync runbook](sync-runbook.md).
+
+## AI-assisted conflict resolution
+
+`engine-resolve` (`.github/workflows/engine-resolve.yml`) is a reusable workflow that
+asks a coding agent to resolve the conflict markers left by a rebase. Only the Cursor
+CLI and OpenCode are supported. Claude and Anthropic are not used, and the resolver
+refuses any model name containing `claude`, `anthropic`, `opus`, `sonnet`, or `haiku`.
+
+Caller configuration:
+
+- `NYACODE_RESOLVER_AGENT=cursor|opencode` selects the CLI and is passed as `agent`.
+- `NYACODE_RESOLVER_MODEL` is the model for that CLI: a Cursor model name, or
+  `provider/model` for OpenCode.
+- Secret `CURSOR_API_KEY` for Cursor, or `OPENCODE_API_KEY` for OpenCode. Each secret
+  is exposed only to its own step. Other provider keys are not forwarded.
+- `cli_version` pins the CLI. For OpenCode it is an exact `opencode-ai` npm version, and
+  the step fails unless `opencode --version` reports it. For Cursor, the installer is
+  checked against `integration/codex/agent/cursor-install.sha256`, which holds
+  `UNPINNED` until a reviewer commits the SHA-256 of the reviewed installer. The
+  installed `agent --version` must also contain `cli_version`.
+
+Run it locally, from a rebase output and with the CLI and key available:
+
+```sh
+python3 scripts/engine_resolve.py --dir .engine/rebase/<rev> --agent opencode \
+  --model provider/model --out .engine/rebase/<rev>/resolution.patch \
+  --validate-cmd "cargo check --offline --manifest-path codex-rs/Cargo.toml"
+```
+
+The resolver edits only the files the report lists as conflicted, up to `--iterations`
+attempts (default 3). A rebase with more than `--max-blocks` conflict blocks (default
+60), any modify/delete conflict, or a conflict without text markers exits 3 for a
+human. A timeout, or failure after the last attempt, exits 4. Success exits 0 and
+writes `resolution.patch` and `resolution.json` (agent, model, attempts, durations).
+The workflow uploads both as the `engine-resolution` artifact.
+
+Security model:
+
+- The agent job has only `contents: read` and `actions: read`, with
+  `persist-credentials: false`. The agent process receives a minimal environment: PATH,
+  HOME, the Rust variables, and its own key. No GitHub token reaches it.
+- The agent's writes are limited to the conflicted files. Its config comes from
+  trusted templates in `integration/codex/agent`, read from the default branch, and is
+  removed after the run. Its config denies `.cursor`, `.github`, and `opencode.json`.
+  The OpenCode template sets no `ask` values, and a test asserts that. Whether OpenCode
+  prompts for tools the template does not list must be verified in a live run.
+- Each attempt is checked. Edits outside the conflicted files are reverted and count
+  as a failure. Conflict markers must be gone; markers that already existed outside
+  conflict blocks are allowed. The validation command must pass. Failure output is
+  passed back, truncated, as untrusted data inside delimited blocks.
+- `resolution.patch` contains only the conflicted files' diff against the rebase output.
+  The resolver checks that it applies to that output. A downstream validator job must
+  re-run the rebase, apply the patch, and repeat the checks without any agent
+  credentials before anything is merged. This workflow publishes nothing.
+- A merge that contains AI resolutions always requires human approval.
+
+The agent may not run shell commands, so no build script ever runs with the agent's
+key in its environment. The resolver runs the validation command itself, without any
+agent key, and feeds failures back to the agent on the next iteration.
