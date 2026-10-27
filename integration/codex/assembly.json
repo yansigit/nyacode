@@ -13146,6 +13146,7 @@
         "codex-rs/core/src/turn_diff_tracker_tests.rs",
         "codex-rs/core/src/turn_timing.rs",
         "codex-rs/core/tests/suite/hooks.rs",
+        "codex-rs/core/tests/suite/scenarios.rs",
         "codex-rs/core/tests/suite/snapshots/all__suite__scenarios__agent_eviction__idle_eviction_followup.snap",
         "codex-rs/core/tests/suite/snapshots/all__suite__scenarios__agent_message_board__remote__remote_board_permissions_direct.snap",
         "codex-rs/core/tests/suite/snapshots/all__suite__scenarios__child_completion_wakes_parent_after_final_answer.snap",

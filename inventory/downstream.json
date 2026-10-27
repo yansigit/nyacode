@@ -17830,6 +17830,25 @@
       "change": "modified",
       "destination": {
         "kind": "patch",
+        "patch": "integration/codex/patches/thread_model_child_routing.patch",
+        "path": "codex-rs/core/tests/suite/scenarios.rs"
+      },
+      "git_status": "M",
+      "mode_changed": false,
+      "owner": "codex-rs",
+      "path": "codex-rs/core/tests/suite/scenarios.rs",
+      "purpose": "thread_model_child_routing",
+      "regression_groups": [
+        "thread_model_child_routing"
+      ],
+      "source": null,
+      "upstream_source": null
+    },
+    {
+      "artifact": "source",
+      "change": "modified",
+      "destination": {
+        "kind": "patch",
         "patch": "integration/codex/patches/backend_dispatch.patch",
         "path": "codex-rs/core/tests/suite/scenarios_mailbox_preemption_tests.rs"
       },
