@@ -95,8 +95,17 @@ class EngineTest(unittest.TestCase):
                 "destination": destination,
                 "replace": replace,
                 "mode": mode,
+                "sha256": engine.digest(engine.blob(self.root / source)),
             }
         )
+        self.save_inputs()
+
+    def refresh_overlay_hashes(self):
+        """Record reviewed overlay source bytes, as `manifest --write` does."""
+        for overlay in self.manifest["overlays"]:
+            overlay["sha256"] = engine.digest(
+                engine.blob(self.root / overlay["source"])
+            )
         self.save_inputs()
 
     def add_patch(self, contents, paths, name="change.patch"):
@@ -142,10 +151,23 @@ class EngineTest(unittest.TestCase):
         old_hash = engine.assembly_report(output)["input_sha256"]
         (output / "stray-build-file").write_text("stale")
         self.write("owned/README.md", "second\n")
+        self.refresh_overlay_hashes()
         self.prepare()
         self.assertEqual((output / "README.md").read_text(), "second\n")
         self.assertFalse((output / "stray-build-file").exists())
         self.assertNotEqual(engine.assembly_report(output)["input_sha256"], old_hash)
+
+    def test_overlay_source_edit_with_stale_digest_records_actual_bytes(self):
+        self.write("owned/README.md", "reviewed\n")
+        self.overlay()
+        self.prepare()
+        self.write("owned/README.md", "edited\n")
+        output = self.prepare()
+        self.assertEqual((output / "README.md").read_text(), "edited\n")
+        self.assertEqual(
+            engine.assembly_report(output)["inputs"]["owned/README.md"]["sha256"],
+            engine.digest(b"edited\n"),
+        )
 
     def test_failed_patch_preserves_last_good_output_and_diagnostics(self):
         output = self.prepare()
@@ -327,6 +349,7 @@ class EngineTest(unittest.TestCase):
         for source in ("// missing binding\n", marker * 2):
             with self.subTest(source=source):
                 self.write("owned/catalog.rs", source)
+                self.refresh_overlay_hashes()
                 with self.assertRaisesRegex(
                     engine.EngineError, "exactly one engine catalog"
                 ):
@@ -732,6 +755,64 @@ class EngineTest(unittest.TestCase):
         for name, content in before.items():
             self.assertEqual((self.root / name).read_bytes(), content)
         self.assertFalse((self.root / ".engine/workspace").exists())
+
+    def generated(self, path, data, generator="fixture"):
+        """Commit a generated output as `manifest --write` records it."""
+        payload = data.encode() if isinstance(data, str) else data
+        self.write(f"integration/codex/generated/{path}", payload)
+        self.manifest.setdefault("generated", []).append(
+            {
+                "generator": generator,
+                "mode": "100644",
+                "path": path,
+                "sha256": engine.digest(payload),
+            }
+        )
+        self.save_inputs()
+
+    def test_generated_output_replaces_upstream_file_and_digest_mismatch_fails_closed(
+        self,
+    ):
+        self.generated("README.md", "generated\n")
+        output = self.prepare()
+        self.assertEqual((output / "README.md").read_text(), "generated\n")
+        report = engine.assembly_report(output)
+        self.assertIn("README.md", report["changed_paths"])
+        self.assertIn("integration/codex/generated/README.md", report["inputs"])
+        self.write("integration/codex/generated/README.md", "edited\n")
+        with self.assertRaisesRegex(
+            engine.EngineError,
+            r"generated output sha256 does not match.*README.md.*manifest --write",
+        ):
+            self.prepare()
+        self.assertEqual((output / "README.md").read_text(), "generated\n")
+
+    def test_generated_output_may_not_be_patched_overlaid_or_create_a_new_file(self):
+        self.generated("README.md", "generated\n")
+        self.add_patch(
+            "diff --git a/README.md b/README.md\n--- a/README.md\n+++ b/README.md\n"
+            "@@ -1 +1 @@\n-upstream\n+patched\n",
+            ["README.md"],
+        )
+        with self.assertRaisesRegex(
+            engine.EngineError, "generated destination collision"
+        ):
+            self.prepare()
+        self.manifest["patches"] = []
+        self.manifest["generated"] = [
+            {
+                "generator": "fixture",
+                "mode": "100644",
+                "path": "docs/new.md",
+                "sha256": engine.digest(b"new\n"),
+            }
+        ]
+        self.write("integration/codex/generated/docs/new.md", "new\n")
+        self.save_inputs()
+        with self.assertRaisesRegex(
+            engine.EngineError, "must replace an upstream regular file"
+        ):
+            self.prepare()
 
 
 if __name__ == "__main__":

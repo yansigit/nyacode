@@ -199,6 +199,7 @@ def validate_assembly_ownership(root: Path, assembly: dict[str, Any]) -> list[st
     declared = {"codex-rs/Cargo.lock"}
     declared.update(assembly["deletes"])
     declared.update(item["destination"] for item in assembly["overlays"])
+    declared.update(item["path"] for item in assembly.get("generated", []))
     for patch in assembly["patches"]:
         declared.update(patch["paths"])
     # A new owned module must not silently disappear from the linked product.

@@ -1268,6 +1268,44 @@ index e60331cc942bddf547b8c8b332af415226fe8c5f..2f9f170a33a45ff18d5393525febe882
  #[test_case::test_case(Some(false), false; "sync finishes before dispatch")]
  #[test_case::test_case(Some(false), true; "resume after interrupt preserves aborted custom call and usage")]
  #[test_case::test_case(Some(true), false; "async dispatches before stream ends")]
+diff --git a/codex-rs/core/tests/suite/scenarios.rs b/codex-rs/core/tests/suite/scenarios.rs
+index dfef49d0076124c635a7f53402b0e1d5e2fb55e8..8b2a9937c6ae706284389bbc10c6da41a8a823df 100644
+--- a/codex-rs/core/tests/suite/scenarios.rs
++++ b/codex-rs/core/tests/suite/scenarios.rs
+@@ -1320,9 +1320,22 @@ async fn child_completion_wakes_parent_after_final_answer() -> Result<()> {
+     })
+     .await;
+     ThreadIdle::wait(&test.codex).await;
++    // A mock records every request it is offered before its own matcher runs, so a worker
++    // request that races ahead of the parent's follow-up is also recorded; keep the parent's.
++    let parent_request = |mock: &responses::ResponseMock| {
++        let mut requests: Vec<_> = mock
++            .requests()
++            .into_iter()
++            .filter(|request| request.header("thread-id").as_deref() == Some(parent_id.as_str()))
++            .collect();
++        assert_eq!(requests.len(), 1);
++        requests.remove(0)
++    };
++    let parent_finished = parent_request(&parent_finished);
++    let wake = parent_request(&wake);
+     assert_ne!(
+-        parent_finished.single_request().body_json()["client_metadata"]["turn_id"],
+-        wake.single_request().body_json()["client_metadata"]["turn_id"],
++        parent_finished.body_json()["client_metadata"]["turn_id"],
++        wake.body_json()["client_metadata"]["turn_id"],
+     );
+ 
+     let mut requests = responses::received_responses_requests(&server).await;
+@@ -1340,7 +1353,7 @@ async fn child_completion_wakes_parent_after_final_answer() -> Result<()> {
+     // The shared formatter labels agent messages without rendering their payload.
+     let mut mailbox =
+         responses::strip_metadata_from_json(responses::strip_response_item_ids_from_json(
+-            serde_json::Value::Array(wake.single_request().inputs_of_type("agent_message")),
++            serde_json::Value::Array(wake.inputs_of_type("agent_message")),
+         ));
+     mailbox.sort_all_objects();
+     insta::assert_snapshot!(format!(
 diff --git a/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__agent_eviction__idle_eviction_followup.snap b/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__agent_eviction__idle_eviction_followup.snap
 index b32892eaa7407d8df6d22ebf97a5f8e7ac036a2b..620ac3cdf1659491202e97013fbc5a8ba5ed76e6 100644
 --- a/codex-rs/core/tests/suite/snapshots/all__suite__scenarios__agent_eviction__idle_eviction_followup.snap
@@ -1690,19 +1728,6 @@ index 04ecf7363763d6755861703b47dfe61f088a5be0..2442fc967a5b502d643907d3e6b2365e
          attributed_mcp_server_ids: BTreeSet::new(),
      })
  }
-diff --git a/codex-rs/hooks/schema/generated/subagent-stop.command.output.schema.json b/codex-rs/hooks/schema/generated/subagent-stop.command.output.schema.json
-index 0cb1dd2a5701ba07d9ab73464a9968279d2065d0..07b23ac3c2cea218a6dccb3851758df86d17ed32 100644
---- a/codex-rs/hooks/schema/generated/subagent-stop.command.output.schema.json
-+++ b/codex-rs/hooks/schema/generated/subagent-stop.command.output.schema.json
-@@ -24,7 +24,7 @@
-     },
-     "reason": {
-       "default": null,
--      "description": "Claude requires `reason` when `decision` is `block`; we enforce that semantic rule during output parsing rather than in the JSON schema.",
-+      "description": "Claude requires `reason` when `decision` is `block`; we enforce that\nsemantic rule during output parsing rather than in the JSON schema.",
-       "type": "string"
-     },
-     "stopReason": {
 diff --git a/codex-rs/model-provider-info/Cargo.toml b/codex-rs/model-provider-info/Cargo.toml
 index 51d3026637dce62a30f6574cb1a5d4624877ebe0..20b789cf17779eea5a4bd7a428c838b3e1f7ef52 100644
 --- a/codex-rs/model-provider-info/Cargo.toml

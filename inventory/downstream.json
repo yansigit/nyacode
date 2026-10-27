@@ -1333,12 +1333,13 @@
       }
     },
     {
-      "artifact": "dependency_override",
+      "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/dependency_override.patch",
-        "path": "MODULE.bazel.lock"
+        "generator": "bazel-lock",
+        "kind": "generated",
+        "path": "MODULE.bazel.lock",
+        "source": "integration/codex/generated/MODULE.bazel.lock"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -1890,9 +1891,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/ApplyPatchApprovalParams.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/ApplyPatchApprovalParams.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/ApplyPatchApprovalParams.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -1917,9 +1919,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/ApplyPatchApprovalResponse.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/ApplyPatchApprovalResponse.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/ApplyPatchApprovalResponse.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -1944,9 +1947,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/ChatgptAuthTokensRefreshParams.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/ChatgptAuthTokensRefreshParams.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/ChatgptAuthTokensRefreshParams.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -1971,9 +1975,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/ClientRequest.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/ClientRequest.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/ClientRequest.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -1998,9 +2003,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/CommandExecutionRequestApprovalParams.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/CommandExecutionRequestApprovalParams.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/CommandExecutionRequestApprovalParams.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -2025,9 +2031,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/CommandExecutionRequestApprovalResponse.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/CommandExecutionRequestApprovalResponse.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/CommandExecutionRequestApprovalResponse.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -2052,9 +2059,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/ExecCommandApprovalParams.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/ExecCommandApprovalParams.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/ExecCommandApprovalParams.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -2079,9 +2087,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/ExecCommandApprovalResponse.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/ExecCommandApprovalResponse.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/ExecCommandApprovalResponse.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -2106,9 +2115,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/FileChangeRequestApprovalParams.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/FileChangeRequestApprovalParams.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/FileChangeRequestApprovalParams.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -2133,9 +2143,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/FuzzyFileSearchResponse.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/FuzzyFileSearchResponse.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/FuzzyFileSearchResponse.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -2160,9 +2171,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/FuzzyFileSearchSessionUpdatedNotification.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/FuzzyFileSearchSessionUpdatedNotification.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/FuzzyFileSearchSessionUpdatedNotification.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -2187,9 +2199,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/McpServerElicitationRequestParams.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/McpServerElicitationRequestParams.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/McpServerElicitationRequestParams.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -2214,9 +2227,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/PermissionsRequestApprovalParams.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/PermissionsRequestApprovalParams.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/PermissionsRequestApprovalParams.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -2241,9 +2255,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/PermissionsRequestApprovalResponse.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/PermissionsRequestApprovalResponse.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/PermissionsRequestApprovalResponse.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -2268,9 +2283,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/ServerNotification.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/ServerNotification.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/ServerNotification.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -2295,9 +2311,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/ServerRequest.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/ServerRequest.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/ServerRequest.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -2322,9 +2339,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/ToolRequestUserInputParams.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/ToolRequestUserInputParams.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/ToolRequestUserInputParams.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -2349,9 +2367,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/codex_app_server_protocol.schemas.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/codex_app_server_protocol.schemas.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/codex_app_server_protocol.schemas.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -2376,9 +2395,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/codex_app_server_protocol.v2.schemas.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/codex_app_server_protocol.v2.schemas.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/codex_app_server_protocol.v2.schemas.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -2403,9 +2423,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v1/InitializeParams.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v1/InitializeParams.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v1/InitializeParams.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -2430,9 +2451,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v1/InitializeResponse.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v1/InitializeResponse.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v1/InitializeResponse.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -2457,9 +2479,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/AccountRateLimitsUpdatedNotification.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/AccountRateLimitsUpdatedNotification.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/AccountRateLimitsUpdatedNotification.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -2484,9 +2507,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/AccountUpdatedNotification.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/AccountUpdatedNotification.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/AccountUpdatedNotification.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -2511,9 +2535,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/AppListUpdatedNotification.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/AppListUpdatedNotification.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/AppListUpdatedNotification.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -2538,9 +2563,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/AppsInstalledParams.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/AppsInstalledParams.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/AppsInstalledParams.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -2565,9 +2591,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/AppsInstalledResponse.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/AppsInstalledResponse.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/AppsInstalledResponse.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -2592,9 +2619,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/AppsListParams.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/AppsListParams.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/AppsListParams.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -2619,9 +2647,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/AppsListResponse.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/AppsListResponse.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/AppsListResponse.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -2646,9 +2675,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/AppsReadParams.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/AppsReadParams.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/AppsReadParams.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -2673,9 +2703,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/CommandExecOutputDeltaNotification.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/CommandExecOutputDeltaNotification.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/CommandExecOutputDeltaNotification.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -2700,9 +2731,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/CommandExecParams.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/CommandExecParams.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/CommandExecParams.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -2727,9 +2759,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/CommandExecResizeParams.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/CommandExecResizeParams.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/CommandExecResizeParams.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -2754,9 +2787,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/CommandExecTerminateParams.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/CommandExecTerminateParams.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/CommandExecTerminateParams.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -2781,9 +2815,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/CommandExecWriteParams.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/CommandExecWriteParams.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/CommandExecWriteParams.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -2808,9 +2843,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/ConfigBatchWriteParams.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/ConfigBatchWriteParams.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/ConfigBatchWriteParams.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -2835,9 +2871,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/ConfigReadParams.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/ConfigReadParams.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/ConfigReadParams.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -2862,9 +2899,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/ConfigReadResponse.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/ConfigReadResponse.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/ConfigReadResponse.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -2889,9 +2927,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/ConfigRequirementsReadResponse.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/ConfigRequirementsReadResponse.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/ConfigRequirementsReadResponse.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -2916,9 +2955,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/ConfigWarningNotification.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/ConfigWarningNotification.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/ConfigWarningNotification.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -2943,9 +2983,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/ConfigWriteResponse.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/ConfigWriteResponse.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/ConfigWriteResponse.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -2970,9 +3011,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/ConsumeAccountRateLimitResetCreditParams.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/ConsumeAccountRateLimitResetCreditParams.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/ConsumeAccountRateLimitResetCreditParams.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -2997,9 +3039,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/ErrorNotification.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/ErrorNotification.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/ErrorNotification.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -3024,9 +3067,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/ExperimentalFeatureEnablementSetParams.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/ExperimentalFeatureEnablementSetParams.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/ExperimentalFeatureEnablementSetParams.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -3051,9 +3095,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/ExperimentalFeatureListParams.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/ExperimentalFeatureListParams.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/ExperimentalFeatureListParams.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -3078,9 +3123,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/ExperimentalFeatureListResponse.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/ExperimentalFeatureListResponse.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/ExperimentalFeatureListResponse.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -3105,9 +3151,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/ExternalAgentConfigDetectParams.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/ExternalAgentConfigDetectParams.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/ExternalAgentConfigDetectParams.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -3132,9 +3179,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/ExternalAgentConfigDetectResponse.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/ExternalAgentConfigDetectResponse.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/ExternalAgentConfigDetectResponse.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -3159,9 +3207,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/ExternalAgentConfigImportHistoriesReadResponse.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/ExternalAgentConfigImportHistoriesReadResponse.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/ExternalAgentConfigImportHistoriesReadResponse.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -3186,9 +3235,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/ExternalAgentConfigImportParams.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/ExternalAgentConfigImportParams.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/ExternalAgentConfigImportParams.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -3213,9 +3263,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/FeedbackSaveParams.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/FeedbackSaveParams.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/FeedbackSaveParams.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -3240,9 +3291,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/FeedbackUploadResponse.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/FeedbackUploadResponse.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/FeedbackUploadResponse.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -3267,9 +3319,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/FsChangedNotification.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/FsChangedNotification.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/FsChangedNotification.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -3294,9 +3347,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/FsCopyParams.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/FsCopyParams.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/FsCopyParams.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -3321,9 +3375,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/FsCreateDirectoryParams.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/FsCreateDirectoryParams.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/FsCreateDirectoryParams.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -3348,9 +3403,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/FsGetMetadataParams.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/FsGetMetadataParams.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/FsGetMetadataParams.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -3375,9 +3431,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/FsReadDirectoryParams.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/FsReadDirectoryParams.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/FsReadDirectoryParams.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -3402,9 +3459,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/FsReadFileParams.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/FsReadFileParams.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/FsReadFileParams.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -3429,9 +3487,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/FsRemoveParams.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/FsRemoveParams.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/FsRemoveParams.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -3456,9 +3515,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/FsWatchParams.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/FsWatchParams.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/FsWatchParams.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -3483,9 +3543,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/FsWatchResponse.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/FsWatchResponse.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/FsWatchResponse.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -3510,9 +3571,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/FsWriteFileParams.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/FsWriteFileParams.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/FsWriteFileParams.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -3537,9 +3599,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/GetAccountParams.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/GetAccountParams.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/GetAccountParams.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -3564,9 +3627,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/GetAccountRateLimitsResponse.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/GetAccountRateLimitsResponse.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/GetAccountRateLimitsResponse.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -3591,9 +3655,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/GetAccountResponse.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/GetAccountResponse.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/GetAccountResponse.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -3618,9 +3683,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/HookCompletedNotification.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/HookCompletedNotification.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/HookCompletedNotification.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -3645,9 +3711,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/HookStartedNotification.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/HookStartedNotification.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/HookStartedNotification.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -3672,9 +3739,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/HooksListResponse.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/HooksListResponse.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/HooksListResponse.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -3699,9 +3767,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/ItemCompletedNotification.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/ItemCompletedNotification.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/ItemCompletedNotification.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -3726,9 +3795,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/ItemGuardianApprovalReviewCompletedNotification.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/ItemGuardianApprovalReviewCompletedNotification.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/ItemGuardianApprovalReviewCompletedNotification.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -3753,9 +3823,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/ItemGuardianApprovalReviewStartedNotification.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/ItemGuardianApprovalReviewStartedNotification.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/ItemGuardianApprovalReviewStartedNotification.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -3780,9 +3851,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/ItemStartedNotification.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/ItemStartedNotification.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/ItemStartedNotification.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -3807,9 +3879,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/ListMcpServerStatusParams.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/ListMcpServerStatusParams.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/ListMcpServerStatusParams.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -3834,9 +3907,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/ListMcpServerStatusResponse.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/ListMcpServerStatusResponse.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/ListMcpServerStatusResponse.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -3861,9 +3935,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/LoginAccountParams.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/LoginAccountParams.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/LoginAccountParams.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -3888,9 +3963,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/LoginAccountResponse.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/LoginAccountResponse.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/LoginAccountResponse.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -3915,9 +3991,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/MarketplaceAddResponse.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/MarketplaceAddResponse.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/MarketplaceAddResponse.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -3942,9 +4019,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/MarketplaceRemoveResponse.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/MarketplaceRemoveResponse.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/MarketplaceRemoveResponse.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -3969,9 +4047,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/MarketplaceUpgradeResponse.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/MarketplaceUpgradeResponse.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/MarketplaceUpgradeResponse.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -3996,9 +4075,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/McpServerOauthLoginResponse.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/McpServerOauthLoginResponse.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/McpServerOauthLoginResponse.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -4023,9 +4103,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/ModelListParams.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/ModelListParams.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/ModelListParams.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -4050,9 +4131,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/ModelListResponse.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/ModelListResponse.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/ModelListResponse.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -4077,9 +4159,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/NullableGetAccountRateLimitsParams.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/NullableGetAccountRateLimitsParams.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/NullableGetAccountRateLimitsParams.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -4104,9 +4187,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/PermissionProfileListParams.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/PermissionProfileListParams.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/PermissionProfileListParams.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -4131,9 +4215,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/PermissionProfileListResponse.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/PermissionProfileListResponse.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/PermissionProfileListResponse.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -4158,9 +4243,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/PlanDeltaNotification.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/PlanDeltaNotification.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/PlanDeltaNotification.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -4185,9 +4271,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/PluginInstallParams.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/PluginInstallParams.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/PluginInstallParams.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -4212,9 +4299,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/PluginInstalledParams.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/PluginInstalledParams.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/PluginInstalledParams.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -4239,9 +4327,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/PluginInstalledResponse.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/PluginInstalledResponse.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/PluginInstalledResponse.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -4266,9 +4355,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/PluginListParams.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/PluginListParams.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/PluginListParams.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -4293,9 +4383,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/PluginListResponse.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/PluginListResponse.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/PluginListResponse.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -4320,9 +4411,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/PluginReadParams.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/PluginReadParams.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/PluginReadParams.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -4347,9 +4439,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/PluginReadResponse.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/PluginReadResponse.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/PluginReadResponse.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -4374,9 +4467,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/PluginReconcileResponse.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/PluginReconcileResponse.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/PluginReconcileResponse.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -4401,9 +4495,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/PluginShareCheckoutResponse.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/PluginShareCheckoutResponse.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/PluginShareCheckoutResponse.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -4428,9 +4523,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/PluginShareListResponse.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/PluginShareListResponse.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/PluginShareListResponse.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -4455,9 +4551,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/PluginShareSaveParams.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/PluginShareSaveParams.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/PluginShareSaveParams.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -4482,9 +4579,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/ProcessExitedNotification.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/ProcessExitedNotification.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/ProcessExitedNotification.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -4509,9 +4607,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/ProcessOutputDeltaNotification.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/ProcessOutputDeltaNotification.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/ProcessOutputDeltaNotification.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -4651,9 +4750,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/RawResponseCompletedNotification.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/RawResponseCompletedNotification.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/RawResponseCompletedNotification.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -4678,9 +4778,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/RawResponseItemCompletedNotification.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/RawResponseItemCompletedNotification.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/RawResponseItemCompletedNotification.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -4705,9 +4806,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/ReviewStartParams.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/ReviewStartParams.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/ReviewStartParams.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -4732,9 +4834,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/ReviewStartResponse.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/ReviewStartResponse.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/ReviewStartResponse.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -4759,9 +4862,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/SkillsChangedNotification.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/SkillsChangedNotification.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/SkillsChangedNotification.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -4786,9 +4890,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/SkillsConfigWriteParams.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/SkillsConfigWriteParams.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/SkillsConfigWriteParams.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -4813,9 +4918,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/SkillsExtraRootsSetParams.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/SkillsExtraRootsSetParams.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/SkillsExtraRootsSetParams.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -4840,9 +4946,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/SkillsListResponse.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/SkillsListResponse.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/SkillsListResponse.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -4867,9 +4974,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadAttachmentListParams.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadAttachmentListParams.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/ThreadAttachmentListParams.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -4894,9 +5002,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadAttachmentOwnerListParams.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadAttachmentOwnerListParams.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/ThreadAttachmentOwnerListParams.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -4921,9 +5030,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadForkParams.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadForkParams.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/ThreadForkParams.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -4948,9 +5058,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadForkResponse.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadForkResponse.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/ThreadForkResponse.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -4975,9 +5086,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadItemsListParams.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadItemsListParams.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/ThreadItemsListParams.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -5002,9 +5114,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadItemsListResponse.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadItemsListResponse.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/ThreadItemsListResponse.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -5029,9 +5142,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadListParams.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadListParams.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/ThreadListParams.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -5056,9 +5170,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadListResponse.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadListResponse.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/ThreadListResponse.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -5083,9 +5198,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadLoadedListParams.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadLoadedListParams.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/ThreadLoadedListParams.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -5110,9 +5226,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadLoadedListResponse.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadLoadedListResponse.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/ThreadLoadedListResponse.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -5137,9 +5254,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadMetadataUpdateParams.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadMetadataUpdateParams.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/ThreadMetadataUpdateParams.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -5164,9 +5282,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadMetadataUpdateResponse.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadMetadataUpdateResponse.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/ThreadMetadataUpdateResponse.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -5214,9 +5333,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadReadParams.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadReadParams.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/ThreadReadParams.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -5241,9 +5361,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadReadResponse.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadReadResponse.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/ThreadReadResponse.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -5268,9 +5389,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadReadStateChangedNotification.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadReadStateChangedNotification.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/ThreadReadStateChangedNotification.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -5295,9 +5417,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadRealtimeItemCompletedNotification.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadRealtimeItemCompletedNotification.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/ThreadRealtimeItemCompletedNotification.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -5322,9 +5445,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadRealtimeItemStartedNotification.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadRealtimeItemStartedNotification.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/ThreadRealtimeItemStartedNotification.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -5349,9 +5473,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadRealtimeOutputAudioDeltaNotification.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadRealtimeOutputAudioDeltaNotification.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/ThreadRealtimeOutputAudioDeltaNotification.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -5376,9 +5501,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadRealtimeTranscriptDeltaNotification.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadRealtimeTranscriptDeltaNotification.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/ThreadRealtimeTranscriptDeltaNotification.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -5403,9 +5529,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadRealtimeTranscriptDoneNotification.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadRealtimeTranscriptDoneNotification.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/ThreadRealtimeTranscriptDoneNotification.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -5430,9 +5557,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadResumeParams.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadResumeParams.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/ThreadResumeParams.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -5457,9 +5585,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadResumeResponse.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadResumeResponse.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/ThreadResumeResponse.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -5484,9 +5613,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadRevertResponse.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadRevertResponse.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/ThreadRevertResponse.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -5511,9 +5641,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadSectionListParams.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadSectionListParams.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/ThreadSectionListParams.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -5538,9 +5669,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadSettingsUpdatedNotification.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadSettingsUpdatedNotification.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/ThreadSettingsUpdatedNotification.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -5565,9 +5697,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadShellCommandParams.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadShellCommandParams.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/ThreadShellCommandParams.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -5592,9 +5725,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadStartParams.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadStartParams.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/ThreadStartParams.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -5619,9 +5753,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadStartResponse.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadStartResponse.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/ThreadStartResponse.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -5646,9 +5781,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadStartedNotification.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadStartedNotification.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/ThreadStartedNotification.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -5673,9 +5809,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadTurnsListParams.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadTurnsListParams.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/ThreadTurnsListParams.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -5700,9 +5837,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadTurnsListResponse.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadTurnsListResponse.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/ThreadTurnsListResponse.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -5727,9 +5865,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadUnarchiveResponse.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/ThreadUnarchiveResponse.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/ThreadUnarchiveResponse.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -5754,9 +5893,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/TurnCompletedNotification.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/TurnCompletedNotification.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/TurnCompletedNotification.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -5781,9 +5921,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/TurnDiffUpdatedNotification.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/TurnDiffUpdatedNotification.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/TurnDiffUpdatedNotification.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -5808,9 +5949,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/TurnStartParams.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/TurnStartParams.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/TurnStartParams.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -5835,9 +5977,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/TurnStartResponse.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/TurnStartResponse.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/TurnStartResponse.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -5862,9 +6005,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/TurnStartedNotification.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/TurnStartedNotification.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/TurnStartedNotification.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -5889,9 +6033,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/TurnSteerParams.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/TurnSteerParams.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/TurnSteerParams.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -5916,9 +6061,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/WindowsSandboxSetupStartParams.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/WindowsSandboxSetupStartParams.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/WindowsSandboxSetupStartParams.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -5943,9 +6089,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/json/v2/WindowsWorldWritableWarningNotification.json"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/json/v2/WindowsWorldWritableWarningNotification.json",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/json/v2/WindowsWorldWritableWarningNotification.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -5967,12 +6114,13 @@
       }
     },
     {
-      "artifact": "source",
+      "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/precomputed/app-server-exports-experimental.json.zst"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/precomputed/app-server-exports-experimental.json.zst",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/precomputed/app-server-exports-experimental.json.zst"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -5994,12 +6142,13 @@
       }
     },
     {
-      "artifact": "source",
+      "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/precomputed/app-server-exports-stable.json.zst"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/precomputed/app-server-exports-stable.json.zst",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/precomputed/app-server-exports-stable.json.zst"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -6024,9 +6173,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/typescript/ClientRequest.ts"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/typescript/ClientRequest.ts",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/typescript/ClientRequest.ts"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -6051,9 +6201,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/typescript/ServerNotification.ts"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/typescript/ServerNotification.ts",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/typescript/ServerNotification.ts"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -6078,9 +6229,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/typescript/ServerNotificationEnvelope.ts"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/typescript/ServerNotificationEnvelope.ts",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/typescript/ServerNotificationEnvelope.ts"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -6105,9 +6257,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/typescript/v2/Account.ts"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/typescript/v2/Account.ts",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/typescript/v2/Account.ts"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -6132,9 +6285,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/typescript/v2/AttestationGenerateParams.ts"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/typescript/v2/AttestationGenerateParams.ts",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/typescript/v2/AttestationGenerateParams.ts"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -6159,9 +6313,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/typescript/v2/CommandExecResizeResponse.ts"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/typescript/v2/CommandExecResizeResponse.ts",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/typescript/v2/CommandExecResizeResponse.ts"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -6186,9 +6341,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/typescript/v2/CommandExecTerminateResponse.ts"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/typescript/v2/CommandExecTerminateResponse.ts",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/typescript/v2/CommandExecTerminateResponse.ts"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -6213,9 +6369,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/typescript/v2/CommandExecWriteResponse.ts"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/typescript/v2/CommandExecWriteResponse.ts",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/typescript/v2/CommandExecWriteResponse.ts"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -6240,9 +6397,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/typescript/v2/FsCopyResponse.ts"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/typescript/v2/FsCopyResponse.ts",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/typescript/v2/FsCopyResponse.ts"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -6267,9 +6425,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/typescript/v2/FsCreateDirectoryResponse.ts"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/typescript/v2/FsCreateDirectoryResponse.ts",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/typescript/v2/FsCreateDirectoryResponse.ts"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -6294,9 +6453,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/typescript/v2/FsRemoveResponse.ts"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/typescript/v2/FsRemoveResponse.ts",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/typescript/v2/FsRemoveResponse.ts"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -6321,9 +6481,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/typescript/v2/FsUnwatchResponse.ts"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/typescript/v2/FsUnwatchResponse.ts",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/typescript/v2/FsUnwatchResponse.ts"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -6348,9 +6509,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/typescript/v2/FsWriteFileResponse.ts"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/typescript/v2/FsWriteFileResponse.ts",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/typescript/v2/FsWriteFileResponse.ts"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -6375,9 +6537,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/typescript/v2/GatewayOAuthCancelResponse.ts"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/typescript/v2/GatewayOAuthCancelResponse.ts",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/typescript/v2/GatewayOAuthCancelResponse.ts"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -6402,9 +6565,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/typescript/v2/GatewayOAuthLoginResponse.ts"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/typescript/v2/GatewayOAuthLoginResponse.ts",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/typescript/v2/GatewayOAuthLoginResponse.ts"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -6429,9 +6593,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/typescript/v2/LoginAccountParams.ts"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/typescript/v2/LoginAccountParams.ts",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/typescript/v2/LoginAccountParams.ts"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -6456,9 +6621,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/typescript/v2/LoginAccountResponse.ts"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/typescript/v2/LoginAccountResponse.ts",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/typescript/v2/LoginAccountResponse.ts"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -6483,9 +6649,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/typescript/v2/LogoutAccountResponse.ts"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/typescript/v2/LogoutAccountResponse.ts",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/typescript/v2/LogoutAccountResponse.ts"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -6510,9 +6677,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/typescript/v2/McpServerRefreshResponse.ts"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/typescript/v2/McpServerRefreshResponse.ts",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/typescript/v2/McpServerRefreshResponse.ts"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -6537,9 +6705,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/typescript/v2/ModelProviderCapabilitiesReadParams.ts"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/typescript/v2/ModelProviderCapabilitiesReadParams.ts",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/typescript/v2/ModelProviderCapabilitiesReadParams.ts"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -6564,9 +6733,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/typescript/v2/PluginShareDeleteResponse.ts"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/typescript/v2/PluginShareDeleteResponse.ts",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/typescript/v2/PluginShareDeleteResponse.ts"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -6591,9 +6761,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/typescript/v2/PluginShareListParams.ts"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/typescript/v2/PluginShareListParams.ts",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/typescript/v2/PluginShareListParams.ts"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -6618,9 +6789,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/typescript/v2/PluginUninstallResponse.ts"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/typescript/v2/PluginUninstallResponse.ts",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/typescript/v2/PluginUninstallResponse.ts"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -6829,9 +7001,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/typescript/v2/SkillsChangedNotification.ts"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/typescript/v2/SkillsChangedNotification.ts",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/typescript/v2/SkillsChangedNotification.ts"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -6856,9 +7029,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/typescript/v2/SkillsExtraRootsSetResponse.ts"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/typescript/v2/SkillsExtraRootsSetResponse.ts",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/typescript/v2/SkillsExtraRootsSetResponse.ts"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -6883,9 +7057,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/typescript/v2/ThreadApproveGuardianDeniedActionResponse.ts"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/typescript/v2/ThreadApproveGuardianDeniedActionResponse.ts",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/typescript/v2/ThreadApproveGuardianDeniedActionResponse.ts"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -6910,9 +7085,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/typescript/v2/ThreadArchiveResponse.ts"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/typescript/v2/ThreadArchiveResponse.ts",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/typescript/v2/ThreadArchiveResponse.ts"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -6937,9 +7113,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/typescript/v2/ThreadAttachmentRemoveResponse.ts"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/typescript/v2/ThreadAttachmentRemoveResponse.ts",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/typescript/v2/ThreadAttachmentRemoveResponse.ts"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -6964,9 +7141,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/typescript/v2/ThreadCompactStartResponse.ts"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/typescript/v2/ThreadCompactStartResponse.ts",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/typescript/v2/ThreadCompactStartResponse.ts"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -6991,9 +7169,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/typescript/v2/ThreadDeleteResponse.ts"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/typescript/v2/ThreadDeleteResponse.ts",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/typescript/v2/ThreadDeleteResponse.ts"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -7018,9 +7197,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/typescript/v2/ThreadExtra.ts"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/typescript/v2/ThreadExtra.ts",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/typescript/v2/ThreadExtra.ts"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -7045,9 +7225,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/typescript/v2/ThreadInjectItemsResponse.ts"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/typescript/v2/ThreadInjectItemsResponse.ts",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/typescript/v2/ThreadInjectItemsResponse.ts"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -7095,9 +7276,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/typescript/v2/ThreadSectionDeleteResponse.ts"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/typescript/v2/ThreadSectionDeleteResponse.ts",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/typescript/v2/ThreadSectionDeleteResponse.ts"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -7122,9 +7304,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/typescript/v2/ThreadSectionMoveResponse.ts"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/typescript/v2/ThreadSectionMoveResponse.ts",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/typescript/v2/ThreadSectionMoveResponse.ts"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -7149,9 +7332,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/typescript/v2/ThreadSetNameResponse.ts"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/typescript/v2/ThreadSetNameResponse.ts",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/typescript/v2/ThreadSetNameResponse.ts"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -7176,9 +7360,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/typescript/v2/ThreadShellCommandResponse.ts"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/typescript/v2/ThreadShellCommandResponse.ts",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/typescript/v2/ThreadShellCommandResponse.ts"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -7203,9 +7388,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/typescript/v2/TurnInterruptResponse.ts"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/typescript/v2/TurnInterruptResponse.ts",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/typescript/v2/TurnInterruptResponse.ts"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -7230,9 +7416,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "codex-rs/app-server-protocol/schema/typescript/v2/index.ts"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "codex-rs/app-server-protocol/schema/typescript/v2/index.ts",
+        "source": "integration/codex/generated/codex-rs/app-server-protocol/schema/typescript/v2/index.ts"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -16373,12 +16560,13 @@
       }
     },
     {
-      "artifact": "source",
+      "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/product_registration_config_branding.patch",
-        "path": "codex-rs/core/config.schema.json"
+        "generator": "config-schema",
+        "kind": "generated",
+        "path": "codex-rs/core/config.schema.json",
+        "source": "integration/codex/generated/codex-rs/core/config.schema.json"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -17636,6 +17824,25 @@
         "path": "codex-rs/core/tests/suite/realtime_conversation.rs",
         "sha256": "a5247fc39613f6fcf54c58a1da35655d35ed27187d8e7f5969ab71766637ca11"
       }
+    },
+    {
+      "artifact": "source",
+      "change": "modified",
+      "destination": {
+        "kind": "patch",
+        "patch": "integration/codex/patches/thread_model_child_routing.patch",
+        "path": "codex-rs/core/tests/suite/scenarios.rs"
+      },
+      "git_status": "M",
+      "mode_changed": false,
+      "owner": "codex-rs",
+      "path": "codex-rs/core/tests/suite/scenarios.rs",
+      "purpose": "thread_model_child_routing",
+      "regression_groups": [
+        "thread_model_child_routing"
+      ],
+      "source": null,
+      "upstream_source": null
     },
     {
       "artifact": "source",
@@ -20072,17 +20279,20 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/dependency_build.patch",
-        "path": "codex-rs/hooks/schema/generated/model-request.command.input.schema.json"
+        "generator": "hooks-schema",
+        "kind": "generated",
+        "path": "codex-rs/hooks/schema/generated/model-request.command.input.schema.json",
+        "source": "integration/codex/generated/codex-rs/hooks/schema/generated/model-request.command.input.schema.json"
       },
       "git_status": "M",
       "mode_changed": false,
       "owner": "codex-rs",
       "path": "codex-rs/hooks/schema/generated/model-request.command.input.schema.json",
-      "purpose": "dependency_build",
+      "purpose": "hooks_schema",
       "regression_groups": [
-        "dependency_build"
+        "backend_dispatch",
+        "dependency_build",
+        "thread_model_child_routing"
       ],
       "source": {
         "mode": "100644",
@@ -20099,17 +20309,20 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/backend_dispatch.patch",
-        "path": "codex-rs/hooks/schema/generated/stop.command.output.schema.json"
+        "generator": "hooks-schema",
+        "kind": "generated",
+        "path": "codex-rs/hooks/schema/generated/stop.command.output.schema.json",
+        "source": "integration/codex/generated/codex-rs/hooks/schema/generated/stop.command.output.schema.json"
       },
       "git_status": "M",
       "mode_changed": false,
       "owner": "codex-rs",
       "path": "codex-rs/hooks/schema/generated/stop.command.output.schema.json",
-      "purpose": "backend_dispatch",
+      "purpose": "hooks_schema",
       "regression_groups": [
-        "backend_dispatch"
+        "backend_dispatch",
+        "dependency_build",
+        "thread_model_child_routing"
       ],
       "source": {
         "mode": "100644",
@@ -20126,16 +20339,19 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/thread_model_child_routing.patch",
-        "path": "codex-rs/hooks/schema/generated/subagent-stop.command.output.schema.json"
+        "generator": "hooks-schema",
+        "kind": "generated",
+        "path": "codex-rs/hooks/schema/generated/subagent-stop.command.output.schema.json",
+        "source": "integration/codex/generated/codex-rs/hooks/schema/generated/subagent-stop.command.output.schema.json"
       },
       "git_status": "M",
       "mode_changed": false,
       "owner": "codex-rs",
       "path": "codex-rs/hooks/schema/generated/subagent-stop.command.output.schema.json",
-      "purpose": "thread_model_child_routing",
+      "purpose": "hooks_schema",
       "regression_groups": [
+        "backend_dispatch",
+        "dependency_build",
         "thread_model_child_routing"
       ],
       "source": {
@@ -40892,12 +41108,13 @@
       "upstream_source": null
     },
     {
-      "artifact": "dependency_override",
+      "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/dependency_override.patch",
-        "path": "pnpm-lock.yaml"
+        "generator": "pnpm-lock",
+        "kind": "generated",
+        "path": "pnpm-lock.yaml",
+        "source": "integration/codex/generated/pnpm-lock.yaml"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -41507,12 +41724,13 @@
       "upstream_source": null
     },
     {
-      "artifact": "dependency_override",
+      "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/dependency_override.patch",
-        "path": "scripts/uv.lock"
+        "generator": "uv-lock",
+        "kind": "generated",
+        "path": "scripts/uv.lock",
+        "source": "integration/codex/generated/scripts/uv.lock"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -41849,9 +42067,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "sdk/python/src/openai_codex/generated/notification_registry.py"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "sdk/python/src/openai_codex/generated/notification_registry.py",
+        "source": "integration/codex/generated/sdk/python/src/openai_codex/generated/notification_registry.py"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -41876,9 +42095,10 @@
       "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/sdk_protocol.patch",
-        "path": "sdk/python/src/openai_codex/generated/v2_all.py"
+        "generator": "app-server-schema",
+        "kind": "generated",
+        "path": "sdk/python/src/openai_codex/generated/v2_all.py",
+        "source": "integration/codex/generated/sdk/python/src/openai_codex/generated/v2_all.py"
       },
       "git_status": "M",
       "mode_changed": false,
@@ -41982,12 +42202,13 @@
       }
     },
     {
-      "artifact": "dependency_override",
+      "artifact": "generated",
       "change": "modified",
       "destination": {
-        "kind": "patch",
-        "patch": "integration/codex/patches/dependency_override.patch",
-        "path": "sdk/python/uv.lock"
+        "generator": "uv-lock",
+        "kind": "generated",
+        "path": "sdk/python/uv.lock",
+        "source": "integration/codex/generated/sdk/python/uv.lock"
       },
       "git_status": "M",
       "mode_changed": false,

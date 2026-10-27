@@ -23,6 +23,7 @@ CACHE = (
     Path(os.environ.get("XDG_CACHE_HOME", Path.home() / ".cache")) / "nyacode/engine"
 )
 MARKER = Path(".git/nyacode/inputs.json")
+GENERATED_ROOT = "integration/codex/generated"
 STABLE_RELEASE = re.compile(r"rust-v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)\Z")
 
 
@@ -228,14 +229,15 @@ def extract_archive(archive: Path, workspace: Path) -> dict[str, str]:
         }
 
 
-def git(workspace: Path, *args: str) -> bytes:
+def git_process(workspace: Path, *args: str) -> subprocess.CompletedProcess[bytes]:
+    """Run git with the engine's hermetic configuration without judging the exit code."""
     env = os.environ.copy()
     env.update(
         {"LC_ALL": "C", "GIT_CONFIG_GLOBAL": os.devnull, "GIT_CONFIG_NOSYSTEM": "1"}
     )
     for name in ("GIT_DIR", "GIT_WORK_TREE", "GIT_INDEX_FILE", "GIT_COMMON_DIR"):
         env.pop(name, None)
-    result = subprocess.run(
+    return subprocess.run(
         [
             "git",
             "-c",
@@ -254,6 +256,10 @@ def git(workspace: Path, *args: str) -> bytes:
         capture_output=True,
         check=False,
     )
+
+
+def git(workspace: Path, *args: str) -> bytes:
+    result = git_process(workspace, *args)
     if result.returncode:
         raise EngineError(
             f"git {' '.join(args)} failed:\n{result.stderr.decode(errors='replace')}"
@@ -525,6 +531,39 @@ def assemble(
             path.chmod(0o755 if mode == "100755" else 0o644)
         touched.add(name)
         allowed.add(name)
+    overlay_names = {overlay["destination"] for overlay in manifest.get("overlays", [])}
+    generated_modes: dict[str, str] = {}
+    for item in manifest.get("generated", []):
+        name = item["path"]
+        relative(name)
+        if (
+            name in touched
+            or name in deletes
+            or name in overlay_names
+            or name == "codex-rs/Cargo.lock"
+        ):
+            raise EngineError(f"generated destination collision: {name}")
+        path = located(workspace, name)
+        if not path.is_file() or path.is_symlink():
+            raise EngineError(
+                f"generated output must replace an upstream regular file: {name}"
+            )
+        source_name = f"{GENERATED_ROOT}/{name}"
+        source = input_file(source_name)
+        mode = item["mode"]
+        if inputs[source_name]["sha256"] != item.get("sha256"):
+            raise EngineError(
+                f"generated output sha256 does not match assembly manifest: {source_name}; "
+                "review the change, then run `python3 scripts/engine.py manifest --write`"
+            )
+        if mode not in {"100644", "100755"} or inputs[source_name]["mode"] != mode:
+            raise EngineError(f"generated output mode mismatch: {source_name}")
+        path.unlink()
+        shutil.copyfile(source, path)
+        path.chmod(0o755 if mode == "100755" else 0o644)
+        generated_modes[name] = mode
+        touched.add(name)
+        allowed.add(name)
     for name in deletes:
         path = located(workspace, name)
         if name in touched and name not in patched_deletes:
@@ -540,7 +579,13 @@ def assemble(
     git(workspace, "add", "--force", "--all", "--", ".")
     index_modes(
         workspace,
-        {item["destination"]: item["mode"] for item in manifest.get("overlays", [])},
+        {
+            **{
+                item["destination"]: item["mode"]
+                for item in manifest.get("overlays", [])
+            },
+            **generated_modes,
+        },
     )
     actual = changed_paths(workspace, pristine)
     if actual - allowed:
@@ -663,6 +708,14 @@ def check(
     commands = [
         [
             sys.executable,
+            str(root / "scripts/engine.py"),
+            "--root",
+            str(root),
+            "manifest",
+            "--check",
+        ],
+        [
+            sys.executable,
             "-m",
             "unittest",
             "discover",
@@ -670,7 +723,17 @@ def check(
             "scripts/tests",
             "-p",
             "test_engine.py",
-        ]
+        ],
+        [
+            sys.executable,
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
+            "scripts/tests",
+            "-p",
+            "test_engine_manifest.py",
+        ],
     ]
     if mode in {"providers", "full"}:
         commands.extend(
@@ -823,6 +886,8 @@ def upgrade(
             names.add(manifest["regression_manifest"])
         if (root / "docs/native-providers/integration-manifest.json").exists():
             names.add("docs/native-providers/integration-manifest.json")
+        if (root / "integration/codex/ownership.json").is_file():
+            names.add("integration/codex/ownership.json")
         names.update(entry["path"] for entry in manifest.get("patches", []))
         names.update(entry["source"] for entry in manifest.get("overlays", []))
         names.update(
@@ -879,6 +944,22 @@ def main() -> int:
     parser.add_argument("--cache-dir", type=Path)
     parser.add_argument("--json", action="store_true")
     subparsers = parser.add_subparsers(dest="command", required=True)
+    manifest_command = subparsers.add_parser(
+        "manifest",
+        help="regenerate or verify integration/codex/assembly.json and inventory/downstream.json",
+    )
+    manifest_mode = manifest_command.add_mutually_exclusive_group(required=True)
+    manifest_mode.add_argument(
+        "--write", action="store_true", help="regenerate both generated files"
+    )
+    manifest_mode.add_argument(
+        "--check", action="store_true", help="fail if committed files drift"
+    )
+    manifest_command.add_argument(
+        "--strict",
+        action="store_true",
+        help="with --check, also fail on stale overlay digests",
+    )
     for name in ("prepare", "check", "upgrade"):
         command = subparsers.add_parser(name)
         command.add_argument("--output", type=Path)
@@ -892,9 +973,106 @@ def main() -> int:
             command.add_argument("--artifact-dir", type=Path)
         if name == "upgrade":
             command.add_argument("tag")
+    rebase_command = subparsers.add_parser(
+        "rebase", help="carry the patch stack onto a new upstream revision"
+    )
+    target = rebase_command.add_mutually_exclusive_group(required=True)
+    target.add_argument("--onto", metavar="REV")
+    target.add_argument("--onto-local-ref", metavar="REF")
+    rebase_command.add_argument(
+        "--tag", help="stable rust-vX.Y.Z release tag to record"
+    )
+    rebase_command.add_argument("--output", type=Path)
+    rebase_command.add_argument(
+        "--local-repo",
+        type=Path,
+        help="repository resolving --onto-local-ref (default: root)",
+    )
+    rebase_command.add_argument("--root", dest="subroot", type=Path)
+    export_command = subparsers.add_parser(
+        "export", help="write workspace edits back into patches and assembly.json"
+    )
+    export_command.add_argument("--workspace", type=Path, required=True)
+    export_command.add_argument("--root", dest="subroot", type=Path)
+    export_command.add_argument("--report", type=Path)
+    export_command.add_argument("--update-lock", action="store_true")
+    export_command.add_argument("--allow-new-paths", action="store_true")
+    export_command.add_argument(
+        "--assign", action="append", default=[], metavar="PATH=PATCH"
+    )
+    export_command.add_argument("--accept", action="append", default=[], metavar="PATH")
+    fold_command = subparsers.add_parser(
+        "fold",
+        help="carry main-side patch edits onto a rebase output, merging per path",
+    )
+    fold_command.add_argument("--output", type=Path, required=True)
+    fold_command.add_argument("--base-root", type=Path, required=True)
+    fold_command.add_argument("--main-root", type=Path, required=True)
+    fold_command.add_argument(
+        "--base-commit", help="product commit the base tree came from"
+    )
+    fold_command.add_argument(
+        "--main-commit", help="product commit the main tree came from"
+    )
+    fold_command.add_argument("--root", dest="subroot", type=Path)
+    generate_command = subparsers.add_parser(
+        "generate",
+        help="run generators in an assembled workspace; --write-back updates integration/codex/generated",
+    )
+    generate_command.add_argument("--workspace", type=Path, required=True)
+    generate_command.add_argument(
+        "--only", action="append", metavar="ID", help="generator id (repeatable)"
+    )
+    generate_command.add_argument(
+        "--deterministic",
+        action="store_true",
+        help="run only the drift-checked generators",
+    )
+    generate_command.add_argument(
+        "--write-back",
+        action="store_true",
+        help="copy current outputs into integration/codex/generated and regenerate assembly.json",
+    )
+    generate_command.add_argument(
+        "--crate",
+        action="append",
+        default=[],
+        metavar="CRATE",
+        help="crate for the snapshots generator (repeatable)",
+    )
+    generate_command.add_argument(
+        "--report", type=Path, help="write the JSON result here"
+    )
     args = parser.parse_args()
-    kwargs = {"root": args.root, "output": args.output, "cache_dir": args.cache_dir}
+    # engine_manifest and engine_patches import this file as `engine`; reuse this module
+    # object so that EngineError is the same class when the script runs as __main__.
+    sys.modules.setdefault("engine", sys.modules[__name__])
+    if args.command == "generate":
+        import engine_generate
+
+        try:
+            return engine_generate.run(args)
+        except (EngineError, OSError, ValueError, KeyError) as error:
+            print(f"engine: {error}", file=sys.stderr)
+            return 1
+    if args.command == "manifest":
+        import engine_manifest
+
+        try:
+            return engine_manifest.run(args.root, write=args.write, strict=args.strict)
+        except (EngineError, OSError, ValueError, KeyError) as error:
+            print(f"engine: {error}", file=sys.stderr)
+            return 1
+    kwargs = {
+        "root": args.root,
+        "output": getattr(args, "output", None),
+        "cache_dir": args.cache_dir,
+    }
     try:
+        if args.command in {"rebase", "export", "fold"}:
+            import engine_patches
+
+            return engine_patches.run(args)
         if args.command == "prepare":
             output = prepare(**kwargs)
         elif args.command == "check":

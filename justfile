@@ -206,6 +206,37 @@ engine-schema *args: prepare-engine
 engine-controls:
     {{ python }} {{ justfile_directory() }}/scripts/engine.py check --mode controls
 
+# Regenerate integration/codex/assembly.json and inventory/downstream.json from ownership metadata.
+[no-cd]
+engine-manifest:
+    {{ python }} {{ justfile_directory() }}/scripts/engine.py manifest --write
+
+# Carry the patch stack onto an upstream revision (40-hex commit); exits 2 on conflicts.
+[no-cd]
+engine-rebase REV *args:
+    {{ python }} {{ justfile_directory() }}/scripts/engine.py rebase --onto {{ quote(REV) }} {args}
+
+# Write the reviewed rebase workspace back into patches (pass --workspace DIR/workspace).
+[no-cd]
+engine-export *args:
+    {{ python }} {{ justfile_directory() }}/scripts/engine.py export {args}
+
+# Download a sync run's plan, rebase it locally into .engine/sync/RUN, and list conflicts.
+[no-cd]
+sync-resolve run_id:
+    {{ python }} {{ justfile_directory() }}/scripts/engine_sync.py resolve-local --run-id {{ quote(run_id) }} --output {{ quote(justfile_directory() / ".engine/sync" / run_id) }}
+
+# Finish a locally resolved sync run (edit .engine/sync/RUN/rebase/workspace first), then push after y/N.
+[no-cd]
+sync-finish run_id:
+    {{ python }} {{ justfile_directory() }}/scripts/engine_sync.py finish --plan {{ quote(justfile_directory() / ".engine/sync" / run_id / "plan.json") }} --dir {{ quote(justfile_directory() / ".engine/sync" / run_id) }} --resolution-kind human
+    {{ python }} {{ justfile_directory() }}/scripts/engine_sync.py push --dir {{ quote(justfile_directory() / ".engine/sync" / run_id) }} --confirm
+
+# Run generators in the assembled workspace; add --write-back to update integration/codex/generated.
+[no-cd]
+engine-generate *args: prepare-engine
+    {{ python }} {{ justfile_directory() }}/scripts/engine.py generate --workspace {{ justfile_directory() }}/.engine/workspace {args}
+
 # Edits the disposable assembly; copy changes into owned inputs before preparing again.
 [no-cd]
 write-hooks-schema:

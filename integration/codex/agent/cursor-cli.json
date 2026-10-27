@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(**)"
+    ],
+    "deny": [
+      "Shell(*)",
+      "Shell(git)",
+      "Shell(curl)",
+      "Shell(wget)",
+      "Shell(bash)",
+      "Shell(sh)",
+      "Shell(env)",
+      "Shell(printenv)",
+      "WebFetch(*)",
+      "Mcp(*)",
+      "Write(.cursor/**)",
+      "Write(.github/**)",
+      "Write(opencode.json)"
+    ]
+  }
+}

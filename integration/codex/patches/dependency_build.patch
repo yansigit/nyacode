@@ -1885,7 +1885,7 @@ index 7d3a49405d1f3be9af35d3ac2838dd35303a48b6..bfbdd0c3b991c06a1135f8db5ec79b64
 +  "packageManager": "pnpm@12.11.2+sha512.25a51652a196785af5f28bda6dfe8dc582ebefa4ac1d180221ce1390231c5fb76637822ea4b6e4633ce74acdcb0a77f725af11bad38177fdeddaee818a955cb9"
  }
 diff --git a/codex-rs/Cargo.toml b/codex-rs/Cargo.toml
-index 520b9418ee45a4b86c07e0ac2ef317c5bc077c95..586fd590f5f402195f0e08f7d01a89e56141e3e5 100644
+index 520b9418ee45a4b86c07e0ac2ef317c5bc077c95..c3e64b7ef8ce98ffc58f5483179edf1468c5a31a 100644
 --- a/codex-rs/Cargo.toml
 +++ b/codex-rs/Cargo.toml
 @@ -7,6 +7,7 @@ members = [
@@ -2265,7 +2265,7 @@ index 520b9418ee45a4b86c07e0ac2ef317c5bc077c95..586fd590f5f402195f0e08f7d01a89e5
      "zstd",
  ] }
 -zstd = "0.13"
-+zstd = "0.14"
++zstd = "0.14.3"
  
  wiremock = "0.6"
 -zeroize = "1.8.2"
@@ -2329,41 +2329,6 @@ index 6e15faf07d2edd4b04f36a00bb2b886a233f889c..fe4120777297dc884f0213cb83f9907c
      "crossterm-0.29.0" = "sha256-ewiWWQPEU1lSUHzmZTiO5yes5luIaQ9TrvCNnTWhxpE=";
      "nucleo-0.5.0" = "sha256-Hm4SxtTSBrcWpXrtSqeO0TACbUxq3gizg1zD/6Yw/sI=";
      "nucleo-matcher-0.3.1" = "sha256-Hm4SxtTSBrcWpXrtSqeO0TACbUxq3gizg1zD/6Yw/sI=";
-diff --git a/codex-rs/hooks/schema/generated/model-request.command.input.schema.json b/codex-rs/hooks/schema/generated/model-request.command.input.schema.json
-index 86bf69b39909e4f47f2771c5f0d7e0ca4f849ac0..66fe109aa7ffe29f40d6e11e04af859a89d1bec7 100644
---- a/codex-rs/hooks/schema/generated/model-request.command.input.schema.json
-+++ b/codex-rs/hooks/schema/generated/model-request.command.input.schema.json
-@@ -2,7 +2,7 @@
-   "$schema": "http://json-schema.org/draft-07/schema#",
-   "definitions": {
-     "AbsolutePathBuf": {
--      "description": "A path that is guaranteed to be absolute and normalized (though it is not guaranteed to be canonicalized or exist on the filesystem).\n\nIMPORTANT: When deserializing an `AbsolutePathBuf`, a base path must be set using [AbsolutePathBufGuard::new]. If no base path is set, the deserialization will fail unless the path being deserialized is already absolute.",
-+      "description": "A path that is guaranteed to be absolute and normalized (though it is not\nguaranteed to be canonicalized or exist on the filesystem).\n\nIMPORTANT: When deserializing an `AbsolutePathBuf`, a base path must be set\nusing [AbsolutePathBufGuard::new]. If no base path is set, the\ndeserialization will fail unless the path being deserialized is already\nabsolute.",
-       "type": "string"
-     },
-     "ModelRequestStatus": {
-@@ -61,9 +61,7 @@
-     {
-       "properties": {
-         "hook_event_name": {
--          "enum": [
--            "PreModelRequest"
--          ],
-+          "const": "PreModelRequest",
-           "type": "string"
-         }
-       },
-@@ -78,9 +76,7 @@
-           "$ref": "#/definitions/NullableString"
-         },
-         "hook_event_name": {
--          "enum": [
--            "PostModelRequest"
--          ],
-+          "const": "PostModelRequest",
-           "type": "string"
-         },
-         "status": {
 diff --git a/codex-rs/hooks/src/events/model_request.rs b/codex-rs/hooks/src/events/model_request.rs
 index 221f2b70cff433382057864fdce187e4beb73c50..c50d44236a6fa7ab91572e62b4e095fd4995686f 100644
 --- a/codex-rs/hooks/src/events/model_request.rs
@@ -3958,9 +3923,7 @@ index 8b2d6bcde3ee965cf12baf75e2ec5c486fbdb3d3..3c3f812b3f4ea6922656696497d4d5a4
                  raise RuntimeError(
                      f"{artifact_label} archive {archive_path} is missing "
 diff --git a/scripts/codex_package/rg b/scripts/codex_package/rg
-old mode 100644
-new mode 100755
-index 3b7c34843aaafe4cf26a87b3daf5806195d4bb0e..04116e29d2281b8e10ab398b411da418ce46055b
+index 3b7c34843aaafe4cf26a87b3daf5806195d4bb0e..04116e29d2281b8e10ab398b411da418ce46055b 100755
 --- a/scripts/codex_package/rg
 +++ b/scripts/codex_package/rg
 @@ -16,14 +16,14 @@
@@ -4639,9 +4602,7 @@ index e9d0bc80574f8dd33174d883c0ec69fe2eefa50c..61109f59a15a87da3fc9bf58d3023677
      & $codexCommand
  }
 diff --git a/scripts/install/install.sh b/scripts/install/install.sh
-old mode 100644
-new mode 100755
-index e40cb02f432abea7753bcd54f103352e76d6bb64..8b53373ab8ca225d58b1f79a28cd11d5c287d516
+index e40cb02f432abea7753bcd54f103352e76d6bb64..8b53373ab8ca225d58b1f79a28cd11d5c287d516 100755
 --- a/scripts/install/install.sh
 +++ b/scripts/install/install.sh
 @@ -2,28 +2,21 @@
@@ -5567,9 +5528,7 @@ index d75aa1f3b89618aa57c698bdbaf50482d893c054..63ee570a61e5692349b927624690faa7
    --runInBand tests/mcpConformance.test.ts
  ```
 diff --git a/scripts/stage_npm_packages.py b/scripts/stage_npm_packages.py
-old mode 100644
-new mode 100755
-index b258b4c94626562ef675302ceec1ee36ccdb6619..2c4960e937293afb36d8d0b1605aaf95be51550f
+index b258b4c94626562ef675302ceec1ee36ccdb6619..2c4960e937293afb36d8d0b1605aaf95be51550f 100755
 --- a/scripts/stage_npm_packages.py
 +++ b/scripts/stage_npm_packages.py
 @@ -19,7 +19,7 @@ from typing import Sequence
@@ -5582,9 +5541,7 @@ index b258b4c94626562ef675302ceec1ee36ccdb6619..2c4960e937293afb36d8d0b1605aaf95
      "x86_64-unknown-linux-musl",
      "aarch64-unknown-linux-musl",
 diff --git a/tools/buildifier b/tools/buildifier
-old mode 100644
-new mode 100755
-index d18dd60ac6b317d06c6ccf850654b2e06e29395d..d4c03d59c10b29cf3f10640c6bebebdfaff05561
+index d18dd60ac6b317d06c6ccf850654b2e06e29395d..d4c03d59c10b29cf3f10640c6bebebdfaff05561 100755
 --- a/tools/buildifier
 +++ b/tools/buildifier
 @@ -4,68 +4,68 @@

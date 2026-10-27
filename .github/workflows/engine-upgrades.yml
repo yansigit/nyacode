@@ -2,11 +2,11 @@ name: Engine upgrades
 
 on:
   schedule:
-    - cron: "17 4 * * *"
+    - cron: "17 */3 * * *"
   workflow_dispatch:
     inputs:
       release_tag:
-        description: Stable rust-vX.Y.Z tag (empty selects latest); manual rehearsal bypasses the schedule gate.
+        description: Stable rust-vX.Y.Z tag (empty selects latest); discovery stays gated by the repository kill switch.
         type: string
         default: ""
       qualification_run:
@@ -26,56 +26,236 @@ concurrency:
 
 jobs:
   discover:
-    name: Propose stable engine pin without write credentials
+    name: Plan the stable engine release without write credentials
     if: github.event_name != 'workflow_run' && inputs.qualification_run == ''
     runs-on: ubuntu-24.04
+    timeout-minutes: 30
     permissions:
       contents: read
       actions: read
     outputs:
-      proposed: ${{ steps.proposal.outputs.proposed }}
+      proposed: ${{ steps.plan.outputs.proposed }}
     steps:
+      - name: Select this job's status file
+        run: echo "NYACODE_STATUS_FILE=$RUNNER_TEMP/status/discover.jsonl" >> "$GITHUB_ENV"
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ github.event.repository.default_branch }}
+          fetch-depth: 0
           persist-credentials: false
-      - name: Resolve stable release and retain proposal diagnostics
-        id: proposal
+      - name: Fetch the latest snapshot branch when it exists
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          auth=$(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)
+          git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $auth" fetch --quiet --no-tags origin '+refs/heads/sync/upstream-main:refs/remotes/origin/sync/upstream-main' || echo "no snapshot branch yet"
+      - name: Plan the stable release from the closest snapshot
+        id: plan
         env:
           GH_TOKEN: ${{ github.token }}
           RELEASE_TAG: ${{ inputs.release_tag || '' }}
-          SCHEDULED: ${{ github.event_name == 'schedule' }}
           NYACODE_ENGINE_UPGRADES_ENABLED: ${{ vars.NYACODE_ENGINE_UPGRADES_ENABLED }}
         run: |
-          args=()
-          if [[ "$SCHEDULED" == 'true' ]]; then args+=(--scheduled); fi
-          python3 scripts/engine_candidates.py discover --tag "$RELEASE_TAG" --output "$RUNNER_TEMP/candidate/candidate.json" "${args[@]}"
-          if [[ -f "$RUNNER_TEMP/candidate/candidate.json" ]]; then
+          python3 scripts/engine_candidates.py discover --tag "$RELEASE_TAG" --output "$RUNNER_TEMP/candidate/plan.json"
+          if [[ -f "$RUNNER_TEMP/candidate/plan.json" ]]; then
             echo 'proposed=true' >> "$GITHUB_OUTPUT"
-            python3 -c 'import json, os; proposal = json.load(open(os.environ["RUNNER_TEMP"] + "/candidate/candidate.json")); print("prepared=" + str(proposal["prepared"]).lower(), file=open(os.environ["GITHUB_OUTPUT"], "a"))'
           fi
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-        if: steps.proposal.outputs.proposed == 'true'
+        if: steps.plan.outputs.proposed == 'true'
         with:
-          name: engine-candidate-proposal
-          path: ${{ runner.temp }}/candidate/candidate.json
+          name: engine-candidate-plan
+          path: ${{ runner.temp }}/candidate/plan.json
           if-no-files-found: error
           retention-days: 7
-      - name: Retain failed proposal evidence
-        if: failure() || steps.proposal.outputs.prepared == 'false'
+      - name: Retain upstream sync status events
+        if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
-          name: engine-candidate-diagnostics
-          path: .engine/upgrades/
-          include-hidden-files: true
-          if-no-files-found: warn
+          name: engine-status-discover
+          path: ${{ runner.temp }}/status/discover.jsonl
+          if-no-files-found: ignore
           retention-days: 7
 
-  publish-candidate:
-    name: Publish approved pin and explicitly dispatch qualification
+  construct:
+    name: Carry the patch stack onto the stable release
     needs: discover
     if: needs.discover.outputs.proposed == 'true'
     runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    permissions:
+      contents: read
+      actions: read
+    outputs:
+      conflicts: ${{ steps.rebase.outputs.conflicts }}
+    env:
+      GH_TOKEN: ${{ github.token }}
+      RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+    steps:
+      - name: Select this job's status file
+        run: echo "NYACODE_STATUS_FILE=$RUNNER_TEMP/status/construct.jsonl" >> "$GITHUB_ENV"
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Fetch the latest snapshot branch when it exists
+        run: |
+          auth=$(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)
+          git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $auth" fetch --quiet --no-tags origin '+refs/heads/sync/upstream-main:refs/remotes/origin/sync/upstream-main' || echo "no snapshot branch yet"
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: engine-candidate-plan
+          path: ${{ runner.temp }}/plan
+      - name: Carry the patch stack onto the release and fold main's edits
+        id: rebase
+        run: |
+          set +e
+          python3 scripts/engine_sync.py rebase --plan "$RUNNER_TEMP/plan/plan.json" --output "$RUNNER_TEMP/sync"
+          code=$?
+          set -e
+          case "$code" in
+            0) echo "conflicts=false" >> "$GITHUB_OUTPUT" ;;
+            2) echo "conflicts=true" >> "$GITHUB_OUTPUT" ;;
+            *) exit "$code" ;;
+          esac
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: steps.rebase.outputs.conflicts == 'true'
+        with:
+          name: engine-candidate-conflicts
+          path: ${{ runner.temp }}/sync/conflicts
+          if-no-files-found: error
+          retention-days: 7
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: always()
+        with:
+          name: engine-status-construct
+          path: ${{ runner.temp }}/status/construct.jsonl
+          if-no-files-found: ignore
+          retention-days: 7
+
+  resolve:
+    name: Resolve conflicts with the configured agent
+    needs: [discover, construct]
+    if: needs.construct.outputs.conflicts == 'true' && vars.NYACODE_RESOLVER_AGENT != ''
+    permissions:
+      contents: read
+      actions: read
+    uses: ./.github/workflows/engine-resolve.yml
+    with:
+      plan_artifact: engine-candidate-plan
+      agent: ${{ vars.NYACODE_RESOLVER_AGENT }}
+      model: ${{ vars.NYACODE_RESOLVER_MODEL }}
+    secrets:
+      CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
+      OPENCODE_API_KEY: ${{ secrets.OPENCODE_API_KEY }}
+
+  build:
+    name: Validate the candidate and build its bundle without publishing
+    needs: [discover, construct, resolve]
+    if: >-
+      !cancelled() && needs.discover.result == 'success' && needs.discover.outputs.proposed == 'true' &&
+      needs.construct.result == 'success' && (needs.resolve.result == 'success' || needs.resolve.result == 'skipped')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 300
+    permissions:
+      contents: read
+      actions: read
+    env:
+      GH_TOKEN: ${{ github.token }}
+      RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+      CONFLICTS: ${{ needs.construct.outputs.conflicts }}
+      RESOLVED: ${{ needs.resolve.result == 'success' }}
+    steps:
+      - name: Select this job's status file
+        run: echo "NYACODE_STATUS_FILE=$RUNNER_TEMP/status/build.jsonl" >> "$GITHUB_ENV"
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Fetch the latest snapshot branch when it exists
+        run: |
+          auth=$(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)
+          git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $auth" fetch --quiet --no-tags origin '+refs/heads/sync/upstream-main:refs/remotes/origin/sync/upstream-main' || echo "no snapshot branch yet"
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: engine-candidate-plan
+          path: ${{ runner.temp }}/plan
+      - name: Download the resolution when an agent resolved the conflicts
+        if: needs.resolve.result == 'success'
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: engine-resolution
+          path: ${{ runner.temp }}/resolution
+      - name: Rebuild the rebase deterministically from the plan
+        run: |
+          set +e
+          python3 scripts/engine_sync.py rebase --plan "$RUNNER_TEMP/plan/plan.json" --output "$RUNNER_TEMP/sync"
+          code=$?
+          set -e
+          if [[ "$code" -ne 0 && "$code" -ne 2 ]]; then exit "$code"; fi
+      - name: Read the toolchain the rebased engine pins
+        id: rust
+        run: python3 -c 'import json, os; print("toolchain=" + json.load(open(os.environ["RUNNER_TEMP"] + "/sync/source/engine.lock"))["toolchain"], file=open(os.environ["GITHUB_OUTPUT"], "a"))'
+      - uses: dtolnay/rust-toolchain@e2a55d2ffb04f378e9626c28d38b36d230d1e12f
+        with:
+          toolchain: ${{ steps.rust.outputs.toolchain }}
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+        with:
+          run_install: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 26.11.1
+      - uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884 # v10.3.0
+        with:
+          version: "0.13.0"
+      - uses: bazel-contrib/setup-bazel@c5acdfb288317d0b5c0bbd7a396a3dc868bb0f86 # 0.19.0
+        with:
+          bazelisk-version: 1.29.0
+      - name: Install Linux build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang libclang-dev cmake libssl-dev pkg-config protobuf-compiler
+      - name: Read the resolver's attribution
+        id: resolution
+        if: needs.resolve.result == 'success'
+        run: python3 -c 'import json, os; data = json.load(open(os.environ["RUNNER_TEMP"] + "/resolution/resolution.json")); print("kind=ai:" + data["agent"] + "/" + data["model"], file=open(os.environ["GITHUB_OUTPUT"], "a"))'
+      - name: Validate, regenerate, and bundle the candidate (never published here)
+        env:
+          RESOLUTION_KIND: ${{ steps.resolution.outputs.kind }}
+          CARGO_TARGET_DIR: ${{ runner.temp }}/target
+        run: |
+          args=(finish --plan "$RUNNER_TEMP/plan/plan.json" --dir "$RUNNER_TEMP/sync")
+          if [[ "$CONFLICTS" == "true" ]]; then
+            if [[ "$RESOLVED" == "true" ]]; then
+              args+=(--resolution "$RUNNER_TEMP/resolution/resolution.patch" --resolution-kind "$RESOLUTION_KIND")
+            else
+              # No agent is configured: the draft repins engine.lock and reports the conflicts.
+              args+=(--allow-unresolved)
+            fi
+          fi
+          python3 scripts/engine_sync.py "${args[@]}"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: engine-candidate-bundle
+          path: |
+            ${{ runner.temp }}/sync/candidate.json
+            ${{ runner.temp }}/sync/candidate.bundle
+          if-no-files-found: error
+          retention-days: 7
+      - name: Retain upstream sync status events
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: engine-status-build
+          path: ${{ runner.temp }}/status/build.jsonl
+          if-no-files-found: ignore
+          retention-days: 7
+
+  publish-candidate:
+    name: Verify the bundle, push the candidate, and dispatch qualification
+    needs: [discover, build]
+    if: needs.build.result == 'success'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
     permissions:
       contents: write
       pull-requests: write
@@ -83,19 +263,31 @@ jobs:
     outputs:
       qualification_run: ${{ steps.publish.outputs.qualification_run }}
     steps:
+      - name: Select this job's status file
+        run: echo "NYACODE_STATUS_FILE=$RUNNER_TEMP/status/publish-candidate.jsonl" >> "$GITHUB_ENV"
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ github.event.repository.default_branch }}
+          fetch-depth: 0
           persist-credentials: false
       - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
-          name: engine-candidate-proposal
+          name: engine-candidate-bundle
           path: ${{ runner.temp }}/candidate
-      - name: Validate untrusted proposal data with the trusted base controller
+      - name: Verify the bundle against the current base and publish it
         id: publish
         env:
           GH_TOKEN: ${{ github.token }}
-        run: python3 scripts/engine_candidates.py publish --proposal "$RUNNER_TEMP/candidate/candidate.json" --github-output "$GITHUB_OUTPUT"
+          NYACODE_ENGINE_UPGRADES_ENABLED: ${{ vars.NYACODE_ENGINE_UPGRADES_ENABLED }}
+        run: python3 scripts/engine_candidates.py publish --proposal "$RUNNER_TEMP/candidate/candidate.json" --bundle "$RUNNER_TEMP/candidate/candidate.bundle" --github-output "$GITHUB_OUTPUT"
+      - name: Retain upstream sync status events
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: engine-status-publish-candidate
+          path: ${{ runner.temp }}/status/publish-candidate.jsonl
+          if-no-files-found: ignore
+          retention-days: 7
 
   observe:
     name: Report completed candidate qualification
@@ -116,6 +308,8 @@ jobs:
       consider_promotion: ${{ steps.report.outputs.consider_promotion }}
       qualification_run: ${{ steps.report.outputs.qualification_run }}
     steps:
+      - name: Select this job's status file
+        run: echo "NYACODE_STATUS_FILE=$RUNNER_TEMP/status/observe.jsonl" >> "$GITHUB_ENV"
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ github.event.repository.default_branch }}
@@ -127,9 +321,17 @@ jobs:
           QUALIFICATION_RUN: ${{ github.event.workflow_run.id || inputs.qualification_run || needs.publish-candidate.outputs.qualification_run }}
         # Leave ten minutes within the hosted job limit to fail closed and allow manual replay.
         run: python3 scripts/engine_candidates.py observe --run-id "$QUALIFICATION_RUN" --wait-seconds 21000 --github-output "$GITHUB_OUTPUT"
+      - name: Retain upstream sync status events
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: engine-status-observe
+          path: ${{ runner.temp }}/status/observe.jsonl
+          if-no-files-found: ignore
+          retention-days: 7
 
   promote:
-    name: Promote only the exact fully qualified candidate
+    name: Promote a mechanical candidate or an approved assisted candidate
     needs: observe
     if: needs.observe.outputs.consider_promotion == 'true'
     runs-on: ubuntu-24.04
@@ -138,12 +340,98 @@ jobs:
       pull-requests: write
       actions: read
     steps:
+      - name: Select this job's status file
+        run: echo "NYACODE_STATUS_FILE=$RUNNER_TEMP/status/promote.jsonl" >> "$GITHUB_ENV"
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ github.event.repository.default_branch }}
           persist-credentials: false
-      - name: Verify run, jobs, base, head, report, and allowed lock changes
+      - name: Verify run, jobs, base, head, report, classification, and any approval
         env:
           GH_TOKEN: ${{ github.token }}
           QUALIFICATION_RUN: ${{ needs.observe.outputs.qualification_run }}
         run: python3 scripts/engine_candidates.py promote --run-id "$QUALIFICATION_RUN"
+      - name: Retain upstream sync status events
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: engine-status-promote
+          path: ${{ runner.temp }}/status/promote.jsonl
+          if-no-files-found: ignore
+          retention-days: 7
+
+  sweep:
+    name: Observe and promote open candidates without waiting
+    # Scheduled sweeps find completed qualification runs without holding a hosted job open.
+    # Approval reviews dispatch this sweep too (see engine-review.yml).
+    if: >-
+      github.event_name == 'schedule' ||
+      (github.event_name == 'workflow_dispatch' && inputs.release_tag == '' && inputs.qualification_run == '')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    permissions:
+      contents: write
+      pull-requests: write
+      actions: read
+    steps:
+      - name: Select this job's status file
+        run: echo "NYACODE_STATUS_FILE=$RUNNER_TEMP/status/sweep.jsonl" >> "$GITHUB_ENV"
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          persist-credentials: false
+      - name: Observe completed candidates and promote only exact qualified heads
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 scripts/engine_candidates.py sweep
+      - name: Retain upstream sync status events
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: engine-status-sweep
+          path: ${{ runner.temp }}/status/sweep.jsonl
+          if-no-files-found: ignore
+          retention-days: 7
+
+  status:
+    name: Publish the upstream sync status issue
+    if: always()
+    needs:
+      [
+        discover,
+        construct,
+        resolve,
+        build,
+        publish-candidate,
+        observe,
+        promote,
+        sweep,
+      ]
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      issues: write
+    concurrency:
+      group: engine-upgrades-status
+      cancel-in-progress: false
+    steps:
+      - name: Select this job's status file
+        run: echo "NYACODE_STATUS_FILE=$RUNNER_TEMP/status/status.jsonl" >> "$GITHUB_ENV"
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          persist-credentials: false
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          pattern: engine-status-*
+          path: ${{ runner.temp }}/status
+          merge-multiple: true
+      - name: Record failed or cancelled upstream sync jobs
+        env:
+          RESULTS: ${{ toJSON(needs) }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: python3 scripts/engine_status.py failures
+      - name: Upsert the single upstream sync status issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 scripts/engine_status.py publish --repository "$GITHUB_REPOSITORY" --status-dir "$RUNNER_TEMP/status"
