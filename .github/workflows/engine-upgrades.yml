@@ -396,7 +396,17 @@ jobs:
   status:
     name: Publish the upstream sync status issue
     if: always()
-    needs: [discover, construct, resolve, build, publish-candidate, observe, promote, sweep]
+    needs:
+      [
+        discover,
+        construct,
+        resolve,
+        build,
+        publish-candidate,
+        observe,
+        promote,
+        sweep,
+      ]
     runs-on: ubuntu-24.04
     permissions:
       contents: read

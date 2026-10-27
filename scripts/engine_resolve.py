@@ -212,8 +212,8 @@ class Agent:
 
     @property
     def excludes(self) -> list[str]:
-        """Top-level workspace entries that hold agent config and never count as changes."""
-        return [self.config_path.split("/", 1)[0]]
+        """The generated agent config never counts as a change."""
+        return [self.config_path]
 
     def run(
         self, prompt_file: Path, workspace: Path, model: str, timeout: float
@@ -323,6 +323,7 @@ def snapshot(workspace: Path, scratch: Path, excludes: list[str]) -> str:
             workspace,
             "add",
             "--all",
+            "--force",
             "--",
             ".",
             *(f":(exclude){path}" for path in excludes),

@@ -11,14 +11,14 @@ the upgrade pipeline in `docs/engine.md`.
 
 Workflow: `.github/workflows/engine-sync.yml`, scheduled at 05:43 UTC.
 
-| Job | Permissions | Does |
-| --- | --- | --- |
-| `plan` | read | Resolves upstream main, finds the latest snapshot, and chooses the source. Writes `engine-sync-plan`. Ends early as `noop` when nothing moved. |
-| `rebase` | read | Materializes the source tree, rebases the patch stack onto upstream, and folds main's patch edits. Exit 2 means conflicts. |
-| `resolve` | read | Only when conflicts exist and `NYACODE_RESOLVER_AGENT` is set. Calls the reusable `engine-resolve.yml`, which produces `engine-resolution`. |
-| `finish` | read, no model secrets | Rebuilds the rebase, applies a resolution if one exists, exports patches, validates, and builds the snapshot bundle. |
-| `commit` | write | Verifies the bundle against the current sync head and pushes it. Runs only for scheduled or default-ref dispatches. |
-| `status` | issues | Upserts the single "Upstream sync status" issue. |
+| Job       | Permissions            | Does                                                                                                                                           |
+| --------- | ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `plan`    | read                   | Resolves upstream main, finds the latest snapshot, and chooses the source. Writes `engine-sync-plan`. Ends early as `noop` when nothing moved. |
+| `rebase`  | read                   | Materializes the source tree, rebases the patch stack onto upstream, and folds main's patch edits. Exit 2 means conflicts.                     |
+| `resolve` | read                   | Only when conflicts exist and `NYACODE_RESOLVER_AGENT` is set. Calls the reusable `engine-resolve.yml`, which produces `engine-resolution`.    |
+| `finish`  | read, no model secrets | Rebuilds the rebase, applies a resolution if one exists, exports patches, validates, and builds the snapshot bundle.                           |
+| `commit`  | write                  | Verifies the bundle against the current sync head and pushes it. Runs only for scheduled or default-ref dispatches.                            |
+| `status`  | issues                 | Upserts the single "Upstream sync status" issue.                                                                                               |
 
 Every job records its outcome. The status issue lists the last 30 events.
 
@@ -87,12 +87,12 @@ exact head by a maintainer with write access before promotion.
 
 ## Configuration
 
-| Name | Kind | Purpose |
-| --- | --- | --- |
-| `NYACODE_ENGINE_SYNC_ENABLED` | variable | Must be `true`. Otherwise the plan job is skipped and nothing runs. |
-| `NYACODE_RESOLVER_AGENT` | variable | Enables the `resolve` job when set. Empty means conflicts go to a human. |
-| `NYACODE_RESOLVER_MODEL` | variable | Model passed to the resolver. |
-| `CURSOR_API_KEY`, `OPENCODE_API_KEY` | secrets | Passed explicitly to the resolver only. Other jobs receive no model secrets. |
+| Name                                 | Kind     | Purpose                                                                      |
+| ------------------------------------ | -------- | ---------------------------------------------------------------------------- |
+| `NYACODE_ENGINE_SYNC_ENABLED`        | variable | Must be `true`. Otherwise the plan job is skipped and nothing runs.          |
+| `NYACODE_RESOLVER_AGENT`             | variable | Enables the `resolve` job when set. Empty means conflicts go to a human.     |
+| `NYACODE_RESOLVER_MODEL`             | variable | Model passed to the resolver.                                                |
+| `CURSOR_API_KEY`, `OPENCODE_API_KEY` | secrets  | Passed explicitly to the resolver only. Other jobs receive no model secrets. |
 
 The workflow shares the `engine-upgrades-status` concurrency group, so its status upsert
 never races the upgrade pipeline's.
@@ -139,14 +139,12 @@ Rebase output under `.engine/sync/<run-id>/rebase/` includes `rebase-report.json
 4. `cargo check --workspace --locked` in the prepared workspace, with the toolchain from
    `engine.lock`. Skipped locally with `--skip-cargo`.
 
-`engine generate --write-back` runs when the subcommand exists. Until it lands, the snapshot
-records "generate unavailable" in `notes`.
+Before these checks, `engine.py generate --write-back` refreshes schemas, SDK types, and
+lockfiles, including `Cargo.lock`. Generation failures stop publication. If the generator
+subcommand is unavailable, the snapshot records that limitation in `notes`.
 
 ## Limits
 
-- `Cargo.lock` is not regenerated. When upstream changes dependencies, `cargo check --locked`
-  fails and no snapshot is published until a maintainer updates the lock through the
-  normal engine path.
 - Provider checks (`engine.py check --mode providers`) are not in the daily path. Promotion
   still runs the full engine qualification.
 - Fold carries only patch content edits. Any other integration change on main forces a

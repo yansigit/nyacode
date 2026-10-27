@@ -242,6 +242,17 @@ class ResolveTest(unittest.TestCase):
             any("previous attempt was rejected" in arg for arg in calls[1]["argv"])
         )
 
+    def test_ignored_cursor_file_is_reverted_and_fails_attempt(self):
+        (self.workspace / ".gitignore").write_text(".cursor/\n")
+        self.fake(
+            "open('.cursor/unexpected', 'w').write('changed')\n" + resolve_action()
+        )
+        self.assertEqual(self.run_main("--iterations", "1"), resolver.EXIT_FAILED)
+        self.assertIn(
+            ".cursor/unexpected", " ".join(self.result()["attempts"][0]["failures"])
+        )
+        self.assertFalse((self.workspace / ".cursor/unexpected").exists())
+
     def test_leftover_markers_retry_then_fail_with_exit_4(self):
         self.fake("pass\n")
         self.assertEqual(self.run_main("--iterations", "2"), resolver.EXIT_FAILED)
