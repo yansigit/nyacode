@@ -956,7 +956,9 @@ def main() -> int:
         "--check", action="store_true", help="fail if committed files drift"
     )
     manifest_command.add_argument(
-        "--strict", action="store_true", help="with --check, also fail on stale overlay digests"
+        "--strict",
+        action="store_true",
+        help="with --check, also fail on stale overlay digests",
     )
     for name in ("prepare", "check", "upgrade"):
         command = subparsers.add_parser(name)

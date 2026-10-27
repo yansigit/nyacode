@@ -1885,7 +1885,7 @@ index 7d3a49405d1f3be9af35d3ac2838dd35303a48b6..bfbdd0c3b991c06a1135f8db5ec79b64
 +  "packageManager": "pnpm@12.11.2+sha512.25a51652a196785af5f28bda6dfe8dc582ebefa4ac1d180221ce1390231c5fb76637822ea4b6e4633ce74acdcb0a77f725af11bad38177fdeddaee818a955cb9"
  }
 diff --git a/codex-rs/Cargo.toml b/codex-rs/Cargo.toml
-index 520b9418ee45a4b86c07e0ac2ef317c5bc077c95..586fd590f5f402195f0e08f7d01a89e56141e3e5 100644
+index 520b9418ee45a4b86c07e0ac2ef317c5bc077c95..c3e64b7ef8ce98ffc58f5483179edf1468c5a31a 100644
 --- a/codex-rs/Cargo.toml
 +++ b/codex-rs/Cargo.toml
 @@ -7,6 +7,7 @@ members = [
@@ -2265,7 +2265,7 @@ index 520b9418ee45a4b86c07e0ac2ef317c5bc077c95..586fd590f5f402195f0e08f7d01a89e5
      "zstd",
  ] }
 -zstd = "0.13"
-+zstd = "0.14"
++zstd = "0.14.3"
  
  wiremock = "0.6"
 -zeroize = "1.8.2"

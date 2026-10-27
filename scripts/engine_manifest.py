@@ -684,7 +684,9 @@ def main(argv: list[str] | None = None) -> int:
         "--check", action="store_true", help="fail if committed files drift"
     )
     parser.add_argument(
-        "--strict", action="store_true", help="with --check, also fail on stale overlay digests"
+        "--strict",
+        action="store_true",
+        help="with --check, also fail on stale overlay digests",
     )
     args = parser.parse_args(argv)
     try:

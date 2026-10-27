@@ -98,7 +98,7 @@ index 12f4f9dc8993108f5315bb8632f99c6793539124..68106f3b2f6eab247c05e7acce33bb13
              CODEX_PLATFORM_PACKAGES[platform_package]["npm_name"]: (
                  f"npm:{CODEX_NPM_NAME}@"
 diff --git a/codex-rs/.cargo/audit.toml b/codex-rs/.cargo/audit.toml
-index a1e347895cab8a403dd6c8750686e559ea38e6f1..b706483e8d5219b7f532191d6b304e8d3e8060d8 100644
+index a1e347895cab8a403dd6c8750686e559ea38e6f1..726936ea1a88c6bc5e0a8584791e3f2d2c42dc51 100644
 --- a/codex-rs/.cargo/audit.toml
 +++ b/codex-rs/.cargo/audit.toml
 @@ -2,7 +2,6 @@
@@ -109,7 +109,7 @@ index a1e347895cab8a403dd6c8750686e559ea38e6f1..b706483e8d5219b7f532191d6b304e8d
      "RUSTSEC-2025-0057", # fxhash 0.2.1 via starlark_map/bm25; upstream crate is unmaintained
      "RUSTSEC-2024-0436", # paste 1.0.15 via starlark/v8; upstream crate is unmaintained
      "RUSTSEC-2023-0089", # atomic-polyfill via postcard/heapless/pagable; upstream crate is unmaintained
-@@ -12,9 +11,7 @@ ignore = [
+@@ -12,9 +11,10 @@ ignore = [
      "RUSTSEC-2026-0119", # hickory-proto via rama-dns/rama-tcp; remove when rama updates to hickory 0.26.1 or hickory-net
      "RUSTSEC-2026-0194", # quick-xml via plist/syntect and wayland-scanner; trusted inputs only; remove when rust-plist#191 and wayland-rs#938 are released
      "RUSTSEC-2026-0195", # quick-xml via plist/syntect and wayland-scanner; trusted inputs only; remove when rust-plist#191 and wayland-rs#938 are released
@@ -121,6 +121,9 @@ index a1e347895cab8a403dd6c8750686e559ea38e6f1..b706483e8d5219b7f532191d6b304e8d
 +    "RUSTSEC-2026-0370", # zvariant via zbus 5.19 used by codex-tui; unmaintained after the zbus 6 merge; remove when codex-tui moves to zbus 6
 +    "RUSTSEC-2026-0371", # zbus_names via zbus 5.19 used by codex-tui; unmaintained after the zbus 6 merge; remove when codex-tui moves to zbus 6
 +    "RUSTSEC-2026-0372", # zvariant_derive via zbus 5.19 used by codex-tui; unmaintained after the zbus 6 merge; remove when codex-tui moves to zbus 6
++    "RUSTSEC-2026-0391", # zstd 0.13.3/zstd-safe 7.3.0 are pulled in only via wreq-util 3.0.0-rc.14 (TLS certificate compression) used by the native backend; no fixed 0.13 release; remove when wreq-util moves to zstd >=0.14.3
++    "RUSTSEC-2026-0398", # zstd 0.13.3/zstd-safe 7.3.0 are pulled in only via wreq-util 3.0.0-rc.14 (TLS certificate compression) used by the native backend; no fixed 0.13 release; remove when wreq-util moves to zstd >=0.14.3
++    "RUSTSEC-2026-0403", # zstd 0.13.3/zstd-safe 7.3.0 are pulled in only via wreq-util 3.0.0-rc.14 (TLS certificate compression) used by the native backend; no fixed 0.13 release; remove when wreq-util moves to zstd >=0.14.3
  ]
 diff --git a/codex-rs/analytics/Cargo.toml b/codex-rs/analytics/Cargo.toml
 index 61e6f7210cccb6fc4844133339a0d59e319b9be9..848016823e5e13db6aaded161da5fcdf2bae2bb5 100644
@@ -5563,10 +5566,10 @@ index 1823275ea4e8a690f6b233a934a044d839a5efb6..5fd20121de01ad695ca10c542ade554d
          http_headers: None,
          env_http_headers: None,
 diff --git a/codex-rs/deny.toml b/codex-rs/deny.toml
-index 1abe4ad02c77ff744ba63d1b41c58005a49d7c60..7bd5a07f9bf8a0688f73615387a75c3822b62491 100644
+index 1abe4ad02c77ff744ba63d1b41c58005a49d7c60..12e8d752d8ac89159847ff75f5db4529bdda8103 100644
 --- a/codex-rs/deny.toml
 +++ b/codex-rs/deny.toml
-@@ -73,22 +73,16 @@ ignore = [
+@@ -73,22 +73,19 @@ ignore = [
      # Reviewed 2026-07-02. Keep this list in sync with .cargo/audit.toml.
      # Each exception must identify the dependency path and removal condition.
      { id = "RUSTSEC-2024-0388", reason = "derivative is unmaintained; pulled in via starlark/starlark_syntax v0.14.2 used by execpolicy/cli/core; no fixed starlark release yet" },
@@ -5589,10 +5592,13 @@ index 1abe4ad02c77ff744ba63d1b41c58005a49d7c60..7bd5a07f9bf8a0688f73615387a75c38
 +    { id = "RUSTSEC-2026-0370", reason = "zvariant is unmaintained after the zbus 6 merge; pulled in via zbus 5.19.0 used by codex-tui on Linux; no semver-compatible upgrade; remove when codex-tui moves to zbus 6" },
 +    { id = "RUSTSEC-2026-0371", reason = "zbus_names is unmaintained after the zbus 6 merge; pulled in via zbus 5.19.0 used by codex-tui on Linux; no semver-compatible upgrade; remove when codex-tui moves to zbus 6" },
 +    { id = "RUSTSEC-2026-0372", reason = "zvariant_derive is unmaintained after the zbus 6 merge; pulled in via zbus 5.19.0 used by codex-tui on Linux; no semver-compatible upgrade; remove when codex-tui moves to zbus 6" },
++    { id = "RUSTSEC-2026-0391", reason = "zstd 0.13.3/zstd-safe 7.3.0 are pulled in only via wreq-util 3.0.0-rc.14 (TLS certificate compression) used by the native backend; no fixed 0.13 release; remove when wreq-util moves to zstd >=0.14.3" },
++    { id = "RUSTSEC-2026-0398", reason = "zstd 0.13.3/zstd-safe 7.3.0 are pulled in only via wreq-util 3.0.0-rc.14 (TLS certificate compression) used by the native backend; no fixed 0.13 release; remove when wreq-util moves to zstd >=0.14.3" },
++    { id = "RUSTSEC-2026-0403", reason = "zstd 0.13.3/zstd-safe 7.3.0 are pulled in only via wreq-util 3.0.0-rc.14 (TLS certificate compression) used by the native backend; no fixed 0.13 release; remove when wreq-util moves to zstd >=0.14.3" },
  ]
  # If this is true, then cargo deny will use the git executable to fetch advisory database.
  # If this is false, then it uses a built-in git library.
-@@ -158,6 +152,9 @@ confidence-threshold = 0.8
+@@ -158,6 +155,9 @@ confidence-threshold = 0.8
  # Allow 1 or more licenses on a per-crate basis, so that particular licenses
  # aren't accepted for every possible crate as with the normal allow list
  exceptions = [
@@ -5602,7 +5608,7 @@ index 1abe4ad02c77ff744ba63d1b41c58005a49d7c60..7bd5a07f9bf8a0688f73615387a75c38
      # Each entry is the crate and version constraint, and its specific allow
      # list
      #{ allow = ["Zlib"], crate = "adler32" },
-@@ -251,6 +248,17 @@ deny = [
+@@ -251,6 +251,17 @@ deny = [
          "codex-responses-api-proxy",
          # Temporary migration exceptions.
          "codex-otel",
@@ -5620,7 +5626,7 @@ index 1abe4ad02c77ff744ba63d1b41c58005a49d7c60..7bd5a07f9bf8a0688f73615387a75c38
          # Third-party crates that own their reqwest integration. These are not part of the
          # first-party migration count above.
          "oauth2",
-@@ -320,12 +328,15 @@ allow-git = [
+@@ -320,12 +331,15 @@ allow-git = [
      "https://github.com/helix-editor/nucleo.git",
      # CONNECT request handling needs this pinned H3 revision until released.
      "https://github.com/hyperium/h3",

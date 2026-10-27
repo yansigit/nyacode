@@ -13,7 +13,7 @@
       "generator": "bazel-lock",
       "mode": "100644",
       "path": "MODULE.bazel.lock",
-      "sha256": "809f85ec6b5724e75fbd7ac4820e169a001f7f0b5462766e83725e3c67bdb414"
+      "sha256": "af3c2a3f017618b6abd5925d09d87f49c8ea0f3123ca52afbc4be4f24e0c7daf"
     },
     {
       "generator": "app-server-schema",

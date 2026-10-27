@@ -21,6 +21,10 @@ inventory/baseline-tree.json
 inventory/downstream.json
 # Per-file assembly ownership includes the reviewed dependency sources.
 integration/codex/assembly.json
+# Regenerated engine outputs mirror the upstream allowlisted lockfile and schemas.
+integration/codex/generated/MODULE.bazel.lock
+integration/codex/generated/codex-rs/app-server-protocol/schema/json/codex_app_server_protocol.schemas.json
+integration/codex/generated/codex-rs/app-server-protocol/schema/json/codex_app_server_protocol.v2.schemas.json
 # Strict integration patches include generated schemas and vendored binary data.
 integration/codex/patches/backend_dispatch.patch
 integration/codex/patches/dependency_override.patch

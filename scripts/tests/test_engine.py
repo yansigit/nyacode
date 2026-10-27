@@ -650,10 +650,9 @@ class EngineTest(unittest.TestCase):
                     patch.object(
                         engine,
                         "download",
-                        side_effect=lambda repo,
-                        revision,
-                        destination,
-                        source=archive: (shutil.copyfile(source, destination)),
+                        side_effect=lambda repo, revision, destination, source=archive: (
+                            shutil.copyfile(source, destination)
+                        ),
                     ),
                     patch.object(
                         engine, "check", return_value=output / "workspace"

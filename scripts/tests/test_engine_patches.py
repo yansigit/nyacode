@@ -591,7 +591,6 @@ class FoldTest(PatchStackTest):
         self.assertIn("pinned upstream revision changed", blockers)
 
 
-
 class GeneratedOutputsTest(PatchStackTest):
     """Generated outputs leave the patches; their conflicts are regenerated, not resolved by hand."""
 
