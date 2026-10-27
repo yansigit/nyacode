@@ -27,7 +27,12 @@ and engine-dependent product modules in `integration/codex/adapter` or
 `integration/codex/overlays`. Ownership metadata lives in
 `integration/codex/ownership.json`. Run `just engine-manifest` to regenerate
 `integration/codex/assembly.json` and `inventory/downstream.json`; controls enforce
-that both stay in sync with the ownership metadata, patches, and overlay bytes.
+that both stay in sync with the ownership metadata and patches, and `prepare` enforces
+generated-output digests. Overlay digests are provenance only: editing an overlay
+source (docs, workflows, scripts) does not fail any check. `manifest --check` lists
+stale overlay digests, `prepare` records the actual source digests in its report, and
+the next `manifest --write`, sync snapshot, or engine candidate refreshes them.
+`manifest --check --strict` also fails on stale overlay digests; sync snapshots use it.
 Retired baseline changes remain in `ownership.json` alongside the active inventory.
 
 `just fix`, schema generators, and Bazel lock updates modify disposable assembled

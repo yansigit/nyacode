@@ -88,10 +88,10 @@ class ManifestTest(unittest.TestCase):
             json.dumps(self.ownership, indent=2, sort_keys=True),
         )
 
-    def run_quietly(self, *, write):
+    def run_quietly(self, *, write, strict=False):
         out, err = io.StringIO(), io.StringIO()
         with contextlib.redirect_stdout(out), contextlib.redirect_stderr(err):
-            code = engine_manifest.run(self.root, write=write)
+            code = engine_manifest.run(self.root, write=write, strict=strict)
         return code, out.getvalue() + err.getvalue()
 
     def read_generated(self):
@@ -137,18 +137,31 @@ class ManifestTest(unittest.TestCase):
             },
         )
 
-    def test_overlay_source_edit_fails_check_until_regenerated(self):
+    def test_overlay_source_edit_only_stales_its_digest(self):
         self.run_quietly(write=True)
         self.write("owned/readme.md", "changed\n")
         code, output = self.run_quietly(write=False)
+        self.assertEqual(code, 0, output)
+        self.assertIn("1 overlay digest(s) are stale", output)
+        self.assertIn("docs/readme.md", output)
+        code, output = self.run_quietly(write=False, strict=True)
         self.assertEqual(code, 1)
         self.assertIn("overlays changed=1", output)
-        self.assertIn("docs/readme.md", output)
         self.assertIn("manifest --write", output)
         code, _ = self.run_quietly(write=True)
         self.assertEqual(code, 0)
-        code, _ = self.run_quietly(write=False)
-        self.assertEqual(code, 0)
+        code, output = self.run_quietly(write=False, strict=True)
+        self.assertEqual(code, 0, output)
+
+    def test_stale_digest_does_not_hide_ownership_drift(self):
+        self.run_quietly(write=True)
+        self.write("owned/readme.md", "changed\n")
+        assembly = json.loads((self.root / engine_manifest.ASSEMBLY).read_text())
+        assembly["overlays"][0]["mode"] = "100755"
+        self.write(engine_manifest.ASSEMBLY, engine_manifest.render(assembly))
+        code, output = self.run_quietly(write=False)
+        self.assertEqual(code, 1)
+        self.assertIn("overlays changed=1", output)
 
     def test_path_override_applies_over_root_default(self):
         self.ownership["overrides"]["docs/readme.md"] = {"owner": "downstream-product"}
@@ -228,8 +241,13 @@ class ManifestTest(unittest.TestCase):
         self.assertEqual(checked.returncode, 0, checked.stderr)
         self.write("owned/readme.md", "drift\n")
         drifted = subprocess.run(command + ["--check"], capture_output=True, text=True)
-        self.assertEqual(drifted.returncode, 1)
-        self.assertIn("overlays changed=1", drifted.stderr)
+        self.assertEqual(drifted.returncode, 0, drifted.stderr)
+        self.assertIn("overlay digest(s) are stale", drifted.stderr)
+        strict = subprocess.run(
+            command + ["--check", "--strict"], capture_output=True, text=True
+        )
+        self.assertEqual(strict.returncode, 1)
+        self.assertIn("overlays changed=1", strict.stderr)
 
     def enable_generator(self, outputs=("docs/*.md",), **extra):
         self.ownership["generated"] = [

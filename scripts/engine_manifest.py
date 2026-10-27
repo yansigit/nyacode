@@ -604,7 +604,39 @@ def differences(
     return report
 
 
-def run(root: Path, *, write: bool) -> int:
+def stale_digests(
+    root: Path, assembly: dict[str, Any], inventory: dict[str, Any]
+) -> list[str] | None:
+    """Return overlays whose only drift is a stale sha256, or None if anything else differs.
+
+    Overlay digests are provenance: prepare records the real source digests, and every
+    `manifest --write` (including each sync snapshot and engine candidate) refreshes them.
+    """
+    try:
+        committed = json.loads(located(root, ASSEMBLY).read_text())
+        if json.loads(located(root, INVENTORY).read_text()) != inventory:
+            return None
+    except (OSError, ValueError):
+        return None
+
+    def without_digests(value: dict[str, Any]) -> dict[str, Any]:
+        overlays = [
+            {key: item[key] for key in item if key != "sha256"}
+            for item in value.get("overlays", [])
+        ]
+        return {**value, "overlays": overlays}
+
+    if without_digests(committed) != without_digests(assembly):
+        return None
+    old = {item["destination"]: item.get("sha256") for item in committed["overlays"]}
+    return sorted(
+        item["destination"]
+        for item in assembly["overlays"]
+        if old[item["destination"]] != item["sha256"]
+    )
+
+
+def run(root: Path, *, write: bool, strict: bool = False) -> int:
     root = root.resolve()
     assembly, inventory = build(root)
     if write:
@@ -618,6 +650,16 @@ def run(root: Path, *, write: bool) -> int:
         )
         return 0
     report = differences(root, assembly, inventory)
+    stale = None if strict or not report else stale_digests(root, assembly, inventory)
+    if stale:
+        print(
+            f"engine manifest is in sync; {len(stale)} overlay digest(s) are stale and are "
+            "refreshed by the next `manifest --write`, sync snapshot, or engine candidate:",
+            file=sys.stderr,
+        )
+        for path in stale[:DIFF_LIMIT]:
+            print(f"  {path}", file=sys.stderr)
+        return 0
     if report:
         print(
             "engine manifest is out of sync with ownership inputs; "
@@ -641,9 +683,12 @@ def main(argv: list[str] | None = None) -> int:
     mode.add_argument(
         "--check", action="store_true", help="fail if committed files drift"
     )
+    parser.add_argument(
+        "--strict", action="store_true", help="with --check, also fail on stale overlay digests"
+    )
     args = parser.parse_args(argv)
     try:
-        return run(args.root, write=args.write)
+        return run(args.root, write=args.write, strict=args.strict)
     except (EngineError, OSError, ValueError, KeyError) as error:
         print(f"engine manifest: {error}", file=sys.stderr)
         return 1

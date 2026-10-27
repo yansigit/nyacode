@@ -802,7 +802,7 @@ def finish(
     checks = [
         (
             "manifest",
-            [sys.executable, str(ENGINE), "--root", str(source), "manifest", "--check"],
+            [sys.executable, str(ENGINE), "--root", str(source), "manifest", "--check", "--strict"],
             None,
         ),
         (

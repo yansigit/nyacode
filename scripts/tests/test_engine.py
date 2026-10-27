@@ -157,17 +157,17 @@ class EngineTest(unittest.TestCase):
         self.assertFalse((output / "stray-build-file").exists())
         self.assertNotEqual(engine.assembly_report(output)["input_sha256"], old_hash)
 
-    def test_overlay_source_edit_without_manifest_refresh_fails_closed(self):
+    def test_overlay_source_edit_with_stale_digest_records_actual_bytes(self):
         self.write("owned/README.md", "reviewed\n")
         self.overlay()
+        self.prepare()
+        self.write("owned/README.md", "edited\n")
         output = self.prepare()
-        self.write("owned/README.md", "unreviewed\n")
-        with self.assertRaisesRegex(
-            engine.EngineError,
-            r"sha256 does not match assembly manifest: owned/README.md.*manifest --write",
-        ):
-            self.prepare()
-        self.assertEqual((output / "README.md").read_text(), "reviewed\n")
+        self.assertEqual((output / "README.md").read_text(), "edited\n")
+        self.assertEqual(
+            engine.assembly_report(output)["inputs"]["owned/README.md"]["sha256"],
+            engine.digest(b"edited\n"),
+        )
 
     def test_failed_patch_preserves_last_good_output_and_diagnostics(self):
         output = self.prepare()

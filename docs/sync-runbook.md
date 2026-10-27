@@ -132,7 +132,8 @@ Rebase output under `.engine/sync/<run-id>/rebase/` includes `rebase-report.json
 
 `finish` runs these in order and stops at the first failure:
 
-1. `engine.py manifest --check` on the rebased source.
+1. `engine.py manifest --check --strict` on the rebased source, so a snapshot also
+   carries fresh overlay digests.
 2. `engine.py prepare` into `prepared/`, the strict assembly.
 3. `engine.py check --mode controls`, which runs the engine control tests.
 4. `cargo check --workspace --locked` in the prepared workspace, with the toolchain from

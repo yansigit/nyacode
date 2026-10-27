@@ -508,11 +508,6 @@ def assemble(
         if os.name == "nt":
             canonical.setdefault(overlay["source"], mode)
         source = input_file(overlay["source"], symlink=mode == "120000")
-        if inputs[overlay["source"]]["sha256"] != overlay.get("sha256"):
-            raise EngineError(
-                f"overlay source sha256 does not match assembly manifest: {overlay['source']}; "
-                "review the change, then run `python3 scripts/engine.py manifest --write`"
-            )
         if (
             mode not in {"100644", "100755", "120000"}
             or inputs[overlay["source"]]["mode"] != mode
@@ -960,6 +955,9 @@ def main() -> int:
     manifest_mode.add_argument(
         "--check", action="store_true", help="fail if committed files drift"
     )
+    manifest_command.add_argument(
+        "--strict", action="store_true", help="with --check, also fail on stale overlay digests"
+    )
     for name in ("prepare", "check", "upgrade"):
         command = subparsers.add_parser(name)
         command.add_argument("--output", type=Path)
@@ -1059,7 +1057,7 @@ def main() -> int:
         import engine_manifest
 
         try:
-            return engine_manifest.run(args.root, write=args.write)
+            return engine_manifest.run(args.root, write=args.write, strict=args.strict)
         except (EngineError, OSError, ValueError, KeyError) as error:
             print(f"engine: {error}", file=sys.stderr)
             return 1
