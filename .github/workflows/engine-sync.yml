@@ -134,6 +134,7 @@ jobs:
     if: needs.rebase.outputs.conflicts == 'true' && vars.NYACODE_RESOLVER_AGENT != ''
     permissions:
       contents: read
+      actions: read
     uses: ./.github/workflows/engine-resolve.yml
     with:
       plan_artifact: engine-sync-plan
