@@ -614,6 +614,7 @@ class ControllerFlowTest(unittest.TestCase):
             patch.object(candidates.subprocess, "check_output", return_value=BASE),
             patch.dict(os.environ, {"NYACODE_ENGINE_UPGRADES_ENABLED": ""}),
             patch.object(candidates, "pages") as pages,
+            patch.object(candidates, "api") as api,
             patch.object(candidates.subprocess, "run") as run,
         ):
             for tag in ("", TAG):
@@ -624,7 +625,28 @@ class ControllerFlowTest(unittest.TestCase):
                         "main",
                     )
             pages.assert_not_called()
+            api.assert_not_called()
             run.assert_not_called()
+
+    def test_discovery_stops_when_the_latest_release_is_not_a_stable_tag(self):
+        (self.root / "engine.lock").write_text(json.dumps(self.original))
+        upstream = self.original["repository"]
+        with (
+            patch.object(candidates, "ROOT", self.root),
+            patch.object(candidates, "current_base", return_value=BASE),
+            patch.object(candidates.subprocess, "check_output", return_value=BASE),
+            patch.object(
+                candidates, "api", return_value={"tag_name": "rust-v1.0.0-alpha.1"}
+            ) as api,
+            patch.object(candidates, "stable_release") as stable_release,
+            patch.object(candidates, "record") as record,
+        ):
+            candidates.discover(
+                SimpleNamespace(tag="", output=self.proposal), REPOSITORY, "main"
+            )
+        api.assert_called_once_with(f"repos/{upstream}/releases/latest")
+        stable_release.assert_not_called()
+        self.assertEqual(record.call_args.args[0], "no-stable")
 
     def test_publish_pushes_the_verified_bundle_and_dispatches_readonly_qualification(
         self,
@@ -773,7 +795,7 @@ class ControllerFlowTest(unittest.TestCase):
             patch.object(candidates, "current_base", return_value=BASE),
             patch.object(candidates.subprocess, "check_output", return_value=BASE),
             patch.object(candidates, "stable_release", return_value=REVISION),
-            patch.object(candidates, "api", return_value={"status": "ahead"}),
+            patch.object(candidates, "api", return_value={"status": "ahead"}) as api,
             patch.object(
                 candidates.engine_sync, "plan", return_value=plan_value
             ) as plan,
@@ -783,6 +805,9 @@ class ControllerFlowTest(unittest.TestCase):
                 SimpleNamespace(tag=TAG, output=output), REPOSITORY, "main"
             )
         run.assert_not_called()
+        self.assertFalse(
+            any("releases/latest" in c.args[0] for c in api.call_args_list)
+        )
         plan.assert_called_once_with(
             repo=self.root, main_ref="HEAD", tag=TAG, release_revision=REVISION
         )

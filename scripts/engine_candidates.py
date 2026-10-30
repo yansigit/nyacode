@@ -386,14 +386,14 @@ def discover(args, repository: str, branch: str) -> None:
     ).strip()
     if base != local:
         raise ValueError("Default branch moved; retry discovery on its current head")
-    releases = pages(f"repos/{original['repository']}/releases?per_page=100")
-    tags = [
-        r["tag_name"]
-        for r in releases
-        if not r["draft"] and not r["prerelease"] and TAG.fullmatch(r["tag_name"])
-    ]
-    tags.sort(key=version, reverse=True)
-    tag = args.tag or (tags[0] if tags else "")
+    tag = args.tag
+    if not tag:
+        # One request: paginating every upstream release times out with HTTP 504.
+        tag = api(f"repos/{original['repository']}/releases/latest")["tag_name"]
+        if not TAG.fullmatch(tag):
+            record("no-stable", f"Latest engine release {tag} is not a stable tag")
+            print("The latest engine release is not a stable rust-vX.Y.Z tag")
+            return
     revision = stable_release(tag, original["repository"])
     if revision == original["revision"]:
         record("current", f"Latest stable engine release {tag} is already accepted")

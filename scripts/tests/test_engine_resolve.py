@@ -154,6 +154,19 @@ def leftover(original: bytes, current: bytes) -> list[str]:
     return resolver.leftover_markers(original, current)
 
 
+def job_blocks(text: str) -> dict[str, str]:
+    """Each job id in a workflow's `jobs:` section, mapped to its indented block text."""
+    parts = re.split(r"(?m)^  ([\w-]+):\n", text.split("\njobs:\n", 1)[1])
+    return dict(zip(parts[1::2], parts[2::2]))
+
+
+def granted(block: str) -> dict[str, str]:
+    """The scopes a job block grants in its `permissions:` section, as {scope: level}."""
+    section = re.search(r"(?m)^    permissions:\n((?:      .*\n)*)", block)
+    body = section.group(1) if section else ""
+    return dict(re.findall(r"(?m)^      ([\w-]+): (\w+)$", body))
+
+
 class ResolveTest(unittest.TestCase):
     def setUp(self):
         temp = tempfile.TemporaryDirectory()
@@ -519,6 +532,25 @@ class HelperTest(unittest.TestCase):
             re.findall(r"secrets\.(\w+)", text).count("OPENCODE_API_KEY"), 1
         )
         self.assertEqual(re.findall(r"secrets\.(\w+)", text).count("CURSOR_API_KEY"), 1)
+
+    def test_resolver_callers_grant_what_the_resolve_job_requests(self):
+        workflows = ROOT / ".github/workflows"
+        resolver_jobs = job_blocks((workflows / "engine-resolve.yml").read_text())
+        required = granted(resolver_jobs["resolve"])
+        self.assertTrue(required)
+        for caller in ("engine-sync.yml", "engine-upgrades.yml"):
+            with self.subTest(caller=caller):
+                jobs = job_blocks((workflows / caller).read_text()).values()
+                calls = [
+                    job
+                    for job in jobs
+                    if "uses: ./.github/workflows/engine-resolve.yml" in job
+                ]
+                self.assertEqual(len(calls), 1)
+                grants = granted(calls[0])
+                self.assertEqual(
+                    {scope: grants.get(scope) for scope in required}, required
+                )
 
 
 def assert_no_ask(test: unittest.TestCase, value) -> None:
