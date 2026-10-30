@@ -648,6 +648,45 @@ class ControllerFlowTest(unittest.TestCase):
         stable_release.assert_not_called()
         self.assertEqual(record.call_args.args[0], "no-stable")
 
+    def test_discovery_plans_the_latest_stable_release_without_an_explicit_tag(self):
+        (self.root / "engine.lock").write_text(json.dumps(self.original))
+        upstream = self.original["repository"]
+
+        def api(path):
+            if path == f"repos/{upstream}/releases/latest":
+                return {"tag_name": TAG}
+            return {"status": "ahead"}
+
+        plan_value = {
+            "schema_version": 1,
+            "action": "sync",
+            "main_sha": BASE,
+            "from": {"kind": "main", "ref": BASE},
+            "reason": "no snapshot",
+            "candidate": {"tag": TAG, "revision": REVISION},
+        }
+        with (
+            patch.object(candidates, "ROOT", self.root),
+            patch.object(candidates, "current_base", return_value=BASE),
+            patch.object(candidates.subprocess, "check_output", return_value=BASE),
+            patch.object(candidates, "api", side_effect=api),
+            patch.object(
+                candidates, "stable_release", return_value=REVISION
+            ) as stable_release,
+            patch.object(
+                candidates.engine_sync, "plan", return_value=plan_value
+            ) as plan,
+        ):
+            candidates.discover(
+                SimpleNamespace(tag="", output=self.root / "plan.json"),
+                REPOSITORY,
+                "main",
+            )
+        stable_release.assert_called_once_with(TAG, upstream)
+        plan.assert_called_once_with(
+            repo=self.root, main_ref="HEAD", tag=TAG, release_revision=REVISION
+        )
+
     def test_publish_pushes_the_verified_bundle_and_dispatches_readonly_qualification(
         self,
     ):
